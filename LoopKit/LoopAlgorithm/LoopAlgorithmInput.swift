@@ -12,6 +12,8 @@ import HealthKit
 public enum AlgorithmInputDecodingError: Error {
     case invalidDoseRecommendationType
     case invalidInsulinType
+    case doseRateMissing
+    case doseVolumeMissing
 }
 
 public struct LoopAlgorithmInput {
@@ -29,6 +31,33 @@ public struct LoopAlgorithmInput {
     public var useIntegralRetrospectiveCorrection: Bool = false
     public var recommendationInsulinType: InsulinType = .novolog
     public var recommendationType: DoseRecommendationType = .automaticBolus
+
+    struct TargetEntry: Codable {
+        var startDate: Date
+        var endDate: Date
+        var lowerBound: Double
+        var upperBound: Double
+    }
+
+    struct Dose: Codable {
+        var startDate: Date
+        var endDate: Date?
+        var volume: Double?
+        var type: DoseType
+        var insulinType: String?
+    }
+
+    struct Glucose {
+        var value: Double
+        var isCalibration: Bool
+        var date: Date
+    }
+
+    struct CarbEntry: Codable {
+        var grams: Double
+        var absorptionTime: TimeInterval?
+        var date: Date
+    }
 
     public init(
         predictionStart: Date,
@@ -63,22 +92,89 @@ public struct LoopAlgorithmInput {
     }
 }
 
+extension LoopAlgorithmInput.Glucose: Codable {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.value = try container.decode(Double.self, forKey: .value)
+        self.isCalibration = try container.decodeIfPresent(Bool.self, forKey: .isCalibration) ?? false
+        self.date = try container.decode(Date.self, forKey: .date)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+
+        try container.encode(value, forKey: .value)
+        if isCalibration {
+            try container.encode(isCalibration, forKey: .isCalibration)
+        }
+        try container.encode(date, forKey: .date)
+
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case value
+        case isCalibration
+        case date
+    }
+}
+
+
 extension LoopAlgorithmInput: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
         self.predictionStart = try container.decode(Date.self, forKey: .predictionStart)
-        self.glucoseHistory = try container.decode([StoredGlucoseSample].self, forKey: .glucoseHistory)
-        self.doses = try container.decode([DoseEntry].self, forKey: .doses)
-        self.carbEntries = try container.decode([StoredCarbEntry].self, forKey: .carbEntries)
+        let glucose = try container.decode([Glucose].self, forKey: .glucoseHistory)
+        self.glucoseHistory = glucose.map { sample in
+            StoredGlucoseSample(
+                startDate: sample.date,
+                quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: sample.value),
+                isDisplayOnly: sample.isCalibration
+            )
+        }
+        let doses = try container.decode([Dose].self, forKey: .doses)
+        self.doses = try doses.map({ dose in
+            let value: Double
+            let unit: DoseUnit
+            switch dose.type {
+            case .basal, .tempBasal, .bolus:
+                guard let decodedVolume = dose.volume else {
+                    throw AlgorithmInputDecodingError.doseVolumeMissing
+                }
+                value = decodedVolume
+                unit = .units
+            default:
+                value = 0
+                unit = .units
+                break
+            }
+            let insulinType: InsulinType?
+            if let insulinTypeIdentifier = dose.insulinType {
+                guard let decodedInsulinType = InsulinType(with: insulinTypeIdentifier) else {
+                    throw AlgorithmInputDecodingError.invalidInsulinType
+                }
+                insulinType = decodedInsulinType
+            } else {
+                insulinType = nil
+            }
+            return DoseEntry(type: dose.type, startDate: dose.startDate, endDate: dose.endDate, value: value, unit: unit, insulinType: insulinType)
+        })
+        let carbEntries = try container.decode([CarbEntry].self, forKey: .carbEntries)
+        self.carbEntries = carbEntries.map { entry in
+            StoredCarbEntry(
+                startDate: entry.date,
+                quantity: HKQuantity(unit: .gram(), doubleValue: entry.grams),
+                absorptionTime: entry.absorptionTime
+            )
+        }
         self.basal = try container.decode([AbsoluteScheduleValue<Double>].self, forKey: .basal)
         let sensitivityMgdl = try container.decode([AbsoluteScheduleValue<Double>].self, forKey: .sensitivity)
         self.sensitivity = sensitivityMgdl.map { AbsoluteScheduleValue(startDate: $0.startDate, endDate: $0.endDate, value: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: $0.value))}
         self.carbRatio = try container.decode([AbsoluteScheduleValue<Double>].self, forKey: .carbRatio)
-        let targetMgdl = try container.decode([AbsoluteScheduleValue<ClosedRange<Double>>].self, forKey: .target)
+        let targetMgdl = try container.decode([TargetEntry].self, forKey: .target)
         self.target = targetMgdl.map {
-            let lower = HKQuantity(unit: .milligramsPerDeciliter, doubleValue: $0.value.lowerBound)
-            let upper = HKQuantity(unit: .milligramsPerDeciliter, doubleValue: $0.value.upperBound)
+            let lower = HKQuantity(unit: .milligramsPerDeciliter, doubleValue: $0.lowerBound)
+            let upper = HKQuantity(unit: .milligramsPerDeciliter, doubleValue: $0.upperBound)
             let range = ClosedRange(uncheckedBounds: (lower: lower, upper: upper))
             return AbsoluteScheduleValue(startDate: $0.startDate, endDate: $0.endDate, value: range)
         }
@@ -113,7 +209,33 @@ extension LoopAlgorithmInput: Codable {
 
         try container.encode(predictionStart, forKey: .predictionStart)
         try container.encode(glucoseHistory, forKey: .glucoseHistory)
+        let glucose = glucoseHistory.map { sample in
+            return Glucose(
+                value: sample.quantity.doubleValue(for: .milligramsPerDeciliter),
+                isCalibration: sample.isDisplayOnly,
+                date: sample.startDate)
+        }
+        try container.encode(glucose, forKey: .glucoseHistory)
+        let doses = doses.map { dose in
+            switch dose.type {
+            case .basal, .tempBasal, .bolus:
+                return Dose(
+                    startDate: dose.startDate,
+                    endDate: dose.endDate,
+                    volume: dose.deliveredUnits ?? dose.programmedUnits,
+                    type: dose.type,
+                    insulinType: dose.insulinType?.identifierForAlgorithmInput)
+            default:
+                return Dose(startDate: dose.startDate, endDate: dose.endDate, type: dose.type, insulinType: dose.insulinType?.identifierForAlgorithmInput)
+            }
+        }
         try container.encode(doses, forKey: .doses)
+        let carbEntries = carbEntries.map { entry in
+            CarbEntry(
+                grams: entry.quantity.doubleValue(for: .gram()),
+                absorptionTime: entry.absorptionTime,
+                date: entry.startDate)
+        }
         try container.encode(carbEntries, forKey: .carbEntries)
         try container.encode(basal, forKey: .basal)
         let sensitivityMgdl = sensitivity.map { AbsoluteScheduleValue(startDate: $0.startDate, endDate: $0.endDate, value: $0.value.doubleValue(for: .milligramsPerDeciliter)) }
@@ -122,8 +244,7 @@ extension LoopAlgorithmInput: Codable {
         let targetMgdl = target.map {
             let lower = $0.value.lowerBound.doubleValue(for: .milligramsPerDeciliter)
             let upper = $0.value.upperBound.doubleValue(for: .milligramsPerDeciliter)
-            let range = ClosedRange(uncheckedBounds: (lower: lower, upper: upper) )
-            return AbsoluteScheduleValue(startDate: $0.startDate, endDate: $0.endDate, value: range)
+            return TargetEntry(startDate: $0.startDate, endDate: $0.endDate, lowerBound: lower, upperBound: upper)
         }
         try container.encode(targetMgdl, forKey: .target)
         try container.encode(suspendThreshold?.doubleValue(for: .milligramsPerDeciliter), forKey: .suspendThreshold)
@@ -132,7 +253,7 @@ extension LoopAlgorithmInput: Codable {
         if useIntegralRetrospectiveCorrection {
             try container.encode(useIntegralRetrospectiveCorrection, forKey: .useIntegralRetrospectiveCorrection)
         }
-        try container.encode(recommendationInsulinType, forKey: .recommendationInsulinType)
+        try container.encode(recommendationInsulinType.identifierForAlgorithmInput, forKey: .recommendationInsulinType)
         try container.encode(recommendationType.rawValue, forKey: .recommendationType)
 
     }
@@ -201,15 +322,8 @@ extension LoopAlgorithmInput {
     var simplifiedForFixture: LoopAlgorithmInput {
         return LoopAlgorithmInput(
             predictionStart: predictionStart,
-            glucoseHistory: glucoseHistory.map {
-                return StoredGlucoseSample(
-                    startDate: $0.startDate,
-                    quantity: $0.quantity,
-                    isDisplayOnly: $0.isDisplayOnly)
-            },
-            doses: doses.map {
-                DoseEntry(type: $0.type, startDate: $0.startDate, endDate: $0.endDate, value: $0.value, unit: $0.unit)
-            },
+            glucoseHistory: glucoseHistory,
+            doses: doses,
             carbEntries: carbEntries.map {
                 StoredCarbEntry(startDate: $0.startDate, quantity: $0.quantity, absorptionTime: $0.absorptionTime)
             },
