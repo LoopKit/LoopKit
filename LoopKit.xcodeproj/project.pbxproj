@@ -726,6 +726,7 @@
 		B4D4C20D25F95A8700DA809D /* DisplayGlucosePreference.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4D4C20C25F95A8700DA809D /* DisplayGlucosePreference.swift */; };
 		C10424642AD830DD00DF7722 /* DoseRecommendationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10424632AD830DD00DF7722 /* DoseRecommendationType.swift */; };
 		C10424652AD836A000DF7722 /* DoseRecommendationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10424632AD830DD00DF7722 /* DoseRecommendationType.swift */; };
+		C104246D2ADF2A7100DF7722 /* LoopAlgorithmDoseRecommendation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C104246C2ADF2A7100DF7722 /* LoopAlgorithmDoseRecommendation.swift */; };
 		C109240F286A4AD500FAD2B8 /* AutomaticDosingStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = C109240E286A4AD500FAD2B8 /* AutomaticDosingStrategy.swift */; };
 		C1092410286A4ADB00FAD2B8 /* AutomaticDosingStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = C109240E286A4AD500FAD2B8 /* AutomaticDosingStrategy.swift */; };
 		C11195352AD7067600C0E1D3 /* LoopAlgorithmOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = C11195342AD7067600C0E1D3 /* LoopAlgorithmOutput.swift */; };
@@ -737,13 +738,11 @@
 		C111953B2AD7475300C0E1D3 /* LoopAlgorithmInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13ACA092AC077F000F05D08 /* LoopAlgorithmInput.swift */; };
 		C111953C2AD7475800C0E1D3 /* LoopDosingInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13ACA0A2AC077F000F05D08 /* LoopDosingInput.swift */; };
 		C111953D2AD7475C00C0E1D3 /* LoopPredictionInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D476B82A8ED3E8002C1C87 /* LoopPredictionInput.swift */; };
-		C111953E2AD7475F00C0E1D3 /* LoopPredictionOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13ACA0B2AC077F000F05D08 /* LoopPredictionOutput.swift */; };
 		C111953F2AD7478500C0E1D3 /* IntegralRetrospectiveCorrection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19E77672A61FD8A003F06C5 /* IntegralRetrospectiveCorrection.swift */; };
 		C11195402AD7478F00C0E1D3 /* RetrospectiveCorrection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19E77682A61FD8A003F06C5 /* RetrospectiveCorrection.swift */; };
 		C11195412AD7479300C0E1D3 /* StandardRetrospectiveCorrection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19E77692A61FD8A003F06C5 /* StandardRetrospectiveCorrection.swift */; };
 		C13ACA0C2AC077F000F05D08 /* LoopAlgorithmInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13ACA092AC077F000F05D08 /* LoopAlgorithmInput.swift */; };
 		C13ACA0D2AC077F000F05D08 /* LoopDosingInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13ACA0A2AC077F000F05D08 /* LoopDosingInput.swift */; };
-		C13ACA0E2AC077F000F05D08 /* LoopPredictionOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13ACA0B2AC077F000F05D08 /* LoopPredictionOutput.swift */; };
 		C140DFFF260276BF000A4FF7 /* ManualBolusRecommendation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C140DFFE260276BF000A4FF7 /* ManualBolusRecommendation.swift */; };
 		C140E0522602908A000A4FF7 /* SettingsPresentationMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C140E0512602908A000A4FF7 /* SettingsPresentationMode.swift */; };
 		C1475B33264C30800040C7B1 /* LoopKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BA7154201E484D0058961E /* LoopKitUI.framework */; };
@@ -878,6 +877,7 @@
 		C1FAEC1D264AD6B400A3250B /* DeviceStatusBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FAEC1C264AD6B400A3250B /* DeviceStatusBadge.swift */; };
 		C1FAEC1F264AE12700A3250B /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47ECF8725DC20810024A54D /* UIImage.swift */; };
 		C1FAEC21264AEEA300A3250B /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FAEC20264AEEA300A3250B /* UIImage.swift */; };
+		C1FFF5452ADF2AF000274183 /* LoopAlgorithmDoseRecommendation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C104246C2ADF2A7100DF7722 /* LoopAlgorithmDoseRecommendation.swift */; };
 		E9077D2724ACD59F0066A88D /* InformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9077D2624ACD59F0066A88D /* InformationView.swift */; };
 		E9077D2A24ACDE2C0066A88D /* CorrectionRangeInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9077D2924ACDE2C0066A88D /* CorrectionRangeInformationView.swift */; };
 		E9086B2924B39EDC0062F5C8 /* ChartsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9086B2824B39EDC0062F5C8 /* ChartsTableViewController.swift */; };
@@ -1714,6 +1714,7 @@
 		B4D4C20C25F95A8700DA809D /* DisplayGlucosePreference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayGlucosePreference.swift; sourceTree = "<group>"; };
 		C10340F329C786E900FE5BA1 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C10424632AD830DD00DF7722 /* DoseRecommendationType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoseRecommendationType.swift; sourceTree = "<group>"; };
+		C104246C2ADF2A7100DF7722 /* LoopAlgorithmDoseRecommendation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoopAlgorithmDoseRecommendation.swift; sourceTree = "<group>"; };
 		C104B64A2981EE3B003A9235 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Main.strings; sourceTree = "<group>"; };
 		C104B64B2981EE3B003A9235 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C109240E286A4AD500FAD2B8 /* AutomaticDosingStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutomaticDosingStrategy.swift; sourceTree = "<group>"; };
@@ -1738,7 +1739,6 @@
 		C1394BA6297E49630042F1A9 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C13ACA092AC077F000F05D08 /* LoopAlgorithmInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoopAlgorithmInput.swift; sourceTree = "<group>"; };
 		C13ACA0A2AC077F000F05D08 /* LoopDosingInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoopDosingInput.swift; sourceTree = "<group>"; };
-		C13ACA0B2AC077F000F05D08 /* LoopPredictionOutput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoopPredictionOutput.swift; sourceTree = "<group>"; };
 		C13E6D291EEB1CB9006F5880 /* ice_slow_absorption.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_slow_absorption.json; sourceTree = "<group>"; };
 		C13F89C4297E495B00C71398 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C140DFFE260276BF000A4FF7 /* ManualBolusRecommendation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManualBolusRecommendation.swift; sourceTree = "<group>"; };
@@ -3304,11 +3304,11 @@
 				C16BC0B42A5FA9D200BDC713 /* DoseMath.swift */,
 				C10424632AD830DD00DF7722 /* DoseRecommendationType.swift */,
 				C1D476B62A8ED3E8002C1C87 /* LoopAlgorithm.swift */,
+				C104246C2ADF2A7100DF7722 /* LoopAlgorithmDoseRecommendation.swift */,
 				C13ACA092AC077F000F05D08 /* LoopAlgorithmInput.swift */,
 				C11195342AD7067600C0E1D3 /* LoopAlgorithmOutput.swift */,
 				C13ACA0A2AC077F000F05D08 /* LoopDosingInput.swift */,
 				C1D476B82A8ED3E8002C1C87 /* LoopPredictionInput.swift */,
-				C13ACA0B2AC077F000F05D08 /* LoopPredictionOutput.swift */,
 			);
 			path = LoopAlgorithm;
 			sourceTree = "<group>";
@@ -4356,6 +4356,7 @@
 				1DA649AB2445174400F61E75 /* Alert.swift in Sources */,
 				4322B777202FA2790002837D /* CarbValue.swift in Sources */,
 				C1D476BB2A8ED3E8002C1C87 /* LoopPredictionInput.swift in Sources */,
+				C104246D2ADF2A7100DF7722 /* LoopAlgorithmDoseRecommendation.swift in Sources */,
 				4322B782202FA2AF0002837D /* PumpEventType.swift in Sources */,
 				C10424642AD830DD00DF7722 /* DoseRecommendationType.swift in Sources */,
 				89AE2228228BC54C00BDFD85 /* TemporaryScheduleOverrideSettings.swift in Sources */,
@@ -4413,7 +4414,6 @@
 				43D8FDFF1C7290350073BE78 /* Date.swift in Sources */,
 				C191D26325B3815000C26C0B /* AutomaticDoseRecommendation.swift in Sources */,
 				C187339429B9486200519CDF /* DateFormatter.swift in Sources */,
-				C13ACA0E2AC077F000F05D08 /* LoopPredictionOutput.swift in Sources */,
 				A919889C2354E5EB00B75EEE /* SettingsStore.swift in Sources */,
 				C187338A29B9486200519CDF /* Collection.swift in Sources */,
 				B42A7472235885B600247B03 /* LoopNotificationUserInfoKey.swift in Sources */,
@@ -4703,6 +4703,7 @@
 				C11195392AD7473600C0E1D3 /* AutomaticDoseRecommendation.swift in Sources */,
 				89AE2231228BC68100BDFD85 /* DoseProgressTimerEstimator.swift in Sources */,
 				A9E675B422713F4700E25293 /* CachedCarbObject+CoreDataProperties.swift in Sources */,
+				C1FFF5452ADF2AF000274183 /* LoopAlgorithmDoseRecommendation.swift in Sources */,
 				A9E675B522713F4700E25293 /* AbsorbedCarbValue.swift in Sources */,
 				B455F4FE2600E5EE000ED456 /* GlucoseRange.swift in Sources */,
 				A9E675B722713F4700E25293 /* NSManagedObjectContext.swift in Sources */,
@@ -4747,7 +4748,6 @@
 				A9E675CF22713F4700E25293 /* Date.swift in Sources */,
 				A9E675D022713F4700E25293 /* GlucoseChange.swift in Sources */,
 				A9E675D122713F4700E25293 /* GlucoseSchedule.swift in Sources */,
-				C111953E2AD7475F00C0E1D3 /* LoopPredictionOutput.swift in Sources */,
 				A9E675D222713F4700E25293 /* NSUserDefaults.swift in Sources */,
 				A9E675D322713F4700E25293 /* CarbStore.swift in Sources */,
 				A9E675D422713F4700E25293 /* CachedGlucoseObject+CoreDataClass.swift in Sources */,
