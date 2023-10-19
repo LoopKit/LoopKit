@@ -72,11 +72,8 @@ public struct LoopAlgorithm {
     ///   - basal: Scheduled basal rate timeline: t-16h to t
     ///   - sensitivity: Insulin sensitivity timeline: t-16h to t (eventually with mid-absorption isf changes, it will be t-10h to t)
     ///   - carbRatio: Carb ratio timeline: t-10h to t+6h
-    ///   - useIntegralRetrospectiveCorrection: Whether to use IRC (true) or RC (false)
-    ///   - rateRounder: Closure that rounds recommendation to nearest supported rate. If nil, no rounding is performed
-    ///   - isBasalRateScheduleOverrideActive: A flag describing whether a basal rate schedule override is in progress
-    ///   - duration: The duration of the temporary basal
-    ///   - continuationInterval: The duration of time before an ongoing temp basal should be continued with a new command
+    ///   - algorithmEffectsOptions: Which effects to include when combining effects to generate glucose prediction
+    ///   - useIntegralRetrospectiveCorrection: If true, the prediction will use Integral Retrospection. If false, will use traditional Retrospective Correction
     /// - Returns: A LoopPrediction struct containing the predicted glucose and the computed intermediate effects used to make the prediction
 
     public static func generatePrediction(
