@@ -82,7 +82,6 @@ extension InsulinCorrection {
     ///  delivery, such as the remaining portion of an ongoing temp basal.
     ///
     /// - Parameters:
-    ///   - pendingInsulin: The number of units expected to be delivered, but not yet reflected in the correction
     ///   - maxBolus: The maximum allowable bolus value in units
     /// - Returns: A bolus recommendation
     public func asManualBolus(maxBolus: Double) -> ManualBolusRecommendation {
@@ -535,9 +534,7 @@ extension Collection where Element: GlucoseValue {
     ///   - suspendThreshold: A glucose value causing a recommendation of no insulin if any prediction falls below
     ///   - sensitivity: The schedule of insulin sensitivities
     ///   - model: The insulin absorption model
-    ///   - pendingInsulin: The number of units expected to be delivered, but not yet reflected in the correction
     ///   - maxBolus: The maximum bolus to return
-    ///   - volumeRounder: Closure that rounds recommendation to nearest supported bolus volume. If nil, no rounding is performed
     /// - Returns: A bolus recommendation
     public func recommendedManualBolus(
         to correctionRange: GlucoseRangeSchedule,
@@ -583,7 +580,6 @@ extension Collection where Element: GlucoseValue {
     ///   - suspendThreshold: A glucose value causing a recommendation of no insulin if any prediction falls below
     ///   - insulinSensitivity: The timeline of insulin sensitivities
     ///   - model: The insulin absorption model to be used for the recommended dose
-    ///   - pendingInsulin: The number of units expected to be delivered, but not yet reflected in the correction
     ///   - maxBolus: The maximum bolus to return
     /// - Returns: A bolus recommendation
     public func recommendedManualBolus(
