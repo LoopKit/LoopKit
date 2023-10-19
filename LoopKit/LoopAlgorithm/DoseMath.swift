@@ -275,7 +275,6 @@ extension Collection where Element: GlucoseValue {
 
             // If any predicted value is below the suspend threshold, return immediately
             guard prediction.quantity >= suspendThreshold else {
-                print("Suspend!")
                 return .suspend(min: prediction)
             }
 
