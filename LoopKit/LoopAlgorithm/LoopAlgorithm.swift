@@ -206,7 +206,7 @@ public struct LoopAlgorithm {
 
     // Computes an amount of insulin to correct the given prediction
     public static func insulinCorrection(
-        prediction: LoopPrediction,
+        prediction: [PredictedGlucoseValue],
         at deliveryDate: Date,
         target: GlucoseRangeTimeline,
         suspendThreshold: HKQuantity,
@@ -215,7 +215,7 @@ public struct LoopAlgorithm {
     ) -> InsulinCorrection {
         let insulinModel = insulinModelProvider.model(for: insulinType)
 
-        return prediction.glucose.insulinCorrection(
+        return prediction.insulinCorrection(
             to: target,
             at: deliveryDate,
             suspendThreshold: suspendThreshold,
@@ -374,10 +374,11 @@ public struct LoopAlgorithm {
         }
 
         // TODO: This is to be removed when implementing mid-absorption ISF changes
+        // This sets a single ISF value for the duration of the dose.
         let correctionSensitivity = [input.sensitivity.first { $0.startDate <= input.predictionStart && $0.endDate >= input.predictionStart }!]
 
         let correction = insulinCorrection(
-            prediction: prediction,
+            prediction: prediction.glucose,
             at: input.predictionStart,
             target: input.target,
             suspendThreshold: suspendThreshold,
