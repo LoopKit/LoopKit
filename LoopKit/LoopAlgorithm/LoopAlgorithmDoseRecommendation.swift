@@ -8,7 +8,8 @@
 
 import Foundation
 
-public struct LoopAlgorithmDoseRecommendation {
+public struct LoopAlgorithmDoseRecommendation: Equatable {
+
     public var manualBolus: ManualBolusRecommendation?
     public var automaticBolus: AutomaticDoseRecommendation?
     public var tempBasal: TempBasalRecommendation?

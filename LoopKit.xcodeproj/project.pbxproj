@@ -878,6 +878,11 @@
 		C1FAEC1F264AE12700A3250B /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47ECF8725DC20810024A54D /* UIImage.swift */; };
 		C1FAEC21264AEEA300A3250B /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FAEC20264AEEA300A3250B /* UIImage.swift */; };
 		C1FFF5452ADF2AF000274183 /* LoopAlgorithmDoseRecommendation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C104246C2ADF2A7100DF7722 /* LoopAlgorithmDoseRecommendation.swift */; };
+		C1FFF5482ADF3A6600274183 /* suspend_input.json in Resources */ = {isa = PBXBuildFile; fileRef = C1FFF5472ADF3A6600274183 /* suspend_input.json */; };
+		C1FFF54C2ADF3AEA00274183 /* suspend_recommendation.json in Resources */ = {isa = PBXBuildFile; fileRef = C1FFF54B2ADF3AEA00274183 /* suspend_recommendation.json */; };
+		C1FFF54E2AE033CF00274183 /* LoopAlgorithmTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFF54D2AE033CF00274183 /* LoopAlgorithmTests.swift */; };
+		C1FFF5502AE06A7000274183 /* carbs_with_isf_change_input.json in Resources */ = {isa = PBXBuildFile; fileRef = C1FFF54F2AE06A7000274183 /* carbs_with_isf_change_input.json */; };
+		C1FFF5542AE06D2900274183 /* carbs_with_isf_change_recommendation.json in Resources */ = {isa = PBXBuildFile; fileRef = C1FFF5532AE06D2900274183 /* carbs_with_isf_change_recommendation.json */; };
 		E9077D2724ACD59F0066A88D /* InformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9077D2624ACD59F0066A88D /* InformationView.swift */; };
 		E9077D2A24ACDE2C0066A88D /* CorrectionRangeInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9077D2924ACDE2C0066A88D /* CorrectionRangeInformationView.swift */; };
 		E9086B2924B39EDC0062F5C8 /* ChartsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9086B2824B39EDC0062F5C8 /* ChartsTableViewController.swift */; };
@@ -1938,6 +1943,11 @@
 		C1FDCC0A29C786F90056E652 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C1FDCC0B29C786F90056E652 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C1FF3D4E29C786A900BDC1EC /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C1FFF5472ADF3A6600274183 /* suspend_input.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = suspend_input.json; sourceTree = "<group>"; };
+		C1FFF54B2ADF3AEA00274183 /* suspend_recommendation.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = suspend_recommendation.json; sourceTree = "<group>"; };
+		C1FFF54D2AE033CF00274183 /* LoopAlgorithmTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopAlgorithmTests.swift; sourceTree = "<group>"; };
+		C1FFF54F2AE06A7000274183 /* carbs_with_isf_change_input.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = carbs_with_isf_change_input.json; sourceTree = "<group>"; };
+		C1FFF5532AE06D2900274183 /* carbs_with_isf_change_recommendation.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = carbs_with_isf_change_recommendation.json; sourceTree = "<group>"; };
 		E9077D2624ACD59F0066A88D /* InformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationView.swift; sourceTree = "<group>"; };
 		E9077D2924ACDE2C0066A88D /* CorrectionRangeInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionRangeInformationView.swift; sourceTree = "<group>"; };
 		E9086B2824B39EDC0062F5C8 /* ChartsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartsTableViewController.swift; sourceTree = "<group>"; };
@@ -2673,7 +2683,6 @@
 		43D8FDD91C728FDF0073BE78 /* LoopKitTests */ = {
 			isa = PBXGroup;
 			children = (
-				43D8FDDC1C728FDF0073BE78 /* Info.plist */,
 				1DFB99D5245CB2E900DCC8C9 /* AlertTests.swift */,
 				43D8FE1A1C72906E0073BE78 /* BasalRateScheduleTests.swift */,
 				A95A1D8A2460FD620079378D /* BolusRecommendationTests.swift */,
@@ -2692,6 +2701,8 @@
 				B4CEE2A4256E91290093111B /* DoseProgressTests.swift */,
 				43A067121F245A2F00E9E90F /* DoseStoreTests.swift */,
 				A971C8A323C6B1890099BEFC /* DosingDecisionStoreTests.swift */,
+				437AFF1B203A45CF008C4892 /* Extensions */,
+				43D988911C87FEFF00DA4467 /* Fixtures */,
 				43D8FE991C7293D00073BE78 /* GlucoseMathTests.swift */,
 				B46E095625F7E5910025A04D /* GlucoseRangeScheduleTests.swift */,
 				B455F4DE2600E0A8000ED456 /* GlucoseRangeTests.swift */,
@@ -2701,9 +2712,11 @@
 				898C897024D4C0E4002FA994 /* GuardrailTests.swift */,
 				1D0E708426BDE3BB00AECF0D /* HKDeviceCodableTests.swift */,
 				B4B7C1762603F5F6007379F6 /* HKUnitTests.swift */,
+				43D8FDDC1C728FDF0073BE78 /* Info.plist */,
 				43D8FEC81C7294640073BE78 /* InsulinMathTests.swift */,
 				B4B7C1602603F241007379F6 /* InsulinSensitivityScheduleTests.swift */,
 				A9DF02CE24F732FC00B7C988 /* JSONStreamEncoderTests.swift */,
+				C1FFF54D2AE033CF00274183 /* LoopAlgorithmTests.swift */,
 				43D8FDDA1C728FDF0073BE78 /* LoopKitTests.swift */,
 				43D9888C1C87EBE400DA4467 /* LoopMathTests.swift */,
 				A9672B5226E80C060025B0CD /* NewGlucoseSampleTests.swift */,
@@ -2712,6 +2725,7 @@
 				43D8FE1B1C72906E0073BE78 /* NSDateTests.swift */,
 				A985464A251442010099C1A6 /* OutputStreamTests.swift */,
 				B46E096C25F80D6C0025A04D /* OverrideTests.swift */,
+				434113B620F2BDB900D05747 /* Persistence */,
 				A9DF02D024F7449E00B7C988 /* PersistentDeviceLogTests.swift */,
 				A95A1D882460F8930079378D /* PumpManagerStatusTests.swift */,
 				434C5F9F209ABD4700B2FD1A /* QuantityFormatterTests.swift */,
@@ -2725,9 +2739,6 @@
 				8974AFBF22120D7A0043F01B /* TemporaryScheduleOverrideTests.swift */,
 				E93C86AF24CF7C470073089B /* TherapySettingsTests.swift */,
 				1D70C40C26F01D9F00C62570 /* VersionCheckServiceTests.swift */,
-				437AFF1B203A45CF008C4892 /* Extensions */,
-				43D988911C87FEFF00DA4467 /* Fixtures */,
-				434113B620F2BDB900D05747 /* Persistence */,
 			);
 			path = LoopKitTests;
 			sourceTree = "<group>";
@@ -2920,6 +2931,7 @@
 		43D988911C87FEFF00DA4467 /* Fixtures */ = {
 			isa = PBXGroup;
 			children = (
+				C1FFF5462ADF3A4100274183 /* AlgorithmTests */,
 				C16BC0B82A6034FA00BDC713 /* DoseMathTests */,
 				43D8FE431C7291930073BE78 /* CarbKit */,
 				43D8FE9B1C7293EB0073BE78 /* GlucoseKit */,
@@ -3311,6 +3323,17 @@
 				C1D476B82A8ED3E8002C1C87 /* LoopPredictionInput.swift */,
 			);
 			path = LoopAlgorithm;
+			sourceTree = "<group>";
+		};
+		C1FFF5462ADF3A4100274183 /* AlgorithmTests */ = {
+			isa = PBXGroup;
+			children = (
+				C1FFF5472ADF3A6600274183 /* suspend_input.json */,
+				C1FFF54B2ADF3AEA00274183 /* suspend_recommendation.json */,
+				C1FFF54F2AE06A7000274183 /* carbs_with_isf_change_input.json */,
+				C1FFF5532AE06D2900274183 /* carbs_with_isf_change_recommendation.json */,
+			);
+			path = AlgorithmTests;
 			sourceTree = "<group>";
 		};
 		E9077D2824ACD5AA0066A88D /* Information Screens */ = {
@@ -3815,6 +3838,7 @@
 				B46FA3F4253F00DD00D993E2 /* momentum_effect_impossible_rising_glucose_input.json in Resources */,
 				4322B7A0202FA3CC0002837D /* ice_slow_absorption.json in Resources */,
 				437874BE202FDD2D00A3D8B9 /* iob_from_bolus_180min_output.json in Resources */,
+				C1FFF5542AE06D2900274183 /* carbs_with_isf_change_recommendation.json in Resources */,
 				4322B7A6202FA3D20002837D /* momentum_effect_falling_glucose_output.json in Resources */,
 				C1D56376296B3F5E00BA15EC /* reservoir_for_iob_missing.json in Resources */,
 				437874C0202FDD2D00A3D8B9 /* iob_from_bolus_300min_output.json in Resources */,
@@ -3822,6 +3846,7 @@
 				435D2929205F3C760026F401 /* momentum_effect_rising_glucose_double_entries_input.json in Resources */,
 				4322B7AB202FA3D20002837D /* momentum_effect_stable_glucose_input.json in Resources */,
 				C16BC0CD2A60351B00BDC713 /* recommend_temp_basal_start_very_low_end_high.json in Resources */,
+				C1FFF5482ADF3A6600274183 /* suspend_input.json in Resources */,
 				E9DFB92E24E8A75C00468917 /* iob_from_multiple_curves_output.json in Resources */,
 				43D988A61C87FFA300DA4467 /* glucose_from_effects_momentum_flat_glucose_input.json in Resources */,
 				C16BC0CF2A60351B00BDC713 /* recommended_temp_start_low_end_just_above_range.json in Resources */,
@@ -3880,6 +3905,7 @@
 				43026D642132404900A332E2 /* ice_minus_flat_carb_effect_output.json in Resources */,
 				9E784343236659BD0016C583 /* ice_slow_absorption_piecewiselinear_output.json in Resources */,
 				43DC87BB1C8AD0ED005BC30D /* glucose_from_effects_non_zero_insulin_input.json in Resources */,
+				C1FFF5502AE06A7000274183 /* carbs_with_isf_change_input.json in Resources */,
 				4322B7A1202FA3D20002837D /* momentum_effect_bouncing_glucose_input.json in Resources */,
 				43D988A91C87FFA300DA4467 /* glucose_from_effects_momentum_blend_output.json in Resources */,
 				437874CF202FDD2D00A3D8B9 /* reconcile_resume_before_rewind_output.json in Resources */,
@@ -3896,6 +3922,7 @@
 				E93E865E24DC797A00FF40C8 /* basal_dose_with_delivered.json in Resources */,
 				437874BB202FDD2D00A3D8B9 /* effect_from_bolus_output.json in Resources */,
 				437874CC202FDD2D00A3D8B9 /* reconcile_history_input.json in Resources */,
+				C1FFF54C2ADF3AEA00274183 /* suspend_recommendation.json in Resources */,
 				43D988AA1C87FFA300DA4467 /* glucose_from_effects_momentum_blend_momentum_input.json in Resources */,
 				43439521205F2D910056DC37 /* counteraction_effect_falling_glucose_input.json in Resources */,
 				4322B792202FA3CC0002837D /* carb_effect_from_history_input.json in Resources */,
@@ -4472,6 +4499,7 @@
 				A99C7373233990D400C80963 /* TempBasalRecommendationTests.swift in Sources */,
 				A971C89F23C68B030099BEFC /* GlucoseStoreTests.swift in Sources */,
 				A971C8A423C6B1890099BEFC /* DosingDecisionStoreTests.swift in Sources */,
+				C1FFF54E2AE033CF00274183 /* LoopAlgorithmTests.swift in Sources */,
 				437AFF21203AA740008C4892 /* NSManagedObjectContext.swift in Sources */,
 				A95A1D852460CAD50079378D /* CarbValueTests.swift in Sources */,
 				437AFF1F203A763F008C4892 /* HKHealthStoreMock.swift in Sources */,

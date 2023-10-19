@@ -116,11 +116,13 @@ public struct LoopAlgorithm {
         let insulinCounteractionEffects = glucoseHistory.counteractionEffects(to: insulinEffects)
 
         // Carb Effects
-        let carbEffects = carbEntries.map(
+        let carbStatus = carbEntries.map(
             to: insulinCounteractionEffects,
             carbRatio: carbRatio,
             insulinSensitivity: sensitivity
-        ).dynamicGlucoseEffects(
+        )
+
+        let carbEffects = carbStatus.dynamicGlucoseEffects(
             from: start.addingTimeInterval(-IntegralRetrospectiveCorrection.retrospectionInterval),
             carbRatios: carbRatio,
             insulinSensitivities: sensitivity
@@ -371,12 +373,15 @@ public struct LoopAlgorithm {
             throw AlgorithmError.missingSuspendThreshold
         }
 
+        // TODO: This is to be removed when implementing mid-absorption ISF changes
+        let correctionSensitivity = [input.sensitivity.first { $0.startDate <= input.predictionStart && $0.endDate >= input.predictionStart }!]
+
         let correction = insulinCorrection(
             prediction: prediction,
             at: input.predictionStart,
             target: input.target,
             suspendThreshold: suspendThreshold,
-            sensitivity: input.sensitivity,
+            sensitivity: correctionSensitivity,
             insulinType: input.recommendationInsulinType)
 
         let activeDoses = input.doses.filterDateRange (nil, input.predictionStart)

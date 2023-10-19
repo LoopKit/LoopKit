@@ -1,0 +1,1203 @@
+{
+  "basal" : [
+    {
+      "endDate" : "2023-10-17T05:00:00Z",
+      "startDate" : "2023-10-17T04:49:07Z",
+      "value" : 0.8
+    },
+    {
+      "endDate" : "2023-10-17T07:00:00Z",
+      "startDate" : "2023-10-17T05:00:00Z",
+      "value" : 0.8
+    },
+    {
+      "endDate" : "2023-10-17T11:30:00Z",
+      "startDate" : "2023-10-17T07:00:00Z",
+      "value" : 0.75
+    },
+    {
+      "endDate" : "2023-10-17T17:00:00Z",
+      "startDate" : "2023-10-17T11:30:00Z",
+      "value" : 1.1
+    },
+    {
+      "endDate" : "2023-10-17T20:59:03Z",
+      "startDate" : "2023-10-17T17:00:00Z",
+      "value" : 1.2
+    }
+  ],
+  "carbEntries" : [
+    {
+      "absorptionTime" : 10800,
+      "date" : "2023-10-17T12:54:10Z",
+      "grams" : 15
+    },
+    {
+      "absorptionTime" : 10800,
+      "date" : "2023-10-17T20:45:30Z",
+      "grams" : 35
+    }
+  ],
+  "carbRatio" : [
+    {
+      "endDate" : "2023-10-17T11:00:00Z",
+      "startDate" : "2023-10-17T10:59:03Z",
+      "value" : 9
+    },
+    {
+      "endDate" : "2023-10-18T03:09:03Z",
+      "startDate" : "2023-10-17T11:00:00Z",
+      "value" : 8
+    }
+  ],
+  "doses" : [
+    {
+      "endDate" : "2023-10-17T04:49:21Z",
+      "startDate" : "2023-10-17T04:49:07Z",
+      "type" : "bolus",
+      "volume" : 0.35
+    },
+    {
+      "endDate" : "2023-10-17T04:54:18Z",
+      "startDate" : "2023-10-17T04:54:10Z",
+      "type" : "bolus",
+      "volume" : 0.2
+    },
+    {
+      "endDate" : "2023-10-17T04:59:17Z",
+      "startDate" : "2023-10-17T04:59:07Z",
+      "type" : "bolus",
+      "volume" : 0.25
+    },
+    {
+      "endDate" : "2023-10-17T05:09:25Z",
+      "startDate" : "2023-10-17T05:09:13Z",
+      "type" : "bolus",
+      "volume" : 0.3
+    },
+    {
+      "endDate" : "2023-10-17T05:14:32Z",
+      "startDate" : "2023-10-17T05:14:20Z",
+      "type" : "bolus",
+      "volume" : 0.3
+    },
+    {
+      "endDate" : "2023-10-17T05:19:23Z",
+      "startDate" : "2023-10-17T05:19:15Z",
+      "type" : "bolus",
+      "volume" : 0.2
+    },
+    {
+      "endDate" : "2023-10-17T05:24:11Z",
+      "startDate" : "2023-10-17T05:24:07Z",
+      "type" : "bolus",
+      "volume" : 0.1
+    },
+    {
+      "endDate" : "2023-10-17T05:29:15Z",
+      "startDate" : "2023-10-17T05:29:07Z",
+      "type" : "bolus",
+      "volume" : 0.2
+    },
+    {
+      "endDate" : "2023-10-17T05:59:08Z",
+      "startDate" : "2023-10-17T05:39:08Z",
+      "type" : "tempBasal",
+      "volume" : 0
+    },
+    {
+      "endDate" : "2023-10-17T05:59:11Z",
+      "startDate" : "2023-10-17T05:59:09Z",
+      "type" : "bolus",
+      "volume" : 0.05
+    },
+    {
+      "endDate" : "2023-10-17T06:09:08Z",
+      "startDate" : "2023-10-17T06:04:31Z",
+      "type" : "tempBasal",
+      "volume" : 0
+    },
+    {
+      "endDate" : "2023-10-17T06:09:12Z",
+      "startDate" : "2023-10-17T06:09:10Z",
+      "type" : "bolus",
+      "volume" : 0.05
+    },
+    {
+      "endDate" : "2023-10-17T06:14:13Z",
+      "startDate" : "2023-10-17T06:14:09Z",
+      "type" : "bolus",
+      "volume" : 0.1
+    },
+    {
+      "endDate" : "2023-10-17T06:19:11Z",
+      "startDate" : "2023-10-17T06:19:07Z",
+      "type" : "bolus",
+      "volume" : 0.1
+    },
+    {
+      "endDate" : "2023-10-17T06:24:11Z",
+      "startDate" : "2023-10-17T06:24:07Z",
+      "type" : "bolus",
+      "volume" : 0.1
+    },
+    {
+      "endDate" : "2023-10-17T06:29:14Z",
+      "startDate" : "2023-10-17T06:29:10Z",
+      "type" : "bolus",
+      "volume" : 0.1
+    },
+    {
+      "endDate" : "2023-10-17T06:34:11Z",
+      "startDate" : "2023-10-17T06:34:07Z",
+      "type" : "bolus",
+      "volume" : 0.1
+    },
+    {
+      "endDate" : "2023-10-17T06:39:14Z",
+      "startDate" : "2023-10-17T06:39:08Z",
+      "type" : "bolus",
+      "volume" : 0.15
+    },
+    {
+      "endDate" : "2023-10-17T06:54:12Z",
+      "startDate" : "2023-10-17T06:54:10Z",
+      "type" : "bolus",
+      "volume" : 0.05
+    },
+    {
+      "endDate" : "2023-10-17T06:59:13Z",
+      "startDate" : "2023-10-17T06:59:11Z",
+      "type" : "bolus",
+      "volume" : 0.05
+    },
+    {
+      "endDate" : "2023-10-17T07:04:13Z",
+      "startDate" : "2023-10-17T07:04:11Z",
+      "type" : "bolus",
+      "volume" : 0.05
+    },
+    {
+      "endDate" : "2023-10-17T07:09:18Z",
+      "startDate" : "2023-10-17T07:09:14Z",
+      "type" : "bolus",
+      "volume" : 0.1
+    },
+    {
+      "endDate" : "2023-10-17T07:19:09Z",
+      "startDate" : "2023-10-17T07:14:07Z",
+      "type" : "tempBasal",
+      "volume" : 0
+    },
+    {
+      "endDate" : "2023-10-17T07:34:07Z",
+      "startDate" : "2023-10-17T07:19:09Z",
+      "type" : "tempBasal",
+      "volume" : 0
+    },
+    {
+      "endDate" : "2023-10-17T07:39:08Z",
+      "startDate" : "2023-10-17T07:34:07Z",
+      "type" : "tempBasal",
+      "volume" : 0
+    },
+    {
+      "endDate" : "2023-10-17T07:59:06Z",
+      "startDate" : "2023-10-17T07:39:09Z",
+      "type" : "tempBasal",
+      "volume" : 0
+    },
+    {
+      "endDate" : "2023-10-17T08:19:07Z",
+      "startDate" : "2023-10-17T07:59:06Z",
+      "type" : "tempBasal",
+      "volume" : 0
+    },
+    {
+      "endDate" : "2023-10-17T08:34:09Z",
+      "startDate" : "2023-10-17T08:19:08Z",
+      "type" : "tempBasal",
+      "volume" : 0
+    },
+    {
+      "endDate" : "2023-10-17T08:44:06Z",
+      "startDate" : "2023-10-17T08:39:14Z",
+      "type" : "tempBasal",
+      "volume" : 0
+    },
+    {
+      "endDate" : "2023-10-17T10:09:13Z",
+      "startDate" : "2023-10-17T09:59:17Z",
+      "type" : "tempBasal",
+      "volume" : 0
+    },
+    {
+      "endDate" : "2023-10-17T10:39:13Z",
+      "startDate" : "2023-10-17T10:19:09Z",
+      "type" : "tempBasal",
+      "volume" : 0
+    },
+    {
+      "endDate" : "2023-10-17T10:59:10Z",
+      "startDate" : "2023-10-17T10:39:14Z",
+      "type" : "tempBasal",
+      "volume" : 0
+    },
+    {
+      "endDate" : "2023-10-17T11:19:07Z",
+      "startDate" : "2023-10-17T10:59:10Z",
+      "type" : "tempBasal",
+      "volume" : 0
+    },
+    {
+      "endDate" : "2023-10-17T11:39:08Z",
+      "startDate" : "2023-10-17T11:19:08Z",
+      "type" : "tempBasal",
+      "volume" : 0
+    },
+    {
+      "endDate" : "2023-10-17T11:44:09Z",
+      "startDate" : "2023-10-17T11:39:09Z",
+      "type" : "tempBasal",
+      "volume" : 0
+    },
+    {
+      "endDate" : "2023-10-17T12:04:30Z",
+      "startDate" : "2023-10-17T12:04:08Z",
+      "type" : "bolus",
+      "volume" : 0.55
+    },
+    {
+      "endDate" : "2023-10-17T12:09:41Z",
+      "startDate" : "2023-10-17T12:09:11Z",
+      "type" : "bolus",
+      "volume" : 0.75
+    },
+    {
+      "endDate" : "2023-10-17T12:14:34Z",
+      "startDate" : "2023-10-17T12:14:10Z",
+      "type" : "bolus",
+      "volume" : 0.6
+    },
+    {
+      "endDate" : "2023-10-17T12:19:27Z",
+      "startDate" : "2023-10-17T12:19:07Z",
+      "type" : "bolus",
+      "volume" : 0.5
+    },
+    {
+      "endDate" : "2023-10-17T12:24:23Z",
+      "startDate" : "2023-10-17T12:24:09Z",
+      "type" : "bolus",
+      "volume" : 0.35
+    },
+    {
+      "endDate" : "2023-10-17T12:29:20Z",
+      "startDate" : "2023-10-17T12:29:10Z",
+      "type" : "bolus",
+      "volume" : 0.25
+    },
+    {
+      "endDate" : "2023-10-17T12:34:17Z",
+      "startDate" : "2023-10-17T12:34:07Z",
+      "type" : "bolus",
+      "volume" : 0.25
+    },
+    {
+      "endDate" : "2023-10-17T12:49:05Z",
+      "startDate" : "2023-10-17T12:44:07Z",
+      "type" : "tempBasal",
+      "volume" : 0.05
+    },
+    {
+      "endDate" : "2023-10-17T12:54:23Z",
+      "startDate" : "2023-10-17T12:54:07Z",
+      "type" : "bolus",
+      "volume" : 0.4
+    },
+    {
+      "endDate" : "2023-10-17T12:59:57Z",
+      "startDate" : "2023-10-17T12:59:11Z",
+      "type" : "bolus",
+      "volume" : 1.15
+    },
+    {
+      "endDate" : "2023-10-17T13:04:38Z",
+      "startDate" : "2023-10-17T13:04:08Z",
+      "type" : "bolus",
+      "volume" : 0.75
+    },
+    {
+      "endDate" : "2023-10-17T13:09:16Z",
+      "startDate" : "2023-10-17T13:09:08Z",
+      "type" : "bolus",
+      "volume" : 0.2
+    },
+    {
+      "endDate" : "2023-10-17T13:14:18Z",
+      "startDate" : "2023-10-17T13:14:16Z",
+      "type" : "bolus",
+      "volume" : 0.05
+    },
+    {
+      "endDate" : "2023-10-17T13:44:12Z",
+      "startDate" : "2023-10-17T13:29:15Z",
+      "type" : "tempBasal",
+      "volume" : 0
+    },
+    {
+      "endDate" : "2023-10-17T13:49:09Z",
+      "startDate" : "2023-10-17T13:44:12Z",
+      "type" : "tempBasal",
+      "volume" : 0
+    },
+    {
+      "endDate" : "2023-10-17T13:54:09Z",
+      "startDate" : "2023-10-17T13:49:09Z",
+      "type" : "tempBasal",
+      "volume" : 0
+    },
+    {
+      "endDate" : "2023-10-17T13:59:06Z",
+      "startDate" : "2023-10-17T13:54:09Z",
+      "type" : "tempBasal",
+      "volume" : 0
+    },
+    {
+      "endDate" : "2023-10-17T14:04:07Z",
+      "startDate" : "2023-10-17T13:59:07Z",
+      "type" : "tempBasal",
+      "volume" : 0
+    },
+    {
+      "endDate" : "2023-10-17T14:09:09Z",
+      "startDate" : "2023-10-17T14:04:07Z",
+      "type" : "tempBasal",
+      "volume" : 0
+    },
+    {
+      "endDate" : "2023-10-17T14:14:07Z",
+      "startDate" : "2023-10-17T14:09:09Z",
+      "type" : "tempBasal",
+      "volume" : 0
+    },
+    {
+      "endDate" : "2023-10-17T14:24:09Z",
+      "startDate" : "2023-10-17T14:14:08Z",
+      "type" : "tempBasal",
+      "volume" : 0.05
+    },
+    {
+      "endDate" : "2023-10-17T14:39:22Z",
+      "startDate" : "2023-10-17T14:39:18Z",
+      "type" : "bolus",
+      "volume" : 0.1
+    },
+    {
+      "endDate" : "2023-10-17T14:44:17Z",
+      "startDate" : "2023-10-17T14:44:11Z",
+      "type" : "bolus",
+      "volume" : 0.15
+    },
+    {
+      "endDate" : "2023-10-17T14:49:13Z",
+      "startDate" : "2023-10-17T14:49:09Z",
+      "type" : "bolus",
+      "volume" : 0.1
+    },
+    {
+      "endDate" : "2023-10-17T14:54:30Z",
+      "startDate" : "2023-10-17T14:54:24Z",
+      "type" : "bolus",
+      "volume" : 0.15
+    },
+    {
+      "endDate" : "2023-10-17T14:59:11Z",
+      "startDate" : "2023-10-17T14:59:09Z",
+      "type" : "bolus",
+      "volume" : 0.05
+    },
+    {
+      "endDate" : "2023-10-17T15:04:15Z",
+      "startDate" : "2023-10-17T15:04:09Z",
+      "type" : "bolus",
+      "volume" : 0.15
+    },
+    {
+      "endDate" : "2023-10-17T15:09:21Z",
+      "startDate" : "2023-10-17T15:09:11Z",
+      "type" : "bolus",
+      "volume" : 0.25
+    },
+    {
+      "endDate" : "2023-10-17T15:19:10Z",
+      "startDate" : "2023-10-17T15:19:08Z",
+      "type" : "bolus",
+      "volume" : 0.05
+    },
+    {
+      "endDate" : "2023-10-17T15:24:11Z",
+      "startDate" : "2023-10-17T15:24:09Z",
+      "type" : "bolus",
+      "volume" : 0.05
+    },
+    {
+      "endDate" : "2023-10-17T15:29:21Z",
+      "startDate" : "2023-10-17T15:29:07Z",
+      "type" : "bolus",
+      "volume" : 0.35
+    },
+    {
+      "endDate" : "2023-10-17T15:34:25Z",
+      "startDate" : "2023-10-17T15:34:07Z",
+      "type" : "bolus",
+      "volume" : 0.45
+    },
+    {
+      "endDate" : "2023-10-17T15:44:14Z",
+      "startDate" : "2023-10-17T15:44:08Z",
+      "type" : "bolus",
+      "volume" : 0.15
+    },
+    {
+      "endDate" : "2023-10-17T15:49:13Z",
+      "startDate" : "2023-10-17T15:49:07Z",
+      "type" : "bolus",
+      "volume" : 0.15
+    },
+    {
+      "endDate" : "2023-10-17T15:59:12Z",
+      "startDate" : "2023-10-17T15:59:08Z",
+      "type" : "bolus",
+      "volume" : 0.1
+    },
+    {
+      "endDate" : "2023-10-17T16:09:06Z",
+      "startDate" : "2023-10-17T16:04:08Z",
+      "type" : "tempBasal",
+      "volume" : 0
+    },
+    {
+      "endDate" : "2023-10-17T16:14:07Z",
+      "startDate" : "2023-10-17T16:09:07Z",
+      "type" : "tempBasal",
+      "volume" : 0.05
+    },
+    {
+      "endDate" : "2023-10-17T16:24:07Z",
+      "startDate" : "2023-10-17T16:19:08Z",
+      "type" : "tempBasal",
+      "volume" : 0
+    },
+    {
+      "endDate" : "2023-10-17T16:24:20Z",
+      "startDate" : "2023-10-17T16:24:08Z",
+      "type" : "bolus",
+      "volume" : 0.3
+    },
+    {
+      "endDate" : "2023-10-17T16:29:33Z",
+      "startDate" : "2023-10-17T16:29:13Z",
+      "type" : "bolus",
+      "volume" : 0.5
+    },
+    {
+      "endDate" : "2023-10-17T16:34:25Z",
+      "startDate" : "2023-10-17T16:34:19Z",
+      "type" : "bolus",
+      "volume" : 0.15
+    },
+    {
+      "endDate" : "2023-10-17T16:39:17Z",
+      "startDate" : "2023-10-17T16:39:09Z",
+      "type" : "bolus",
+      "volume" : 0.2
+    },
+    {
+      "endDate" : "2023-10-17T16:44:23Z",
+      "startDate" : "2023-10-17T16:44:07Z",
+      "type" : "bolus",
+      "volume" : 0.4
+    },
+    {
+      "endDate" : "2023-10-17T16:49:21Z",
+      "startDate" : "2023-10-17T16:49:07Z",
+      "type" : "bolus",
+      "volume" : 0.35
+    },
+    {
+      "endDate" : "2023-10-17T16:54:21Z",
+      "startDate" : "2023-10-17T16:54:09Z",
+      "type" : "bolus",
+      "volume" : 0.3
+    },
+    {
+      "endDate" : "2023-10-17T17:04:07Z",
+      "startDate" : "2023-10-17T16:59:12Z",
+      "type" : "tempBasal",
+      "volume" : 0.05
+    },
+    {
+      "endDate" : "2023-10-17T17:09:20Z",
+      "startDate" : "2023-10-17T17:09:08Z",
+      "type" : "bolus",
+      "volume" : 0.3
+    },
+    {
+      "endDate" : "2023-10-17T17:14:14Z",
+      "startDate" : "2023-10-17T17:14:08Z",
+      "type" : "bolus",
+      "volume" : 0.15
+    },
+    {
+      "endDate" : "2023-10-17T17:19:12Z",
+      "startDate" : "2023-10-17T17:19:08Z",
+      "type" : "bolus",
+      "volume" : 0.1
+    },
+    {
+      "endDate" : "2023-10-17T17:24:19Z",
+      "startDate" : "2023-10-17T17:24:09Z",
+      "type" : "bolus",
+      "volume" : 0.25
+    },
+    {
+      "endDate" : "2023-10-17T17:29:20Z",
+      "startDate" : "2023-10-17T17:29:10Z",
+      "type" : "bolus",
+      "volume" : 0.25
+    },
+    {
+      "endDate" : "2023-10-17T17:34:11Z",
+      "startDate" : "2023-10-17T17:34:09Z",
+      "type" : "bolus",
+      "volume" : 0.05
+    },
+    {
+      "endDate" : "2023-10-17T17:39:17Z",
+      "startDate" : "2023-10-17T17:39:07Z",
+      "type" : "bolus",
+      "volume" : 0.25
+    },
+    {
+      "endDate" : "2023-10-17T17:54:13Z",
+      "startDate" : "2023-10-17T17:54:07Z",
+      "type" : "bolus",
+      "volume" : 0.15
+    },
+    {
+      "endDate" : "2023-10-17T18:14:07Z",
+      "startDate" : "2023-10-17T18:09:08Z",
+      "type" : "tempBasal",
+      "volume" : 0.05
+    },
+    {
+      "endDate" : "2023-10-17T18:19:16Z",
+      "startDate" : "2023-10-17T18:19:08Z",
+      "type" : "bolus",
+      "volume" : 0.2
+    },
+    {
+      "endDate" : "2023-10-17T18:39:09Z",
+      "startDate" : "2023-10-17T18:29:07Z",
+      "type" : "tempBasal",
+      "volume" : 0.1
+    },
+    {
+      "endDate" : "2023-10-17T18:44:11Z",
+      "startDate" : "2023-10-17T18:44:07Z",
+      "type" : "bolus",
+      "volume" : 0.1
+    },
+    {
+      "endDate" : "2023-10-17T18:54:08Z",
+      "startDate" : "2023-10-17T18:49:09Z",
+      "type" : "tempBasal",
+      "volume" : 0.05
+    },
+    {
+      "endDate" : "2023-10-17T18:59:10Z",
+      "startDate" : "2023-10-17T18:54:09Z",
+      "type" : "tempBasal",
+      "volume" : 0.05
+    },
+    {
+      "endDate" : "2023-10-17T19:09:07Z",
+      "startDate" : "2023-10-17T18:59:10Z",
+      "type" : "tempBasal",
+      "volume" : 0
+    },
+    {
+      "endDate" : "2023-10-17T19:14:09Z",
+      "startDate" : "2023-10-17T19:09:07Z",
+      "type" : "tempBasal",
+      "volume" : 0.05
+    },
+    {
+      "endDate" : "2023-10-17T19:34:08Z",
+      "startDate" : "2023-10-17T19:14:10Z",
+      "type" : "tempBasal",
+      "volume" : 0
+    },
+    {
+      "endDate" : "2023-10-17T19:54:07Z",
+      "startDate" : "2023-10-17T19:34:08Z",
+      "type" : "tempBasal",
+      "volume" : 0
+    },
+    {
+      "endDate" : "2023-10-17T20:14:17Z",
+      "startDate" : "2023-10-17T19:54:08Z",
+      "type" : "tempBasal",
+      "volume" : 0
+    },
+    {
+      "endDate" : "2023-10-17T20:34:08Z",
+      "startDate" : "2023-10-17T20:14:17Z",
+      "type" : "tempBasal",
+      "volume" : 0
+    },
+    {
+      "endDate" : "2023-10-17T20:39:48Z",
+      "startDate" : "2023-10-17T20:39:10Z",
+      "type" : "bolus",
+      "volume" : 0.95
+    },
+    {
+      "endDate" : "2023-10-17T20:44:44Z",
+      "startDate" : "2023-10-17T20:44:12Z",
+      "type" : "bolus",
+      "volume" : 0.8
+    },
+    {
+      "endDate" : "2023-10-17T20:49:23Z",
+      "startDate" : "2023-10-17T20:45:37Z",
+      "type" : "bolus",
+      "volume" : 5.65
+    },
+    {
+      "endDate" : "2023-10-17T20:54:23Z",
+      "startDate" : "2023-10-17T20:54:07Z",
+      "type" : "bolus",
+      "volume" : 0.4
+    }
+  ],
+  "glucoseHistory" : [
+    {
+      "date" : "2023-10-17T11:04:02Z",
+      "value" : 72
+    },
+    {
+      "date" : "2023-10-17T11:09:02Z",
+      "value" : 72
+    },
+    {
+      "date" : "2023-10-17T11:14:02Z",
+      "value" : 72
+    },
+    {
+      "date" : "2023-10-17T11:19:02Z",
+      "value" : 72
+    },
+    {
+      "date" : "2023-10-17T11:24:02Z",
+      "value" : 74
+    },
+    {
+      "date" : "2023-10-17T11:29:02Z",
+      "value" : 76
+    },
+    {
+      "date" : "2023-10-17T11:34:02Z",
+      "value" : 75
+    },
+    {
+      "date" : "2023-10-17T11:39:02Z",
+      "value" : 77
+    },
+    {
+      "date" : "2023-10-17T11:44:02Z",
+      "value" : 81
+    },
+    {
+      "date" : "2023-10-17T11:49:02Z",
+      "value" : 84
+    },
+    {
+      "date" : "2023-10-17T11:54:02Z",
+      "value" : 88
+    },
+    {
+      "date" : "2023-10-17T11:59:02Z",
+      "value" : 93
+    },
+    {
+      "date" : "2023-10-17T12:04:02Z",
+      "value" : 108
+    },
+    {
+      "date" : "2023-10-17T12:09:02Z",
+      "value" : 134
+    },
+    {
+      "date" : "2023-10-17T12:14:02Z",
+      "value" : 151
+    },
+    {
+      "date" : "2023-10-17T12:19:02Z",
+      "value" : 167
+    },
+    {
+      "date" : "2023-10-17T12:24:02Z",
+      "value" : 176
+    },
+    {
+      "date" : "2023-10-17T12:29:02Z",
+      "value" : 182
+    },
+    {
+      "date" : "2023-10-17T12:34:02Z",
+      "value" : 189
+    },
+    {
+      "date" : "2023-10-17T12:39:02Z",
+      "value" : 192
+    },
+    {
+      "date" : "2023-10-17T12:44:02Z",
+      "value" : 198
+    },
+    {
+      "date" : "2023-10-17T12:49:02Z",
+      "value" : 201
+    },
+    {
+      "date" : "2023-10-17T12:54:02Z",
+      "value" : 224
+    },
+    {
+      "date" : "2023-10-17T12:59:02Z",
+      "value" : 233
+    },
+    {
+      "date" : "2023-10-17T13:04:02Z",
+      "value" : 237
+    },
+    {
+      "date" : "2023-10-17T13:09:02Z",
+      "value" : 244
+    },
+    {
+      "date" : "2023-10-17T13:14:02Z",
+      "value" : 239
+    },
+    {
+      "date" : "2023-10-17T13:19:02Z",
+      "value" : 245
+    },
+    {
+      "date" : "2023-10-17T13:24:02Z",
+      "value" : 240
+    },
+    {
+      "date" : "2023-10-17T13:29:02Z",
+      "value" : 239
+    },
+    {
+      "date" : "2023-10-17T13:34:02Z",
+      "value" : 239
+    },
+    {
+      "date" : "2023-10-17T13:39:03Z",
+      "value" : 250
+    },
+    {
+      "date" : "2023-10-17T13:44:02Z",
+      "value" : 253
+    },
+    {
+      "date" : "2023-10-17T13:49:02Z",
+      "value" : 254
+    },
+    {
+      "date" : "2023-10-17T13:54:02Z",
+      "value" : 260
+    },
+    {
+      "date" : "2023-10-17T13:59:02Z",
+      "value" : 259
+    },
+    {
+      "date" : "2023-10-17T14:04:02Z",
+      "value" : 254
+    },
+    {
+      "date" : "2023-10-17T14:09:03Z",
+      "value" : 250
+    },
+    {
+      "date" : "2023-10-17T14:14:02Z",
+      "value" : 243
+    },
+    {
+      "date" : "2023-10-17T14:19:02Z",
+      "value" : 242
+    },
+    {
+      "date" : "2023-10-17T14:24:03Z",
+      "value" : 241
+    },
+    {
+      "date" : "2023-10-17T14:29:02Z",
+      "value" : 233
+    },
+    {
+      "date" : "2023-10-17T14:34:02Z",
+      "value" : 230
+    },
+    {
+      "date" : "2023-10-17T14:39:03Z",
+      "value" : 229
+    },
+    {
+      "date" : "2023-10-17T14:44:02Z",
+      "value" : 228
+    },
+    {
+      "date" : "2023-10-17T14:49:03Z",
+      "value" : 223
+    },
+    {
+      "date" : "2023-10-17T14:54:02Z",
+      "value" : 223
+    },
+    {
+      "date" : "2023-10-17T14:59:02Z",
+      "value" : 216
+    },
+    {
+      "date" : "2023-10-17T15:04:02Z",
+      "value" : 218
+    },
+    {
+      "date" : "2023-10-17T15:09:03Z",
+      "value" : 218
+    },
+    {
+      "date" : "2023-10-17T15:14:02Z",
+      "value" : 213
+    },
+    {
+      "date" : "2023-10-17T15:19:02Z",
+      "value" : 210
+    },
+    {
+      "date" : "2023-10-17T15:24:02Z",
+      "value" : 205
+    },
+    {
+      "date" : "2023-10-17T15:29:02Z",
+      "value" : 217
+    },
+    {
+      "date" : "2023-10-17T15:34:02Z",
+      "value" : 222
+    },
+    {
+      "date" : "2023-10-17T15:39:03Z",
+      "value" : 216
+    },
+    {
+      "date" : "2023-10-17T15:44:02Z",
+      "value" : 219
+    },
+    {
+      "date" : "2023-10-17T15:49:02Z",
+      "value" : 217
+    },
+    {
+      "date" : "2023-10-17T15:54:02Z",
+      "value" : 210
+    },
+    {
+      "date" : "2023-10-17T15:59:03Z",
+      "value" : 209
+    },
+    {
+      "date" : "2023-10-17T16:04:03Z",
+      "value" : 205
+    },
+    {
+      "date" : "2023-10-17T16:09:02Z",
+      "value" : 202
+    },
+    {
+      "date" : "2023-10-17T16:14:03Z",
+      "value" : 197
+    },
+    {
+      "date" : "2023-10-17T16:19:03Z",
+      "value" : 185
+    },
+    {
+      "date" : "2023-10-17T16:24:03Z",
+      "value" : 203
+    },
+    {
+      "date" : "2023-10-17T16:29:03Z",
+      "value" : 211
+    },
+    {
+      "date" : "2023-10-17T16:34:02Z",
+      "value" : 208
+    },
+    {
+      "date" : "2023-10-17T16:39:02Z",
+      "value" : 214
+    },
+    {
+      "date" : "2023-10-17T16:44:02Z",
+      "value" : 223
+    },
+    {
+      "date" : "2023-10-17T16:49:02Z",
+      "value" : 225
+    },
+    {
+      "date" : "2023-10-17T16:54:02Z",
+      "value" : 226
+    },
+    {
+      "date" : "2023-10-17T16:59:02Z",
+      "value" : 227
+    },
+    {
+      "date" : "2023-10-17T17:04:03Z",
+      "value" : 226
+    },
+    {
+      "date" : "2023-10-17T17:09:03Z",
+      "value" : 232
+    },
+    {
+      "date" : "2023-10-17T17:14:03Z",
+      "value" : 232
+    },
+    {
+      "date" : "2023-10-17T17:19:02Z",
+      "value" : 234
+    },
+    {
+      "date" : "2023-10-17T17:24:02Z",
+      "value" : 238
+    },
+    {
+      "date" : "2023-10-17T17:29:02Z",
+      "value" : 240
+    },
+    {
+      "date" : "2023-10-17T17:34:03Z",
+      "value" : 237
+    },
+    {
+      "date" : "2023-10-17T17:39:02Z",
+      "value" : 243
+    },
+    {
+      "date" : "2023-10-17T17:44:03Z",
+      "value" : 239
+    },
+    {
+      "date" : "2023-10-17T17:49:02Z",
+      "value" : 235
+    },
+    {
+      "date" : "2023-10-17T17:54:03Z",
+      "value" : 236
+    },
+    {
+      "date" : "2023-10-17T17:59:02Z",
+      "value" : 233
+    },
+    {
+      "date" : "2023-10-17T18:04:03Z",
+      "value" : 230
+    },
+    {
+      "date" : "2023-10-17T18:09:02Z",
+      "value" : 221
+    },
+    {
+      "date" : "2023-10-17T18:14:03Z",
+      "value" : 223
+    },
+    {
+      "date" : "2023-10-17T18:19:02Z",
+      "value" : 222
+    },
+    {
+      "date" : "2023-10-17T18:24:03Z",
+      "value" : 215
+    },
+    {
+      "date" : "2023-10-17T18:29:02Z",
+      "value" : 211
+    },
+    {
+      "date" : "2023-10-17T18:34:02Z",
+      "value" : 204
+    },
+    {
+      "date" : "2023-10-17T18:39:03Z",
+      "value" : 201
+    },
+    {
+      "date" : "2023-10-17T18:44:03Z",
+      "value" : 199
+    },
+    {
+      "date" : "2023-10-17T18:49:02Z",
+      "value" : 193
+    },
+    {
+      "date" : "2023-10-17T18:54:03Z",
+      "value" : 188
+    },
+    {
+      "date" : "2023-10-17T18:59:03Z",
+      "value" : 173
+    },
+    {
+      "date" : "2023-10-17T19:04:02Z",
+      "value" : 167
+    },
+    {
+      "date" : "2023-10-17T19:09:02Z",
+      "value" : 163
+    },
+    {
+      "date" : "2023-10-17T19:14:02Z",
+      "value" : 149
+    },
+    {
+      "date" : "2023-10-17T19:19:02Z",
+      "value" : 142
+    },
+    {
+      "date" : "2023-10-17T19:24:03Z",
+      "value" : 137
+    },
+    {
+      "date" : "2023-10-17T19:29:02Z",
+      "value" : 128
+    },
+    {
+      "date" : "2023-10-17T19:34:03Z",
+      "value" : 118
+    },
+    {
+      "date" : "2023-10-17T19:39:02Z",
+      "value" : 98
+    },
+    {
+      "date" : "2023-10-17T19:44:03Z",
+      "value" : 87
+    },
+    {
+      "date" : "2023-10-17T19:49:02Z",
+      "value" : 82
+    },
+    {
+      "date" : "2023-10-17T19:54:02Z",
+      "value" : 74
+    },
+    {
+      "date" : "2023-10-17T19:59:03Z",
+      "value" : 70
+    },
+    {
+      "date" : "2023-10-17T20:04:02Z",
+      "value" : 59
+    },
+    {
+      "date" : "2023-10-17T20:09:02Z",
+      "value" : 53
+    },
+    {
+      "date" : "2023-10-17T20:14:03Z",
+      "value" : 50
+    },
+    {
+      "date" : "2023-10-17T20:19:02Z",
+      "value" : 51
+    },
+    {
+      "date" : "2023-10-17T20:24:02Z",
+      "value" : 59
+    },
+    {
+      "date" : "2023-10-17T20:29:03Z",
+      "value" : 72
+    },
+    {
+      "date" : "2023-10-17T20:34:03Z",
+      "value" : 89
+    },
+    {
+      "date" : "2023-10-17T20:39:03Z",
+      "value" : 110
+    },
+    {
+      "date" : "2023-10-17T20:44:03Z",
+      "value" : 129
+    },
+    {
+      "date" : "2023-10-17T20:49:02Z",
+      "value" : 146
+    },
+    {
+      "date" : "2023-10-17T20:54:02Z",
+      "value" : 161
+    },
+    {
+      "date" : "2023-10-17T20:59:03Z",
+      "value" : 158
+    }
+  ],
+  "maxBasalRate" : 4.1,
+  "maxBolus" : 9,
+  "predictionStart" : "2023-10-17T20:59:03Z",
+  "recommendationInsulinType" : "novolog",
+  "recommendationType" : "automaticBolus",
+  "sensitivity" : [
+    {
+      "endDate" : "2023-10-17T05:00:00Z",
+      "startDate" : "2023-10-17T04:49:07Z",
+      "value" : 63
+    },
+    {
+      "endDate" : "2023-10-17T13:00:00Z",
+      "startDate" : "2023-10-17T05:00:00Z",
+      "value" : 65
+    },
+    {
+      "endDate" : "2023-10-17T18:30:00Z",
+      "startDate" : "2023-10-17T13:00:00Z",
+      "value" : 55
+    },
+    {
+      "endDate" : "2023-10-18T03:09:03Z",
+      "startDate" : "2023-10-17T18:30:00Z",
+      "value" : 63
+    }
+  ],
+  "suspendThreshold" : 78,
+  "target" : [
+    {
+      "endDate" : "2023-10-18T03:10:00Z",
+      "lowerBound" : 101,
+      "startDate" : "2023-10-17T20:59:03Z",
+      "upperBound" : 115
+    }
+  ]
+}
