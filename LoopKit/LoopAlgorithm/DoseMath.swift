@@ -242,7 +242,7 @@ extension Collection where Element: GlucoseValue {
     ///   - insulinSensitivityTimeline: The timeline of expected insulin sensitivity over the period of dose absorption
     ///   - model: The insulin effect model
     /// - Returns: A correction value in units, or nil if no correction needed
-    public func insulinCorrection(
+    func insulinCorrection(
         to correctionRange: GlucoseRangeTimeline,
         at date: Date,
         suspendThreshold: HKQuantity,
