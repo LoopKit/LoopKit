@@ -71,6 +71,15 @@
 /* Generic pump error description */
 "Device Refused" = "Il dispositivo è stato rifiutato";
 
+/* Accessibility label for device status critical state */
+"Device Status Critical" = "Stato del dispositivo critico";
+
+/* Accessibility label for device status normal state */
+"Device Status Normal" = "Sato del device normale";
+
+/* Accessibility label for device status warning state */
+"Device Status Warning" = "Avviso sullo stato del dispositivo";
+
 /* Recovery suggestion for a no data error */
 "Ensure carb data exists for the specified date" = "Assicurati che i dati sui carboidrati esistano per la data specificata";
 
@@ -148,11 +157,17 @@
 /* Descriptive text for maximum bolus */
 "Maximum Bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose." = "Il bolo massimo e' il valore piu' alto di bolo che puo'essere erogato tutto in una volta per coprire i carboidrati inseriti o per abbassare una iperglicemia";
 
+/* The short unit display string for milligrams per liter per minute */
+"mg/dL/min" = "mg/dl/min";
+
 /* The short unit display string for milligrams per deciliter per U */
 "mg/dL/U" = "mg/dL/U";
 
 /* The short unit display string for millimoles per liter */
 "mmol/L" = "mmol/L";
+
+/* The short unit display string for millimoles per liter per minute */
+"mmol/L/min" = "mmol/L/min";
 
 /* The short unit display string for millimoles per liter per U */
 "mmol/L/U" = "mmol/L/U";

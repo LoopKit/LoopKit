@@ -19,6 +19,9 @@
 /* No comment provided by engineer. */
 "%@" = "%@";
 
+/* No comment provided by engineer. */
+"%@ carbs, %@ absorption" = "%@ углеводов, %@ усвоения";
+
 /* Appends a full-stop to a statement */
 "%@." = "%@.";
 
@@ -53,6 +56,9 @@
 /* Description of a basal temp basal dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit)
    Description of a bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit) */
 "%1$@: <b>%2$@</b> %3$@" = "%1$@:<b>%2$@</b> %3$@";
+
+/* Format string describing glucose units per minute (1: glucose unit string) */
+"%1$@/min" = "%1$@/мин";
 
 /* String format for value with units (1: value, 2: separator, 3: units) */
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";
@@ -199,6 +205,9 @@
 /* Title of the setup button to continue */
 "Continue" = "Продолжить";
 
+/* Instruction to correct unsupported value */
+"Correct the highlighted unsupported value(s)." = "Исправьте выделенное значение (значения), которое не поддерживается.";
+
 /* The section footer of correction range schedule */
 "Correction range is the blood glucose range that you would like Loop to correct to." = "Диапазон коррекции это желательный диапазон значений ГК для обработки алгоритмом петли.";
 
@@ -297,6 +306,9 @@
 
 /* Title of insulin model preset - fiasp */
 "Fiasp" = "Fiasp";
+
+/* No comment provided by engineer. */
+"Food Type" = "Тип еды";
 
 /* Insulin model setting description (1: app name) (2: number of models) */
 "For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from %2$@ different models for how the app measures the insulin’s peak activity." = "Для быстродействующего инсулина %1$@ предполагается, что он активно работает в течение 6 часов. Вы можете выбрать из %2$@ различных моделей того, как приложение измеряет пиковую активность инсулина.";
@@ -433,6 +445,9 @@
 
 /* Title text for the zero basal rate warning */
 "No Basal Insulin" = "Без базального инсулина";
+
+/* No comment provided by engineer. */
+"Nothing to See Here!" = "Здесь нет ничего!";
 
 /* Section title for no-carb food
    The title for override emoji miscellaneous section */
@@ -574,6 +589,9 @@
 /* Text directing the user to configure their first custom preset */
 "Tap '+' to create a new custom preset." = "Нажмите «+», чтобы создать новый пользовательский пресет.";
 
+/* No comment provided by engineer. */
+"Tap back to continue exploring the rest of the %@ interface." = "Нажмите «Назад», чтобы продолжить изучение остальной части %@ интерфейса .";
+
 /* The empty-state text for a configuration value */
 "Tap to set" = "Щелкнуть для ввода";
 
@@ -633,6 +651,9 @@
 /* Subtitle of Rapid-Acting – Adult preset */
 "This model assumes peak insulin activity at 75 minutes." = "Эта модель предполагает пик активности инсулина на 75 минуте.";
 
+/* No comment provided by engineer. */
+"This section of the %@ app is unavailable in this simulator." = "Этот раздел %@ приложения  недоступен в этом симуляторе.";
+
 /* Information about maximum automated insulin on board (1: app name) */
 "This setting will also determine a safety limit for automatic dosing. %1$@ will limit automatic delivery to keep the amount of active insulin below twice your maximum bolus." = "Эта настройка также определяет предел безопасности для автоматического введения инсулина. %1$@ ограничит автоматический ввод инсулина, чтобы количество активного инсулина не превышало удвоенного максимального болюса.";
 
@@ -676,6 +697,9 @@
 
 /* Title for selection when no insulin type is selected. */
 "Unset" = "Не выбрано";
+
+/* No comment provided by engineer. */
+"Unsupported %@" = "Не поддерживается %@";
 
 /* Placeholder text until value is entered */
 "Value" = "Значение";

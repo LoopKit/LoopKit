@@ -71,6 +71,15 @@
 /* Generic pump error description */
 "Device Refused" = "Enheten nektet";
 
+/* Accessibility label for device status critical state */
+"Device Status Critical" = "Enhetens status er kritisk";
+
+/* Accessibility label for device status normal state */
+"Device Status Normal" = "Enhetens status er Normal";
+
+/* Accessibility label for device status warning state */
+"Device Status Warning" = "Advarsel om enhetsstatus";
+
 /* Recovery suggestion for a no data error */
 "Ensure carb data exists for the specified date" = "Verifiser at karbohydratoppføring eksisterer for den valgte datoen";
 
@@ -148,11 +157,17 @@
 /* Descriptive text for maximum bolus */
 "Maximum Bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose." = "Maksimal bolus er den høyeste bolusmengden du kan gi på en gang for å dekke karbohydrater eller redusere høyt blodsukker.";
 
+/* The short unit display string for milligrams per liter per minute */
+"mg/dL/min" = "mg/dL/min";
+
 /* The short unit display string for milligrams per deciliter per U */
 "mg/dL/U" = "mg/dL/E";
 
 /* The short unit display string for millimoles per liter */
 "mmol/L" = "mmol/L";
+
+/* The short unit display string for millimoles per liter per minute */
+"mmol/L/min" = "mmol/L/min";
 
 /* The short unit display string for millimoles per liter per U */
 "mmol/L/U" = "mmol/L/E";

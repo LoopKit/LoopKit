@@ -1,4 +1,7 @@
 /* No comment provided by engineer. */
+"%@" = "%@";
+
+/* No comment provided by engineer. */
 "%@ has been unable to communicate with the Simulator Pump since %@.\n\nWithout communication, the app cannot continue to send commands for insulin delivery or display accurate, recent information about your active insulin or the insulin being delivered." = "%1$@ не может установить связь с Симулятором помпы с %2$@.\n\nБез связи приложение не может продолжать посылать команды на доставку инсулина или отображать точную, свежую информацию о вашем активном инсулине или доставляемом инсулине.";
 
 /* Appends a full-stop to a statement */
@@ -7,8 +10,20 @@
 /* String format for value with units (1: value, 2: separator, 3: units) */
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";
 
+/* No comment provided by engineer. */
+"2" = "2";
+
+/* No comment provided by engineer. */
+"5" = "5";
+
+/* No comment provided by engineer. */
+"50+" = "50+";
+
 /* Alert content body for recurring software update alert */
 "A software update is recommended to continue using the %1$@ app.\n\nGo to %2$@ Settings > Software Update to install the latest version." = "Для продолжения использования приложения %1$@ рекомендуется обновить программное обеспечение.\n\nПерейдите в %2$@ Настройки > Обновление ПО, чтобы установить последнюю версию.";
+
+/* Section header for the activity section */
+"Activity" = "Нагрузка";
 
 /* Confirmation message for deleting a service */
 "Are you sure you want to delete this service?" = "Вы уверены, что хотите удалить этот сервис?";
@@ -23,19 +38,46 @@
 "CGM Settings" = "Настройки CGM";
 
 /* No comment provided by engineer. */
+"CGM Simulator" = "Симулятор CGM";
+
+/* No comment provided by engineer. */
 "Clear Last Version Check Alert Date" = "Очистить последнюю дату проверки версии";
 
 /* No comment provided by engineer. */
 "Comms Recovery" = "Восстановление связи";
 
+/* No comment provided by engineer. */
+"days" = "дней";
+
 /* Button title to delete a service */
 "Delete Service" = "Удалить сервис";
+
+/* No comment provided by engineer. */
+"Device Details" = "Сведения об устройстве";
+
+/* Settings done button label */
+"Done" = "Готово";
 
 /* The alert title for a resume error */
 "Error Resuming" = "Ошибка возобновления";
 
 /* The alert title for a suspend error */
 "Error Suspending" = "Ошибка приостановки";
+
+/* No comment provided by engineer. */
+"Estimated Reading" = "Приблизительное данные";
+
+/* No comment provided by engineer. */
+"Failed to Resume Insulin Delivery" = "Не удалось возобновить подачу инсулина";
+
+/* No comment provided by engineer. */
+"Failed to Suspend Insulin Delivery" = "Не удалось приостановить подачу инсулина";
+
+/* No comment provided by engineer. */
+"Get help with your CGM" = "Получите помощь по работе с CGM";
+
+/* No comment provided by engineer. */
+"Get help with your pump" = "Получите помощь по работе с помпой";
 
 /* Caption for History
    History Caption */
@@ -44,21 +86,63 @@
 /* No comment provided by engineer. */
 "How should the simulator respond to a version check?" = "Как симулятор должен реагировать на проверку версии?";
 
+/* No comment provided by engineer. */
+"Insulin\nSuspended" = "Подача инсулина приостановлена";
+
 /* Controller title for insulin type selection screen */
 "Insulin Type" = "Тип инсулина";
 
+/* Title of insulin delivery section */
+"Insulin(String.nonBreakingSpace)Delivery" = "Подача инсулина";
+
+/* No comment provided by engineer. */
+"Insulin%@Remaining" = "Остаток инсулина %@";
+
+/* No comment provided by engineer. */
+"Last Reading" = "Последние данные";
+
+/* No comment provided by engineer. */
+"min" = "мин";
+
 /* No comment provided by engineer. */
 "Mock Version Check %@" = "Проверка версии Mock %@";
+
+/* No comment provided by engineer. */
+"No\nDelivery" = "Нет подачи";
+
+/* No comment provided by engineer. */
+"Notification Settings" = "Настройки уведомлений";
 
 /* Button title to acknowledge error
    Default acknowledgement */
 "OK" = "OK";
 
+/* No comment provided by engineer. */
+"Pump expires in " = "Под истекает в ";
+
 /* Button title recovering comms */
 "Recover Simulator" = "Восстановить симулятор";
 
+/* No comment provided by engineer. */
+"Replace Pump" = "Замените помпу";
+
+/* No comment provided by engineer. */
+"Scheduled%@Basal" = "Запланированный базал %@";
+
+/* No comment provided by engineer. */
+"Sensor expires in " = "Сенсор заканчивается в";
+
 /* Caption for Source */
 "Source" = "Источник";
+
+/* No comment provided by engineer. */
+"Stop Sensor" = "Стоп сенсор";
+
+/* Label for suspended at field */
+"Suspended At" = "Приостановлено в";
+
+/* No comment provided by engineer. */
+"Temporary%@Basal" = "Временный базал %@";
 
 /* Recurring software update alert title */
 "Update Reminder" = "Напоминание об обновлении";
