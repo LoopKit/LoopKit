@@ -71,6 +71,15 @@
 /* Generic pump error description */
 "Device Refused" = "Gerät verweigert";
 
+/* Accessibility label for device status critical state */
+"Device Status Critical" = "Gerätestatus Kritisch";
+
+/* Accessibility label for device status normal state */
+"Device Status Normal" = "Gerätestatus Normal";
+
+/* Accessibility label for device status warning state */
+"Device Status Warning" = "Gerätestatus Warnung";
+
 /* Recovery suggestion for a no data error */
 "Ensure carb data exists for the specified date" = "Stelle sicher, dass die Kohlenhydrate für den ausgewählten Zeitraum eingegeben wurden";
 

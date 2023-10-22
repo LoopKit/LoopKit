@@ -28,8 +28,14 @@
 /* No comment provided by engineer. */
 "Comms Recovery" = "Comms Herstel";
 
+/* No comment provided by engineer. */
+"days" = "dagen";
+
 /* Button title to delete a service */
 "Delete Service" = "Service Verwijderen";
+
+/* Settings done button label */
+"Done" = "Gereed";
 
 /* The alert title for a resume error */
 "Error Resuming" = "Fout Bij Hervatten";
@@ -48,6 +54,9 @@
 "Insulin Type" = "Insulinetype";
 
 /* No comment provided by engineer. */
+"min" = "min";
+
+/* No comment provided by engineer. */
 "Mock Version Check %@" = "Mock Versie Check %@";
 
 /* Button title to acknowledge error
@@ -57,8 +66,20 @@
 /* Button title recovering comms */
 "Recover Simulator" = "Simulator Herstellen";
 
+/* No comment provided by engineer. */
+"Replace Pump" = "Vervang pomp";
+
+/* No comment provided by engineer. */
+"Sensor expires in " = "Sensor verloopt in ";
+
 /* Caption for Source */
 "Source" = "Bron";
+
+/* No comment provided by engineer. */
+"Stop Sensor" = "Stop Sensor";
+
+/* Label for suspended at field */
+"Suspended At" = "Onderbroken om";
 
 /* Recurring software update alert title */
 "Update Reminder" = "Update Herinnering";

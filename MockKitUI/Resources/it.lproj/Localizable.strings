@@ -1,8 +1,29 @@
+/* No comment provided by engineer. */
+"%@" = "%@";
+
+/* No comment provided by engineer. */
+"%@ has been unable to communicate with the Simulator Pump since %@.\n\nWithout communication, the app cannot continue to send commands for insulin delivery or display accurate, recent information about your active insulin or the insulin being delivered." = "%1$@ non ha potuto stabilire la comunicazione con il simulatore del microinfusore dal%2$@.\n\nSenza  comunicazione la App non puo' continuare a mandare i comandi per l'erogazione di insulina o poter visualizzare correttamente la quantità' di insulina attiva gia' erogata.";
+
 /* Appends a full-stop to a statement */
 "%@." = "%@.";
 
 /* String format for value with units (1: value, 2: separator, 3: units) */
 "%1$@%2$@%3$@" = "%1$@ %2$@ %3$@";
+
+/* No comment provided by engineer. */
+"2" = "2";
+
+/* No comment provided by engineer. */
+"5" = "5";
+
+/* No comment provided by engineer. */
+"50+" = "50+";
+
+/* Alert content body for recurring software update alert */
+"A software update is recommended to continue using the %1$@ app.\n\nGo to %2$@ Settings > Software Update to install the latest version." = "Si consiglia un aggiornamento software per continuare a utilizzare l'app (appName).\n\nVai a (appName) Impostazioni > Aggiornamento Software per installare la versione più recente.";
+
+/* Section header for the activity section */
+"Activity" = "Attività";
 
 /* Confirmation message for deleting a service */
 "Are you sure you want to delete this service?" = "Sei sicuro di voler eliminare questo servizio?";
@@ -17,19 +38,46 @@
 "CGM Settings" = "Impostazioni CGM";
 
 /* No comment provided by engineer. */
+"CGM Simulator" = "Simulatore CGM";
+
+/* No comment provided by engineer. */
 "Clear Last Version Check Alert Date" = "Cancella l'ultima versione Controlla la data dell'avviso";
 
 /* No comment provided by engineer. */
-"Comms Recovery" = "recovero delle comunicazioni";
+"Comms Recovery" = "Recupero comunicazioni";
+
+/* No comment provided by engineer. */
+"days" = "giorni";
 
 /* Button title to delete a service */
 "Delete Service" = "Elimina Servizio";
+
+/* No comment provided by engineer. */
+"Device Details" = "dettagli device ";
+
+/* Settings done button label */
+"Done" = "fatto";
 
 /* The alert title for a resume error */
 "Error Resuming" = "Errore durante la Ripresa";
 
 /* The alert title for a suspend error */
 "Error Suspending" = "Errore durante l’interruzione";
+
+/* No comment provided by engineer. */
+"Estimated Reading" = "Lettura stimata";
+
+/* No comment provided by engineer. */
+"Failed to Resume Insulin Delivery" = "Impossibile riprendere l'erogazione dell'insulina";
+
+/* No comment provided by engineer. */
+"Failed to Suspend Insulin Delivery" = "Impossibile Sospendere Erogazione Insulina";
+
+/* No comment provided by engineer. */
+"Get help with your CGM" = "Ottieni aiuto per il tuo CGM";
+
+/* No comment provided by engineer. */
+"Get help with your pump" = "Ottieni aiuto per il tuo CGM";
 
 /* Caption for History
    History Caption */
@@ -38,22 +86,70 @@
 /* No comment provided by engineer. */
 "How should the simulator respond to a version check?" = "Come dovrebbe rispondere il simulatore a un controllo della versione?";
 
+/* No comment provided by engineer. */
+"Insulin\nSuspended" = "Insulina sospesa";
+
 /* Controller title for insulin type selection screen */
 "Insulin Type" = "Tipo d'insulina";
+
+/* Title of insulin delivery section */
+"Insulin(String.nonBreakingSpace)Delivery" = "Consegna di insulina (String.nonBreakingSpace).";
+
+/* No comment provided by engineer. */
+"Insulin%@Remaining" = "Insulina Rimanente";
+
+/* No comment provided by engineer. */
+"Last Reading" = "Ultima lettura";
+
+/* No comment provided by engineer. */
+"min" = "minuti";
+
+/* No comment provided by engineer. */
+"Mock Version Check %@" = "Controllo versione fittizia %@";
+
+/* No comment provided by engineer. */
+"No\nDelivery" = "Nessuna Erogazione";
+
+/* No comment provided by engineer. */
+"Notification Settings" = "impostazioni notifiche ";
 
 /* Button title to acknowledge error
    Default acknowledgement */
 "OK" = "OK";
 
+/* No comment provided by engineer. */
+"Pump expires in " = "Il microinfusore scade tra:";
+
 /* Button title recovering comms */
 "Recover Simulator" = "Simulatore di recupero";
 
+/* No comment provided by engineer. */
+"Replace Pump" = "Cambia microinfusore";
+
+/* No comment provided by engineer. */
+"Scheduled%@Basal" = "Basale %@ Programmata";
+
+/* No comment provided by engineer. */
+"Sensor expires in " = "Il sensore scade tra:";
+
 /* Caption for Source */
 "Source" = "Fonte";
+
+/* No comment provided by engineer. */
+"Stop Sensor" = "Stop Sensore";
+
+/* Label for suspended at field */
+"Suspended At" = "Sospeso a";
+
+/* No comment provided by engineer. */
+"Temporary%@Basal" = "Basale %@ Temporanea";
 
 /* Recurring software update alert title */
 "Update Reminder" = "Promemoria di aggiornamento";
 
 /* No comment provided by engineer. */
 "Version Check Response" = "Responso del controllo versione";
+
+/* Alert content body for first software update alert (1: app name)(2: app name) */
+"Your %1$@ app is out of date. It will continue to work, but we recommend updating to the latest version.\n\nGo to %2$@ Settings > Software Update to complete." = "La tua app (appName) non è aggiornata. Continuerà a funzionare, ma ti consigliamo di eseguire l'aggiornamento all'ultima versione. \n\n Vai a (appName) Impostazioni > Aggiornamento software per completare.";
 

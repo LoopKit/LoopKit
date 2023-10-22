@@ -298,6 +298,9 @@
 /* Title of insulin model preset - fiasp */
 "Fiasp" = "Fiasp";
 
+/* No comment provided by engineer. */
+"Food Type" = "Essenstyp";
+
 /* Insulin model setting description (1: app name) (2: number of models) */
 "For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from %2$@ different models for how the app measures the insulin’s peak activity." = "Bei schnell wirkendem Insulin geht %1$@ davon aus, dass es 6 Stunden lang wirkt. Du kannst aus %2$@ verschiedenen Modellen wählen, wie die App die Spitzenaktivität des Insulins misst.";
 
@@ -433,6 +436,9 @@
 
 /* Title text for the zero basal rate warning */
 "No Basal Insulin" = "Kein Basal Insulin";
+
+/* No comment provided by engineer. */
+"Nothing to See Here!" = "Es gibt hier nichts zu sehen!";
 
 /* Section title for no-carb food
    The title for override emoji miscellaneous section */
@@ -676,6 +682,9 @@
 
 /* Title for selection when no insulin type is selected. */
 "Unset" = "Nicht gesetzt";
+
+/* No comment provided by engineer. */
+"Unsupported %@" = "Nicht unterstützt %@";
 
 /* Placeholder text until value is entered */
 "Value" = "Wert";

@@ -2,7 +2,7 @@
 " higher " = "høyere";
 
 /* Information about pre-meal range relative to correction range */
-" lower " = " nedre ";
+" lower " = "nedre";
 
 /* Separator between min and max glucose values */
 "-" = "-";
@@ -18,6 +18,9 @@
 
 /* No comment provided by engineer. */
 "%@" = "%@";
+
+/* No comment provided by engineer. */
+"%@ carbs, %@ absorption" = "%@ karbohydrater, %@ absorpsjon";
 
 /* Appends a full-stop to a statement */
 "%@." = "%@ .";
@@ -53,6 +56,9 @@
 /* Description of a basal temp basal dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit)
    Description of a bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit) */
 "%1$@: <b>%2$@</b> %3$@" = "%1$@ : <b> %2$@ </b> %3$@";
+
+/* Format string describing glucose units per minute (1: glucose unit string) */
+"%1$@/min" = "%1$@/min";
 
 /* String format for value with units (1: value, 2: separator, 3: units) */
 "%1$@%2$@%3$@" = "%1$@ %2$@ %3$@";
@@ -199,6 +205,9 @@
 /* Title of the setup button to continue */
 "Continue" = "Fortsett";
 
+/* Instruction to correct unsupported value */
+"Correct the highlighted unsupported value(s)." = "Korriger de(n) markerte verdien(e) som ikke støttes.";
+
 /* The section footer of correction range schedule */
 "Correction range is the blood glucose range that you would like Loop to correct to." = "Korreksjonsområde er området du ønsker at Loop skal korrigere blodsukker til.";
 
@@ -297,6 +306,9 @@
 
 /* Title of insulin model preset - fiasp */
 "Fiasp" = "Fiasp";
+
+/* No comment provided by engineer. */
+"Food Type" = "Type mat";
 
 /* Insulin model setting description (1: app name) (2: number of models) */
 "For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from %2$@ different models for how the app measures the insulin’s peak activity." = "For hurtigvirkende insulin antar %1$@ at det virker aktivt i 6 timer. Du kan velge mellom %2$@ forskjellige modeller for hvordan appen måler insulinets toppaktivitet.";
@@ -433,6 +445,9 @@
 
 /* Title text for the zero basal rate warning */
 "No Basal Insulin" = "Ingen basal insulin";
+
+/* No comment provided by engineer. */
+"Nothing to See Here!" = "Ingenting å se her!";
 
 /* Section title for no-carb food
    The title for override emoji miscellaneous section */
@@ -574,6 +589,9 @@
 /* Text directing the user to configure their first custom preset */
 "Tap '+' to create a new custom preset." = "Trykk på '+' for å opprette en ny 'Override'.";
 
+/* No comment provided by engineer. */
+"Tap back to continue exploring the rest of the %@ interface." = "Trykk på tilbake for å fortsette å utforske resten av %@-grensesnittet.";
+
 /* The empty-state text for a configuration value */
 "Tap to set" = "Trykk for å angi";
 
@@ -633,6 +651,9 @@
 /* Subtitle of Rapid-Acting – Adult preset */
 "This model assumes peak insulin activity at 75 minutes." = "Denne modellen antar maksimal insulinaktivitet etter 75 minutter.";
 
+/* No comment provided by engineer. */
+"This section of the %@ app is unavailable in this simulator." = "Denne delen av %@-appen er ikke tilgjengelig i denne simulatoren.";
+
 /* Information about maximum automated insulin on board (1: app name) */
 "This setting will also determine a safety limit for automatic dosing. %1$@ will limit automatic delivery to keep the amount of active insulin below twice your maximum bolus." = "Denne innstillingen vil også bestemme en sikkerhetsgrense for automatisk dosering. %1$@ vil begrense automatisk tilførsel for å holde mengden aktivt insulin under det dobbelte av maksimal bolus.";
 
@@ -676,6 +697,9 @@
 
 /* Title for selection when no insulin type is selected. */
 "Unset" = "Fjern";
+
+/* No comment provided by engineer. */
+"Unsupported %@" = "Ikke-støttet %@";
 
 /* Placeholder text until value is entered */
 "Value" = "Verdi";
