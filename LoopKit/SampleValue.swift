@@ -34,7 +34,7 @@ public extension Sequence where Element: TimelineValue {
 
      - parameter date: The date to use in the search
 
-     - returns: The closest element, if any exist before the specified date
+     - returns: The closest index, if any exist before the specified date
      */
     func closestPrior(to date: Date) -> Iterator.Element? {
         return elementsAdjacent(to: date).before

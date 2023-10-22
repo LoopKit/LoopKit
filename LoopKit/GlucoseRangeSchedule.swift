@@ -53,6 +53,8 @@ extension DoubleRange: Hashable {}
 
 extension DoubleRange: Codable {}
 
+public typealias GlucoseRangeTimeline = [AbsoluteScheduleValue<ClosedRange<HKQuantity>>]
+
 /// Defines a daily schedule of glucose ranges
 public struct GlucoseRangeSchedule: DailySchedule, Equatable {
     public typealias RawValue = [String: Any]
@@ -125,8 +127,8 @@ public struct GlucoseRangeSchedule: DailySchedule, Equatable {
         }
     }
 
-    public func quantityBetween(start: Date, end: Date) -> [AbsoluteScheduleValue<ClosedRange<HKQuantity>>] {
-        var quantitySchedule = [AbsoluteScheduleValue<ClosedRange<HKQuantity>>]()
+    public func quantityBetween(start: Date, end: Date) -> GlucoseRangeTimeline {
+        var quantitySchedule = GlucoseRangeTimeline()
 
         for schedule in between(start: start, end: end) {
             quantitySchedule.append(AbsoluteScheduleValue(

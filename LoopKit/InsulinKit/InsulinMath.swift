@@ -11,6 +11,7 @@ import HealthKit
 
 public struct InsulinMath {
     public static var defaultInsulinActivityDuration: TimeInterval = TimeInterval(hours: 6) + TimeInterval(minutes: 10)
+    public static var longestInsulinActivityDuration: TimeInterval = TimeInterval(hours: 6) + TimeInterval(minutes: 10)
 }
 
 extension DoseEntry {
@@ -580,7 +581,7 @@ extension Collection where Element == DoseEntry {
         longestEffectDuration: TimeInterval = InsulinMath.defaultInsulinActivityDuration,
         from start: Date? = nil,
         to end: Date? = nil,
-        delta: TimeInterval = TimeInterval(5*60)
+        delta: TimeInterval = GlucoseMath.defaultDelta
     ) -> [InsulinValue] {
         guard let (start, end) = LoopMath.simulationDateRangeForSamples(self, from: start, to: end, duration: longestEffectDuration, delta: delta) else {
             return []
@@ -600,6 +601,27 @@ extension Collection where Element == DoseEntry {
 
         return values
     }
+
+    /**
+     Calculates insulin remaining at a given point in time for a collection of doses
+
+     - parameter insulinModelProvider:  A factory that can provide an insulin model given an insulin type
+     - parameter date:                  The date at which to calculate remaining insulin.  If nil, current date is used.
+
+     - returns: A sequence of insulin amount remaining
+     */
+    public func insulinOnBoard(
+        insulinModelProvider: InsulinModelProvider = PresetInsulinModelProvider(defaultRapidActingModel: nil),
+        at date: Date? = nil
+    ) -> Double {
+
+        let date = date ?? Date()
+
+        return reduce(0) { (value, dose) -> Double in
+            return value + dose.insulinOnBoard(at: date, model: insulinModelProvider.model(for: dose.insulinType), delta: GlucoseMath.defaultDelta)
+        }
+    }
+
 
     /// Calculates the timeline of glucose effects for a collection of doses. The ISF used for a given dose is based on the ISF in effect at the dose start time.
     ///
@@ -647,7 +669,6 @@ extension Collection where Element == DoseEntry {
     ///
     /// - Parameters:
     ///   - insulinModelProvider: A factory that can provide an insulin model given an insulin type
-    ///   - longestEffectDuration: The longest duration that a dose could be active.
     ///   - insulinSensitivityHistory: The timeline of glucose effect per unit of insulin
     ///   - start: The earliest date of effects to return
     ///   - end: The latest date of effects to return. If nil is passed, it will be calculated from the last sample end date plus the longestEffectDuration.
@@ -655,7 +676,6 @@ extension Collection where Element == DoseEntry {
     /// - Returns: An array of glucose effects for the duration of the doses
     public func glucoseEffects(
         insulinModelProvider: InsulinModelProvider,
-        longestEffectDuration: TimeInterval,
         insulinSensitivityHistory: [AbsoluteScheduleValue<HKQuantity>],
         from start: Date? = nil,
         to end: Date? = nil,
@@ -666,7 +686,7 @@ extension Collection where Element == DoseEntry {
             entry.netBasalUnits != 0
         })
 
-        guard let (start, end) = LoopMath.simulationDateRangeForSamples(activeEntries, from: start, to: end, duration: longestEffectDuration, delta: delta) else {
+        guard let (start, end) = LoopMath.simulationDateRangeForSamples(activeEntries, from: start, to: end, duration: InsulinMath.longestInsulinActivityDuration, delta: delta) else {
             return []
         }
 

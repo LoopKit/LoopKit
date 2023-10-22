@@ -88,15 +88,27 @@ extension BolusRecommendationNotice: Codable {
 }
 
 public struct ManualBolusRecommendation {
-    public let amount: Double
-    public let pendingInsulin: Double
+    public var amount: Double
     public var notice: BolusRecommendationNotice?
 
-    public init(amount: Double, pendingInsulin: Double, notice: BolusRecommendationNotice? = nil) {
+    public var quantity: HKQuantity {
+        return HKQuantity(unit: .internationalUnit(), doubleValue: amount)
+    }
+
+    public init(amount: Double, notice: BolusRecommendationNotice? = nil) {
         self.amount = amount
-        self.pendingInsulin = pendingInsulin
         self.notice = notice
     }
 }
 
 extension ManualBolusRecommendation: Codable {}
+
+extension ManualBolusRecommendation: Comparable {
+    public static func ==(lhs: ManualBolusRecommendation, rhs: ManualBolusRecommendation) -> Bool {
+        return lhs.amount == rhs.amount
+    }
+
+    public static func <(lhs: ManualBolusRecommendation, rhs: ManualBolusRecommendation) -> Bool {
+        return lhs.amount < rhs.amount
+    }
+}

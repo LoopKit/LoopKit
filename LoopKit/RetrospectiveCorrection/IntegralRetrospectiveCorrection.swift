@@ -59,16 +59,6 @@ public class IntegralRetrospectiveCorrection: RetrospectiveCorrection {
     var currentDate: Date = Date()
     var ircStatus: String = "-"
     
-    /**
-     Initialize integral retrospective correction settings based on current values of user settings
-     
-     - Parameters:
-        - settings: User settings
-        - insulinSensitivity: User insulin sensitivity schedule
-        - basalRates: User basal rate schedule
-     
-     - Returns: Integral Retrospective Correction customized with controller parameters and user settings
-    */
     public init(effectDuration: TimeInterval) {
         self.effectDuration = effectDuration
     }
@@ -87,9 +77,6 @@ public class IntegralRetrospectiveCorrection: RetrospectiveCorrection {
         startingAt startingGlucose: GlucoseValue,
         retrospectiveGlucoseDiscrepanciesSummed: [GlucoseChange]?,
         recencyInterval: TimeInterval,
-        insulinSensitivity: HKQuantity,
-        basalRate: Double,
-        correctionRange: ClosedRange<HKQuantity>,
         retrospectiveCorrectionGroupingInterval: TimeInterval
         ) -> [GlucoseEffect] {
         
@@ -116,7 +103,7 @@ public class IntegralRetrospectiveCorrection: RetrospectiveCorrection {
         integralCorrectionEffectDuration = effectDuration
         
         // Calculate integral retrospective correction if past discrepancies over integration interval are available and if user settings are available
-        if  let pastDiscrepancies = retrospectiveGlucoseDiscrepanciesSummed?.filterDateRange(glucoseDate.addingTimeInterval(-Self.retrospectionInterval), glucoseDate) {
+        if let pastDiscrepancies = retrospectiveGlucoseDiscrepanciesSummed?.filterDateRange(glucoseDate.addingTimeInterval(-Self.retrospectionInterval), glucoseDate) {
             ircStatus = "effect computed successfully."
             
             // To reduce response delay, integral retrospective correction is computed over an array of recent contiguous discrepancy values having the same sign as the latest discrepancy value
@@ -137,18 +124,7 @@ public class IntegralRetrospectiveCorrection: RetrospectiveCorrection {
             }
             recentDiscrepancyValues = recentDiscrepancyValues.reversed()
 
-            let correctionRangeMin = correctionRange.lowerBound.doubleValue(for: unit)
-            let correctionRangeMax = correctionRange.upperBound.doubleValue(for: unit)
-
             let latestGlucoseValue = startingGlucose.quantity.doubleValue(for: unit) // most recent glucose
-            
-            // Safety limit for (+) integral effect. The limit is set to a larger value if the current blood glucose is further away from the correction range because we have more time available for corrections
-            let glucoseError = latestGlucoseValue - correctionRangeMax
-            let zeroTempEffect = abs(insulinSensitivity.doubleValue(for: unit) * basalRate)
-            let integralEffectPositiveLimit = min(max(glucoseError, 1.0 * zeroTempEffect), 4.0 * zeroTempEffect)
-            
-            // Limit for (-) integral effect: glucose prediction reduced by no more than 10 mg/dL below the correction range minimum
-            let integralEffectNegativeLimit = -max(10.0, latestGlucoseValue - correctionRangeMin)
             
             // Integral effect math
             integralCorrection = 0.0
@@ -159,8 +135,7 @@ public class IntegralRetrospectiveCorrection: RetrospectiveCorrection {
                     IntegralRetrospectiveCorrection.integralGain * discrepancy
                 integralCorrectionEffectMinutes += 2.0 * IntegralRetrospectiveCorrection.delta.minutes
             }
-            // Limits applied to integral correction effect and effect duration
-            integralCorrection = min(max(integralCorrection, integralEffectNegativeLimit), integralEffectPositiveLimit)
+            // Limit effect duration
             integralCorrectionEffectMinutes = min(integralCorrectionEffectMinutes, IntegralRetrospectiveCorrection.maximumCorrectionEffectDuration.minutes)
             
             // Differential effect math
