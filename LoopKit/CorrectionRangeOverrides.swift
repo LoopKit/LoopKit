@@ -111,3 +111,9 @@ extension CorrectionRangeOverrides: RawRepresentable {
         return raw
     }
 }
+
+extension ClosedRange<HKQuantity> {
+    public func localizedDescription(unit: HKUnit) -> String {
+        String(format: NSLocalizedString("%.0f - %.0f %3$@", comment: ""), lowerBound.doubleValue(for: unit, withRounding: true), upperBound.doubleValue(for: unit, withRounding: true), unit.unitString)
+    }
+}
