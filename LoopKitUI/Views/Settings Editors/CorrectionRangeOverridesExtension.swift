@@ -21,6 +21,7 @@ extension CorrectionRangeOverrides.Preset {
         }
     }
         
+    @ViewBuilder
     private func icon(named name: String, tinted color: Color, resizable: Bool) -> some View {
         if resizable {
             Image(name)
