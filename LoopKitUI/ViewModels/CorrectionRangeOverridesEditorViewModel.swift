@@ -23,6 +23,32 @@ struct CorrectionRangeOverridesEditorViewModel {
     let guardrail: Guardrail<HKQuantity>
 
     var saveCorrectionRangeOverride: (_ correctionRangeOverrides: CorrectionRangeOverrides) -> Void
+    
+    private var duration: TimeInterval? = TimeInterval(hours: 1)
+    var overallInsulinPercentage: Double = 1 // This should always be 1
+    
+    var durationString: String? {
+        guard let duration else {
+            return nil
+        }
+        
+        return unitFormatter.string(from: duration)
+    }
+    
+    var insulinPercentageString: String {
+        return "\(String(format: "%.0f", 100 * overallInsulinPercentage))% \(LocalizedString("of scheduled", comment: ""))"
+    }
+    
+    var correctionRangeString: String? {
+        correctionRangeOverrides.workout?.localizedDescription(unit: .milligramsPerDeciliter)
+    }
+    
+    private let unitFormatter: DateComponentsFormatter = {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.hour, .minute, .second]
+        formatter.unitsStyle = .short
+        return formatter
+    }()
 
     public init(therapySettingsViewModel: TherapySettingsViewModel,
                 preset: CorrectionRangeOverrides.Preset,

@@ -36,9 +36,9 @@ public extension TherapySetting {
         case .glucoseTargetRange:
             return LocalizedString("Correction Range", comment: "Title text for glucose target range")
         case .preMealCorrectionRangeOverride:
-            return String(format: LocalizedString("%@ Range", comment: "Format for correction range override therapy setting card"), CorrectionRangeOverrides.Preset.preMeal.title)
+            return String(format: LocalizedString("%@ Preset", comment: "Format for correction range override therapy setting card"), CorrectionRangeOverrides.Preset.preMeal.title)
         case .workoutCorrectionRangeOverride:
-            return String(format: LocalizedString("%@ Range", comment: "Format for correction range override therapy setting card"), CorrectionRangeOverrides.Preset.workout.title)
+            return String(format: LocalizedString("%@ Preset", comment: "Format for correction range override therapy setting card"), CorrectionRangeOverrides.Preset.workout.title)
         case .suspendThreshold:
             return LocalizedString("Glucose Safety Limit", comment: "Title text for glucose safety limit")
         case .basalRate:
