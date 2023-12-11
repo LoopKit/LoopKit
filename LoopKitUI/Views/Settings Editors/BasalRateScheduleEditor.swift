@@ -96,7 +96,8 @@ public struct BasalRateScheduleEditor: View {
             },
             onSave: savingMechanism,
             mode: mode,
-            settingType: .basalRate(maximumScheduleEntryCount)
+            settingType: .basalRate(maximumScheduleEntryCount),
+            shouldBlockZeroSchedule: true
         )
     }
     
