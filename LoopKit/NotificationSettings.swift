@@ -9,6 +9,7 @@
 import Foundation
 import UserNotifications
 
+
 public struct NotificationSettings: Equatable {
     public enum AuthorizationStatus: String, Codable {
         case notDetermined
@@ -61,7 +62,8 @@ public struct NotificationSettings: Equatable {
         case banner
         case alert
         case unknown
-
+        
+#if os(iOS)
         public init(_ alertStyle: UNAlertStyle) {
             switch alertStyle {
             case .none:
@@ -74,6 +76,7 @@ public struct NotificationSettings: Equatable {
                 self = .unknown
             }
         }
+#endif
     }
 
     public enum ShowPreviewsSetting: String, Codable {
@@ -81,7 +84,8 @@ public struct NotificationSettings: Equatable {
         case whenAuthenticated
         case never
         case unknown
-
+        
+#if os(iOS)
         public init(_ showPreviewsSetting: UNShowPreviewsSetting) {
             switch showPreviewsSetting {
             case .always:
@@ -94,6 +98,7 @@ public struct NotificationSettings: Equatable {
                 self = .unknown
             }
         }
+#endif
     }
 
     public enum TemporaryMuteAlertSetting: Codable, Equatable {
