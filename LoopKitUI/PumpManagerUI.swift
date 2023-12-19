@@ -94,6 +94,7 @@ public protocol PumpManagerOnboardingDelegate: AnyObject {
     func pumpManagerOnboarding(didPauseOnboarding pumpManager: PumpManagerUI)
 }
 
+@MainActor
 public protocol PumpManagerOnboarding {
     /// Delegate to notify about pump manager onboarding.
     var pumpManagerOnboardingDelegate: PumpManagerOnboardingDelegate? { get set }

@@ -14,7 +14,7 @@ public protocol SupportInfoProvider {
     var pumpStatus: PumpManagerStatus? { get }
     var cgmStatus: CGMManagerStatus? { get }
     var localizedAppNameAndVersion: String { get }
-    func generateIssueReport(completion: @escaping (String) -> Void)
+    func generateIssueReport() async -> String
 }
 
 public struct LoopScenario: Hashable {

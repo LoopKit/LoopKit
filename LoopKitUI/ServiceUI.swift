@@ -59,6 +59,7 @@ public protocol ServiceOnboardingDelegate: AnyObject {
     func serviceOnboarding(didOnboardService service: Service)
 }
 
+@MainActor
 public protocol ServiceOnboarding {
     /// Delegate to notify about service onboarding.
     var serviceOnboardingDelegate: ServiceOnboardingDelegate? { get set }

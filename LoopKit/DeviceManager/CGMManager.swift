@@ -165,6 +165,16 @@ public protocol CGMManager: DeviceManager {
     func delete(completion: @escaping () -> Void)
 }
 
+public extension CGMManager {
+    func fetchNewDataIfNeeded() async -> CGMReadingResult {
+        await withCheckedContinuation { continuation in
+            fetchNewDataIfNeeded { result in
+                continuation.resume(returning: result)
+            }
+        }
+    }
+}
+
 
 public extension CGMManager {
     var appURL: URL? {

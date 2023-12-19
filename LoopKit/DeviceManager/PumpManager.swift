@@ -251,3 +251,50 @@ public extension PumpManager {
         }
     }
 }
+
+public extension PumpManager {
+
+    func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval) async throws
+    {
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            enactTempBasal(unitsPerHour: unitsPerHour, for: duration, completion: { error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume()
+                }
+            })
+        }
+    }
+
+    func enactBolus(units: Double, activationType: BolusActivationType) async throws
+    {
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            enactBolus(units: units, activationType: activationType, completion: { error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume()
+                }
+            })
+        }
+    }
+
+    @discardableResult
+    func ensureCurrentPumpData() async -> Date? {
+        await withCheckedContinuation { (continuation) in
+            ensureCurrentPumpData { lastSync in
+                continuation.resume(returning: lastSync)
+            }
+        }
+    }
+
+    func syncDeliveryLimits(limits deliveryLimits: DeliveryLimits) async throws -> DeliveryLimits
+    {
+        return try await withCheckedThrowingContinuation { (continuation) in
+            syncDeliveryLimits(limits: deliveryLimits) { result in
+                continuation.resume(with: result)
+            }
+        }
+    }
+}

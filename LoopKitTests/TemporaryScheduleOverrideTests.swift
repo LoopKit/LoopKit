@@ -8,6 +8,7 @@
 
 import XCTest
 @testable import LoopKit
+import HealthKit
 
 extension TimeZone {
     static var fixtureTimeZone: TimeZone {
@@ -272,6 +273,127 @@ class TemporaryScheduleOverrideTests: XCTestCase {
         XCTAssertEqual(rangeSchedule.value(at: overrideStart), overrideRange)
         XCTAssertEqual(rangeSchedule.value(at: overrideStart + overrideDuration), overrideRange)
         XCTAssertEqual(rangeSchedule.value(at: overrideStart + overrideDuration + .hours(2)), overrideRange)
+    }
+
+    func testTimelineSensitivityApplication() {
+        let timeline = [
+            AbsoluteScheduleValue(startDate: .t(1) , endDate: .t(2), value: 50.0),
+            AbsoluteScheduleValue(startDate: .t(2) , endDate: .t(3), value: 75.0),
+            AbsoluteScheduleValue(startDate: .t(3) , endDate: .t(4), value: 25.0),
+            AbsoluteScheduleValue(startDate: .t(4) , endDate: .t(5), value: 100.0),
+        ]
+
+        let overrides: [TemporaryScheduleOverride] = [
+            .custom(scale: 0.5, start: .t(2.5), end: .t(3.5)),
+            .custom(scale: 0.2, start: .t(4.5), end: .t(5))
+        ]
+
+        let applied = overrides.apply(over: timeline) { (value, override) in
+            value / override.settings.effectiveInsulinNeedsScaleFactor
+        }
+
+        let times = applied.map { $0.startDate }
+        let expectedTimes: [Date] = [.t(1), .t(2), .t(2.5), .t(3), .t(3.5), .t(4), .t(4.5)]
+        XCTAssertEqual(expectedTimes, times)
+
+        let values = applied.map { $0.value }
+        let expectedValues: [Double] = [50, 75, 150, 50, 25, 100, 500]
+        XCTAssertEqual(expectedValues, values)
+    }
+
+    func testTimelineSensitivityApplicationStartingAtSameTime() {
+        let timeline = [
+            AbsoluteScheduleValue(startDate: .t(1) , endDate: .t(2), value: 50.0),
+        ]
+
+        let overrides: [TemporaryScheduleOverride] = [
+            .custom(scale: 0.5, start: .t(1), end: .t(1.5))
+        ]
+
+        let applied = overrides.apply(over: timeline) { (value, override) in
+            value / override.settings.effectiveInsulinNeedsScaleFactor
+        }
+
+        let times = applied.map { $0.startDate }
+        let expectedTimes: [Date] = [.t(1), .t(1.5)]
+        XCTAssertEqual(expectedTimes, times)
+
+        let values = applied.map { $0.value }
+        let expectedValues: [Double] = [100, 50]
+        XCTAssertEqual(expectedValues, values)
+    }
+
+    func testTimelineSensitivityApplicationEndingAtSameTime() {
+        let timeline = [
+            AbsoluteScheduleValue(startDate: .t(1) , endDate: .t(2), value: 50.0),
+            AbsoluteScheduleValue(startDate: .t(2) , endDate: .t(3), value: 120.0),
+        ]
+
+        let overrides: [TemporaryScheduleOverride] = [
+            .custom(scale: 0.5, start: .t(1.5), end: .t(2))
+        ]
+
+        let applied = overrides.apply(over: timeline) { (value, override) in
+            value / override.settings.effectiveInsulinNeedsScaleFactor
+        }
+
+        let times = applied.map { $0.startDate }
+        let expectedTimes: [Date] = [.t(1), .t(1.5), .t(2)]
+        XCTAssertEqual(expectedTimes, times)
+
+        let values = applied.map { $0.value }
+        let expectedValues: [Double] = [50, 100, 120]
+        XCTAssertEqual(expectedValues, values)
+    }
+
+    func testTimelineSensitivityApplicationInMiddleOfTimeRange() {
+        let timeline = [
+            AbsoluteScheduleValue(startDate: .t(1) , endDate: .t(3), value: 50.0),
+        ]
+
+        let overrides: [TemporaryScheduleOverride] = [
+            .custom(scale: 0.5, start: .t(1.5), end: .t(2))
+        ]
+
+        let applied = overrides.apply(over: timeline) { (value, override) in
+            value / override.settings.effectiveInsulinNeedsScaleFactor
+        }
+
+        let times = applied.map { $0.startDate }
+        let expectedTimes: [Date] = [.t(1), .t(1.5), .t(2)]
+        XCTAssertEqual(expectedTimes, times)
+
+        let values = applied.map { $0.value }
+        let expectedValues: [Double] = [50, 100, 50]
+        XCTAssertEqual(expectedValues, values)
+    }
+
+
+}
+
+extension Date {
+    static func t(_ hours: Double) -> Date {
+        return .init(timeIntervalSince1970: .hours(hours))
+    }
+}
+
+extension TemporaryScheduleOverride {
+    static func custom(scale: Double? = nil, target: ClosedRange<Double>? = nil, start: Date, end: Date?) -> TemporaryScheduleOverride {
+        let targetRange = target.map {
+            ClosedRange(uncheckedBounds: (
+                lower: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: $0.lowerBound),
+                upper: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: $0.upperBound)))
+        }
+        let settings = TemporaryScheduleOverrideSettings(targetRange: targetRange, insulinNeedsScaleFactor: scale)
+        let duration: TimeInterval? = end.map { $0.timeIntervalSince(start) }
+        return TemporaryScheduleOverride(
+            context: .custom,
+            settings: settings,
+            startDate: start,
+            duration: duration != nil ? .finite(duration!) : .indefinite,
+            enactTrigger: .local,
+            syncIdentifier: UUID()
+        )
     }
 }
 

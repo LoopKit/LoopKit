@@ -62,6 +62,10 @@ public struct StoredCarbEntry: CarbEntry, Equatable {
         self.userCreatedDate = userCreatedDate
         self.userUpdatedDate = userUpdatedDate
     }
+
+    public var amount: Double {
+        quantity.doubleValue(for: .gram())
+    }
 }
 
 extension StoredCarbEntry {

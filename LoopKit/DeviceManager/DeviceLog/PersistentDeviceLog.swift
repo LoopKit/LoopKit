@@ -75,25 +75,28 @@ public class PersistentDeviceLog {
         }
     }
     
-    public func getLogEntries(startDate: Date, endDate: Date? = nil, completion: @escaping (_ result: Result<[StoredDeviceLogEntry], Error>) -> Void) {
-        
-        managedObjectContext.perform {
-            var predicate: NSPredicate = NSPredicate(format: "timestamp >= %@", startDate as NSDate)
-            if let endDate = endDate {
-                let endFilter = NSPredicate(format: "timestamp < %@", endDate as NSDate)
-                predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, endFilter])
-            }
-            
-            let request: NSFetchRequest<DeviceLogEntry> = DeviceLogEntry.fetchRequest()
-            request.predicate = predicate
-            request.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
-            
-            do {
-                let entries = try self.managedObjectContext.fetch(request)
-                completion(.success(entries.map { StoredDeviceLogEntry(managedObject: $0) } ))
-                self.purgeExpiredLogEntries()
-            } catch let error {
-                completion(.failure(error))
+    public func generateDiagnosticReport() async -> String {
+        await withCheckedContinuation { continuation in
+            let startDate = Date() - .hours(3.5 * 24) // Report the last 3 and half days of device logs
+            let header = "## Device Communication Log\n"
+
+            managedObjectContext.perform {
+                var predicate: NSPredicate = NSPredicate(format: "timestamp >= %@", startDate as NSDate)
+                let request: NSFetchRequest<DeviceLogEntry> = DeviceLogEntry.fetchRequest()
+                request.predicate = predicate
+                request.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
+
+                do {
+                    let entries = try self.managedObjectContext.fetch(request)
+                    let deviceLogReport = header + entries
+                        .map { StoredDeviceLogEntry(managedObject: $0) }
+                        .map { "* \($0.timestamp) \($0.managerIdentifier) \($0.deviceIdentifier ?? "") \($0.type) \($0.message)" }
+                        .joined(separator: "\n")
+                    continuation.resume(returning: deviceLogReport)
+                    self.purgeExpiredLogEntries()
+                } catch {
+                    continuation.resume(returning: header)
+                }
             }
         }
     }

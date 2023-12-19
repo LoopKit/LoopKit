@@ -13,7 +13,7 @@ import SwiftUI
 
 public protocol TherapySettingsViewModelDelegate: AnyObject {
     func syncBasalRateSchedule(items: [RepeatingScheduleValue<Double>], completion: @escaping (Result<BasalRateSchedule, Error>) -> Void)
-    func syncDeliveryLimits(deliveryLimits: DeliveryLimits, completion: @escaping (Result<DeliveryLimits, Error>) -> Void)
+    func syncDeliveryLimits(deliveryLimits: DeliveryLimits) async throws -> DeliveryLimits
     func saveCompletion(therapySettings: TherapySettings)
     func pumpSupportedIncrements() -> PumpSupportedIncrements?
 }
@@ -98,8 +98,8 @@ extension TherapySettingsViewModel {
         delegate?.syncBasalRateSchedule(items: items, completion: completion)
     }
     
-    public func syncDeliveryLimits(deliveryLimits: DeliveryLimits, completion: @escaping (Result<DeliveryLimits, Error>) -> Void) {
-        delegate?.syncDeliveryLimits(deliveryLimits: deliveryLimits, completion: completion)
+    public func syncDeliveryLimits(deliveryLimits: DeliveryLimits) async throws -> DeliveryLimits {
+        return try await delegate?.syncDeliveryLimits(deliveryLimits: deliveryLimits) ?? deliveryLimits
     }
 }
 

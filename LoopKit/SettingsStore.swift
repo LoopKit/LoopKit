@@ -288,32 +288,30 @@ public struct StoredSettingsData {
 }
 
 public struct StoredSettings: Equatable {
-    public let date: Date
+    public var date: Date
     public var controllerTimeZone: TimeZone
-    public let dosingEnabled: Bool
-    public let glucoseTargetRangeSchedule: GlucoseRangeSchedule?
-    public let preMealTargetRange: ClosedRange<HKQuantity>?
-    public let workoutTargetRange: ClosedRange<HKQuantity>?
-    public let overridePresets: [TemporaryScheduleOverridePreset]?
-    public let scheduleOverride: TemporaryScheduleOverride?
-    public let preMealOverride: TemporaryScheduleOverride?
-    public let maximumBasalRatePerHour: Double?
-    public let maximumBolus: Double?
-    public let suspendThreshold: GlucoseThreshold?
-    public let deviceToken: String?
-    public let insulinType: InsulinType?
-    public let defaultRapidActingModel: StoredInsulinModel?
-    public let basalRateSchedule: BasalRateSchedule?
-    public let insulinSensitivitySchedule: InsulinSensitivitySchedule?
-    public let carbRatioSchedule: CarbRatioSchedule?
+    public var dosingEnabled: Bool
+    public var glucoseTargetRangeSchedule: GlucoseRangeSchedule?
+    public var preMealTargetRange: ClosedRange<HKQuantity>?
+    public var workoutTargetRange: ClosedRange<HKQuantity>?
+    public var overridePresets: [TemporaryScheduleOverridePreset]
+    public var maximumBasalRatePerHour: Double?
+    public var maximumBolus: Double?
+    public var suspendThreshold: GlucoseThreshold?
+    public var deviceToken: String?
+    public var insulinType: InsulinType?
+    public var defaultRapidActingModel: StoredInsulinModel?
+    public var basalRateSchedule: BasalRateSchedule?
+    public var insulinSensitivitySchedule: InsulinSensitivitySchedule?
+    public var carbRatioSchedule: CarbRatioSchedule?
     public var notificationSettings: NotificationSettings?
-    public let controllerDevice: ControllerDevice?
-    public let cgmDevice: HKDevice?
-    public let pumpDevice: HKDevice?
+    public var controllerDevice: ControllerDevice?
+    public var cgmDevice: HKDevice?
+    public var pumpDevice: HKDevice?
     // This is the user's display preference glucose unit. TODO: Rename?
-    public let bloodGlucoseUnit: HKUnit?
-    public let automaticDosingStrategy: AutomaticDosingStrategy
-    public let syncIdentifier: UUID
+    public var bloodGlucoseUnit: HKUnit?
+    public var automaticDosingStrategy: AutomaticDosingStrategy
+    public var syncIdentifier: UUID
 
     public init(date: Date = Date(),
                 controllerTimeZone: TimeZone = TimeZone.current,
@@ -321,9 +319,7 @@ public struct StoredSettings: Equatable {
                 glucoseTargetRangeSchedule: GlucoseRangeSchedule? = nil,
                 preMealTargetRange: ClosedRange<HKQuantity>? = nil,
                 workoutTargetRange: ClosedRange<HKQuantity>? = nil,
-                overridePresets: [TemporaryScheduleOverridePreset]? = nil,
-                scheduleOverride: TemporaryScheduleOverride? = nil,
-                preMealOverride: TemporaryScheduleOverride? = nil,
+                overridePresets: [TemporaryScheduleOverridePreset] = [],
                 maximumBasalRatePerHour: Double? = nil,
                 maximumBolus: Double? = nil,
                 suspendThreshold: GlucoseThreshold? = nil,
@@ -347,8 +343,6 @@ public struct StoredSettings: Equatable {
         self.preMealTargetRange = preMealTargetRange
         self.workoutTargetRange = workoutTargetRange
         self.overridePresets = overridePresets
-        self.scheduleOverride = scheduleOverride
-        self.preMealOverride = preMealOverride
         self.maximumBasalRatePerHour = maximumBasalRatePerHour
         self.maximumBolus = maximumBolus
         self.suspendThreshold = suspendThreshold
@@ -380,9 +374,7 @@ extension StoredSettings: Codable {
                   glucoseTargetRangeSchedule: try container.decodeIfPresent(GlucoseRangeSchedule.self, forKey: .glucoseTargetRangeSchedule),
                   preMealTargetRange: try container.decodeIfPresent(DoubleRange.self, forKey: .preMealTargetRange)?.quantityRange(for: bloodGlucoseUnit),
                   workoutTargetRange: try container.decodeIfPresent(DoubleRange.self, forKey: .workoutTargetRange)?.quantityRange(for: bloodGlucoseUnit),
-                  overridePresets: try container.decodeIfPresent([TemporaryScheduleOverridePreset].self, forKey: .overridePresets),
-                  scheduleOverride: try container.decodeIfPresent(TemporaryScheduleOverride.self, forKey: .scheduleOverride),
-                  preMealOverride: try container.decodeIfPresent(TemporaryScheduleOverride.self, forKey: .preMealOverride),
+                  overridePresets: try container.decodeIfPresent([TemporaryScheduleOverridePreset].self, forKey: .overridePresets) ?? [],
                   maximumBasalRatePerHour: try container.decodeIfPresent(Double.self, forKey: .maximumBasalRatePerHour),
                   maximumBolus: try container.decodeIfPresent(Double.self, forKey: .maximumBolus),
                   suspendThreshold: try container.decodeIfPresent(GlucoseThreshold.self, forKey: .suspendThreshold),
@@ -411,8 +403,6 @@ extension StoredSettings: Codable {
         try container.encodeIfPresent(preMealTargetRange?.doubleRange(for: bloodGlucoseUnit), forKey: .preMealTargetRange)
         try container.encodeIfPresent(workoutTargetRange?.doubleRange(for: bloodGlucoseUnit), forKey: .workoutTargetRange)
         try container.encodeIfPresent(overridePresets, forKey: .overridePresets)
-        try container.encodeIfPresent(scheduleOverride, forKey: .scheduleOverride)
-        try container.encodeIfPresent(preMealOverride, forKey: .preMealOverride)
         try container.encodeIfPresent(maximumBasalRatePerHour, forKey: .maximumBasalRatePerHour)
         try container.encodeIfPresent(maximumBolus, forKey: .maximumBolus)
         try container.encodeIfPresent(suspendThreshold, forKey: .suspendThreshold)
@@ -589,3 +579,244 @@ extension SettingsStore {
         }
     }
 }
+
+// MARK: Historical queries
+
+extension SettingsStore {
+    public func getTargetRangeHistory(startDate: Date, endDate: Date) async throws -> [AbsoluteScheduleValue<ClosedRange<HKQuantity>>] {
+        // Get any changes during the period
+        var settingsHistory = try await getStoredSettings(start: startDate, end: endDate)
+
+        // Also need to get the one in effect before the start of the period
+        if let firstSettings = try await getStoredSettings(end: startDate, limit: 1).first {
+            settingsHistory.append(firstSettings)
+        }
+
+        guard !settingsHistory.isEmpty else {
+            return []
+        }
+
+        // Order from oldest to newest
+        settingsHistory.reverse()
+
+        // Find all valid, non-repeat target schedules in settings
+        var lastSchedule: GlucoseRangeSchedule? = nil
+        let schedules: [(date: Date, schedule: GlucoseRangeSchedule)] = settingsHistory.compactMap { settings in
+            if let schedule = settings.glucoseTargetRangeSchedule, schedule != lastSchedule {
+                lastSchedule = schedule
+                return (date: settings.date, schedule: schedule)
+            } else {
+                return nil
+            }
+        }
+
+        var idx = schedules.startIndex
+        var date = startDate
+        var items = [LoopKit.AbsoluteScheduleValue<ClosedRange<HKQuantity>>]()
+        while date < endDate {
+            let scheduleActiveEnd: Date
+            if idx+1 < schedules.endIndex {
+                scheduleActiveEnd = schedules[idx+1].date
+            } else {
+                scheduleActiveEnd = endDate
+            }
+
+            let schedule = schedules[idx].schedule
+
+            let absoluteScheduleValues = schedule.truncatingBetween(start: date, end: scheduleActiveEnd)
+
+            items.append(contentsOf: absoluteScheduleValues.map { entry in
+                let quantityRange = entry.value.quantityRange(for: schedule.unit)
+                return AbsoluteScheduleValue(startDate: entry.startDate, endDate: entry.endDate, value: quantityRange)
+            })
+            date = scheduleActiveEnd
+            idx += 1
+        }
+        return items
+    }
+
+    public func getBasalHistory(startDate: Date, endDate: Date) async throws -> [AbsoluteScheduleValue<Double>] {
+        // Get any settings changes during the period
+        var settingsHistory = try await getStoredSettings(start: startDate, end: endDate)
+
+        // Also need to get the one in effect before the start of the period
+        if let firstSettings = try await getStoredSettings(end: startDate, limit: 1).first {
+            settingsHistory.append(firstSettings)
+        }
+
+        guard !settingsHistory.isEmpty else {
+            return []
+        }
+
+        // Order from oldest to newest
+        settingsHistory.reverse()
+
+        // Find all valid, non-repeat basal rate schedules in settings
+        var lastSchedule: BasalRateSchedule? = nil
+        let schedules: [(date: Date, schedule: BasalRateSchedule)] = settingsHistory.compactMap { settings in
+            if let schedule = settings.basalRateSchedule, schedule != lastSchedule {
+                lastSchedule = schedule
+                return (date: settings.date, schedule: schedule)
+            } else {
+                return nil
+            }
+        }
+
+        guard !schedules.isEmpty else {
+            return []
+        }
+
+        var idx = schedules.startIndex
+        var date = startDate
+        var items = [AbsoluteScheduleValue<Double>]()
+        while date < endDate {
+            let scheduleActiveEnd: Date
+            if idx+1 < schedules.endIndex {
+                scheduleActiveEnd = schedules[idx+1].date
+            } else {
+                scheduleActiveEnd = endDate
+            }
+
+            let schedule = schedules[idx].schedule
+
+            let absoluteScheduleValues = schedule.truncatingBetween(start: date, end: scheduleActiveEnd)
+
+            items.append(contentsOf: absoluteScheduleValues)
+            date = scheduleActiveEnd
+            idx += 1
+        }
+
+        return items
+    }
+
+    public func getInsulinSensitivityHistory(startDate: Date, endDate: Date) async throws -> [AbsoluteScheduleValue<HKQuantity>] {
+        // Get any settings changes during the period
+        var settingsHistory = try await getStoredSettings(start: startDate, end: endDate)
+
+        // Also need to get the one in effect before the start of the period
+        if let firstSettings = try await getStoredSettings(end: startDate, limit: 1).first {
+            settingsHistory.append(firstSettings)
+        }
+
+        guard !settingsHistory.isEmpty else {
+            return []
+        }
+
+        // Order from oldest to newest
+        settingsHistory.reverse()
+
+        // Find all valid, non-repeat insulin sensitivity schedules in settings
+        var lastSchedule: InsulinSensitivitySchedule? = nil
+        let schedules: [(date: Date, schedule: InsulinSensitivitySchedule)] = settingsHistory.compactMap { settings in
+            if let schedule = settings.insulinSensitivitySchedule, schedule != lastSchedule {
+                lastSchedule = schedule
+                return (date: settings.date, schedule: schedule)
+            } else {
+                return nil
+            }
+        }
+
+        var idx = schedules.startIndex
+        var date = startDate
+        var items = [AbsoluteScheduleValue<HKQuantity>]()
+        while date < endDate {
+            let scheduleActiveEnd: Date
+            if idx+1 < schedules.endIndex {
+                scheduleActiveEnd = schedules[idx+1].date
+            } else {
+                scheduleActiveEnd = endDate
+            }
+
+            let schedule: InsulinSensitivitySchedule = schedules[idx].schedule
+
+            let absoluteScheduleValues = schedule.truncatingBetween(start: date, end: scheduleActiveEnd).map {
+                AbsoluteScheduleValue(
+                    startDate: $0.startDate,
+                    endDate: $0.endDate,
+                    value: HKQuantity(unit: schedule.unit, doubleValue: $0.value))
+            }
+
+            items.append(contentsOf: absoluteScheduleValues)
+            date = scheduleActiveEnd
+            idx += 1
+        }
+
+        return items
+    }
+
+    public func getCarbRatioHistory(startDate: Date, endDate: Date) async throws -> [AbsoluteScheduleValue<Double>] {
+        // Get any settings changes during the period
+        var settingsHistory = try await getStoredSettings(start: startDate, end: endDate)
+
+        // Also need to get the one in effect before the start of the period
+        if let firstSettings = try await getStoredSettings(end: startDate, limit: 1).first {
+            settingsHistory.append(firstSettings)
+        }
+
+        guard !settingsHistory.isEmpty else {
+            return []
+        }
+
+        // Order from oldest to newest
+        settingsHistory.reverse()
+
+        // Find all valid, non-repeat basal rate schedules in settings
+        var lastSchedule: CarbRatioSchedule? = nil
+        let schedules: [(date: Date, schedule: CarbRatioSchedule)] = settingsHistory.compactMap { settings in
+            if let schedule = settings.carbRatioSchedule, schedule != lastSchedule {
+                lastSchedule = schedule
+                return (date: settings.date, schedule: schedule)
+            } else {
+                return nil
+            }
+        }
+
+        guard !settingsHistory.isEmpty else {
+            return []
+        }
+
+        var idx = schedules.startIndex
+        var date = startDate
+        var items = [AbsoluteScheduleValue<Double>]()
+        while date < endDate {
+            let scheduleActiveEnd: Date
+            if idx+1 < schedules.endIndex {
+                scheduleActiveEnd = schedules[idx+1].date
+            } else {
+                scheduleActiveEnd = endDate
+            }
+
+            let schedule = schedules[idx].schedule
+
+            let absoluteScheduleValues = schedule.truncatingBetween(start: date, end: scheduleActiveEnd)
+
+            items.append(contentsOf: absoluteScheduleValues)
+            date = scheduleActiveEnd
+            idx += 1
+        }
+
+        return items
+    }
+
+    public func getDosingLimits(at date: Date) async throws -> DosingLimits {
+        // Get the one in effect before the given date. The underlying query already sorts by date descending.
+        let settings = try await getStoredSettings(end: date, limit: 1).first
+        return DosingLimits(
+            suspendThreshold: settings?.suspendThreshold?.quantity,
+            maxBolus: settings?.maximumBolus,
+            maxBasalRate: settings?.maximumBasalRatePerHour)
+    }
+}
+
+public struct DosingLimits {
+    public var suspendThreshold: HKQuantity?
+    public var maxBolus: Double?
+    public var maxBasalRate: Double?
+
+    public init(suspendThreshold: HKQuantity? = nil, maxBolus: Double? = nil, maxBasalRate: Double? = nil) {
+        self.suspendThreshold = suspendThreshold
+        self.maxBolus = maxBolus
+        self.maxBasalRate = maxBasalRate
+    }
+}
+

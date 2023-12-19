@@ -257,10 +257,7 @@ class CarbMathTests: XCTestCase {
         let carbsOnBoard = statuses.dynamicCarbsOnBoard(
             from: inputICE[0].startDate,
             to: inputICE[0].startDate.addingTimeInterval(TimeInterval(hours: 6)),
-            defaultAbsorptionTime: defaultAbsorptionTimes.medium,
-            absorptionModel: LinearAbsorption(),
-            delay: TimeInterval(minutes: 10),
-            delta: TimeInterval(minutes: 5))
+            absorptionModel: LinearAbsorption())
 
         let unit = HKUnit.gram()
 
@@ -311,10 +308,7 @@ class CarbMathTests: XCTestCase {
         let carbsOnBoard = statuses.dynamicCarbsOnBoard(
             from: inputICE[0].startDate,
             to: inputICE[0].startDate.addingTimeInterval(TimeInterval(hours: 6)),
-            defaultAbsorptionTime: defaultAbsorptionTimes.medium,
-            absorptionModel: LinearAbsorption(),
-            delay: TimeInterval(minutes: 10),
-            delta: TimeInterval(minutes: 5)
+            absorptionModel: LinearAbsorption()
         )
 
         XCTAssertEqual(output.count, carbsOnBoard.count)
@@ -421,10 +415,7 @@ class CarbMathTests: XCTestCase {
         let carbsOnBoard = statuses.dynamicCarbsOnBoard(
             from: inputICE[0].startDate,
             to: inputICE[0].startDate.addingTimeInterval(TimeInterval(hours: 6)),
-            defaultAbsorptionTime: defaultAbsorptionTimes.medium,
-            absorptionModel: LinearAbsorption(),
-            delay: TimeInterval(minutes: 10),
-            delta: TimeInterval(minutes: 5)
+            absorptionModel: LinearAbsorption()
         )
 
         XCTAssertEqual(output.count, carbsOnBoard.count)
@@ -530,10 +521,7 @@ class CarbMathTests: XCTestCase {
         let carbsOnBoard = statuses.dynamicCarbsOnBoard(
             from: inputICE[0].startDate,
             to: inputICE[0].startDate.addingTimeInterval(TimeInterval(hours: 18)),
-            defaultAbsorptionTime: defaultAbsorptionTimes.medium,
-            absorptionModel: LinearAbsorption(),
-            delay: TimeInterval(minutes: 10),
-            delta: TimeInterval(minutes: 5)
+            absorptionModel: LinearAbsorption()
         )
 
         let unit = HKUnit.gram()
@@ -660,10 +648,8 @@ class CarbMathTests: XCTestCase {
         let carbsOnBoard = statuses.dynamicCarbsOnBoard(
             from: inputICE[0].startDate,
             to: inputICE[0].startDate.addingTimeInterval(TimeInterval(hours: 6)),
-            defaultAbsorptionTime: defaultAbsorptionTimes.medium,
-            absorptionModel: PiecewiseLinearAbsorption(),
-            delay: TimeInterval(minutes: 10),
-            delta: TimeInterval(minutes: 5))
+            absorptionModel: PiecewiseLinearAbsorption()
+        )
 
         let unit = HKUnit.gram()
 
@@ -714,10 +700,7 @@ class CarbMathTests: XCTestCase {
         let carbsOnBoard = statuses.dynamicCarbsOnBoard(
             from: inputICE[0].startDate,
             to: inputICE[0].startDate.addingTimeInterval(TimeInterval(hours: 6)),
-            defaultAbsorptionTime: defaultAbsorptionTimes.medium,
-            absorptionModel: PiecewiseLinearAbsorption(),
-            delay: TimeInterval(minutes: 10),
-            delta: TimeInterval(minutes: 5)
+            absorptionModel: PiecewiseLinearAbsorption()
         )
 
         XCTAssertEqual(output.count, carbsOnBoard.count)
@@ -773,10 +756,7 @@ class CarbMathTests: XCTestCase {
         let carbsOnBoard = statuses.dynamicCarbsOnBoard(
             from: inputICE[0].startDate,
             to: inputICE[0].startDate.addingTimeInterval(TimeInterval(hours: 6)),
-            defaultAbsorptionTime: defaultAbsorptionTimes.medium,
-            absorptionModel: PiecewiseLinearAbsorption(),
-            delay: TimeInterval(minutes: 10),
-            delta: TimeInterval(minutes: 5)
+            absorptionModel: PiecewiseLinearAbsorption()
         )
 
         XCTAssertEqual(output.count, carbsOnBoard.count)
@@ -828,10 +808,7 @@ class CarbMathTests: XCTestCase {
         let carbsOnBoard = statuses.dynamicCarbsOnBoard(
             from: inputICE[0].startDate,
             to: inputICE[0].startDate.addingTimeInterval(TimeInterval(hours: 18)),
-            defaultAbsorptionTime: defaultAbsorptionTimes.medium,
-            absorptionModel: PiecewiseLinearAbsorption(),
-            delay: TimeInterval(minutes: 10),
-            delta: TimeInterval(minutes: 5)
+            absorptionModel: PiecewiseLinearAbsorption()
         )
 
         let unit = HKUnit.gram()
@@ -884,10 +861,7 @@ class CarbMathTests: XCTestCase {
         let carbsOnBoard = statuses.dynamicCarbsOnBoard(
             from: inputICE[0].startDate,
             to: inputICE[0].startDate.addingTimeInterval(TimeInterval(hours: 6)),
-            defaultAbsorptionTime: defaultAbsorptionTimes.medium,
-            absorptionModel: PiecewiseLinearAbsorption(),
-            delay: TimeInterval(minutes: 10),
-            delta: TimeInterval(minutes: 5)
+            absorptionModel: PiecewiseLinearAbsorption()
         )
 
         XCTAssertEqual(output.count, carbsOnBoard.count)

@@ -32,21 +32,21 @@ extension InsulinCorrection {
     /// Determines the temp basal over `duration` needed to perform the correction.
     ///
     /// - Parameters:
-    ///   - scheduledBasalRate: The scheduled basal rate at the time the correction is delivered
+    ///   - neutralBasalRate: The basal rate that should effect no glucose change
     ///   - maxBasalRate: The maximum allowed basal rate
     ///   - duration: The duration of the temporary basal
     ///   - rateRounder: The smallest fraction of a unit supported in basal delivery
     /// - Returns: A temp basal recommendation
     public func asTempBasal(
-        scheduledBasalRate: Double,
+        neutralBasalRate: Double,
         maxBasalRate: Double,
         duration: TimeInterval,
-        rateRounder: ((Double) -> Double)?
+        rateRounder: ((Double) -> Double)? = nil
     ) -> TempBasalRecommendation {
         var rate = units / (duration / TimeInterval(hours: 1))  // units/hour
         switch self {
         case .aboveRange, .inRange, .entirelyBelowRange:
-            rate += scheduledBasalRate
+            rate += neutralBasalRate
         case .suspend:
             break
         }
@@ -101,7 +101,7 @@ extension InsulinCorrection {
     public func asPartialBolus(
         partialApplicationFactor: Double,
         maxBolusUnits: Double,
-        volumeRounder: ((Double) -> Double)?
+        volumeRounder: ((Double) -> Double)? = nil
     ) -> Double {
 
         let partialDose = units * partialApplicationFactor
@@ -133,10 +133,10 @@ extension TempBasalRecommendation {
     /// - Returns: A temp basal recommendation
     public func ifNecessary(
         at date: Date,
-        scheduledBasalRate: Double,
+        neutralBasalRate: Double,
         lastTempBasal: DoseEntry?,
         continuationInterval: TimeInterval,
-        scheduledBasalRateMatchesPump: Bool
+        neutralBasalRateMatchesPump: Bool
     ) -> TempBasalRecommendation? {
         // Adjust behavior for the currently active temp basal
         if let lastTempBasal = lastTempBasal,
@@ -147,11 +147,11 @@ extension TempBasalRecommendation {
             if matchesRate(lastTempBasal.unitsPerHour),
                 lastTempBasal.endDate.timeIntervalSince(date) > continuationInterval {
                 return nil
-            } else if matchesRate(scheduledBasalRate), scheduledBasalRateMatchesPump {
+            } else if matchesRate(neutralBasalRate), neutralBasalRateMatchesPump {
                 // If our new temp matches the scheduled rate of the pump, cancel the current temp
                 return .cancel
             }
-        } else if matchesRate(scheduledBasalRate), scheduledBasalRateMatchesPump {
+        } else if matchesRate(neutralBasalRate), neutralBasalRateMatchesPump {
             // If we recommend the in-progress scheduled basal rate of the pump, do nothing
             return nil
         }
@@ -427,7 +427,7 @@ extension Collection where Element: GlucoseValue {
         }
 
         let temp = correction?.asTempBasal(
-            scheduledBasalRate: scheduledBasalRate,
+            neutralBasalRate: scheduledBasalRate,
             maxBasalRate: maxBasalRate,
             duration: duration,
             rateRounder: rateRounder
@@ -435,10 +435,10 @@ extension Collection where Element: GlucoseValue {
 
         return temp?.ifNecessary(
             at: date,
-            scheduledBasalRate: scheduledBasalRate,
+            neutralBasalRate: scheduledBasalRate,
             lastTempBasal: lastTempBasal,
             continuationInterval: continuationInterval,
-            scheduledBasalRateMatchesPump: !isBasalRateScheduleOverrideActive
+            neutralBasalRateMatchesPump: !isBasalRateScheduleOverrideActive
         )
     }
 
@@ -498,7 +498,7 @@ extension Collection where Element: GlucoseValue {
         }
 
         var temp: TempBasalRecommendation? = correction.asTempBasal(
-            scheduledBasalRate: scheduledBasalRate,
+            neutralBasalRate: scheduledBasalRate,
             maxBasalRate: scheduledBasalRate,
             duration: duration,
             rateRounder: rateRounder
@@ -506,10 +506,10 @@ extension Collection where Element: GlucoseValue {
 
         temp = temp?.ifNecessary(
             at: date,
-            scheduledBasalRate: scheduledBasalRate,
+            neutralBasalRate: scheduledBasalRate,
             lastTempBasal: lastTempBasal,
             continuationInterval: continuationInterval,
-            scheduledBasalRateMatchesPump: !isBasalRateScheduleOverrideActive
+            neutralBasalRateMatchesPump: !isBasalRateScheduleOverrideActive
         )
 
         let bolusUnits = correction.asPartialBolus(

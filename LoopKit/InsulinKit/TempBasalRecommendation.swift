@@ -10,7 +10,7 @@ import Foundation
 import HealthKit
 
 public struct TempBasalRecommendation: Equatable {
-    public let unitsPerHour: Double
+    public var unitsPerHour: Double
     public let duration: TimeInterval
 
     public var rateQuantity: HKQuantity {

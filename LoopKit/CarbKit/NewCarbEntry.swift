@@ -57,4 +57,8 @@ public struct NewCarbEntry: CarbEntry, Equatable, RawRepresentable {
 
         return rawValue
     }
+
+    public var amount: Double {
+        quantity.doubleValue(for: .gram())
+    }
 }

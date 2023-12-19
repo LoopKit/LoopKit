@@ -31,8 +31,6 @@ class DeviceDataManager {
             cacheStore: cacheStore,
             cacheLength: observationInterval,
             defaultAbsorptionTimes: (fast: .minutes(30), medium: .hours(3), slow: .hours(5)),
-            carbRatioSchedule: carbRatioSchedule,
-            insulinSensitivitySchedule: insulinSensitivitySchedule,
             provenanceIdentifier: HKSource.default().bundleIdentifier
         )
 
@@ -92,17 +90,12 @@ class DeviceDataManager {
     var carbRatioSchedule = UserDefaults.standard.carbRatioSchedule {
         didSet {
             UserDefaults.standard.carbRatioSchedule = carbRatioSchedule
-
-            carbStore?.carbRatioSchedule = carbRatioSchedule
         }
     }
 
     var insulinSensitivitySchedule = UserDefaults.standard.insulinSensitivitySchedule {
         didSet {
             UserDefaults.standard.insulinSensitivitySchedule = insulinSensitivitySchedule
-
-            carbStore?.insulinSensitivitySchedule = insulinSensitivitySchedule
-            doseStore.insulinSensitivitySchedule = insulinSensitivitySchedule
         }
     }
 

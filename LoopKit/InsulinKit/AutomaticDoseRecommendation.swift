@@ -9,12 +9,16 @@
 import Foundation
 
 public struct AutomaticDoseRecommendation: Equatable {
-    public let basalAdjustment: TempBasalRecommendation?
-    public let bolusUnits: Double?
-    
+    public var basalAdjustment: TempBasalRecommendation?
+    public var bolusUnits: Double?
+
     public init(basalAdjustment: TempBasalRecommendation?, bolusUnits: Double? = nil) {
         self.basalAdjustment = basalAdjustment
         self.bolusUnits = bolusUnits
+    }
+
+    public var hasDosingChange: Bool {
+        return basalAdjustment != nil || bolusUnits != nil
     }
 }
 

@@ -106,7 +106,15 @@ public struct TemporaryScheduleOverride: Hashable {
         return date > actualEndDate
     }
 
-    public init(context: Context, settings: TemporaryScheduleOverrideSettings, startDate: Date, duration: Duration, enactTrigger: EnactTrigger, syncIdentifier: UUID, actualEnd: End = .natural) {
+    public init(
+        context: Context,
+        settings: TemporaryScheduleOverrideSettings,
+        startDate: Date,
+        duration: Duration,
+        enactTrigger: EnactTrigger,
+        syncIdentifier: UUID,
+        actualEnd: End = .natural
+    ) {
         precondition(duration.timeInterval > 0)
         self.context = context
         self.settings = settings
@@ -416,5 +424,78 @@ extension TemporaryScheduleOverride.EnactTrigger: Codable {
     private enum CodableKeys: String, CodingKey {
         case local
         case remote
+    }
+}
+
+extension Array where Element == TemporaryScheduleOverride {
+
+    public func apply<T>(
+        over timeline: [AbsoluteScheduleValue<T>],
+        transform: (T, TemporaryScheduleOverride) -> T
+    ) -> [AbsoluteScheduleValue<T>]
+    {
+        guard timeline.count > 0 else {
+            return []
+        }
+
+        var result: [AbsoluteScheduleValue<T>] = []
+        var presetIndex = 0
+
+        for entry in timeline {
+            var start = entry.startDate
+
+            while presetIndex < self.count {
+                let preset = self[presetIndex]
+
+                // Skip presets that end before this sensitivity period
+                if preset.actualEndDate < start {
+                    presetIndex += 1
+                    continue
+                }
+
+                if preset.isActive(at: start) {
+                    let newValue = transform(entry.value, preset)
+                    let end = Swift.min(entry.endDate, preset.actualEndDate)
+                    result.append(AbsoluteScheduleValue(
+                        startDate: start,
+                        endDate: end,
+                        value: newValue
+                    ))
+                    if entry.endDate > end {
+                        presetIndex += 1
+                    }
+                    start = end
+                } else if preset.startDate < entry.endDate {
+                    result.append(AbsoluteScheduleValue(
+                        startDate: start,
+                        endDate: preset.startDate,
+                        value: entry.value
+                    ))
+                    let newValue = transform(entry.value, preset)
+                    let endDate = Swift.min(entry.endDate, preset.actualEndDate)
+                    result.append(AbsoluteScheduleValue(
+                        startDate: preset.startDate,
+                        endDate: endDate,
+                        value: newValue
+                    ))
+                    start = endDate
+                    if preset.actualEndDate > entry.endDate {
+                        break
+                    }
+                    presetIndex += 1
+                } else {
+                    break
+                }
+            }
+            if start < entry.endDate {
+                result.append(AbsoluteScheduleValue(
+                    startDate: start,
+                    endDate: entry.endDate,
+                    value: entry.value
+                ))
+                start = entry.endDate
+            }
+        }
+        return result
     }
 }

@@ -68,6 +68,7 @@ public protocol TemporaryScheduleOverrideHistoryDelegate: AnyObject {
 }
 
 public final class TemporaryScheduleOverrideHistory {
+
     public struct QueryAnchor: RawRepresentable {
         public typealias RawValue = [String: Any]
 
@@ -129,11 +130,17 @@ public final class TemporaryScheduleOverrideHistory {
         }
         delegate?.temporaryScheduleOverrideHistoryDidUpdate(self)
     }
-    
+
+    public func activeOverride(at date: Date) -> TemporaryScheduleOverride? {
+        recentEvents.first { event in
+            event.override.isActive(at: date)
+        }?.override
+    }
+
     private var lastUndeletedEvent: OverrideEvent? {
         return recentEvents.reversed().first { $0.override.actualEnd != .deleted }
     }
-    
+
     private func deleteEventsStartingOnOrAfter(_ date: Date) {
         recentEvents.mutateEach { (event) in
             if event.override.startDate >= date {
@@ -212,6 +219,18 @@ public final class TemporaryScheduleOverrideHistory {
         return recentEvents.map { $0.override }
     }
 
+    public func getOverrideHistory(startDate: Date, endDate: Date) -> [TemporaryScheduleOverride] {
+        return recentEvents.compactMap { (event) -> TemporaryScheduleOverride? in
+            guard 
+                event.override.startDate < endDate,
+                event.override.actualEndDate > startDate
+            else {
+                return nil
+            }
+            return event.override
+        }
+    }
+
     private func relevantPeriod(relativeTo referenceDate: Date) -> DateInterval {
         return DateInterval(
             start: referenceDate.addingTimeInterval(-relevantTimeWindow),
@@ -279,6 +298,7 @@ public final class TemporaryScheduleOverrideHistory {
         }
     }
 
+    // Used in tests
     func wipeHistory() {
         recentEvents.removeAll()
         modificationCounter = 0

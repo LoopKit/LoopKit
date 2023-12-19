@@ -1437,7 +1437,6 @@ class DoseStoreEffectTests: PersistenceControllerTestCase {
             longestEffectDuration: exponentialInsulinModel.effectDuration,
             basalProfile: BasalRateSchedule(dailyItems: [RepeatingScheduleValue(startTime: .hours(0), value: 1.0)]),
             insulinSensitivitySchedule: insulinSensitivitySchedule,
-            overrideHistory: TemporaryScheduleOverrideHistory(),
             provenanceIdentifier: Bundle.main.bundleIdentifier!,
             test_currentDate: startDate
         )
@@ -1508,89 +1507,5 @@ class DoseStoreEffectTests: PersistenceControllerTestCase {
             updateGroup.leave()
         }
         updateGroup.wait()
-    }
-
-    func testGlucoseEffectFromTempBasal() {
-        injectDoseEvents(from: "basal_dose")
-        let output = loadGlucoseEffectFixture("effect_from_basal_output_exponential")
-
-        var insulinEffects: [GlucoseEffect]!
-        let startDate = dateFormatter.date(from: "2015-07-13T12:00:00")!
-        let updateGroup = DispatchGroup()
-        updateGroup.enter()
-        doseStore.getGlucoseEffects(start: startDate) { (result) -> Void in
-            switch result {
-            case .failure(let error):
-                print(error)
-                XCTFail("Mock should always return success")
-            case .success(let effects):
-                insulinEffects = effects
-            }
-            updateGroup.leave()
-        }
-        updateGroup.wait()
-
-        XCTAssertEqual(output.count, insulinEffects.count)
-
-        for (expected, calculated) in zip(output, insulinEffects) {
-            XCTAssertEqual(expected.startDate, calculated.startDate)
-            XCTAssertEqual(expected.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter), calculated.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter), accuracy: 1.0, String(describing: expected.startDate))
-        }
-    }
-
-    func testGlucoseEffectFromTempBasalWithOldDoses() {
-        injectDoseEvents(from: "basal_dose_with_expired")
-        let output = loadGlucoseEffectFixture("effect_from_basal_output_exponential")
-
-        var insulinEffects: [GlucoseEffect]!
-        let startDate = dateFormatter.date(from: "2015-07-13T12:00:00")!
-        let updateGroup = DispatchGroup()
-        updateGroup.enter()
-        doseStore.getGlucoseEffects(start: startDate) { (result) -> Void in
-            switch result {
-            case .failure(let error):
-                print(error)
-                XCTFail("Mock should always return success")
-            case .success(let effects):
-                insulinEffects = effects
-            }
-            updateGroup.leave()
-        }
-        updateGroup.wait()
-
-        XCTAssertEqual(output.count, insulinEffects.count)
-
-        for (expected, calculated) in zip(output, insulinEffects) {
-            XCTAssertEqual(expected.startDate, calculated.startDate)
-            XCTAssertEqual(expected.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter), calculated.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter), accuracy: 1.0, String(describing: expected.startDate))
-        }
-    }
-
-    func testGlucoseEffectFromHistory() {
-        injectDoseEvents(from: "dose_history_with_delivered_units")
-        let output = loadGlucoseEffectFixture("effect_from_history_exponential_delivered_units_output")
-
-        var insulinEffects: [GlucoseEffect]!
-        let startDate = dateFormatter.date(from: "2016-01-30T15:40:49")!
-        let updateGroup = DispatchGroup()
-        updateGroup.enter()
-        doseStore.getGlucoseEffects(start: startDate) { (result) -> Void in
-            switch result {
-            case .failure(let error):
-                print(error)
-                XCTFail("Mock should always return success")
-            case .success(let effects):
-                insulinEffects = effects
-            }
-            updateGroup.leave()
-        }
-        updateGroup.wait()
-
-        XCTAssertEqual(output.count, insulinEffects.count)
-
-        for (expected, calculated) in zip(output, insulinEffects) {
-            XCTAssertEqual(expected.startDate, calculated.startDate)
-            XCTAssertEqual(expected.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter), calculated.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter), accuracy: 1.0, String(describing: expected.startDate))
-        }
     }
 }

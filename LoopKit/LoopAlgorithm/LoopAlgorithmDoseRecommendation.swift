@@ -10,14 +10,12 @@ import Foundation
 
 public struct LoopAlgorithmDoseRecommendation: Equatable {
 
-    public var manualBolus: ManualBolusRecommendation?
-    public var automaticBolus: AutomaticDoseRecommendation?
-    public var tempBasal: TempBasalRecommendation?
+    public var manual: ManualBolusRecommendation?
+    public var automatic: AutomaticDoseRecommendation?
 
-    public init(manualBolus: ManualBolusRecommendation? = nil, automaticBolus: AutomaticDoseRecommendation? = nil, tempBasal: TempBasalRecommendation? = nil) {
-        self.manualBolus = manualBolus
-        self.automaticBolus = automaticBolus
-        self.tempBasal = tempBasal
+    public init(manual: ManualBolusRecommendation? = nil, automatic: AutomaticDoseRecommendation? = nil) {
+        self.manual = manual
+        self.automatic = automatic
     }
 }
 

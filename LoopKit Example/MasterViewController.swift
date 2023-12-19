@@ -214,55 +214,11 @@ class MasterViewController: UITableViewController {
         case .data:
             switch DataRow(rawValue: indexPath.row)! {
             case .carbs:
-                //performSegue(withIdentifier: CarbEntryTableViewController.className, sender: sender)
                 break
             case .reservoir:
-                performSegue(withIdentifier: LegacyInsulinDeliveryTableViewController.className, sender: sender)
+                break
             case .diagnostic:
-                let vc = CommandResponseViewController(command: { [weak self] (completionHandler) -> String in
-                    let group = DispatchGroup()
-
-                    guard let dataManager = self?.dataManager else {
-                        completionHandler("")
-                        return "nil"
-                    }
-
-                    var doseStoreResponse = ""
-                    group.enter()
-                    dataManager.doseStore.generateDiagnosticReport { (report) in
-                        doseStoreResponse = report
-                        group.leave()
-                    }
-
-                    var carbStoreResponse = ""
-                    if let carbStore = dataManager.carbStore {
-                        group.enter()
-                        carbStore.generateDiagnosticReport { (report) in
-                            carbStoreResponse = report
-                            group.leave()
-                        }
-                    }
-
-                    var glucoseStoreResponse = ""
-                    group.enter()
-                    dataManager.glucoseStore.generateDiagnosticReport { (report) in
-                        glucoseStoreResponse = report
-                        group.leave()
-                    }
-
-                    group.notify(queue: DispatchQueue.main) {
-                        completionHandler([
-                            doseStoreResponse,
-                            carbStoreResponse,
-                            glucoseStoreResponse
-                        ].joined(separator: "\n\n"))
-                    }
-
-                    return "…"
-                })
-                vc.title = "Diagnostic"
-
-                show(vc, sender: sender)
+                break
             case .generate:
                 let vc = CommandResponseViewController(command: { [weak self] (completionHandler) -> String in
                     guard let dataManager = self?.dataManager else {
@@ -317,13 +273,6 @@ class MasterViewController: UITableViewController {
 
         if let navVC = targetViewController as? UINavigationController, let topViewController = navVC.topViewController {
             targetViewController = topViewController
-        }
-
-        switch targetViewController {
-        case let vc as LegacyInsulinDeliveryTableViewController:
-            vc.doseStore = dataManager?.doseStore
-        default:
-            break
         }
     }
 }

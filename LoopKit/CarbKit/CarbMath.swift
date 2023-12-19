@@ -16,7 +16,21 @@ public struct CarbMath {
     public static let defaultEffectDelay: TimeInterval = .minutes(10)
 }
 
-struct CarbModelSettings {
+public enum CarbAbsorptionModel {
+    case linear
+    case piecewiseLinear
+
+    public var model: CarbAbsorptionComputable {
+        switch self {
+        case .linear:
+            return LinearAbsorption()
+        case .piecewiseLinear:
+            return PiecewiseLinearAbsorption()
+        }
+    }
+}
+
+public struct CarbModelSettings {
     var absorptionModel: CarbAbsorptionComputable
     var initialAbsorptionTimeOverrun: Double
     var adaptiveAbsorptionRateEnabled: Bool
@@ -356,10 +370,10 @@ extension Collection where Element: CarbEntry {
     func carbsOnBoard(
         from start: Date? = nil,
         to end: Date? = nil,
-        defaultAbsorptionTime: TimeInterval,
+        defaultAbsorptionTime: TimeInterval = CarbMath.defaultAbsorptionTime,
         absorptionModel: CarbAbsorptionComputable,
-        delay: TimeInterval = TimeInterval(minutes: 10),
-        delta: TimeInterval = TimeInterval(minutes: 5)
+        delay: TimeInterval = CarbMath.defaultEffectDelay,
+        delta: TimeInterval = GlucoseMath.defaultDelta
     ) -> [CarbValue] {
         guard let (startDate, endDate) = simulationDateRange(from: start, to: end, defaultAbsorptionTime: defaultAbsorptionTime, delay: delay, delta: delta) else {
             return []
@@ -441,15 +455,35 @@ extension Collection where Element: CarbEntry {
 
 // MARK: - Dyanamic absorption overrides
 extension Collection {
+
+    public func dynamicCarbsOnBoard<T>(
+        at date: Date,
+        absorptionModel: CarbAbsorptionComputable
+    ) -> Double where Element == CarbStatus<T> {
+        reduce(0.0) { (value, entry) -> Double in
+            return value + entry.dynamicCarbsOnBoard(
+                at: date,
+                defaultAbsorptionTime: CarbMath.defaultAbsorptionTime,
+                delay: CarbMath.defaultEffectDelay,
+                delta: GlucoseMath.defaultDelta,
+                absorptionModel: absorptionModel
+            )
+        }
+    }
+
     public func dynamicCarbsOnBoard<T>(
         from start: Date? = nil,
         to end: Date? = nil,
-        defaultAbsorptionTime: TimeInterval = TimeInterval(3 /* hours */ * 60 /* minutes */ * 60 /* seconds */),
-        absorptionModel: CarbAbsorptionComputable = PiecewiseLinearAbsorption(),
-        delay: TimeInterval = TimeInterval(10 /* minutes */ * 60 /* seconds */),
-        delta: TimeInterval = TimeInterval(5 /* minutes */ * 60 /* seconds */)
+        absorptionModel: CarbAbsorptionComputable = PiecewiseLinearAbsorption()
     ) -> [CarbValue] where Element == CarbStatus<T> {
-        guard let (startDate, endDate) = simulationDateRange(from: start, to: end, defaultAbsorptionTime: defaultAbsorptionTime, delay: delay, delta: delta) else {
+
+        guard let (startDate, endDate) = simulationDateRange(
+            from: start,
+            to: end,
+            defaultAbsorptionTime: CarbMath.defaultAbsorptionTime,
+            delay: CarbMath.defaultEffectDelay,
+            delta: GlucoseMath.defaultDelta
+        ) else {
             return []
         }
 
@@ -460,15 +494,15 @@ extension Collection {
             let value = reduce(0.0) { (value, entry) -> Double in
                 return value + entry.dynamicCarbsOnBoard(
                     at: date,
-                    defaultAbsorptionTime: defaultAbsorptionTime,
-                    delay: delay,
-                    delta: delta,
+                    defaultAbsorptionTime: CarbMath.defaultAbsorptionTime,
+                    delay: CarbMath.defaultEffectDelay,
+                    delta: GlucoseMath.defaultDelta,
                     absorptionModel: absorptionModel
                 )
             }
 
             values.append(CarbValue(startDate: date, value: value))
-            date = date.addingTimeInterval(delta)
+            date = date.addingTimeInterval(GlucoseMath.defaultDelta)
         } while date <= endDate
         
         return values

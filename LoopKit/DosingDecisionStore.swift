@@ -32,21 +32,24 @@ public class DosingDecisionStore {
         self.expireAfter = expireAfter
     }
 
-    public func storeDosingDecision(_ dosingDecision: StoredDosingDecision, completion: @escaping () -> Void) {
-        dataAccessQueue.async {
-            if let data = self.encodeDosingDecision(dosingDecision) {
-                self.store.managedObjectContext.performAndWait {
-                    let object = DosingDecisionObject(context: self.store.managedObjectContext)
-                    object.data = data
-                    object.date = dosingDecision.date
-                    self.store.save()
+    public func storeDosingDecision(_ dosingDecision: StoredDosingDecision) async {
+        await withCheckedContinuation { continuation in
+            dataAccessQueue.async {
+                if let data = self.encodeDosingDecision(dosingDecision) {
+                    self.store.managedObjectContext.performAndWait {
+                        let object = DosingDecisionObject(context: self.store.managedObjectContext)
+                        object.data = data
+                        object.date = dosingDecision.date
+                        self.store.save()
+                    }
                 }
-            }
 
-            self.purgeExpiredDosingDecisions()
-            completion()
+                self.purgeExpiredDosingDecisions()
+                continuation.resume()
+            }
         }
     }
+
 
     public var expireDate: Date {
         return Date(timeIntervalSinceNow: -expireAfter)

@@ -31,6 +31,10 @@ public struct LoopPredictionInput {
     public var algorithmEffectsOptions: AlgorithmEffectsOptions
 
     public var useIntegralRetrospectiveCorrection: Bool = false
+    
+    public var includePositiveVelocityAndRC: Bool = true
+
+    public var carbAbsorptionModel: CarbAbsorptionModel = .piecewiseLinear
 
     public init(
         glucoseHistory: [StoredGlucoseSample],
@@ -40,7 +44,8 @@ public struct LoopPredictionInput {
         sensitivity: [AbsoluteScheduleValue<HKQuantity>],
         carbRatio: [AbsoluteScheduleValue<Double>],
         algorithmEffectsOptions: AlgorithmEffectsOptions,
-        useIntegralRetrospectiveCorrection: Bool
+        useIntegralRetrospectiveCorrection: Bool,
+        includePositiveVelocityAndRC: Bool
     )
     {
         self.glucoseHistory = glucoseHistory
@@ -51,6 +56,7 @@ public struct LoopPredictionInput {
         self.carbRatio = carbRatio
         self.algorithmEffectsOptions = algorithmEffectsOptions
         self.useIntegralRetrospectiveCorrection = useIntegralRetrospectiveCorrection
+        self.includePositiveVelocityAndRC = includePositiveVelocityAndRC
     }
 }
 
@@ -72,6 +78,8 @@ extension LoopPredictionInput: Codable {
             self.algorithmEffectsOptions = .all
         }
         self.useIntegralRetrospectiveCorrection = try container.decodeIfPresent(Bool.self, forKey: .useIntegralRetrospectiveCorrection) ?? false
+        self.includePositiveVelocityAndRC = try container.decodeIfPresent(Bool.self, forKey: .includePositiveVelocityAndRC) ?? true
+
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -86,8 +94,11 @@ extension LoopPredictionInput: Codable {
         if algorithmEffectsOptions != .all {
             try container.encode(algorithmEffectsOptions.rawValue, forKey: .algorithmEffectsOptions)
         }
-        if useIntegralRetrospectiveCorrection {
+        if !useIntegralRetrospectiveCorrection {
             try container.encode(useIntegralRetrospectiveCorrection, forKey: .useIntegralRetrospectiveCorrection)
+        }
+        if !includePositiveVelocityAndRC {
+            try container.encode(includePositiveVelocityAndRC, forKey: .includePositiveVelocityAndRC)
         }
     }
 
@@ -100,6 +111,7 @@ extension LoopPredictionInput: Codable {
         case carbRatio
         case algorithmEffectsOptions
         case useIntegralRetrospectiveCorrection
+        case includePositiveVelocityAndRC
     }
 }
 
@@ -123,7 +135,8 @@ extension LoopPredictionInput {
             sensitivity: sensitivity,
             carbRatio: carbRatio,
             algorithmEffectsOptions: algorithmEffectsOptions,
-            useIntegralRetrospectiveCorrection: useIntegralRetrospectiveCorrection
+            useIntegralRetrospectiveCorrection: useIntegralRetrospectiveCorrection,
+            includePositiveVelocityAndRC: includePositiveVelocityAndRC
         )
     }
 

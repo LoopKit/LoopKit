@@ -10,8 +10,6 @@ import SwiftUI
 import HealthKit
 import LoopKit
 
-public typealias SyncDeliveryLimits = (_ deliveryLimits: DeliveryLimits, _ completion: @escaping (Swift.Result<DeliveryLimits, Error>) -> Void) -> Void
-
 public struct DeliveryLimitsEditor: View {
     fileprivate enum PresentedAlert: Error {
         case saveConfirmation(AlertContent)
@@ -24,7 +22,7 @@ public struct DeliveryLimitsEditor: View {
     let scheduledBasalRange: ClosedRange<Double>?
     let supportedMaximumBolusVolumes: [Double]
     let selectableMaximumBolusVolumes: [Double]
-    let syncDeliveryLimits: SyncDeliveryLimits?
+    let syncDeliveryLimits: ((_ deliveryLimits: DeliveryLimits) async throws -> DeliveryLimits)?
     let save: (_ deliveryLimits: DeliveryLimits) -> Void
     let mode: SettingsPresentationMode
 
@@ -46,7 +44,7 @@ public struct DeliveryLimitsEditor: View {
         scheduledBasalRange: ClosedRange<Double>?,
         supportedMaximumBolusVolumes: [Double],
         lowestCarbRatio: Double?,
-        syncDeliveryLimits: @escaping SyncDeliveryLimits,
+        syncDeliveryLimits: @escaping (_ deliveryLimits: DeliveryLimits) async throws -> DeliveryLimits,
         onSave save: @escaping (_ deliveryLimits: DeliveryLimits) -> Void,
         mode: SettingsPresentationMode = .settings
     ) {
@@ -342,13 +340,14 @@ public struct DeliveryLimitsEditor: View {
             actuallySave(deliveryLimits)
             return
         }
-        syncDeliveryLimits(deliveryLimits) { result in
-            switch result {
-            case .success(let deliveryLimits):
-                actuallySave(deliveryLimits)
-                completion(nil)
-            case .failure(let error):
-                completion(PresentedAlert.saveError(error))
+        Task {
+            do {
+                let result = try await syncDeliveryLimits(deliveryLimits)
+                actuallySave(result)
+            } catch {
+                Task { @MainActor in
+                    completion(PresentedAlert.saveError(error))
+                }
             }
         }
     }

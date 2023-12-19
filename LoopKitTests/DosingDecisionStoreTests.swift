@@ -40,9 +40,8 @@ class DosingDecisionStorePersistenceTests: PersistenceControllerTestCase, Dosing
 
     // MARK: -
 
-    func testStoreDosingDecision() {
+    func testStoreDosingDecision() async {
         let storeDosingDecisionHandler = expectation(description: "Store dosing decision handler")
-        let storeDosingDecisionCompletion = expectation(description: "Store dosing decision completion")
 
         var handlerInvocation = 0
 
@@ -57,18 +56,14 @@ class DosingDecisionStorePersistenceTests: PersistenceControllerTestCase, Dosing
             }
         }
 
-        dosingDecisionStore.storeDosingDecision(StoredDosingDecision(reason: "test")) {
-            storeDosingDecisionCompletion.fulfill()
-        }
+        await dosingDecisionStore.storeDosingDecision(StoredDosingDecision(reason: "test"))
 
-        wait(for: [storeDosingDecisionHandler, storeDosingDecisionCompletion], timeout: 2, enforceOrder: true)
+        await fulfillment(of: [storeDosingDecisionHandler], timeout: 2)
     }
 
-    func testStoreDosingDecisionMultiple() {
+    func testStoreDosingDecisionMultiple() async {
         let storeDosingDecisionHandler1 = expectation(description: "Store dosing decision handler 1")
         let storeDosingDecisionHandler2 = expectation(description: "Store dosing decision handler 2")
-        let storeDosingDecisionCompletion1 = expectation(description: "Store dosing decision completion 1")
-        let storeDosingDecisionCompletion2 = expectation(description: "Store dosing decision completion 2")
 
         var handlerInvocation = 0
 
@@ -85,15 +80,11 @@ class DosingDecisionStorePersistenceTests: PersistenceControllerTestCase, Dosing
             }
         }
 
-        dosingDecisionStore.storeDosingDecision(StoredDosingDecision(reason: "test")) {
-            storeDosingDecisionCompletion1.fulfill()
-        }
+        await dosingDecisionStore.storeDosingDecision(StoredDosingDecision(reason: "test"))
 
-        dosingDecisionStore.storeDosingDecision(StoredDosingDecision(reason: "test")) {
-            storeDosingDecisionCompletion2.fulfill()
-        }
+        await dosingDecisionStore.storeDosingDecision(StoredDosingDecision(reason: "test"))
 
-        wait(for: [storeDosingDecisionHandler1, storeDosingDecisionCompletion1, storeDosingDecisionHandler2, storeDosingDecisionCompletion2], timeout: 2, enforceOrder: true)
+        await fulfillment(of: [storeDosingDecisionHandler1, storeDosingDecisionHandler2], timeout: 2)
     }
 
     func testDosingDecisionObjectEncodable() throws {
@@ -501,10 +492,10 @@ class DosingDecisionStoreQueryTests: PersistenceControllerTestCase {
         wait(for: [completion], timeout: 2, enforceOrder: true)
     }
 
-    func testDataWithUnusedQueryAnchor() {
+    func testDataWithUnusedQueryAnchor() async {
         let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
 
-        addData(withSyncIdentifiers: syncIdentifiers)
+        await addData(withSyncIdentifiers: syncIdentifiers)
 
         dosingDecisionStore.executeDosingDecisionQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
             switch result {
@@ -520,13 +511,13 @@ class DosingDecisionStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
 
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        await fulfillment(of: [completion], timeout: 2)
     }
 
-    func testDataWithStaleQueryAnchor() {
+    func testDataWithStaleQueryAnchor() async {
         let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
 
-        addData(withSyncIdentifiers: syncIdentifiers)
+        await addData(withSyncIdentifiers: syncIdentifiers)
 
         queryAnchor.modificationCounter = 2
 
@@ -542,13 +533,13 @@ class DosingDecisionStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
 
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        await fulfillment(of: [completion])
     }
 
-    func testDataWithCurrentQueryAnchor() {
+    func testDataWithCurrentQueryAnchor() async {
         let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
 
-        addData(withSyncIdentifiers: syncIdentifiers)
+        await addData(withSyncIdentifiers: syncIdentifiers)
 
         queryAnchor.modificationCounter = 3
 
@@ -563,13 +554,13 @@ class DosingDecisionStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
 
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        await fulfillment(of: [completion])
     }
 
-    func testDataWithLimitZero() {
+    func testDataWithLimitZero() async {
         let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
 
-        addData(withSyncIdentifiers: syncIdentifiers)
+        await addData(withSyncIdentifiers: syncIdentifiers)
 
         limit = 0
 
@@ -584,13 +575,13 @@ class DosingDecisionStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
 
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        await fulfillment(of: [completion])
     }
 
-    func testDataWithLimitCoveredByData() {
+    func testDataWithLimitCoveredByData() async {
         let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
 
-        addData(withSyncIdentifiers: syncIdentifiers)
+        await addData(withSyncIdentifiers: syncIdentifiers)
 
         limit = 2
 
@@ -607,15 +598,13 @@ class DosingDecisionStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
 
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        await fulfillment(of: [completion], timeout: 2)
     }
 
-    private func addData(withSyncIdentifiers syncIdentifiers: [UUID]) {
-        let semaphore = DispatchSemaphore(value: 0)
+    private func addData(withSyncIdentifiers syncIdentifiers: [UUID]) async {
         for syncIdentifier in syncIdentifiers {
-            self.dosingDecisionStore.storeDosingDecision(StoredDosingDecision(reason: "test", syncIdentifier: syncIdentifier)) { semaphore.signal() }
+            await dosingDecisionStore.storeDosingDecision(StoredDosingDecision(reason: "test", syncIdentifier: syncIdentifier))
         }
-        for _ in syncIdentifiers { semaphore.wait() }
     }
 
     private func generateSyncIdentifier() -> UUID { UUID() }

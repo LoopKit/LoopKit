@@ -190,6 +190,15 @@ extension InsulinDeliveryStore {
         }
     }
 
+    public func getDoseEntries(start: Date? = nil, end: Date? = nil, includeMutable: Bool = false) async throws -> [DoseEntry] {
+        try await withCheckedThrowingContinuation { continuation in
+            queue.async {
+                continuation.resume(with: self.getDoseEntries(start: start, end: end, includeMutable: includeMutable))
+            }
+        }
+    }
+
+
     private func getDoseEntries(start: Date? = nil, end: Date? = nil, includeMutable: Bool = false) -> Result<[DoseEntry], Error> {
         dispatchPrecondition(condition: .onQueue(queue))
 
@@ -273,6 +282,19 @@ extension InsulinDeliveryStore {
             }
 
             completion(.success(doses))
+        }
+    }
+
+    public func getManuallyEnteredDoses(since startDate: Date, chronological: Bool = true, limit: Int? = nil) async throws -> [DoseEntry] {
+        try await withCheckedThrowingContinuation { continuation in
+            getManuallyEnteredDoses(since: startDate, chronological: chronological, limit: limit) { result in
+                switch result {
+                case .success(let entries):
+                    continuation.resume(returning: entries)
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
+            }
         }
     }
 
@@ -820,33 +842,26 @@ extension InsulinDeliveryStore {
 
 extension InsulinDeliveryStore {
     /// Generates a diagnostic report about the current state
-    ///
-    /// This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
-    ///
-    /// - parameter completion: The closure takes a single argument of the report string.
-    public func generateDiagnosticReport(_ completion: @escaping (_ report: String) -> Void) {
-        self.queue.async {
-            var report: [String] = [
-                "### InsulinDeliveryStore",
-                "* cacheLength: \(self.cacheLength)",
-                "* HealthKitSampleStore: \(self.hkSampleStore?.debugDescription ?? "nil")",
-                "* lastImmutableBasalEndDate: \(String(describing: self.lastImmutableBasalEndDate))",
-                "",
-                "#### cachedDoseEntries",
-            ]
+    public func generateDiagnosticReport() async -> String {
+        var report: [String] = [
+            "### InsulinDeliveryStore",
+            "* cacheLength: \(self.cacheLength)",
+            "* HealthKitSampleStore: \(self.hkSampleStore?.debugDescription ?? "nil")",
+            "* lastImmutableBasalEndDate: \(String(describing: self.lastImmutableBasalEndDate))",
+            "",
+            "#### cachedDoseEntries",
+        ]
 
-            switch self.getDoseEntries(start: Date(timeIntervalSinceNow: -.hours(24)), includeMutable: true) {
-            case .failure(let error):
-                report.append("Error: \(error)")
-            case .success(let entries):
-                for entry in entries {
-                    report.append(String(describing: entry))
-                }
+        do {
+            let entries = try await getDoseEntries(start: Date(timeIntervalSinceNow: -.hours(24)), includeMutable: true)
+            for entry in entries {
+                report.append(String(describing: entry))
             }
-
-            report.append("")
-            completion(report.joined(separator: "\n"))
+        } catch {
+            report.append("Error: \(error)")
         }
+        report.append("")
+        return report.joined(separator: "\n")
     }
 }
 

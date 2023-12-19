@@ -10,6 +10,7 @@ import Combine
 import HealthKit
 
 /// Abstract class providing boilerplate setup for chart-based table view controllers
+@MainActor
 open class ChartsTableViewController: UITableViewController, UIGestureRecognizerDelegate {
 
     public var displayGlucosePreference: DisplayGlucosePreference? {
@@ -42,7 +43,9 @@ open class ChartsTableViewController: UITableViewController, UIGestureRecognizer
             .sink { [weak self] _ in
                 self?.active = true
                 if self?.visible == true {
-                    self?.reloadData()
+                    Task {
+                        await self?.reloadData()
+                    }
                 }
             }
             .store(in: &cancellables)
@@ -79,7 +82,9 @@ open class ChartsTableViewController: UITableViewController, UIGestureRecognizer
     open override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
 
-        reloadData(animated: false)
+        Task {
+            await reloadData(animated: false)
+        }
     }
 
     open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -95,7 +100,9 @@ open class ChartsTableViewController: UITableViewController, UIGestureRecognizer
             self.charts.setGlucoseUnit(unit)
             self.glucoseUnitDidChange()
         }
-        self.reloadData()
+        Task {
+            await self.reloadData()
+        }
     }
 
     open func glucoseUnitDidChange() {
@@ -113,13 +120,17 @@ open class ChartsTableViewController: UITableViewController, UIGestureRecognizer
 
     open var active: Bool = true {
         didSet {
-            reloadData()
+            Task {
+                await reloadData()
+            }
         }
     }
 
     public var visible = false {
         didSet {
-            reloadData()
+            Task {
+                await reloadData()
+            }
         }
     }
 
@@ -129,7 +140,7 @@ open class ChartsTableViewController: UITableViewController, UIGestureRecognizer
     ///
     /// - Parameters:
     ///   - animated: Whether the updating should be animated if possible
-    open func reloadData(animated: Bool = false) {
+    open func reloadData(animated: Bool = false) async {
 
     }
 

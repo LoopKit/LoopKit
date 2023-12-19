@@ -1,5 +1,5 @@
 {
-  "automaticBolus" : {
+  "automatic" : {
     "basalAdjustment" : {
       "duration" : 1800,
       "unitsPerHour" : 0

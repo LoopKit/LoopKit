@@ -27,9 +27,9 @@ final class LoopAlgorithmTests: XCTestCase {
 
         let (input, recommendation) = loadScenario("suspend")
 
-        let output = try LoopAlgorithm.run(input: input)
+        let output = LoopAlgorithm.run(input: input)
 
-        XCTAssertEqual(output.doseRecommendation, recommendation)
+        XCTAssertEqual(output.recommendation, recommendation)
     }
 
     func testCarbsWithSensitivityChange() throws {
@@ -40,9 +40,9 @@ final class LoopAlgorithmTests: XCTestCase {
 
         let (input, recommendation) = loadScenario("carbs_with_isf_change")
 
-        let output = try LoopAlgorithm.run(input: input)
+        let output = LoopAlgorithm.run(input: input)
 
-        XCTAssertEqual(output.doseRecommendation, recommendation)
+        XCTAssertEqual(output.recommendation, recommendation)
     }
 
 

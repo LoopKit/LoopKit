@@ -80,6 +80,7 @@ public protocol CGMManagerOnboardingDelegate: AnyObject {
     func cgmManagerOnboarding(didOnboardCGMManager cgmManager: CGMManagerUI)
 }
 
+@MainActor
 public protocol CGMManagerOnboarding {
     /// Delegate to notify about CGM manager onboarding.
     var cgmManagerOnboardingDelegate: CGMManagerOnboardingDelegate? { get set }
