@@ -91,11 +91,15 @@ public struct ManualBolusRecommendation {
     public let amount: Double
     public let pendingInsulin: Double
     public var notice: BolusRecommendationNotice?
+    public let carbsAmount: Double?
+    public let correctionAmount: Double?
 
-    public init(amount: Double, pendingInsulin: Double, notice: BolusRecommendationNotice? = nil) {
+    public init(amount: Double, pendingInsulin: Double, notice: BolusRecommendationNotice? = nil, carbsAmount: Double? = nil, correctionAmount: Double? = nil) {
         self.amount = amount
         self.pendingInsulin = pendingInsulin
         self.notice = notice
+        self.carbsAmount = carbsAmount
+        self.correctionAmount = correctionAmount
     }
 }
 
