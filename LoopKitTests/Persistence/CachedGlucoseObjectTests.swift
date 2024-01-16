@@ -225,7 +225,7 @@ class CachedGlucoseObjectEncodableTests: PersistenceControllerTestCase {
   "syncVersion" : 2,
   "unitString" : "mg/dL",
   "uuid" : "2A67A303-5203-4CB8-8263-79498265368E",
-  "value" : 98.700000000000003,
+  "value" : 98.7,
   "wasUserEntered" : true
 }
 """
@@ -250,7 +250,7 @@ class CachedGlucoseObjectEncodableTests: PersistenceControllerTestCase {
   "provenanceIdentifier" : "238E41EA-9576-4981-A1A4-51E10228584F",
   "startDate" : "2020-05-14T22:38:14Z",
   "unitString" : "mg/dL",
-  "value" : 87.599999999999994,
+  "value" : 87.6,
   "wasUserEntered" : false
 }
 """

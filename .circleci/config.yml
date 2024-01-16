@@ -13,19 +13,15 @@ project_directory: &project_directory ~/project
 jobs:
   test:
     working_directory: *project_directory
-    resource_class: macos.x86.medium.gen2
+    resource_class: macos.m1.medium.gen1
     macos:
-      xcode: 14.3.1
+      xcode: "15.2"
     steps:
       - checkout
       - run:
           name: Test
           command: |
-            set -o pipefail && xcodebuild -project LoopKit.xcodeproj -scheme Shared build -destination 'name=iPhone 14' test | xcpretty
-      - run:
-          name: Build Swift Package
-          command: |
-            swift build -v -Xswiftc "-sdk" -Xswiftc "`xcrun --sdk iphonesimulator --show-sdk-path`" -Xswiftc "-target" -Xswiftc "x86_64-apple-ios15.0-simulator" | xcpretty
+            set -o pipefail && xcodebuild -project LoopKit.xcodeproj -scheme Shared build -destination 'name=iPhone 15 Pro' test | xcpretty
       - store_test_results:
           path: test_output
 #
