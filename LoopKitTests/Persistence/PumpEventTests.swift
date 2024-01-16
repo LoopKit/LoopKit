@@ -36,7 +36,7 @@ class PumpEventEncodableTests: PersistenceControllerTestCase {
   "automatic" : false,
   "createdAt" : "2020-05-14T22:33:48Z",
   "date" : "2020-05-14T22:38:14Z",
-  "deliveredUnits" : 0.56000000000000005,
+  "deliveredUnits" : 0.56,
   "doseType" : "tempBasal",
   "duration" : 1800,
   "insulinType" : 3,

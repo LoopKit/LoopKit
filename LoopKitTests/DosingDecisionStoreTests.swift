@@ -238,7 +238,7 @@ class DosingDecisionStorePersistenceTests: PersistenceControllerTestCase, Dosing
         }
       }
     },
-    "manualBolusRequested" : 0.80000000000000004,
+    "manualBolusRequested" : 0.8,
     "manualGlucoseSample" : {
       "condition" : "aboveRange",
       "device" : {
@@ -257,7 +257,7 @@ class DosingDecisionStorePersistenceTests: PersistenceControllerTestCase, Dosing
       "syncIdentifier" : "d3876f59-adb3-4a4f-8b29-315cda22062e",
       "syncVersion" : 1,
       "trend" : 7,
-      "trendRate" : -10.199999999999999,
+      "trendRate" : -10.2,
       "uuid" : "DA0CED44-E4F1-49C4-BAF8-6EFA6D75525F",
       "wasUserEntered" : true
     },
@@ -845,7 +845,7 @@ class StoredDosingDecisionCodableTests: XCTestCase {
       }
     }
   },
-  "manualBolusRequested" : 0.80000000000000004,
+  "manualBolusRequested" : 0.8,
   "manualGlucoseSample" : {
     "condition" : "aboveRange",
     "device" : {
@@ -864,7 +864,7 @@ class StoredDosingDecisionCodableTests: XCTestCase {
     "syncIdentifier" : "d3876f59-adb3-4a4f-8b29-315cda22062e",
     "syncVersion" : 1,
     "trend" : 7,
-    "trendRate" : -10.199999999999999,
+    "trendRate" : -10.2,
     "uuid" : "DA0CED44-E4F1-49C4-BAF8-6EFA6D75525F",
     "wasUserEntered" : true
   },
