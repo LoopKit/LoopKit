@@ -65,15 +65,10 @@ struct MockPumpManagerSettingsView: View {
     }
     
     private var pumpProgressView: some View {
-        VStack(alignment: .center, spacing: 12) {
-            Text("Press and Hold for More Options")
-                .font(.headline)
-                .foregroundColor(.primary)
-            HStack(alignment: .center, spacing: 16) {
-                pumpImage
-                expirationArea
-                    .offset(y: -3)
-            }
+        HStack(alignment: .center, spacing: 16) {
+            pumpImage
+            expirationArea
+                .offset(y: -3)
         }
     }
     
