@@ -11,7 +11,7 @@ import LoopKitUI
 import MockKit
 
 extension View {
-    func openMockCGMSettingsOnLongPress(enabled: Bool = true, minimumDuration: Double = 5, cgmManager: MockCGMManager, displayGlucosePreference: DisplayGlucosePreference) -> some View {
+    func openMockCGMSettingsOnLongPress(enabled: Bool = true, minimumDuration: Double = 0.5, cgmManager: MockCGMManager, displayGlucosePreference: DisplayGlucosePreference) -> some View {
         modifier(OpenMockCGMSettingsOnLongPressGesture(enabled: enabled, minimumDuration: minimumDuration, cgmManager: cgmManager, displayGlucosePreference: displayGlucosePreference))
     }
 }

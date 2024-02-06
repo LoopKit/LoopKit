@@ -11,7 +11,7 @@ import LoopKit
 import MockKit
 
 extension View {
-    func openMockPumpSettingsOnLongPress(enabled: Bool = true, minimumDuration: Double = 5, pumpManager: MockPumpManager, supportedInsulinTypes: [InsulinType]) -> some View {
+    func openMockPumpSettingsOnLongPress(enabled: Bool = true, minimumDuration: Double = 0.5, pumpManager: MockPumpManager, supportedInsulinTypes: [InsulinType]) -> some View {
         modifier(OpenMockPumpSettingsOnLongPressGesture(enabled: enabled, minimumDuration: minimumDuration, pumpManager: pumpManager, supportedInsulinTypes: supportedInsulinTypes))
     }
 }
