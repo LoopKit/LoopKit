@@ -15,6 +15,7 @@ import MockKit
 
 
 extension MockCGMManager: CGMManagerUI {
+
     fileprivate var appName: String {
         return Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as! String
     }

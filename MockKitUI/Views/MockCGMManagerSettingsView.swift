@@ -60,7 +60,7 @@ struct MockCGMManagerSettingsView: View {
         notificationSubSection
         
         if (allowDebugFeatures) {
-            deviceDetailsSubSection
+            settingsSubSection
         }
     }
     
@@ -187,10 +187,10 @@ struct MockCGMManagerSettingsView: View {
         }
     }
     
-    private var deviceDetailsSubSection: some View {
+    private var settingsSubSection: some View {
         Section {
             NavigationLink(destination: MockCGMManagerControlsView(cgmManager: viewModel.cgmManager, displayGlucosePreference: displayGlucosePreference)) {
-                Text("Device Details")
+                Text("Simulator Settings")
             }
         }
     }
