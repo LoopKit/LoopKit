@@ -57,6 +57,7 @@ struct MockPumpManagerSettingsView: View {
         Section {
             VStack(spacing: 8) {
                 pumpProgressView
+                    .accessibilityIdentifier("mockPumpManagerProgressView")
                     .openMockPumpSettingsOnLongPress(enabled: true, pumpManager: viewModel.pumpManager, supportedInsulinTypes: supportedInsulinTypes)
                 Divider()
                 insulinInfo

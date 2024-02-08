@@ -237,6 +237,7 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                 cell.textLabel?.text = "Reservoir Remaining"
                 cell.detailTextLabel?.text = reservoirFormatter.string(from: HKQuantity(unit: .internationalUnit(), doubleValue: pumpManager.state.reservoirUnitsRemaining))
                 cell.accessoryType = .disclosureIndicator
+                cell.accessibilityIdentifier = "mockPumpSettingsReservoirRemaining"
                 return cell
             case .batteryRemaining:
                 let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)

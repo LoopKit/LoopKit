@@ -60,6 +60,7 @@ public struct DismissibleKeyboardTextField: UIViewRepresentable {
         textField.addTarget(context.coordinator, action: #selector(Coordinator.textChanged), for: .editingChanged)
         textField.addTarget(context.coordinator, action: #selector(Coordinator.editingDidBegin), for: .editingDidBegin)
         textField.delegate = context.coordinator
+        textField.accessibilityIdentifier = "dismissibleKeyboardTextField"
         return textField
     }
 
