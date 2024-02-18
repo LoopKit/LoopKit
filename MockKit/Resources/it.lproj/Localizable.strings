@@ -23,7 +23,7 @@
 "Resume" = "Riprendi";
 
 /* Pump Event title for UnfinalizedDose with doseType of .suspend */
-"Suspend" = "Blocco Erogazione";
+"Suspend" = "Sospeso";
 
 /* Pump Event title for UnfinalizedDose with doseType of .tempBasal */
 "Temp Basal" = "Basale Temporanea";

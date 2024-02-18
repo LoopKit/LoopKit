@@ -68,7 +68,7 @@ extension ExponentialInsulinModel: InsulinModel {
 
 extension ExponentialInsulinModel: CustomDebugStringConvertible {
     public var debugDescription: String {
-        return "ExponentialInsulinModel(actionDuration: \(actionDuration), peakActivityTime: \(peakActivityTime), delay: \(delay)"
+        return "ExponentialInsulinModel(actionDuration: \(actionDuration), peakActivityTime: \(peakActivityTime), delay: \(delay))"
     }
 }
 

@@ -40,4 +40,3 @@ workflows:
     jobs:
       - test
       - package
-

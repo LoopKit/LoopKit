@@ -28,14 +28,29 @@
 /* No comment provided by engineer. */
 "Comms Recovery" = "Kommunikationswiederherstellung";
 
+/* No comment provided by engineer. */
+"days" = "Tage";
+
 /* Button title to delete a service */
 "Delete Service" = "Dienst löschen";
+
+/* Settings done button label */
+"Done" = "Fertig";
 
 /* The alert title for a resume error */
 "Error Resuming" = "Fehler beim Fortfahren";
 
 /* The alert title for a suspend error */
 "Error Suspending" = "Fehler beim Unterbrechen";
+
+/* No comment provided by engineer. */
+"Estimated Reading" = "Geschätzter Wert";
+
+/* No comment provided by engineer. */
+"Failed to Resume Insulin Delivery" = "Fortsetzen des Insulins fehlgeschlagen";
+
+/* No comment provided by engineer. */
+"Failed to Suspend Insulin Delivery" = "Anhalten des Insulin fehlgeschlagen";
 
 /* Caption for History
    History Caption */
@@ -44,21 +59,60 @@
 /* No comment provided by engineer. */
 "How should the simulator respond to a version check?" = "Wie soll der Simulator auf eine Versionsprüfung reagieren?";
 
+/* No comment provided by engineer. */
+"Insulin\nSuspended" = "Insulin angehalten";
+
 /* Controller title for insulin type selection screen */
 "Insulin Type" = "Insulintyp";
 
 /* No comment provided by engineer. */
+"Insulin%@Remaining" = "Insulin%@Übrig";
+
+/* No comment provided by engineer. */
+"Last Reading" = "Letzter Wert";
+
+/* No comment provided by engineer. */
+"min" = "Min";
+
+/* No comment provided by engineer. */
 "Mock Version Check %@" = "Mock Versionsprüfung %@";
+
+/* No comment provided by engineer. */
+"No\nDelivery" = "Keine Abgabe";
+
+/* No comment provided by engineer. */
+"Notification Settings" = "Benachrichtigungseinstellungen";
 
 /* Button title to acknowledge error
    Default acknowledgement */
 "OK" = "OK";
 
+/* No comment provided by engineer. */
+"Pump expires in " = "Pumpe läuft ab in ";
+
 /* Button title recovering comms */
 "Recover Simulator" = "Simulator wiederherstellen";
 
+/* No comment provided by engineer. */
+"Replace Pump" = "Pumpe ersetzen";
+
+/* No comment provided by engineer. */
+"Scheduled%@Basal" = "Geplantes%@Basal";
+
+/* No comment provided by engineer. */
+"Sensor expires in " = "Sensor läuft ab in ";
+
 /* Caption for Source */
 "Source" = "Quelle";
+
+/* No comment provided by engineer. */
+"Stop Sensor" = "Sensor stoppen";
+
+/* Label for suspended at field */
+"Suspended At" = "Angehalten am";
+
+/* No comment provided by engineer. */
+"Temporary%@Basal" = "Temporäres%@Basal";
 
 /* Recurring software update alert title */
 "Update Reminder" = "Update-Erinnerung";

@@ -42,10 +42,33 @@ public struct LoopPrediction: GlucosePrediction {
     public var effects: LoopAlgorithmEffects
 }
 
+public struct DoseRecommendation: Equatable {
+    public let basalAdjustment: TempBasalRecommendation?
+    public let bolusUnits: Double?
+
+    public init(basalAdjustment: TempBasalRecommendation?, bolusUnits: Double? = nil) {
+        self.basalAdjustment = basalAdjustment
+        self.bolusUnits = bolusUnits
+    }
+}
+
 public actor LoopAlgorithm {
 
     public typealias InputType = LoopPredictionInput
     public typealias OutputType = LoopPrediction
+
+//    public static func generateRecommendation(input: LoopAlgorithmInput) throws -> DoseRecommendation {
+//        let prediction = try generatePrediction(input: input.predictionInput, startDate: input.predictionDate)
+//
+//        switch input.doseRecommendationType {
+//        case .manualBolus:
+//            prediction.glucose.recommendedManualBolus(to: <#T##GlucoseRangeSchedule#>, suspendThreshold: <#T##HKQuantity?#>, sensitivity: <#T##InsulinSensitivitySchedule#>, model: <#T##InsulinModel#>, pendingInsulin: <#T##Double#>, maxBolus: <#T##Double#>)
+//        case .automaticBolus:
+//            <#code#>
+//        case .tempBasal:
+//            <#code#>
+//        }
+//    }
 
     // Generates a forecast predicting glucose.
     public static func generatePrediction(input: LoopPredictionInput, startDate: Date? = nil) throws -> LoopPrediction {
@@ -63,7 +86,7 @@ public actor LoopAlgorithm {
         if let doseStart = input.doses.first?.startDate {
             assert(!input.settings.basal.isEmpty, "Missing basal history input.")
             let basalStart = input.settings.basal.first!.startDate
-            precondition(basalStart <= doseStart, "Basal history must cover historic dose range. First dose date: \(doseStart) > \(basalStart)")
+            precondition(basalStart <= doseStart, "Basal history must cover historic dose range. First dose date: \(doseStart) < \(basalStart)")
         }
 
         // Overlay basal history on basal doses, splitting doses to get amount delivered relative to basal

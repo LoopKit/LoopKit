@@ -19,6 +19,9 @@
 /* No comment provided by engineer. */
 "%@" = "%@";
 
+/* No comment provided by engineer. */
+"%@ carbs, %@ absorption" = "%@ węglowodanów, %@ wchłaniania";
+
 /* Appends a full-stop to a statement */
 "%@." = "%@.";
 
@@ -53,6 +56,9 @@
 /* Description of a basal temp basal dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit)
    Description of a bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit) */
 "%1$@: <b>%2$@</b> %3$@" = "%1$@: <b>%2$@</b> %3$@";
+
+/* Format string describing glucose units per minute (1: glucose unit string) */
+"%1$@/min" = "%1$@/min";
 
 /* String format for value with units (1: value, 2: separator, 3: units) */
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";
@@ -148,7 +154,7 @@
 "Cancel" = "Anuluj";
 
 /* The text for the override cancellation button */
-"Cancel Override" = "Anuluj pominięcie";
+"Cancel Override" = "Anuluj Cel Tymczasowy";
 
 /* Title text for suspend resume button when temp basal canceling */
 "Canceling Temp Basal" = "Anulowanie tymczasowej dawki podstawowej";
@@ -157,7 +163,7 @@
 "Carb Ratios" = "Współczynniki węglowodanowe";
 
 /* Footer text for customizing an override from a preset (1: preset name) */
-"Changes will only apply this time you enable the override. The default settings of %@ will not be affected." = "Zmiany będą obowiązywać wyłącznie podczas tego pominięcia. Domyślne ustawienia %@ nie zostaną zmienione.";
+"Changes will only apply this time you enable the override. The default settings of %@ will not be affected." = "Zmiany będą obowiązywać wyłącznie podczas tego Celu Tymczasowego. Domyślne ustawienia %@ nie zostaną zmienione.";
 
 /* Footer text for customizing from a preset (1: preset name) */
 "Changes will only apply this time you enable the preset. The default settings of %@ will not be affected." = "Zmiany zostaną zastosowane tylko wtedy, gdy włączysz ustawienie wstępne. Domyślne ustawienia %@ nie zostaną naruszone.";
@@ -198,6 +204,9 @@
 
 /* Title of the setup button to continue */
 "Continue" = "Kontynuuj";
+
+/* Instruction to correct unsupported value */
+"Correct the highlighted unsupported value(s)." = "Popraw podświetlone nieobsługiwane wartości.";
 
 /* The section footer of correction range schedule */
 "Correction range is the blood glucose range that you would like Loop to correct to." = "Zakres korekty to zakres stężenia glukozy we krwi, względem którego chcesz skorygować algorytm Loop.";
@@ -257,7 +266,7 @@
 "Edit Carb Entry" = "Edytuj wprowadzone węglowodany";
 
 /* The title for the override editing screen */
-"Edit Override" = "Edytuj pominięcie";
+"Edit Override" = "Edytuj Cel Tymczasowy";
 
 /* Footer text for editing an active override (1: preset name) */
 "Editing affects only the active override. The default settings of %@ will not be affected." = " Edycja wpływa wyłącznie na aktywne pominięcie. Domyślne ustawienia %@ nie zostaną zmienione.";
@@ -297,6 +306,9 @@
 
 /* Title of insulin model preset - fiasp */
 "Fiasp" = "Fiasp";
+
+/* No comment provided by engineer. */
+"Food Type" = "Rodzaj żywności";
 
 /* Insulin model setting description (1: app name) (2: number of models) */
 "For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from %2$@ different models for how the app measures the insulin’s peak activity." = "W przypadku szybko działającej insuliny %1$@ zakłada, że działa aktywnie przez 6 godzin. Możesz wybierać spośród %2$@ różnych modeli pomiaru szczytowej aktywności insuliny przez aplikację.";
@@ -434,6 +446,9 @@
 /* Title text for the zero basal rate warning */
 "No Basal Insulin" = "Bez insuliny bazowej";
 
+/* No comment provided by engineer. */
+"Nothing to See Here!" = "Nie ma tu nic do zobaczenia!";
+
 /* Section title for no-carb food
    The title for override emoji miscellaneous section */
 "Other" = "Inne";
@@ -533,7 +548,7 @@
 "Saving..." = "Zapisywanie...";
 
 /* The section header text for a scheduled override */
-"SCHEDULED OVERRIDE" = "ZAPLANOWANE POMINIĘCIE";
+"SCHEDULED OVERRIDE" = "ZAPLANOWANE CELU TYMCZASOWEGO";
 
 /* The section header text for a scheduled custom preset */
 "SCHEDULED PRESET" = "Lista Celów";
@@ -573,6 +588,9 @@
 
 /* Text directing the user to configure their first custom preset */
 "Tap '+' to create a new custom preset." = "Stuknij „+”, aby utworzyć nowy Cel Tymczasowy";
+
+/* No comment provided by engineer. */
+"Tap back to continue exploring the rest of the %@ interface." = "Stuknij przycisk Wstecz, aby kontynuować przeglądanie pozostałej części interfejsu %@.";
 
 /* The empty-state text for a configuration value */
 "Tap to set" = "Kliknij, aby ustawić";
@@ -633,6 +651,9 @@
 /* Subtitle of Rapid-Acting – Adult preset */
 "This model assumes peak insulin activity at 75 minutes." = "Model ten zakłada szczytową aktywność insuliny po 75 minutach.";
 
+/* No comment provided by engineer. */
+"This section of the %@ app is unavailable in this simulator." = "Ta sekcja aplikacji %@ jest niedostępna w tym symulatorze.";
+
 /* Information about maximum automated insulin on board (1: app name) */
 "This setting will also determine a safety limit for automatic dosing. %1$@ will limit automatic delivery to keep the amount of active insulin below twice your maximum bolus." = "Te ustawienia będą dodatkowo określać bezpieczny limit automatycznych dawek. %1$@ ograniczy automatyczne podawanie, do dwukrotności Twojego maksymalnego bolusa.";
 
@@ -676,6 +697,9 @@
 
 /* Title for selection when no insulin type is selected. */
 "Unset" = "Niewybrano";
+
+/* No comment provided by engineer. */
+"Unsupported %@" = "Nieobsługiwany %@";
 
 /* Placeholder text until value is entered */
 "Value" = "Wartość";
