@@ -1,0 +1,21 @@
+name: Test LoopKit Build
+on:
+  push:
+jobs:
+  build-and-test:
+    runs-on: macos-13
+    steps:
+    - name: Checkout target repo
+      uses: actions/checkout@v3
+    - name: Show available xcode versions
+      run: "ls -al /Applications/Xcode*"
+    - name: Select Xcode
+      run: "sudo xcode-select --switch /Applications/Xcode_15.2.app/Contents/Developer"
+    - name: Run Tests
+      run: set -o pipefail && xcodebuild -project LoopKit.xcodeproj -scheme Shared build -destination 'OS=17.2,name=iPhone 15' test | xcpretty
+    - name: Remove xcode project 
+      run: rm -rf LoopKit.xcodeproj
+    - name: Build LoopKit Swift Package
+      run: set -o pipefail && xcodebuild build -scheme LoopKit -sdk iphonesimulator17.2 -destination "OS=17.2,name=iPhone 15" | xcpretty
+    - name: Build LoopKitUI Swift Package
+      run: set -o pipefail && xcodebuild build -scheme LoopKitUI -sdk iphonesimulator17.2 -destination "OS=17.2,name=iPhone 15" | xcpretty

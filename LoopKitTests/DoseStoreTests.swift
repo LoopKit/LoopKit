@@ -1334,12 +1334,20 @@ class DoseStoreCriticalEventLogTests: PersistenceControllerTestCase {
                       PersistedPumpEvent(date: dateFormatter.date(from: "2100-01-02T03:06:00Z")!, persistedDate: persistedDate, dose: nil, isUploaded: false, objectIDURL: url, raw: nil, title: nil, type: nil),
                       PersistedPumpEvent(date: dateFormatter.date(from: "2100-01-02T03:02:00Z")!, persistedDate: persistedDate, dose: nil, isUploaded: false, objectIDURL: url, raw: nil, title: nil, type: nil)]
 
+
+
+        let semaphore = DispatchSemaphore(value: 0)
         doseStore = DoseStore(cacheStore: cacheStore,
                               insulinModelProvider: StaticInsulinModelProvider(insulinModel),
                               longestEffectDuration: insulinModel.effectDuration,
                               basalProfile: basalProfile,
                               insulinSensitivitySchedule: insulinSensitivitySchedule,
-                              provenanceIdentifier: Bundle.main.bundleIdentifier!)
+                              provenanceIdentifier: Bundle.main.bundleIdentifier!,
+                              onReady: { (error) in
+                                  semaphore.signal()
+                              })
+        semaphore.wait()
+
         XCTAssertNil(doseStore.addPumpEvents(events: events))
 
         outputStream = MockOutputStream()

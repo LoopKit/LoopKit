@@ -215,7 +215,10 @@ class CachedGlucoseObjectEncodableTests: PersistenceControllerTestCase {
             cachedGlucoseObject.isDisplayOnly = false
             cachedGlucoseObject.wasUserEntered = true
             cachedGlucoseObject.modificationCounter = 123
-            try! assertCachedGlucoseObjectEncodable(cachedGlucoseObject, encodesJSON: """
+
+            let data = try! encoder.encode(cachedGlucoseObject)
+
+            let expected = """
 {
   "isDisplayOnly" : false,
   "modificationCounter" : 123,
@@ -225,11 +228,11 @@ class CachedGlucoseObjectEncodableTests: PersistenceControllerTestCase {
   "syncVersion" : 2,
   "unitString" : "mg/dL",
   "uuid" : "2A67A303-5203-4CB8-8263-79498265368E",
-  "value" : 98.700000000000003,
+  "value" : 98.7,
   "wasUserEntered" : true
 }
 """
-            )
+            XCTAssertEqual(String(data: data, encoding: .utf8), expected)
         }
     }
 
@@ -243,24 +246,23 @@ class CachedGlucoseObjectEncodableTests: PersistenceControllerTestCase {
             cachedGlucoseObject.isDisplayOnly = true
             cachedGlucoseObject.wasUserEntered = false
             cachedGlucoseObject.modificationCounter = 234
-            try! assertCachedGlucoseObjectEncodable(cachedGlucoseObject, encodesJSON: """
+
+            let data = try! encoder.encode(cachedGlucoseObject)
+
+            let expected = """
 {
   "isDisplayOnly" : true,
   "modificationCounter" : 234,
   "provenanceIdentifier" : "238E41EA-9576-4981-A1A4-51E10228584F",
   "startDate" : "2020-05-14T22:38:14Z",
   "unitString" : "mg/dL",
-  "value" : 87.599999999999994,
+  "value" : 87.6,
   "wasUserEntered" : false
 }
 """
-            )
-        }
-    }
+            XCTAssertEqual(String(data: data, encoding: .utf8), expected)
 
-    private func assertCachedGlucoseObjectEncodable(_ original: CachedGlucoseObject, encodesJSON string: String) throws {
-        let data = try encoder.encode(original)
-        XCTAssertEqual(String(data: data, encoding: .utf8), string)
+        }
     }
 
     private let dateFormatter = ISO8601DateFormatter()
