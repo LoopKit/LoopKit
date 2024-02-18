@@ -6,6 +6,7 @@ version: 2.1
 
 jobs:
   test:
+    resource_class: macos.m1.medium.gen1
     macos:
       xcode: 15.0.0
     steps:
