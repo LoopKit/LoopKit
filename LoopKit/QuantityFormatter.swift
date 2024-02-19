@@ -173,6 +173,19 @@ public extension HKQuantity {
     }
 }
 
+extension ClosedRange where Bound == HKQuantity {
+    public func roundedDisplayValues(for unit: HKUnit) -> [Double] {
+        let stride = 1 / pow(10.0, Double(unit.preferredFractionDigits))
+        return Array(
+            Swift.stride(
+                from: self.lowerBound.doubleValue(for: unit, withRounding: true, rule: .up),
+                through: self.upperBound.doubleValue(for: unit, withRounding: true, rule: .down),
+                by: stride
+            )
+        )
+    }
+}
+
 public extension HKUnit {
     var usesMassFormatterForUnitString: Bool {
         return self == .gram()
