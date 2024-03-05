@@ -1,306 +1,341 @@
 [
   {
-    "start_at" : "2016-02-15T14:01:04",
-    "end_at" : "2016-02-15T14:58:02",
-    "type" : "BasalProfileStart",
     "amount" : 0.75,
-    "unit" : "U\/hour"
+    "scheduled" : 0.75,
+    "raw" : "BasalRateSchedule 2016-02-15T14:01:04Z 2016-02-15T14:58:02Z",
+    "type" : "BasalProfileStart",
+    "start_at" : "2016-02-15T14:01:04",
+    "unit" : "U\/hour",
+    "end_at" : "2016-02-15T14:58:02"
   },
   {
+    "type" : "TempBasal",
+    "unit" : "U\/hour",
+    "raw" : "TB0",
     "start_at" : "2016-02-15T14:58:02",
-    "end_at" : "2016-02-15T15:00:00",
-    "type" : "TempBasal",
-    "amount" : 3.5,
-    "unit" : "U\/hour",
-    "raw" : "TB0 1/2"
-  },
-  {
-    "start_at" : "2016-02-15T15:00:00",
     "end_at" : "2016-02-15T15:06:05",
-    "type" : "TempBasal",
-    "amount" : 3.5,
-    "unit" : "U\/hour",
-    "raw" : "TB0 2/2"
+    "amount" : 3.5
   },
   {
     "start_at" : "2016-02-15T15:06:05",
     "end_at" : "2016-02-15T15:21:06",
     "type" : "TempBasal",
+    "raw" : "TB1",
     "amount" : 3.5,
-    "unit" : "U\/hour",
-    "raw" : "TB1"
+    "unit" : "U\/hour"
   },
   {
-    "start_at" : "2016-02-15T15:18:56",
-    "end_at" : "2016-02-15T15:18:56",
     "type" : "Bolus",
+    "start_at" : "2016-02-15T15:18:56",
     "amount" : 2.1499999999999999,
-    "unit" : "U"
+    "raw" : "B2",
+    "unit" : "U",
+    "end_at" : "2016-02-15T15:18:56"
   },
   {
-    "start_at" : "2016-02-15T15:21:06",
-    "end_at" : "2016-02-15T15:26:05",
-    "type" : "TempBasal",
     "amount" : 2.25,
+    "start_at" : "2016-02-15T15:21:06",
+    "raw" : "TB3",
+    "type" : "TempBasal",
+    "end_at" : "2016-02-15T15:26:05",
     "unit" : "U\/hour"
   },
   {
     "start_at" : "2016-02-15T15:26:05",
+    "unit" : "U\/hour",
+    "raw" : "TB4",
     "end_at" : "2016-02-15T15:31:06",
     "type" : "TempBasal",
-    "amount" : 2.6000000000000001,
-    "unit" : "U\/hour"
+    "amount" : 2.6000000000000001
   },
   {
-    "start_at" : "2016-02-15T15:31:06",
     "end_at" : "2016-02-15T15:36:05",
-    "type" : "TempBasal",
     "amount" : 2.8250000000000002,
-    "unit" : "U\/hour"
+    "unit" : "U\/hour",
+    "type" : "TempBasal",
+    "start_at" : "2016-02-15T15:31:06",
+    "raw" : "TB5"
   },
   {
     "start_at" : "2016-02-15T15:36:05",
-    "end_at" : "2016-02-15T15:41:05",
     "type" : "TempBasal",
     "amount" : 2.4750000000000001,
-    "unit" : "U\/hour"
+    "unit" : "U\/hour",
+    "end_at" : "2016-02-15T15:41:05",
+    "raw" : "TB6"
   },
   {
-    "start_at" : "2016-02-15T15:41:05",
-    "end_at" : "2016-02-15T15:46:05",
-    "type" : "TempBasal",
     "amount" : 1.95,
-    "unit" : "U\/hour"
+    "end_at" : "2016-02-15T15:46:05",
+    "unit" : "U\/hour",
+    "type" : "TempBasal",
+    "raw" : "TB7",
+    "start_at" : "2016-02-15T15:41:05"
   },
   {
+    "raw" : "B9",
+    "type" : "Bolus",
     "start_at" : "2016-02-15T15:50:08",
     "end_at" : "2016-02-15T15:50:08",
-    "type" : "Bolus",
     "amount" : 2.3999999999999999,
     "unit" : "U"
   },
   {
-    "start_at" : "2016-02-15T15:46:05",
+    "raw" : "BasalRateSchedule 2016-02-15T15:46:05Z 2016-02-15T16:01:07Z",
+    "scheduled" : 0.80000000000000004,
     "end_at" : "2016-02-15T16:01:07",
-    "type" : "BasalProfileStart",
     "amount" : 0.80000000000000004,
-    "unit" : "U\/hour"
+    "type" : "BasalProfileStart",
+    "unit" : "U\/hour",
+    "start_at" : "2016-02-15T15:46:05"
   },
   {
-    "start_at" : "2016-02-15T16:01:07",
     "end_at" : "2016-02-15T16:21:11",
-    "type" : "TempBasal",
     "amount" : 0,
-    "unit" : "U\/hour"
+    "type" : "TempBasal",
+    "start_at" : "2016-02-15T16:01:07",
+    "unit" : "U\/hour",
+    "raw" : "TB10"
   },
   {
+    "amount" : 0,
+    "type" : "TempBasal",
     "start_at" : "2016-02-15T16:21:11",
     "end_at" : "2016-02-15T16:41:09",
-    "type" : "TempBasal",
-    "amount" : 0,
-    "unit" : "U\/hour"
+    "unit" : "U\/hour",
+    "raw" : "TB11"
   },
   {
-    "start_at" : "2016-02-15T16:41:09",
     "end_at" : "2016-02-15T17:01:08",
     "type" : "TempBasal",
-    "amount" : 0,
-    "unit" : "U\/hour"
+    "unit" : "U\/hour",
+    "start_at" : "2016-02-15T16:41:09",
+    "raw" : "TB12",
+    "amount" : 0
   },
   {
-    "start_at" : "2016-02-15T17:01:08",
     "end_at" : "2016-02-15T17:11:08",
+    "start_at" : "2016-02-15T17:01:08",
+    "raw" : "TB13",
     "type" : "TempBasal",
     "amount" : 0,
     "unit" : "U\/hour"
   },
   {
-    "start_at" : "2016-02-15T17:05:39",
-    "end_at" : "2016-02-15T17:05:39",
+    "raw" : "B14",
     "type" : "Bolus",
     "amount" : 1.1000000000000001,
-    "unit" : "U"
+    "unit" : "U",
+    "start_at" : "2016-02-15T17:05:39",
+    "end_at" : "2016-02-15T17:05:39"
   },
   {
-    "start_at" : "2016-02-15T17:11:08",
-    "end_at" : "2016-02-15T17:41:08",
     "type" : "TempBasal",
+    "start_at" : "2016-02-15T17:11:08",
+    "unit" : "U\/hour",
+    "end_at" : "2016-02-15T17:41:08",
     "amount" : 3.4750000000000001,
-    "unit" : "U\/hour"
+    "raw" : "TB15"
   },
   {
-    "start_at" : "2016-02-15T17:36:40",
+    "raw" : "B16",
+    "amount" : 2.5,
     "end_at" : "2016-02-15T17:36:40",
     "type" : "Bolus",
-    "amount" : 2.5,
-    "unit" : "U"
+    "unit" : "U",
+    "start_at" : "2016-02-15T17:36:40"
   },
   {
-    "start_at" : "2016-02-15T17:41:08",
-    "end_at" : "2016-02-15T17:56:17",
+    "unit" : "U\/hour",
     "type" : "BasalProfileStart",
+    "start_at" : "2016-02-15T17:41:08",
     "amount" : 0.80000000000000004,
-    "unit" : "U\/hour"
+    "raw" : "BasalRateSchedule 2016-02-15T17:41:08Z 2016-02-15T17:56:17Z",
+    "end_at" : "2016-02-15T17:56:17",
+    "scheduled" : 0.80000000000000004
   },
   {
-    "start_at" : "2016-02-15T17:56:17",
+    "unit" : "U\/hour",
+    "type" : "TempBasal",
     "end_at" : "2016-02-15T18:01:09",
-    "type" : "TempBasal",
-    "amount" : 3.5,
-    "unit" : "U\/hour"
+    "start_at" : "2016-02-15T17:56:17",
+    "raw" : "TB17",
+    "amount" : 3.5
   },
   {
-    "start_at" : "2016-02-15T18:01:09",
+    "unit" : "U\/hour",
+    "raw" : "TB18",
     "end_at" : "2016-02-15T18:21:11",
-    "type" : "TempBasal",
     "amount" : 3.3250000000000002,
-    "unit" : "U\/hour"
+    "type" : "TempBasal",
+    "start_at" : "2016-02-15T18:01:09"
   },
   {
     "start_at" : "2016-02-15T18:21:11",
     "end_at" : "2016-02-15T18:51:07",
-    "type" : "TempBasal",
     "amount" : 0,
-    "unit" : "U\/hour"
+    "unit" : "U\/hour",
+    "raw" : "TB19",
+    "type" : "TempBasal"
   },
   {
+    "unit" : "U",
+    "type" : "Bolus",
     "start_at" : "2016-02-15T18:41:27",
     "end_at" : "2016-02-15T18:41:27",
-    "type" : "Bolus",
-    "amount" : 2.2000000000000002,
-    "unit" : "U"
+    "raw" : "B20",
+    "amount" : 2.2000000000000002
   },
   {
-    "start_at" : "2016-02-15T18:45:17",
     "end_at" : "2016-02-15T18:45:17",
+    "raw" : "B21",
     "type" : "Bolus",
+    "start_at" : "2016-02-15T18:45:17",
     "amount" : 1.1499999999999999,
     "unit" : "U"
   },
   {
     "start_at" : "2016-02-15T18:51:07",
+    "unit" : "U\/hour",
+    "raw" : "TB22",
     "end_at" : "2016-02-15T18:56:08",
-    "type" : "TempBasal",
     "amount" : 0.050000000000000003,
-    "unit" : "U\/hour"
+    "type" : "TempBasal"
   },
   {
-    "start_at" : "2016-02-15T18:56:08",
-    "end_at" : "2016-02-15T19:01:09",
+    "raw" : "TB23",
     "type" : "TempBasal",
+    "start_at" : "2016-02-15T18:56:08",
     "amount" : 0,
+    "end_at" : "2016-02-15T19:01:09",
     "unit" : "U\/hour"
   },
   {
+    "amount" : 0.80000000000000004,
+    "raw" : "BasalRateSchedule 2016-02-15T19:01:09Z 2016-02-15T19:31:08Z",
+    "type" : "BasalProfileStart",
+    "unit" : "U\/hour",
     "start_at" : "2016-02-15T19:01:09",
     "end_at" : "2016-02-15T19:31:08",
-    "type" : "BasalProfileStart",
-    "amount" : 0.80000000000000004,
-    "unit" : "U\/hour"
+    "scheduled" : 0.80000000000000004
   },
   {
+    "raw" : "TB25",
     "start_at" : "2016-02-15T19:31:08",
     "end_at" : "2016-02-15T19:36:11",
-    "type" : "TempBasal",
+    "unit" : "U\/hour",
     "amount" : 0.050000000000000003,
-    "unit" : "U\/hour"
+    "type" : "TempBasal"
   },
   {
-    "start_at" : "2016-02-15T19:36:11",
-    "end_at" : "2016-02-15T19:41:07",
-    "type" : "BasalProfileStart",
     "amount" : 0.80000000000000004,
+    "type" : "BasalProfileStart",
+    "scheduled" : 0.80000000000000004,
+    "raw" : "BasalRateSchedule 2016-02-15T19:36:11Z 2016-02-15T19:41:07Z",
+    "end_at" : "2016-02-15T19:41:07",
+    "start_at" : "2016-02-15T19:36:11",
     "unit" : "U\/hour"
   },
   {
-    "start_at" : "2016-02-15T19:41:07",
+    "amount" : 1.425,
+    "unit" : "U\/hour",
+    "raw" : "TB27",
     "end_at" : "2016-02-15T19:46:07",
     "type" : "TempBasal",
-    "amount" : 1.425,
-    "unit" : "U\/hour"
+    "start_at" : "2016-02-15T19:41:07"
   },
   {
+    "amount" : 1.675,
+    "type" : "TempBasal",
     "start_at" : "2016-02-15T19:46:07",
     "end_at" : "2016-02-15T19:51:07",
-    "type" : "TempBasal",
-    "amount" : 1.675,
+    "raw" : "TB28",
     "unit" : "U\/hour"
   },
   {
-    "start_at" : "2016-02-15T19:51:07",
-    "end_at" : "2016-02-15T19:56:09",
     "type" : "TempBasal",
     "amount" : 1.75,
-    "unit" : "U\/hour"
+    "end_at" : "2016-02-15T19:56:09",
+    "unit" : "U\/hour",
+    "raw" : "TB29",
+    "start_at" : "2016-02-15T19:51:07"
   },
   {
+    "raw" : "TB30",
     "start_at" : "2016-02-15T19:56:09",
-    "end_at" : "2016-02-15T20:06:08",
     "type" : "TempBasal",
-    "amount" : 1.95,
-    "unit" : "U\/hour"
+    "end_at" : "2016-02-15T20:06:08",
+    "unit" : "U\/hour",
+    "amount" : 1.95
   },
   {
-    "start_at" : "2016-02-15T20:06:08",
     "end_at" : "2016-02-15T20:11:15",
     "type" : "TempBasal",
+    "start_at" : "2016-02-15T20:06:08",
     "amount" : 2,
-    "unit" : "U\/hour"
+    "unit" : "U\/hour",
+    "raw" : "TB31"
   },
   {
     "start_at" : "2016-02-15T20:11:15",
     "end_at" : "2016-02-15T20:16:08",
-    "type" : "TempBasal",
     "amount" : 2,
-    "unit" : "U\/hour"
+    "unit" : "U\/hour",
+    "raw" : "TB32",
+    "type" : "TempBasal"
   },
   {
-    "start_at" : "2016-02-15T20:16:08",
     "end_at" : "2016-02-15T20:19:21",
+    "raw" : "TB33",
     "type" : "TempBasal",
     "amount" : 2.5,
-    "unit" : "U\/hour"
+    "unit" : "U\/hour",
+    "start_at" : "2016-02-15T20:16:08"
   },
   {
+    "type" : "Bolus",
+    "raw" : "B35",
+    "amount" : 0.65000000000000002,
     "start_at" : "2016-02-15T20:18:54",
     "end_at" : "2016-02-15T20:18:54",
-    "type" : "Bolus",
-    "amount" : 0.65000000000000002,
     "unit" : "U"
   },
   {
-    "start_at" : "2016-02-15T20:19:21",
-    "end_at" : "2016-02-15T20:25:01",
-    "type" : "PumpSuspend",
     "amount" : 0,
-    "unit" : "U\/hour"
+    "unit" : "U\/hour",
+    "raw" : "S34",
+    "type" : "PumpSuspend",
+    "end_at" : "2016-02-15T20:25:01",
+    "start_at" : "2016-02-15T20:19:21"
   },
   {
+    "type" : "TempBasal",
     "start_at" : "2016-02-15T20:25:01",
     "end_at" : "2016-02-15T20:36:08",
-    "type" : "TempBasal",
     "amount" : 2.5,
-    "unit" : "U\/hour"
+    "unit" : "U\/hour",
+    "raw" : "R36"
   },
   {
+    "type" : "TempBasal",
     "start_at" : "2016-02-15T20:36:08",
     "end_at" : "2016-02-15T20:41:10",
-    "type" : "TempBasal",
     "amount" : 2.875,
-    "unit" : "U\/hour"
+    "unit" : "U\/hour",
+    "raw" : "TB37"
   },
   {
-    "start_at" : "2016-02-15T20:41:10",
+    "unit" : "U\/hour",
+    "type" : "TempBasal",
     "end_at" : "2016-02-15T20:46:09",
-    "type" : "TempBasal",
-    "amount" : 2.9750000000000001,
-    "unit" : "U\/hour"
+    "start_at" : "2016-02-15T20:41:10",
+    "amount" : 2.9750000000000001
   },
   {
-    "start_at" : "2016-02-15T20:46:09",
-    "end_at" : "2016-02-15T21:16:09",
-    "type" : "TempBasal",
+    "unit" : "U\/hour",
     "amount" : 2.125,
-    "unit" : "U\/hour"
+    "type" : "TempBasal",
+    "end_at" : "2016-02-15T21:16:09",
+    "start_at" : "2016-02-15T20:46:09"
   }
 ]

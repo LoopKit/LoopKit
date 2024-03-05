@@ -9,6 +9,7 @@
 import HealthKit
 import LoopKit
 import LoopTestingKit
+import LoopAlgorithm
 
 public protocol MockPumpManagerStateObserver {
     func mockPumpManager(_ manager: MockPumpManager, didUpdate state: MockPumpManagerState)

@@ -10,6 +10,7 @@ import SwiftUI
 import LoopKit
 import LoopKitUI
 import MockKit
+import LoopAlgorithm
 
 struct MockPumpManagerSettingsView: View {
     fileprivate enum PresentedAlert {

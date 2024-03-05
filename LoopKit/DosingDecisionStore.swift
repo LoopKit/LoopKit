@@ -9,6 +9,7 @@
 import os.log
 import Foundation
 import CoreData
+import LoopAlgorithm
 
 public protocol DosingDecisionStoreDelegate: AnyObject {
     /**

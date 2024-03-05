@@ -11,6 +11,7 @@ import SwiftUI
 import LoopKit
 import LoopKitUI
 import MockKit
+import LoopAlgorithm
 
 
 extension MockPumpManager: PumpManagerUI {

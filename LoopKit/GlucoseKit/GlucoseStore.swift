@@ -10,6 +10,7 @@ import Foundation
 import CoreData
 import HealthKit
 import os.log
+import LoopAlgorithm
 
 public protocol GlucoseStoreDelegate: AnyObject {
 

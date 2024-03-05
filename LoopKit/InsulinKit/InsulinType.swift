@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import LoopAlgorithm
 
 public enum InsulinType: Int, Codable, CaseIterable {
     case novolog
@@ -15,7 +16,9 @@ public enum InsulinType: Int, Codable, CaseIterable {
     case fiasp
     case lyumjev
     case afrezza
-    
+}
+
+extension InsulinType {
     public var title: String {
         switch self {
         case .novolog:
@@ -66,7 +69,7 @@ public enum InsulinType: Int, Codable, CaseIterable {
             return LocalizedString("Afrezza is an ultra rapid-acting mealtime insulin that is breathed in through your lungs using an oral inhaler and made by MannKind", comment: "Description for afrezza insulin type")
         }
     }
-    
+
     public var pumpAdministerable: Bool {
         switch self {
         case .afrezza:

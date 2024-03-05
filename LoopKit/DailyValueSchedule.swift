@@ -8,6 +8,7 @@
 
 import Foundation
 import HealthKit
+import LoopAlgorithm
 
 
 public struct RepeatingScheduleValue<T> {
@@ -31,20 +32,6 @@ extension RepeatingScheduleValue: Equatable where T: Equatable {
 }
 
 extension RepeatingScheduleValue: Hashable where T: Hashable {}
-
-public struct AbsoluteScheduleValue<T>: TimelineValue {
-    public let startDate: Date
-    public let endDate: Date
-    public let value: T
-
-    public init(startDate: Date, endDate: Date, value: T) {
-        self.startDate = startDate
-        self.endDate = endDate
-        self.value = value
-    }
-}
-
-extension AbsoluteScheduleValue: Equatable where T: Equatable {}
 
 extension RepeatingScheduleValue: RawRepresentable where T: RawRepresentable {
     public typealias RawValue = [String: Any]
@@ -288,7 +275,4 @@ extension DailyValueSchedule {
             && lhs.items.count == rhs.items.count
             && Swift.zip(lhs.items, rhs.items).allSatisfy(==)
     }
-}
-
-extension AbsoluteScheduleValue: Codable where T: Codable {
 }

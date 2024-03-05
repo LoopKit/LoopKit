@@ -9,7 +9,7 @@
 import UIKit
 import HealthKit
 import LoopKit
-
+import LoopAlgorithm
 
 public protocol AddEditOverrideTableViewControllerDelegate: AnyObject {
     func addEditOverrideTableViewController(_ vc: AddEditOverrideTableViewController, didSavePreset preset: TemporaryScheduleOverridePreset)

@@ -12,6 +12,7 @@ import LoopKit
 import LoopKitUI
 import MockKit
 import SwiftUI
+import LoopAlgorithm
 
 
 final class MockPumpManagerSettingsViewController: UITableViewController {

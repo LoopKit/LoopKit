@@ -7,6 +7,7 @@
 //
 
 import HealthKit
+import LoopAlgorithm
 
 public struct TherapySettings: Equatable {
 

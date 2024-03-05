@@ -8,6 +8,7 @@
 import HealthKit
 import SwiftUI
 import LoopKit
+import LoopAlgorithm
 
 public struct CGMManagerDescriptor {
     public let identifier: String

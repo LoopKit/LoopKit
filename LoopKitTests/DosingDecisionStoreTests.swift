@@ -8,6 +8,7 @@
 
 import XCTest
 import HealthKit
+import LoopAlgorithm
 @testable import LoopKit
 
 class DosingDecisionStorePersistenceTests: PersistenceControllerTestCase, DosingDecisionStoreDelegate {
@@ -229,7 +230,6 @@ class DosingDecisionStorePersistenceTests: PersistenceControllerTestCase, Dosing
         "notice" : {
           "predictedGlucoseBelowTarget" : {
             "minGlucose" : {
-              "endDate" : "2020-05-14T23:03:15Z",
               "quantity" : 75.5,
               "quantityUnit" : "mg/dL",
               "startDate" : "2020-05-14T23:03:15Z"
@@ -836,7 +836,6 @@ class StoredDosingDecisionCodableTests: XCTestCase {
       "notice" : {
         "predictedGlucoseBelowTarget" : {
           "minGlucose" : {
-            "endDate" : "2020-05-14T23:03:15Z",
             "quantity" : 75.5,
             "quantityUnit" : "mg/dL",
             "startDate" : "2020-05-14T23:03:15Z"
@@ -1020,12 +1019,6 @@ extension ManualBolusRecommendationWithDate: Equatable {
     }
 }
 
-extension ManualBolusRecommendation: Equatable {
-    public static func == (lhs: ManualBolusRecommendation, rhs: ManualBolusRecommendation) -> Bool {
-        return lhs.amount == rhs.amount && lhs.notice == rhs.notice
-    }
-}
-
 fileprivate extension StoredDosingDecision {
     static var test: StoredDosingDecision {
         let controllerTimeZone = TimeZone(identifier: "America/Los_Angeles")!
@@ -1138,7 +1131,7 @@ fileprivate extension StoredDosingDecision {
                                                               duration: .minutes(30))
         let automaticDoseRecommendation = AutomaticDoseRecommendation(basalAdjustment: tempBasalRecommendation, bolusUnits: 1.25)
         let manualBolusRecommendation = ManualBolusRecommendationWithDate(recommendation: ManualBolusRecommendation(amount: 1.2,
-                                                                                                                    notice: .predictedGlucoseBelowTarget(minGlucose: PredictedGlucoseValue(startDate: dateFormatter.date(from: "2020-05-14T23:03:15Z")!,
+                                                                                                                    notice: .predictedGlucoseBelowTarget(minGlucose: SimpleGlucoseValue(startDate: dateFormatter.date(from: "2020-05-14T23:03:15Z")!,
                                                                                                                                                                                            quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 75.5)))),
                                                                           date: dateFormatter.date(from: "2020-05-14T22:38:16Z")!)
         let manualBolusRequested = 0.8

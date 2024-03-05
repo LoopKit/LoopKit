@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import LoopAlgorithm
 
 public struct WalshInsulinModel {
     public let actionDuration: TimeInterval

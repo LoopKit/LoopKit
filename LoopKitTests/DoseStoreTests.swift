@@ -8,19 +8,10 @@
 import XCTest
 import CoreData
 import HealthKit
+import LoopAlgorithm
 @testable import LoopKit
 
 class DoseStoreTests: PersistenceControllerTestCase {
-
-    func loadReservoirFixture(_ resourceName: String) -> [NewReservoirValue] {
-
-        let fixture: [JSONDictionary] = loadFixture(resourceName)
-        let dateFormatter = ISO8601DateFormatter.localTimeDate(timeZone: .utcTimeZone)
-
-        return fixture.map {
-            return NewReservoirValue(startDate: dateFormatter.date(from: $0["date"] as! String)!, unitVolume: $0["amount"] as! Double)
-        }
-    }
 
     func defaultStore(testingDate: Date? = nil) -> DoseStore {
         let healthStore = HKHealthStoreMock()
@@ -35,7 +26,6 @@ class DoseStoreTests: PersistenceControllerTestCase {
         let doseStore = DoseStore(
             healthKitSampleStore: sampleStore,
             cacheStore: cacheStore,
-            insulinModelProvider: StaticInsulinModelProvider(WalshInsulinModel(actionDuration: .hours(4))),
             longestEffectDuration: .hours(4),
             basalProfile: BasalRateSchedule(rawValue: ["timeZone": -28800, "items": [["value": 0.75, "startTime": 0.0], ["value": 0.8, "startTime": 10800.0], ["value": 0.85, "startTime": 32400.0], ["value": 1.0, "startTime": 68400.0]]]),
             insulinSensitivitySchedule: InsulinSensitivitySchedule(rawValue: ["unit": "mg/dL", "timeZone": -28800, "items": [["value": 40.0, "startTime": 0.0], ["value": 35.0, "startTime": 21600.0], ["value": 40.0, "startTime": 57600.0]]]),
@@ -58,112 +48,6 @@ class DoseStoreTests: PersistenceControllerTestCase {
     func testingDate(_ input: String) -> Date {
         return testingDateFormatter.date(from: input)!
     }
-
-    func testEmptyDoseStoreReturnsZeroInsulinOnBoard() {
-        let doseStore = defaultStore()
-
-        let queryFinishedExpectation = expectation(description: "query finished")
-        
-        doseStore.insulinOnBoard(at: Date()) { (result) in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected error: \(error)")
-            case .success(let value):
-                XCTAssertEqual(0, value.value)
-            }
-            queryFinishedExpectation.fulfill()
-        }
-        waitForExpectations(timeout: 3)
-    }
-
-    func testGetNormalizedDoseEntriesUsingReservoir() {
-        let now = testingDate("2022-09-05 02:04:00 +0000")
-        let doseStore = defaultStore(testingDate: now)
-
-        let reservoirReadings = loadReservoirFixture("reservoir_iob_test")
-
-        let storageExpectations = expectation(description: "reservoir store finished")
-        storageExpectations.expectedFulfillmentCount = reservoirReadings.count + 1
-        for reading in reservoirReadings.reversed() {
-            doseStore.addReservoirValue(reading.unitVolume, at: reading.startDate) { _, _, _, _ in storageExpectations.fulfill() }
-        }
-
-        let bolusStart = testingDate("2022-09-05 01:49:47 +0000")
-        let bolusEnd = testingDate("2022-09-05 01:51:19 +0000")
-        let bolus = DoseEntry(type: .bolus, startDate: bolusStart, endDate: bolusEnd, value: 2.3, unit: .units, isMutable: true)
-        let pumpEvent = NewPumpEvent(date: bolus.startDate, dose: bolus, raw: Data(hexadecimalString: "0000")!, title: "Bolus 2.3U")
-
-        doseStore.addPumpEvents([pumpEvent], lastReconciliation: testingDate("2022-09-05 01:50:18 +0000")) { error in
-            storageExpectations.fulfill()
-        }
-        
-        waitForExpectations(timeout: 2)
-
-        let queryFinishedExpectation = expectation(description: "query finished")
-
-        doseStore.insulinOnBoard(at: now) { (result) in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected error: \(error)")
-            case .success(let value):
-                XCTAssertEqual(2.25, value.value, accuracy: 0.01)
-            }
-            queryFinishedExpectation.fulfill()
-        }
-        waitForExpectations(timeout: 3)
-    }
-
-    func testMutableDosesIncludedInIOB() {
-        let now = testingDate("2023-01-08 17:11:14 +0000")
-        let doseStore = defaultStore(testingDate: now)
-
-        let reservoirReadings = loadReservoirFixture("reservoir_for_iob_missing")
-
-        let storageExpectations = expectation(description: "reservoir store finished")
-        storageExpectations.expectedFulfillmentCount = reservoirReadings.count + 1
-        for reading in reservoirReadings.reversed() {
-            doseStore.addReservoirValue(reading.unitVolume, at: reading.startDate) { _, _, _, _ in storageExpectations.fulfill() }
-        }
-
-        let lastReconciliation = testingDate("2023-01-08 17:08:27 +0000")
-
-        // NewPumpEvent(date: 2023-01-08 17:04:58 +0000, dose: Optional(LoopKit.DoseEntry(type: LoopKit.DoseType.bolus, startDate: 2023-01-08 17:04:58 +0000, endDate: 2023-01-08 17:08:24 +0000, value: 5.15, unit: LoopKit.DoseUnit.units, deliveredUnits: Optional(5.15), description: nil, insulinType: Optional(LoopKit.InsulinType.novolog), automatic: Optional(false), manuallyEntered: false, syncIdentifier: Optional("464327afd390446786cced682f22448f"), isMutable: true, wasProgrammedByPumpUI: false, scheduledBasalRate: nil)), raw: 16 bytes, type: Optional(LoopKit.PumpEventType.bolus), title: "Bolus", alarmType: nil),
-
-        // NewPumpEvent(date: 2023-01-08 17:02:35 +0000, dose: Optional(LoopKit.DoseEntry(type: LoopKit.DoseType.tempBasal, startDate: 2023-01-08 17:02:35 +0000, endDate: 2023-01-08 17:32:35 +0000, value: 0.575, unit: LoopKit.DoseUnit.unitsPerHour, deliveredUnits: nil, description: nil, insulinType: Optional(LoopKit.InsulinType.novolog), automatic: Optional(true), manuallyEntered: false, syncIdentifier: Optional("61487bd5d34f4ff49a7f0766066e7773"), isMutable: false, wasProgrammedByPumpUI: false, scheduledBasalRate: nil)), raw: 16 bytes, type: Optional(LoopKit.PumpEventType.tempBasal), title: "Temp Basal", alarmType: nil)]
-
-        let bolusStart = testingDate("2023-01-08 17:04:58 +0000")
-        let bolusEnd = testingDate("2023-01-08 17:08:24 +0000")
-        let bolus = DoseEntry(type: .bolus, startDate: bolusStart, endDate: bolusEnd, value: 5.15, unit: .units, isMutable: true)
-
-        let tempBasalStart = testingDate("2023-01-08 17:02:35 +0000")
-        let tempBasalEnd = testingDate("2023-01-08 17:32:35 +0000")
-        let tempBasal = DoseEntry(type: .tempBasal, startDate: tempBasalStart, endDate: tempBasalEnd, value:0.575, unit: .unitsPerHour, isMutable: false)
-
-        let pumpEvents: [NewPumpEvent] = [
-            NewPumpEvent(date: bolus.startDate, dose: bolus, raw: Data(hexadecimalString: "0000")!, title: "Bolus 5.15U"),
-            NewPumpEvent(date: tempBasal.startDate, dose: tempBasal, raw: Data(hexadecimalString: "0001")!, title: "TempBasal 0.575 U/hr")
-        ]
-
-        doseStore.addPumpEvents(pumpEvents, lastReconciliation: lastReconciliation) { error in
-            storageExpectations.fulfill()
-        }
-
-        waitForExpectations(timeout: 2)
-
-        let queryFinishedExpectation = expectation(description: "query finished")
-
-        doseStore.insulinOnBoard(at: now) { (result) in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected error: \(error)")
-            case .success(let value):
-                XCTAssertEqual(5.07, value.value, accuracy: 0.01)
-            }
-            queryFinishedExpectation.fulfill()
-        }
-        waitForExpectations(timeout: 3)
-    }
-
     
     func testPumpEventTypeDoseMigration() {
         cacheStore.managedObjectContext.performAndWait {
@@ -230,7 +114,6 @@ class DoseStoreTests: PersistenceControllerTestCase {
         let doseStore = DoseStore(
             healthKitSampleStore: sampleStore,
             cacheStore: cacheStore,
-            insulinModelProvider: StaticInsulinModelProvider(WalshInsulinModel(actionDuration: .hours(4))),
             longestEffectDuration: .hours(4),
             basalProfile: BasalRateSchedule(rawValue: ["timeZone": -28800, "items": [ // Timezone = -0800
                 ["value": 0.75, "startTime": 0.0],       // 0000 - Midnight
@@ -355,7 +238,6 @@ class DoseStoreTests: PersistenceControllerTestCase {
         let doseStore = DoseStore(
             healthKitSampleStore: sampleStore,
             cacheStore: cacheStore,
-            insulinModelProvider: StaticInsulinModelProvider(WalshInsulinModel(actionDuration: .hours(4))),
             longestEffectDuration: .hours(4),
             basalProfile: BasalRateSchedule(rawValue: ["timeZone": -28800, "items": [["value": 0.75, "startTime": 0.0], ["value": 0.8, "startTime": 10800.0], ["value": 0.85, "startTime": 32400.0], ["value": 1.0, "startTime": 68400.0]]]),
             insulinSensitivitySchedule: InsulinSensitivitySchedule(rawValue: ["unit": "mg/dL", "timeZone": -28800, "items": [["value": 40.0, "startTime": 0.0], ["value": 35.0, "startTime": 21600.0], ["value": 40.0, "startTime": 57600.0]]]),
@@ -522,7 +404,6 @@ class DoseStoreTests: PersistenceControllerTestCase {
         // 1. Create a DoseStore
         let doseStore = DoseStore(
             cacheStore: cacheStore,
-            insulinModelProvider: StaticInsulinModelProvider(WalshInsulinModel(actionDuration: .hours(4))),
             longestEffectDuration: .hours(4),
             basalProfile: BasalRateSchedule(rawValue: ["timeZone": -28800, "items": [["value": 0.75, "startTime": 0.0], ["value": 0.8, "startTime": 10800.0], ["value": 0.85, "startTime": 32400.0], ["value": 1.0, "startTime": 37800.0]]]),
             insulinSensitivitySchedule: InsulinSensitivitySchedule(rawValue: ["unit": "mg/dL", "timeZone": -28800, "items": [["value": 40.0, "startTime": 0.0], ["value": 35.0, "startTime": 21600.0], ["value": 40.0, "startTime": 57600.0]]]),
@@ -664,7 +545,6 @@ class DoseStoreTests: PersistenceControllerTestCase {
         // 1. Create a DoseStore
         let doseStore = DoseStore(
             cacheStore: cacheStore,
-            insulinModelProvider: PresetInsulinModelProvider(defaultRapidActingModel: nil),
             longestEffectDuration: .hours(6),
             basalProfile: BasalRateSchedule(rawValue: ["timeZone": 0, "items": [["value": 0.75, "startTime": 0.0], ["value": 0.8, "startTime": 61200.0]]]),
             insulinSensitivitySchedule: InsulinSensitivitySchedule(rawValue: ["unit": "mg/dL", "timeZone": 0, "items": [["value": 40.0, "startTime": 0.0]]]),
@@ -723,7 +603,6 @@ class DoseStoreTests: PersistenceControllerTestCase {
         // 1. Create a DoseStore
         let doseStore = DoseStore(
             cacheStore: cacheStore,
-            insulinModelProvider: StaticInsulinModelProvider(WalshInsulinModel(actionDuration: .hours(4))),
             longestEffectDuration: .hours(4),
             basalProfile: BasalRateSchedule(rawValue: ["timeZone": -28800, "items": [["value": 0.75, "startTime": 0.0], ["value": 0.8, "startTime": 10800.0], ["value": 0.85, "startTime": 32400.0], ["value": 1.0, "startTime": 37800.0]]]),
             insulinSensitivitySchedule: InsulinSensitivitySchedule(rawValue: ["unit": "mg/dL", "timeZone": -28800, "items": [["value": 40.0, "startTime": 0.0], ["value": 35.0, "startTime": 21600.0], ["value": 40.0, "startTime": 57600.0]]]),
@@ -1132,7 +1011,6 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
         super.setUp()
         
         doseStore = DoseStore(cacheStore: cacheStore,
-                              insulinModelProvider: StaticInsulinModelProvider(insulinModel),
                               longestEffectDuration: insulinModel.effectDuration,
                               basalProfile: basalProfile,
                               insulinSensitivitySchedule: insulinSensitivitySchedule,
@@ -1335,7 +1213,6 @@ class DoseStoreCriticalEventLogTests: PersistenceControllerTestCase {
                       PersistedPumpEvent(date: dateFormatter.date(from: "2100-01-02T03:02:00Z")!, persistedDate: persistedDate, dose: nil, isUploaded: false, objectIDURL: url, raw: nil, title: nil, type: nil)]
 
         doseStore = DoseStore(cacheStore: cacheStore,
-                              insulinModelProvider: StaticInsulinModelProvider(insulinModel),
                               longestEffectDuration: insulinModel.effectDuration,
                               basalProfile: basalProfile,
                               insulinSensitivitySchedule: insulinSensitivitySchedule,
@@ -1433,7 +1310,6 @@ class DoseStoreEffectTests: PersistenceControllerTestCase {
         doseStore = DoseStore(
             healthKitSampleStore: sampleStore,
             cacheStore: cacheStore,
-            insulinModelProvider: StaticInsulinModelProvider(exponentialInsulinModel),
             longestEffectDuration: exponentialInsulinModel.effectDuration,
             basalProfile: BasalRateSchedule(dailyItems: [RepeatingScheduleValue(startTime: .hours(0), value: 1.0)]),
             insulinSensitivitySchedule: insulinSensitivitySchedule,
