@@ -92,15 +92,17 @@ public struct ManualBolusRecommendation {
     public let pendingInsulin: Double
     public var notice: BolusRecommendationNotice?
     public let carbsAmount: Double?
-    public let correctionAmount: Double?
+    public let cobCorrectionAmount: Double?
+    public let bgCorrectionAmount: Double?
     public let missingAmount: Double?
 
-    public init(amount: Double, pendingInsulin: Double, notice: BolusRecommendationNotice? = nil, carbsAmount: Double? = nil, correctionAmount: Double? = nil, missingAmount: Double? = nil) {
+    public init(amount: Double, pendingInsulin: Double, notice: BolusRecommendationNotice? = nil, carbsAmount: Double? = nil, cobCorrectionAmount: Double? = nil, bgCorrectionAmount: Double? = nil, missingAmount: Double? = nil) {
         self.amount = amount
         self.pendingInsulin = pendingInsulin
         self.notice = notice
         self.carbsAmount = carbsAmount
-        self.correctionAmount = correctionAmount
+        self.cobCorrectionAmount = cobCorrectionAmount
+        self.bgCorrectionAmount = bgCorrectionAmount
         self.missingAmount = missingAmount
     }
 }
