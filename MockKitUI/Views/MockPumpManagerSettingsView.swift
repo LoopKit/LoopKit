@@ -27,13 +27,15 @@ struct MockPumpManagerSettingsView: View {
 
     private var supportedInsulinTypes: [InsulinType]
     private var appName: String
+    private let allowDebugFeatures : Bool
     private var title: String
     
-    init(pumpManager: MockPumpManager, supportedInsulinTypes: [InsulinType], appName: String) {
+    init(pumpManager: MockPumpManager, supportedInsulinTypes: [InsulinType], appName: String, allowDebugFeatures: Bool) {
         viewModel = MockPumpManagerSettingsViewModel(pumpManager: pumpManager)
         title = pumpManager.localizedTitle
         self.supportedInsulinTypes = supportedInsulinTypes
         self.appName = appName
+        self.allowDebugFeatures = allowDebugFeatures
     }
     
     var body: some View {
@@ -125,6 +127,11 @@ struct MockPumpManagerSettingsView: View {
     
     @ViewBuilder
     private var activitySection: some View {
+
+        if (allowDebugFeatures) {
+            settingsSubSection
+        }
+
         suspendResumeInsulinSubSection
 
         deviceDetailsSubSection
@@ -186,6 +193,14 @@ struct MockPumpManagerSettingsView: View {
             NavigationLink(destination: DemoPlaceHolderView(appName: appName)) {
                 Text("Replace Pump")
                     .foregroundColor(.accentColor)
+            }
+        }
+    }
+
+    private var settingsSubSection: some View {
+        Section {
+            NavigationLink(destination: MockPumpManagerControlsView(pumpManager: viewModel.pumpManager, supportedInsulinTypes: supportedInsulinTypes)) {
+                Text("Simulator Settings")
             }
         }
     }
@@ -252,6 +267,6 @@ extension MockPumpManagerSettingsView.PresentedAlert: Identifiable {
 
 struct MockPumpManagerSettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        MockPumpManagerSettingsView(pumpManager: MockPumpManager(), supportedInsulinTypes: [], appName: "Loop")
+        MockPumpManagerSettingsView(pumpManager: MockPumpManager(), supportedInsulinTypes: [], appName: "Loop", allowDebugFeatures: false)
     }
 }

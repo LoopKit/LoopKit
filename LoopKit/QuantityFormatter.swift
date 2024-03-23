@@ -163,13 +163,26 @@ open class QuantityFormatter {
 
 public extension HKQuantity {
     /// if fractionDigits is nil, defaults to the unit maxFractionDigits
-    func doubleValue(for unit: HKUnit, withRounding: Bool, usingFractionDigits fractionDigits: Int? = nil) -> Double {
+    func doubleValue(for unit: HKUnit, withRounding: Bool, usingFractionDigits fractionDigits: Int? = nil, rule: FloatingPointRoundingRule = .toNearestOrAwayFromZero) -> Double {
         var value = self.doubleValue(for: unit)
         if withRounding {
-            value = unit.round(value: value, fractionDigits: fractionDigits ?? unit.maxFractionDigits)
+            value = unit.round(value: value, fractionDigits: fractionDigits ?? unit.maxFractionDigits, rule: rule)
         }
 
         return value
+    }
+}
+
+extension ClosedRange where Bound == HKQuantity {
+    public func roundedDisplayValues(for unit: HKUnit) -> [Double] {
+        let stride = 1 / pow(10.0, Double(unit.preferredFractionDigits))
+        return Array(
+            Swift.stride(
+                from: self.lowerBound.doubleValue(for: unit, withRounding: true, rule: .up),
+                through: self.upperBound.doubleValue(for: unit, withRounding: true, rule: .down),
+                by: stride
+            )
+        )
     }
 }
 
@@ -207,13 +220,13 @@ public extension HKUnit {
     }
     
     /// if fractionDigits is nil, defaults to the unit maxFractionDigits
-    func round(value: Double, fractionDigits: Int? = nil) -> Double {
+    func round(value: Double, fractionDigits: Int? = nil, rule: FloatingPointRoundingRule = .toNearestOrAwayFromZero) -> Double {
         let usedFractionDigits: Int = fractionDigits ?? maxFractionDigits
         if usedFractionDigits == 0 {
-            return value.rounded()
+            return value.rounded(rule)
         } else {
             let scaleFactor = pow(10.0, Double(usedFractionDigits))
-            return (value * scaleFactor).rounded() / scaleFactor
+            return (value * scaleFactor).rounded(rule) / scaleFactor
         }
     }
     

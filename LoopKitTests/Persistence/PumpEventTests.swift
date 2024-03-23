@@ -30,13 +30,14 @@ class PumpEventEncodableTests: PersistenceControllerTestCase {
             pumpEvent.alarmType = .other("An Alarm")
             pumpEvent.modificationCounter = 123
             pumpEvent.wasProgrammedByPumpUI = true
-            try! assertPumpEventEncodable(pumpEvent, encodesJSON: """
+            let data = try! encoder.encode(pumpEvent)
+            XCTAssertEqual(String(data: data, encoding: .utf8), """
 {
   "alarmType" : "An Alarm",
   "automatic" : false,
   "createdAt" : "2020-05-14T22:33:48Z",
   "date" : "2020-05-14T22:38:14Z",
-  "deliveredUnits" : 0.56000000000000005,
+  "deliveredUnits" : 0.56,
   "doseType" : "tempBasal",
   "duration" : 1800,
   "insulinType" : 3,
@@ -65,7 +66,9 @@ class PumpEventEncodableTests: PersistenceControllerTestCase {
             pumpEvent.mutable = false
             pumpEvent.modificationCounter = 234
             pumpEvent.wasProgrammedByPumpUI = true
-            try! assertPumpEventEncodable(pumpEvent, encodesJSON: """
+
+            let data = try! encoder.encode(pumpEvent)
+            XCTAssertEqual(String(data: data, encoding: .utf8), """
 {
   "createdAt" : "2020-05-13T22:33:48Z",
   "date" : "2020-05-13T22:38:14Z",
@@ -79,11 +82,6 @@ class PumpEventEncodableTests: PersistenceControllerTestCase {
 """
             )
         }
-    }
-
-    private func assertPumpEventEncodable(_ original: PumpEvent, encodesJSON string: String) throws {
-        let data = try encoder.encode(original)
-        XCTAssertEqual(String(data: data, encoding: .utf8), string)
     }
 
     private let dateFormatter = ISO8601DateFormatter()

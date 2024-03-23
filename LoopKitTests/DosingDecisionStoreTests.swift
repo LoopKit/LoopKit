@@ -103,7 +103,9 @@ class DosingDecisionStorePersistenceTests: PersistenceControllerTestCase, Dosing
                 object.data = try PropertyListEncoder().encode(StoredDosingDecision.test)
                 object.date = dateFormatter.date(from: "2100-01-02T03:03:00Z")!
                 object.modificationCounter = 123
-                try assertDosingDecisionObjectEncodable(object, encodesJSON: """
+
+                let data = try encoder.encode(object)
+                XCTAssertEqual(String(data: data, encoding: .utf8), """
 {
   "data" : {
     "automaticDoseRecommendation" : {
@@ -248,7 +250,7 @@ class DosingDecisionStorePersistenceTests: PersistenceControllerTestCase, Dosing
         "pendingInsulin" : 0.75
       }
     },
-    "manualBolusRequested" : 0.80000000000000004,
+    "manualBolusRequested" : 0.8,
     "manualGlucoseSample" : {
       "condition" : "aboveRange",
       "device" : {
@@ -267,7 +269,7 @@ class DosingDecisionStorePersistenceTests: PersistenceControllerTestCase, Dosing
       "syncIdentifier" : "d3876f59-adb3-4a4f-8b29-315cda22062e",
       "syncVersion" : 1,
       "trend" : 7,
-      "trendRate" : -10.199999999999999,
+      "trendRate" : -10.2,
       "uuid" : "DA0CED44-E4F1-49C4-BAF8-6EFA6D75525F",
       "wasUserEntered" : true
     },
@@ -366,11 +368,6 @@ class DosingDecisionStorePersistenceTests: PersistenceControllerTestCase, Dosing
                 XCTFail("Unexpected failure: \(error)")
             }
         }
-    }
-
-    private func assertDosingDecisionObjectEncodable(_ original: DosingDecisionObject, encodesJSON string: String) throws {
-        let data = try encoder.encode(original)
-        XCTAssertEqual(String(data: data, encoding: .utf8), string)
     }
 
     private let dateFormatter = ISO8601DateFormatter()
@@ -714,7 +711,9 @@ class DosingDecisionStoreCriticalEventLogTests: PersistenceControllerTestCase {
 
 class StoredDosingDecisionCodableTests: XCTestCase {
     func testCodable() throws {
-        try assertStoredDosingDecisionCodable(StoredDosingDecision.test, encodesJSON: """
+
+        let data = try encoder.encode(StoredDosingDecision.test)
+        XCTAssertEqual(String(data: data, encoding: .utf8), """
 {
   "automaticDoseRecommendation" : {
     "basalAdjustment" : {
@@ -858,7 +857,7 @@ class StoredDosingDecisionCodableTests: XCTestCase {
       "pendingInsulin" : 0.75
     }
   },
-  "manualBolusRequested" : 0.80000000000000004,
+  "manualBolusRequested" : 0.8,
   "manualGlucoseSample" : {
     "condition" : "aboveRange",
     "device" : {
@@ -877,7 +876,7 @@ class StoredDosingDecisionCodableTests: XCTestCase {
     "syncIdentifier" : "d3876f59-adb3-4a4f-8b29-315cda22062e",
     "syncVersion" : 1,
     "trend" : 7,
-    "trendRate" : -10.199999999999999,
+    "trendRate" : -10.2,
     "uuid" : "DA0CED44-E4F1-49C4-BAF8-6EFA6D75525F",
     "wasUserEntered" : true
   },
