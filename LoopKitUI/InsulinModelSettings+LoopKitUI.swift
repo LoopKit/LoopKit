@@ -6,6 +6,7 @@
 //
 
 import LoopKit
+import LoopAlgorithm
 
 public extension ExponentialInsulinModelPreset {
     var title: String {

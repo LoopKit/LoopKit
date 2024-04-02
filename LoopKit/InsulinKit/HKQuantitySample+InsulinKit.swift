@@ -6,6 +6,7 @@
 //
 
 import HealthKit
+import LoopAlgorithm
 
 
 /// Defines the scheduled basal insulin rate during the time of the basal delivery sample

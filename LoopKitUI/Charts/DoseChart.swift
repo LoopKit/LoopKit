@@ -9,6 +9,7 @@ import Foundation
 import LoopKit
 import SwiftCharts
 import UIKit
+import LoopAlgorithm
 
 fileprivate struct DosePointsCache {
     let basal: [ChartPoint]
@@ -21,8 +22,8 @@ public class DoseChart: ChartProviding {
     public init() {
         doseEntries = []
     }
-    
-    public var doseEntries: [DoseEntry] {
+
+    public var doseEntries: [BasalRelativeDose] {
         didSet {
             pointsCache = nil
         }
@@ -168,7 +169,7 @@ public extension DoseChart {
 
             if entry.type == .bolus && entry.netBasalUnits > 0 {
                 let x = ChartAxisValueDate(date: entry.startDate, formatter: dateFormatter)
-                let y = ChartAxisValueDoubleLog(actualDouble: entry.unitsInDeliverableIncrements, unitString: "U", formatter: doseFormatter)
+                let y = ChartAxisValueDoubleLog(actualDouble: entry.volume, unitString: "U", formatter: doseFormatter)
 
                 let point = ChartPoint(x: x, y: y)
                 bolusPoints.append(point)
@@ -178,7 +179,7 @@ public extension DoseChart {
                 let startX = ChartAxisValueDate(date: max(startDate, entry.startDate), formatter: dateFormatter)
                 let endX = ChartAxisValueDate(date: entry.endDate, formatter: dateFormatter)
                 let zero = ChartAxisValueInt(0)
-                let rate = entry.netBasalUnitsPerHour
+                let rate = entry.netBasalUnits / time
                 let value = ChartAxisValueDoubleLog(actualDouble: rate, unitString: "U/hour", formatter: doseFormatter)
 
                 let valuePoints: [ChartPoint]

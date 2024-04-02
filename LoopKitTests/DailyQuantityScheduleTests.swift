@@ -8,6 +8,7 @@
 
 import XCTest
 @testable import LoopKit
+import LoopAlgorithm
 
 class DailyQuantityScheduleCodableTests: XCTestCase {
     func testCodableDouble() throws {

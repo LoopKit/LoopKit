@@ -9,6 +9,7 @@
 import CoreData
 import HealthKit
 import os.log
+import LoopAlgorithm
 
 public protocol DoseStoreDelegate: AnyObject {
 
@@ -75,22 +76,6 @@ public final class DoseStore {
     
     public var longestEffectDuration: TimeInterval
 
-    public var insulinModelProvider: InsulinModelProvider {
-        get {
-            return lockedInsulinModelProvider.value
-        }
-        set {
-            lockedInsulinModelProvider.value = newValue
-
-            persistenceController.managedObjectContext.perform {
-                self.pumpEventQueryAfterDate = max(self.pumpEventQueryAfterDate, self.cacheStartDate)
-
-                self.validateReservoirContinuity()
-            }
-        }
-    }
-    private let lockedInsulinModelProvider: Locked<InsulinModelProvider>
-    
     public var basalProfile: BasalRateSchedule? {
         get {
             return lockedBasalProfile.value
@@ -141,7 +126,6 @@ public final class DoseStore {
     ///   - healthKitSampleStore: The HealthKit store for reading & writing insulin delivery
     ///   - cacheStore: The cache store for reading & writing short-term intermediate data
     ///   - cacheLength: Maximum age of data to keep in the store.
-    ///   - insulinModelProvider: A factory for producing insulin models based on insulin type
     ///   - longestEffectDuration: This determines the oldest age of doses to be retrieved for calculating glucose effects
     ///   - basalProfile: The daily schedule of basal insulin rates
     ///   - insulinSensitivitySchedule: The daily schedule of insulin sensitivity (ISF)
@@ -154,7 +138,6 @@ public final class DoseStore {
         healthKitSampleStore: HealthKitSampleStore? = nil,
         cacheStore: PersistenceController,
         cacheLength: TimeInterval = 24 /* hours */ * 60 /* minutes */ * 60 /* seconds */,
-        insulinModelProvider: InsulinModelProvider,
         longestEffectDuration: TimeInterval = InsulinMath.longestInsulinActivityDuration,
         basalProfile: BasalRateSchedule? = nil,
         insulinSensitivitySchedule: InsulinSensitivitySchedule? = nil,
@@ -171,7 +154,6 @@ public final class DoseStore {
             provenanceIdentifier: provenanceIdentifier,
             test_currentDate: test_currentDate
         )
-        self.lockedInsulinModelProvider = Locked(insulinModelProvider)
         self.longestEffectDuration = longestEffectDuration
         self.lockedBasalProfile = Locked(basalProfile)
         self.persistenceController = cacheStore
@@ -424,22 +406,20 @@ extension DoseStore {
             reservoir.date = date
 
             let previousValue = self.lastStoredReservoirValue
-            if let basalProfile = self.basalProfile {
-                var newValues: [StoredReservoirValue] = []
 
-                if let previousValue = previousValue {
-                    newValues.append(previousValue)
-                }
+            var newValues: [StoredReservoirValue] = []
 
-                newValues.append(reservoir.storedReservoirValue)
+            if let previousValue = previousValue {
+                newValues.append(previousValue)
+            }
 
-                let newDoseEntries = newValues.doseEntries
+            newValues.append(reservoir.storedReservoirValue)
 
-                if self.recentReservoirNormalizedDoseEntriesCache != nil {
-                    self.recentReservoirNormalizedDoseEntriesCache = self.recentReservoirNormalizedDoseEntriesCache!.filterDateRange(self.recentStartDate, nil)
+            let newDoseEntries = newValues.doseEntries
 
-                    self.recentReservoirNormalizedDoseEntriesCache! += newDoseEntries.annotated(with: basalProfile)
-                }
+            if self.recentReservoirNormalizedDoseEntriesCache != nil {
+                self.recentReservoirNormalizedDoseEntriesCache = self.recentReservoirNormalizedDoseEntriesCache!.filterDateRange(self.recentStartDate, nil)
+                self.recentReservoirNormalizedDoseEntriesCache! += newDoseEntries
             }
 
             // Remove reservoir objects older than our cache length
@@ -537,17 +517,12 @@ extension DoseStore {
         if let normalizedDoses = self.recentReservoirNormalizedDoseEntriesCache, let firstDoseDate = normalizedDoses.first?.startDate, firstDoseDate <= start {
             return normalizedDoses.filterDateRange(start, end)
         } else {
-            guard let basalProfile = self.basalProfile else {
-                throw DoseStoreError.configurationError
-            }
-
             // Attempt to get the reading before "start", so we can build those doses that have an end date after "start", but a start date before "start"
             // Any extra doses will be filtered out below, via filterDateRange
             let doses = try self.getReservoirObjects(since: start.addingTimeInterval(-.minutes(10))).reversed().doseEntries
 
-            let normalizedDoses = doses.annotated(with: basalProfile)
-            self.recentReservoirNormalizedDoseEntriesCache = normalizedDoses
-            return normalizedDoses.filterDateRange(start, end)
+            self.recentReservoirNormalizedDoseEntriesCache = doses
+            return doses.filterDateRange(start, end)
         }
     }
 
@@ -1091,15 +1066,11 @@ extension DoseStore {
     /// - Returns: An array of doses from pump events that were marked mutable
     /// - Throws: An error describing the failure to fetch objects
     private func getNormalizedMutablePumpEventDoseEntries(start: Date) throws -> [DoseEntry] {
-        guard let basalProfile = self.basalProfile else {
-            throw DoseStoreError.configurationError
-        }
-
         let doses = try getPumpEventObjects(
             matching: NSPredicate(format: "mutable == true && doseType != nil"),
             chronological: true
             ).compactMap({ $0.dose })
-        let normalizedDoses = doses.filterDateRange(start, nil).reconciled().annotated(with: basalProfile)
+        let normalizedDoses = doses.filterDateRange(start, nil).reconciled()
         return normalizedDoses.map { $0.trimmed(from: start) }
     }
 
@@ -1188,11 +1159,6 @@ extension DoseStore {
     ///   - result: An array of dose entries, in chronological order by startDate
     public func getNormalizedDoseEntries(start: Date, end: Date? = nil, completion: @escaping (_ result: DoseStoreResult<[DoseEntry]>) -> Void) {
 
-        guard let basalProfile = self.basalProfile else {
-            completion(.failure(.configurationError))
-            return
-        }
-
         insulinDeliveryStore.getDoseEntries(start: start, end: end, includeMutable: true) { (result) in
             switch result {
             case .failure(let error):
@@ -1225,7 +1191,7 @@ extension DoseStore {
                             return dose
                         }
 
-                        completion(.success(doses.annotated(with: basalProfile)))
+                        completion(.success(doses))
                     } catch let error as DoseStoreError {
                         completion(.failure(error))
                     } catch {
@@ -1266,54 +1232,6 @@ extension DoseStore {
         return try await insulinDeliveryStore.getDoses(start: start, end: end)
     }
 
-
-    @available(*, deprecated, message: "Code using this should be updated to use active insulin returned from LoopAlgorithm")
-    /// Retrieves the maximum insulin on-board value from the two timeline values nearest to the specified date
-    ///
-    /// This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
-    ///
-    /// - Parameters:
-    ///   - date: The date of the value to retrieve
-    ///   - completion: A closure called once the value has been retrieved
-    ///   - result: The insulin on-board value
-    public func insulinOnBoard(at date: Date, completion: @escaping (_ result: DoseStoreResult<InsulinValue>) -> Void) {
-        getInsulinOnBoardValues(start: date.addingTimeInterval(.minutes(-5)), end: date.addingTimeInterval(.minutes(5))) { (result) -> Void in
-            switch result {
-            case .failure(let error):
-                completion(.failure(error))
-            case .success(let values):
-                let closest = values.allElementsAdjacent(to: date)
-
-                // Return the larger of the two bounding values, for the scenario when a bolus
-                // was scheduled between the two values; we want to return the later, larger value
-                guard let maxValue = closest.max(by: { return $0.value < $1.value }) else {
-                    // If we have no iob values in the store, and did not encounter an error, return 0
-                    completion(.success(InsulinValue(startDate: date, value: 0)))
-                    return
-                }
-
-                completion(.success(maxValue))
-            }
-        }
-    }
-
-    private func getInsulinOnBoardValues(start: Date, end: Date? = nil, basalDosingEnd: Date? = nil, completion: @escaping (_ result: DoseStoreResult<[InsulinValue]>) -> Void) {
-
-        // To properly know IOB at startDate, we need to go back another DIA hours
-        let doseStart = start.addingTimeInterval(-longestEffectDuration)
-        getNormalizedDoseEntries(start: doseStart, end: end) { (result) in
-            switch result {
-            case .failure(let error):
-                completion(.failure(error))
-            case .success(let doses):
-                let trimmedDoses = doses.map { $0.trimmed(to: basalDosingEnd) }
-                let insulinOnBoard = trimmedDoses.insulinOnBoard(insulinModelProvider: self.insulinModelProvider, longestEffectDuration: self.longestEffectDuration)
-                completion(.success(insulinOnBoard.filterDateRange(start, end)))
-            }
-        }
-    }
-
-
     /// Retrieves the estimated total number of units delivered since the specified date.
     ///
     /// - Parameters:
@@ -1349,7 +1267,6 @@ extension DoseStore {
         var report: [String] = [
             "## DoseStore",
             "",
-            "* insulinModelProvider: \(String(reflecting: insulinModelProvider))",
             "* basalProfile: \(basalProfile?.debugDescription ?? "")",
             "* areReservoirValuesValid: \(areReservoirValuesValid)",
             "* lastPumpEventsReconciliation: \(String(describing: lastPumpEventsReconciliation))",

@@ -8,6 +8,7 @@
 
 import XCTest
 import HealthKit
+import LoopAlgorithm
 
 @testable import LoopKit
 
@@ -20,7 +21,6 @@ class BolusRecommendationNoticeCodableTests: XCTestCase {
   "bolusRecommendationNotice" : {
     "glucoseBelowSuspendThreshold" : {
       "minGlucose" : {
-        "endDate" : "2020-05-14T22:14:16Z",
         "quantity" : 65,
         "quantityUnit" : "mg/dL",
         "startDate" : "2020-05-14T22:14:16Z"
@@ -40,7 +40,6 @@ class BolusRecommendationNoticeCodableTests: XCTestCase {
   "bolusRecommendationNotice" : {
     "currentGlucoseBelowTarget" : {
       "glucose" : {
-        "endDate" : "2020-05-14T22:20:16Z",
         "quantity" : 85,
         "quantityUnit" : "mg/dL",
         "startDate" : "2020-05-14T22:20:16Z"
@@ -60,7 +59,6 @@ class BolusRecommendationNoticeCodableTests: XCTestCase {
   "bolusRecommendationNotice" : {
     "predictedGlucoseBelowTarget" : {
       "minGlucose" : {
-        "endDate" : "2020-05-14T22:38:16Z",
         "quantity" : 80,
         "quantityUnit" : "mg/dL",
         "startDate" : "2020-05-14T22:38:16Z"
@@ -89,7 +87,6 @@ class BolusRecommendationNoticeCodableTests: XCTestCase {
   "bolusRecommendationNotice" : {
     "allGlucoseBelowTarget" : {
       "minGlucose" : {
-        "endDate" : "2020-05-14T22:38:16Z",
         "quantity" : 80,
         "quantityUnit" : "mg/dL",
         "startDate" : "2020-05-14T22:38:16Z"
@@ -128,20 +125,20 @@ class BolusRecommendationNoticeCodableTests: XCTestCase {
     }
 }
 
-extension BolusRecommendationNotice: Equatable {
-    public static func == (lhs: BolusRecommendationNotice, rhs: BolusRecommendationNotice) -> Bool {
-        switch (lhs, rhs) {
-        case (.glucoseBelowSuspendThreshold(let lhsGlucoseValue), .glucoseBelowSuspendThreshold(let rhsGlucoseValue)),
-             (.currentGlucoseBelowTarget(let lhsGlucoseValue), .currentGlucoseBelowTarget(let rhsGlucoseValue)),
-             (.predictedGlucoseBelowTarget(let lhsGlucoseValue), .predictedGlucoseBelowTarget(let rhsGlucoseValue)),
-             (.allGlucoseBelowTarget(let lhsGlucoseValue), .allGlucoseBelowTarget(let rhsGlucoseValue)):
-            return lhsGlucoseValue.startDate == rhsGlucoseValue.startDate &&
-                lhsGlucoseValue.endDate == rhsGlucoseValue.endDate &&
-                lhsGlucoseValue.quantity == rhsGlucoseValue.quantity
-        case (.predictedGlucoseInRange, .predictedGlucoseInRange):
-            return true
-        default:
-            return false
-        }
-    }
-}
+//extension BolusRecommendationNotice: Equatable {
+//    public static func == (lhs: BolusRecommendationNotice, rhs: BolusRecommendationNotice) -> Bool {
+//        switch (lhs, rhs) {
+//        case (.glucoseBelowSuspendThreshold(let lhsGlucoseValue), .glucoseBelowSuspendThreshold(let rhsGlucoseValue)),
+//             (.currentGlucoseBelowTarget(let lhsGlucoseValue), .currentGlucoseBelowTarget(let rhsGlucoseValue)),
+//             (.predictedGlucoseBelowTarget(let lhsGlucoseValue), .predictedGlucoseBelowTarget(let rhsGlucoseValue)),
+//             (.allGlucoseBelowTarget(let lhsGlucoseValue), .allGlucoseBelowTarget(let rhsGlucoseValue)):
+//            return lhsGlucoseValue.startDate == rhsGlucoseValue.startDate &&
+//                lhsGlucoseValue.endDate == rhsGlucoseValue.endDate &&
+//                lhsGlucoseValue.quantity == rhsGlucoseValue.quantity
+//        case (.predictedGlucoseInRange, .predictedGlucoseInRange):
+//            return true
+//        default:
+//            return false
+//        }
+//    }
+//}

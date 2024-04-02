@@ -7,6 +7,7 @@
 
 import Foundation
 import HealthKit
+import LoopAlgorithm
 
 
 /// A quantity of carbs absorbed over a given date interval

@@ -7,6 +7,7 @@
 
 import Foundation
 import HealthKit
+import LoopAlgorithm
 
 public struct PumpStatusHighlight: DeviceStatusHighlight, Equatable {
     public var localizedMessage: String

@@ -10,6 +10,7 @@ import LoopKit
 import LoopKitUI
 import MockKit
 import Foundation
+import LoopAlgorithm
 
 final class MockHUDProvider: NSObject, HUDProvider {
 

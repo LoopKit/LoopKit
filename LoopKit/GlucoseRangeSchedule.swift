@@ -8,7 +8,7 @@
 
 import Foundation
 import HealthKit
-
+import LoopAlgorithm
 
 public struct DoubleRange {
     public let minValue: Double
@@ -23,7 +23,6 @@ public struct DoubleRange {
         return abs(minValue) < .ulpOfOne && abs(maxValue) < .ulpOfOne
     }
 }
-
 
 extension DoubleRange: RawRepresentable {
     public typealias RawValue = [Double]
@@ -46,6 +45,14 @@ extension DoubleRange: Equatable {
     public static func ==(lhs: DoubleRange, rhs: DoubleRange) -> Bool {
         return abs(lhs.minValue - rhs.minValue) < .ulpOfOne &&
                abs(lhs.maxValue - rhs.maxValue) < .ulpOfOne
+    }
+}
+
+extension DoubleRange {
+    public func quantityRange(for unit: HKUnit) -> ClosedRange<HKQuantity> {
+        let lowerBound = HKQuantity(unit: unit, doubleValue: minValue)
+        let upperBound = HKQuantity(unit: unit, doubleValue: maxValue)
+        return lowerBound...upperBound
     }
 }
 
@@ -229,14 +236,6 @@ extension ClosedRange where Bound == HKQuantity {
         let minValue = lowerBound.doubleValue(for: unit)
         let maxValue = upperBound.doubleValue(for: unit)
         return (maxValue + minValue) / 2
-    }
-}
-
-extension DoubleRange {
-    public func quantityRange(for unit: HKUnit) -> ClosedRange<HKQuantity> {
-        let lowerBound = HKQuantity(unit: unit, doubleValue: minValue)
-        let upperBound = HKQuantity(unit: unit, doubleValue: maxValue)
-        return lowerBound...upperBound
     }
 }
 

@@ -10,7 +10,7 @@ import HealthKit
 import LoopKit
 import SwiftCharts
 import UIKit
-
+import LoopAlgorithm
 
 public class COBChart: ChartProviding {
     public init() {

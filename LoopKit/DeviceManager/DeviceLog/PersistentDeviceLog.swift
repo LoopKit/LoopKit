@@ -81,7 +81,7 @@ public class PersistentDeviceLog {
             let header = "## Device Communication Log\n"
 
             managedObjectContext.perform {
-                var predicate: NSPredicate = NSPredicate(format: "timestamp >= %@", startDate as NSDate)
+                let predicate: NSPredicate = NSPredicate(format: "timestamp >= %@", startDate as NSDate)
                 let request: NSFetchRequest<DeviceLogEntry> = DeviceLogEntry.fetchRequest()
                 request.predicate = predicate
                 request.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]

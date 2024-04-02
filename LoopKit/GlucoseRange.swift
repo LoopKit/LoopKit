@@ -8,6 +8,7 @@
 
 import Foundation
 import HealthKit
+import LoopAlgorithm
 
 public struct GlucoseRange {
     public let range: DoubleRange

@@ -8,6 +8,7 @@
 
 import SwiftUI
 import LoopKit
+import LoopAlgorithm
 
 public struct InsulinTypeChooser: View {
     

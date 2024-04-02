@@ -8,7 +8,7 @@
 
 import Foundation
 import CoreData
-
+import LoopAlgorithm
 
 class PumpEvent: NSManagedObject {
 
