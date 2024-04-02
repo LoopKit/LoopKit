@@ -16,7 +16,7 @@ public struct DoseEntry: TimelineValue, Equatable {
     public var endDate: Date
     internal let value: Double
     public let unit: DoseUnit
-    public let deliveredUnits: Double?
+    public var deliveredUnits: Double?
     public let description: String?
     public let insulinType: InsulinType?
     public let automatic: Bool?
