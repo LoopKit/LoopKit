@@ -16,6 +16,12 @@ class PersistenceControllerTestCase: XCTestCase {
         super.setUp()
 
         cacheStore = PersistenceController(directoryURL: URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true).appendingPathComponent(UUID().uuidString, isDirectory: true))
+
+        let semaphore = DispatchSemaphore(value: 0)
+        cacheStore.onReady { error in
+            semaphore.signal()
+        }
+        semaphore.wait()
     }
 
     override func tearDown() {
