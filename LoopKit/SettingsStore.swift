@@ -10,6 +10,7 @@ import os.log
 import Foundation
 import CoreData
 import HealthKit
+import LoopAlgorithm
 
 public protocol SettingsStoreDelegate: AnyObject {
     /**
@@ -612,7 +613,7 @@ extension SettingsStore {
 
         var idx = schedules.startIndex
         var date = startDate
-        var items = [LoopKit.AbsoluteScheduleValue<ClosedRange<HKQuantity>>]()
+        var items = [AbsoluteScheduleValue<ClosedRange<HKQuantity>>]()
         while date < endDate {
             let scheduleActiveEnd: Date
             if idx+1 < schedules.endIndex {

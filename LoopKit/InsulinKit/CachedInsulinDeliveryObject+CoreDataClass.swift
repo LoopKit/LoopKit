@@ -9,6 +9,7 @@
 import Foundation
 import CoreData
 import HealthKit
+import LoopAlgorithm
 
 class CachedInsulinDeliveryObject: NSManagedObject {
     var reason: HKInsulinDeliveryReason! {

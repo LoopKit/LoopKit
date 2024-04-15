@@ -7,8 +7,10 @@
 //
 
 import XCTest
-@testable import LoopKit
 import HealthKit
+import LoopAlgorithm
+
+@testable import LoopKit
 
 extension TimeZone {
     static var fixtureTimeZone: TimeZone {
@@ -229,18 +231,22 @@ class TemporaryScheduleOverrideTests: XCTestCase {
             RepeatingScheduleValue(startTime: 79200.0, value: 0.225),
         ])!
 
-        let dose = DoseEntry(
-            type: .tempBasal,
-            startDate: date(at: "19:25"),
+        let start = date(at: "19:25")
+
+        let dose = FixtureInsulinDose(
+            deliveryType: .basal,
+            startDate: start,
             endDate: date(at: "19:30"),
-            value: 0.8,
-            unit: .units
+            volume: 0.8,
+            insulinType: .novolog
         )
 
-        let annotated = [dose].annotated(with: schedule)
+        let timeline = schedule.between(start: start, end: start.addingTimeInterval(InsulinMath.longestInsulinActivityDuration))
+
+        let annotated = [dose].annotated(with: timeline)
 
         XCTAssertEqual(3, annotated.count)
-        XCTAssertEqual(dose.programmedUnits, annotated.map { $0.unitsInDeliverableIncrements }.reduce(0, +))
+        XCTAssertEqual(dose.volume, annotated.map { $0.volume }.reduce(0, +))
     }
 
     // MARK: - Target range tests

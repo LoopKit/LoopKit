@@ -8,6 +8,7 @@
 
 import Foundation
 import HealthKit
+import LoopAlgorithm
 
 extension GlucoseRangeSchedule {
     public func safeSchedule(with suspendThreshold: HKQuantity?) -> GlucoseRangeSchedule? {

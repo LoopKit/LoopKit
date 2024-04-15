@@ -30,7 +30,6 @@ class CarbStoreHKQueryTestsBase: PersistenceControllerTestCase {
         carbStore = CarbStore(healthKitSampleStore: hkSampleStore,
                               cacheStore: cacheStore,
                               cacheLength: .hours(24),
-                              defaultAbsorptionTimes: (fast: .minutes(30), medium: .hours(3), slow: .hours(5)),
                               provenanceIdentifier: Bundle.main.bundleIdentifier!)
 
         let semaphore = DispatchSemaphore(value: 0)
@@ -118,7 +117,6 @@ class CarbStoreHKQueryTests: CarbStoreHKQueryTestsBase {
         let _ = CarbStore(healthKitSampleStore: newSampleStore,
                                      cacheStore: cacheStore,
                                      cacheLength: .hours(24),
-                                     defaultAbsorptionTimes: (fast: .minutes(30), medium: .hours(3), slow: .hours(5)),
                                      provenanceIdentifier: Bundle.main.bundleIdentifier!)
 
 

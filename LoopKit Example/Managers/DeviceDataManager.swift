@@ -9,7 +9,7 @@
 import Foundation
 import HealthKit
 import LoopKit
-
+import LoopAlgorithm
 
 class DeviceDataManager {
 
@@ -30,7 +30,6 @@ class DeviceDataManager {
             healthKitSampleStore: carbSampleStore,
             cacheStore: cacheStore,
             cacheLength: observationInterval,
-            defaultAbsorptionTimes: (fast: .minutes(30), medium: .hours(3), slow: .hours(5)),
             provenanceIdentifier: HKSource.default().bundleIdentifier
         )
 
@@ -44,7 +43,6 @@ class DeviceDataManager {
         doseStore = DoseStore(
             healthKitSampleStore: doseSampleStore,
             cacheStore: cacheStore,
-            insulinModelProvider: PresetInsulinModelProvider(defaultRapidActingModel: ExponentialInsulinModelPreset.rapidActingAdult),
             longestEffectDuration: ExponentialInsulinModelPreset.rapidActingAdult.effectDuration,
             basalProfile: basalRateSchedule,
             insulinSensitivitySchedule: insulinSensitivitySchedule,

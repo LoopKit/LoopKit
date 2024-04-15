@@ -90,7 +90,6 @@ class MockCGMManagerSettingsViewModel: ObservableObject {
             lastGlucoseTrendFormatted = nil
             return
         }
-        let glucoseUnitPerMinute = displayGlucosePreference.unit.unitDivided(by: .minute())
         lastGlucoseTrendFormatted = displayGlucosePreference.formatMinuteRate(trendRate)
     }
     

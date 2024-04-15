@@ -9,6 +9,7 @@
 import HealthKit
 import SwiftUI
 import LoopKit
+import LoopAlgorithm
 
 public struct InsulinModelSelection: View {
     @EnvironmentObject private var displayGlucosePreference: DisplayGlucosePreference
@@ -198,9 +199,15 @@ public struct InsulinModelSelection: View {
     }
     
     private func oneUnitBolusEffectPrediction(using modelPreset: ExponentialInsulinModelPreset) -> [GlucoseValue] {
-        let bolus = DoseEntry(type: .bolus, startDate: chartManager.startDate, value: 1, unit: .units, insulinType: .novolog)
+        let bolus = BasalRelativeDose(type: .bolus, startDate: chartManager.startDate, endDate: chartManager.startDate, volume: 1, insulinModel: modelPreset.model)
         let startingGlucoseSample = HKQuantitySample(type: HealthKitSampleStore.glucoseType, quantity: startingGlucoseQuantity, start: chartManager.startDate, end: chartManager.startDate)
-        let effects = [bolus].glucoseEffects(insulinModelProvider: StaticInsulinModelProvider(modelPreset), longestEffectDuration: .hours(6), insulinSensitivity: insulinSensitivitySchedule)
+        let isfTimeline = insulinSensitivitySchedule.quantitiesBetween(
+            start: chartManager.startDate,
+            end: chartManager.startDate.addingTimeInterval(
+                InsulinMath.longestInsulinActivityDuration
+            )
+        )
+        let effects = [bolus].glucoseEffects(longestEffectDuration: .hours(6), insulinSensitivityTimeline: isfTimeline)
         return LoopMath.predictGlucose(startingAt: startingGlucoseSample, effects: effects)
     }
 

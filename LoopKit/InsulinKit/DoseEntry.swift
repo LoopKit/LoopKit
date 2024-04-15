@@ -8,6 +8,7 @@
 
 import Foundation
 import HealthKit
+import LoopAlgorithm
 
 
 public struct DoseEntry: TimelineValue, Equatable {
@@ -16,9 +17,9 @@ public struct DoseEntry: TimelineValue, Equatable {
     public var endDate: Date
     internal let value: Double
     public let unit: DoseUnit
-    public let deliveredUnits: Double?
+    public var deliveredUnits: Double?
     public let description: String?
-    public let insulinType: InsulinType?
+    public var insulinType: InsulinType?
     public let automatic: Bool?
     public let manuallyEntered: Bool
     public internal(set) var syncIdentifier: String?
@@ -274,22 +275,5 @@ extension DoseEntry: RawRepresentable {
         rawValue["scheduledBasalRate"] = scheduledBasalRate?.doubleValue(for: .internationalUnitsPerHour)
 
         return rawValue
-    }
-}
-
-public extension Array where Element == DoseEntry {
-    func trimmed(from start: Date? = nil, to end: Date? = nil, onlyTrimTempBasals: Bool = false) -> [DoseEntry] {
-        return self.compactMap { dose in
-            if let start, dose.endDate < start {
-                return nil
-            }
-            if let end, dose.startDate > end {
-                return nil
-            }
-            if onlyTrimTempBasals && dose.type != .tempBasal {
-                return dose
-            }
-            return dose.trimmed(from: start, to: end)
-        }
     }
 }

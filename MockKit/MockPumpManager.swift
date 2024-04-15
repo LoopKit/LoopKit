@@ -9,6 +9,7 @@
 import HealthKit
 import LoopKit
 import LoopTestingKit
+import LoopAlgorithm
 
 public protocol MockPumpManagerStateObserver {
     func mockPumpManager(_ manager: MockPumpManager, didUpdate state: MockPumpManagerState)
@@ -132,11 +133,7 @@ public final class MockPumpManager: TestingPumpManager {
         return type(of: self).device
     }
 
-    public var testLastReconciliation: Date? = nil
-    
-    public var lastSync: Date? {
-        return testLastReconciliation ?? Date()
-    }
+    public var lastSync: Date?
     
     public var insulinType: InsulinType? {
         return state.insulinType
@@ -379,7 +376,11 @@ public final class MockPumpManager: TestingPumpManager {
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(fetchDelay)) {
             
             self.state.finalizeFinishedDoses()
-            
+
+            if !self.state.pumpErrorDetected && !self.state.occlusionDetected {
+                self.lastSync = Date()
+            }
+
             self.storePumpEvents { (error) in
                 guard error == nil else {
                     completion?(self.lastSync)

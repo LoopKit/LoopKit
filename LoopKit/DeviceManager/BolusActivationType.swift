@@ -6,6 +6,8 @@
 //  Copyright © 2023 LoopKit Authors. All rights reserved.
 //
 
+import LoopAlgorithm
+
 public enum BolusActivationType: String, Codable {
     case automatic
     case manualNoRecommendation

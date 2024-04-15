@@ -1,6 +1,15 @@
 {
   "pins" : [
     {
+      "identity" : "loopalgorithm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/LoopKit/LoopAlgorithm",
+      "state" : {
+        "branch" : "main",
+        "revision" : "52c0ec9471c7b7b6fc63ae59246507009e79a64d"
+      }
+    },
+    {
       "identity" : "swiftcharts",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ivanschuetz/SwiftCharts",

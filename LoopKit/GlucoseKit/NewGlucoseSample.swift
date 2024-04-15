@@ -6,7 +6,7 @@
 //
 
 import HealthKit
-
+import LoopAlgorithm
 
 public struct NewGlucoseSample: Equatable, RawRepresentable {
     public let date: Date

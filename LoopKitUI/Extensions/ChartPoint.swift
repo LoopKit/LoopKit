@@ -10,6 +10,7 @@ import Foundation
 import HealthKit
 import LoopKit
 import SwiftCharts
+import LoopAlgorithm
 
 struct TargetChartBar {
     let points: [ChartPoint]

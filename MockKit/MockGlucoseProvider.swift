@@ -9,7 +9,7 @@
 import HealthKit
 import LoopKit
 import LoopTestingKit
-
+import LoopAlgorithm
 
 /// Returns a value based on the result of a random coin flip.
 /// - Parameter chanceOfHeads: The chance of flipping heads. Must be a value in the range `0...1`. Defaults to `0.5`.

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import LoopAlgorithm
 
 public struct StoredInsulinModel: Codable, Equatable {
     public enum ModelType: String, Codable {

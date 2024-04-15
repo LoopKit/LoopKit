@@ -10,6 +10,7 @@ import AVFoundation
 import HealthKit
 import LoopKit
 import SwiftUI
+import LoopAlgorithm
 
 public struct TherapySettingsView: View {
     @EnvironmentObject private var displayGlucosePreference: DisplayGlucosePreference

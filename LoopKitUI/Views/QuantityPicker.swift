@@ -9,6 +9,7 @@
 import SwiftUI
 import HealthKit
 import LoopKit
+import LoopAlgorithm
 
 
 private struct PickerValueBoundsKey: PreferenceKey {

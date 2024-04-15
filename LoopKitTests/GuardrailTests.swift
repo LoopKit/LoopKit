@@ -9,6 +9,7 @@
 import XCTest
 import HealthKit
 @testable import LoopKit
+import LoopAlgorithm
 
 class GuardrailTests: XCTestCase {
     let correctionRangeSchedule120 = GlucoseRangeSchedule(unit: .milligramsPerDeciliter, dailyItems: [RepeatingScheduleValue(startTime: 0, value: DoubleRange(120...130))])
