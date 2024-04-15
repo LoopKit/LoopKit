@@ -55,7 +55,7 @@ struct QuantityScheduleEditor<ActionAreaContent: View>: View {
                     unit: unit,
                     guardrail: guardrail,
                     isEditing: isEditing,
-                    isSupportedValue: selectableValues.contains(value.doubleValue(for: unit))
+                    isSupportedValue: selectableValues.contains(value.doubleValue(for: unit, withRounding: true))
                 )
             },
             valuePicker: { item, availableWidth in
@@ -148,7 +148,7 @@ struct QuantityScheduleEditor<ActionAreaContent: View>: View {
         
     private func hasUnsupportedValue(_ scheduleItems: [RepeatingScheduleValue<HKQuantity>]) -> Bool {
         !scheduleItems.filter { scheduleItem in
-            !selectableValues.contains(scheduleItem.value.doubleValue(for: unit))
+            !selectableValues.contains(scheduleItem.value.doubleValue(for: unit, withRounding: true))
         }.isEmpty
     }
     
