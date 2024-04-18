@@ -70,7 +70,7 @@ public struct FractionalQuantityPicker: View {
                 let newFractionValue = Self.matchingFraction(for: doubleValue.wrappedValue.fraction, from: fractionalValuesByWhole[newWholeValue] ?? [0.0])
                 let newDoubleValue = newWholeValue + newFractionValue
                 let maxValue = guardrail.absoluteBounds.upperBound.doubleValue(for: unit)
-                doubleValue.wrappedValue = min(newDoubleValue, maxValue)
+                doubleValue.wrappedValue = unit.roundForPicker(value: min(newDoubleValue, maxValue))
             }
         )
         self._fraction = Binding(
@@ -78,7 +78,7 @@ public struct FractionalQuantityPicker: View {
             set: { newFractionValue in
                 let newDoubleValue = doubleValue.wrappedValue.whole + newFractionValue
                 let minValue = guardrail.absoluteBounds.lowerBound.doubleValue(for: unit)
-                doubleValue.wrappedValue = max(newDoubleValue, minValue)
+                doubleValue.wrappedValue = unit.roundForPicker(value: max(newDoubleValue, minValue))
             }
         )
         self.unit = unit
