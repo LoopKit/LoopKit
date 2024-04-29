@@ -179,7 +179,7 @@ public extension DoseChart {
                 let startX = ChartAxisValueDate(date: max(startDate, entry.startDate), formatter: dateFormatter)
                 let endX = ChartAxisValueDate(date: entry.endDate, formatter: dateFormatter)
                 let zero = ChartAxisValueInt(0)
-                let rate = entry.netBasalUnits / time
+                let rate = entry.netBasalUnits / time.hours
                 let value = ChartAxisValueDoubleLog(actualDouble: rate, unitString: "U/hour", formatter: doseFormatter)
 
                 let valuePoints: [ChartPoint]
