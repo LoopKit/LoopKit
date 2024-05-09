@@ -188,7 +188,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
 
     // MARK: - Fetching
 
-    func testGetDoseEntries() {
+    func testGetDoseEntries() async throws {
         let addDoseEntriesCompletion = expectation(description: "addDoseEntries")
         insulinDeliveryStore.addDoseEntries([entry1, entry2, entry3], from: device, syncVersion: 2) { result in
             switch result {
@@ -199,96 +199,68 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             }
             addDoseEntriesCompletion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        await fulfillment(of: [addDoseEntriesCompletion], timeout: 10)
 
-        let getDoseEntries1Completion = expectation(description: "getDoseEntries1")
-        insulinDeliveryStore.getDoseEntries() { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let entries):
-                XCTAssertEqual(entries.count, 3)
-                XCTAssertEqual(entries[0].type, self.entry1.type)
-                XCTAssertEqual(entries[0].startDate, self.entry1.startDate)
-                XCTAssertEqual(entries[0].endDate, self.entry1.endDate)
-                XCTAssertEqual(entries[0].value, 0.015)
-                XCTAssertEqual(entries[0].unit, .units)
-                XCTAssertNil(entries[0].deliveredUnits)
-                XCTAssertEqual(entries[0].description, self.entry1.description)
-                XCTAssertEqual(entries[0].syncIdentifier, self.entry1.syncIdentifier)
-                XCTAssertEqual(entries[0].scheduledBasalRate, self.entry1.scheduledBasalRate)
-                XCTAssertEqual(entries[1].type, self.entry3.type)
-                XCTAssertEqual(entries[1].startDate, self.entry3.startDate)
-                XCTAssertEqual(entries[1].endDate, self.entry3.endDate)
-                XCTAssertEqual(entries[1].value, self.entry3.value)
-                XCTAssertEqual(entries[1].unit, self.entry3.unit)
-                XCTAssertEqual(entries[1].deliveredUnits, self.entry3.deliveredUnits)
-                XCTAssertEqual(entries[1].description, self.entry3.description)
-                XCTAssertEqual(entries[1].syncIdentifier, self.entry3.syncIdentifier)
-                XCTAssertEqual(entries[1].scheduledBasalRate, self.entry3.scheduledBasalRate)
-                XCTAssertEqual(entries[2].type, self.entry2.type)
-                XCTAssertEqual(entries[2].startDate, self.entry2.startDate)
-                XCTAssertEqual(entries[2].endDate, self.entry2.endDate)
-                XCTAssertEqual(entries[2].value, self.entry2.value)
-                XCTAssertEqual(entries[2].unit, self.entry2.unit)
-                XCTAssertEqual(entries[2].deliveredUnits, self.entry2.deliveredUnits)
-                XCTAssertEqual(entries[2].description, self.entry2.description)
-                XCTAssertEqual(entries[2].syncIdentifier, self.entry2.syncIdentifier)
-                XCTAssertEqual(entries[2].scheduledBasalRate, self.entry2.scheduledBasalRate)
-            }
-            getDoseEntries1Completion.fulfill()
-        }
-        waitForExpectations(timeout: 10)
+        var entries = try await insulinDeliveryStore.getDoseEntries()
+        XCTAssertEqual(entries.count, 3)
+        XCTAssertEqual(entries[0].type, self.entry1.type)
+        XCTAssertEqual(entries[0].startDate, self.entry1.startDate)
+        XCTAssertEqual(entries[0].endDate, self.entry1.endDate)
+        XCTAssertEqual(entries[0].value, 0.015)
+        XCTAssertEqual(entries[0].unit, .units)
+        XCTAssertNil(entries[0].deliveredUnits)
+        XCTAssertEqual(entries[0].description, self.entry1.description)
+        XCTAssertEqual(entries[0].syncIdentifier, self.entry1.syncIdentifier)
+        XCTAssertEqual(entries[0].scheduledBasalRate, self.entry1.scheduledBasalRate)
+        XCTAssertEqual(entries[1].type, self.entry3.type)
+        XCTAssertEqual(entries[1].startDate, self.entry3.startDate)
+        XCTAssertEqual(entries[1].endDate, self.entry3.endDate)
+        XCTAssertEqual(entries[1].value, self.entry3.value)
+        XCTAssertEqual(entries[1].unit, self.entry3.unit)
+        XCTAssertEqual(entries[1].deliveredUnits, self.entry3.deliveredUnits)
+        XCTAssertEqual(entries[1].description, self.entry3.description)
+        XCTAssertEqual(entries[1].syncIdentifier, self.entry3.syncIdentifier)
+        XCTAssertEqual(entries[1].scheduledBasalRate, self.entry3.scheduledBasalRate)
+        XCTAssertEqual(entries[2].type, self.entry2.type)
+        XCTAssertEqual(entries[2].startDate, self.entry2.startDate)
+        XCTAssertEqual(entries[2].endDate, self.entry2.endDate)
+        XCTAssertEqual(entries[2].value, self.entry2.value)
+        XCTAssertEqual(entries[2].unit, self.entry2.unit)
+        XCTAssertEqual(entries[2].deliveredUnits, self.entry2.deliveredUnits)
+        XCTAssertEqual(entries[2].description, self.entry2.description)
+        XCTAssertEqual(entries[2].syncIdentifier, self.entry2.syncIdentifier)
+        XCTAssertEqual(entries[2].scheduledBasalRate, self.entry2.scheduledBasalRate)
 
-
-        let getDoseEntries2Completion = expectation(description: "getDoseEntries2")
-        insulinDeliveryStore.getDoseEntries(start: Date(timeIntervalSinceNow: -.minutes(3.75)), end: Date(timeIntervalSinceNow: -.minutes(1.75))) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let entries):
-                XCTAssertEqual(entries.count, 2)
-                XCTAssertEqual(entries[0].type, self.entry3.type)
-                XCTAssertEqual(entries[0].startDate, self.entry3.startDate)
-                XCTAssertEqual(entries[0].endDate, self.entry3.endDate)
-                XCTAssertEqual(entries[0].value, self.entry3.value)
-                XCTAssertEqual(entries[0].unit, self.entry3.unit)
-                XCTAssertEqual(entries[0].deliveredUnits, self.entry3.deliveredUnits)
-                XCTAssertEqual(entries[0].description, self.entry3.description)
-                XCTAssertEqual(entries[0].syncIdentifier, self.entry3.syncIdentifier)
-                XCTAssertEqual(entries[0].scheduledBasalRate, self.entry3.scheduledBasalRate)
-                XCTAssertEqual(entries[1].type, self.entry2.type)
-                XCTAssertEqual(entries[1].startDate, self.entry2.startDate)
-                XCTAssertEqual(entries[1].endDate, self.entry2.endDate)
-                XCTAssertEqual(entries[1].value, self.entry2.value)
-                XCTAssertEqual(entries[1].unit, self.entry2.unit)
-                XCTAssertEqual(entries[1].deliveredUnits, self.entry2.deliveredUnits)
-                XCTAssertEqual(entries[1].description, self.entry2.description)
-                XCTAssertEqual(entries[1].syncIdentifier, self.entry2.syncIdentifier)
-                XCTAssertEqual(entries[1].scheduledBasalRate, self.entry2.scheduledBasalRate)
-            }
-            getDoseEntries2Completion.fulfill()
-        }
-        waitForExpectations(timeout: 10)
+        entries = try await insulinDeliveryStore.getDoseEntries(start: Date(timeIntervalSinceNow: -.minutes(3.75)), end: Date(timeIntervalSinceNow: -.minutes(1.75)))
+        XCTAssertEqual(entries.count, 2)
+        XCTAssertEqual(entries[0].type, self.entry3.type)
+        XCTAssertEqual(entries[0].startDate, self.entry3.startDate)
+        XCTAssertEqual(entries[0].endDate, self.entry3.endDate)
+        XCTAssertEqual(entries[0].value, self.entry3.value)
+        XCTAssertEqual(entries[0].unit, self.entry3.unit)
+        XCTAssertEqual(entries[0].deliveredUnits, self.entry3.deliveredUnits)
+        XCTAssertEqual(entries[0].description, self.entry3.description)
+        XCTAssertEqual(entries[0].syncIdentifier, self.entry3.syncIdentifier)
+        XCTAssertEqual(entries[0].scheduledBasalRate, self.entry3.scheduledBasalRate)
+        XCTAssertEqual(entries[1].type, self.entry2.type)
+        XCTAssertEqual(entries[1].startDate, self.entry2.startDate)
+        XCTAssertEqual(entries[1].endDate, self.entry2.endDate)
+        XCTAssertEqual(entries[1].value, self.entry2.value)
+        XCTAssertEqual(entries[1].unit, self.entry2.unit)
+        XCTAssertEqual(entries[1].deliveredUnits, self.entry2.deliveredUnits)
+        XCTAssertEqual(entries[1].description, self.entry2.description)
+        XCTAssertEqual(entries[1].syncIdentifier, self.entry2.syncIdentifier)
+        XCTAssertEqual(entries[1].scheduledBasalRate, self.entry2.scheduledBasalRate)
 
         let purgeCachedInsulinDeliveryObjectsCompletion = expectation(description: "purgeCachedInsulinDeliveryObjects")
         insulinDeliveryStore.purgeCachedInsulinDeliveryObjects() { error in
             XCTAssertNil(error)
             purgeCachedInsulinDeliveryObjectsCompletion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        await fulfillment(of: [purgeCachedInsulinDeliveryObjectsCompletion], timeout: 10)
 
-        let getDoseEntries3Completion = expectation(description: "getDoseEntries3")
-        insulinDeliveryStore.getDoseEntries() { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let entries):
-                XCTAssertEqual(entries.count, 0)
-            }
-            getDoseEntries3Completion.fulfill()
-        }
-        waitForExpectations(timeout: 10)
+        entries = try await insulinDeliveryStore.getDoseEntries()
+        XCTAssertEqual(entries.count, 0)
     }
 
     func testLastBasalEndDate() {
@@ -350,7 +322,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
 
     // MARK: - Modification
 
-    func testAddDoseEntries() {
+    func testAddDoseEntries() async throws {
         let addDoseEntries1Completion = expectation(description: "addDoseEntries1")
         insulinDeliveryStore.addDoseEntries([entry1, entry2, entry3], from: device, syncVersion: 2) { result in
             switch result {
@@ -361,46 +333,37 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             }
             addDoseEntries1Completion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        await fulfillment(of: [addDoseEntries1Completion], timeout: 10)
 
-        let getDoseEntries1Completion = expectation(description: "getDoseEntries1")
-        insulinDeliveryStore.getDoseEntries() { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let entries):
-                XCTAssertEqual(entries.count, 3)
-                XCTAssertEqual(entries[0].type, self.entry1.type)
-                XCTAssertEqual(entries[0].startDate, self.entry1.startDate)
-                XCTAssertEqual(entries[0].endDate, self.entry1.endDate)
-                XCTAssertEqual(entries[0].value, 0.015)
-                XCTAssertEqual(entries[0].unit, .units)
-                XCTAssertNil(entries[0].deliveredUnits)
-                XCTAssertEqual(entries[0].description, self.entry1.description)
-                XCTAssertEqual(entries[0].syncIdentifier, self.entry1.syncIdentifier)
-                XCTAssertEqual(entries[0].scheduledBasalRate, self.entry1.scheduledBasalRate)
-                XCTAssertEqual(entries[1].type, self.entry3.type)
-                XCTAssertEqual(entries[1].startDate, self.entry3.startDate)
-                XCTAssertEqual(entries[1].endDate, self.entry3.endDate)
-                XCTAssertEqual(entries[1].value, self.entry3.value)
-                XCTAssertEqual(entries[1].unit, self.entry3.unit)
-                XCTAssertEqual(entries[1].deliveredUnits, self.entry3.deliveredUnits)
-                XCTAssertEqual(entries[1].description, self.entry3.description)
-                XCTAssertEqual(entries[1].syncIdentifier, self.entry3.syncIdentifier)
-                XCTAssertEqual(entries[1].scheduledBasalRate, self.entry3.scheduledBasalRate)
-                XCTAssertEqual(entries[2].type, self.entry2.type)
-                XCTAssertEqual(entries[2].startDate, self.entry2.startDate)
-                XCTAssertEqual(entries[2].endDate, self.entry2.endDate)
-                XCTAssertEqual(entries[2].value, self.entry2.value)
-                XCTAssertEqual(entries[2].unit, self.entry2.unit)
-                XCTAssertEqual(entries[2].deliveredUnits, self.entry2.deliveredUnits)
-                XCTAssertEqual(entries[2].description, self.entry2.description)
-                XCTAssertEqual(entries[2].syncIdentifier, self.entry2.syncIdentifier)
-                XCTAssertEqual(entries[2].scheduledBasalRate, self.entry2.scheduledBasalRate)
-            }
-            getDoseEntries1Completion.fulfill()
-        }
-        waitForExpectations(timeout: 10)
+        var entries = try await insulinDeliveryStore.getDoseEntries()
+        XCTAssertEqual(entries.count, 3)
+        XCTAssertEqual(entries[0].type, self.entry1.type)
+        XCTAssertEqual(entries[0].startDate, self.entry1.startDate)
+        XCTAssertEqual(entries[0].endDate, self.entry1.endDate)
+        XCTAssertEqual(entries[0].value, 0.015)
+        XCTAssertEqual(entries[0].unit, .units)
+        XCTAssertNil(entries[0].deliveredUnits)
+        XCTAssertEqual(entries[0].description, self.entry1.description)
+        XCTAssertEqual(entries[0].syncIdentifier, self.entry1.syncIdentifier)
+        XCTAssertEqual(entries[0].scheduledBasalRate, self.entry1.scheduledBasalRate)
+        XCTAssertEqual(entries[1].type, self.entry3.type)
+        XCTAssertEqual(entries[1].startDate, self.entry3.startDate)
+        XCTAssertEqual(entries[1].endDate, self.entry3.endDate)
+        XCTAssertEqual(entries[1].value, self.entry3.value)
+        XCTAssertEqual(entries[1].unit, self.entry3.unit)
+        XCTAssertEqual(entries[1].deliveredUnits, self.entry3.deliveredUnits)
+        XCTAssertEqual(entries[1].description, self.entry3.description)
+        XCTAssertEqual(entries[1].syncIdentifier, self.entry3.syncIdentifier)
+        XCTAssertEqual(entries[1].scheduledBasalRate, self.entry3.scheduledBasalRate)
+        XCTAssertEqual(entries[2].type, self.entry2.type)
+        XCTAssertEqual(entries[2].startDate, self.entry2.startDate)
+        XCTAssertEqual(entries[2].endDate, self.entry2.endDate)
+        XCTAssertEqual(entries[2].value, self.entry2.value)
+        XCTAssertEqual(entries[2].unit, self.entry2.unit)
+        XCTAssertEqual(entries[2].deliveredUnits, self.entry2.deliveredUnits)
+        XCTAssertEqual(entries[2].description, self.entry2.description)
+        XCTAssertEqual(entries[2].syncIdentifier, self.entry2.syncIdentifier)
+        XCTAssertEqual(entries[2].scheduledBasalRate, self.entry2.scheduledBasalRate)
 
         let addDoseEntries2Completion = expectation(description: "addDoseEntries2")
         insulinDeliveryStore.addDoseEntries([entry3, entry1, entry2], from: device, syncVersion: 2) { result in
@@ -412,46 +375,37 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             }
             addDoseEntries2Completion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        await fulfillment(of: [addDoseEntries2Completion], timeout: 10)
 
-        let getDoseEntries2Completion = expectation(description: "getDoseEntries2Completion")
-        insulinDeliveryStore.getDoseEntries() { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let entries):
-                XCTAssertEqual(entries.count, 3)
-                XCTAssertEqual(entries[0].type, self.entry1.type)
-                XCTAssertEqual(entries[0].startDate, self.entry1.startDate)
-                XCTAssertEqual(entries[0].endDate, self.entry1.endDate)
-                XCTAssertEqual(entries[0].value, 0.015)
-                XCTAssertEqual(entries[0].unit, .units)
-                XCTAssertNil(entries[0].deliveredUnits)
-                XCTAssertEqual(entries[0].description, self.entry1.description)
-                XCTAssertEqual(entries[0].syncIdentifier, self.entry1.syncIdentifier)
-                XCTAssertEqual(entries[0].scheduledBasalRate, self.entry1.scheduledBasalRate)
-                XCTAssertEqual(entries[1].type, self.entry3.type)
-                XCTAssertEqual(entries[1].startDate, self.entry3.startDate)
-                XCTAssertEqual(entries[1].endDate, self.entry3.endDate)
-                XCTAssertEqual(entries[1].value, self.entry3.value)
-                XCTAssertEqual(entries[1].unit, self.entry3.unit)
-                XCTAssertEqual(entries[1].deliveredUnits, self.entry3.deliveredUnits)
-                XCTAssertEqual(entries[1].description, self.entry3.description)
-                XCTAssertEqual(entries[1].syncIdentifier, self.entry3.syncIdentifier)
-                XCTAssertEqual(entries[1].scheduledBasalRate, self.entry3.scheduledBasalRate)
-                XCTAssertEqual(entries[2].type, self.entry2.type)
-                XCTAssertEqual(entries[2].startDate, self.entry2.startDate)
-                XCTAssertEqual(entries[2].endDate, self.entry2.endDate)
-                XCTAssertEqual(entries[2].value, self.entry2.value)
-                XCTAssertEqual(entries[2].unit, self.entry2.unit)
-                XCTAssertEqual(entries[2].deliveredUnits, self.entry2.deliveredUnits)
-                XCTAssertEqual(entries[2].description, self.entry2.description)
-                XCTAssertEqual(entries[2].syncIdentifier, self.entry2.syncIdentifier)
-                XCTAssertEqual(entries[2].scheduledBasalRate, self.entry2.scheduledBasalRate)
-            }
-            getDoseEntries2Completion.fulfill()
-        }
-        waitForExpectations(timeout: 10)
+        entries = try await insulinDeliveryStore.getDoseEntries()
+        XCTAssertEqual(entries.count, 3)
+        XCTAssertEqual(entries[0].type, self.entry1.type)
+        XCTAssertEqual(entries[0].startDate, self.entry1.startDate)
+        XCTAssertEqual(entries[0].endDate, self.entry1.endDate)
+        XCTAssertEqual(entries[0].value, 0.015)
+        XCTAssertEqual(entries[0].unit, .units)
+        XCTAssertNil(entries[0].deliveredUnits)
+        XCTAssertEqual(entries[0].description, self.entry1.description)
+        XCTAssertEqual(entries[0].syncIdentifier, self.entry1.syncIdentifier)
+        XCTAssertEqual(entries[0].scheduledBasalRate, self.entry1.scheduledBasalRate)
+        XCTAssertEqual(entries[1].type, self.entry3.type)
+        XCTAssertEqual(entries[1].startDate, self.entry3.startDate)
+        XCTAssertEqual(entries[1].endDate, self.entry3.endDate)
+        XCTAssertEqual(entries[1].value, self.entry3.value)
+        XCTAssertEqual(entries[1].unit, self.entry3.unit)
+        XCTAssertEqual(entries[1].deliveredUnits, self.entry3.deliveredUnits)
+        XCTAssertEqual(entries[1].description, self.entry3.description)
+        XCTAssertEqual(entries[1].syncIdentifier, self.entry3.syncIdentifier)
+        XCTAssertEqual(entries[1].scheduledBasalRate, self.entry3.scheduledBasalRate)
+        XCTAssertEqual(entries[2].type, self.entry2.type)
+        XCTAssertEqual(entries[2].startDate, self.entry2.startDate)
+        XCTAssertEqual(entries[2].endDate, self.entry2.endDate)
+        XCTAssertEqual(entries[2].value, self.entry2.value)
+        XCTAssertEqual(entries[2].unit, self.entry2.unit)
+        XCTAssertEqual(entries[2].deliveredUnits, self.entry2.deliveredUnits)
+        XCTAssertEqual(entries[2].description, self.entry2.description)
+        XCTAssertEqual(entries[2].syncIdentifier, self.entry2.syncIdentifier)
+        XCTAssertEqual(entries[2].scheduledBasalRate, self.entry2.scheduledBasalRate)
     }
 
     func testAddDoseEntriesEmpty() {
@@ -581,7 +535,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
         XCTAssertEqual(insulinDeliveryStore.earliestCacheDate.timeIntervalSinceNow, -.hours(1), accuracy: 1)
     }
 
-    func testPurgeAllDoseEntries() {
+    func testPurgeAllDoseEntries() async throws {
         let addDoseEntriesCompletion = expectation(description: "addDoseEntries")
         insulinDeliveryStore.addDoseEntries([entry1, entry2, entry3], from: device, syncVersion: 2) { result in
             switch result {
@@ -592,19 +546,10 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             }
             addDoseEntriesCompletion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        await fulfillment(of: [addDoseEntriesCompletion], timeout: 10)
 
-        let getDoseEntries1Completion = expectation(description: "getDoseEntries1")
-        insulinDeliveryStore.getDoseEntries() { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let entries):
-                XCTAssertEqual(entries.count, 3)
-            }
-            getDoseEntries1Completion.fulfill()
-        }
-        waitForExpectations(timeout: 10)
+        var entries = try await insulinDeliveryStore.getDoseEntries()
+        XCTAssertEqual(entries.count, 3)
 
         let purgeAllDoseEntriesCompletion = expectation(description: "purgeAllDoseEntries")
         insulinDeliveryStore.purgeAllDoseEntries(healthKitPredicate: HKQuery.predicateForObjects(from: HKSource.default())) { error in
@@ -612,22 +557,13 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             purgeAllDoseEntriesCompletion.fulfill()
 
         }
-        waitForExpectations(timeout: 10)
+        await fulfillment(of: [purgeAllDoseEntriesCompletion], timeout: 10)
 
-        let getDoseEntries2Completion = expectation(description: "getDoseEntries2")
-        insulinDeliveryStore.getDoseEntries() { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let entries):
-                XCTAssertEqual(entries.count, 0)
-            }
-            getDoseEntries2Completion.fulfill()
-        }
-        waitForExpectations(timeout: 10)
+        entries = try await insulinDeliveryStore.getDoseEntries()
+        XCTAssertEqual(entries.count, 0)
     }
 
-    func testPurgeExpiredGlucoseObjects() {
+    func testPurgeExpiredGlucoseObjects() async throws {
         let expiredEntry = DoseEntry(type: .bolus,
                                      startDate: Date(timeIntervalSinceNow: -.hours(3)),
                                      endDate: Date(timeIntervalSinceNow: -.hours(2)),
@@ -647,22 +583,13 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             }
             addDoseEntriesCompletion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        await fulfillment(of: [addDoseEntriesCompletion], timeout: 10)
 
-        let getDoseEntriesCompletion = expectation(description: "getDoseEntries")
-        insulinDeliveryStore.getDoseEntries() { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let entries):
-                XCTAssertEqual(entries.count, 3)
-            }
-            getDoseEntriesCompletion.fulfill()
-        }
-        waitForExpectations(timeout: 10)
+        let entries = try await insulinDeliveryStore.getDoseEntries()
+        XCTAssertEqual(entries.count, 3)
     }
 
-    func testPurgeCachedInsulinDeliveryObjects() {
+    func testPurgeCachedInsulinDeliveryObjects() async throws {
         let addDoseEntriesCompletion = expectation(description: "addDoseEntries")
         insulinDeliveryStore.addDoseEntries([entry1, entry2, entry3], from: device, syncVersion: 2) { result in
             switch result {
@@ -673,19 +600,10 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             }
             addDoseEntriesCompletion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        await fulfillment(of: [addDoseEntriesCompletion], timeout: 10)
 
-        let getDoseEntries1Completion = expectation(description: "getDoseEntries1")
-        insulinDeliveryStore.getDoseEntries() { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let entries):
-                XCTAssertEqual(entries.count, 3)
-            }
-            getDoseEntries1Completion.fulfill()
-        }
-        waitForExpectations(timeout: 10)
+        var entries = try await insulinDeliveryStore.getDoseEntries()
+        XCTAssertEqual(entries.count, 3)
 
         let purgeCachedInsulinDeliveryObjects1Completion = expectation(description: "purgeCachedInsulinDeliveryObjects1")
         insulinDeliveryStore.purgeCachedInsulinDeliveryObjects(before: Date(timeIntervalSinceNow: -.minutes(5))) { error in
@@ -693,19 +611,10 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             purgeCachedInsulinDeliveryObjects1Completion.fulfill()
 
         }
-        waitForExpectations(timeout: 10)
+        await fulfillment(of: [purgeCachedInsulinDeliveryObjects1Completion], timeout: 10)
 
-        let getDoseEntries2Completion = expectation(description: "getDoseEntries2")
-        insulinDeliveryStore.getDoseEntries() { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let entries):
-                XCTAssertEqual(entries.count, 2)
-            }
-            getDoseEntries2Completion.fulfill()
-        }
-        waitForExpectations(timeout: 10)
+        entries = try await insulinDeliveryStore.getDoseEntries()
+        XCTAssertEqual(entries.count, 2)
 
         let purgeCachedInsulinDeliveryObjects2Completion = expectation(description: "purgeCachedInsulinDeliveryObjects2")
         insulinDeliveryStore.purgeCachedInsulinDeliveryObjects() { error in
@@ -713,19 +622,10 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             purgeCachedInsulinDeliveryObjects2Completion.fulfill()
 
         }
-        waitForExpectations(timeout: 10)
+        await fulfillment(of: [purgeCachedInsulinDeliveryObjects2Completion], timeout: 10)
 
-        let getDoseEntries3Completion = expectation(description: "getDoseEntries3")
-        insulinDeliveryStore.getDoseEntries() { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let entries):
-                XCTAssertEqual(entries.count, 0)
-            }
-            getDoseEntries3Completion.fulfill()
-        }
-        waitForExpectations(timeout: 10)
+        entries = try await insulinDeliveryStore.getDoseEntries()
+        XCTAssertEqual(entries.count, 0)
     }
 
     func testPurgeCachedInsulinDeliveryObjectsNotification() {

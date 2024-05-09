@@ -393,7 +393,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
         XCTAssertEqual(f("2018-11-29 11:14:28 +0000"), doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate)
     }
 
-    func testAddPumpEventsProgrammedByPumpUI() {
+    func testAddPumpEventsProgrammedByPumpUI() async throws {
         let formatter = DateFormatter.descriptionFormatter
         let f = { (input) in
             return formatter.date(from: input)!
@@ -415,7 +415,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
             // Set the current date
             test_currentDate: f("2018-12-12 18:07:14 +0000")
         )
-        waitForExpectations(timeout: 3)
+        await fulfillment(of: [doseStoreInitialization], timeout: 3)
 
 
         // 2. Add a temp basal which has already ended. It should persist in InsulinDeliveryStore.
@@ -427,52 +427,33 @@ class DoseStoreTests: PersistenceControllerTestCase {
         doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate = f("2018-12-12 17:35:00 +0000")
         doseStore.insulinDeliveryStore.test_currentDate = f("2018-12-12 18:07:14 +0000")
 
-        let addPumpEvents1 = expectation(description: "addPumpEvents1")
-        addPumpEvents1.expectedFulfillmentCount = 2
-        doseStore.addPumpEvents(pumpEvents1, lastReconciliation: Date()) { (error) in
-            XCTAssertNil(error)
-            doseStore.insulinDeliveryStore.getDoseEntries { result in
-                switch result {
-                case .failure:
-                    XCTFail()
-                case .success(let doseEntries):
-                    XCTAssertEqual(doseEntries.count, 1)
-                    XCTAssertEqual(doseEntries[0].type, .tempBasal)
-                    XCTAssertEqual(doseEntries[0].startDate, f("2018-12-12 17:35:00 +0000"))
-                    XCTAssertEqual(doseEntries[0].endDate, f("2018-12-12 18:05:00 +0000"))
-                    XCTAssertEqual(doseEntries[0].value, 2.125)
-                    XCTAssertEqual(doseEntries[0].deliveredUnits, 1.05)
-                    XCTAssertEqual(doseEntries[0].syncIdentifier, "1601fa23094c12")
-                    XCTAssertFalse(doseEntries[0].isMutable)
-                }
-                addPumpEvents1.fulfill();
-            }
-            doseStore.insulinDeliveryStore.getDoseEntries(includeMutable: true) { result in
-                switch result {
-                case .failure:
-                    XCTFail()
-                case .success(let doseEntries):
-                    XCTAssertEqual(doseEntries.count, 1)
-                    XCTAssertEqual(doseEntries[0].type, .tempBasal)
-                    XCTAssertEqual(doseEntries[0].startDate, f("2018-12-12 17:35:00 +0000"))
-                    XCTAssertEqual(doseEntries[0].endDate, f("2018-12-12 18:05:00 +0000"))
-                    XCTAssertEqual(doseEntries[0].value, 2.125)
-                    XCTAssertEqual(doseEntries[0].deliveredUnits, 1.05)
-                    XCTAssertEqual(doseEntries[0].syncIdentifier, "1601fa23094c12")
-                    XCTAssertFalse(doseEntries[0].isMutable)
-                    XCTAssertTrue(doseEntries[0].wasProgrammedByPumpUI)
-                }
-                addPumpEvents1.fulfill();
-            }
-        }
+        try await doseStore.addPumpEvents(pumpEvents1, lastReconciliation: Date())
+        var doseEntries = try await doseStore.insulinDeliveryStore.getDoseEntries()
+        XCTAssertEqual(doseEntries.count, 1)
+        XCTAssertEqual(doseEntries[0].type, .tempBasal)
+        XCTAssertEqual(doseEntries[0].startDate, f("2018-12-12 17:35:00 +0000"))
+        XCTAssertEqual(doseEntries[0].endDate, f("2018-12-12 18:05:00 +0000"))
+        XCTAssertEqual(doseEntries[0].value, 2.125)
+        XCTAssertEqual(doseEntries[0].deliveredUnits, 1.05)
+        XCTAssertEqual(doseEntries[0].syncIdentifier, "1601fa23094c12")
+        XCTAssertFalse(doseEntries[0].isMutable)
 
-        waitForExpectations(timeout: 3)
+        doseEntries = try await doseStore.insulinDeliveryStore.getDoseEntries()
+        XCTAssertEqual(doseEntries.count, 1)
+        XCTAssertEqual(doseEntries[0].type, .tempBasal)
+        XCTAssertEqual(doseEntries[0].startDate, f("2018-12-12 17:35:00 +0000"))
+        XCTAssertEqual(doseEntries[0].endDate, f("2018-12-12 18:05:00 +0000"))
+        XCTAssertEqual(doseEntries[0].value, 2.125)
+        XCTAssertEqual(doseEntries[0].deliveredUnits, 1.05)
+        XCTAssertEqual(doseEntries[0].syncIdentifier, "1601fa23094c12")
+        XCTAssertFalse(doseEntries[0].isMutable)
+        XCTAssertTrue(doseEntries[0].wasProgrammedByPumpUI)
 
         XCTAssertEqual(f("2018-12-12 18:05:00 +0000"), doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate)
 
     }
 
-    func testBasalInsertionBetweenTempBasals() {
+    func testBasalInsertionBetweenTempBasals() async throws {
 
 
         let start = testingDate("2018-12-12 17:00:00 +0000")
@@ -481,7 +462,6 @@ class DoseStoreTests: PersistenceControllerTestCase {
         let doseStore = defaultStore(testingDate: now)
 
         doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate = start
-
 
         // 2. Add a temp basal which has already ended. It should persist in InsulinDeliveryStore.
         let pumpEvents1 = [
@@ -511,27 +491,16 @@ class DoseStoreTests: PersistenceControllerTestCase {
                 type: .tempBasal)
         ]
 
-        let addPumpEvents = expectation(description: "addPumpEvents")
-        doseStore.addPumpEvents(pumpEvents1, lastReconciliation: now) { (error) in
-            XCTAssertNil(error)
-            doseStore.insulinDeliveryStore.getDoseEntries(start: start, end: start.addingTimeInterval(.minutes(20))) { result in
-                switch result {
-                case .failure:
-                    XCTFail()
-                case .success(let doseEntries):
-                    XCTAssertEqual(doseEntries.count, 3)
-                    XCTAssertTrue(doseEntries[0].automatic!)
-                    XCTAssertTrue(doseEntries[1].automatic!)
-                    XCTAssertTrue(doseEntries[2].automatic!)
-                }
-                addPumpEvents.fulfill();
-            }
-        }
 
-        waitForExpectations(timeout: 3)
+        try await doseStore.addPumpEvents(pumpEvents1, lastReconciliation: now)
+        let doseEntries = try await doseStore.insulinDeliveryStore.getDoseEntries(start: start, end: start.addingTimeInterval(.minutes(20)))
+        XCTAssertEqual(doseEntries.count, 3)
+        XCTAssertTrue(doseEntries[0].automatic!)
+        XCTAssertTrue(doseEntries[1].automatic!)
+        XCTAssertTrue(doseEntries[2].automatic!)
     }
 
-    func testUnfinalizedTempBasalCrossingScheduleChange() {
+    func testUnfinalizedTempBasalCrossingScheduleChange() async throws {
         let formatter = DateFormatter.descriptionFormatter
         let f = { (input) in
             return formatter.date(from: input)!
@@ -557,7 +526,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
         )
 
         // Wait for dose store to initialize
-        waitForExpectations(timeout: 3)
+        await fulfillment(of: [doseStoreInitialization], timeout: 3)
 
         doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate = doseStart //.addingTimeInterval(.minutes(-2))
 
@@ -565,33 +534,21 @@ class DoseStoreTests: PersistenceControllerTestCase {
             NewPumpEvent(date: doseStart, dose: DoseEntry(type: .tempBasal, startDate: doseStart, endDate: doseStart.addingTimeInterval(.minutes(30)), value: 2.125, unit: .unitsPerHour, isMutable: true), raw: Data(hexadecimalString: "1234567890")!, title: "TempBasal Test Data", type: .tempBasal)
         ]
 
-        let addPumpEvent = expectation(description: "addPumpEvent")
-        doseStore.addPumpEvents(pumpEvent, lastReconciliation: currentTime) { (error) in
-            XCTAssertNil(error)
-            doseStore.insulinDeliveryStore.getDoseEntries(includeMutable: true) { result in
-                switch result {
-                case .failure:
-                    XCTFail()
-                case .success(let doseEntries):
-                    XCTAssertEqual(doseEntries.count, 1)
-                    XCTAssertEqual(doseEntries[0].type, .tempBasal)
-                    XCTAssertEqual(doseEntries[0].startDate, f("2018-12-12 16:45:00 +0000"))
-                    XCTAssertEqual(doseEntries[0].endDate, f("2018-12-12 17:15:00 +0000"))
-                    XCTAssertEqual(doseEntries[0].value, 2.125)
-                    XCTAssertEqual(doseEntries[0].deliveredUnits, nil)
-                    XCTAssertEqual(doseEntries[0].syncIdentifier, "1234567890")
-                    XCTAssertEqual(doseEntries[0].scheduledBasalRate, nil)
-                    XCTAssertTrue(doseEntries[0].isMutable)
-                }
-                addPumpEvent.fulfill();
-            }
-        }
-
-        waitForExpectations(timeout: 3)
+        try await doseStore.addPumpEvents(pumpEvent, lastReconciliation: currentTime)
+        let doseEntries = try await doseStore.insulinDeliveryStore.getDoseEntries(includeMutable: true)
+        XCTAssertEqual(doseEntries.count, 1)
+        XCTAssertEqual(doseEntries[0].type, .tempBasal)
+        XCTAssertEqual(doseEntries[0].startDate, f("2018-12-12 16:45:00 +0000"))
+        XCTAssertEqual(doseEntries[0].endDate, f("2018-12-12 17:15:00 +0000"))
+        XCTAssertEqual(doseEntries[0].value, 2.125)
+        XCTAssertEqual(doseEntries[0].deliveredUnits, nil)
+        XCTAssertEqual(doseEntries[0].syncIdentifier, "1234567890")
+        XCTAssertEqual(doseEntries[0].scheduledBasalRate, nil)
+        XCTAssertTrue(doseEntries[0].isMutable)
     }
 
 
-    func testAddPumpEventsPurgesMutableDosesFromInsulinDeliveryStore() {
+    func testAddPumpEventsPurgesMutableDosesFromInsulinDeliveryStore() async throws {
         let formatter = DateFormatter.descriptionFormatter
         let f = { (input) in
             return formatter.date(from: input)!
@@ -614,7 +571,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
             test_currentDate: f("2018-12-12 18:07:14 +0000")
         )
 
-        waitForExpectations(timeout: 3)
+        await fulfillment(of: [doseStoreInitialization], timeout: 3)
 
         // 2. Add a temp basal which has already ended. It should persist in InsulinDeliveryStore.
         let pumpEvents1 = [
@@ -625,45 +582,26 @@ class DoseStoreTests: PersistenceControllerTestCase {
         doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate = f("2018-12-12 17:35:00 +0000")
         doseStore.insulinDeliveryStore.test_currentDate = f("2018-12-12 18:07:14 +0000")
 
-        let addPumpEvents1 = expectation(description: "addPumpEvents1")
-        addPumpEvents1.expectedFulfillmentCount = 2
-        doseStore.addPumpEvents(pumpEvents1, lastReconciliation: Date()) { (error) in
-            XCTAssertNil(error)
-            doseStore.insulinDeliveryStore.getDoseEntries { result in
-                switch result {
-                case .failure:
-                    XCTFail()
-                case .success(let doseEntries):
-                    XCTAssertEqual(doseEntries.count, 1)
-                    XCTAssertEqual(doseEntries[0].type, .tempBasal)
-                    XCTAssertEqual(doseEntries[0].startDate, f("2018-12-12 17:35:00 +0000"))
-                    XCTAssertEqual(doseEntries[0].endDate, f("2018-12-12 18:05:00 +0000"))
-                    XCTAssertEqual(doseEntries[0].value, 2.125)
-                    XCTAssertEqual(doseEntries[0].deliveredUnits, 1.05)
-                    XCTAssertEqual(doseEntries[0].syncIdentifier, "1601fa23094c12")
-                    XCTAssertFalse(doseEntries[0].isMutable)
-                }
-                addPumpEvents1.fulfill();
-            }
-            doseStore.insulinDeliveryStore.getDoseEntries(includeMutable: true) { result in
-                switch result {
-                case .failure:
-                    XCTFail()
-                case .success(let doseEntries):
-                    XCTAssertEqual(doseEntries.count, 1)
-                    XCTAssertEqual(doseEntries[0].type, .tempBasal)
-                    XCTAssertEqual(doseEntries[0].startDate, f("2018-12-12 17:35:00 +0000"))
-                    XCTAssertEqual(doseEntries[0].endDate, f("2018-12-12 18:05:00 +0000"))
-                    XCTAssertEqual(doseEntries[0].value, 2.125)
-                    XCTAssertEqual(doseEntries[0].deliveredUnits, 1.05)
-                    XCTAssertEqual(doseEntries[0].syncIdentifier, "1601fa23094c12")
-                    XCTAssertFalse(doseEntries[0].isMutable)
-                }
-                addPumpEvents1.fulfill();
-            }
-        }
+        try await doseStore.addPumpEvents(pumpEvents1, lastReconciliation: Date())
+        var doseEntries = try await doseStore.insulinDeliveryStore.getDoseEntries()
+        XCTAssertEqual(doseEntries.count, 1)
+        XCTAssertEqual(doseEntries[0].type, .tempBasal)
+        XCTAssertEqual(doseEntries[0].startDate, f("2018-12-12 17:35:00 +0000"))
+        XCTAssertEqual(doseEntries[0].endDate, f("2018-12-12 18:05:00 +0000"))
+        XCTAssertEqual(doseEntries[0].value, 2.125)
+        XCTAssertEqual(doseEntries[0].deliveredUnits, 1.05)
+        XCTAssertEqual(doseEntries[0].syncIdentifier, "1601fa23094c12")
+        XCTAssertFalse(doseEntries[0].isMutable)
 
-        waitForExpectations(timeout: 3)
+        doseEntries = try await doseStore.insulinDeliveryStore.getDoseEntries(includeMutable: true)
+        XCTAssertEqual(doseEntries.count, 1)
+        XCTAssertEqual(doseEntries[0].type, .tempBasal)
+        XCTAssertEqual(doseEntries[0].startDate, f("2018-12-12 17:35:00 +0000"))
+        XCTAssertEqual(doseEntries[0].endDate, f("2018-12-12 18:05:00 +0000"))
+        XCTAssertEqual(doseEntries[0].value, 2.125)
+        XCTAssertEqual(doseEntries[0].deliveredUnits, 1.05)
+        XCTAssertEqual(doseEntries[0].syncIdentifier, "1601fa23094c12")
+        XCTAssertFalse(doseEntries[0].isMutable)
 
         XCTAssertEqual(f("2018-12-12 18:05:00 +0000"), doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate)
 
@@ -675,54 +613,35 @@ class DoseStoreTests: PersistenceControllerTestCase {
         doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate = f("2018-12-12 18:05:00 +0000")
         doseStore.insulinDeliveryStore.test_currentDate = f("2018-12-12 18:07:14 +0000")
 
-        let addPumpEvents2 = expectation(description: "addPumpEvents2")
-        addPumpEvents2.expectedFulfillmentCount = 2
-        doseStore.addPumpEvents(pumpEvents2, lastReconciliation: Date()) { (error) in
-            XCTAssertNil(error)
-            doseStore.insulinDeliveryStore.getDoseEntries { result in
-                switch result {
-                case .failure:
-                    XCTFail()
-                case .success(let doseEntries):
-                    XCTAssertEqual(doseEntries.count, 1)
-                    XCTAssertEqual(doseEntries[0].type, .tempBasal)
-                    XCTAssertEqual(doseEntries[0].startDate, f("2018-12-12 17:35:00 +0000"))
-                    XCTAssertEqual(doseEntries[0].endDate, f("2018-12-12 18:05:00 +0000"))
-                    XCTAssertEqual(doseEntries[0].value, 2.125)
-                    XCTAssertEqual(doseEntries[0].deliveredUnits, 1.05)
-                    XCTAssertEqual(doseEntries[0].syncIdentifier, "1601fa23094c12")
-                    XCTAssertFalse(doseEntries[0].isMutable)
-                    XCTAssertFalse(doseEntries[0].wasProgrammedByPumpUI)
-                }
-                addPumpEvents2.fulfill();
-            }
-            doseStore.insulinDeliveryStore.getDoseEntries(includeMutable: true) { result in
-                switch result {
-                case .failure:
-                    XCTFail()
-                case .success(let doseEntries):
-                    XCTAssertEqual(doseEntries.count, 2)
-                    XCTAssertEqual(doseEntries[0].type, .tempBasal)
-                    XCTAssertEqual(doseEntries[0].startDate, f("2018-12-12 17:35:00 +0000"))
-                    XCTAssertEqual(doseEntries[0].endDate, f("2018-12-12 18:05:00 +0000"))
-                    XCTAssertEqual(doseEntries[0].value, 2.125)
-                    XCTAssertEqual(doseEntries[0].deliveredUnits, 1.05)
-                    XCTAssertEqual(doseEntries[0].syncIdentifier, "1601fa23094c12")
-                    XCTAssertFalse(doseEntries[0].isMutable)
-                    XCTAssertEqual(doseEntries[1].type, .tempBasal)
-                    XCTAssertEqual(doseEntries[1].startDate, f("2018-12-12 18:05:00 +0000"))
-                    XCTAssertEqual(doseEntries[1].endDate, f("2018-12-12 18:25:00 +0000"))
-                    XCTAssertEqual(doseEntries[1].value, 1.375)
-                    XCTAssertNil(doseEntries[1].deliveredUnits)
-                    XCTAssertEqual(doseEntries[1].syncIdentifier, "3094c121601fa2")
-                    XCTAssertTrue(doseEntries[1].isMutable)
-                    XCTAssertTrue(doseEntries[1].wasProgrammedByPumpUI)
-                }
-                addPumpEvents2.fulfill();
-            }
-        }
+        try await doseStore.addPumpEvents(pumpEvents2, lastReconciliation: Date())
+        doseEntries = try await doseStore.insulinDeliveryStore.getDoseEntries()
+        XCTAssertEqual(doseEntries.count, 1)
+        XCTAssertEqual(doseEntries[0].type, .tempBasal)
+        XCTAssertEqual(doseEntries[0].startDate, f("2018-12-12 17:35:00 +0000"))
+        XCTAssertEqual(doseEntries[0].endDate, f("2018-12-12 18:05:00 +0000"))
+        XCTAssertEqual(doseEntries[0].value, 2.125)
+        XCTAssertEqual(doseEntries[0].deliveredUnits, 1.05)
+        XCTAssertEqual(doseEntries[0].syncIdentifier, "1601fa23094c12")
+        XCTAssertFalse(doseEntries[0].isMutable)
+        XCTAssertFalse(doseEntries[0].wasProgrammedByPumpUI)
 
-        waitForExpectations(timeout: 3)
+        doseEntries = try await doseStore.insulinDeliveryStore.getDoseEntries(includeMutable: true)
+        XCTAssertEqual(doseEntries.count, 2)
+        XCTAssertEqual(doseEntries[0].type, .tempBasal)
+        XCTAssertEqual(doseEntries[0].startDate, f("2018-12-12 17:35:00 +0000"))
+        XCTAssertEqual(doseEntries[0].endDate, f("2018-12-12 18:05:00 +0000"))
+        XCTAssertEqual(doseEntries[0].value, 2.125)
+        XCTAssertEqual(doseEntries[0].deliveredUnits, 1.05)
+        XCTAssertEqual(doseEntries[0].syncIdentifier, "1601fa23094c12")
+        XCTAssertFalse(doseEntries[0].isMutable)
+        XCTAssertEqual(doseEntries[1].type, .tempBasal)
+        XCTAssertEqual(doseEntries[1].startDate, f("2018-12-12 18:05:00 +0000"))
+        XCTAssertEqual(doseEntries[1].endDate, f("2018-12-12 18:25:00 +0000"))
+        XCTAssertEqual(doseEntries[1].value, 1.375)
+        XCTAssertNil(doseEntries[1].deliveredUnits)
+        XCTAssertEqual(doseEntries[1].syncIdentifier, "3094c121601fa2")
+        XCTAssertTrue(doseEntries[1].isMutable)
+        XCTAssertTrue(doseEntries[1].wasProgrammedByPumpUI)
 
         XCTAssertEqual(f("2018-12-12 18:05:00 +0000"), doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate)
 
@@ -734,52 +653,33 @@ class DoseStoreTests: PersistenceControllerTestCase {
         doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate = f("2018-12-12 18:05:00 +0000")
         doseStore.insulinDeliveryStore.test_currentDate = f("2018-12-12 18:07:14 +0000")
 
-        let addPumpEvents3 = expectation(description: "addPumpEvents3")
-        addPumpEvents3.expectedFulfillmentCount = 2
-        doseStore.addPumpEvents(pumpEvents3, lastReconciliation: Date()) { (error) in
-            XCTAssertNil(error)
-            doseStore.insulinDeliveryStore.getDoseEntries { result in
-                switch result {
-                case .failure:
-                    XCTFail()
-                case .success(let doseEntries):
-                    XCTAssertEqual(doseEntries.count, 1)
-                    XCTAssertEqual(doseEntries[0].type, .tempBasal)
-                    XCTAssertEqual(doseEntries[0].startDate, f("2018-12-12 17:35:00 +0000"))
-                    XCTAssertEqual(doseEntries[0].endDate, f("2018-12-12 18:05:00 +0000"))
-                    XCTAssertEqual(doseEntries[0].value, 2.125)
-                    XCTAssertEqual(doseEntries[0].deliveredUnits, 1.05)
-                    XCTAssertEqual(doseEntries[0].syncIdentifier, "1601fa23094c12")
-                    XCTAssertFalse(doseEntries[0].isMutable)
-                }
-                addPumpEvents3.fulfill();
-            }
-            doseStore.insulinDeliveryStore.getDoseEntries(includeMutable: true) { result in
-                switch result {
-                case .failure:
-                    XCTFail()
-                case .success(let doseEntries):
-                    XCTAssertEqual(doseEntries.count, 2)
-                    XCTAssertEqual(doseEntries[0].type, .tempBasal)
-                    XCTAssertEqual(doseEntries[0].startDate, f("2018-12-12 17:35:00 +0000"))
-                    XCTAssertEqual(doseEntries[0].endDate, f("2018-12-12 18:05:00 +0000"))
-                    XCTAssertEqual(doseEntries[0].value, 2.125)
-                    XCTAssertEqual(doseEntries[0].deliveredUnits, 1.05)
-                    XCTAssertEqual(doseEntries[0].syncIdentifier, "1601fa23094c12")
-                    XCTAssertFalse(doseEntries[0].isMutable)
-                    XCTAssertEqual(doseEntries[1].type, .tempBasal)
-                    XCTAssertEqual(doseEntries[1].startDate, f("2018-12-12 18:05:00 +0000"))
-                    XCTAssertEqual(doseEntries[1].endDate, f("2018-12-12 18:35:00 +0000"))
-                    XCTAssertEqual(doseEntries[1].value, 0.875)
-                    XCTAssertNil(doseEntries[1].deliveredUnits)
-                    XCTAssertEqual(doseEntries[1].syncIdentifier, "3094c121601fa2")
-                    XCTAssertTrue(doseEntries[1].isMutable)
-                }
-                addPumpEvents3.fulfill();
-            }
-        }
+        try await doseStore.addPumpEvents(pumpEvents3, lastReconciliation: Date())
+        doseEntries = try await doseStore.insulinDeliveryStore.getDoseEntries()
+        XCTAssertEqual(doseEntries.count, 1)
+        XCTAssertEqual(doseEntries[0].type, .tempBasal)
+        XCTAssertEqual(doseEntries[0].startDate, f("2018-12-12 17:35:00 +0000"))
+        XCTAssertEqual(doseEntries[0].endDate, f("2018-12-12 18:05:00 +0000"))
+        XCTAssertEqual(doseEntries[0].value, 2.125)
+        XCTAssertEqual(doseEntries[0].deliveredUnits, 1.05)
+        XCTAssertEqual(doseEntries[0].syncIdentifier, "1601fa23094c12")
+        XCTAssertFalse(doseEntries[0].isMutable)
 
-        waitForExpectations(timeout: 3)
+        doseEntries = try await doseStore.insulinDeliveryStore.getDoseEntries(includeMutable: true)
+        XCTAssertEqual(doseEntries.count, 2)
+        XCTAssertEqual(doseEntries[0].type, .tempBasal)
+        XCTAssertEqual(doseEntries[0].startDate, f("2018-12-12 17:35:00 +0000"))
+        XCTAssertEqual(doseEntries[0].endDate, f("2018-12-12 18:05:00 +0000"))
+        XCTAssertEqual(doseEntries[0].value, 2.125)
+        XCTAssertEqual(doseEntries[0].deliveredUnits, 1.05)
+        XCTAssertEqual(doseEntries[0].syncIdentifier, "1601fa23094c12")
+        XCTAssertFalse(doseEntries[0].isMutable)
+        XCTAssertEqual(doseEntries[1].type, .tempBasal)
+        XCTAssertEqual(doseEntries[1].startDate, f("2018-12-12 18:05:00 +0000"))
+        XCTAssertEqual(doseEntries[1].endDate, f("2018-12-12 18:35:00 +0000"))
+        XCTAssertEqual(doseEntries[1].value, 0.875)
+        XCTAssertNil(doseEntries[1].deliveredUnits)
+        XCTAssertEqual(doseEntries[1].syncIdentifier, "3094c121601fa2")
+        XCTAssertTrue(doseEntries[1].isMutable)
 
         XCTAssertEqual(f("2018-12-12 18:05:00 +0000"), doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate)
 
@@ -793,70 +693,51 @@ class DoseStoreTests: PersistenceControllerTestCase {
         doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate = f("2018-12-12 18:05:00 +0000")
         doseStore.insulinDeliveryStore.test_currentDate = f("2018-12-12 18:17:14 +0000")
 
-        let addPumpEvents4 = expectation(description: "addPumpEvents4")
-        addPumpEvents4.expectedFulfillmentCount = 2
-        doseStore.addPumpEvents(pumpEvents4, lastReconciliation: Date()) { (error) in
-            XCTAssertNil(error)
-            doseStore.insulinDeliveryStore.getDoseEntries { result in
-                switch result {
-                case .failure:
-                    XCTFail()
-                case .success(let doseEntries):
-                    XCTAssertEqual(doseEntries.count, 2)
-                    XCTAssertEqual(doseEntries[0].type, .tempBasal)
-                    XCTAssertEqual(doseEntries[0].startDate, f("2018-12-12 17:35:00 +0000"))
-                    XCTAssertEqual(doseEntries[0].endDate, f("2018-12-12 18:05:00 +0000"))
-                    XCTAssertEqual(doseEntries[0].value, 2.125)
-                    XCTAssertEqual(doseEntries[0].deliveredUnits, 1.05)
-                    XCTAssertEqual(doseEntries[0].syncIdentifier, "1601fa23094c12")
-                    XCTAssertFalse(doseEntries[0].isMutable)
-                    XCTAssertEqual(doseEntries[1].type, .basal)
-                    XCTAssertEqual(doseEntries[1].startDate, f("2018-12-12 18:05:00 +0000"))
-                    XCTAssertEqual(doseEntries[1].endDate, f("2018-12-12 18:15:00 +0000"))
-                    XCTAssertEqual(doseEntries[1].value, 0.15)
-                    XCTAssertNil(doseEntries[1].deliveredUnits)
-                    XCTAssertEqual(doseEntries[1].syncIdentifier, "BasalRateSchedule 2018-12-12T18:05:00Z 2018-12-12T18:15:00Z")
-                    XCTAssertEqual(doseEntries[1].scheduledBasalRate, HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 0.85))
-                    XCTAssertFalse(doseEntries[1].isMutable)
+        try await doseStore.addPumpEvents(pumpEvents4, lastReconciliation: Date())
+        doseEntries = try await doseStore.insulinDeliveryStore.getDoseEntries()
+        XCTAssertEqual(doseEntries.count, 2)
+        XCTAssertEqual(doseEntries[0].type, .tempBasal)
+        XCTAssertEqual(doseEntries[0].startDate, f("2018-12-12 17:35:00 +0000"))
+        XCTAssertEqual(doseEntries[0].endDate, f("2018-12-12 18:05:00 +0000"))
+        XCTAssertEqual(doseEntries[0].value, 2.125)
+        XCTAssertEqual(doseEntries[0].deliveredUnits, 1.05)
+        XCTAssertEqual(doseEntries[0].syncIdentifier, "1601fa23094c12")
+        XCTAssertFalse(doseEntries[0].isMutable)
+        XCTAssertEqual(doseEntries[1].type, .basal)
+        XCTAssertEqual(doseEntries[1].startDate, f("2018-12-12 18:05:00 +0000"))
+        XCTAssertEqual(doseEntries[1].endDate, f("2018-12-12 18:15:00 +0000"))
+        XCTAssertEqual(doseEntries[1].value, 0.15)
+        XCTAssertNil(doseEntries[1].deliveredUnits)
+        XCTAssertEqual(doseEntries[1].syncIdentifier, "BasalRateSchedule 2018-12-12T18:05:00Z 2018-12-12T18:15:00Z")
+        XCTAssertEqual(doseEntries[1].scheduledBasalRate, HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 0.85))
+        XCTAssertFalse(doseEntries[1].isMutable)
 
-                    basalDoseEntry = doseEntries[1]
-                }
-                addPumpEvents4.fulfill();
-            }
-            doseStore.insulinDeliveryStore.getDoseEntries(includeMutable: true) { result in
-                switch result {
-                case .failure:
-                    XCTFail()
-                case .success(let doseEntries):
-                    XCTAssertEqual(doseEntries.count, 3)
-                    XCTAssertEqual(doseEntries[0].type, .tempBasal)
-                    XCTAssertEqual(doseEntries[0].startDate, f("2018-12-12 17:35:00 +0000"))
-                    XCTAssertEqual(doseEntries[0].endDate, f("2018-12-12 18:05:00 +0000"))
-                    XCTAssertEqual(doseEntries[0].value, 2.125)
-                    XCTAssertEqual(doseEntries[0].deliveredUnits, 1.05)
-                    XCTAssertEqual(doseEntries[0].syncIdentifier, "1601fa23094c12")
-                    XCTAssertFalse(doseEntries[0].isMutable)
-                    XCTAssertEqual(doseEntries[1].type, .basal)
-                    XCTAssertEqual(doseEntries[1].startDate, f("2018-12-12 18:05:00 +0000"))
-                    XCTAssertEqual(doseEntries[1].endDate, f("2018-12-12 18:15:00 +0000"))
-                    XCTAssertEqual(doseEntries[1].value, 0.15)
-                    XCTAssertNil(doseEntries[1].deliveredUnits)
-                    XCTAssertEqual(doseEntries[1].syncIdentifier, "BasalRateSchedule 2018-12-12T18:05:00Z 2018-12-12T18:15:00Z")
-                    XCTAssertEqual(doseEntries[1].scheduledBasalRate, HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 0.85))
-                    XCTAssertFalse(doseEntries[1].isMutable)
-                    XCTAssertEqual(doseEntries[2].type, .tempBasal)
-                    XCTAssertEqual(doseEntries[2].startDate, f("2018-12-12 18:15:00 +0000"))
-                    XCTAssertEqual(doseEntries[2].endDate, f("2018-12-12 18:45:00 +0000"))
-                    XCTAssertEqual(doseEntries[2].value, 0.5)
-                    XCTAssertNil(doseEntries[2].deliveredUnits)
-                    XCTAssertEqual(doseEntries[2].syncIdentifier, "121601f3094ca2")
-                    XCTAssertTrue(doseEntries[2].isMutable)
-                }
-                addPumpEvents4.fulfill();
-            }
-        }
+        basalDoseEntry = doseEntries[1]
 
-        waitForExpectations(timeout: 3)
+        doseEntries = try await doseStore.insulinDeliveryStore.getDoseEntries(includeMutable: true)
+        XCTAssertEqual(doseEntries.count, 3)
+        XCTAssertEqual(doseEntries[0].type, .tempBasal)
+        XCTAssertEqual(doseEntries[0].startDate, f("2018-12-12 17:35:00 +0000"))
+        XCTAssertEqual(doseEntries[0].endDate, f("2018-12-12 18:05:00 +0000"))
+        XCTAssertEqual(doseEntries[0].value, 2.125)
+        XCTAssertEqual(doseEntries[0].deliveredUnits, 1.05)
+        XCTAssertEqual(doseEntries[0].syncIdentifier, "1601fa23094c12")
+        XCTAssertFalse(doseEntries[0].isMutable)
+        XCTAssertEqual(doseEntries[1].type, .basal)
+        XCTAssertEqual(doseEntries[1].startDate, f("2018-12-12 18:05:00 +0000"))
+        XCTAssertEqual(doseEntries[1].endDate, f("2018-12-12 18:15:00 +0000"))
+        XCTAssertEqual(doseEntries[1].value, 0.15)
+        XCTAssertNil(doseEntries[1].deliveredUnits)
+        XCTAssertEqual(doseEntries[1].syncIdentifier, "BasalRateSchedule 2018-12-12T18:05:00Z 2018-12-12T18:15:00Z")
+        XCTAssertEqual(doseEntries[1].scheduledBasalRate, HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 0.85))
+        XCTAssertFalse(doseEntries[1].isMutable)
+        XCTAssertEqual(doseEntries[2].type, .tempBasal)
+        XCTAssertEqual(doseEntries[2].startDate, f("2018-12-12 18:15:00 +0000"))
+        XCTAssertEqual(doseEntries[2].endDate, f("2018-12-12 18:45:00 +0000"))
+        XCTAssertEqual(doseEntries[2].value, 0.5)
+        XCTAssertNil(doseEntries[2].deliveredUnits)
+        XCTAssertEqual(doseEntries[2].syncIdentifier, "121601f3094ca2")
+        XCTAssertTrue(doseEntries[2].isMutable)
 
         XCTAssertEqual(f("2018-12-12 18:15:00 +0000"), doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate)
 
@@ -867,7 +748,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
             addPumpEvents5.fulfill();
         }
 
-        waitForExpectations(timeout: 3)
+        await fulfillment(of: [addPumpEvents5], timeout: 3)
 
         XCTAssertEqual(f("2018-12-12 18:05:00 +0000"), doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate)
 
@@ -879,75 +760,56 @@ class DoseStoreTests: PersistenceControllerTestCase {
         doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate = f("2018-12-12 18:05:00 +0000")
         doseStore.insulinDeliveryStore.test_currentDate = f("2018-12-12 18:41:14 +0000")
 
-        let addPumpEvents6 = expectation(description: "addPumpEvents6")
-        addPumpEvents6.expectedFulfillmentCount = 2
-        doseStore.addPumpEvents(pumpEvents6, lastReconciliation: Date()) { (error) in
-            XCTAssertNil(error)
-            doseStore.insulinDeliveryStore.getDoseEntries { result in
-                switch result {
-                case .failure:
-                    XCTFail()
-                case .success(let doseEntries):
-                    XCTAssertEqual(doseEntries.count, 3)
-                    XCTAssertEqual(doseEntries[0].type, .tempBasal)
-                    XCTAssertEqual(doseEntries[0].startDate, f("2018-12-12 17:35:00 +0000"))
-                    XCTAssertEqual(doseEntries[0].endDate, f("2018-12-12 18:05:00 +0000"))
-                    XCTAssertEqual(doseEntries[0].value, 2.125)
-                    XCTAssertEqual(doseEntries[0].deliveredUnits, 1.05)
-                    XCTAssertEqual(doseEntries[0].syncIdentifier, "1601fa23094c12")
-                    XCTAssertFalse(doseEntries[0].isMutable)
-                    XCTAssertEqual(doseEntries[1].type, .basal)
-                    XCTAssertEqual(doseEntries[1].startDate, f("2018-12-12 18:05:00 +0000"))
-                    XCTAssertEqual(doseEntries[1].endDate, f("2018-12-12 18:25:00 +0000"))
-                    XCTAssertEqual(doseEntries[1].value, 0.3)
-                    XCTAssertNil(doseEntries[1].deliveredUnits)
-                    XCTAssertEqual(doseEntries[1].syncIdentifier, "BasalRateSchedule 2018-12-12T18:05:00Z 2018-12-12T18:25:00Z")
-                    XCTAssertEqual(doseEntries[1].scheduledBasalRate, HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 0.85))
-                    XCTAssertFalse(doseEntries[1].isMutable)
-                    XCTAssertEqual(doseEntries[2].type, .tempBasal)
-                    XCTAssertEqual(doseEntries[2].startDate, f("2018-12-12 18:25:00 +0000"))
-                    XCTAssertEqual(doseEntries[2].endDate, f("2018-12-12 18:40:00 +0000"))
-                    XCTAssertEqual(doseEntries[2].value, 0.75)
-                    XCTAssertEqual(doseEntries[2].deliveredUnits, 0.2)
-                    XCTAssertEqual(doseEntries[2].syncIdentifier, "1201f3094c16a2")
-                    XCTAssertFalse(doseEntries[2].isMutable)
-                }
-                addPumpEvents6.fulfill();
-            }
-            doseStore.insulinDeliveryStore.getDoseEntries(includeMutable: true) { result in
-                switch result {
-                case .failure:
-                    XCTFail()
-                case .success(let doseEntries):
-                    XCTAssertEqual(doseEntries.count, 3)
-                    XCTAssertEqual(doseEntries[0].type, .tempBasal)
-                    XCTAssertEqual(doseEntries[0].startDate, f("2018-12-12 17:35:00 +0000"))
-                    XCTAssertEqual(doseEntries[0].endDate, f("2018-12-12 18:05:00 +0000"))
-                    XCTAssertEqual(doseEntries[0].value, 2.125)
-                    XCTAssertEqual(doseEntries[0].deliveredUnits, 1.05)
-                    XCTAssertEqual(doseEntries[0].syncIdentifier, "1601fa23094c12")
-                    XCTAssertFalse(doseEntries[0].isMutable)
-                    XCTAssertEqual(doseEntries[1].type, .basal)
-                    XCTAssertEqual(doseEntries[1].startDate, f("2018-12-12 18:05:00 +0000"))
-                    XCTAssertEqual(doseEntries[1].endDate, f("2018-12-12 18:25:00 +0000"))
-                    XCTAssertEqual(doseEntries[1].value, 0.3)
-                    XCTAssertNil(doseEntries[1].deliveredUnits)
-                    XCTAssertEqual(doseEntries[1].syncIdentifier, "BasalRateSchedule 2018-12-12T18:05:00Z 2018-12-12T18:25:00Z")
-                    XCTAssertEqual(doseEntries[1].scheduledBasalRate, HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 0.85))
-                    XCTAssertFalse(doseEntries[1].isMutable)
-                    XCTAssertEqual(doseEntries[2].type, .tempBasal)
-                    XCTAssertEqual(doseEntries[2].startDate, f("2018-12-12 18:25:00 +0000"))
-                    XCTAssertEqual(doseEntries[2].endDate, f("2018-12-12 18:40:00 +0000"))
-                    XCTAssertEqual(doseEntries[2].value, 0.75)
-                    XCTAssertEqual(doseEntries[2].deliveredUnits, 0.2)
-                    XCTAssertEqual(doseEntries[2].syncIdentifier, "1201f3094c16a2")
-                    XCTAssertFalse(doseEntries[2].isMutable)
-                }
-                addPumpEvents6.fulfill();
-            }
-        }
+        try await doseStore.addPumpEvents(pumpEvents6, lastReconciliation: Date())
+        doseEntries = try await doseStore.insulinDeliveryStore.getDoseEntries()
+        XCTAssertEqual(doseEntries.count, 3)
+        XCTAssertEqual(doseEntries[0].type, .tempBasal)
+        XCTAssertEqual(doseEntries[0].startDate, f("2018-12-12 17:35:00 +0000"))
+        XCTAssertEqual(doseEntries[0].endDate, f("2018-12-12 18:05:00 +0000"))
+        XCTAssertEqual(doseEntries[0].value, 2.125)
+        XCTAssertEqual(doseEntries[0].deliveredUnits, 1.05)
+        XCTAssertEqual(doseEntries[0].syncIdentifier, "1601fa23094c12")
+        XCTAssertFalse(doseEntries[0].isMutable)
+        XCTAssertEqual(doseEntries[1].type, .basal)
+        XCTAssertEqual(doseEntries[1].startDate, f("2018-12-12 18:05:00 +0000"))
+        XCTAssertEqual(doseEntries[1].endDate, f("2018-12-12 18:25:00 +0000"))
+        XCTAssertEqual(doseEntries[1].value, 0.3)
+        XCTAssertNil(doseEntries[1].deliveredUnits)
+        XCTAssertEqual(doseEntries[1].syncIdentifier, "BasalRateSchedule 2018-12-12T18:05:00Z 2018-12-12T18:25:00Z")
+        XCTAssertEqual(doseEntries[1].scheduledBasalRate, HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 0.85))
+        XCTAssertFalse(doseEntries[1].isMutable)
+        XCTAssertEqual(doseEntries[2].type, .tempBasal)
+        XCTAssertEqual(doseEntries[2].startDate, f("2018-12-12 18:25:00 +0000"))
+        XCTAssertEqual(doseEntries[2].endDate, f("2018-12-12 18:40:00 +0000"))
+        XCTAssertEqual(doseEntries[2].value, 0.75)
+        XCTAssertEqual(doseEntries[2].deliveredUnits, 0.2)
+        XCTAssertEqual(doseEntries[2].syncIdentifier, "1201f3094c16a2")
+        XCTAssertFalse(doseEntries[2].isMutable)
 
-        waitForExpectations(timeout: 3)
+        doseEntries = try await doseStore.insulinDeliveryStore.getDoseEntries(includeMutable: true)
+        XCTAssertEqual(doseEntries.count, 3)
+        XCTAssertEqual(doseEntries[0].type, .tempBasal)
+        XCTAssertEqual(doseEntries[0].startDate, f("2018-12-12 17:35:00 +0000"))
+        XCTAssertEqual(doseEntries[0].endDate, f("2018-12-12 18:05:00 +0000"))
+        XCTAssertEqual(doseEntries[0].value, 2.125)
+        XCTAssertEqual(doseEntries[0].deliveredUnits, 1.05)
+        XCTAssertEqual(doseEntries[0].syncIdentifier, "1601fa23094c12")
+        XCTAssertFalse(doseEntries[0].isMutable)
+        XCTAssertEqual(doseEntries[1].type, .basal)
+        XCTAssertEqual(doseEntries[1].startDate, f("2018-12-12 18:05:00 +0000"))
+        XCTAssertEqual(doseEntries[1].endDate, f("2018-12-12 18:25:00 +0000"))
+        XCTAssertEqual(doseEntries[1].value, 0.3)
+        XCTAssertNil(doseEntries[1].deliveredUnits)
+        XCTAssertEqual(doseEntries[1].syncIdentifier, "BasalRateSchedule 2018-12-12T18:05:00Z 2018-12-12T18:25:00Z")
+        XCTAssertEqual(doseEntries[1].scheduledBasalRate, HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 0.85))
+        XCTAssertFalse(doseEntries[1].isMutable)
+        XCTAssertEqual(doseEntries[2].type, .tempBasal)
+        XCTAssertEqual(doseEntries[2].startDate, f("2018-12-12 18:25:00 +0000"))
+        XCTAssertEqual(doseEntries[2].endDate, f("2018-12-12 18:40:00 +0000"))
+        XCTAssertEqual(doseEntries[2].value, 0.75)
+        XCTAssertEqual(doseEntries[2].deliveredUnits, 0.2)
+        XCTAssertEqual(doseEntries[2].syncIdentifier, "1201f3094c16a2")
+        XCTAssertFalse(doseEntries[2].isMutable)
 
         XCTAssertEqual(f("2018-12-12 18:40:00 +0000"), doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate)
     }
