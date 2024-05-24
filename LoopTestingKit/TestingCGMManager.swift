@@ -11,5 +11,5 @@ import LoopKit
 
 public protocol TestingCGMManager: CGMManager, TestingDeviceManager {
     var autoStartTrace: Bool { get set }
-    func injectGlucoseSamples(_ pastSamples: [NewGlucoseSample], futureSamples: [NewGlucoseSample]) async
+    func injectGlucoseSamples(_ pastSamples: [NewGlucoseSample], futureSamples: [NewGlucoseSample])
 }
