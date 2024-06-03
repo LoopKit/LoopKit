@@ -789,6 +789,8 @@
 		C1FAEC1D264AD6B400A3250B /* DeviceStatusBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FAEC1C264AD6B400A3250B /* DeviceStatusBadge.swift */; };
 		C1FAEC1F264AE12700A3250B /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47ECF8725DC20810024A54D /* UIImage.swift */; };
 		C1FAEC21264AEEA300A3250B /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FAEC20264AEEA300A3250B /* UIImage.swift */; };
+		E0E99C342C0E7AD300F9300C /* ConfirmationToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0E99C332C0E7AD300F9300C /* ConfirmationToggle.swift */; };
+		E0E99C392C0E80C200F9300C /* LoopStatusCircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0E99C382C0E80C200F9300C /* LoopStatusCircleView.swift */; };
 		E9077D2724ACD59F0066A88D /* InformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9077D2624ACD59F0066A88D /* InformationView.swift */; };
 		E9077D2A24ACDE2C0066A88D /* CorrectionRangeInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9077D2924ACDE2C0066A88D /* CorrectionRangeInformationView.swift */; };
 		E9086B2924B39EDC0062F5C8 /* ChartsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9086B2824B39EDC0062F5C8 /* ChartsTableViewController.swift */; };
@@ -1781,6 +1783,8 @@
 		C1FDCC0A29C786F90056E652 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C1FDCC0B29C786F90056E652 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C1FF3D4E29C786A900BDC1EC /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Localizable.strings; sourceTree = "<group>"; };
+		E0E99C332C0E7AD300F9300C /* ConfirmationToggle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmationToggle.swift; sourceTree = "<group>"; };
+		E0E99C382C0E80C200F9300C /* LoopStatusCircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopStatusCircleView.swift; sourceTree = "<group>"; };
 		E9077D2624ACD59F0066A88D /* InformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationView.swift; sourceTree = "<group>"; };
 		E9077D2924ACDE2C0066A88D /* CorrectionRangeInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionRangeInformationView.swift; sourceTree = "<group>"; };
 		E9086B2824B39EDC0062F5C8 /* ChartsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartsTableViewController.swift; sourceTree = "<group>"; };
@@ -2134,6 +2138,7 @@
 				1D096BF924C242300078B6B5 /* CheckmarkListItem.swift */,
 				89627B172441168900BEB424 /* ConfigurationPage.swift */,
 				C14A7E7D295F43AB00CD87B4 /* ConfigurationPageScrollView.swift */,
+				E0E99C332C0E7AD300F9300C /* ConfirmationToggle.swift */,
 				8997B4F423727E8A00061132 /* CustomOverrideCollectionViewCell.swift */,
 				434A01CF1F019D9100938125 /* DateAndDurationTableViewCell.xib */,
 				4369F091208B0DFF000E3E45 /* DateAndDurationTableViewCell.swift */,
@@ -2235,6 +2240,7 @@
 				89CAB37024CB4DEC009EE3CE /* WarningView.swift */,
 				1D1065E3282DAEE500026A70 /* WebView.swift */,
 				84F295252B48CB4C00127C8E /* Callout.swift */,
+				E0E99C382C0E80C200F9300C /* LoopStatusCircleView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -3883,6 +3889,7 @@
 				C18733B229B9492300519CDF /* Comparable.swift in Sources */,
 				B4B7C1BC2604E3FC007379F6 /* CorrectionRangeScheduleEditorViewModel.swift in Sources */,
 				898B4E77246DAE280053C484 /* GlucoseRangePicker.swift in Sources */,
+				E0E99C342C0E7AD300F9300C /* ConfirmationToggle.swift in Sources */,
 				432CF86D20D76C470066B889 /* SwitchTableViewCell.swift in Sources */,
 				E93C86A824C8F7F70073089B /* InsulinModelChartView.swift in Sources */,
 				E93C86B224D080E00073089B /* CarbRatioInformationView.swift in Sources */,
@@ -3916,6 +3923,7 @@
 				89F6E315244A1AB600CB9E15 /* GlucoseValuePicker.swift in Sources */,
 				E9086B3124B3A7270062F5C8 /* ChartTableViewCell.swift in Sources */,
 				E93E866424DCFB6D00FF40C8 /* OverrideHistoryCollectionViewCell.swift in Sources */,
+				E0E99C392C0E80C200F9300C /* LoopStatusCircleView.swift in Sources */,
 				895FE08122011F0C00FCF18A /* OverridePresetCollectionViewCell.swift in Sources */,
 				43FB60E320DCB9E0002B996B /* PumpManagerUI.swift in Sources */,
 				89186C0B24BFD6DB0003D0F3 /* DurationPicker.swift in Sources */,
