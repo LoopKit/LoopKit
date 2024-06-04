@@ -10,8 +10,8 @@ import LoopKit
 import SwiftUI
 
 public struct LoopCircleView: View {
-    private class _Dummy {}
     
+    @Environment(\.guidanceColors) private var guidanceColors
     @Environment(\.isEnabled) private var isEnabled
     
     let closedLoop: Bool
@@ -35,11 +35,11 @@ public struct LoopCircleView: View {
     func getLoopColor(freshness: LoopCompletionFreshness) -> Color {
         switch freshness {
         case .fresh:
-            return Color("Fresh", bundle: Bundle(for: _Dummy.self))
+            return guidanceColors.acceptable
         case .aging:
-            return Color("WarningOrange", bundle: Bundle(for: _Dummy.self))
+            return guidanceColors.warning
         case .stale:
-            return Color.red
+            return guidanceColors.critical
         }
     }
 }
