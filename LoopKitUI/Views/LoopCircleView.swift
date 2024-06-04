@@ -37,7 +37,7 @@ public struct LoopCircleView: View {
         case .fresh:
             return Color("Fresh", bundle: Bundle(for: _Dummy.self))
         case .aging:
-            return Color("Warning", bundle: Bundle(for: _Dummy.self))
+            return Color("WarningOrange", bundle: Bundle(for: _Dummy.self))
         case .stale:
             return Color.red
         }
