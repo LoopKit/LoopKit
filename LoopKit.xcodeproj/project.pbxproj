@@ -271,6 +271,8 @@
 		43FB610720DDF19B002B996B /* PumpManagerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FB610620DDF19B002B996B /* PumpManagerError.swift */; };
 		4B67E2CB289B4EDB002D92AF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4B67E2C9289B4EDB002D92AF /* InfoPlist.strings */; };
 		7D68A9AE1FE0A3D000522C49 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68A9B01FE0A3D000522C49 /* Localizable.strings */; };
+		840A2F112C0F9882003D5E90 /* LoopCompletionFreshness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840A2F102C0F9882003D5E90 /* LoopCompletionFreshness.swift */; };
+		840A2F122C0F9A88003D5E90 /* LoopCompletionFreshness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840A2F102C0F9882003D5E90 /* LoopCompletionFreshness.swift */; };
 		84F295262B48CB4C00127C8E /* Callout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F295252B48CB4C00127C8E /* Callout.swift */; };
 		8907E35921A9D0EC00335852 /* GlucoseEntryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8907E35821A9D0EC00335852 /* GlucoseEntryTableViewController.swift */; };
 		89186C0524BEC9CA0003D0F3 /* SegmentedControlTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89186C0424BEC9CA0003D0F3 /* SegmentedControlTableViewCell.swift */; };
@@ -790,7 +792,7 @@
 		C1FAEC1F264AE12700A3250B /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47ECF8725DC20810024A54D /* UIImage.swift */; };
 		C1FAEC21264AEEA300A3250B /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FAEC20264AEEA300A3250B /* UIImage.swift */; };
 		E0E99C342C0E7AD300F9300C /* ConfirmationToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0E99C332C0E7AD300F9300C /* ConfirmationToggle.swift */; };
-		E0E99C392C0E80C200F9300C /* LoopStatusCircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0E99C382C0E80C200F9300C /* LoopStatusCircleView.swift */; };
+		E0E99C392C0E80C200F9300C /* LoopCircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0E99C382C0E80C200F9300C /* LoopCircleView.swift */; };
 		E9077D2724ACD59F0066A88D /* InformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9077D2624ACD59F0066A88D /* InformationView.swift */; };
 		E9077D2A24ACDE2C0066A88D /* CorrectionRangeInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9077D2924ACDE2C0066A88D /* CorrectionRangeInformationView.swift */; };
 		E9086B2924B39EDC0062F5C8 /* ChartsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9086B2824B39EDC0062F5C8 /* ChartsTableViewController.swift */; };
@@ -1291,6 +1293,7 @@
 		7D68AAB91FE31A2800522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InsulinKit.strings; sourceTree = "<group>"; };
 		7D68AABC1FE31BE700522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7D68AAC61FE31BE900522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		840A2F102C0F9882003D5E90 /* LoopCompletionFreshness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopCompletionFreshness.swift; sourceTree = "<group>"; };
 		84F295252B48CB4C00127C8E /* Callout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Callout.swift; sourceTree = "<group>"; };
 		8907E35821A9D0EC00335852 /* GlucoseEntryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseEntryTableViewController.swift; sourceTree = "<group>"; };
 		8907E35A21A9D1B200335852 /* SineCurveParametersTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SineCurveParametersTableViewController.swift; sourceTree = "<group>"; };
@@ -1784,7 +1787,7 @@
 		C1FDCC0B29C786F90056E652 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C1FF3D4E29C786A900BDC1EC /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E0E99C332C0E7AD300F9300C /* ConfirmationToggle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmationToggle.swift; sourceTree = "<group>"; };
-		E0E99C382C0E80C200F9300C /* LoopStatusCircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopStatusCircleView.swift; sourceTree = "<group>"; };
+		E0E99C382C0E80C200F9300C /* LoopCircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopCircleView.swift; sourceTree = "<group>"; };
 		E9077D2624ACD59F0066A88D /* InformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationView.swift; sourceTree = "<group>"; };
 		E9077D2924ACDE2C0066A88D /* CorrectionRangeInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionRangeInformationView.swift; sourceTree = "<group>"; };
 		E9086B2824B39EDC0062F5C8 /* ChartsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartsTableViewController.swift; sourceTree = "<group>"; };
@@ -2240,7 +2243,7 @@
 				89CAB37024CB4DEC009EE3CE /* WarningView.swift */,
 				1D1065E3282DAEE500026A70 /* WebView.swift */,
 				84F295252B48CB4C00127C8E /* Callout.swift */,
-				E0E99C382C0E80C200F9300C /* LoopStatusCircleView.swift */,
+				E0E99C382C0E80C200F9300C /* LoopCircleView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2491,6 +2494,7 @@
 				C1814B8B226371DF008D2D8E /* WeakSynchronizedDelegate.swift */,
 				43CACE0D2247F89100F90AF5 /* WeakSynchronizedSet.swift */,
 				B4A2ABEE2AAB5160007E3EC1 /* Pluggable.swift */,
+				840A2F102C0F9882003D5E90 /* LoopCompletionFreshness.swift */,
 			);
 			path = LoopKit;
 			sourceTree = "<group>";
@@ -3923,7 +3927,7 @@
 				89F6E315244A1AB600CB9E15 /* GlucoseValuePicker.swift in Sources */,
 				E9086B3124B3A7270062F5C8 /* ChartTableViewCell.swift in Sources */,
 				E93E866424DCFB6D00FF40C8 /* OverrideHistoryCollectionViewCell.swift in Sources */,
-				E0E99C392C0E80C200F9300C /* LoopStatusCircleView.swift in Sources */,
+				E0E99C392C0E80C200F9300C /* LoopCircleView.swift in Sources */,
 				895FE08122011F0C00FCF18A /* OverridePresetCollectionViewCell.swift in Sources */,
 				43FB60E320DCB9E0002B996B /* PumpManagerUI.swift in Sources */,
 				89186C0B24BFD6DB0003D0F3 /* DurationPicker.swift in Sources */,
@@ -4043,6 +4047,7 @@
 				43F5034B21051FCE009FA89A /* KeychainManager.swift in Sources */,
 				891A3FD5224B047200378B27 /* DailyQuantitySchedule+Override.swift in Sources */,
 				432CF87320D774220066B889 /* PumpManager.swift in Sources */,
+				840A2F112C0F9882003D5E90 /* LoopCompletionFreshness.swift in Sources */,
 				43D8FE021C7290350073BE78 /* SampleValue.swift in Sources */,
 				A967D94924F99B6A00CDDF8A /* DataOutputStream.swift in Sources */,
 				43D8FDF41C7290350073BE78 /* BasalRateSchedule.swift in Sources */,
@@ -4342,6 +4347,7 @@
 				C1A85A9C2A1C6E4500430101 /* HealthKitSampleStore.swift in Sources */,
 				A9E6759722713F4700E25293 /* DailyQuantitySchedule.swift in Sources */,
 				C1A174EC23DEAD670034DF11 /* DeviceLogEntry+CoreDataClass.swift in Sources */,
+				840A2F122C0F9A88003D5E90 /* LoopCompletionFreshness.swift in Sources */,
 				A9E6759822713F4700E25293 /* CarbRatioSchedule.swift in Sources */,
 				A9E6759A22713F4700E25293 /* GlucoseDisplayable.swift in Sources */,
 				A9E6759B22713F4700E25293 /* PersistenceController.swift in Sources */,
