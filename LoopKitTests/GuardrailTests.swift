@@ -65,9 +65,9 @@ class GuardrailTests: XCTestCase {
         let guardrail = Guardrail.correctionRange
         let expectedAndTest: [(SafetyClassification, Double)] = [
             (SafetyClassification.withinRecommendedRange, 100),
-            (SafetyClassification.withinRecommendedRange, 115),
+            (SafetyClassification.withinRecommendedRange, 125),
             (SafetyClassification.outsideRecommendedRange(.belowRecommended), 100.nextDown),
-            (SafetyClassification.outsideRecommendedRange(.aboveRecommended), 115.nextUp),
+            (SafetyClassification.outsideRecommendedRange(.aboveRecommended), 125.nextUp),
             (SafetyClassification.outsideRecommendedRange(.maximum), 180),
             (SafetyClassification.outsideRecommendedRange(.minimum), 87),
         ]

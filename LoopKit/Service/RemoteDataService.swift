@@ -116,7 +116,6 @@ public protocol RemoteDataService: Service {
      - Parameter notification: The push notification dictionary
      */
     func remoteNotificationWasReceived(_ notification: [String: AnyObject]) async throws
-
 }
 
 public extension RemoteDataService {

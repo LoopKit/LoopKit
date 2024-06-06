@@ -182,24 +182,16 @@ extension InsulinDeliveryStore {
     ///   - start: The earliest date of dose entries to retrieve, if provided.
     ///   - end: The latest date of dose entries to retrieve, if provided.
     ///   - includeMutable: Whether to include mutable dose entries or not. Defaults to false.
-    ///   - completion: A closure called once the dose entries have been retrieved.
-    ///   - result: An array of dose entries, in chronological order by startDate, or error.
-    public func getDoseEntries(start: Date? = nil, end: Date? = nil, includeMutable: Bool = false, completion: @escaping (_ result: Result<[DoseEntry], Error>) -> Void) {
-        queue.async {
-            completion(self.getDoseEntries(start: start, end: end, includeMutable: includeMutable))
-        }
-    }
-
+    ///   - returns: An array of dose entries, in chronological order by startDate, or error.
     public func getDoseEntries(start: Date? = nil, end: Date? = nil, includeMutable: Bool = false) async throws -> [DoseEntry] {
         try await withCheckedThrowingContinuation { continuation in
             queue.async {
-                continuation.resume(with: self.getDoseEntries(start: start, end: end, includeMutable: includeMutable))
+                continuation.resume(with: self.getDoseEntriesInternal(start: start, end: end, includeMutable: includeMutable))
             }
         }
     }
 
-
-    private func getDoseEntries(start: Date? = nil, end: Date? = nil, includeMutable: Bool = false) -> Result<[DoseEntry], Error> {
+    private func getDoseEntriesInternal(start: Date? = nil, end: Date? = nil, includeMutable: Bool = false) -> Result<[DoseEntry], Error> {
         dispatchPrecondition(condition: .onQueue(queue))
 
         var entries: [DoseEntry] = []
@@ -321,44 +313,6 @@ extension InsulinDeliveryStore {
                     request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
 
                     request.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: false)]
-                    if let limit {
-                        request.fetchLimit = limit
-                    }
-
-                    do {
-                        let doses = try self.cacheStore.managedObjectContext.fetch(request).compactMap{ $0.dose }
-                        continuation.resume(returning: doses)
-                    } catch {
-                        continuation.resume(throwing: error)
-                    }
-                }
-            }
-        })
-    }
-
-    /// Retrieves doses overlapping supplied range
-    ///
-    /// - Parameters:
-    ///   - start:If non-nil, select boluses that ended after start.
-    ///   - end: If non-nil, select boluses that started before end.
-    ///   - limit: If non-nill, specify the max number of boluses to return.
-    ///   - returns: A list of DoseEntry objects representing the basal doses matching the passed constraints
-    public func getDoses(start: Date? = nil, end: Date? = nil, limit: Int? = nil) async throws -> [DoseEntry] {
-        return try await withCheckedThrowingContinuation({ continuation in
-            queue.async {
-                self.cacheStore.managedObjectContext.performAndWait {
-                    let request: NSFetchRequest<CachedInsulinDeliveryObject> = CachedInsulinDeliveryObject.fetchRequest()
-
-                    var predicates = [NSPredicate(format: "deletedAt == NIL")]
-                    if let start {
-                        predicates.append(NSPredicate(format: "endDate >= %@", start as NSDate))
-                    }
-                    if let end {
-                        predicates.append(NSPredicate(format: "startDate <= %@", end as NSDate))
-                    }
-                    request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
-
-                    request.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: true)]
                     if let limit {
                         request.fetchLimit = limit
                     }

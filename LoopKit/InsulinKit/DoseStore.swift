@@ -629,6 +629,9 @@ extension DoseStore {
             completion(nil)
             return
         }
+        
+        let now = Date()
+        self.log.debug("addPumpEvents: lastReconciliation = %@ (%@ hours ago)", String(describing: lastReconciliation), String(describing: now.timeIntervalSince(lastReconciliation ?? now).hours))
 
         for event in events {
             if let dose = event.dose {
@@ -707,6 +710,19 @@ extension DoseStore {
             }
         }
     }
+
+    public func addPumpEvents(_ events: [NewPumpEvent], lastReconciliation: Date?, replacePendingEvents: Bool = true) async throws {
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            self.addPumpEvents(events, lastReconciliation: lastReconciliation, replacePendingEvents: replacePendingEvents) { error in
+                if let error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume()
+                }
+            }
+        }
+    }
+
 
     public func deletePumpEvent(_ event: PersistedPumpEvent, completion: @escaping (_ error: DoseStoreError?) -> Void) {
         persistenceController.managedObjectContext.perform {
@@ -919,6 +935,7 @@ extension DoseStore {
     private func getPumpEventDoseEntriesForSavingToInsulinDeliveryStore(startingAt: Date, completion: @escaping (_ result: DoseStoreResult<[DoseEntry]>) -> Void) {
         // Can't store to insulin delivery store if we don't know end of reconciled range, or if we already have doses after the end
         guard let endingAt = lastPumpEventsReconciliation, endingAt > startingAt else {
+            self.log.error("lastPumpEventsReconciliation of %@ < startingAt %@. (lastImmutableBasalEndDate after lastPumpEventsReconciliation???", String(describing: lastPumpEventsReconciliation), String(describing: startingAt))
             completion(.success([]))
             return
         }
@@ -1146,6 +1163,7 @@ extension DoseStore {
 
 
 extension DoseStore {
+
     /// Retrieves dose entries normalized to the current basal schedule, for visualization purposes.
     ///
     /// Doses are derived from pump events if they've been updated within the last 15 minutes or reservoir data is incomplete.
@@ -1157,46 +1175,34 @@ extension DoseStore {
     ///   - end: The latest startDate of entries to retrieve, if provided
     ///   - completion: A closure called once the entries have been retrieved
     ///   - result: An array of dose entries, in chronological order by startDate
-    public func getNormalizedDoseEntries(start: Date, end: Date? = nil, completion: @escaping (_ result: DoseStoreResult<[DoseEntry]>) -> Void) {
+    public func getNormalizedDoseEntries(start: Date, end: Date? = nil) async throws -> [DoseEntry] {
 
-        insulinDeliveryStore.getDoseEntries(start: start, end: end, includeMutable: true) { (result) in
-            switch result {
-            case .failure(let error):
-                completion(.failure(.persistenceError(description: error.localizedDescription, recoverySuggestion: nil)))
-            case .success(let insulinDeliveryDoses):
-                let filteredStart = max(self.lastPumpEventsReconciliation ?? start, start)
+        let insulinDeliveryDoses = try await insulinDeliveryStore.getDoseEntries(start: start, end: end, includeMutable: true)
+        let filteredStart = max(self.lastPumpEventsReconciliation ?? start, start)
 
-                self.persistenceController.managedObjectContext.perform {
-                    do {
-                        var doses: [DoseEntry]
+        return try await self.persistenceController.managedObjectContext.perform {
+            do {
+                var doses: [DoseEntry]
 
-                        // Reservoir data is used only if it's continuous and the pumpmanager hasn't reconciled since the last reservoir reading
-                        if self.areReservoirValuesValid, let reservoirEndDate = self.lastStoredReservoirValue?.startDate, reservoirEndDate > self.lastPumpEventsReconciliation ?? .distantPast {
-                            let reservoirDoses = try self.getNormalizedReservoirDoseEntries(start: filteredStart, end: end)
-                            let endOfReservoirData = self.lastStoredReservoirValue?.endDate ?? .distantPast
-                            let startOfReservoirData = reservoirDoses.first?.startDate ?? filteredStart
-                            let mutableDoses = try self.getNormalizedMutablePumpEventDoseEntries(start: endOfReservoirData)
-                            doses = insulinDeliveryDoses.map({ $0.trimmed(to: startOfReservoirData) }) + reservoirDoses + mutableDoses.map({ $0.trimmed(from: endOfReservoirData) })
-                        } else {
-                            // Deduplicates doses by syncIdentifier
-                            doses = insulinDeliveryDoses.appendedUnion(with: try self.getNormalizedPumpEventDoseEntries(start: filteredStart, end: end))
-                        }
+                // Reservoir data is used only if it's continuous and the pumpmanager hasn't reconciled since the last reservoir reading
+                if self.areReservoirValuesValid, let reservoirEndDate = self.lastStoredReservoirValue?.startDate, reservoirEndDate > self.lastPumpEventsReconciliation ?? .distantPast {
+                    let reservoirDoses = try self.getNormalizedReservoirDoseEntries(start: filteredStart, end: end)
+                    let endOfReservoirData = self.lastStoredReservoirValue?.endDate ?? .distantPast
+                    let startOfReservoirData = reservoirDoses.first?.startDate ?? filteredStart
+                    let mutableDoses = try self.getNormalizedMutablePumpEventDoseEntries(start: endOfReservoirData)
+                    doses = insulinDeliveryDoses.map({ $0.trimmed(to: startOfReservoirData) }) + reservoirDoses + mutableDoses.map({ $0.trimmed(from: endOfReservoirData) })
+                } else {
+                    // Deduplicates doses by syncIdentifier
+                    doses = insulinDeliveryDoses.appendedUnion(with: try self.getNormalizedPumpEventDoseEntries(start: filteredStart, end: end))
+                }
 
-                        // Extend an unfinished suspend out to end time
-                        doses = doses.map { dose in
-                            var dose = dose
-                            if dose.type == .suspend && dose.startDate == dose.endDate {
-                                dose.endDate = end ?? Date()
-                            }
-                            return dose
-                        }
-
-                        completion(.success(doses))
-                    } catch let error as DoseStoreError {
-                        completion(.failure(error))
-                    } catch {
-                        assertionFailure()
+                // Extend an unfinished suspend out to end time
+                return doses.map { dose in
+                    var dose = dose
+                    if dose.type == .suspend && dose.startDate == dose.endDate {
+                        dose.endDate = end ?? Date()
                     }
+                    return dose
                 }
             }
         }
@@ -1221,17 +1227,6 @@ extension DoseStore {
         return try await insulinDeliveryStore.getBoluses(start: start, end: end)
     }
 
-    /// Retrieves doses overlapping supplied range
-    ///
-    /// - Parameters:
-    ///   - start:If non-nil, select boluses that ended after start.
-    ///   - end: If non-nil, select boluses that started before end.
-    ///   - limit: If non-nill, specify the max number of boluses to return.
-    ///   - returns: A list of DoseEntry objects representing the basal doses that match the query parameters
-    public func getDoses(start: Date? = nil, end: Date? = nil) async throws -> [DoseEntry] {
-        return try await insulinDeliveryStore.getDoses(start: start, end: end)
-    }
-
     /// Retrieves the estimated total number of units delivered since the specified date.
     ///
     /// - Parameters:
@@ -1240,25 +1235,13 @@ extension DoseStore {
     ///   - result: The total units delivered and the date of the first dose
     public func getTotalUnitsDelivered(since startDate: Date) async throws -> InsulinValue
     {
-        try await withCheckedThrowingContinuation { continuation in
-            persistenceController.managedObjectContext.perform {
-                self.getNormalizedDoseEntries(start: startDate) { (result) in
-                    switch result {
-                    case .success(let doses):
-                        let trimmedDoses = doses.map { $0.trimmed(from: startDate, to: self.currentDate())}
-                        let result = InsulinValue(
-                            startDate: startDate,
-                            value: trimmedDoses.totalDelivery
-                        )
-                        continuation.resume(returning: result)
-                    case .failure(let error):
-                        continuation.resume(throwing: error)
-                    }
-                }
-            }
-        }
-    }
-    
+        let doses = try await self.getNormalizedDoseEntries(start: startDate)
+        let trimmedDoses = doses.map { $0.trimmed(from: startDate, to: self.currentDate())}
+        return InsulinValue(
+            startDate: startDate,
+            value: trimmedDoses.totalDelivery
+        )
+    }    
 }
 
 extension DoseStore {

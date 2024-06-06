@@ -464,6 +464,11 @@ extension Array where Element == TemporaryScheduleOverride {
                     if entry.endDate > end {
                         presetIndex += 1
                     }
+
+                    if preset.actualEndDate > entry.endDate {
+                        break
+                    }
+
                     start = end
                 } else if preset.startDate < entry.endDate {
                     result.append(AbsoluteScheduleValue(
