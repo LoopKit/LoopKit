@@ -404,7 +404,10 @@ public final class MockCGMManager: TestingCGMManager {
     private var glucoseUpdateTimer: Timer?
 
     public init() {
-        setupGlucoseUpdateTimer()
+        Task {
+            try? await Task.sleep(nanoseconds: NSEC_PER_SEC * 5)
+            setupGlucoseUpdateTimer()
+        }
     }
 
     // MARK: Handling CGM Manager Status observers
