@@ -82,7 +82,7 @@ class MockPumpManagerSettingsViewModel: ObservableObject {
         switch basalDeliveryState {
         case .active, .initiatingTempBasal:
             return true
-        case .tempBasal, .cancelingTempBasal, .suspending, .suspended, .resuming, .none:
+        default:
             return false
         }
     }
@@ -91,7 +91,7 @@ class MockPumpManagerSettingsViewModel: ObservableObject {
         switch basalDeliveryState {
         case .tempBasal, .cancelingTempBasal:
             return true
-        case .active, .initiatingTempBasal, .suspending, .suspended, .resuming, .none:
+        default:
             return false
         }
     }
