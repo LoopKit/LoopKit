@@ -158,6 +158,21 @@ extension PersistentDeviceLog: CriticalEventLog {
         return result!
     }
 
+    public func fetch(startDate: Date, endDate: Date) async throws -> [StoredDeviceLogEntry] {
+        return try await self.managedObjectContext.perform {
+            let request: NSFetchRequest<DeviceLogEntry> = DeviceLogEntry.fetchRequest()
+            request.predicate = self.exportDatePredicate(startDate: startDate, endDate: endDate)
+            request.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
+
+            let objects = try self.managedObjectContext.fetch(request)
+            if objects.isEmpty {
+                return []
+            }
+
+            return objects.map { StoredDeviceLogEntry(managedObject: $0) }
+        }
+    }
+
     public func export(startDate: Date, endDate: Date, to stream: DataOutputStream, progress: Progress) -> Error? {
         let encoder = JSONStreamEncoder(stream: stream)
         var modificationCounter: Int64 = 0

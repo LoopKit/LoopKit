@@ -20,7 +20,9 @@ public final class MockService: Service {
     public weak var stateDelegate: StatefulPluggableDelegate?
     
     public weak var serviceDelegate: ServiceDelegate?
-    
+
+    public weak var remoteDataServiceDelegate: RemoteDataServiceDelegate?
+
     public var remoteData: Bool
     
     public var logging: Bool
@@ -116,71 +118,62 @@ extension MockService: LoggingService {
 }
 
 extension MockService: RemoteDataService {
-    public func uploadTemporaryOverrideData(updated: [TemporaryScheduleOverride], deleted: [TemporaryScheduleOverride], completion: @escaping (Result<Bool, Error>) -> Void) {
+    public func uploadTemporaryOverrideData(updated: [TemporaryScheduleOverride], deleted: [TemporaryScheduleOverride]) async throws {
         if remoteData {
             record("[RemoteDataService] Upload temporary override data (updated: \(updated.count), deleted: \(deleted.count))")
         }
-        completion(.success(false))
     }
     
-    public func uploadAlertData(_ stored: [SyncAlertObject], completion: @escaping (Result<Bool, Error>) -> Void) {
+    public func uploadAlertData(_ stored: [SyncAlertObject]) async throws {
         if remoteData {
             record("[RemoteDataService] Upload alert data (stored: \(stored.count))")
         }
-        completion(.success(false))
     }
 
-    public func uploadCarbData(created: [SyncCarbObject], updated: [SyncCarbObject], deleted: [SyncCarbObject], completion: @escaping (Result<Bool, Error>) -> Void) {
+    public func uploadCarbData(created: [SyncCarbObject], updated: [SyncCarbObject], deleted: [SyncCarbObject]) async throws {
         if remoteData {
             record("[RemoteDataService] Upload carb data (created: \(created.count), updated: \(updated.count), deleted: \(deleted.count))")
         }
-        completion(.success(false))
     }
     
-    public func uploadDoseData(created: [DoseEntry], deleted: [DoseEntry], completion: @escaping (_ result: Result<Bool, Error>) -> Void) {
+    public func uploadDoseData(created: [DoseEntry], deleted: [DoseEntry]) async throws {
         if remoteData {
             record("[RemoteDataService] Upload dose data (created: \(created.count), deleted: \(deleted.count))")
         }
-        completion(.success(false))
     }
 
-    public func uploadDosingDecisionData(_ stored: [StoredDosingDecision], completion: @escaping (Result<Bool, Error>) -> Void) {
+    public func uploadDosingDecisionData(_ stored: [StoredDosingDecision]) async throws {
         if remoteData {
             let warned = stored.filter { !$0.warnings.isEmpty }
             let errored = stored.filter { !$0.errors.isEmpty }
             record("[RemoteDataService] Upload dosing decision data (stored: \(stored.count), warned: \(warned.count), errored: \(errored.count))")
         }
-        completion(.success(false))
     }
     
-    public func uploadGlucoseData(_ stored: [StoredGlucoseSample], completion: @escaping (Result<Bool, Error>) -> Void) {
+    public func uploadGlucoseData(_ stored: [StoredGlucoseSample]) async throws {
         if remoteData {
             record("[RemoteDataService] Upload glucose data (stored: \(stored.count))")
         }
-        completion(.success(false))
     }
     
-    public func uploadPumpEventData(_ stored: [PersistedPumpEvent], completion: @escaping (Result<Bool, Error>) -> Void) {
+    public func uploadPumpEventData(_ stored: [PersistedPumpEvent]) async throws {
         if remoteData {
             record("[RemoteDataService] Upload pump event data (stored: \(stored.count))")
         }
-        completion(.success(false))
     }
     
-    public func uploadSettingsData(_ stored: [StoredSettings], completion: @escaping (Result<Bool, Error>) -> Void) {
+    public func uploadSettingsData(_ stored: [StoredSettings]) async throws {
         if remoteData {
             record("[RemoteDataService] Upload settings data (stored: \(stored.count))")
         }
-        completion(.success(false))
     }
 
-    public func uploadCgmEventData(_ stored: [LoopKit.PersistedCgmEvent], completion: @escaping (Result<Bool, Error>) -> Void) {
+    public func uploadCgmEventData(_ stored: [PersistedCgmEvent]) async throws {
         if remoteData {
             record("[RemoteDataService] Upload cgm event data (stored: \(stored.count))")
         }
-        completion(.success(false))
     }
-    
+
     public func remoteNotificationWasReceived(_ notification: [String: AnyObject]) async throws {
     }
 }
