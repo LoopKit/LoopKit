@@ -147,8 +147,8 @@ public struct CorrectionRangeOverridesEditor: View {
     
     @ViewBuilder
     private func cardContent(for preset: CorrectionRangeOverrides.Preset) -> some View {
-        switch preset {
-        case .preMeal:
+//        switch preset {
+//        case .preMeal:
             CorrectionRangeOverridesExpandableSetting(
                 isEditing: Binding(
                     get: { presetBeingEdited == preset },
@@ -180,52 +180,53 @@ public struct CorrectionRangeOverridesEditor: View {
                     )
                     .accessibility(identifier: "\(accessibilityIdentifier(for: preset))_picker")
             })
-        case .workout:
-            NavigationLink {
-                EmptyView()
-            } label: {
-                VStack(alignment: .leading, spacing: 16) {
-                    HStack(spacing: 4) {
-                        preset.icon(usingCarbTintColor: carbTintColor, orGlucoseTintColor: glucoseTintColor, resizable: true)
-                            .frame(width: 24, height: 24)
-                        
-                        Text(preset.title)
-                            .font(.title3)
-                            .fontWeight(.semibold)
-                        
-                        Spacer()
-                        
-                        if let duration = viewModel.durationString {
-                            Group {
-                                Text(Image(systemName: "timer")) + Text(" ") + Text(duration)
-                            }
-                            .font(.footnote)
-                            .foregroundColor(.secondary)
-                        }
-                    }
-                    
-                    if let correctionRangeString = viewModel.correctionRangeString {
-                        Divider()
-                        
-                        VStack(alignment: .leading) {
-                            Text("Overall Insulin")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                            
-                            Group {
-                                Text(viewModel.insulinPercentageString)
-                                    .fontWeight(.semibold)
-                                + Text(" • ")
-                                    .foregroundColor(.secondary)
-                                + Text(correctionRangeString)
-                            }
-                            .font(.subheadline)
-                        }
-                    }
-                }
-            }
-            .buttonStyle(.plain)
-        }
+        // MARK: Reverted for Formative 3. To be updated post-formative 3
+//        case .workout:
+//            NavigationLink {
+//                EmptyView()
+//            } label: {
+//                VStack(alignment: .leading, spacing: 16) {
+//                    HStack(spacing: 4) {
+//                        preset.icon(usingCarbTintColor: carbTintColor, orGlucoseTintColor: glucoseTintColor, resizable: true)
+//                            .frame(width: 24, height: 24)
+//                        
+//                        Text(preset.title)
+//                            .font(.title3)
+//                            .fontWeight(.semibold)
+//                        
+//                        Spacer()
+//                        
+//                        if let duration = viewModel.durationString {
+//                            Group {
+//                                Text(Image(systemName: "timer")) + Text(" ") + Text(duration)
+//                            }
+//                            .font(.footnote)
+//                            .foregroundColor(.secondary)
+//                        }
+//                    }
+//                    
+//                    if let correctionRangeString = viewModel.correctionRangeString {
+//                        Divider()
+//                        
+//                        VStack(alignment: .leading) {
+//                            Text("Overall Insulin")
+//                                .font(.caption)
+//                                .foregroundColor(.secondary)
+//                            
+//                            Group {
+//                                Text(viewModel.insulinPercentageString)
+//                                    .fontWeight(.semibold)
+//                                + Text(" • ")
+//                                    .foregroundColor(.secondary)
+//                                + Text(correctionRangeString)
+//                            }
+//                            .font(.subheadline)
+//                        }
+//                    }
+//                }
+//            }
+//            .buttonStyle(.plain)
+//        }
     }
 
     private func description(of preset: CorrectionRangeOverrides.Preset) -> Text {
