@@ -547,6 +547,160 @@ class DoseStoreTests: PersistenceControllerTestCase {
         XCTAssertTrue(doseEntries[0].isMutable)
     }
 
+    func testLaggingPumpReconciliationWithReservoir() async throws {
+        let now = testingDate("2024-06-04 17:20:16 +0000")
+        let doseStore = defaultStore(testingDate: now)
+
+        let pumpEvents = [
+            NewPumpEvent(
+                date: testingDate("2024-06-04 16:56:27 +0000"),
+                dose: DoseEntry(
+                    type: .tempBasal,
+                    startDate: testingDate("2024-06-04 16:56:27 +0000"),
+                    endDate: testingDate("2024-06-04 17:01:27 +0000"),
+                    value: 1.25,
+                    unit: .unitsPerHour,
+                    deliveredUnits: 0.09980625328687837,
+                    syncIdentifier: "74656d70426173616c20302e36323520323032342d30362d30345431363a35363a32375a",
+                    automatic: true,
+                    isMutable: false
+                ),
+                raw: Data("74656d70426173616c20302e36323520323032342d30362d30345431363a35363a32375a".utf8),
+                title: "temp basal 1",
+                type: .tempBasal),
+            NewPumpEvent(
+                date: testingDate("2024-06-04 17:01:27 +0000"),
+                dose: DoseEntry(
+                    type: .tempBasal,
+                    startDate: testingDate("2024-06-04 17:01:27 +0000"),
+                    endDate: testingDate("2024-06-04 17:06:27 +0000"),
+                    value: 0.3,
+                    unit: .unitsPerHour,
+                    deliveredUnits: 0.04986030185585366,
+                    syncIdentifier: "74656d70426173616c20302e313520323032342d30362d30345431373a30313a32375a",
+                    automatic: true,
+                    isMutable: false
+                ),
+                raw: Data("74656d70426173616c20302e313520323032342d30362d30345431373a30313a32375a".utf8),
+                title: "temp basal 2",
+                type: .tempBasal),
+            NewPumpEvent(
+                date: testingDate("2024-06-04 17:06:27 +0000"),
+                dose: DoseEntry(
+                    type: .tempBasal,
+                    startDate: testingDate("2024-06-04 17:06:27 +0000"),
+                    endDate: testingDate("2024-06-04 17:36:27 +0000"),
+                    value: 0,
+                    unit: .unitsPerHour,
+                    deliveredUnits: nil,
+                    syncIdentifier: "74656d70426173616c20302e3020323032342d30362d30345431373a30363a32375a",
+                    automatic: true,
+                    isMutable: true
+                ),
+                raw: Data("74656d70426173616c20302e3020323032342d30362d30345431373a30363a32375a".utf8),
+                title: "temp basal 3",
+                type: .tempBasal),
+            NewPumpEvent(
+                date: testingDate("2024-06-04 17:13:44 +0000"),
+                dose: DoseEntry(
+                    type: .bolus,
+                    startDate: testingDate("2024-06-04 17:13:44 +0000"),
+                    endDate: testingDate("2024-06-04 17:14:20 +0000"),
+                    value: 0.95,
+                    unit: .units,
+                    deliveredUnits: nil,
+                    syncIdentifier: "626f6c757320302e393520323032342d30362d30345431373a31333a34345a",
+                    automatic: false,
+                    isMutable: false
+                ),
+                raw: Data("626f6c757320302e393520323032342d30362d30345431373a31333a34345a".utf8),
+                title: "bolus1",
+                type: .tempBasal),
+            NewPumpEvent(
+                date: testingDate("2024-06-04 17:19:59 +0000"),
+                dose: DoseEntry(
+                    type: .bolus,
+                    startDate: testingDate("2024-06-04 17:19:59 +0000"),
+                    endDate: testingDate("2024-06-04 17:22:59 +0000"),
+                    value: 4.5,
+                    unit: .units,
+                    deliveredUnits: nil,
+                    syncIdentifier: "626f6c757320342e3520323032342d30362d30345431373a31393a35395a",
+                    automatic: false,
+                    isMutable: true
+                ),
+                raw: Data("626f6c757320342e3520323032342d30362d30345431373a31393a35395a".utf8),
+                title: "bolus1",
+                type: .tempBasal)
+        ]
+        try await doseStore.addPumpEvents(pumpEvents, lastReconciliation: testingDate("2024-06-04 17:16:27 +0000"))
+
+        // Recent reservoir values from issue report
+        var reservoirReadings = [
+            NewReservoirValue(startDate: testingDate("2024-06-04 17:20:15 +0000"), unitVolume: 223.0),
+            NewReservoirValue(startDate: testingDate("2024-06-04 17:20:13 +0000"), unitVolume: 223.05),
+            NewReservoirValue(startDate: testingDate("2024-06-04 17:20:11 +0000"), unitVolume: 223.1),
+            NewReservoirValue(startDate: testingDate("2024-06-04 17:20:09 +0000"), unitVolume: 223.15),
+            NewReservoirValue(startDate: testingDate("2024-06-04 17:20:07 +0000"), unitVolume: 223.2),
+            NewReservoirValue(startDate: testingDate("2024-06-04 17:20:05 +0000"), unitVolume: 223.25),
+            NewReservoirValue(startDate: testingDate("2024-06-04 17:20:03 +0000"), unitVolume: 223.3),
+            NewReservoirValue(startDate: testingDate("2024-06-04 17:20:01 +0000"), unitVolume: 223.35),
+            NewReservoirValue(startDate: testingDate("2024-06-04 17:20:00 +0000"), unitVolume: 223.4),
+            NewReservoirValue(startDate: testingDate("2024-06-04 17:14:20 +0000"), unitVolume: 223.45),
+            NewReservoirValue(startDate: testingDate("2024-06-04 17:14:18 +0000"), unitVolume: 223.5),
+            NewReservoirValue(startDate: testingDate("2024-06-04 17:14:16 +0000"), unitVolume: 223.55),
+            NewReservoirValue(startDate: testingDate("2024-06-04 17:14:14 +0000"), unitVolume: 223.6),
+            NewReservoirValue(startDate: testingDate("2024-06-04 17:14:12 +0000"), unitVolume: 223.65),
+            NewReservoirValue(startDate: testingDate("2024-06-04 17:14:10 +0000"), unitVolume: 223.7),
+            NewReservoirValue(startDate: testingDate("2024-06-04 17:14:08 +0000"), unitVolume: 223.75),
+            NewReservoirValue(startDate: testingDate("2024-06-04 17:14:06 +0000"), unitVolume: 223.8),
+            NewReservoirValue(startDate: testingDate("2024-06-04 17:14:04 +0000"), unitVolume: 223.85),
+            NewReservoirValue(startDate: testingDate("2024-06-04 17:14:02 +0000"), unitVolume: 223.9)
+        ]
+        // Add more entries to make the reservoir history go back long enough to be considered continuous
+        var date = reservoirReadings.last!.startDate
+        var value = reservoirReadings.last!.unitVolume
+        while date > now.addingTimeInterval(-.hours(6)) {
+            date = date.addingTimeInterval(-.minutes(5))
+            value -= 0.05
+            reservoirReadings.append(NewReservoirValue(startDate: date, unitVolume: value))
+        }
+
+        for reading in reservoirReadings.reversed() {
+            let (_, _, _) = try await doseStore.addReservoirValue(reading.unitVolume, at: reading.startDate)
+        }
+
+
+        let doses = try await doseStore.getNormalizedDoseEntries(start: now.addingTimeInterval(-.hours(5)), end: now.addingTimeInterval(.hours(6)))
+
+        let rates = doses.map { $0.unitsPerHour }
+
+        let expectedRates = [
+            0.8,
+            1.25,
+            0.3,
+            0.0,
+            95.0,
+            0.0,
+            0.53,
+            180,  // Actual rate is 90U/h, but time quantization to seconds makes this high
+            90,
+            90,
+            90,
+            90,
+            90,
+            90,
+            90,
+            90,
+            0.0
+        ]
+
+        for (rate, expectedRate) in zip(rates, expectedRates) {
+            XCTAssertEqual(rate, expectedRate, accuracy: 0.05)
+        }
+
+    }
+
 
     func testAddPumpEventsPurgesMutableDosesFromInsulinDeliveryStore() async throws {
         let formatter = DateFormatter.descriptionFormatter
