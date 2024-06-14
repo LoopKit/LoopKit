@@ -45,7 +45,16 @@ class MockCGMManagerSettingsViewModel: ObservableObject {
     var glucoseUnitString: String {
         displayGlucosePreference.unit.shortLocalizedUnitString()
     }
-    
+
+    var shouldDisplayUnitsForCurrentGlucose: Bool {
+        switch cgmManager.mockSensorState.glucoseRangeCategory {
+        case .aboveRange, .belowRange:
+            return false
+        default:
+            return true
+        }
+    }
+
     @Published private(set) var lastGlucoseDate: Date? {
         didSet {
             updateLastReadingTime()
@@ -80,7 +89,7 @@ class MockCGMManagerSettingsViewModel: ObservableObject {
         lastGlucoseDate = cgmManager.cgmManagerStatus.lastCommunicationDate
         lastGlucoseTrend = cgmManager.mockSensorState.trendType
         setLastGlucoseTrend(cgmManager.mockSensorState.trendRate)
-        setLastGlucoseValue(cgmManager.mockSensorState.currentGlucose)
+        setLastGlucoseValue()
         
         cgmManager.addStatusObserver(self, queue: .main)
     }
@@ -93,15 +102,27 @@ class MockCGMManagerSettingsViewModel: ObservableObject {
         lastGlucoseTrendFormatted = displayGlucosePreference.formatMinuteRate(trendRate)
     }
     
-    func setLastGlucoseValue(_ lastGlucose: HKQuantity?) {
-        guard let lastGlucose = lastGlucose else {
+    func setLastGlucoseValue() {
+        guard let lastGlucose = cgmManager.mockSensorState.currentGlucose else {
             lastGlucoseValueWithUnitFormatted = nil
             lastGlucoseValueFormatted = "---"
             return
         }
 
-        lastGlucoseValueWithUnitFormatted = displayGlucosePreference.format(lastGlucose)
-        lastGlucoseValueFormatted = displayGlucosePreference.format(lastGlucose, includeUnit: false)
+        switch cgmManager.mockSensorState.glucoseRangeCategory {
+        case .aboveRange:
+            let glucoseString = LocalizedString("HIGH", comment: "String displayed instead of a glucose value above the CGM range")
+            lastGlucoseValueWithUnitFormatted = glucoseString
+            lastGlucoseValueFormatted = glucoseString
+        case .belowRange:
+            let glucoseString = LocalizedString("LOW", comment: "String displayed instead of a glucose value below the CGM range")
+            lastGlucoseValueWithUnitFormatted = glucoseString
+            lastGlucoseValueFormatted = glucoseString
+        default:
+            lastGlucoseValueWithUnitFormatted = displayGlucosePreference.format(lastGlucose)
+            lastGlucoseValueFormatted = displayGlucosePreference.format(lastGlucose, includeUnit: false)
+        }
+
     }
 }
 
@@ -113,6 +134,6 @@ extension MockCGMManagerSettingsViewModel: CGMManagerStatusObserver {
         
         setLastGlucoseTrend(cgmManager.mockSensorState.trendRate)
         
-        setLastGlucoseValue(cgmManager.mockSensorState.currentGlucose)
+        setLastGlucoseValue()
     }
 }

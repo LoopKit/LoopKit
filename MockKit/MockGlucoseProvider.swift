@@ -68,7 +68,8 @@ struct MockGlucoseProvider {
 
 extension MockGlucoseProvider {
     init(model: MockCGMDataSource.Model, effects: MockCGMDataSource.Effects) {
-        self = effects.transformations.reduce(model.glucoseProvider) { model, transform in transform(model) }
+        let provider = model.glucoseProvider
+        self = effects.transformations.reduce(provider) { model, transform in transform(model) }
     }
 
     private static func glucoseSample(at date: Date, quantity: HKQuantity, condition: GlucoseCondition?, trend: GlucoseTrend?, trendRate: HKQuantity?) -> NewGlucoseSample {
@@ -90,10 +91,10 @@ extension MockGlucoseProvider {
 
 extension MockGlucoseProvider {
     fileprivate static func constant(_ quantity: HKQuantity) -> MockGlucoseProvider {
-        return MockGlucoseProvider { date, completion in
+        return MockGlucoseProvider(fetchDataAt: { date, completion in
             let sample = glucoseSample(at: date, quantity: quantity, condition: nil, trend: .flat, trendRate: HKQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: 0))
             completion(.newData([sample]))
-        }
+        })
     }
 
     fileprivate static func sineCurve(parameters: MockCGMDataSource.Model.SineCurveParameters) -> MockGlucoseProvider {
@@ -150,17 +151,25 @@ extension MockGlucoseProvider {
     
     fileprivate static func scenario(pastSamples: [NewGlucoseSample], futureSamples: [NewGlucoseSample]) -> MockGlucoseProvider {
         var localSamples = futureSamples
-        return MockGlucoseProvider { date, completion in
+        return MockGlucoseProvider {
+            date,
+            completion in
             if localSamples.isEmpty {
                 localSamples = pastSamples + futureSamples
             }
             
-            guard let nextValue = localSamples.first?.quantity else {
+            guard let nextSample = localSamples.first else {
                 completion(.noData)
                 return
             }
             
-            let sample = glucoseSample(at: date, quantity: nextValue, condition: nil, trend: .flat, trendRate: HKQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: 0))
+            let sample = glucoseSample(
+                at: date,
+                quantity: nextSample.quantity,
+                condition: nextSample.condition,
+                trend: nextSample.trend,
+                trendRate: nextSample.trendRate
+            )
             localSamples = Array(localSamples.dropFirst())
             completion(.newData([sample]))
         }
