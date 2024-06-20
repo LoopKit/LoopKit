@@ -591,7 +591,7 @@ public final class MockCGMManager: TestingCGMManager {
     
     private func setupGlucoseUpdateTimer() {
         Task {
-            try? await Task.sleep(nanoseconds: NSEC_PER_SEC)
+            try? await Task.sleep(nanoseconds: NSEC_PER_SEC * 5)
             
             glucoseUpdateTimer = Timer.scheduledTimer(withTimeInterval: dataSource.dataPointFrequency.frequency, repeats: true) { [weak self] _ in
                 guard let self = self else { return }
