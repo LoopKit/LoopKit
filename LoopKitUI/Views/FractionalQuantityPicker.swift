@@ -124,6 +124,7 @@ public struct FractionalQuantityPicker: View {
             .frame(width: availableWidth / 3)
             .overlay(
                 Text(separator)
+                    .font(.title)
                     .foregroundColor(Color(.secondaryLabel))
                     .offset(x: spacing + separatorWidth),
                 alignment: .trailing
@@ -178,7 +179,7 @@ public struct FractionalQuantityPicker: View {
     var separatorWidth: CGFloat {
         let attributedSeparator = NSAttributedString(
             string: separator,
-            attributes: [.font: UIFont.preferredFont(forTextStyle: .body)]
+            attributes: [.font: UIFont.preferredFont(forTextStyle: .title1)]
         )
 
         return attributedSeparator.size().width

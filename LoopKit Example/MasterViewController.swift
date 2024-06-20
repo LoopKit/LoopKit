@@ -237,10 +237,10 @@ class MasterViewController: UITableViewController {
 
                         unitVolume -= (drand48() * 2.0)
 
-                        group.enter()
-                        dataManager.doseStore.addReservoirValue(unitVolume, at: Date(timeIntervalSinceNow: index)) { (_, _, _, error) in
-                            group.leave()
-                        }
+//                        group.enter()
+//                        dataManager.doseStore.addReservoirValue(unitVolume, at: Date(timeIntervalSinceNow: index)) { (_, _, _, error) in
+//                            group.leave()
+//                        }
                     }
 
                     group.enter()

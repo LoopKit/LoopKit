@@ -491,23 +491,46 @@ public final class MockCGMManager: TestingCGMManager {
     }
 
     private func sendCGMReadingResult(_ result: CGMReadingResult) {
-        if case .newData(let samples) = result,
-            let currentValue = samples.first
-        {
-            mockSensorState.currentGlucose = currentValue.quantity
-            mockSensorState.trendType = currentValue.trend
-            mockSensorState.trendRate = currentValue.trendRate
-            mockSensorState.glucoseRangeCategory = glucoseRangeCategory(for: currentValue.quantitySample)
-            issueAlert(for: currentValue)
-        }
-        self.delegate.notify { delegate in
-            delegate?.cgmManager(self, hasNew: result)
+        if case .newData(let samples) = result {
+            if let currentValue = samples.first {
+                mockSensorState.currentGlucose = currentValue.quantity
+                mockSensorState.trendType = currentValue.trend
+                mockSensorState.trendRate = currentValue.trendRate
+                mockSensorState.glucoseRangeCategory = glucoseRangeCategory(for: currentValue.quantitySample)
+                issueAlert(for: currentValue)
+            }
+
+            let samplesWithCondition = samples.map { sample in
+                var condition: GlucoseCondition?
+                if sample.quantity < mockSensorState.cgmLowerLimit {
+                    condition = .belowRange
+                } else if sample.quantity > mockSensorState.cgmUpperLimit {
+                    condition = .aboveRange
+                }
+                return NewGlucoseSample(
+                    date: sample.date,
+                    quantity: sample.quantity,
+                    condition: condition,
+                    trend: sample.trend,
+                    trendRate: sample.trendRate,
+                    isDisplayOnly: sample.isDisplayOnly,
+                    wasUserEntered: sample.wasUserEntered,
+                    syncIdentifier: sample.syncIdentifier
+                )
+            }
+            self.delegate.notify { delegate in
+                delegate?.cgmManager(self, hasNew: .newData(samplesWithCondition))
+            }
+        } else {
+            self.delegate.notify { delegate in
+                delegate?.cgmManager(self, hasNew: result)
+            }
         }
     }
     
     public func glucoseRangeCategory(for glucose: GlucoseSampleValue) -> GlucoseRangeCategory? {
         switch glucose.quantity {
-        case ...mockSensorState.cgmLowerLimit:
+        case ..<mockSensorState.cgmLowerLimit:
             return glucose.wasUserEntered ? .urgentLow : .belowRange
         case mockSensorState.cgmLowerLimit..<mockSensorState.urgentLowGlucoseThreshold:
             return .urgentLow
@@ -515,7 +538,7 @@ public final class MockCGMManager: TestingCGMManager {
             return .low
         case mockSensorState.lowGlucoseThreshold..<mockSensorState.highGlucoseThreshold:
             return .normal
-        case mockSensorState.highGlucoseThreshold..<mockSensorState.cgmUpperLimit:
+        case mockSensorState.highGlucoseThreshold...mockSensorState.cgmUpperLimit:
             return .high
         default:
             return glucose.wasUserEntered ? .high : .aboveRange

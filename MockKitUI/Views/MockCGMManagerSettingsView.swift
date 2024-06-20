@@ -149,8 +149,10 @@ struct MockCGMManagerSettingsView: View {
                     Text(viewModel.lastGlucoseValueFormatted)
                         .font(.title)
                         .fontWeight(.heavy)
-                    Text(viewModel.glucoseUnitString)
-                        .foregroundColor(.secondary)
+                    if viewModel.shouldDisplayUnitsForCurrentGlucose {
+                        Text(viewModel.glucoseUnitString)
+                            .foregroundColor(.secondary)
+                    }
                 }
             }
         }

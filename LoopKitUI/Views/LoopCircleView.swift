@@ -6,12 +6,11 @@
 //  Copyright © 2024 LoopKit Authors. All rights reserved.
 //
 
-import LoopKit
 import SwiftUI
+import LoopKit
 
 public struct LoopCircleView: View {
-    
-    @Environment(\.guidanceColors) private var guidanceColors
+    @Environment(\.loopStatusColorPalette) private var loopStatusColors
     @Environment(\.isEnabled) private var isEnabled
     
     let closedLoop: Bool
@@ -35,11 +34,11 @@ public struct LoopCircleView: View {
     func getLoopColor(freshness: LoopCompletionFreshness) -> Color {
         switch freshness {
         case .fresh:
-            return guidanceColors.acceptable
+            return Color(uiColor: loopStatusColors.normal)
         case .aging:
-            return guidanceColors.warning
+            return Color(uiColor: loopStatusColors.warning)
         case .stale:
-            return guidanceColors.critical
+            return Color(uiColor: loopStatusColors.error)
         }
     }
 }

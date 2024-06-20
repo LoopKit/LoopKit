@@ -44,6 +44,7 @@ public struct PumpManagerStatus: Equatable {
         case suspending
         case suspended(_ at: Date)
         case resuming
+        case pumpInoperable
 
         public var isSuspended: Bool {
             if case .suspended = self {
@@ -176,6 +177,9 @@ extension PumpManagerStatus.BasalDeliveryState: Codable {
         case .resuming:
             var container = encoder.singleValueContainer()
             try container.encode(CodableKeys.resuming.rawValue)
+        case .pumpInoperable:
+            var container = encoder.singleValueContainer()
+            try container.encode(CodableKeys.pumpInoperable.rawValue)
         }
     }
 
@@ -199,6 +203,7 @@ extension PumpManagerStatus.BasalDeliveryState: Codable {
         case suspending
         case suspended
         case resuming
+        case pumpInoperable
     }
 }
 
