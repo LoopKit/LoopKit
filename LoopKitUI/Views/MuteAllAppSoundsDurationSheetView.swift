@@ -86,7 +86,7 @@ public struct DurationSheet: View {
                     } label: {
                         EmptyView()
                     }
-                    .font(.body)
+                    .font(.title3)
                     .pickerStyle(.wheel)
                     .frame(height: pickerHeight)
                     .padding(.horizontal)
