@@ -274,6 +274,7 @@
 		840A2F122C0F9A88003D5E90 /* LoopCompletionFreshness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840A2F102C0F9882003D5E90 /* LoopCompletionFreshness.swift */; };
 		849B110D2C19E2A40083B30A /* NumberCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849B110C2C19E2A40083B30A /* NumberCircle.swift */; };
 		84CB9CDE2C0FD94B007210DD /* LoopCompletionFreshnessTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CB9CDD2C0FD94B007210DD /* LoopCompletionFreshnessTests.swift */; };
+		84DF48892C33218100844FB1 /* MuteAllAppSoundsDurationSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DF48882C33217400844FB1 /* MuteAllAppSoundsDurationSheetView.swift */; };
 		84F295262B48CB4C00127C8E /* Callout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F295252B48CB4C00127C8E /* Callout.swift */; };
 		8907E35921A9D0EC00335852 /* GlucoseEntryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8907E35821A9D0EC00335852 /* GlucoseEntryTableViewController.swift */; };
 		89186C0524BEC9CA0003D0F3 /* SegmentedControlTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89186C0424BEC9CA0003D0F3 /* SegmentedControlTableViewCell.swift */; };
@@ -1295,6 +1296,7 @@
 		840A2F102C0F9882003D5E90 /* LoopCompletionFreshness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopCompletionFreshness.swift; sourceTree = "<group>"; };
 		849B110C2C19E2A40083B30A /* NumberCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberCircle.swift; sourceTree = "<group>"; };
 		84CB9CDD2C0FD94B007210DD /* LoopCompletionFreshnessTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoopCompletionFreshnessTests.swift; sourceTree = "<group>"; };
+		84DF48882C33217400844FB1 /* MuteAllAppSoundsDurationSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuteAllAppSoundsDurationSheetView.swift; sourceTree = "<group>"; };
 		84F295252B48CB4C00127C8E /* Callout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Callout.swift; sourceTree = "<group>"; };
 		8907E35821A9D0EC00335852 /* GlucoseEntryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseEntryTableViewController.swift; sourceTree = "<group>"; };
 		8907E35A21A9D1B200335852 /* SineCurveParametersTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SineCurveParametersTableViewController.swift; sourceTree = "<group>"; };
@@ -2141,6 +2143,7 @@
 				E9086B3024B3A7270062F5C8 /* ChartTableViewCell.swift */,
 				1D096BF924C242300078B6B5 /* CheckmarkListItem.swift */,
 				89627B172441168900BEB424 /* ConfigurationPage.swift */,
+				84DF48882C33217400844FB1 /* MuteAllAppSoundsDurationSheetView.swift */,
 				C14A7E7D295F43AB00CD87B4 /* ConfigurationPageScrollView.swift */,
 				E0E99C332C0E7AD300F9300C /* ConfirmationToggle.swift */,
 				8997B4F423727E8A00061132 /* CustomOverrideCollectionViewCell.swift */,
@@ -3932,6 +3935,7 @@
 				E93E866424DCFB6D00FF40C8 /* OverrideHistoryCollectionViewCell.swift in Sources */,
 				E0E99C392C0E80C200F9300C /* LoopCircleView.swift in Sources */,
 				895FE08122011F0C00FCF18A /* OverridePresetCollectionViewCell.swift in Sources */,
+				84DF48892C33218100844FB1 /* MuteAllAppSoundsDurationSheetView.swift in Sources */,
 				43FB60E320DCB9E0002B996B /* PumpManagerUI.swift in Sources */,
 				89186C0B24BFD6DB0003D0F3 /* DurationPicker.swift in Sources */,
 				A9D3FF012A6C1944000C891D /* CarbEffectChart.swift in Sources */,
