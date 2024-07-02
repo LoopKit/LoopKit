@@ -273,6 +273,7 @@
 		840A2F112C0F9882003D5E90 /* LoopCompletionFreshness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840A2F102C0F9882003D5E90 /* LoopCompletionFreshness.swift */; };
 		840A2F122C0F9A88003D5E90 /* LoopCompletionFreshness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840A2F102C0F9882003D5E90 /* LoopCompletionFreshness.swift */; };
 		849B110D2C19E2A40083B30A /* NumberCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849B110C2C19E2A40083B30A /* NumberCircle.swift */; };
+		84AAB1E52C347EEA0054D304 /* Environment+InvestigationalDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AAB1E42C347EEA0054D304 /* Environment+InvestigationalDevice.swift */; };
 		84CB9CDE2C0FD94B007210DD /* LoopCompletionFreshnessTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CB9CDD2C0FD94B007210DD /* LoopCompletionFreshnessTests.swift */; };
 		84DF48892C33218100844FB1 /* MuteAllAppSoundsDurationSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DF48882C33217400844FB1 /* MuteAllAppSoundsDurationSheetView.swift */; };
 		84F295262B48CB4C00127C8E /* Callout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F295252B48CB4C00127C8E /* Callout.swift */; };
@@ -1295,6 +1296,7 @@
 		7D68AAC61FE31BE900522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		840A2F102C0F9882003D5E90 /* LoopCompletionFreshness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopCompletionFreshness.swift; sourceTree = "<group>"; };
 		849B110C2C19E2A40083B30A /* NumberCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberCircle.swift; sourceTree = "<group>"; };
+		84AAB1E42C347EEA0054D304 /* Environment+InvestigationalDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Environment+InvestigationalDevice.swift"; sourceTree = "<group>"; };
 		84CB9CDD2C0FD94B007210DD /* LoopCompletionFreshnessTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoopCompletionFreshnessTests.swift; sourceTree = "<group>"; };
 		84DF48882C33217400844FB1 /* MuteAllAppSoundsDurationSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuteAllAppSoundsDurationSheetView.swift; sourceTree = "<group>"; };
 		84F295252B48CB4C00127C8E /* Callout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Callout.swift; sourceTree = "<group>"; };
@@ -2895,6 +2897,7 @@
 				E9086B4924B540B70062F5C8 /* DateFormatter.swift */,
 				E96175AD24B7BE38008E5080 /* Dictionary.swift */,
 				1D60355D24D39ED10095DC2A /* Environment+AppName.swift */,
+				84AAB1E42C347EEA0054D304 /* Environment+InvestigationalDevice.swift */,
 				1D498E4624D892B0000627F2 /* Environment+Authenticate.swift */,
 				B45AF6EF24D4355A00EEAA4D /* Environment+Colors.swift */,
 				89BE75C62464B4A900B145D9 /* Environment+Dismiss.swift */,
@@ -3828,6 +3831,7 @@
 				89653C822473592600E1BAA5 /* CarbRatioScheduleEditor.swift in Sources */,
 				1D1FCE2B24BE704A000300A8 /* TherapySetting+Settings.swift in Sources */,
 				4369F08F208859E6000E3E45 /* PaddedTextField.swift in Sources */,
+				84AAB1E52C347EEA0054D304 /* Environment+InvestigationalDevice.swift in Sources */,
 				A9498D8823386CAF00DAA9B9 /* ServiceNavigationController.swift in Sources */,
 				892A5D9E2231E122008961AB /* StateColorPalette.swift in Sources */,
 				895FE08022011F0C00FCF18A /* EmojiDataSource.swift in Sources */,
