@@ -201,5 +201,5 @@ public protocol OnboardingUI: Pluggable {
     ///   - displayGlucosePreference: The glucose unit to use for display.
     ///   - colorPalette: The colors to use in any UI,
     /// - Returns: A view controller to create and configure a new onboarding.
-    func onboardingViewController(onboardingProvider: OnboardingProvider, displayGlucosePreference: DisplayGlucosePreference, colorPalette: LoopUIColorPalette) -> OnboardingViewController
+    func onboardingViewController(onboardingProvider: OnboardingProvider, displayGlucosePreference: DisplayGlucosePreference, colorPalette: LoopUIColorPalette, adultChildInsulinModelSelectionEnabled: Bool) -> OnboardingViewController
 }
