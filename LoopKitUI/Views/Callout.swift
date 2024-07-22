@@ -98,7 +98,7 @@ public struct Callout<Content: View>: View {
                         Group {
                             content
                         }
-                        .font(.footnote)
+                        .font(.subheadline)
                         .foregroundColor(.primary)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .fixedSize(horizontal: false, vertical: true)
