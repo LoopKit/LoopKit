@@ -265,13 +265,8 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
 
     func testLastBasalEndDate() {
         let getLastImmutableBasalEndDate1Completion = expectation(description: "getLastImmutableBasalEndDate1")
-        insulinDeliveryStore.getLastImmutableBasalEndDate() { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let lastBasalEndDate):
-                XCTAssertEqual(lastBasalEndDate, .distantPast)
-            }
+        insulinDeliveryStore.getLastImmutableBasalEndDate() { lastBasalEndDate in
+            XCTAssertNil(lastBasalEndDate)
             getLastImmutableBasalEndDate1Completion.fulfill()
         }
         waitForExpectations(timeout: 10)
@@ -289,13 +284,8 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
         waitForExpectations(timeout: 10)
 
         let getLastImmutableBasalEndDate2Completion = expectation(description: "getLastImmutableBasalEndDate2")
-        insulinDeliveryStore.getLastImmutableBasalEndDate() { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let lastBasalEndDate):
-                XCTAssertEqual(lastBasalEndDate, self.entry2.endDate)
-            }
+        insulinDeliveryStore.getLastImmutableBasalEndDate() { lastBasalEndDate in
+            XCTAssertEqual(lastBasalEndDate, self.entry2.endDate)
             getLastImmutableBasalEndDate2Completion.fulfill()
         }
         waitForExpectations(timeout: 10)
@@ -308,13 +298,8 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
         waitForExpectations(timeout: 10)
 
         let getLastImmutableBasalEndDate3Completion = expectation(description: "getLastImmutableBasalEndDate3")
-        insulinDeliveryStore.getLastImmutableBasalEndDate() { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let lastBasalEndDate):
-                XCTAssertEqual(lastBasalEndDate, .distantPast)
-            }
+        insulinDeliveryStore.getLastImmutableBasalEndDate() { lastBasalEndDate in
+            XCTAssertNil(lastBasalEndDate)
             getLastImmutableBasalEndDate3Completion.fulfill()
         }
         waitForExpectations(timeout: 10)

@@ -676,7 +676,6 @@ class DoseStoreTests: PersistenceControllerTestCase {
         let rates = doses.map { $0.unitsPerHour }
 
         let expectedRates = [
-            0.8,
             1.25,
             0.3,
             0.0,
