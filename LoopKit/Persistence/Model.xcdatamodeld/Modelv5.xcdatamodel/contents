@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22758" systemVersion="23A344" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23173.10" systemVersion="23F79" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="CachedCarbObject" representedClassName="LoopKit.CachedCarbObject" syncable="YES">
         <attribute name="absorptionTime" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
         <attribute name="addedDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="anchorKey" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" elementID="modificationCounter"/>
         <attribute name="createdByCurrentApp" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="favoriteFoodID" optional="YES" attributeType="String"/>
         <attribute name="foodType" optional="YES" attributeType="String"/>
         <attribute name="grams" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="operation" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO"/>
@@ -59,6 +60,7 @@
         <attribute name="automaticallyIssued" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="deletedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="deliveredUnits" attributeType="Double" usesScalarValueType="YES" versionHashModifier="1" elementID="value"/>
         <attribute name="endDate" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="hasLoopKitOrigin" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="insulinType" optional="YES" attributeType="Integer 16" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -67,13 +69,13 @@
         <attribute name="manuallyEntered" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="modificationCounter" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="programmedTempBasalRate" optional="YES" attributeType="Double" usesScalarValueType="NO" elementID="scheduledTempBasalRate"/>
+        <attribute name="programmedUnits" optional="YES" attributeType="Double" usesScalarValueType="YES"/>
         <attribute name="provenanceIdentifier" attributeType="String"/>
         <attribute name="reason" attributeType="Integer 16" usesScalarValueType="NO"/>
         <attribute name="scheduledBasalRate" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
         <attribute name="startDate" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="syncIdentifier" attributeType="String"/>
         <attribute name="uuid" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
-        <attribute name="value" attributeType="Double" usesScalarValueType="YES"/>
         <attribute name="wasProgrammedByPumpUI" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <fetchIndex name="byUUIDIndex">
             <fetchIndexElement property="uuid" type="Binary" order="ascending"/>

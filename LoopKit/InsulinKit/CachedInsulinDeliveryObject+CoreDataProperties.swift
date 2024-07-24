@@ -22,9 +22,10 @@ extension CachedInsulinDeliveryObject {
     @NSManaged public var startDate: Date
     @NSManaged public var endDate: Date
     @NSManaged public var syncIdentifier: String?
-    @NSManaged public var value: Double
+    @NSManaged public var deliveredUnits: Double
     @NSManaged public var primitiveScheduledBasalRate: NSNumber?
     @NSManaged public var primitiveProgrammedTempBasalRate: NSNumber?
+    @NSManaged public var primitiveProgrammedUnits: NSNumber?
     @NSManaged public var primitiveReason: NSNumber?
     @NSManaged public var createdAt: Date
     @NSManaged public var deletedAt: Date?

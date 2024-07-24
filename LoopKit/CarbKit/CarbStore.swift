@@ -240,15 +240,17 @@ extension CarbStore: HealthKitSampleStoreDelegate {
 
 extension CarbStore {
 
-    /// Retrieves carb entries that have a `startDate` within the specified date range
+    /// Retrieves carb entries that have a `startDate` within the specified date range and optionally match a specific favorite food
     ///
     /// - Parameters:
     ///   - start: The earliest date of values to retrieve
     ///   - end: The latest date of values to retrieve, if provided
-    ///   - result: An array of carb entries, in chronological order by startDate, or error
-    public func getCarbEntries(start: Date? = nil, end: Date? = nil) async throws -> [StoredCarbEntry] {
+    ///   - dateAscending: Indicates how the result will be sorted. If true, function returns `[oldestEntry, ..., newestEntry]`. If false, function returns`[newestEntry, ..., oldestEntry]`
+    ///   - with: The favorite food identifier to match
+    ///   - result: An array of carb entries, sorted by startDate, or error
+    public func getCarbEntries(start: Date? = nil, end: Date? = nil, dateAscending: Bool = true, with favoriteFoodID: String? = nil ) async throws -> [StoredCarbEntry] {
         try await withCheckedThrowingContinuation { continuation in
-            getCarbEntries(start: start, end: end) { result in
+            getCarbEntries(start: start, end: end, dateAscending: dateAscending, with: favoriteFoodID) { result in
                 switch result {
                 case .failure(let error):
                     continuation.resume(throwing: error)
@@ -259,34 +261,43 @@ extension CarbStore {
         }
     }
 
-    /// Retrieves carb entries within the specified date range
+    /// Retrieves carb entries that have a `startDate` within the specified date range and optionally match a specific favorite food
     ///
     /// - Parameters:
     ///   - start: The earliest date of values to retrieve
-    ///   - end: The latest date of values to retrieve, if provided
+    ///   - end: The latest date of values to retrieve, if provided'
+    ///   - dateAscending: Indicates how the result will be sorted. If true, function returns `[oldestEntry, ..., newestEntry]`. If false, function returns`[newestEntry, ..., oldestEntry]`
+    ///   - with: The favorite food identifier to match
     ///   - completion: A closure called once the values have been retrieved
-    ///   - result: An array of carb entries, in chronological order by startDate, or error
-    public func getCarbEntries(start: Date? = nil, end: Date? = nil, completion: @escaping (_ result: Result<[StoredCarbEntry], Error>) -> Void) {
+    ///   - result: An array of carb entries, sorted by startDate, or error
+    public func getCarbEntries(start: Date? = nil, end: Date? = nil, dateAscending: Bool = true, with favoriteFoodID: String? = nil , completion: @escaping (_ result: Result<[StoredCarbEntry], Error>) -> Void) {
         queue.async {
-            completion(self.getCarbEntries(start: start, end: end))
+            completion(self.getCarbEntries(start: start, end: end, dateAscending: dateAscending, with: favoriteFoodID))
         }
     }
 
-    /// Retrieves carb entries that have a `startDate` within the specified date range
+    /// Retrieves carb entries that have a `startDate` within the specified date range and optionally match a specific favorite food
     ///
     /// - Parameters:
     ///   - start: The earliest date of values to retrieve
     ///   - end: The latest date of values to retrieve, if provided
-    /// - Returns: An array of carb entries, in chronological order by startDate, or error
-    private func getCarbEntries(start: Date? = nil, end: Date? = nil) -> Result<[StoredCarbEntry], Error> {
+    ///   - dateAscending: Indicates how the result will be sorted. If true, function returns `[oldestEntry, ..., newestEntry]`. If false, function returns`[newestEntry, ..., oldestEntry]`
+    ///   - with: The favorite food identifier to match
+    /// - Returns: An array of carb entries, sorted by startDate, or error
+    private func getCarbEntries(start: Date? = nil, end: Date? = nil, dateAscending: Bool = true, with favoriteFoodID: String? = nil ) -> Result<[StoredCarbEntry], Error> {
         dispatchPrecondition(condition: .onQueue(queue))
 
         var entries: [StoredCarbEntry] = []
         var error: CarbStoreError?
+        
+        var additionalPredicates = [NSPredicate]()
+        if let favoriteFoodID = favoriteFoodID {
+            additionalPredicates.append(NSPredicate(format: "favoriteFoodID == %@", favoriteFoodID))
+        }
 
         cacheStore.managedObjectContext.performAndWait {
             do {
-                entries = try self.getActiveCachedCarbObjects(start: start, end: end).map { StoredCarbEntry(managedObject: $0) }
+                entries = try self.getActiveCachedCarbObjects(start: start, end: end, dateAscending: dateAscending, additionalPredicates: additionalPredicates).map { StoredCarbEntry(managedObject: $0) }
             } catch let coreDataError {
                 error = .coreDataError(coreDataError)
             }
@@ -299,13 +310,15 @@ extension CarbStore {
         return .success(entries)
     }
 
-    /// Retrieves active (not superceded, non-delete operation) cached carb objects that have a `startDate` within the specified date range
+    /// Retrieves active (not superceded, non-delete operation) cached carb objects that have a `startDate` within the specified date range and match additional predicates
     ///
     /// - Parameters:
     ///   - start: The earliest date of values to retrieve
     ///   - end: The latest date of values to retrieve, if provided
+    ///   - dateAscending: Indicates how the result will be sorted. If true, function returns `[oldestEntry, ..., newestEntry]`. If false, function returns`[newestEntry, ..., oldestEntry]`
+    ///   - additionalPredicates: Optionally add additional predicates to the fetch
     /// - Returns: An array of cached carb objects
-    private func getActiveCachedCarbObjects(start: Date? = nil, end: Date? = nil) throws -> [CachedCarbObject] {
+    private func getActiveCachedCarbObjects(start: Date? = nil, end: Date? = nil, dateAscending: Bool = true, additionalPredicates: [NSPredicate] = []) throws -> [CachedCarbObject] {
         dispatchPrecondition(condition: .onQueue(queue))
 
         var predicates = [NSPredicate(format: "operation != %d", Operation.delete.rawValue),
@@ -316,10 +329,13 @@ extension CarbStore {
         if let end = end {
             predicates.append(NSPredicate(format: "startDate < %@", end as NSDate))
         }
+        if !additionalPredicates.isEmpty {
+            predicates.append(contentsOf: additionalPredicates)
+        }
 
         let request: NSFetchRequest<CachedCarbObject> = CachedCarbObject.fetchRequest()
         request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
-        request.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: true)]
+        request.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: dateAscending)]
 
         return try self.cacheStore.managedObjectContext.fetch(request)
     }
@@ -1132,7 +1148,7 @@ extension CarbStore {
                     report.append("Error: \(error)")
                 case .success(let entries):
                     report.append("[")
-                    report.append("\tStoredCarbEntry(uuid, provenanceIdentifier, syncIdentifier, syncVersion, startDate, quantity, foodType, absorptionTime, createdByCurrentApp, userCreatedDate, userUpdatedDate)")
+                    report.append("\tStoredCarbEntry(uuid, provenanceIdentifier, syncIdentifier, syncVersion, startDate, quantity, foodType, absorptionTime, favoriteFoodID, createdByCurrentApp, userCreatedDate, userUpdatedDate)")
                     report.append(entries.map({ (entry) -> String in
                         return [
                             "\t",
@@ -1143,6 +1159,7 @@ extension CarbStore {
                             String(describing: entry.startDate),
                             String(describing: entry.quantity),
                             entry.foodType ?? "",
+                            entry.favoriteFoodID ?? "",
                             String(describing: entry.createdByCurrentApp),
                             entry.userCreatedDate != nil ? String(describing: entry.userCreatedDate) : "",
                             entry.userUpdatedDate != nil ? String(describing: entry.userUpdatedDate) : "",

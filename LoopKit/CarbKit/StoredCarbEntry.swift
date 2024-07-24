@@ -31,6 +31,7 @@ public struct StoredCarbEntry: CarbEntry, Equatable {
 
     public let foodType: String?
     public let absorptionTime: TimeInterval?
+    public let favoriteFoodID: String?
     public let createdByCurrentApp: Bool
 
     // MARK: - User dates
@@ -47,6 +48,7 @@ public struct StoredCarbEntry: CarbEntry, Equatable {
         syncVersion: Int? = nil,
         foodType: String? = nil,
         absorptionTime: TimeInterval? = nil,
+        favoriteFoodID: String? = nil,
         createdByCurrentApp: Bool = true,
         userCreatedDate: Date? = nil,
         userUpdatedDate: Date? = nil
@@ -59,6 +61,7 @@ public struct StoredCarbEntry: CarbEntry, Equatable {
         self.quantity = quantity
         self.foodType = foodType
         self.absorptionTime = absorptionTime
+        self.favoriteFoodID = favoriteFoodID
         self.createdByCurrentApp = createdByCurrentApp
         self.userCreatedDate = userCreatedDate
         self.userUpdatedDate = userUpdatedDate
@@ -80,6 +83,7 @@ extension StoredCarbEntry {
             syncVersion: managedObject.syncVersion,
             foodType: managedObject.foodType,
             absorptionTime: managedObject.absorptionTime,
+            favoriteFoodID: managedObject.quantitySample.favoriteFoodID,
             createdByCurrentApp: managedObject.createdByCurrentApp,
             userCreatedDate: managedObject.userCreatedDate,
             userUpdatedDate: managedObject.userUpdatedDate

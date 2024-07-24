@@ -11,6 +11,7 @@ import HealthKit
 
 let LegacyMetadataKeyAbsorptionTime = "com.loudnate.CarbKit.HKMetadataKey.AbsorptionTimeMinutes"
 let MetadataKeyAbsorptionTime = "com.loopkit.AbsorptionTime"
+let MetadataKeyFavoriteFoodID = "com.loopkit.FavoriteFoodID"
 let MetadataKeyUserCreatedDate = "com.loopkit.CarbKit.HKMetadataKey.UserCreatedDate"
 let MetadataKeyUserUpdatedDate = "com.loopkit.CarbKit.HKMetadataKey.UserUpdatedDate"
 
@@ -24,6 +25,10 @@ extension HKQuantitySample {
             ?? metadata?[LegacyMetadataKeyAbsorptionTime] as? TimeInterval
     }
 
+    public var favoriteFoodID: String? {
+        return metadata?[MetadataKeyFavoriteFoodID] as? String
+    }
+    
     public var createdByCurrentApp: Bool {
         return sourceRevision.source == HKSource.default()
     }

@@ -74,6 +74,7 @@ extension CachedCarbObject {
         self.grams = entry.quantity.doubleValue(for: .gram())
         self.startDate = entry.startDate
         self.uuid = nil
+        self.favoriteFoodID = entry.favoriteFoodID
 
         self.provenanceIdentifier = provenanceIdentifier
         self.syncIdentifier = syncIdentifier
@@ -96,6 +97,7 @@ extension CachedCarbObject {
         self.grams = sample.quantity.doubleValue(for: .gram())
         self.startDate = sample.startDate
         self.uuid = sample.uuid
+        self.favoriteFoodID = sample.favoriteFoodID
 
         self.provenanceIdentifier = sample.provenanceIdentifier
         self.syncIdentifier = sample.syncIdentifier
@@ -122,6 +124,7 @@ extension CachedCarbObject {
         self.grams = entry.quantity.doubleValue(for: .gram())
         self.startDate = entry.startDate
         self.uuid = nil
+        self.favoriteFoodID = entry.favoriteFoodID
 
         self.provenanceIdentifier = object.provenanceIdentifier
         self.syncIdentifier = object.syncIdentifier
@@ -144,7 +147,8 @@ extension CachedCarbObject {
         self.grams = sample.quantity.doubleValue(for: .gram())
         self.startDate = sample.startDate
         self.uuid = sample.uuid
-
+        self.favoriteFoodID = sample.favoriteFoodID
+        
         self.provenanceIdentifier = sample.provenanceIdentifier
         self.syncIdentifier = sample.syncIdentifier
         self.syncVersion = sample.syncVersion
@@ -166,6 +170,7 @@ extension CachedCarbObject {
         self.grams = object.grams
         self.startDate = object.startDate
         self.uuid = object.uuid
+        self.favoriteFoodID = object.favoriteFoodID
 
         self.provenanceIdentifier = object.provenanceIdentifier
         self.syncIdentifier = object.syncIdentifier
@@ -214,6 +219,7 @@ extension CachedCarbObject {
 
         metadata[HKMetadataKeyFoodType] = foodType
         metadata[MetadataKeyAbsorptionTime] = absorptionTime
+        metadata[MetadataKeyFavoriteFoodID] = favoriteFoodID
 
         metadata[HKMetadataKeySyncIdentifier] = syncIdentifier
         metadata[HKMetadataKeySyncVersion] = syncVersion
@@ -241,6 +247,7 @@ extension CachedCarbObject {
         self.grams = entry.quantity.doubleValue(for: .gram())
         self.startDate = entry.startDate
         self.uuid = entry.uuid
+        self.favoriteFoodID = entry.favoriteFoodID
 
         self.provenanceIdentifier = entry.provenanceIdentifier
         self.syncIdentifier = entry.syncIdentifier
