@@ -15,7 +15,7 @@ jobs:
     working_directory: *project_directory
     resource_class: macos.m1.medium.gen1
     macos:
-      xcode: "15.2"
+      xcode: "15.3"
     steps:
       - checkout
       - run:

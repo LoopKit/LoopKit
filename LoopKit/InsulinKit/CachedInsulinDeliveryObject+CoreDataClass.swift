@@ -84,6 +84,22 @@ class CachedInsulinDeliveryObject: NSManagedObject {
         }
     }
 
+    var programmedUnits: Double? {
+        get {
+            willAccessValue(forKey: "programmedUnits")
+            defer { didAccessValue(forKey: "programmedUnits") }
+            guard let programmedUnits = primitiveProgrammedUnits else {
+                return nil
+            }
+            return programmedUnits as? Double
+        }
+        set {
+            willChangeValue(forKey: "programmedUnits")
+            defer { didChangeValue(forKey: "programmedUnits") }
+            primitiveProgrammedUnits = newValue != nil ? NSNumber(value: newValue!) : nil
+        }
+    }
+
     var insulinType: InsulinType? {
         get {
             willAccessValue(forKey: "insulinType")
@@ -99,7 +115,7 @@ class CachedInsulinDeliveryObject: NSManagedObject {
             primitiveInsulinType = newValue != nil ? NSNumber(value: newValue!.rawValue) : nil
         }
     }
-    
+
     var automaticallyIssued: Bool? {
         get {
             willAccessValue(forKey: "automaticallyIssued")
@@ -152,25 +168,37 @@ extension CachedInsulinDeliveryObject {
             fatalError("CachedInsulinDeliveryObject has unexpected reason value: \(String(describing: reason))")
         }
 
-        let doseValue: Double
+        let programmedValue: Double
         let unit: DoseUnit
-        let deliveredUnits: Double?
+        let deliveredUnits: Double
 
-        if let programmedRate = programmedTempBasalRate {
-            doseValue = programmedRate.doubleValue(for: .internationalUnitsPerHour)
+        if type == .tempBasal,
+           let programmedRate = programmedTempBasalRate
+        {
+            deliveredUnits = self.deliveredUnits
+            programmedValue = programmedRate.doubleValue(for: .internationalUnitsPerHour)
             unit = .unitsPerHour
-            deliveredUnits = value
-        } else {
-            doseValue = value
+        } else if type == .basal,
+                  let programmedRate = scheduledBasalRate
+        {
+            deliveredUnits = self.deliveredUnits
+            programmedValue = programmedRate.doubleValue(for: .internationalUnitsPerHour)
+            unit = .unitsPerHour
+        } else if type == .suspend {
+            deliveredUnits = 0
+            programmedValue = 0
             unit = .units
-            deliveredUnits = nil
+        } else {
+            deliveredUnits = self.deliveredUnits
+            programmedValue = self.programmedUnits ?? deliveredUnits
+            unit = .units
         }
 
         return DoseEntry(
             type: type,
             startDate: startDate,
             endDate: endDate,
-            value: doseValue,
+            value: programmedValue,
             unit: unit,
             deliveredUnits: !isMutable ? deliveredUnits : nil,
             description: nil,
@@ -193,7 +221,7 @@ extension CachedInsulinDeliveryObject {
         self.startDate = sample.startDate
         self.endDate = sample.endDate
         self.syncIdentifier = sample.syncIdentifier ?? sample.uuid.uuidString // External doses might not have a syncIdentifier, so use the UUID
-        self.value = sample.quantity.doubleValue(for: .internationalUnit())
+        self.deliveredUnits = sample.quantity.doubleValue(for: .internationalUnit())
         self.scheduledBasalRate = sample.scheduledBasalRate
         self.programmedTempBasalRate = sample.programmedTempBasalRate
         self.insulinType = sample.insulinType
@@ -215,9 +243,10 @@ extension CachedInsulinDeliveryObject {
         self.startDate = entry.startDate
         self.endDate = entry.endDate
         self.syncIdentifier = entry.syncIdentifier
-        self.value = entry.unitsInDeliverableIncrements
+        self.deliveredUnits = entry.unitsInDeliverableIncrements
         self.scheduledBasalRate = entry.scheduledBasalRate
         self.programmedTempBasalRate = (entry.type == .tempBasal) ? HKQuantity(unit: .internationalUnitsPerHour, doubleValue: entry.unitsPerHour) : nil
+        self.programmedUnits = (entry.type == .bolus) ? entry.programmedUnits : nil
         self.reason = (entry.type == .bolus) ? .bolus : .basal
         self.createdAt = date
         self.deletedAt = nil
@@ -239,9 +268,10 @@ extension CachedInsulinDeliveryObject {
         self.startDate = entry.startDate
         self.endDate = entry.endDate
         self.syncIdentifier = entry.syncIdentifier
-        self.value = entry.unitsInDeliverableIncrements
+        self.deliveredUnits = entry.unitsInDeliverableIncrements
         self.scheduledBasalRate = entry.scheduledBasalRate
         self.programmedTempBasalRate = (entry.type == .tempBasal) ? HKQuantity(unit: .internationalUnitsPerHour, doubleValue: entry.unitsPerHour) : nil
+        self.programmedUnits = (entry.type == .bolus) ? entry.programmedUnits : nil
         self.reason = (entry.type == .bolus) ? .bolus : .basal
         self.deletedAt = nil
         self.insulinType = entry.insulinType
