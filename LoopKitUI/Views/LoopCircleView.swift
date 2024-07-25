@@ -13,22 +13,14 @@ public struct LoopCircleView: View {
     @Environment(\.loopStatusColorPalette) private var loopStatusColors
     @Environment(\.isEnabled) private var isEnabled
     
-    @Binding private var animating: Bool
-    @Binding private var closedLoop: Bool
-    @Binding private var freshness: LoopCompletionFreshness
-    
-    public init(closedLoop: Binding<Bool>, freshness: Binding<LoopCompletionFreshness>, animating: Binding<Bool> = .constant(false)) {
-        self._closedLoop = closedLoop
-        self._freshness = freshness
-        self._animating = animating
-    }
+    private let animating: Bool
+    private let closedLoop: Bool
+    private let freshness: LoopCompletionFreshness
     
     public init(closedLoop: Bool, freshness: LoopCompletionFreshness, animating: Bool = false) {
-        self.init(
-            closedLoop: .constant(closedLoop),
-            freshness: .constant(freshness),
-            animating: .constant(animating)
-        )
+        self.closedLoop = closedLoop
+        self.freshness = freshness
+        self.animating = animating
     }
     
     public var body: some View {
@@ -44,7 +36,7 @@ public struct LoopCircleView: View {
             .animation(.default, value: closedLoop)
     }
     
-    func getLoopColor(freshness: LoopCompletionFreshness) -> Color {
+    private func getLoopColor(freshness: LoopCompletionFreshness) -> Color {
         switch freshness {
         case .fresh:
             return Color(uiColor: loopStatusColors.normal)
@@ -56,7 +48,7 @@ public struct LoopCircleView: View {
     }
 }
 
-extension Animation {
+private extension Animation {
     func `repeat`(while expression: Bool, autoreverses: Bool = true) -> Animation {
         if expression {
             return self.repeatForever(autoreverses: autoreverses)
