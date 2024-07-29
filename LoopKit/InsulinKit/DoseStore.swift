@@ -1190,8 +1190,6 @@ extension DoseStore {
             do {
                 var doses: [DoseEntry]
 
-                self.log.debug("here")
-
                 // Reservoir data is used only if it's continuous and the pumpmanager hasn't reconciled since the last reservoir reading
                 if self.areReservoirValuesValid, let reservoirEndDate = self.lastStoredReservoirValue?.startDate, reservoirEndDate > self.lastPumpEventsReconciliation ?? .distantPast {
                     let reservoirDoses = try self.getNormalizedReservoirDoseEntries(start: filteredStart, end: end)

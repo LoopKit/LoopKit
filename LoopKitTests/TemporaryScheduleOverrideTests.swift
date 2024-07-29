@@ -378,7 +378,7 @@ class TemporaryScheduleOverrideTests: XCTestCase {
             ),
         ]
 
-        let overrides: [TemporaryScheduleOverride] = [
+        var overrides: [TemporaryScheduleOverride] = [
             .init(
                 context: .preMeal,
                 settings: .init(targetRange: overrideRange),
@@ -433,7 +433,16 @@ class TemporaryScheduleOverrideTests: XCTestCase {
         ]
         XCTAssertEqual(expectedValues, values)
 
+        // Test override canceled 30 minutes after start (at 2.5 hours)
+        overrides[0].actualEnd = .early(.t(2.5))
+        applied = overrides.applyTarget(over: timeline, at: .t(2.8))
 
+        times = applied.map { $0.startDate }
+        XCTAssertEqual([.t(0)], times)
+        XCTAssertEqual(.t(4), applied.last!.endDate)
+
+        values = applied.map { $0.value }
+        XCTAssertEqual([scheduledRange], values)
     }
 
     func testPreMealPreset() {

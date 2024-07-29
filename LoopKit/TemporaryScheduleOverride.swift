@@ -476,7 +476,7 @@ extension Array where Element == TemporaryScheduleOverride {
 
         // Look for active or future override
         for override in self {
-            if override.scheduledEndDate > date && override.startDate < scheduleEndDate {
+            if override.actualEndDate > date && override.startDate < scheduleEndDate {
                 // override is active or future
                 applicableOverride = override
                 break
