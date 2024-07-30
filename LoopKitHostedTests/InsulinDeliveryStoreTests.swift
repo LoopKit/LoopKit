@@ -32,7 +32,7 @@ class InsulinDeliveryStoreTestsBase: PersistenceControllerTestCase {
                                     endDate: Date(timeIntervalSinceNow: -.minutes(3.5)),
                                     value: 1.0,
                                     unit: .units,
-                                    deliveredUnits: nil,
+                                    deliveredUnits: 1.0,
                                     syncIdentifier: "1A1D6192-1521-4469-B962-1B82C4534BB1",
                                     scheduledBasalRate: nil)
     internal let device = HKDevice(name: UUID().uuidString,
@@ -208,7 +208,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
         XCTAssertEqual(entries[0].endDate, self.entry1.endDate)
         XCTAssertEqual(entries[0].value, 0.015)
         XCTAssertEqual(entries[0].unit, .units)
-        XCTAssertNil(entries[0].deliveredUnits)
+        XCTAssertEqual(entries[0].deliveredUnits, 0.015)
         XCTAssertEqual(entries[0].description, self.entry1.description)
         XCTAssertEqual(entries[0].syncIdentifier, self.entry1.syncIdentifier)
         XCTAssertEqual(entries[0].scheduledBasalRate, self.entry1.scheduledBasalRate)
@@ -265,13 +265,8 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
 
     func testLastBasalEndDate() {
         let getLastImmutableBasalEndDate1Completion = expectation(description: "getLastImmutableBasalEndDate1")
-        insulinDeliveryStore.getLastImmutableBasalEndDate() { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let lastBasalEndDate):
-                XCTAssertEqual(lastBasalEndDate, .distantPast)
-            }
+        insulinDeliveryStore.getLastImmutableBasalEndDate() { lastBasalEndDate in
+            XCTAssertNil(lastBasalEndDate)
             getLastImmutableBasalEndDate1Completion.fulfill()
         }
         waitForExpectations(timeout: 10)
@@ -289,13 +284,8 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
         waitForExpectations(timeout: 10)
 
         let getLastImmutableBasalEndDate2Completion = expectation(description: "getLastImmutableBasalEndDate2")
-        insulinDeliveryStore.getLastImmutableBasalEndDate() { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let lastBasalEndDate):
-                XCTAssertEqual(lastBasalEndDate, self.entry2.endDate)
-            }
+        insulinDeliveryStore.getLastImmutableBasalEndDate() { lastBasalEndDate in
+            XCTAssertEqual(lastBasalEndDate, self.entry2.endDate)
             getLastImmutableBasalEndDate2Completion.fulfill()
         }
         waitForExpectations(timeout: 10)
@@ -308,13 +298,8 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
         waitForExpectations(timeout: 10)
 
         let getLastImmutableBasalEndDate3Completion = expectation(description: "getLastImmutableBasalEndDate3")
-        insulinDeliveryStore.getLastImmutableBasalEndDate() { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let lastBasalEndDate):
-                XCTAssertEqual(lastBasalEndDate, .distantPast)
-            }
+        insulinDeliveryStore.getLastImmutableBasalEndDate() { lastBasalEndDate in
+            XCTAssertNil(lastBasalEndDate)
             getLastImmutableBasalEndDate3Completion.fulfill()
         }
         waitForExpectations(timeout: 10)
@@ -342,7 +327,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
         XCTAssertEqual(entries[0].endDate, self.entry1.endDate)
         XCTAssertEqual(entries[0].value, 0.015)
         XCTAssertEqual(entries[0].unit, .units)
-        XCTAssertNil(entries[0].deliveredUnits)
+        XCTAssertEqual(entries[0].deliveredUnits, 0.015)
         XCTAssertEqual(entries[0].description, self.entry1.description)
         XCTAssertEqual(entries[0].syncIdentifier, self.entry1.syncIdentifier)
         XCTAssertEqual(entries[0].scheduledBasalRate, self.entry1.scheduledBasalRate)
@@ -384,7 +369,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
         XCTAssertEqual(entries[0].endDate, self.entry1.endDate)
         XCTAssertEqual(entries[0].value, 0.015)
         XCTAssertEqual(entries[0].unit, .units)
-        XCTAssertNil(entries[0].deliveredUnits)
+        XCTAssertEqual(entries[0].deliveredUnits, 0.015)
         XCTAssertEqual(entries[0].description, self.entry1.description)
         XCTAssertEqual(entries[0].syncIdentifier, self.entry1.syncIdentifier)
         XCTAssertEqual(entries[0].scheduledBasalRate, self.entry1.scheduledBasalRate)
@@ -449,6 +434,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
                                     endDate: Date(timeIntervalSinceNow: -.minutes(10)),
                                     value: 3.0,
                                     unit: .units,
+                                    deliveredUnits: 3.0,
                                     syncIdentifier: "C0AB1CBD-6B36-4113-9D49-709A022B2451",
                                     manuallyEntered: true)
 
@@ -894,7 +880,8 @@ class InsulinDeliveryStoreQueryTests: PersistenceControllerTestCase {
                 object.startDate = Date().addingTimeInterval(-.minutes(15))
                 object.endDate = Date().addingTimeInterval(-.minutes(5))
                 object.syncIdentifier = doseDatum.syncIdentifier
-                object.value = 1.0
+                object.deliveredUnits = 1.0
+                object.programmedUnits = 2.0
                 object.reason = .bolus
                 object.createdAt = Date()
                 object.deletedAt = doseDatum.deleted ? Date() : nil

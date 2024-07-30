@@ -868,14 +868,30 @@ extension DoseStore {
 
     /// Attempts to store doses from pump events to insulin delivery store
     private func syncPumpEventsToInsulinDeliveryStore(after start: Date? = nil, resolveMutable: Bool = false, completion: @escaping (_ error: Error?) -> Void) {
-        insulinDeliveryStore.getLastImmutableBasalEndDate { (result) in
-            switch result {
-            case .success(let date):
+        insulinDeliveryStore.getLastImmutableBasalEndDate { (date) in
+            if let date {
+                var start = date
                 // Limit the query behavior to 24 hours
-                let date = max(date, self.recentStartDate)
-                self.savePumpEventsToInsulinDeliveryStore(after: start ?? date, resolveMutable: resolveMutable, completion: completion)
-            case .failure(let error):
-                completion(error)
+                start = max(start, self.recentStartDate)
+                self.savePumpEventsToInsulinDeliveryStore(after: start, resolveMutable: resolveMutable, completion: completion)
+            } else {
+                self.persistenceController.managedObjectContext.perform {
+                    do {
+                        let events = try self.getPumpEventObjects(chronological: true, limit: 1)
+                        if let firstPumpEvent = events.first {
+                            var start = firstPumpEvent.startDate
+                            // Limit the query behavior to 24 hours
+                            start = max(start, self.recentStartDate)
+                            self.savePumpEventsToInsulinDeliveryStore(after: start, resolveMutable: resolveMutable, completion: completion)
+                        } else {
+                            // No previous basal, and no pump events; nothing to store or infer
+                            completion(nil)
+                            return
+                        }
+                    } catch {
+                        completion(error)
+                    }
+                }
             }
         }
     }
@@ -1020,10 +1036,10 @@ extension DoseStore {
     ///
     /// - Parameters:
     ///   - predicate: The predicate to apply to the objects
-    ///   - chronological: Whether to return the objects in chronological or reverse-chronological order
+    ///   - chronological: Whether to return the objects in chronological (true) or reverse-chronological (false) order
     /// - Returns: An array of pump events in the specified order by date
     /// - Throws: An error describing the failure to fetch objects
-    private func getPumpEventObjects(matching predicate: NSPredicate, chronological: Bool, limit: Int? = nil) throws -> [PumpEvent] {
+    private func getPumpEventObjects(matching predicate: NSPredicate? = nil, chronological: Bool = true, limit: Int? = nil) throws -> [PumpEvent] {
         let request: NSFetchRequest<PumpEvent> = PumpEvent.fetchRequest()
         request.predicate = predicate
         request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: chronological)]
@@ -1173,8 +1189,6 @@ extension DoseStore {
         return try await self.persistenceController.managedObjectContext.perform {
             do {
                 var doses: [DoseEntry]
-
-                self.log.debug("here")
 
                 // Reservoir data is used only if it's continuous and the pumpmanager hasn't reconciled since the last reservoir reading
                 if self.areReservoirValuesValid, let reservoirEndDate = self.lastStoredReservoirValue?.startDate, reservoirEndDate > self.lastPumpEventsReconciliation ?? .distantPast {

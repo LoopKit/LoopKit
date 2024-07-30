@@ -312,15 +312,15 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
                 XCTFail("Unexpected failure: \(error)")
             case .success(let samples):
                 XCTAssertEqual(samples.count, 3)
-                // HealthKit storage is deferred, so the second 2 UUIDs are nil
+                // HealthKit storage is deferred, so the second 1 UUIDs is nil
                 XCTAssertNotNil(samples[0].uuid)
                 XCTAssertNil(samples[0].healthKitEligibleDate)
                 assertEqualSamples(samples[0], self.sample1)
                 XCTAssertNil(samples[1].uuid)
                 XCTAssertNotNil(samples[1].healthKitEligibleDate)
                 assertEqualSamples(samples[1], self.sample3)
-                XCTAssertNil(samples[2].uuid)
-                XCTAssertNotNil(samples[2].healthKitEligibleDate)
+                XCTAssertNotNil(samples[2].uuid)
+                XCTAssertNil(samples[2].healthKitEligibleDate)
                 assertEqualSamples(samples[2], self.sample2)
             }
             getGlucoseSamples1Completion.fulfill()

@@ -10,6 +10,7 @@ import SwiftUI
 import LoopKit
 
 public struct FoodTypeRow: View {
+    @Binding private var selectedFavoriteFood: StoredFavoriteFood?
     @Binding private var foodType: String
     @Binding private var absorptionTime: TimeInterval
     @Binding private var selectedDefaultAbsorptionTimeEmoji: String
@@ -30,7 +31,8 @@ public struct FoodTypeRow: View {
     @State private var selectedEmojiIndex = 1
     
     /// Contains emoji shortcuts, an emoji keyboard, and modifies absorption time to match emoji
-    public init(foodType: Binding<String>, absorptionTime: Binding<TimeInterval>, selectedDefaultAbsorptionTimeEmoji: Binding<String>, usesCustomFoodType: Binding<Bool>, absorptionTimeWasEdited: Binding<Bool>, isFocused: Binding<Bool>, defaultAbsorptionTimes: DefaultAbsorptionTimes) {
+    public init(selectedFavoriteFood: Binding<StoredFavoriteFood?>, foodType: Binding<String>, absorptionTime: Binding<TimeInterval>, selectedDefaultAbsorptionTimeEmoji: Binding<String>, usesCustomFoodType: Binding<Bool>, absorptionTimeWasEdited: Binding<Bool>, isFocused: Binding<Bool>, defaultAbsorptionTimes: DefaultAbsorptionTimes) {
+        self._selectedFavoriteFood = selectedFavoriteFood
         self._foodType = foodType
         self._absorptionTime = absorptionTime
         self._selectedDefaultAbsorptionTimeEmoji = selectedDefaultAbsorptionTimeEmoji
@@ -48,7 +50,11 @@ public struct FoodTypeRow: View {
             
             Spacer()
             
-            if usesCustomFoodType {
+            if let selectedFavoriteFood {
+                Text(selectedFavoriteFood.title)
+                    .modifier(LabelBackground(bgColor: Color(.tertiarySystemGroupedBackground)))
+            }
+            else if usesCustomFoodType {
                 RowEmojiTextField(text: $foodType, isFocused: $isFocused, emojiType: .food, didSelectItemInSection: didSelectEmojiInSection)
                     .onTapGesture {
                         // so that row does not lose focus on cursor move
@@ -109,6 +115,25 @@ public struct FoodTypeRow: View {
         }
     }
 }
+
+public struct LabelBackground: ViewModifier {
+    let bgColor: Color
+    
+    public init(bgColor: Color = Color(.systemGray6)) {
+        self.bgColor = bgColor
+    }
+    
+    public func body(content: Content) -> some View {
+        content
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .background(
+                RoundedRectangle(cornerRadius: 5, style: .continuous)
+                    .fill(bgColor)
+            )
+    }
+}
+
 
 fileprivate enum FoodEmojiShortcut {
     case fast(emoji: String)
