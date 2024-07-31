@@ -18,6 +18,9 @@
 		149A28BF2A85430F00052EDF /* DatePickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 149A28BE2A85430F00052EDF /* DatePickerRow.swift */; };
 		149A28C12A85432700052EDF /* FoodTypeRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 149A28C02A85432700052EDF /* FoodTypeRow.swift */; };
 		14B33265293ED44C009B8746 /* GlucoseRangeSchedule+SafeBounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B33264293ED44C009B8746 /* GlucoseRangeSchedule+SafeBounds.swift */; };
+		14C970702C5A8E1500E8A01B /* ChartAxisValueDoubleCarbEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C9706F2C5A8E1500E8A01B /* ChartAxisValueDoubleCarbEntry.swift */; };
+		14C970742C5A925500E8A01B /* GlucoseCarbChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C970732C5A925500E8A01B /* GlucoseCarbChart.swift */; };
+		14C970782C5A935600E8A01B /* ChartPointsScatterCarbImageLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C970772C5A935200E8A01B /* ChartPointsScatterCarbImageLayer.swift */; };
 		14D906EE2A84579B006EB79A /* NewFavoriteFood.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D906ED2A84579B006EB79A /* NewFavoriteFood.swift */; };
 		14D906F02A8457AB006EB79A /* StoredFavoriteFood.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D906EF2A8457AB006EB79A /* StoredFavoriteFood.swift */; };
 		14D906F22A845868006EB79A /* FavoriteFoodListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D906F12A845868006EB79A /* FavoriteFoodListRow.swift */; };
@@ -1002,6 +1005,9 @@
 		149A28BE2A85430F00052EDF /* DatePickerRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerRow.swift; sourceTree = "<group>"; };
 		149A28C02A85432700052EDF /* FoodTypeRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodTypeRow.swift; sourceTree = "<group>"; };
 		14B33264293ED44C009B8746 /* GlucoseRangeSchedule+SafeBounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GlucoseRangeSchedule+SafeBounds.swift"; sourceTree = "<group>"; };
+		14C9706F2C5A8E1500E8A01B /* ChartAxisValueDoubleCarbEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartAxisValueDoubleCarbEntry.swift; sourceTree = "<group>"; };
+		14C970732C5A925500E8A01B /* GlucoseCarbChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseCarbChart.swift; sourceTree = "<group>"; };
+		14C970772C5A935200E8A01B /* ChartPointsScatterCarbImageLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartPointsScatterCarbImageLayer.swift; sourceTree = "<group>"; };
 		14D906ED2A84579B006EB79A /* NewFavoriteFood.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFavoriteFood.swift; sourceTree = "<group>"; };
 		14D906EF2A8457AB006EB79A /* StoredFavoriteFood.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoredFavoriteFood.swift; sourceTree = "<group>"; };
 		14D906F12A845868006EB79A /* FavoriteFoodListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteFoodListRow.swift; sourceTree = "<group>"; };
@@ -2137,6 +2143,7 @@
 				E9086B3424B3A8820062F5C8 /* ChartContainerView.swift */,
 				A9D3FF112A6C19ED000C891D /* ChartPointsContextFillLayer.swift */,
 				A9D3FF132A6C1A01000C891D /* ChartPointsScatterDownTrianglesLayer.swift */,
+				14C970772C5A935200E8A01B /* ChartPointsScatterCarbImageLayer.swift */,
 				A9D3FF152A6C1A16000C891D /* ChartPointsTouchHighlightLayerViewCache.swift */,
 				E9086B3024B3A7270062F5C8 /* ChartTableViewCell.swift */,
 				1D096BF924C242300078B6B5 /* CheckmarkListItem.swift */,
@@ -3090,6 +3097,7 @@
 				A9D3FEFA2A6C1943000C891D /* ChartConstants.swift */,
 				A9D3FEFC2A6C1943000C891D /* COBChart.swift */,
 				A9D3FEF92A6C1942000C891D /* DoseChart.swift */,
+				14C970732C5A925500E8A01B /* GlucoseCarbChart.swift */,
 				E9086B4424B53CC50062F5C8 /* GlucoseChart.swift */,
 				E93C86A124C8F7550073089B /* InsulinModelChart.swift */,
 				A9D3FEFD2A6C1943000C891D /* IOBChart.swift */,
@@ -3101,6 +3109,7 @@
 		E9086B4624B5404D0062F5C8 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				14C9706F2C5A8E1500E8A01B /* ChartAxisValueDoubleCarbEntry.swift */,
 				A9D3FF0F2A6C19CA000C891D /* ChartAxisValueDoubleLog.swift */,
 				E9086B4724B5405E0062F5C8 /* ChartAxisValueDoubleUnit.swift */,
 				B43DA43E24D49AA400CAFF4E /* GuidanceColors.swift */,
@@ -3772,6 +3781,7 @@
 				1D498E4724D892B0000627F2 /* Environment+Authenticate.swift in Sources */,
 				B4A2AAB3240832350066563F /* MultipleSelectionList.swift in Sources */,
 				B46B62AB23FF0822001E69BA /* LabeledValueView.swift in Sources */,
+				14C970742C5A925500E8A01B /* GlucoseCarbChart.swift in Sources */,
 				43FB60E720DCBC55002B996B /* RadioSelectionTableViewController.swift in Sources */,
 				43BA7182201EE7090058961E /* TextFieldTableViewCell.swift in Sources */,
 				89F6E314244A1AB600CB9E15 /* GuardrailWarning.swift in Sources */,
@@ -3933,6 +3943,7 @@
 				E9086B3124B3A7270062F5C8 /* ChartTableViewCell.swift in Sources */,
 				E93E866424DCFB6D00FF40C8 /* OverrideHistoryCollectionViewCell.swift in Sources */,
 				E0E99C392C0E80C200F9300C /* LoopCircleView.swift in Sources */,
+				14C970702C5A8E1500E8A01B /* ChartAxisValueDoubleCarbEntry.swift in Sources */,
 				895FE08122011F0C00FCF18A /* OverridePresetCollectionViewCell.swift in Sources */,
 				84DF48892C33218100844FB1 /* MuteAllAppSoundsDurationSheetView.swift in Sources */,
 				43FB60E320DCB9E0002B996B /* PumpManagerUI.swift in Sources */,
@@ -3940,6 +3951,7 @@
 				A9D3FF012A6C1944000C891D /* CarbEffectChart.swift in Sources */,
 				89BE75C72464B4A900B145D9 /* Environment+Dismiss.swift in Sources */,
 				43BA717F201EE7090058961E /* GlucoseRangeOverrideTableViewCell.swift in Sources */,
+				14C970782C5A935600E8A01B /* ChartPointsScatterCarbImageLayer.swift in Sources */,
 				895FE09022011F4800FCF18A /* OverrideSelectionViewController.swift in Sources */,
 				89904032245B5CA500F1C0A2 /* Deletable.swift in Sources */,
 				43F5035721059A8A009FA89A /* ServiceCredential.swift in Sources */,
@@ -5915,8 +5927,7 @@
 				B41E10532C3D314600E186F7 /* Modelv4.xcdatamodel */,
 			);
 			currentVersion = B41E10522C3D314600E186F7 /* Modelv5.xcdatamodel */;
-			name = Model.xcdatamodeld;
-			path = "Model.xcdatamodeld";
+			path = Model.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};
