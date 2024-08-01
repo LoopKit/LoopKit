@@ -246,11 +246,12 @@ extension CarbStore {
     ///   - start: The earliest date of values to retrieve
     ///   - end: The latest date of values to retrieve, if provided
     ///   - dateAscending: Indicates how the result will be sorted. If true, function returns `[oldestEntry, ..., newestEntry]`. If false, function returns`[newestEntry, ..., oldestEntry]`
+    ///   - fetchLimit: Limit on the maximum number of entries to be retrieved
     ///   - with: The favorite food identifier to match
     ///   - result: An array of carb entries, sorted by startDate, or error
-    public func getCarbEntries(start: Date? = nil, end: Date? = nil, dateAscending: Bool = true, with favoriteFoodID: String? = nil ) async throws -> [StoredCarbEntry] {
+    public func getCarbEntries(start: Date? = nil, end: Date? = nil, dateAscending: Bool = true, fetchLimit: Int? = nil, with favoriteFoodID: String? = nil) async throws -> [StoredCarbEntry] {
         try await withCheckedThrowingContinuation { continuation in
-            getCarbEntries(start: start, end: end, dateAscending: dateAscending, with: favoriteFoodID) { result in
+            getCarbEntries(start: start, end: end, dateAscending: dateAscending, fetchLimit: fetchLimit, with: favoriteFoodID) { result in
                 switch result {
                 case .failure(let error):
                     continuation.resume(throwing: error)
@@ -266,13 +267,14 @@ extension CarbStore {
     /// - Parameters:
     ///   - start: The earliest date of values to retrieve
     ///   - end: The latest date of values to retrieve, if provided'
-    ///   - dateAscending: Indicates how the result will be sorted. If true, function returns `[oldestEntry, ..., newestEntry]`. If false, function returns`[newestEntry, ..., oldestEntry]`
+    ///   - dateAscending: Indicates how the result will be sorted. If true, function returns `[oldestEntry, ..., newestEntry]`. If false, function returns`[newestEntry, ...,
+    ///   - fetchLimit: Limit on the maximum number of entries to be retrieved
     ///   - with: The favorite food identifier to match
     ///   - completion: A closure called once the values have been retrieved
     ///   - result: An array of carb entries, sorted by startDate, or error
-    public func getCarbEntries(start: Date? = nil, end: Date? = nil, dateAscending: Bool = true, with favoriteFoodID: String? = nil , completion: @escaping (_ result: Result<[StoredCarbEntry], Error>) -> Void) {
+    public func getCarbEntries(start: Date? = nil, end: Date? = nil, dateAscending: Bool = true, fetchLimit: Int? = nil, with favoriteFoodID: String? = nil, completion: @escaping (_ result: Result<[StoredCarbEntry], Error>) -> Void) {
         queue.async {
-            completion(self.getCarbEntries(start: start, end: end, dateAscending: dateAscending, with: favoriteFoodID))
+            completion(self.getCarbEntries(start: start, end: end, dateAscending: dateAscending, fetchLimit: fetchLimit, with: favoriteFoodID))
         }
     }
 
@@ -282,9 +284,10 @@ extension CarbStore {
     ///   - start: The earliest date of values to retrieve
     ///   - end: The latest date of values to retrieve, if provided
     ///   - dateAscending: Indicates how the result will be sorted. If true, function returns `[oldestEntry, ..., newestEntry]`. If false, function returns`[newestEntry, ..., oldestEntry]`
+    ///   - fetchLimit: Limit on the maximum number of entries to be retrieved
     ///   - with: The favorite food identifier to match
     /// - Returns: An array of carb entries, sorted by startDate, or error
-    private func getCarbEntries(start: Date? = nil, end: Date? = nil, dateAscending: Bool = true, with favoriteFoodID: String? = nil ) -> Result<[StoredCarbEntry], Error> {
+    private func getCarbEntries(start: Date? = nil, end: Date? = nil, dateAscending: Bool = true, fetchLimit: Int? = nil, with favoriteFoodID: String? = nil) -> Result<[StoredCarbEntry], Error> {
         dispatchPrecondition(condition: .onQueue(queue))
 
         var entries: [StoredCarbEntry] = []
@@ -294,7 +297,6 @@ extension CarbStore {
         if let favoriteFoodID = favoriteFoodID {
             additionalPredicates.append(NSPredicate(format: "favoriteFoodID == %@", favoriteFoodID))
         }
-
         cacheStore.managedObjectContext.performAndWait {
             do {
                 entries = try self.getActiveCachedCarbObjects(start: start, end: end, dateAscending: dateAscending, additionalPredicates: additionalPredicates).map { StoredCarbEntry(managedObject: $0) }
@@ -316,9 +318,10 @@ extension CarbStore {
     ///   - start: The earliest date of values to retrieve
     ///   - end: The latest date of values to retrieve, if provided
     ///   - dateAscending: Indicates how the result will be sorted. If true, function returns `[oldestEntry, ..., newestEntry]`. If false, function returns`[newestEntry, ..., oldestEntry]`
+    ///   - fetchLimit: Limit on the maximum number of entries to be retrieved
     ///   - additionalPredicates: Optionally add additional predicates to the fetch
     /// - Returns: An array of cached carb objects
-    private func getActiveCachedCarbObjects(start: Date? = nil, end: Date? = nil, dateAscending: Bool = true, additionalPredicates: [NSPredicate] = []) throws -> [CachedCarbObject] {
+    private func getActiveCachedCarbObjects(start: Date? = nil, end: Date? = nil, dateAscending: Bool = true, fetchLimit: Int? = nil, additionalPredicates: [NSPredicate] = []) throws -> [CachedCarbObject] {
         dispatchPrecondition(condition: .onQueue(queue))
 
         var predicates = [NSPredicate(format: "operation != %d", Operation.delete.rawValue),
@@ -336,6 +339,9 @@ extension CarbStore {
         let request: NSFetchRequest<CachedCarbObject> = CachedCarbObject.fetchRequest()
         request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
         request.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: dateAscending)]
+        if let fetchLimit {
+            request.fetchLimit = fetchLimit
+        }
 
         return try self.cacheStore.managedObjectContext.fetch(request)
     }
