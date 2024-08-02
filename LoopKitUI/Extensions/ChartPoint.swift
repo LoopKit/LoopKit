@@ -128,8 +128,10 @@ extension ChartPoint: TimelineValue {
 }
 
 extension Array where Element: ChartPoint {
-    /// Merges the current sorted array with another sorted array into a single sorted array.
+    /// Merges the current array (must already sorted by `startDate`) with another array (also sorted by `startDate`) into a single sorted array.
     /// The merging process maintains the sorted order of the elements.
+    ///
+    /// - Precondition: Both arrays are sorted in ascending order of `startDate`
     ///
     /// - Parameter other: The sorted array to be merged with the current array.
     /// - Returns: A new sorted array containing all the elements from the current array and `other`.

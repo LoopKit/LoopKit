@@ -299,7 +299,7 @@ extension CarbStore {
         }
         cacheStore.managedObjectContext.performAndWait {
             do {
-                entries = try self.getActiveCachedCarbObjects(start: start, end: end, dateAscending: dateAscending, additionalPredicates: additionalPredicates).map { StoredCarbEntry(managedObject: $0) }
+                entries = try self.getActiveCachedCarbObjects(start: start, end: end, dateAscending: dateAscending, fetchLimit: fetchLimit, additionalPredicates: additionalPredicates).map { StoredCarbEntry(managedObject: $0) }
             } catch let coreDataError {
                 error = .coreDataError(coreDataError)
             }
