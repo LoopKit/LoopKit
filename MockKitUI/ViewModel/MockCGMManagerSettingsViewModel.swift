@@ -62,7 +62,9 @@ class MockCGMManagerSettingsViewModel: ObservableObject {
     }
     
     @Published var lastReadingMinutesFromNow: Int = 0
-    
+
+    @Published var fobId: Int?
+
     func updateLastReadingTime() {
         guard let lastGlucoseDate = lastGlucoseDate else {
             lastReadingMinutesFromNow = 0
@@ -73,6 +75,15 @@ class MockCGMManagerSettingsViewModel: ObservableObject {
     
     @Published private(set) var lastGlucoseTrend: GlucoseTrend?
     
+
+    var bleHeartbeatStatus: String? {
+        if let fobId {
+            return "Fob ID #\(fobId)"
+        } else {
+            return "Not Paired"
+        }
+    }
+
     var lastGlucoseDateFormatted: String? {
         guard let lastGlucoseDate = lastGlucoseDate else {
             return nil
@@ -85,7 +96,9 @@ class MockCGMManagerSettingsViewModel: ObservableObject {
     init(cgmManager: MockCGMManager, displayGlucosePreference: DisplayGlucosePreference) {
         self.cgmManager = cgmManager
         self.displayGlucosePreference = displayGlucosePreference
-                
+
+        self.fobId = cgmManager.mockSensorState.heartbeatFobId
+
         lastGlucoseDate = cgmManager.cgmManagerStatus.lastCommunicationDate
         lastGlucoseTrend = cgmManager.mockSensorState.trendType
         setLastGlucoseTrend(cgmManager.mockSensorState.trendRate)
@@ -133,7 +146,9 @@ extension MockCGMManagerSettingsViewModel: CGMManagerStatusObserver {
         lastGlucoseTrend = cgmManager.mockSensorState.trendType
         
         setLastGlucoseTrend(cgmManager.mockSensorState.trendRate)
-        
+
+        fobId = cgmManager.mockSensorState.heartbeatFobId
+
         setLastGlucoseValue()
     }
 }
