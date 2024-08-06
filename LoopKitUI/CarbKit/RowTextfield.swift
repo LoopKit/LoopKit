@@ -50,8 +50,9 @@ struct RowTextField: UIViewRepresentable {
         }
         
         @objc fileprivate func textChanged(_ textField: UITextField) {
+            let text = textField.text ?? ""
             DispatchQueue.main.async {
-                self.text = textField.text ?? ""
+                self.text = text
             }
         }
 
