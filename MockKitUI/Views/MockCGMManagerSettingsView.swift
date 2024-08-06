@@ -56,6 +56,8 @@ struct MockCGMManagerSettingsView: View {
         statusCardSubSection
         
         notificationSubSection
+
+        heartbeatSubSection
     }
     
     private var statusCardSubSection: some View {
@@ -206,6 +208,17 @@ struct MockCGMManagerSettingsView: View {
             }
         }
     }
+
+    private var heartbeatSubSection: some View {
+        Section(header: SectionHeader(label: "BLE Heartbeat")) {
+            if let heartbeatFob = viewModel.cgmManager.heartbeatFob {
+                NavigationLink(destination: HeartbeatFobPairingView(heartbeatFob: heartbeatFob)) {
+                    LabeledValueView(label: "Status", value: viewModel.bleHeartbeatStatus)
+                }
+            }
+        }
+    }
+
 
     private var lastReadingSection: some View {
         Section(header: SectionHeader(label: "Last Reading")) {
