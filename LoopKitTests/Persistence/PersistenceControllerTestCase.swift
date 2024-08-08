@@ -9,13 +9,16 @@ import XCTest
 @testable import LoopKit
 
 class PersistenceControllerTestCase: XCTestCase {
-
+ 
     var cacheStore: PersistenceController!
 
     override func setUp() {
         super.setUp()
 
-        cacheStore = PersistenceController(directoryURL: URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true).appendingPathComponent(UUID().uuidString, isDirectory: true))
+
+        let dir = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+
+        cacheStore = PersistenceController(directoryURL: URL(fileURLWithPath: dir.absoluteString, isDirectory: true).appendingPathComponent(UUID().uuidString, isDirectory: true))
 
         let semaphore = DispatchSemaphore(value: 0)
         cacheStore.onReady { error in

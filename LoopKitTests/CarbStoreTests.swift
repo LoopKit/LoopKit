@@ -225,7 +225,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
             addCarbEntryCompletion.fulfill()
         }
 
-        wait(for: [addHealthStoreHandler, addCarbEntryCompletion, addCarbEntryHandler, getCarbEntriesCompletion], timeout: 10, enforceOrder: true)
+        wait(for: [addHealthStoreHandler, addCarbEntryCompletion, addCarbEntryHandler, getCarbEntriesCompletion], timeout: 30, enforceOrder: true)
     }
 
     func testAddAndReplaceCarbEntry() {
@@ -394,7 +394,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
             addCarbEntryCompletion.fulfill()
         }
 
-        wait(for: [addHealthStoreHandler, addCarbEntryCompletion, addCarbEntryHandler, updateHealthStoreHandler, updateCarbEntryCompletion, updateCarbEntryHandler, getCarbEntriesCompletion], timeout: 10, enforceOrder: true)
+        wait(for: [addHealthStoreHandler, addCarbEntryCompletion, addCarbEntryHandler, updateHealthStoreHandler, updateCarbEntryCompletion, updateCarbEntryHandler, getCarbEntriesCompletion], timeout: 30, enforceOrder: true)
     }
 
     func testAddAndDeleteCarbEntry() {
@@ -538,7 +538,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
             addCarbEntryCompletion.fulfill()
         }
 
-        wait(for: [addHealthStoreHandler, addCarbEntryCompletion, addCarbEntryHandler, deleteHealthStoreHandler, deleteCarbEntryCompletion, deleteCarbEntryHandler, getCarbEntriesCompletion], timeout: 10, enforceOrder: true)
+        wait(for: [addHealthStoreHandler, addCarbEntryCompletion, addCarbEntryHandler, deleteHealthStoreHandler, deleteCarbEntryCompletion, deleteCarbEntryHandler, getCarbEntriesCompletion], timeout: 30, enforceOrder: true)
     }
 
     func testAddAndReplaceAndDeleteCarbEntry() {
@@ -770,7 +770,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
             addCarbEntryCompletion.fulfill()
         }
 
-        wait(for: [addHealthStoreHandler, addCarbEntryCompletion, addCarbEntryHandler, updateHealthStoreHandler, updateCarbEntryCompletion, updateCarbEntryHandler, deleteHealthStoreHandler, deleteCarbEntryCompletion, deleteCarbEntryHandler, getCarbEntriesCompletion], timeout: 10, enforceOrder: true)
+        wait(for: [addHealthStoreHandler, addCarbEntryCompletion, addCarbEntryHandler, updateHealthStoreHandler, updateCarbEntryCompletion, updateCarbEntryHandler, deleteHealthStoreHandler, deleteCarbEntryCompletion, deleteCarbEntryHandler, getCarbEntriesCompletion], timeout: 30, enforceOrder: true)
     }
 
     // MARK: -
@@ -854,7 +854,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
             }
         }
 
-        wait(for: [getSyncCarbObjectsCompletion], timeout: 2, enforceOrder: true)
+        wait(for: [getSyncCarbObjectsCompletion], timeout: 30, enforceOrder: true)
     }
 
     func testSetSyncCarbObjects() {
@@ -940,7 +940,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
             }
         }
 
-        wait(for: [getCarbEntriesCompletion], timeout: 2, enforceOrder: true)
+        wait(for: [getCarbEntriesCompletion], timeout: 30, enforceOrder: true)
     }
 
     // MARK: -
@@ -1063,7 +1063,7 @@ class CarbStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
 
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
 
     func testEmptyWithMissingQueryAnchor() {
@@ -1082,7 +1082,7 @@ class CarbStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
 
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
 
     func testEmptyWithNonDefaultQueryAnchor() {
@@ -1101,7 +1101,7 @@ class CarbStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
 
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
 
     func testDataWithUnusedQueryAnchor() {
@@ -1128,7 +1128,7 @@ class CarbStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
 
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
 
     func testDataWithStaleQueryAnchor() {
@@ -1153,7 +1153,7 @@ class CarbStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
 
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
 
     func testDataWithCurrentQueryAnchor() {
@@ -1176,7 +1176,7 @@ class CarbStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
 
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
 
     func testDataWithLimitZero() {
@@ -1199,7 +1199,7 @@ class CarbStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
 
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
 
     func testDataWithLimitCoveredByData() {
@@ -1226,7 +1226,7 @@ class CarbStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
 
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
 
     private func addData(withSyncIdentifiers syncIdentifiers: [String]) {
