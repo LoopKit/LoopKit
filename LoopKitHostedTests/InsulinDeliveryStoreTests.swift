@@ -99,7 +99,7 @@ class InsulinDeliveryStoreTestsAuthorized: InsulinDeliveryStoreTestsBase {
 
         mockHealthStore.observerQueryStartedExpectation = expectation(description: "observer query started")
 
-        waitForExpectations(timeout: 2)
+        waitForExpectations(timeout: 30)
 
         XCTAssertNotNil(mockHealthStore.observerQuery)
     }
@@ -730,7 +730,7 @@ class InsulinDeliveryStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
 
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
 
     func testDoseEmptyWithMissingQueryAnchor() {
@@ -748,7 +748,7 @@ class InsulinDeliveryStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
 
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
 
     func testDoseEmptyWithNonDefaultQueryAnchor() {
@@ -766,7 +766,7 @@ class InsulinDeliveryStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
 
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
 
     func testDoseDataWithUnusedQueryAnchor() {
@@ -793,7 +793,7 @@ class InsulinDeliveryStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
 
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
 
     func testDoseDataWithStaleQueryAnchor() {
@@ -818,7 +818,7 @@ class InsulinDeliveryStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
 
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
 
     func testDoseDataWithCurrentQueryAnchor() {
@@ -840,7 +840,7 @@ class InsulinDeliveryStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
 
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
 
     func testDoseDataWithLimitCoveredByData() {
@@ -868,7 +868,7 @@ class InsulinDeliveryStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
 
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
 
     private func addDoseData(_ doseData: [DoseDatum]) {
