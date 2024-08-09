@@ -24,23 +24,14 @@ public struct LoopCircleView: View {
     }
     
     public var body: some View {
-        ZStack {
-            Circle()
-                .trim(from: closedLoop ? 0 : 0.2, to: 1)
-                .stroke(!isEnabled ? Color(UIColor.systemGray3) : loopColor, lineWidth: animating && closedLoop ? 12 : 8)
-                .scaleEffect(animating && closedLoop ? 0.7 : 1)
-                .rotationEffect(Angle(degrees: closedLoop ? -90 : -126))
-                .frame(width: 36, height: 36)
-                .animation(animating && closedLoop ? .easeInOut(duration: 1).repeatForever(autoreverses: true) : .easeInOut(duration: 1), value: animating)
-                .animation(.default, value: closedLoop)
-            
-            VStack {
-                Text(animating.description)
-                Text(closedLoop.description)
-                Text(freshness.description)
-            }
-            .font(.footnote)
-        }
+        Circle()
+            .trim(from: closedLoop ? 0 : 0.2, to: 1)
+            .stroke(!isEnabled ? Color(UIColor.systemGray3) : loopColor, lineWidth: animating && closedLoop ? 12 : 8)
+            .scaleEffect(animating && closedLoop ? 0.7 : 1)
+            .rotationEffect(Angle(degrees: closedLoop ? -90 : -126))
+            .frame(width: 36, height: 36)
+            .animation(animating && closedLoop ? .easeInOut(duration: 1).repeatForever(autoreverses: true) : .easeInOut(duration: 1), value: animating)
+            .animation(.default, value: closedLoop)
     }
     
     private var loopColor: Color {
@@ -51,19 +42,6 @@ public struct LoopCircleView: View {
             return Color(uiColor: loopStatusColors.warning)
         case .stale:
             return Color(uiColor: loopStatusColors.error)
-        }
-    }
-}
-
-extension LoopCompletionFreshness {
-    var description: String {
-        switch self {
-        case .fresh:
-            return "fresh"
-        case .aging:
-            return "aging"
-        case .stale:
-            return "stale"
         }
     }
 }
