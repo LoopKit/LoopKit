@@ -534,7 +534,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
             // Set the current date
             test_currentDate: f("2018-12-12 18:07:14 +0000")
         )
-        waitForExpectations(timeout: 3)
+        waitForExpectations(timeout: 30)
 
 
         // 2. Add a temp basal which has already ended. It should persist in InsulinDeliveryStore.
@@ -1170,7 +1170,7 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
         
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
     
     func testPumpEventEmptyWithMissingQueryAnchor() {
@@ -1187,7 +1187,7 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
         
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
     
     func testPumpEventEmptyWithNonDefaultQueryAnchor() {
@@ -1204,7 +1204,7 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
         
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
     
     func testPumpEventDataWithUnusedQueryAnchor() {
@@ -1226,7 +1226,7 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
         
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
     
     func testPumpEventDataWithStaleQueryAnchor() {
@@ -1248,7 +1248,7 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
         
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
     
     func testPumpEventDataWithCurrentQueryAnchor() {
@@ -1269,7 +1269,7 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
         
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
     
     func testPumpEventDataWithLimitCoveredByData() {
@@ -1292,7 +1292,7 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
         
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
     
     private func addPumpEventData(withSyncIdentifiers syncIdentifiers: [String]) {

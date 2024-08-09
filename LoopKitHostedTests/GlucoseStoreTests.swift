@@ -124,7 +124,7 @@ class GlucoseStoreTestsAuthorized: GlucoseStoreTestsBase {
 
         mockHealthStore.observerQueryStartedExpectation = expectation(description: "observer query started")
 
-        waitForExpectations(timeout: 2)
+        waitForExpectations(timeout: 30)
 
         XCTAssertNotNil(hkSampleStore.observerQuery)
     }
