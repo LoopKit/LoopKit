@@ -24,19 +24,18 @@ public struct LoopCircleView: View {
     }
     
     public var body: some View {
-        let loopColor = getLoopColor(freshness: freshness)
-        
         Circle()
             .trim(from: closedLoop ? 0 : 0.2, to: 1)
             .stroke(!isEnabled ? Color(UIColor.systemGray3) : loopColor, lineWidth: animating && closedLoop ? 12 : 8)
             .scaleEffect(animating && closedLoop ? 0.7 : 1)
-            .animation(.easeInOut(duration: 1).repeat(while: animating && closedLoop, autoreverses: true), value: animating)
-            .frame(width: 36, height: 36)
             .rotationEffect(Angle(degrees: closedLoop ? -90 : -126))
+            .frame(width: 36, height: 36)
+            .animation(animating && closedLoop ? .easeInOut(duration: 1).repeatForever(autoreverses: true) : .easeInOut(duration: 1), value: animating)
             .animation(.default, value: closedLoop)
+            .animation(.none, value: loopColor)
     }
     
-    private func getLoopColor(freshness: LoopCompletionFreshness) -> Color {
+    private var loopColor: Color {
         switch freshness {
         case .fresh:
             return Color(uiColor: loopStatusColors.normal)
@@ -44,16 +43,6 @@ public struct LoopCircleView: View {
             return Color(uiColor: loopStatusColors.warning)
         case .stale:
             return Color(uiColor: loopStatusColors.error)
-        }
-    }
-}
-
-private extension Animation {
-    func `repeat`(while expression: Bool, autoreverses: Bool = true) -> Animation {
-        if expression {
-            return self.repeatForever(autoreverses: autoreverses)
-        } else {
-            return self
         }
     }
 }
