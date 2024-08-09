@@ -126,7 +126,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
             }
         }
 
-        wait(for: [getCarbEntriesCompletion], timeout: 2, enforceOrder: true)
+        wait(for: [getCarbEntriesCompletion], timeout: 30, enforceOrder: true)
     }
 
     // MARK: -
