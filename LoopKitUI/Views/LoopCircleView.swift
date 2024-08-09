@@ -27,13 +27,12 @@ public struct LoopCircleView: View {
         ZStack {
             Circle()
                 .trim(from: closedLoop ? 0 : 0.2, to: 1)
-                .stroke(!isEnabled ? Color(UIColor.systemGray3) : loopColor, lineWidth: animating && closedLoop ? 12 : 8)
+                .stroke(!isEnabled ? Color(UIColor.systemGray3) : loopColor, lineWidth: 8)
                 .scaleEffect(animating && closedLoop ? 0.7 : 1)
                 .rotationEffect(Angle(degrees: closedLoop ? -90 : -126))
                 .frame(width: 36, height: 36)
-                .animation(animating && closedLoop ? .easeInOut(duration: 1).repeatForever(autoreverses: true) : .easeInOut(duration: 1), value: animating)
+                .animation(animating && closedLoop ? .easeInOut(duration: 1).repeatForever(autoreverses: true) : .default, value: animating)
                 .animation(.default, value: closedLoop)
-                .animation(.none, value: loopColor)
             
             VStack {
                 Text(animating.description)
