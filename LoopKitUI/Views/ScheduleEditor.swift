@@ -252,7 +252,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
     
     private var blockZeroScheduleWarning: some View {
         WarningView(title: Text("Unsupported \(title)"),
-                    caption: Text(LocalizedString("The schedule cannot equal 0 U/day. Please adjust your schedule to a value above zero.", comment: "Instruction to correct zero schedule")))
+                    caption: Text(LocalizedString("The sum of your basal rates cannot equal 0 U/day. Please adjust your schedule to a value above zero.", comment: "Instruction to correct zero schedule")))
     }
 
 
