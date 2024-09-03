@@ -36,7 +36,7 @@ public struct LoopCircleView: View {
             .trim(from: closedLoop ? 0 : 0.2, to: 1)
             .stroke(loopColor, lineWidth: 8)
             .rotationEffect(Angle(degrees: closedLoop ? -90 : -126))
-            .animation(.default, value: freshness)
+            .animation(.none, value: freshness)
             .animation(.default, value: closedLoop)
             .scaleEffect(animating && closedLoop ? 0.75 : 1)
             .animation(reversingAnimation, value: UUID())
