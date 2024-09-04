@@ -976,6 +976,9 @@ extension MockCGMState: CustomDebugStringConvertible {
 extension MockCGMManager: HeartbeatFobDelegate {
     public func heartbeatFobTriggeredHeartbeat(_ fob: HeartbeatFob) {
         self.logDeviceComms(.receive, message: "received heartbeat")
+        self.fetchNewDataIfNeeded() { result in
+            self.sendCGMReadingResult(result)
+        }
     }
     
     public func heartbeatFobSelectionChanged(id: Int?, peripheralIdentifier: UUID?) {
