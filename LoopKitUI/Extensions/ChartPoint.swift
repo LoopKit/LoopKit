@@ -127,6 +127,55 @@ extension ChartPoint: TimelineValue {
     }
 }
 
+extension Array where Element: ChartPoint {
+    /// Merges the current array (must already sorted by `startDate`) with another array (also sorted by `startDate`) into a single sorted array.
+    /// The merging process maintains the sorted order of the elements.
+    ///
+    /// - Precondition: Both arrays are sorted in ascending order of `startDate`
+    ///
+    /// - Parameter other: The sorted array to be merged with the current array.
+    /// - Returns: A new sorted array containing all the elements from the current array and `other`.
+    ///
+    /// Example usage (with integers instead of chart points):
+    /// ```
+    /// let sortedArray1 = [1, 2, 5, 8]
+    /// let sortedArray2 = [3, 4, 6, 7]
+    /// let mergedArray = sortedArray1.mergeWithSortedArray(sortedArray2)
+    /// print(mergedArray) // Output: [1, 2, 3, 4, 5, 6, 7, 8]
+    /// ```
+    func mergeWithSortedArray(_ other: [ChartPoint]) -> [ChartPoint] {
+        var mergedArray = [ChartPoint]()
+        mergedArray.reserveCapacity(self.count + other.count)
+        
+        var i = 0
+        var j = 0
+        
+        // Merge both arrays while maintaining sorted order
+        while i < self.count && j < other.count {
+            if self[i].startDate < other[j].startDate {
+                mergedArray.append(self[i])
+                i += 1
+            } else {
+                mergedArray.append(other[j])
+                j += 1
+            }
+        }
+        
+        // Append remaining elements from self
+        while i < self.count {
+            mergedArray.append(self[i])
+            i += 1
+        }
+        
+        // Append remaining elements from other
+        while j < other.count {
+            mergedArray.append(other[j])
+            j += 1
+        }
+        
+        return mergedArray
+    }
+}
 
 private extension ClosedRange where Bound == HKQuantity {
     func doubleRangeWithMinimumIncrement(in unit: HKUnit) -> DoubleRange {

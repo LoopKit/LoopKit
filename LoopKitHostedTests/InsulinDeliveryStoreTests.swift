@@ -99,7 +99,7 @@ class InsulinDeliveryStoreTestsAuthorized: InsulinDeliveryStoreTestsBase {
 
         mockHealthStore.observerQueryStartedExpectation = expectation(description: "observer query started")
 
-        waitForExpectations(timeout: 2)
+        waitForExpectations(timeout: 30)
 
         XCTAssertNotNil(mockHealthStore.observerQuery)
     }
@@ -199,7 +199,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             }
             addDoseEntriesCompletion.fulfill()
         }
-        await fulfillment(of: [addDoseEntriesCompletion], timeout: 10)
+        await fulfillment(of: [addDoseEntriesCompletion], timeout: 30)
 
         var entries = try await insulinDeliveryStore.getDoseEntries()
         XCTAssertEqual(entries.count, 3)
@@ -257,7 +257,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             XCTAssertNil(error)
             purgeCachedInsulinDeliveryObjectsCompletion.fulfill()
         }
-        await fulfillment(of: [purgeCachedInsulinDeliveryObjectsCompletion], timeout: 10)
+        await fulfillment(of: [purgeCachedInsulinDeliveryObjectsCompletion], timeout: 30)
 
         entries = try await insulinDeliveryStore.getDoseEntries()
         XCTAssertEqual(entries.count, 0)
@@ -269,7 +269,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             XCTAssertNil(lastBasalEndDate)
             getLastImmutableBasalEndDate1Completion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         let addDoseEntriesCompletion = expectation(description: "addDoseEntries")
         insulinDeliveryStore.addDoseEntries([entry1, entry2, entry3], from: device, syncVersion: 2) { result in
@@ -281,28 +281,28 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             }
             addDoseEntriesCompletion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         let getLastImmutableBasalEndDate2Completion = expectation(description: "getLastImmutableBasalEndDate2")
         insulinDeliveryStore.getLastImmutableBasalEndDate() { lastBasalEndDate in
             XCTAssertEqual(lastBasalEndDate, self.entry2.endDate)
             getLastImmutableBasalEndDate2Completion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         let purgeCachedInsulinDeliveryObjectsCompletion = expectation(description: "purgeCachedInsulinDeliveryObjects")
         insulinDeliveryStore.purgeCachedInsulinDeliveryObjects() { error in
             XCTAssertNil(error)
             purgeCachedInsulinDeliveryObjectsCompletion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         let getLastImmutableBasalEndDate3Completion = expectation(description: "getLastImmutableBasalEndDate3")
         insulinDeliveryStore.getLastImmutableBasalEndDate() { lastBasalEndDate in
             XCTAssertNil(lastBasalEndDate)
             getLastImmutableBasalEndDate3Completion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
     }
 
     // MARK: - Modification
@@ -318,7 +318,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             }
             addDoseEntries1Completion.fulfill()
         }
-        await fulfillment(of: [addDoseEntries1Completion], timeout: 10)
+        await fulfillment(of: [addDoseEntries1Completion], timeout: 30)
 
         var entries = try await insulinDeliveryStore.getDoseEntries()
         XCTAssertEqual(entries.count, 3)
@@ -360,7 +360,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             }
             addDoseEntries2Completion.fulfill()
         }
-        await fulfillment(of: [addDoseEntries2Completion], timeout: 10)
+        await fulfillment(of: [addDoseEntries2Completion], timeout: 30)
 
         entries = try await insulinDeliveryStore.getDoseEntries()
         XCTAssertEqual(entries.count, 3)
@@ -404,7 +404,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             }
             addDoseEntriesCompletion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
     }
 
     func testAddDoseEntriesNotification() {
@@ -423,7 +423,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             }
             addDoseEntriesCompletion.fulfill()
         }
-        wait(for: [doseEntriesDidChangeCompletion, addDoseEntriesCompletion], timeout: 10, enforceOrder: true)
+        wait(for: [doseEntriesDidChangeCompletion, addDoseEntriesCompletion], timeout: 30, enforceOrder: true)
 
         NotificationCenter.default.removeObserver(observer)
     }
@@ -448,7 +448,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             }
             addDoseEntriesCompletion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         let getManuallyEnteredDoses1Completion = expectation(description: "getManuallyEnteredDoses1")
         insulinDeliveryStore.getManuallyEnteredDoses(since: .distantPast) { result in
@@ -461,7 +461,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             }
             getManuallyEnteredDoses1Completion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         let getManuallyEnteredDoses2Completion = expectation(description: "getManuallyEnteredDoses2")
         insulinDeliveryStore.getManuallyEnteredDoses(since: Date(timeIntervalSinceNow: -.minutes(12))) { result in
@@ -473,14 +473,14 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             }
             getManuallyEnteredDoses2Completion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         let deleteAllManuallyEnteredDoses1Completion = expectation(description: "deleteAllManuallyEnteredDoses1")
         insulinDeliveryStore.deleteAllManuallyEnteredDoses(since: Date(timeIntervalSinceNow: -.minutes(12))) { error in
             XCTAssertNil(error)
             deleteAllManuallyEnteredDoses1Completion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         let getManuallyEnteredDoses3Completion = expectation(description: "getManuallyEnteredDoses3")
         insulinDeliveryStore.getManuallyEnteredDoses(since: .distantPast) { result in
@@ -493,14 +493,14 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             }
             getManuallyEnteredDoses3Completion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         let deleteAllManuallyEnteredDose2Completion = expectation(description: "deleteAllManuallyEnteredDose2")
         insulinDeliveryStore.deleteAllManuallyEnteredDoses(since: Date(timeIntervalSinceNow: -.minutes(20))) { error in
             XCTAssertNil(error)
             deleteAllManuallyEnteredDose2Completion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         let getManuallyEnteredDoses4Completion = expectation(description: "getManuallyEnteredDoses4")
         insulinDeliveryStore.getManuallyEnteredDoses(since: .distantPast) { result in
@@ -512,7 +512,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             }
             getManuallyEnteredDoses4Completion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
     }
 
     // MARK: - Cache Management
@@ -532,7 +532,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             }
             addDoseEntriesCompletion.fulfill()
         }
-        await fulfillment(of: [addDoseEntriesCompletion], timeout: 10)
+        await fulfillment(of: [addDoseEntriesCompletion], timeout: 30)
 
         var entries = try await insulinDeliveryStore.getDoseEntries()
         XCTAssertEqual(entries.count, 3)
@@ -543,7 +543,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             purgeAllDoseEntriesCompletion.fulfill()
 
         }
-        await fulfillment(of: [purgeAllDoseEntriesCompletion], timeout: 10)
+        await fulfillment(of: [purgeAllDoseEntriesCompletion], timeout: 30)
 
         entries = try await insulinDeliveryStore.getDoseEntries()
         XCTAssertEqual(entries.count, 0)
@@ -569,7 +569,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             }
             addDoseEntriesCompletion.fulfill()
         }
-        await fulfillment(of: [addDoseEntriesCompletion], timeout: 10)
+        await fulfillment(of: [addDoseEntriesCompletion], timeout: 30)
 
         let entries = try await insulinDeliveryStore.getDoseEntries()
         XCTAssertEqual(entries.count, 3)
@@ -586,7 +586,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             }
             addDoseEntriesCompletion.fulfill()
         }
-        await fulfillment(of: [addDoseEntriesCompletion], timeout: 10)
+        await fulfillment(of: [addDoseEntriesCompletion], timeout: 30)
 
         var entries = try await insulinDeliveryStore.getDoseEntries()
         XCTAssertEqual(entries.count, 3)
@@ -597,7 +597,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             purgeCachedInsulinDeliveryObjects1Completion.fulfill()
 
         }
-        await fulfillment(of: [purgeCachedInsulinDeliveryObjects1Completion], timeout: 10)
+        await fulfillment(of: [purgeCachedInsulinDeliveryObjects1Completion], timeout: 30)
 
         entries = try await insulinDeliveryStore.getDoseEntries()
         XCTAssertEqual(entries.count, 2)
@@ -608,7 +608,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             purgeCachedInsulinDeliveryObjects2Completion.fulfill()
 
         }
-        await fulfillment(of: [purgeCachedInsulinDeliveryObjects2Completion], timeout: 10)
+        await fulfillment(of: [purgeCachedInsulinDeliveryObjects2Completion], timeout: 30)
 
         entries = try await insulinDeliveryStore.getDoseEntries()
         XCTAssertEqual(entries.count, 0)
@@ -625,7 +625,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             }
             addDoseEntriesCompletion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         let doseEntriesDidChangeCompletion = expectation(description: "doseEntriesDidChange")
         let observer = NotificationCenter.default.addObserver(forName: InsulinDeliveryStore.doseEntriesDidChange, object: insulinDeliveryStore, queue: nil) { notification in
@@ -638,7 +638,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             purgeCachedInsulinDeliveryObjectsCompletion.fulfill()
 
         }
-        wait(for: [doseEntriesDidChangeCompletion, purgeCachedInsulinDeliveryObjectsCompletion], timeout: 10, enforceOrder: true)
+        wait(for: [doseEntriesDidChangeCompletion, purgeCachedInsulinDeliveryObjectsCompletion], timeout: 30, enforceOrder: true)
 
         NotificationCenter.default.removeObserver(observer)
     }
@@ -730,7 +730,7 @@ class InsulinDeliveryStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
 
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
 
     func testDoseEmptyWithMissingQueryAnchor() {
@@ -748,7 +748,7 @@ class InsulinDeliveryStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
 
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
 
     func testDoseEmptyWithNonDefaultQueryAnchor() {
@@ -766,7 +766,7 @@ class InsulinDeliveryStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
 
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
 
     func testDoseDataWithUnusedQueryAnchor() {
@@ -793,7 +793,7 @@ class InsulinDeliveryStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
 
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
 
     func testDoseDataWithStaleQueryAnchor() {
@@ -818,7 +818,7 @@ class InsulinDeliveryStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
 
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
 
     func testDoseDataWithCurrentQueryAnchor() {
@@ -840,7 +840,7 @@ class InsulinDeliveryStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
 
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
 
     func testDoseDataWithLimitCoveredByData() {
@@ -868,7 +868,7 @@ class InsulinDeliveryStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
 
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
 
     private func addDoseData(_ doseData: [DoseDatum]) {

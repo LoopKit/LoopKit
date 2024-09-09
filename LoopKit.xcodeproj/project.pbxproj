@@ -18,6 +18,9 @@
 		149A28BF2A85430F00052EDF /* DatePickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 149A28BE2A85430F00052EDF /* DatePickerRow.swift */; };
 		149A28C12A85432700052EDF /* FoodTypeRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 149A28C02A85432700052EDF /* FoodTypeRow.swift */; };
 		14B33265293ED44C009B8746 /* GlucoseRangeSchedule+SafeBounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B33264293ED44C009B8746 /* GlucoseRangeSchedule+SafeBounds.swift */; };
+		14C970702C5A8E1500E8A01B /* ChartAxisValueDoubleCarbEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C9706F2C5A8E1500E8A01B /* ChartAxisValueDoubleCarbEntry.swift */; };
+		14C970742C5A925500E8A01B /* GlucoseCarbChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C970732C5A925500E8A01B /* GlucoseCarbChart.swift */; };
+		14C970782C5A935600E8A01B /* ChartPointsScatterCarbImageLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C970772C5A935200E8A01B /* ChartPointsScatterCarbImageLayer.swift */; };
 		14D906EE2A84579B006EB79A /* NewFavoriteFood.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D906ED2A84579B006EB79A /* NewFavoriteFood.swift */; };
 		14D906F02A8457AB006EB79A /* StoredFavoriteFood.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D906EF2A8457AB006EB79A /* StoredFavoriteFood.swift */; };
 		14D906F22A845868006EB79A /* FavoriteFoodListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D906F12A845868006EB79A /* FavoriteFoodListRow.swift */; };
@@ -667,6 +670,14 @@
 		B4D4C20D25F95A8700DA809D /* DisplayGlucosePreference.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4D4C20C25F95A8700DA809D /* DisplayGlucosePreference.swift */; };
 		C109240F286A4AD500FAD2B8 /* AutomaticDosingStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = C109240E286A4AD500FAD2B8 /* AutomaticDosingStrategy.swift */; };
 		C1092410286A4ADB00FAD2B8 /* AutomaticDosingStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = C109240E286A4AD500FAD2B8 /* AutomaticDosingStrategy.swift */; };
+		C10DF6D72C2CA3E80076DA10 /* HeartbeatFobPairingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10DF6D62C2CA3E80076DA10 /* HeartbeatFobPairingView.swift */; };
+		C10DF6DD2C2CA4270076DA10 /* BluetoothManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10DF6D82C2CA4270076DA10 /* BluetoothManager.swift */; };
+		C10DF6DE2C2CA4270076DA10 /* BluetoothServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10DF6D92C2CA4270076DA10 /* BluetoothServices.swift */; };
+		C10DF6DF2C2CA4270076DA10 /* HeartbeatFob.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10DF6DA2C2CA4270076DA10 /* HeartbeatFob.swift */; };
+		C10DF6E02C2CA4270076DA10 /* PeripheralManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10DF6DB2C2CA4270076DA10 /* PeripheralManager.swift */; };
+		C10DF6E32C2CB7FF0076DA10 /* OSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10DF6E22C2CB7FF0076DA10 /* OSLog.swift */; };
+		C10DF6E72C2CBA0D0076DA10 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10DF6E62C2CBA0D0076DA10 /* Data.swift */; };
+		C13FF4262C5ADC8100FD2869 /* DiscoveredFob+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13FF4252C5ADC8100FD2869 /* DiscoveredFob+UI.swift */; };
 		C140E0522602908A000A4FF7 /* SettingsPresentationMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C140E0512602908A000A4FF7 /* SettingsPresentationMode.swift */; };
 		C1475B33264C30800040C7B1 /* LoopKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BA7154201E484D0058961E /* LoopKitUI.framework */; };
 		C14A7E7E295F43AB00CD87B4 /* ConfigurationPageScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14A7E7D295F43AB00CD87B4 /* ConfigurationPageScrollView.swift */; };
@@ -1002,6 +1013,9 @@
 		149A28BE2A85430F00052EDF /* DatePickerRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerRow.swift; sourceTree = "<group>"; };
 		149A28C02A85432700052EDF /* FoodTypeRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodTypeRow.swift; sourceTree = "<group>"; };
 		14B33264293ED44C009B8746 /* GlucoseRangeSchedule+SafeBounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GlucoseRangeSchedule+SafeBounds.swift"; sourceTree = "<group>"; };
+		14C9706F2C5A8E1500E8A01B /* ChartAxisValueDoubleCarbEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartAxisValueDoubleCarbEntry.swift; sourceTree = "<group>"; };
+		14C970732C5A925500E8A01B /* GlucoseCarbChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseCarbChart.swift; sourceTree = "<group>"; };
+		14C970772C5A935200E8A01B /* ChartPointsScatterCarbImageLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartPointsScatterCarbImageLayer.swift; sourceTree = "<group>"; };
 		14D906ED2A84579B006EB79A /* NewFavoriteFood.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFavoriteFood.swift; sourceTree = "<group>"; };
 		14D906EF2A8457AB006EB79A /* StoredFavoriteFood.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoredFavoriteFood.swift; sourceTree = "<group>"; };
 		14D906F12A845868006EB79A /* FavoriteFoodListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteFoodListRow.swift; sourceTree = "<group>"; };
@@ -1590,6 +1604,13 @@
 		C109240E286A4AD500FAD2B8 /* AutomaticDosingStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutomaticDosingStrategy.swift; sourceTree = "<group>"; };
 		C10B8078297E498E00446CDD /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C10BD98429C7867600FE2BDC /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C10DF6D62C2CA3E80076DA10 /* HeartbeatFobPairingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeartbeatFobPairingView.swift; sourceTree = "<group>"; };
+		C10DF6D82C2CA4270076DA10 /* BluetoothManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BluetoothManager.swift; sourceTree = "<group>"; };
+		C10DF6D92C2CA4270076DA10 /* BluetoothServices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BluetoothServices.swift; sourceTree = "<group>"; };
+		C10DF6DA2C2CA4270076DA10 /* HeartbeatFob.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeartbeatFob.swift; sourceTree = "<group>"; };
+		C10DF6DB2C2CA4270076DA10 /* PeripheralManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeripheralManager.swift; sourceTree = "<group>"; };
+		C10DF6E22C2CB7FF0076DA10 /* OSLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSLog.swift; sourceTree = "<group>"; };
+		C10DF6E62C2CBA0D0076DA10 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		C121D8D329C7866D00DA0520 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C121D8D429C7866D00DA0520 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C122DF0129BBFAAE00321F8D /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
@@ -1605,6 +1626,7 @@
 		C13493B7297E498700D87305 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C1394BA6297E49630042F1A9 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C13F89C4297E495B00C71398 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C13FF4252C5ADC8100FD2869 /* DiscoveredFob+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DiscoveredFob+UI.swift"; sourceTree = "<group>"; };
 		C140E0512602908A000A4FF7 /* SettingsPresentationMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsPresentationMode.swift; sourceTree = "<group>"; };
 		C14690CF297E497A00124A99 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C1469E02297E498100042439 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -2137,6 +2159,7 @@
 				E9086B3424B3A8820062F5C8 /* ChartContainerView.swift */,
 				A9D3FF112A6C19ED000C891D /* ChartPointsContextFillLayer.swift */,
 				A9D3FF132A6C1A01000C891D /* ChartPointsScatterDownTrianglesLayer.swift */,
+				14C970772C5A935200E8A01B /* ChartPointsScatterCarbImageLayer.swift */,
 				A9D3FF152A6C1A16000C891D /* ChartPointsTouchHighlightLayerViewCache.swift */,
 				E9086B3024B3A7270062F5C8 /* ChartTableViewCell.swift */,
 				1D096BF924C242300078B6B5 /* CheckmarkListItem.swift */,
@@ -2304,6 +2327,7 @@
 			children = (
 				439706E822D2E94800C81566 /* BoundSwitchTableViewCell.swift */,
 				C1E0EEF524EB26D800086510 /* DeliveryUncertaintyRecoveryView.swift */,
+				C10DF6D62C2CA3E80076DA10 /* HeartbeatFobPairingView.swift */,
 				B451D1172A16A21F004878F1 /* InsulinStatusView.swift */,
 				B451D1222A17193C004878F1 /* MockCGMManagerControlsView.swift */,
 				B451D11E2A1718D0004878F1 /* MockCGMManagerSettingsView.swift */,
@@ -2783,6 +2807,7 @@
 		89D2047321CC7BD7001238CC /* MockKit */ = {
 			isa = PBXGroup;
 			children = (
+				C10DF6DC2C2CA4270076DA10 /* HeartbeatFob */,
 				C1CEBFDF29BB731E007FD8A3 /* Resources */,
 				89D204AD21CC7D2B001238CC /* Extensions */,
 				89D2047521CC7BD7001238CC /* Info.plist */,
@@ -2829,6 +2854,8 @@
 				C18733BA29B94A3700519CDF /* TimeInterval.swift */,
 				C18733BB29B94A3700519CDF /* TimeZone.swift */,
 				B47ECF8725DC20810024A54D /* UIImage.swift */,
+				C10DF6E22C2CB7FF0076DA10 /* OSLog.swift */,
+				C10DF6E62C2CBA0D0076DA10 /* Data.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -2942,6 +2969,7 @@
 			children = (
 				B451D1202A17190C004878F1 /* MockCGMManagerSettingsViewModel.swift */,
 				B451D11A2A16B97C004878F1 /* MockPumpManagerSettingsViewModel.swift */,
+				C13FF4252C5ADC8100FD2869 /* DiscoveredFob+UI.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -2966,6 +2994,17 @@
 				1D1FCE2424BD42EF000300A8 /* TherapySettingsViewModel.swift */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		C10DF6DC2C2CA4270076DA10 /* HeartbeatFob */ = {
+			isa = PBXGroup;
+			children = (
+				C10DF6D82C2CA4270076DA10 /* BluetoothManager.swift */,
+				C10DF6D92C2CA4270076DA10 /* BluetoothServices.swift */,
+				C10DF6DA2C2CA4270076DA10 /* HeartbeatFob.swift */,
+				C10DF6DB2C2CA4270076DA10 /* PeripheralManager.swift */,
+			);
+			path = HeartbeatFob;
 			sourceTree = "<group>";
 		};
 		C16BC0B82A6034FA00BDC713 /* DoseMathTests */ = {
@@ -3090,6 +3129,7 @@
 				A9D3FEFA2A6C1943000C891D /* ChartConstants.swift */,
 				A9D3FEFC2A6C1943000C891D /* COBChart.swift */,
 				A9D3FEF92A6C1942000C891D /* DoseChart.swift */,
+				14C970732C5A925500E8A01B /* GlucoseCarbChart.swift */,
 				E9086B4424B53CC50062F5C8 /* GlucoseChart.swift */,
 				E93C86A124C8F7550073089B /* InsulinModelChart.swift */,
 				A9D3FEFD2A6C1943000C891D /* IOBChart.swift */,
@@ -3101,6 +3141,7 @@
 		E9086B4624B5404D0062F5C8 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				14C9706F2C5A8E1500E8A01B /* ChartAxisValueDoubleCarbEntry.swift */,
 				A9D3FF0F2A6C19CA000C891D /* ChartAxisValueDoubleLog.swift */,
 				E9086B4724B5405E0062F5C8 /* ChartAxisValueDoubleUnit.swift */,
 				B43DA43E24D49AA400CAFF4E /* GuidanceColors.swift */,
@@ -3772,6 +3813,7 @@
 				1D498E4724D892B0000627F2 /* Environment+Authenticate.swift in Sources */,
 				B4A2AAB3240832350066563F /* MultipleSelectionList.swift in Sources */,
 				B46B62AB23FF0822001E69BA /* LabeledValueView.swift in Sources */,
+				14C970742C5A925500E8A01B /* GlucoseCarbChart.swift in Sources */,
 				43FB60E720DCBC55002B996B /* RadioSelectionTableViewController.swift in Sources */,
 				43BA7182201EE7090058961E /* TextFieldTableViewCell.swift in Sources */,
 				89F6E314244A1AB600CB9E15 /* GuardrailWarning.swift in Sources */,
@@ -3933,6 +3975,7 @@
 				E9086B3124B3A7270062F5C8 /* ChartTableViewCell.swift in Sources */,
 				E93E866424DCFB6D00FF40C8 /* OverrideHistoryCollectionViewCell.swift in Sources */,
 				E0E99C392C0E80C200F9300C /* LoopCircleView.swift in Sources */,
+				14C970702C5A8E1500E8A01B /* ChartAxisValueDoubleCarbEntry.swift in Sources */,
 				895FE08122011F0C00FCF18A /* OverridePresetCollectionViewCell.swift in Sources */,
 				84DF48892C33218100844FB1 /* MuteAllAppSoundsDurationSheetView.swift in Sources */,
 				43FB60E320DCB9E0002B996B /* PumpManagerUI.swift in Sources */,
@@ -3940,6 +3983,7 @@
 				A9D3FF012A6C1944000C891D /* CarbEffectChart.swift in Sources */,
 				89BE75C72464B4A900B145D9 /* Environment+Dismiss.swift in Sources */,
 				43BA717F201EE7090058961E /* GlucoseRangeOverrideTableViewCell.swift in Sources */,
+				14C970782C5A935600E8A01B /* ChartPointsScatterCarbImageLayer.swift in Sources */,
 				895FE09022011F4800FCF18A /* OverrideSelectionViewController.swift in Sources */,
 				89904032245B5CA500F1C0A2 /* Deletable.swift in Sources */,
 				43F5035721059A8A009FA89A /* ServiceCredential.swift in Sources */,
@@ -4252,17 +4296,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C10DF6DF2C2CA4270076DA10 /* HeartbeatFob.swift in Sources */,
 				C164A56422F21081000E3FA5 /* MockPumpManagerState.swift in Sources */,
 				C18733BD29B94A3700519CDF /* TimeInterval.swift in Sources */,
+				C10DF6E02C2CA4270076DA10 /* PeripheralManager.swift in Sources */,
 				C164A56022F14C73000E3FA5 /* UnfinalizedDose.swift in Sources */,
+				C10DF6E32C2CB7FF0076DA10 /* OSLog.swift in Sources */,
 				89D204A921CC7C8F001238CC /* MockPumpManager.swift in Sources */,
+				C10DF6DD2C2CA4270076DA10 /* BluetoothManager.swift in Sources */,
 				C18733BC29B94A3700519CDF /* HKUnit.swift in Sources */,
 				C1FAEC1F264AE12700A3250B /* UIImage.swift in Sources */,
 				A9498D8D23386CD800DAA9B9 /* MockService.swift in Sources */,
+				C10DF6E72C2CBA0D0076DA10 /* Data.swift in Sources */,
 				89D204AA21CC7C8F001238CC /* MockGlucoseProvider.swift in Sources */,
 				89AE2233228BC6A500BDFD85 /* MockDoseProgressEstimator.swift in Sources */,
 				89D204AB21CC7C8F001238CC /* MockCGMDataSource.swift in Sources */,
 				C15E994629C6790A004AB926 /* LocalizedString.swift in Sources */,
+				C10DF6DE2C2CA4270076DA10 /* BluetoothServices.swift in Sources */,
 				89D204B221CC7D93001238CC /* Collection.swift in Sources */,
 				89D204AC21CC7C8F001238CC /* MockCGMManager.swift in Sources */,
 				C18733BE29B94A3700519CDF /* TimeZone.swift in Sources */,
@@ -4276,6 +4326,7 @@
 				892A5D2E222EF69A008961AB /* MockHUDProvider.swift in Sources */,
 				C18733C929B94A6400519CDF /* TimeInterval.swift in Sources */,
 				C18733C529B94A6400519CDF /* NumberFormatter.swift in Sources */,
+				C13FF4262C5ADC8100FD2869 /* DiscoveredFob+UI.swift in Sources */,
 				B451D1102A161B84004878F1 /* OpenMockPumpSettingsOnLongPressGesture.swift in Sources */,
 				B451D1122A165DA0004878F1 /* Image.swift in Sources */,
 				439706E922D2E94800C81566 /* BoundSwitchTableViewCell.swift in Sources */,
@@ -4301,6 +4352,7 @@
 				B451D1162A168C81004878F1 /* Color.swift in Sources */,
 				B43606E52A28D8F00026F677 /* TimeView.swift in Sources */,
 				89D204BD21CC7F34001238CC /* RandomOutlierTableViewController.swift in Sources */,
+				C10DF6D72C2CA3E80076DA10 /* HeartbeatFobPairingView.swift in Sources */,
 				B42C950E24A3BD4B00857C73 /* MeasurementFrequencyTableViewController.swift in Sources */,
 				B45774352562CCC6004B9466 /* SupportedRangeTableViewController.swift in Sources */,
 				B45703C22A1808ED00F615B7 /* MockCGMManagerControlsView.swift in Sources */,
@@ -5915,8 +5967,7 @@
 				B41E10532C3D314600E186F7 /* Modelv4.xcdatamodel */,
 			);
 			currentVersion = B41E10522C3D314600E186F7 /* Modelv5.xcdatamodel */;
-			name = Model.xcdatamodeld;
-			path = "Model.xcdatamodeld";
+			path = Model.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

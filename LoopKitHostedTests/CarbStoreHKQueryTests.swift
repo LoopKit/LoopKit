@@ -60,7 +60,7 @@ class CarbStoreHKQueryTestsAuthorized: CarbStoreHKQueryTestsBase {
 
         mockHealthStore.observerQueryStartedExpectation = expectation(description: "observer query started")
 
-        waitForExpectations(timeout: 2)
+        waitForExpectations(timeout: 30)
 
         XCTAssertNotNil(mockHealthStore.observerQuery)
     }

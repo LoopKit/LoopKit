@@ -16,6 +16,7 @@ extension PersistenceController {
             let coordinator = self.managedObjectContext.persistentStoreCoordinator!
             let store = coordinator.persistentStores.first!
             let url = coordinator.url(for: store)
+            try! self.managedObjectContext.persistentStoreCoordinator!.remove(store)
             try! self.managedObjectContext.persistentStoreCoordinator!.destroyPersistentStore(at: url, ofType: NSSQLiteStoreType, options: nil)
         }
     }

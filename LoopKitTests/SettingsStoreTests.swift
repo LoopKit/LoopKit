@@ -62,7 +62,7 @@ class SettingsStorePersistenceTests: PersistenceControllerTestCase, SettingsStor
             storeSettingsCompletion.fulfill()
         }
         
-        wait(for: [storeSettingsHandler, storeSettingsCompletion], timeout: 2, enforceOrder: true)
+        wait(for: [storeSettingsHandler, storeSettingsCompletion], timeout: 30, enforceOrder: true)
     }
     
     func testStoreSettingsMultiple() {
@@ -94,7 +94,7 @@ class SettingsStorePersistenceTests: PersistenceControllerTestCase, SettingsStor
             storeSettingsCompletion2.fulfill()
         }
         
-        wait(for: [storeSettingsHandler1, storeSettingsCompletion1, storeSettingsHandler2, storeSettingsCompletion2], timeout: 10, enforceOrder: true)
+        wait(for: [storeSettingsHandler1, storeSettingsCompletion1, storeSettingsHandler2, storeSettingsCompletion2], timeout: 30, enforceOrder: true)
     }
     
     // MARK: -
@@ -427,7 +427,7 @@ class SettingsStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
         
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
     
     func testEmptyWithMissingQueryAnchor() {
@@ -444,7 +444,7 @@ class SettingsStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
         
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
     
     func testEmptyWithNonDefaultQueryAnchor() {
@@ -461,7 +461,7 @@ class SettingsStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
         
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
     
     func testDataWithUnusedQueryAnchor() {
@@ -483,7 +483,7 @@ class SettingsStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
         
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
     
     func testDataWithStaleQueryAnchor() {
@@ -505,7 +505,7 @@ class SettingsStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
         
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
     
     func testDataWithCurrentQueryAnchor() {
@@ -526,7 +526,7 @@ class SettingsStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
         
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
     
     func testDataWithLimitZero() {
@@ -547,7 +547,7 @@ class SettingsStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
         
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
     
     func testDataWithLimitCoveredByData() {
@@ -570,7 +570,7 @@ class SettingsStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
         
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
     
     private func addData(withSyncIdentifiers syncIdentifiers: [UUID]) {

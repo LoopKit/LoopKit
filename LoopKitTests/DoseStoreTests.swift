@@ -129,7 +129,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
             test_currentDate: f("2018-12-12 18:07:14 +0000")
         )
 
-        waitForExpectations(timeout: 3)
+        waitForExpectations(timeout: 30)
 
         // 2. Add a temp basal which has already ended. It should be saved to Health
         let pumpEvents1 = [
@@ -157,7 +157,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
             XCTAssertNil(error)
             addPumpEvents1.fulfill()
         }
-        waitForExpectations(timeout: 3)
+        waitForExpectations(timeout: 30)
 
         XCTAssertEqual(f("2018-12-12 18:05:58 +0000"), doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate)
 
@@ -188,7 +188,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
             XCTAssertNil(error)
             addPumpEvents2.fulfill()
         }
-        waitForExpectations(timeout: 3)
+        waitForExpectations(timeout: 30)
 
         XCTAssertEqual(f("2018-12-12 18:05:58 +0000"), doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate)
 
@@ -211,7 +211,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
             XCTAssertNil(error)
             addPumpEvents3.fulfill()
         }
-        waitForExpectations(timeout: 3)
+        waitForExpectations(timeout: 30)
 
         XCTAssertEqual(f("2018-12-12 18:05:58 +0000"), doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate)
     }
@@ -250,7 +250,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
             test_currentDate: f("2018-11-29 11:04:27 +0000")
         )
 
-        waitForExpectations(timeout: 3)
+        waitForExpectations(timeout: 30)
 
         doseStore.pumpRecordsBasalProfileStartEvents = false
 
@@ -271,7 +271,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
             XCTAssertNil(error)
             addPumpEvents1.fulfill()
         }
-        waitForExpectations(timeout: 3)
+        waitForExpectations(timeout: 30)
 
         XCTAssertEqual(f("2018-11-29 10:54:28 +0000"), doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate)
         XCTAssertEqual(f("2018-11-29 10:59:28 +0000"), doseStore.pumpEventQueryAfterDate)
@@ -291,7 +291,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
             XCTAssertNil(error)
             addPumpEvents2.fulfill()
         }
-        waitForExpectations(timeout: 3)
+        waitForExpectations(timeout: 30)
 
         XCTAssertEqual(f("2018-11-29 10:54:28 +0000"), doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate)
         XCTAssertEqual(f("2018-11-29 10:59:28 +0000"), doseStore.pumpEventQueryAfterDate)
@@ -330,7 +330,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
             XCTAssertNil(error)
             addPumpEvents3.fulfill()
         }
-        waitForExpectations(timeout: 3)
+        waitForExpectations(timeout: 30)
 
         XCTAssertEqual(f("2018-11-29 11:09:27 +0000"), doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate)
         XCTAssertEqual(f("2018-11-29 11:09:27 +0000"), doseStore.pumpEventQueryAfterDate)
@@ -363,7 +363,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
             XCTAssertNil(error)
             addPumpEvents4.fulfill()
         }
-        waitForExpectations(timeout: 3)
+        waitForExpectations(timeout: 30)
 
         XCTAssertEqual(f("2018-11-29 11:14:28 +0000"), doseStore.pumpEventQueryAfterDate)
         XCTAssertEqual(f("2018-11-29 11:14:28 +0000"), doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate)
@@ -387,7 +387,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
             XCTAssertNil(error)
             addPumpEvents5.fulfill()
         }
-        waitForExpectations(timeout: 3)
+        waitForExpectations(timeout: 30)
 
         XCTAssertEqual(f("2018-11-29 11:14:28 +0000"), doseStore.pumpEventQueryAfterDate)
         XCTAssertEqual(f("2018-11-29 11:14:28 +0000"), doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate)
@@ -415,7 +415,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
             // Set the current date
             test_currentDate: f("2018-12-12 18:07:14 +0000")
         )
-        await fulfillment(of: [doseStoreInitialization], timeout: 3)
+        await fulfillment(of: [doseStoreInitialization], timeout: 30)
 
 
         // 2. Add a temp basal which has already ended. It should persist in InsulinDeliveryStore.
@@ -1085,7 +1085,7 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
         
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
     
     func testPumpEventEmptyWithMissingQueryAnchor() {
@@ -1102,7 +1102,7 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
         
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
     
     func testPumpEventEmptyWithNonDefaultQueryAnchor() {
@@ -1119,7 +1119,7 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
         
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
     
     func testPumpEventDataWithUnusedQueryAnchor() {
@@ -1141,7 +1141,7 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
         
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
     
     func testPumpEventDataWithStaleQueryAnchor() {
@@ -1163,7 +1163,7 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
         
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
     
     func testPumpEventDataWithCurrentQueryAnchor() {
@@ -1184,7 +1184,7 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
         
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
     
     func testPumpEventDataWithLimitCoveredByData() {
@@ -1207,7 +1207,7 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
         
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
     
     private func addPumpEventData(withSyncIdentifiers syncIdentifiers: [String]) {

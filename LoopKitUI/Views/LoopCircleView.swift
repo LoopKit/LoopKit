@@ -23,37 +23,38 @@ public struct LoopCircleView: View {
         self.animating = animating
     }
     
-    public var body: some View {
-        let loopColor = getLoopColor(freshness: freshness)
-        
-        Circle()
-            .trim(from: closedLoop ? 0 : 0.2, to: 1)
-            .stroke(!isEnabled ? Color(UIColor.systemGray3) : loopColor, lineWidth: animating && closedLoop ? 12 : 8)
-            .scaleEffect(animating && closedLoop ? 0.7 : 1)
-            .animation(.easeInOut(duration: 1).repeat(while: animating && closedLoop, autoreverses: true), value: animating)
-            .frame(width: 36, height: 36)
-            .rotationEffect(Angle(degrees: closedLoop ? -90 : -126))
-            .animation(.default, value: closedLoop)
-    }
-    
-    private func getLoopColor(freshness: LoopCompletionFreshness) -> Color {
-        switch freshness {
-        case .fresh:
-            return Color(uiColor: loopStatusColors.normal)
-        case .aging:
-            return Color(uiColor: loopStatusColors.warning)
-        case .stale:
-            return Color(uiColor: loopStatusColors.error)
+    private var reversingAnimation: Animation {
+        if animating && closedLoop {
+            return .easeInOut(duration: 1).repeatForever(autoreverses: true)
+        } else {
+            return .easeInOut(duration: 1)
         }
     }
-}
-
-private extension Animation {
-    func `repeat`(while expression: Bool, autoreverses: Bool = true) -> Animation {
-        if expression {
-            return self.repeatForever(autoreverses: autoreverses)
+    
+    public var body: some View {
+        Circle()
+            .trim(from: closedLoop ? 0 : 0.2, to: 1)
+            .stroke(loopColor, lineWidth: 8)
+            .rotationEffect(Angle(degrees: closedLoop ? -90 : -126))
+            .animation(.none, value: freshness)
+            .animation(.default, value: closedLoop)
+            .scaleEffect(animating && closedLoop ? 0.75 : 1)
+            .animation(reversingAnimation, value: UUID())
+            .frame(width: 36, height: 36)
+    }
+    
+    private var loopColor: Color {
+        if !isEnabled {
+            return Color(UIColor.systemGray3)
         } else {
-            return self
+            switch freshness {
+            case .fresh:
+                return Color(uiColor: loopStatusColors.normal)
+            case .aging:
+                return Color(uiColor: loopStatusColors.warning)
+            case .stale:
+                return Color(uiColor: loopStatusColors.error)
+            }
         }
     }
 }

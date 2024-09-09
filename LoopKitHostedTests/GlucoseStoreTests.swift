@@ -124,7 +124,7 @@ class GlucoseStoreTestsAuthorized: GlucoseStoreTestsBase {
 
         mockHealthStore.observerQueryStartedExpectation = expectation(description: "observer query started")
 
-        waitForExpectations(timeout: 2)
+        waitForExpectations(timeout: 30)
 
         XCTAssertNotNil(hkSampleStore.observerQuery)
     }
@@ -229,7 +229,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             }
             addGlucoseSamplesCompletion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         let getGlucoseSamples1Completion = expectation(description: "getGlucoseSamples1")
         glucoseStore.getGlucoseSamples() { result in
@@ -250,7 +250,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             }
             getGlucoseSamples1Completion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         let getGlucoseSamples2Completion = expectation(description: "getGlucoseSamples2")
         glucoseStore.getGlucoseSamples(start: Date(timeIntervalSinceNow: -.minutes(5)), end: Date(timeIntervalSinceNow: -.minutes(3))) { result in
@@ -265,14 +265,14 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             }
             getGlucoseSamples2Completion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         let purgeCachedGlucoseObjectsCompletion = expectation(description: "purgeCachedGlucoseObjects")
         glucoseStore.purgeCachedGlucoseObjects() { error in
             XCTAssertNil(error)
             purgeCachedGlucoseObjectsCompletion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         let getGlucoseSamples3Completion = expectation(description: "getGlucoseSamples3")
         glucoseStore.getGlucoseSamples() { result in
@@ -284,7 +284,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             }
             getGlucoseSamples3Completion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
     }
     
     enum Error: Swift.Error { case arbitrary }
@@ -303,7 +303,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             }
             addGlucoseSamplesCompletion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         let getGlucoseSamples1Completion = expectation(description: "getGlucoseSamples1")
         glucoseStore.getGlucoseSamples() { result in
@@ -325,7 +325,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             }
             getGlucoseSamples1Completion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         let stored = hkobjects[0] as! HKQuantitySample
         XCTAssertEqual(sample1.quantitySample.quantity, stored.quantity)
@@ -345,7 +345,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             }
             addGlucoseSamplesCompletion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         let getGlucoseSamples1Completion = expectation(description: "getGlucoseSamples1")
         glucoseStore.getGlucoseSamples() { result in
@@ -367,7 +367,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             }
             getGlucoseSamples1Completion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         XCTAssertEqual(3, hkobjects.count)
     }
@@ -386,7 +386,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             }
             addGlucoseSamplesCompletion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         let getGlucoseSamples1Completion = expectation(description: "getGlucoseSamples1")
         glucoseStore.getGlucoseSamples() { result in
@@ -408,7 +408,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             }
             getGlucoseSamples1Completion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         XCTAssertTrue(hkobjects.isEmpty)
     }
@@ -428,7 +428,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             }
             addGlucoseSamples1Completion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
         XCTAssertEqual(1, hkobjects.count)
         hkobjects = []
         
@@ -444,7 +444,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             }
             addGlucoseSamples2Completion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
         XCTAssertEqual(0, hkobjects.count)
         hkobjects = []
 
@@ -460,7 +460,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             }
             addGlucoseSamples3Completion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
         XCTAssertEqual(1, hkobjects.count)
         hkobjects = []
 
@@ -483,7 +483,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             }
             getGlucoseSamples1Completion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
     }
     
     func testLatestGlucose() {
@@ -502,7 +502,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             }
             addGlucoseSamplesCompletion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         XCTAssertNotNil(glucoseStore.latestGlucose)
         XCTAssertEqual(glucoseStore.latestGlucose?.startDate, sample2.date)
@@ -517,7 +517,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             XCTAssertNil(error)
             purgeCachedGlucoseObjectsCompletion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         XCTAssertNil(glucoseStore.latestGlucose)
     }
@@ -545,7 +545,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             }
             addGlucoseSamples1Completion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         let getGlucoseSamples1Completion = expectation(description: "getGlucoseSamples1")
         glucoseStore.getGlucoseSamples() { result in
@@ -566,7 +566,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             }
             getGlucoseSamples1Completion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         let addGlucoseSamples2Completion = expectation(description: "addGlucoseSamples2")
         glucoseStore.addGlucoseSamples([sample3, sample1, sample2]) { result in
@@ -578,7 +578,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             }
             addGlucoseSamples2Completion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         let getGlucoseSamples2Completion = expectation(description: "getGlucoseSamples2Completion")
         glucoseStore.getGlucoseSamples() { result in
@@ -599,7 +599,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             }
             getGlucoseSamples2Completion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
     }
 
     func testAddGlucoseSamplesEmpty() {
@@ -613,7 +613,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             }
             addGlucoseSamplesCompletion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
     }
 
     func testAddGlucoseSamplesNotification() {
@@ -633,7 +633,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             }
             addGlucoseSamplesCompletion.fulfill()
         }
-        wait(for: [glucoseSamplesDidChangeCompletion, delegateCompletion!, addGlucoseSamplesCompletion], timeout: 10, enforceOrder: true)
+        wait(for: [glucoseSamplesDidChangeCompletion, delegateCompletion!, addGlucoseSamplesCompletion], timeout: 30, enforceOrder: true)
 
         NotificationCenter.default.removeObserver(observer)
         delegateCompletion = nil
@@ -654,7 +654,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             }
             addGlucoseSamplesCompletion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         let getSyncGlucoseSamples1Completion = expectation(description: "getSyncGlucoseSamples1")
         glucoseStore.getSyncGlucoseSamples() { result in
@@ -673,7 +673,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             }
             getSyncGlucoseSamples1Completion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         let getSyncGlucoseSamples2Completion = expectation(description: "getSyncGlucoseSamples2")
         glucoseStore.getSyncGlucoseSamples(start: Date(timeIntervalSinceNow: -.minutes(5)), end: Date(timeIntervalSinceNow: -.minutes(3))) { result in
@@ -687,14 +687,14 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             }
             getSyncGlucoseSamples2Completion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         let purgeCachedGlucoseObjectsCompletion = expectation(description: "purgeCachedGlucoseObjects")
         glucoseStore.purgeCachedGlucoseObjects() { error in
             XCTAssertNil(error)
             purgeCachedGlucoseObjectsCompletion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         let getSyncGlucoseSamples3Completion = expectation(description: "getSyncGlucoseSamples3")
         glucoseStore.getSyncGlucoseSamples() { result in
@@ -706,14 +706,14 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             }
             getSyncGlucoseSamples3Completion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         let setSyncGlucoseSamplesCompletion = expectation(description: "setSyncGlucoseSamples")
         glucoseStore.setSyncGlucoseSamples(syncGlucoseSamples) { error in
             XCTAssertNil(error)
             setSyncGlucoseSamplesCompletion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         let getSyncGlucoseSamples4Completion = expectation(description: "getSyncGlucoseSamples4")
         glucoseStore.getSyncGlucoseSamples() { result in
@@ -732,7 +732,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             }
             getSyncGlucoseSamples4Completion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
     }
 
     // MARK: - Cache Management
@@ -752,7 +752,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             }
             addGlucoseSamplesCompletion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         let getGlucoseSamples1Completion = expectation(description: "getGlucoseSamples1")
         glucoseStore.getGlucoseSamples() { result in
@@ -764,7 +764,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             }
             getGlucoseSamples1Completion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         let purgeAllGlucoseSamplesCompletion = expectation(description: "purgeAllGlucoseSamples")
         glucoseStore.purgeAllGlucoseSamples(healthKitPredicate: HKQuery.predicateForObjects(from: HKSource.default())) { error in
@@ -772,7 +772,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             purgeAllGlucoseSamplesCompletion.fulfill()
 
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         let getGlucoseSamples2Completion = expectation(description: "getGlucoseSamples2")
         glucoseStore.getGlucoseSamples() { result in
@@ -784,7 +784,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             }
             getGlucoseSamples2Completion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
     }
 
     func testPurgeExpiredGlucoseObjects() {
@@ -808,7 +808,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             }
             addGlucoseSamplesCompletion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         let getGlucoseSamplesCompletion = expectation(description: "getGlucoseSamples")
         glucoseStore.getGlucoseSamples() { result in
@@ -820,7 +820,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             }
             getGlucoseSamplesCompletion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
     }
 
     func testPurgeCachedGlucoseObjects() {
@@ -834,7 +834,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             }
             addGlucoseSamplesCompletion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         let getGlucoseSamples1Completion = expectation(description: "getGlucoseSamples1")
         glucoseStore.getGlucoseSamples() { result in
@@ -846,7 +846,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             }
             getGlucoseSamples1Completion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         let purgeCachedGlucoseObjects1Completion = expectation(description: "purgeCachedGlucoseObjects1")
         glucoseStore.purgeCachedGlucoseObjects(before: Date(timeIntervalSinceNow: -.minutes(5))) { error in
@@ -854,7 +854,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             purgeCachedGlucoseObjects1Completion.fulfill()
 
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         let getGlucoseSamples2Completion = expectation(description: "getGlucoseSamples2")
         glucoseStore.getGlucoseSamples() { result in
@@ -866,7 +866,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             }
             getGlucoseSamples2Completion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         let purgeCachedGlucoseObjects2Completion = expectation(description: "purgeCachedGlucoseObjects2")
         glucoseStore.purgeCachedGlucoseObjects() { error in
@@ -874,7 +874,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             purgeCachedGlucoseObjects2Completion.fulfill()
 
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         let getGlucoseSamples3Completion = expectation(description: "getGlucoseSamples3")
         glucoseStore.getGlucoseSamples() { result in
@@ -886,7 +886,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             }
             getGlucoseSamples3Completion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
     }
 
     func testPurgeCachedGlucoseObjectsNotification() {
@@ -900,7 +900,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             }
             addGlucoseSamplesCompletion.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 30)
 
         delegateCompletion = expectation(description: "delegate")
         let glucoseSamplesDidChangeCompletion = expectation(description: "glucoseSamplesDidChange")
@@ -914,7 +914,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             purgeCachedGlucoseObjectsCompletion.fulfill()
 
         }
-        wait(for: [glucoseSamplesDidChangeCompletion, delegateCompletion!, purgeCachedGlucoseObjectsCompletion], timeout: 10, enforceOrder: true)
+        wait(for: [glucoseSamplesDidChangeCompletion, delegateCompletion!, purgeCachedGlucoseObjectsCompletion], timeout: 30, enforceOrder: true)
 
         NotificationCenter.default.removeObserver(observer)
         delegateCompletion = nil

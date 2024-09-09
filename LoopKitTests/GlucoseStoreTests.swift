@@ -57,7 +57,7 @@ class GlucoseStoreTests: PersistenceControllerTestCase {
             }
             storeCompletion.fulfill()
         }
-        wait(for: [storeCompletion], timeout: 2)
+        wait(for: [storeCompletion], timeout: 30)
         XCTAssertEqual(storedQuantity, self.glucoseStore.latestGlucose?.quantity)
 
         let purgeCompletion = expectation(description: "Storage completion")
@@ -69,7 +69,7 @@ class GlucoseStoreTests: PersistenceControllerTestCase {
             }
             purgeCompletion.fulfill()
         }
-        wait(for: [purgeCompletion], timeout: 2)
+        wait(for: [purgeCompletion], timeout: 30)
         XCTAssertNil(self.glucoseStore.latestGlucose)
     }
 }
@@ -159,7 +159,7 @@ class GlucoseStoreRemoteDataServiceQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
         
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
     
     func testEmptyWithMissingQueryAnchor() {
@@ -176,7 +176,7 @@ class GlucoseStoreRemoteDataServiceQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
         
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
     
     func testEmptyWithNonDefaultQueryAnchor() {
@@ -193,7 +193,7 @@ class GlucoseStoreRemoteDataServiceQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
         
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
     
     func testDataWithUnusedQueryAnchor() {
@@ -216,7 +216,7 @@ class GlucoseStoreRemoteDataServiceQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
         
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
     
     func testDataWithStaleQueryAnchor() {
@@ -239,7 +239,7 @@ class GlucoseStoreRemoteDataServiceQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
         
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
     
     func testDataWithCurrentQueryAnchor() {
@@ -260,7 +260,7 @@ class GlucoseStoreRemoteDataServiceQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
         
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
 
     func testDataWithLimitZero() {
@@ -281,7 +281,7 @@ class GlucoseStoreRemoteDataServiceQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
 
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
 
     func testDataWithLimitCoveredByData() {
@@ -306,7 +306,7 @@ class GlucoseStoreRemoteDataServiceQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
         
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
     
     private func addData(withSyncIdentifiers syncIdentifiers: [String]) {

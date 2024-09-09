@@ -18,6 +18,8 @@ public struct FoodTypeRow: View {
     @Binding private var absorptionTimeWasEdited: Bool
     @Binding private var isFocused: Bool
 
+    private var showClearFavoriteFoodButton: Bool
+    
     public typealias DefaultAbsorptionTimes = (fast: TimeInterval, medium: TimeInterval, slow: TimeInterval)
 
     private var defaultAbsorptionTimes: DefaultAbsorptionTimes
@@ -31,7 +33,7 @@ public struct FoodTypeRow: View {
     @State private var selectedEmojiIndex = 1
     
     /// Contains emoji shortcuts, an emoji keyboard, and modifies absorption time to match emoji
-    public init(selectedFavoriteFood: Binding<StoredFavoriteFood?>, foodType: Binding<String>, absorptionTime: Binding<TimeInterval>, selectedDefaultAbsorptionTimeEmoji: Binding<String>, usesCustomFoodType: Binding<Bool>, absorptionTimeWasEdited: Binding<Bool>, isFocused: Binding<Bool>, defaultAbsorptionTimes: DefaultAbsorptionTimes) {
+    public init(selectedFavoriteFood: Binding<StoredFavoriteFood?>, foodType: Binding<String>, absorptionTime: Binding<TimeInterval>, selectedDefaultAbsorptionTimeEmoji: Binding<String>, usesCustomFoodType: Binding<Bool>, absorptionTimeWasEdited: Binding<Bool>, isFocused: Binding<Bool>, showClearFavoriteFoodButton: Bool, defaultAbsorptionTimes: DefaultAbsorptionTimes) {
         self._selectedFavoriteFood = selectedFavoriteFood
         self._foodType = foodType
         self._absorptionTime = absorptionTime
@@ -40,6 +42,7 @@ public struct FoodTypeRow: View {
         self._absorptionTimeWasEdited = absorptionTimeWasEdited
         self._isFocused = isFocused
         
+        self.showClearFavoriteFoodButton = showClearFavoriteFoodButton
         self.defaultAbsorptionTimes = defaultAbsorptionTimes
     }
     
@@ -51,8 +54,18 @@ public struct FoodTypeRow: View {
             Spacer()
             
             if let selectedFavoriteFood {
-                Text(selectedFavoriteFood.title)
-                    .modifier(LabelBackground(bgColor: Color(.tertiarySystemGroupedBackground)))
+                HStack(spacing: 8) {
+                    Text(selectedFavoriteFood.title)
+                        .modifier(LabelBackground(bgColor: Color(.tertiarySystemGroupedBackground)))
+                    
+                    if showClearFavoriteFoodButton {
+                        Button(action: { self.selectedFavoriteFood = nil }) {
+                            Image(systemName: "xmark")
+                                .font(.body.bold())
+                                .foregroundColor(Color(.tertiaryLabel))
+                        }
+                    }
+                }
             }
             else if usesCustomFoodType {
                 RowEmojiTextField(text: $foodType, isFocused: $isFocused, emojiType: .food, didSelectItemInSection: didSelectEmojiInSection)
