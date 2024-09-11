@@ -67,6 +67,7 @@ extension CGMManagerUI {
     }
 }
 
+@MainActor
 public protocol CGMManagerOnboardingDelegate: AnyObject {
     /// Informs the delegate that the specified CGM manager was created.
     ///
