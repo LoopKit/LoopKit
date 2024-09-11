@@ -316,17 +316,6 @@ extension Collection where Element == DoseEntry {
     }
 
 
-    /**
-     Calculates the total insulin delivery for a collection of doses
-
-     - returns: The total insulin insulin, in Units
-     */
-    var totalDelivery: Double {
-        return reduce(0) { (total, dose) -> Double in
-            return total + dose.unitsInDeliverableIncrements
-        }
-    }
-    
     /// Fills any missing gaps in basal delivery with new doses based on the supplied basal history. Compared to `overlayBasalSchedule`, this uses a history of
     /// of basal rates, rather than a daily schedule, so it can work across multiple schedule changes.  This method is suitable for generating a display of basal delivery
     /// that includes scheduled and temp basals. Boluses are not included in the returned array.

@@ -1233,21 +1233,6 @@ extension DoseStore {
         return try await insulinDeliveryStore.getBoluses(start: start, end: end)
     }
 
-    /// Retrieves the estimated total number of units delivered since the specified date.
-    ///
-    /// - Parameters:
-    ///   - startDate: The date after which delivery should be calculated
-    ///   - completion: A closure called once the total has been retrieved with arguments:
-    ///   - result: The total units delivered and the date of the first dose
-    public func getTotalUnitsDelivered(since startDate: Date) async throws -> InsulinValue
-    {
-        let doses = try await self.getNormalizedDoseEntries(start: startDate)
-        let trimmedDoses = doses.map { $0.trimmed(from: startDate, to: self.currentDate())}
-        return InsulinValue(
-            startDate: startDate,
-            value: trimmedDoses.totalDelivery
-        )
-    }    
 }
 
 extension DoseStore {

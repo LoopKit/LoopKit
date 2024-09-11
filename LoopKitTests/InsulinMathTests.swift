@@ -578,13 +578,6 @@ class InsulinMathTests: XCTestCase {
         }
     }
 
-    func testTotalDelivery() {
-        let input = loadDoseFixture("normalize_edge_case_doses_input")
-        let output = input.totalDelivery
-
-        XCTAssertEqual(18.8, output, accuracy: 0.01)
-    }
-
     func testTrimContinuingDoses() {
         let dateFormatter = ISO8601DateFormatter.localTimeDate(timeZone: fixtureTimeZone)
         let input = loadDoseFixture("normalized_doses").reversed()
