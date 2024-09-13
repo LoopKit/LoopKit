@@ -318,42 +318,55 @@ extension Collection where Element == DoseEntry {
 
     /// Fills any missing gaps in basal delivery with new doses based on the supplied basal history. Compared to `overlayBasalSchedule`, this uses a history of
     /// of basal rates, rather than a daily schedule, so it can work across multiple schedule changes.  This method is suitable for generating a display of basal delivery
-    /// that includes scheduled and temp basals. Boluses are not included in the returned array.
+    /// that includes scheduled and temp basals.
     ///
     /// - Parameters:
-    ///   - basalHistory: A history of scheduled basal rates. The first record should have a timestamp matching or earlier than the start date of the first DoseEntry in this array.
+    ///   - basalTimeline: A history of scheduled basal rates. The first record should have a timestamp matching or earlier than the start date of the first DoseEntry in this array.
     ///   - endDate: Infill to this date, if supplied. If not supplied, infill will stop at the last DoseEntry.
+    ///   - lastPumpEventsReconciliation: date at which pump manager has verified doses up to; doses with an end time of this or later are mutable
     ///   - gapPatchInterval: if the gap between two temp basals is less than this, then the start date of the second dose will be fudged to fill the gap. Used for display purposes.
     /// - Returns: An array of doses, with new doses created for any gaps between basalHistory.first.startDate and the end date.
-    public func infill(with basalHistory: [AbsoluteScheduleValue<Double>], endDate: Date? = nil, gapPatchInterval: TimeInterval = 0) -> [DoseEntry] {
-        guard basalHistory.count > 0 else {
+    public func overlayBasal(_ basalTimeline: [AbsoluteScheduleValue<Double>], endDate: Date? = nil, lastPumpEventsReconciliation: Date, gapPatchInterval: TimeInterval = 0) -> [DoseEntry] {
+        let dateFormatter = ISO8601DateFormatter()  // GMT-based ISO formatting
+
+        guard basalTimeline.count > 0 else {
             return Array(self)
         }
 
         var newEntries = [DoseEntry]()
-        var curBasalIdx = basalHistory.startIndex
-        var lastDate = basalHistory[curBasalIdx].startDate
+        var curBasalIdx = basalTimeline.startIndex
+        var lastDate = basalTimeline[curBasalIdx].startDate
 
         func addBasalsBetween(startDate: Date, endDate: Date) {
             while lastDate < endDate {
                 let entryEnd: Date
                 let nextBasalIdx = curBasalIdx + 1
-                let curRate = basalHistory[curBasalIdx].value
-                if nextBasalIdx < basalHistory.endIndex && basalHistory[nextBasalIdx].startDate < endDate {
-                    entryEnd = Swift.max(startDate, basalHistory[nextBasalIdx].startDate)
+                let curRate = basalTimeline[curBasalIdx].value
+                if nextBasalIdx < basalTimeline.endIndex && basalTimeline[nextBasalIdx].startDate < endDate {
+                    entryEnd = Swift.max(startDate, basalTimeline[nextBasalIdx].startDate)
                     curBasalIdx = nextBasalIdx
                 } else {
                     entryEnd = endDate
                 }
 
                 if lastDate != entryEnd {
+                    if entryEnd.timeIntervalSince(lastDate).hours > 24 {
+                        print("here")
+                    }
+
+                    let syncIdentifier = "BasalRateSchedule \(dateFormatter.string(from: lastDate))"
+
                     newEntries.append(
                         DoseEntry(
                             type: .basal,
                             startDate: lastDate,
                             endDate: entryEnd,
                             value: curRate,
-                            unit: .unitsPerHour))
+                            unit: .unitsPerHour,
+                            syncIdentifier: syncIdentifier,
+                            scheduledBasalRate: HKQuantity(unit: .internationalUnitsPerHour, doubleValue: curRate),
+                            automatic: true,
+                            isMutable: entryEnd >= lastPumpEventsReconciliation))
 
                     lastDate = entryEnd
                 }
@@ -373,13 +386,19 @@ extension Collection where Element == DoseEntry {
                     type: dose.type,
                     startDate: doseStart,
                     endDate: dose.endDate,
-                    value: dose.unitsPerHour,
-                    unit: .unitsPerHour)
-                )
+                    value: dose.value,
+                    unit: dose.unit,
+                    syncIdentifier: dose.syncIdentifier,
+                    scheduledBasalRate: dose.scheduledBasalRate,
+                    insulinType: dose.insulinType,
+                    automatic: dose.automatic,
+                    isMutable: dose.isMutable,
+                    wasProgrammedByPumpUI: dose.wasProgrammedByPumpUI))
                 lastDate = dose.endDate
             case .resume:
                 assertionFailure("No resume events should be present in reconciled doses")
             case .bolus:
+                newEntries.append(dose)
                 break
             }
         }
@@ -391,81 +410,6 @@ extension Collection where Element == DoseEntry {
         return newEntries
     }
 
-
-    /// Applies the current basal schedule to a collection of reconciled doses in chronological order
-    ///
-    /// The scheduled basal rate is associated doses that override it, for later derivation of net delivery
-    ///
-    /// - Parameters:
-    ///   - basalSchedule: The active basal schedule during the dose delivery
-    ///   - start: The earliest date to apply the basal schedule
-    ///   - end: The latest date to include. Doses must end before this time to be included.
-    ///   - insertingBasalEntries: Whether basal doses should be created from the schedule. Pass true only for pump models that do not report their basal rates in event history.
-    /// - Returns: An array of doses,
-    public func overlayBasalSchedule(_ basalSchedule: BasalRateSchedule, startingAt start: Date, endingAt end: Date = .distantFuture, insertingBasalEntries: Bool) -> [DoseEntry] {
-        let dateFormatter = ISO8601DateFormatter()  // GMT-based ISO formatting
-        var newEntries = [DoseEntry]()
-        var lastBasal: DoseEntry?
-
-        if insertingBasalEntries {
-            // Create a placeholder entry at our start date, so we know the correct duration of the
-            // inserted basal entries
-            lastBasal = DoseEntry(resumeDate: start, automatic: true)
-        }
-
-        for dose in self {
-            switch dose.type {
-            case .tempBasal, .basal, .suspend:
-                // Only include entries if they have ended by the end date, since they may be cancelled
-                guard dose.endDate <= end else {
-                    continue
-                }
-
-                if let lastBasal = lastBasal {
-                    if insertingBasalEntries {
-                        // For older pumps which don't report the start/end of scheduled basal delivery,
-                        // generate a basal entry from the specified schedule.
-                        for scheduled in basalSchedule.between(start: lastBasal.endDate, end: dose.startDate) {
-                            // Generate a unique identifier based on the start/end timestamps
-                            let start = Swift.max(lastBasal.endDate, scheduled.startDate)
-                            let end = Swift.min(dose.startDate, scheduled.endDate)
-
-                            guard end.timeIntervalSince(start) > .ulpOfOne else {
-                                continue
-                            }
-
-                            let syncIdentifier = "BasalRateSchedule \(dateFormatter.string(from: start)) \(dateFormatter.string(from: end))"
-
-                            newEntries.append(DoseEntry(
-                                type: .basal,
-                                startDate: start,
-                                endDate: end,
-                                value: scheduled.value,
-                                unit: .unitsPerHour,
-                                syncIdentifier: syncIdentifier,
-                                scheduledBasalRate: HKQuantity(unit: .internationalUnitsPerHour, doubleValue: scheduled.value),
-                                insulinType: lastBasal.insulinType,
-                                automatic: lastBasal.automatic
-                            ))
-                        }
-                    }
-                }
-
-                lastBasal = dose
-
-                // Only include the last basal entry if has ended by our end date
-                if let lastBasal = lastBasal {
-                    newEntries.append(lastBasal)
-                }
-            case .resume:
-                assertionFailure("No resume events should be present in reconciled doses")
-            case .bolus:
-                newEntries.append(dose)
-            }
-        }
-
-        return newEntries
-    }
 
     /// Creates an array of DoseEntry values by unioning another array, de-duplicating by syncIdentifier
     ///

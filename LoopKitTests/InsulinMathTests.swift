@@ -131,7 +131,7 @@ class InsulinMathTests: XCTestCase {
 
                 return obj
             }),
-            options: .prettyPrinted), encoding: .utf8)!)
+            options: [.sortedKeys, .prettyPrinted]), encoding: .utf8)!)
         print("\n\n")
     }
 
@@ -608,17 +608,18 @@ class InsulinMathTests: XCTestCase {
         let dateFormatter = ISO8601DateFormatter.localTimeDate(timeZone: fixtureTimeZone)
         let input = loadDoseFixture("reconcile_history_output").sorted { $0.startDate < $1.startDate }
         let output = loadDoseFixture("doses_overlay_basal_profile_output")
-        let basals = loadBasalRateScheduleFixture("basal")
 
-        let doses = input.overlayBasalSchedule(
-            basals,
-            // A start date before the first entry should generate a basal
-            startingAt: dateFormatter.date(from: "2016-02-15T14:01:04")!,
-            endingAt: Date(),
-            insertingBasalEntries: true
-        )
+        // A start date before the first entry should generate a basal
+        let basalStart = dateFormatter.date(from: "2016-02-15T14:01:04")!
+        let changeAt   = dateFormatter.date(from: "2016-02-15T15:30:00")!
+        let basalEnd   = dateFormatter.date(from: "2016-02-15T21:16:09")!
 
-        printDoses(doses)
+        let basals = [
+            AbsoluteScheduleValue(startDate: basalStart, endDate: changeAt, value: 0.75),
+            AbsoluteScheduleValue(startDate: changeAt, endDate: basalEnd, value: 0.8)
+        ]
+
+        let doses = input.overlayBasal(basals, endDate: basalEnd, lastPumpEventsReconciliation: basalEnd)
 
         XCTAssertEqual(output.count, doses.count)
 
@@ -635,30 +636,18 @@ class InsulinMathTests: XCTestCase {
             }
         }
 
-        // Test trimming end
-        let dosesTrimmedEnd = input[0..<input.count - 11].overlayBasalSchedule(
+        // Test filling in basal after end of doses
+        let dosesTrimmedEnd = input[0..<input.count - 11].overlayBasal(
             basals,
-            startingAt: dateFormatter.date(from: "2016-02-15T14:01:04")!,
-            // An end date before some input entries should omit them
-            endingAt: dateFormatter.date(from: "2016-02-15T19:45:00")!,
-            insertingBasalEntries: true
+            endDate: basalEnd,
+            lastPumpEventsReconciliation: basalEnd.addingTimeInterval(.minutes(-10))
         )
 
-        XCTAssertEqual(output.count - 14, dosesTrimmedEnd.count)
-        // The BasalProfileStart event shouldn't be generated
-        XCTAssertEqual(dosesTrimmedEnd.last!.endDate, dateFormatter.date(from: "2016-02-15T19:36:11")!)
-
-        // Test a start date equal to the first entry, the expected case
-        let dosesMatchingStart = input.overlayBasalSchedule(
-            basals,
-            startingAt: dateFormatter.date(from: "2016-02-15T15:06:05")!,
-            endingAt: Date(),
-            insertingBasalEntries: true
-        )
-
-        // The inserted entries aren't included
-        XCTAssertEqual(output.count-1, dosesMatchingStart.count)
-        XCTAssertEqual(dosesMatchingStart.first!.startDate, dateFormatter.date(from: "2016-02-15T14:58:02")!)
+        XCTAssertEqual(32, dosesTrimmedEnd.count)
+        XCTAssertEqual(dosesTrimmedEnd.last!.type, .basal)
+        XCTAssertEqual(dosesTrimmedEnd.last!.value, 0.8)
+        XCTAssertEqual(dosesTrimmedEnd.last!.endDate, basalEnd)
+        XCTAssert(dosesTrimmedEnd.last!.isMutable)
     }
 
     func testReconcilingBasalProfileStartBeforeResume() {
@@ -795,17 +784,21 @@ class InsulinMathTests: XCTestCase {
 
         let scheduledBasalRate = HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 1.2)
         let expected = [
-            DoseEntry(type: .basal,     startDate: f("2018-07-11 04:00:00 +0000"), endDate: f("2018-07-11 04:07:15 +0000"), value: 1.2, unit: .unitsPerHour, syncIdentifier: "BasalRateSchedule 2018-07-11T04:00:00Z 2018-07-11T04:07:15Z", scheduledBasalRate: scheduledBasalRate, automatic: true),
+            DoseEntry(type: .basal,     startDate: f("2018-07-11 04:00:00 +0000"), endDate: f("2018-07-11 04:07:15 +0000"), value: 1.2, unit: .unitsPerHour, syncIdentifier: "BasalRateSchedule 2018-07-11T04:00:00Z", scheduledBasalRate: scheduledBasalRate, automatic: true),
             DoseEntry(type: .tempBasal, startDate: f("2018-07-11 04:07:15 +0000"), endDate: f("2018-07-11 04:12:15 +0000"), value: 0.67500000000000004, unit: .unitsPerHour),
-            DoseEntry(type: .basal,     startDate: f("2018-07-11 04:12:15 +0000"), endDate: f("2018-07-11 04:31:55 +0000"), value: 1.2, unit: .unitsPerHour, syncIdentifier: "BasalRateSchedule 2018-07-11T04:12:15Z 2018-07-11T04:31:55Z", scheduledBasalRate: scheduledBasalRate),
+            DoseEntry(type: .basal,     startDate: f("2018-07-11 04:12:15 +0000"), endDate: f("2018-07-11 04:31:55 +0000"), value: 1.2, unit: .unitsPerHour, syncIdentifier: "BasalRateSchedule 2018-07-11T04:12:15Z", scheduledBasalRate: scheduledBasalRate, automatic: true),
             DoseEntry(type: .suspend,   startDate: f("2018-07-11 04:31:55 +0000"), endDate: f("2018-07-11 05:01:14 +0000"), value: 0.0, unit: .units),
-            DoseEntry(type: .basal,     startDate: f("2018-07-11 05:01:14 +0000"), endDate: f("2018-07-11 05:02:15 +0000"), value: 1.2, unit: .unitsPerHour, syncIdentifier: "BasalRateSchedule 2018-07-11T05:01:14Z 2018-07-11T05:02:15Z", scheduledBasalRate: scheduledBasalRate),
+            DoseEntry(type: .basal,     startDate: f("2018-07-11 05:01:14 +0000"), endDate: f("2018-07-11 05:02:15 +0000"), value: 1.2, unit: .unitsPerHour, syncIdentifier: "BasalRateSchedule 2018-07-11T05:01:14Z", scheduledBasalRate: scheduledBasalRate, automatic: true),
             DoseEntry(type: .tempBasal, startDate: f("2018-07-11 05:02:15 +0000"), endDate: f("2018-07-11 05:32:15 +0000"), value: 0.0, unit: .unitsPerHour)
         ]
 
-        let basalSchedule = BasalRateSchedule(dailyItems: [RepeatingScheduleValue(startTime: 0, value: 1.2)])
+        let basals = [
+            AbsoluteScheduleValue(startDate: f("2018-07-11 04:00:00 +0000"), endDate: f("2018-07-11 05:32:15 +0000"), value: 1.2)
+        ]
 
-        let overlaid = reconciled.overlayBasalSchedule(basalSchedule!, startingAt: f("2018-07-11 04:00:00 +0000"), endingAt: f("2018-07-11 05:32:15 +0000"), insertingBasalEntries: true)
+        let endDate = f("2018-07-11 05:32:15 +0000")
+
+        let overlaid = reconciled.overlayBasal(basals, endDate: endDate, lastPumpEventsReconciliation: endDate)
 
         XCTAssertEqual(expected.count, overlaid.count)
 

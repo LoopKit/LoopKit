@@ -2,7 +2,7 @@
   {
     "amount" : 0.75,
     "scheduled" : 0.75,
-    "raw" : "BasalRateSchedule 2016-02-15T14:01:04Z 2016-02-15T14:58:02Z",
+    "raw" : "BasalRateSchedule 2016-02-15T14:01:04Z",
     "type" : "BasalProfileStart",
     "start_at" : "2016-02-15T14:01:04",
     "unit" : "U\/hour",
@@ -81,7 +81,7 @@
     "unit" : "U"
   },
   {
-    "raw" : "BasalRateSchedule 2016-02-15T15:46:05Z 2016-02-15T16:01:07Z",
+    "raw" : "BasalRateSchedule 2016-02-15T15:46:05Z",
     "scheduled" : 0.80000000000000004,
     "end_at" : "2016-02-15T16:01:07",
     "amount" : 0.80000000000000004,
@@ -150,7 +150,7 @@
     "type" : "BasalProfileStart",
     "start_at" : "2016-02-15T17:41:08",
     "amount" : 0.80000000000000004,
-    "raw" : "BasalRateSchedule 2016-02-15T17:41:08Z 2016-02-15T17:56:17Z",
+    "raw" : "BasalRateSchedule 2016-02-15T17:41:08Z",
     "end_at" : "2016-02-15T17:56:17",
     "scheduled" : 0.80000000000000004
   },
@@ -212,7 +212,7 @@
   },
   {
     "amount" : 0.80000000000000004,
-    "raw" : "BasalRateSchedule 2016-02-15T19:01:09Z 2016-02-15T19:31:08Z",
+    "raw" : "BasalRateSchedule 2016-02-15T19:01:09Z",
     "type" : "BasalProfileStart",
     "unit" : "U\/hour",
     "start_at" : "2016-02-15T19:01:09",
@@ -231,7 +231,7 @@
     "amount" : 0.80000000000000004,
     "type" : "BasalProfileStart",
     "scheduled" : 0.80000000000000004,
-    "raw" : "BasalRateSchedule 2016-02-15T19:36:11Z 2016-02-15T19:41:07Z",
+    "raw" : "BasalRateSchedule 2016-02-15T19:36:11Z",
     "end_at" : "2016-02-15T19:41:07",
     "start_at" : "2016-02-15T19:36:11",
     "unit" : "U\/hour"

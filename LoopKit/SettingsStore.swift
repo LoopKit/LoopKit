@@ -663,32 +663,9 @@ extension SettingsStore {
             }
         }
 
-        guard !schedules.isEmpty else {
-            return []
-        }
-
-        var idx = schedules.startIndex
-        var date = startDate
-        var items = [AbsoluteScheduleValue<Double>]()
-        while date < endDate {
-            let scheduleActiveEnd: Date
-            if idx+1 < schedules.endIndex {
-                scheduleActiveEnd = schedules[idx+1].date
-            } else {
-                scheduleActiveEnd = endDate
-            }
-
-            let schedule = schedules[idx].schedule
-
-            let absoluteScheduleValues = schedule.truncatingBetween(start: date, end: scheduleActiveEnd)
-
-            items.append(contentsOf: absoluteScheduleValues)
-            date = scheduleActiveEnd
-            idx += 1
-        }
-
-        return items
+        return BasalRateSchedule.generateTimeline(schedules: schedules, startDate: startDate, endDate: endDate)
     }
+
 
     public func getInsulinSensitivityHistory(startDate: Date, endDate: Date) async throws -> [AbsoluteScheduleValue<HKQuantity>] {
         // Get any settings changes during the period

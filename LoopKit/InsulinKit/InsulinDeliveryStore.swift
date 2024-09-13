@@ -340,6 +340,14 @@ extension InsulinDeliveryStore {
         }
     }
 
+    func getLastImmutableBasalEndDate() async -> Date? {
+        return await withCheckedContinuation { continuation in
+            getLastImmutableBasalEndDate { date in
+                continuation.resume(returning: date)
+            }
+        }
+    }
+
     private func updateLastImmutableBasalEndDate() {
         dispatchPrecondition(condition: .onQueue(queue))
 
@@ -421,7 +429,7 @@ extension InsulinDeliveryStore {
 
                         // If we have a mutable object that matches this sync identifier, then update, it will mark as NOT deleted
                         if let object = mutableObjects.first(where: { $0.provenanceIdentifier == self.provenanceIdentifier && $0.syncIdentifier == entry.syncIdentifier }) {
-                            self.log.debug("Update: %{public}@", String(describing: entry))
+                            self.log.debug("ISD Update: %{public}@", String(describing: entry))
                             object.update(from: entry)
                             return (quantitySample, object)
 
@@ -429,7 +437,7 @@ extension InsulinDeliveryStore {
                         } else {
                             let object = CachedInsulinDeliveryObject(context: self.cacheStore.managedObjectContext)
                             object.create(from: entry, by: self.provenanceIdentifier, at: now)
-                            self.log.debug("Add: %{public}@", String(describing: entry))
+                            self.log.debug("IDS Add: %{public}@", String(describing: entry))
                             return (quantitySample, object)
                         }
                     }
@@ -471,6 +479,14 @@ extension InsulinDeliveryStore {
             self.delegate?.insulinDeliveryStoreHasUpdatedDoseData(self)
 
             completion(.success(()))
+        }
+    }
+
+    func addDoseEntries(_ entries: [DoseEntry], from device: HKDevice?, syncVersion: Int, resolveMutable: Bool = false) async throws {
+        try await withCheckedThrowingContinuation { continuation in
+            addDoseEntries(entries, from: device, syncVersion: syncVersion, resolveMutable: resolveMutable) { result in
+                continuation.resume(with: result)
+            }
         }
     }
 
@@ -699,6 +715,18 @@ extension InsulinDeliveryStore {
             self.handleUpdatedDoseData()
             self.delegate?.insulinDeliveryStoreHasUpdatedDoseData(self)
             completion(doseStoreError)
+        }
+    }
+
+    public func deleteAllManuallyEnteredDoses(since startDate: Date) async throws {
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) -> Void in
+            deleteAllManuallyEnteredDoses(since: startDate) { error in
+                if let error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume()
+                }
+            }
         }
     }
 }

@@ -44,8 +44,6 @@ class DeviceDataManager {
             healthKitSampleStore: doseSampleStore,
             cacheStore: cacheStore,
             longestEffectDuration: ExponentialInsulinModelPreset.rapidActingAdult.effectDuration,
-            basalProfile: basalRateSchedule,
-            insulinSensitivitySchedule: insulinSensitivitySchedule,
             provenanceIdentifier: HKSource.default().bundleIdentifier
         )
 
@@ -80,8 +78,6 @@ class DeviceDataManager {
     var basalRateSchedule = UserDefaults.standard.basalRateSchedule {
         didSet {
             UserDefaults.standard.basalRateSchedule = basalRateSchedule
-
-            doseStore.basalProfile = basalRateSchedule
         }
     }
 
@@ -120,7 +116,9 @@ class DeviceDataManager {
             UserDefaults.standard.pumpID = pumpID
 
             if pumpID != oldValue {
-                doseStore.resetPumpData()
+                Task {
+                    try await doseStore.resetPumpData()
+                }
             }
         }
     }
