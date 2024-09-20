@@ -25,6 +25,10 @@ public protocol DoseStoreDelegate: AnyObject {
      */
     func scheduledBasalHistory(from start: Date, to end: Date) async throws -> [AbsoluteScheduleValue<Double>]
 
+    /**
+     Provides a history of segments indicating whether automation was enabled.
+     */
+    func automationHistory(from start: Date, to end: Date) async throws -> [AbsoluteScheduleValue<Bool>]
 }
 
 public enum DoseStoreResult<T> {
@@ -862,18 +866,16 @@ extension DoseStore {
             try self.getNormalizedPumpEventDoseEntriesForSavingToInsulinDeliveryStore(basalStart: startingAt, end: self.currentDate())
         }
 
-        guard !doses.isEmpty else
-        {
-            return []
-        }
-
         guard let delegate = self.delegate else {
             throw DoseStoreError.configurationError
         }
         let basalHistory = try await delegate.scheduledBasalHistory(from: startingAt, to: endingAt)
 
         self.log.debug("Overlaying basal schedule for %d doses starting at %@", doses.count, String(describing: startingAt))
-        return doses.overlayBasal(basalHistory, endDate: endingAt, lastPumpEventsReconciliation: endingAt)
+        let dosesWithBasal = doses.overlayBasal(basalHistory, endDate: endingAt, lastPumpEventsReconciliation: endingAt)
+
+        let automationHistory = try await delegate.automationHistory(from: startingAt, to: endingAt)
+        return dosesWithBasal.overlayAutomationHistory(automationHistory)
     }
 
     /// Fetches manually entered doses.

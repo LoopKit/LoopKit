@@ -18,9 +18,13 @@ class DoseStoreDelegateMock: DoseStoreDelegate {
     func doseStoreHasUpdatedPumpEventData(_ doseStore: LoopKit.DoseStore) {
         updateCount += 1
     }
-    
+
     func scheduledBasalHistory(from start: Date, to end: Date) async throws -> [AbsoluteScheduleValue<Double>] {
         return basal.trimmed(from: start, to: end)
+    }
+
+    func automationHistory(from start: Date, to end: Date) async throws -> [AbsoluteScheduleValue<Bool>] {
+        return []
     }
 }
 
@@ -324,17 +328,20 @@ class DoseStoreTests: PersistenceControllerTestCase {
 
         // Add a temp basal. It hasn't finished yet, and should not be saved to Health
         let pumpEvents1 = [
-            NewPumpEvent(date: f("2018-11-29 10:59:28 +0000"), dose: nil, raw: UUID().data, title: "TempBasalPumpEvent(length: 8, rawData: 8 bytes, rateType: MinimedKit.TempBasalPumpEvent.RateType.Absolute, rate: 0.3, timestamp: calendar: gregorian (fixed) year: 2018 month: 11 day: 29 hour: 2 minute: 59 second: 28 isLeapMonth: false )", type: nil),
-            NewPumpEvent(date: f("2018-11-29 10:59:28 +0000"), dose: DoseEntry(type: .tempBasal, startDate: f("2018-11-29 10:59:28 +0000"), endDate: f("2018-11-29 11:29:28 +0000"), value: 0.3, unit: .unitsPerHour), raw: Data(hexadecimalString: "5bffc7cace53e48e87f7cfcb")!, title: "TempBasalDurationPumpEvent(length: 7, rawData: 7 bytes, duration: 30, timestamp: calendar: gregorian (fixed) year: 2018 month: 11 day: 29 hour: 2 minute: 59 second: 28 isLeapMonth: false )", type: .tempBasal)
+            NewPumpEvent(date: f("2018-11-29 10:59:28 +0000"), dose: DoseEntry(type: .tempBasal, startDate: f("2018-11-29 10:59:28 +0000"), endDate: f("2018-11-29 11:29:28 +0000"), value: 0.3, unit: .unitsPerHour, isMutable: true), raw: Data(hexadecimalString: "5bffc7cace53e48e87f7cfcb")!, title: "TempBasalDurationPumpEvent(length: 7, rawData: 7 bytes, duration: 30, timestamp: calendar: gregorian (fixed) year: 2018 month: 11 day: 29 hour: 2 minute: 59 second: 28 isLeapMonth: false )", type: .tempBasal)
         ]
 
         healthStore.setSaveHandler({ (objects, success, error) in
-            XCTFail()
-        })
-        try await doseStore.addPumpEvents(pumpEvents1, lastReconciliation: Date())
+            XCTAssertEqual(1, objects.count)
+            let basal = objects[0] as! HKQuantitySample
+            XCTAssertEqual(f("2018-11-29 10:54:28 +0000"), basal.startDate)
+            XCTAssertEqual(f("2018-11-29 10:59:28 +0000"), basal.endDate)
 
-        XCTAssertEqual(f("2018-11-29 10:54:28 +0000"), doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate)
-        XCTAssertEqual(f("2018-11-29 10:59:28 +0000"), doseStore.pumpEventQueryAfterDate)
+        })
+        try await doseStore.addPumpEvents(pumpEvents1, lastReconciliation: f("2018-11-29 11:04:27 +0000"))
+
+        XCTAssertEqual(f("2018-11-29 10:59:28 +0000"), doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate)
+        XCTAssertEqual(f("2018-11-28 11:04:27 +0000"), doseStore.pumpEventQueryAfterDate)
 
         // Add the next query of the same pump events (no new data) 5 minutes later. Expect the same result
         doseStore.insulinDeliveryStore.test_currentDate = f("2018-11-29 11:09:27 +0000")
@@ -345,30 +352,25 @@ class DoseStoreTests: PersistenceControllerTestCase {
         doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDateDidSet = {
             XCTFail()
         }
-        try await doseStore.addPumpEvents(pumpEvents1, lastReconciliation: Date())
+        try await doseStore.addPumpEvents(pumpEvents1, lastReconciliation: f("2018-11-29 10:59:28 +0000"))
 
-        XCTAssertEqual(f("2018-11-29 10:54:28 +0000"), doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate)
-        XCTAssertEqual(f("2018-11-29 10:59:28 +0000"), doseStore.pumpEventQueryAfterDate)
+        XCTAssertEqual(f("2018-11-29 10:59:28 +0000"), doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate)
+        XCTAssertEqual(f("2018-11-28 11:04:27 +0000"), doseStore.pumpEventQueryAfterDate)
 
         // Add the next set of pump events, including the last temp basal change.
         // The previous, completed basal entries should be saved to Health
         doseStore.insulinDeliveryStore.test_currentDate = f("2018-11-29 11:14:28 +0000")
 
         let pumpEvents3 = [
-            NewPumpEvent(date: f("2018-11-29 11:09:27 +0000"), dose: nil, raw: UUID().data, title: "TempBasalPumpEvent(length: 8, rawData: 8 bytes, rateType: MinimedKit.TempBasalPumpEvent.RateType.Absolute, rate: 0.325, timestamp: calendar: gregorian (fixed) year: 2018 month: 11 day: 29 hour: 3 minute: 9 second: 27 isLeapMonth: false )", type: nil),
+            NewPumpEvent(date: f("2018-11-29 10:59:28 +0000"), dose: DoseEntry(type: .tempBasal, startDate: f("2018-11-29 10:59:28 +0000"), endDate: f("2018-11-29 11:09:27 +0000"), value: 0.3, unit: .unitsPerHour, isMutable: false), raw: Data(hexadecimalString: "5bffc7cace53e48e87f7cfcb")!, title: "TempBasalDurationPumpEvent(length: 7, rawData: 7 bytes, duration: 30, timestamp: calendar: gregorian (fixed) year: 2018 month: 11 day: 29 hour: 2 minute: 59 second: 28 isLeapMonth: false )", type: .tempBasal),
             NewPumpEvent(date: f("2018-11-29 11:09:27 +0000"), dose: DoseEntry(type: .tempBasal, startDate: f("2018-11-29 11:09:27 +0000"), endDate: f("2018-11-29 11:39:27 +0000"), value: 0.325, unit: .unitsPerHour), raw: Data(hexadecimalString: "5bffca22ce53e48e87f7d624")!, title: "TempBasalDurationPumpEvent(length: 7, rawData: 7 bytes, duration: 30, timestamp: calendar: gregorian (fixed) year: 2018 month: 11 day: 29 hour: 3 minute: 9 second: 27 isLeapMonth: false )", type: .tempBasal)
         ]
 
         let addPumpEvents3 = expectation(description: "add pumpEvents3")
         addPumpEvents3.expectedFulfillmentCount = 2
         healthStore.setSaveHandler({ (objects, success, error) in
-            XCTAssertEqual(2, objects.count)
-            let basal = objects[0] as! HKQuantitySample
-            XCTAssertEqual(HKInsulinDeliveryReason.basal, basal.insulinDeliveryReason)
-            XCTAssertEqual(f("2018-11-29 10:54:28 +0000"), basal.startDate)
-            XCTAssertEqual(f("2018-11-29 10:59:28 +0000"), basal.endDate)
-            XCTAssertEqual("BasalRateSchedule 2018-11-29T10:54:28Z", basal.metadata![HKMetadataKeySyncIdentifier] as! String)
-            let temp1 = objects[1] as! HKQuantitySample
+            XCTAssertEqual(1, objects.count)
+            let temp1 = objects[0] as! HKQuantitySample
             XCTAssertEqual(HKInsulinDeliveryReason.basal, temp1.insulinDeliveryReason)
             XCTAssertEqual(f("2018-11-29 10:59:28 +0000"), temp1.startDate)
             XCTAssertEqual(f("2018-11-29 11:09:27 +0000"), temp1.endDate)

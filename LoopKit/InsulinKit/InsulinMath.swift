@@ -315,6 +315,69 @@ extension Collection where Element == DoseEntry {
         return reconciled.map { $0.resolvingDelivery }
     }
 
+    /// Assigns an automation status to any dose where automation is not already specified
+    ///
+    /// - Parameters:
+    ///   - automationHistory: A history of automation periods.
+    /// - Returns: An array of doses, with the automation flag set based on automation history. Doses will be split if the automation state changes mid-dose.
+
+    public func overlayAutomationHistory(
+        _ automationHistory: [AbsoluteScheduleValue<Bool>]
+    ) -> [DoseEntry] {
+
+        guard count > 0 else {
+            return []
+        }
+
+        var newEntries = [DoseEntry]()
+
+        var automation = automationHistory
+
+        // Assume automation if doses start before automationHistory
+        if let firstAutomation = automation.first, firstAutomation.startDate > first!.startDate {
+            automation.insert(AbsoluteScheduleValue(startDate: first!.startDate, endDate: firstAutomation.startDate, value: true), at: 0)
+        }
+
+        // Overlay automation periods
+        func annotateDoseWithAutomation(dose: DoseEntry) {
+            var addedCount = 0
+            for period in automation {
+                if period.endDate > dose.startDate && period.startDate < dose.endDate {
+                    var newDose = dose
+                    newDose.startDate = Swift.max(period.startDate, dose.startDate)
+                    newDose.endDate = Swift.min(period.endDate, dose.endDate)
+                    if let delivered = dose.deliveredUnits {
+                        newDose.deliveredUnits = newDose.duration / dose.duration * delivered
+                    }
+                    newDose.automatic = period.value
+                    newEntries.append(newDose)
+                    addedCount += 1
+                }
+            }
+            if addedCount == 0 {
+                // automation history did not cover dose; mark automatic as default
+                var newDose = dose
+                newDose.automatic = true
+                newEntries.append(newDose)
+            }
+        }
+
+        for dose in self {
+            switch dose.type {
+            case .tempBasal, .basal, .suspend:
+                if dose.automatic == nil {
+                    annotateDoseWithAutomation(dose: dose)
+                } else {
+                    newEntries.append(dose)
+                }
+            default:
+                newEntries.append(dose)
+                break
+            }
+        }
+        return newEntries
+    }
+
 
     /// Fills any missing gaps in basal delivery with new doses based on the supplied basal history. Compared to `overlayBasalSchedule`, this uses a history of
     /// of basal rates, rather than a daily schedule, so it can work across multiple schedule changes.  This method is suitable for generating a display of basal delivery
@@ -326,7 +389,12 @@ extension Collection where Element == DoseEntry {
     ///   - lastPumpEventsReconciliation: date at which pump manager has verified doses up to; doses with an end time of this or later are mutable
     ///   - gapPatchInterval: if the gap between two temp basals is less than this, then the start date of the second dose will be fudged to fill the gap. Used for display purposes.
     /// - Returns: An array of doses, with new doses created for any gaps between basalHistory.first.startDate and the end date.
-    public func overlayBasal(_ basalTimeline: [AbsoluteScheduleValue<Double>], endDate: Date? = nil, lastPumpEventsReconciliation: Date, gapPatchInterval: TimeInterval = 0) -> [DoseEntry] {
+    public func overlayBasal(
+        _ basalTimeline: [AbsoluteScheduleValue<Double>],
+        endDate: Date? = nil,
+        lastPumpEventsReconciliation: Date,
+        gapPatchInterval: TimeInterval = 0
+    ) -> [DoseEntry] {
         let dateFormatter = ISO8601DateFormatter()  // GMT-based ISO formatting
 
         guard basalTimeline.count > 0 else {
@@ -350,10 +418,6 @@ extension Collection where Element == DoseEntry {
                 }
 
                 if lastDate != entryEnd {
-                    if entryEnd.timeIntervalSince(lastDate).hours > 24 {
-                        print("here")
-                    }
-
                     let syncIdentifier = "BasalRateSchedule \(dateFormatter.string(from: lastDate))"
 
                     newEntries.append(
@@ -365,7 +429,7 @@ extension Collection where Element == DoseEntry {
                             unit: .unitsPerHour,
                             syncIdentifier: syncIdentifier,
                             scheduledBasalRate: HKQuantity(unit: .internationalUnitsPerHour, doubleValue: curRate),
-                            automatic: true,
+                            automatic: nil,  // To be filled in later
                             isMutable: entryEnd >= lastPumpEventsReconciliation))
 
                     lastDate = entryEnd

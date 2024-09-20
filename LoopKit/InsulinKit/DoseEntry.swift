@@ -13,14 +13,14 @@ import LoopAlgorithm
 
 public struct DoseEntry: TimelineValue, Equatable {
     public let type: DoseType
-    public let startDate: Date
+    public var startDate: Date
     public var endDate: Date
     internal let value: Double
     public let unit: DoseUnit
     public var deliveredUnits: Double?
     public let description: String?
     public var insulinType: InsulinType?
-    public let automatic: Bool?
+    public var automatic: Bool?
     public let manuallyEntered: Bool
     public internal(set) var syncIdentifier: String?
     public let isMutable: Bool
@@ -64,6 +64,10 @@ extension DoseEntry {
 
     private var hours: Double {
         return endDate.timeIntervalSince(startDate).hours
+    }
+
+    public var duration: TimeInterval {
+        return endDate.timeIntervalSince(startDate)
     }
 
     public var programmedUnits: Double {
