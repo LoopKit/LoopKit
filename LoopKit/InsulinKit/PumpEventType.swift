@@ -22,6 +22,7 @@ public enum PumpEventType: CaseIterable, Equatable {
     case rewind
     case suspend
     case tempBasal
+    case timeZoneSync(fromSecondsFromGMT: Int, toSecondsFromGMT: Int)
     case replaceComponent(componentType: ReplaceableComponent)
     
     init?(rawValue: String) {
@@ -45,8 +46,17 @@ public enum PumpEventType: CaseIterable, Equatable {
         case "TempBasal":
             self = .tempBasal
         default:
-            if rawValue.starts(with: "Replace"), let value = ReplaceableComponent(rawValue: String(rawValue.dropFirst(7))) {
+            if rawValue.starts(with: "Replace"), 
+                let value = ReplaceableComponent(rawValue: String(rawValue.dropFirst(7)))
+            {
                 self = .replaceComponent(componentType: value)
+            } else if rawValue.starts(with: "TimeZoneSync") {
+                let parts = rawValue.split(separator: "|")
+                guard parts.count == 3,
+                      let fromSecondsToGMT = Int(String(parts[1])),
+                      let toSecondsToGMT = Int(String(parts[2]))
+                else { return nil }
+                self = .timeZoneSync(fromSecondsFromGMT: fromSecondsToGMT, toSecondsFromGMT: toSecondsToGMT)
             } else {
                 return nil
             }
@@ -73,6 +83,8 @@ public enum PumpEventType: CaseIterable, Equatable {
             return "PumpSuspend"
         case .tempBasal:
             return "TempBasal"
+        case let .timeZoneSync(fromSecondsToGMT, toSecondsToGMT):
+            return "TimeZoneSync|\(fromSecondsToGMT)|\(toSecondsToGMT)"
         case let .replaceComponent(componentType):
             return "Replace\(componentType.rawValue)"
         }
@@ -123,6 +135,8 @@ extension PumpEventType {
             return 11
         case .replaceComponent(componentType: .infusionSet):
             return 12
+        case .timeZoneSync:
+            return 13
         }
     }
 }
