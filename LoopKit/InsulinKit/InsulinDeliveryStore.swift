@@ -573,14 +573,14 @@ extension InsulinDeliveryStore {
         dispatchGroup.wait()
 
         if let error = error {
-            self.log.error("Error saving HealthKit objects: %@", String(describing: error))
+            self.log.error("Error saving HealthKit objects: %{public}@", String(describing: error))
             return
         }
 
         // Update Core Data with the changes, log any errors, but do not fail
         sampleObjects.forEach { (sample, object) in object.uuid = sample.uuid }
         if let error = self.cacheStore.save() {
-            self.log.error("Error updating CachedInsulinDeliveryObjects after saving HealthKit objects: %@", String(describing: error))
+            self.log.error("Error updating CachedInsulinDeliveryObjects after saving HealthKit objects: %{public}@", String(describing: error))
             sampleObjects.forEach { (_, object) in object.uuid = nil }
         }
     }

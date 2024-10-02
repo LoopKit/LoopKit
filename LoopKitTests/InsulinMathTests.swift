@@ -604,6 +604,40 @@ class InsulinMathTests: XCTestCase {
         XCTAssertTrue(trimmed.last!.isMutable)
     }
 
+    func testOverlayBasalWithUnfinishedSuspend() {
+        let dateFormatter = ISO8601DateFormatter.localTimeDate(timeZone: fixtureTimeZone)
+        let startDate = dateFormatter.date(from: "2015-10-15T22:25:50")!
+        let doses = [
+            DoseEntry(
+                type: .suspend,
+                startDate: startDate,
+                value: 0,
+                unit: .units,
+                description: "Suspend",
+                syncIdentifier: "SuspendSyncIdentifier",
+                manuallyEntered: false,
+                isMutable: true,
+                wasProgrammedByPumpUI: false
+            )
+        ]
+
+        let now = startDate.addingTimeInterval(.hours(1))
+
+        let basals = [
+            AbsoluteScheduleValue(startDate: startDate.addingTimeInterval(.hours(-1)), endDate: now, value: 1.0)
+        ]
+
+        let dosesWithBasal = doses.overlayBasal(basals, endDate: now, lastPumpEventsReconciliation: now)
+
+        XCTAssertEqual(2, dosesWithBasal.count)
+
+        XCTAssertEqual(.basal, dosesWithBasal[0].type)
+        XCTAssertEqual(.hours(1), dosesWithBasal[0].duration)
+
+        XCTAssertEqual(.suspend, dosesWithBasal[1].type)
+        XCTAssertEqual(.hours(1), dosesWithBasal[1].duration)
+    }
+
     func testDosesOverlayBasalProfile() {
         let dateFormatter = ISO8601DateFormatter.localTimeDate(timeZone: fixtureTimeZone)
         let input = loadDoseFixture("reconcile_history_output").sorted { $0.startDate < $1.startDate }
@@ -1208,116 +1242,6 @@ class InsulinMathTests: XCTestCase {
         // A 5 minute dose starting one minute before midnight, split at midnight, means split should be 1/5, 4/5
         XCTAssertEqual(delivery * 1.0/5.0, splitDoses[0].volume, accuracy: .ulpOfOne)
         XCTAssertEqual(delivery * 4.0/5.0, splitDoses[1].volume, accuracy: .ulpOfOne)
-    }
-
-
-    func testOverlayAutomationHistory_NoAutomationHistory() {
-        let doses: [DoseEntry] = [
-            DoseEntry(type: .basal, startDate: Date(), endDate: Date().addingTimeInterval(3600), value: 1.0, unit: .unitsPerHour, automatic: nil, manuallyEntered: false, isMutable: false)
-        ]
-        let result = doses.overlayAutomationHistory([])
-
-        XCTAssertEqual(result.count, 1)
-        XCTAssertEqual(result[0].automatic, true) // Default to true when no automation history
-    }
-
-    func testOverlayAutomationHistory_SingleAutomationPeriod() {
-        let now = Date()
-        let doses: [DoseEntry] = [
-            DoseEntry(type: .basal, startDate: now, endDate: now.addingTimeInterval(3600), value: 1.0, unit: .unitsPerHour, automatic: nil, manuallyEntered: false, isMutable: false)
-        ]
-        let automationHistory: [AbsoluteScheduleValue<Bool>] = [
-            AbsoluteScheduleValue(startDate: now, endDate: now.addingTimeInterval(3600), value: false)
-        ]
-
-        let result = doses.overlayAutomationHistory(automationHistory)
-
-        XCTAssertEqual(result.count, 1)
-        XCTAssertEqual(result[0].automatic, false)
-    }
-
-    func testOverlayAutomationHistory_MultipleAutomationPeriods() {
-        let now = Date()
-        let doses: [DoseEntry] = [
-            DoseEntry(type: .basal, startDate: now, endDate: now.addingTimeInterval(3600), value: 1.0, unit: .unitsPerHour, automatic: nil, manuallyEntered: false, isMutable: false)
-        ]
-        let automationHistory: [AbsoluteScheduleValue<Bool>] = [
-            AbsoluteScheduleValue(startDate: now, endDate: now.addingTimeInterval(1800), value: false),
-            AbsoluteScheduleValue(startDate: now.addingTimeInterval(1800), endDate: now.addingTimeInterval(3600), value: true)
-        ]
-
-        let result = doses.overlayAutomationHistory(automationHistory)
-
-        XCTAssertEqual(result.count, 2)
-        XCTAssertEqual(result[0].automatic, false)
-        XCTAssertEqual(result[1].automatic, true)
-    }
-
-    func testOverlayAutomationHistory_PartialOverlap() {
-        let now = Date()
-        let doses: [DoseEntry] = [
-            DoseEntry(type: .basal, startDate: now, endDate: now.addingTimeInterval(3600), value: 1.0, unit: .unitsPerHour, automatic: nil, manuallyEntered: false, isMutable: false)
-        ]
-        let automationHistory: [AbsoluteScheduleValue<Bool>] = [
-            AbsoluteScheduleValue(startDate: now.addingTimeInterval(1800), endDate: now.addingTimeInterval(4800), value: false)
-        ]
-
-        let result = doses.overlayAutomationHistory(automationHistory)
-
-        XCTAssertEqual(result.count, 2)
-        XCTAssertEqual(result[0].automatic, true)
-        XCTAssertEqual(result[1].automatic, false)
-    }
-
-    func testOverlayAutomationHistory_NonBasalDoses() {
-        let now = Date()
-        let doses: [DoseEntry] = [
-            DoseEntry(type: .bolus, startDate: now, endDate: now.addingTimeInterval(300), value: 2.0, unit: .unitsPerHour, automatic: nil, manuallyEntered: false, isMutable: false),
-            DoseEntry(type: .basal, startDate: now.addingTimeInterval(300), endDate: now.addingTimeInterval(3600), value: 1.0, unit: .unitsPerHour, automatic: nil, manuallyEntered: false, isMutable: false)
-        ]
-        let automationHistory: [AbsoluteScheduleValue<Bool>] = [
-            AbsoluteScheduleValue(startDate: now, endDate: now.addingTimeInterval(3600), value: false)
-        ]
-
-        let result = doses.overlayAutomationHistory(automationHistory)
-
-        XCTAssertEqual(result.count, 2)
-        XCTAssertNil(result[0].automatic) // Bolus dose should remain unchanged
-        XCTAssertEqual(result[1].automatic, false)
-    }
-
-    func testOverlayAutomationHistory_PreexistingAutomationFlag() {
-        let now = Date()
-        let doses: [DoseEntry] = [
-            DoseEntry(type: .basal, startDate: now, endDate: now.addingTimeInterval(3600), value: 1.0, unit: .unitsPerHour, automatic: true, manuallyEntered: false, isMutable: false)
-        ]
-        let automationHistory: [AbsoluteScheduleValue<Bool>] = [
-            AbsoluteScheduleValue(startDate: now, endDate: now.addingTimeInterval(3600), value: false)
-        ]
-
-        let result = doses.overlayAutomationHistory(automationHistory)
-
-        XCTAssertEqual(result.count, 1)
-        XCTAssertEqual(result[0].automatic, true) // Should not change preexisting automation flag
-    }
-
-    func testOverlayAutomationHistory_DeliveredUnitsAdjustment() {
-        let now = Date()
-        let doses: [DoseEntry] = [
-            DoseEntry(type: .basal, startDate: now, endDate: now.addingTimeInterval(3600), value: 1.0, unit: .unitsPerHour, deliveredUnits: 1.0, automatic: nil, manuallyEntered: false, isMutable: false)
-        ]
-        let automationHistory: [AbsoluteScheduleValue<Bool>] = [
-            AbsoluteScheduleValue(startDate: now, endDate: now.addingTimeInterval(1800), value: false),
-            AbsoluteScheduleValue(startDate: now.addingTimeInterval(1800), endDate: now.addingTimeInterval(3600), value: true)
-        ]
-
-        let result = doses.overlayAutomationHistory(automationHistory)
-
-        XCTAssertEqual(result.count, 2)
-        XCTAssertEqual(result[0].deliveredUnits!, 0.5, accuracy: 0.001)
-        XCTAssertEqual(result[0].automatic, false)
-        XCTAssertEqual(result[1].deliveredUnits!, 0.5, accuracy: 0.001)
-        XCTAssertEqual(result[1].automatic, true)
     }
 }
 

@@ -343,7 +343,7 @@ extension GlucoseStore {
                 let objects = try self.cacheStore.managedObjectContext.fetch(request)
                 latestGlucose = objects.first.map { StoredGlucoseSample(managedObject: $0) }
             } catch let error {
-                self.log.error("Unable to fetch latest glucose object: %@", String(describing: error))
+                self.log.error("Unable to fetch latest glucose object: %{public}@", String(describing: error))
             }
 
             self.latestGlucose = latestGlucose
@@ -543,7 +543,7 @@ extension GlucoseStore {
                     let samples = objects.map { StoredGlucoseSample(managedObject: $0) }
                     completion(.success(samples.first))
                 } catch let error {
-                    self.log.error("Error in getLatestCGMGlucose: %@", String(describing: error))
+                    self.log.error("Error in getLatestCGMGlucose: %{public}@", String(describing: error))
                     completion(.failure(error))
                 }
             }

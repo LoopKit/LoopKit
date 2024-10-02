@@ -11,9 +11,12 @@
 */
 
 import Foundation
+import LoopAlgorithm
 
 public protocol RemoteDataServiceDelegate: AnyObject {
     func fetchDeviceLogs(startDate: Date, endDate: Date) async throws -> [StoredDeviceLogEntry]
+    func getBasalHistory(startDate: Date, endDate: Date) async throws -> [AbsoluteScheduleValue<Double>]
+    func automationHistory(from start: Date, to end: Date) async throws -> [AbsoluteScheduleValue<Bool>]
 }
 
 public protocol RemoteDataService: Service {

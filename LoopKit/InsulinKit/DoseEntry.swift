@@ -12,22 +12,22 @@ import LoopAlgorithm
 
 
 public struct DoseEntry: TimelineValue, Equatable {
-    public let type: DoseType
+    public var type: DoseType
     public var startDate: Date
     public var endDate: Date
-    internal let value: Double
-    public let unit: DoseUnit
+    public var value: Double
+    public var unit: DoseUnit
     public var deliveredUnits: Double?
-    public let description: String?
+    public var description: String?
     public var insulinType: InsulinType?
     public var automatic: Bool?
-    public let manuallyEntered: Bool
-    public internal(set) var syncIdentifier: String?
-    public let isMutable: Bool
-    public let wasProgrammedByPumpUI: Bool
+    public var manuallyEntered: Bool
+    public var syncIdentifier: String?
+    public var isMutable: Bool
+    public var wasProgrammedByPumpUI: Bool
 
     /// The scheduled basal rate during this dose entry
-    public internal(set) var scheduledBasalRate: HKQuantity?
+    public var scheduledBasalRate: HKQuantity?
 
     public init(suspendDate: Date, automatic: Bool? = nil, isMutable: Bool = false, wasProgrammedByPumpUI: Bool = false) {
         self.init(type: .suspend, startDate: suspendDate, value: 0, unit: .units, automatic: automatic, isMutable: isMutable, wasProgrammedByPumpUI: wasProgrammedByPumpUI)

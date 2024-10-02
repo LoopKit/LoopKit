@@ -404,7 +404,7 @@ extension HealthKitSampleStore {
             do {
                 try await healthStore.enableBackgroundDelivery(for: sampleType, frequency: .immediate)
             } catch {
-                self.log.error("Error enabling background delivery: %@", error.localizedDescription)
+                self.log.error("Error enabling background delivery: %{public}@", error.localizedDescription)
             }
         }
 #endif
