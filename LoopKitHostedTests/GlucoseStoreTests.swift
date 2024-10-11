@@ -49,44 +49,31 @@ class GlucoseStoreTestsBase: PersistenceControllerTestCase, GlucoseStoreDelegate
     var delegateCompletion: XCTestExpectation?
     var authorizationStatus: HKAuthorizationStatus = .notDetermined
 
-    override func setUp() {
-        super.setUp()
-
-        let semaphore = DispatchSemaphore(value: 0)
-        cacheStore.onReady { error in
-            XCTAssertNil(error)
-            semaphore.signal()
-        }
-        semaphore.wait()
+    override func setUp() async throws {
+        try await super.setUp()
 
         mockHealthStore = HKHealthStoreMock()
-
 
         hkSampleStore = HealthKitSampleStore(healthStore: mockHealthStore, type: HealthKitSampleStore.glucoseType)
         hkSampleStore.observerQueryType = MockHKObserverQuery.self
         hkSampleStore.anchoredObjectQueryType = MockHKAnchoredObjectQuery.self
 
         mockHealthStore.authorizationStatus = authorizationStatus
-        glucoseStore = GlucoseStore(healthKitSampleStore: hkSampleStore,
+        glucoseStore = await GlucoseStore(healthKitSampleStore: hkSampleStore,
                                     cacheStore: cacheStore,
                                     cacheLength: .hours(1),
                                     provenanceIdentifier: HKSource.default().bundleIdentifier)
         glucoseStore.delegate = self
     }
 
-    override func tearDown() {
-        let semaphore = DispatchSemaphore(value: 0)
-        glucoseStore.purgeAllGlucoseSamples(healthKitPredicate: HKQuery.predicateForObjects(from: HKSource.default())) { error in
-            XCTAssertNil(error)
-            semaphore.signal()
-        }
-        semaphore.wait()
+    override func tearDown() async throws {
+        try await glucoseStore.purgeAllGlucose(for: HKSource.default())
 
         delegateCompletion = nil
         glucoseStore = nil
         mockHealthStore = nil
 
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // MARK: - GlucoseStoreDelegate
@@ -112,26 +99,38 @@ class GlucoseStoreTestsAuthorizationRequired: GlucoseStoreTestsBase {
     }
 }
 
-class GlucoseStoreTestsAuthorized: GlucoseStoreTestsBase {
-    override func setUp() {
-        authorizationStatus = .sharingAuthorized
-        super.setUp()
-    }
+class GlucoseStoreTestsAuthorized: PersistenceControllerTestCase {
 
-    func testObserverQueryStartup() {
+    var mockHealthStore: HKHealthStoreMock!
+    var glucoseStore: GlucoseStore!
+    var hkSampleStore: HealthKitSampleStore!
+    var delegateCompletion: XCTestExpectation?
+
+    func testObserverQueryStartup() async throws {
+        mockHealthStore = HKHealthStoreMock()
+
+        hkSampleStore = HealthKitSampleStore(healthStore: mockHealthStore, type: HealthKitSampleStore.glucoseType)
+        hkSampleStore.observerQueryType = MockHKObserverQuery.self
+        hkSampleStore.anchoredObjectQueryType = MockHKAnchoredObjectQuery.self
+
+        mockHealthStore.authorizationStatus = .sharingAuthorized
+        mockHealthStore.observerQueryStartedExpectation = expectation(description: "observer query started")
+        glucoseStore = await GlucoseStore(healthKitSampleStore: hkSampleStore,
+                                    cacheStore: cacheStore,
+                                    cacheLength: .hours(1),
+                                    provenanceIdentifier: HKSource.default().bundleIdentifier)
+
         // Check that an observer query is registered when authorization is already determined.
         XCTAssertFalse(hkSampleStore.authorizationRequired);
 
-        mockHealthStore.observerQueryStartedExpectation = expectation(description: "observer query started")
-
-        waitForExpectations(timeout: 30)
+        await fulfillment(of: [mockHealthStore.observerQueryStartedExpectation!])
 
         XCTAssertNotNil(hkSampleStore.observerQuery)
     }
 }
 
 class GlucoseStoreTestSharingUndetermined: GlucoseStoreTestsBase {
-    func testHealthKitQueryAnchorPersistence() {
+    func testHealthKitQueryAnchorPersistence() async throws {
         XCTAssert(hkSampleStore.authorizationRequired);
         XCTAssertNil(hkSampleStore.observerQuery);
 
@@ -140,7 +139,7 @@ class GlucoseStoreTestSharingUndetermined: GlucoseStoreTestsBase {
         mockHealthStore.authorizationStatus = .sharingAuthorized
         hkSampleStore.authorizationIsDetermined()
 
-        waitForExpectations(timeout: 3)
+        await fulfillment(of: [mockHealthStore.observerQueryStartedExpectation!])
 
         XCTAssertNotNil(mockHealthStore.observerQuery)
 
@@ -157,7 +156,7 @@ class GlucoseStoreTestSharingUndetermined: GlucoseStoreTestsBase {
         // This simulates a signal marking the arrival of new HK Data.
         mockObserverQuery.updateHandler?(mockObserverQuery, observerQueryCompletionHandler, nil)
 
-        wait(for: [mockHealthStore.anchorQueryStartedExpectation!])
+        await fulfillment(of: [mockHealthStore.anchorQueryStartedExpectation!])
 
         let currentAnchor = HKQueryAnchor(fromValue: 5)
 
@@ -165,7 +164,7 @@ class GlucoseStoreTestSharingUndetermined: GlucoseStoreTestsBase {
         mockAnchoredObjectQuery.resultsHandler?(mockAnchoredObjectQuery, [], [], currentAnchor, nil)
 
         // Wait for observerQueryCompletionExpectation
-        waitForExpectations(timeout: 3)
+        await fulfillment(of: [observerQueryCompletionExpectation])
 
         XCTAssertNotNil(hkSampleStore.queryAnchor)
 
@@ -178,17 +177,16 @@ class GlucoseStoreTestSharingUndetermined: GlucoseStoreTestsBase {
         newSampleStore.anchoredObjectQueryType = MockHKAnchoredObjectQuery.self
 
         // Create a new glucose store, and ensure it uses the last query anchor
-        let _ = GlucoseStore(healthKitSampleStore: newSampleStore,
+        mockHealthStore.observerQueryStartedExpectation = expectation(description: "new observer query started")
+        let _ = await GlucoseStore(healthKitSampleStore: newSampleStore,
                              cacheStore: cacheStore,
                              provenanceIdentifier: HKSource.default().bundleIdentifier)
-
-        mockHealthStore.observerQueryStartedExpectation = expectation(description: "new observer query started")
 
         mockHealthStore.authorizationStatus = .sharingAuthorized
         newSampleStore.authorizationIsDetermined()
 
-        // Wait for observerQueryCompletionExpectation
-        waitForExpectations(timeout: 3)
+        // Wait for observerQueryStartedExpectation
+        await fulfillment(of: [mockHealthStore.observerQueryStartedExpectation!])
 
         mockHealthStore.anchorQueryStartedExpectation = expectation(description: "new anchored object query started")
 
@@ -198,12 +196,11 @@ class GlucoseStoreTestSharingUndetermined: GlucoseStoreTestsBase {
         mockObserverQuery2.updateHandler?(mockObserverQuery2, {}, nil)
 
         // Wait for anchorQueryStartedExpectation
-        waitForExpectations(timeout: 3)
+        await fulfillment(of: [mockHealthStore.anchorQueryStartedExpectation!])
 
         // Assert new carb store is querying with the last anchor that our HealthKit mock returned
         let mockAnchoredObjectQuery2 = mockHealthStore.anchoredObjectQuery as! MockHKAnchoredObjectQuery
         XCTAssertEqual(currentAnchor, mockAnchoredObjectQuery2.anchor)
-
 
         mockAnchoredObjectQuery2.resultsHandler?(mockAnchoredObjectQuery2, [], [], currentAnchor, nil)
     }
@@ -211,298 +208,170 @@ class GlucoseStoreTestSharingUndetermined: GlucoseStoreTestsBase {
 
 
 class GlucoseStoreTests: GlucoseStoreTestsBase {
-    override func setUp() {
+    override func setUp() async throws {
         authorizationStatus = .sharingAuthorized
-        super.setUp()
+        try await super.setUp()
     }
 
     // MARK: - Fetching
 
-    func testGetGlucoseSamples() {
-        let addGlucoseSamplesCompletion = expectation(description: "addGlucoseSamples")
-        glucoseStore.addGlucoseSamples([sample1, sample2, sample3]) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
-            }
-            addGlucoseSamplesCompletion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+    func testGetGlucoseSamples() async throws {
+        var samples = try await glucoseStore.addGlucoseSamples([sample1, sample2, sample3])
+        XCTAssertEqual(samples.count, 3)
 
-        let getGlucoseSamples1Completion = expectation(description: "getGlucoseSamples1")
-        glucoseStore.getGlucoseSamples() { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
-                XCTAssertNotNil(samples[0].uuid)
-                XCTAssertNil(samples[0].healthKitEligibleDate)
-                assertEqualSamples(samples[0], self.sample1)
-                XCTAssertNotNil(samples[1].uuid)
-                XCTAssertNil(samples[1].healthKitEligibleDate)
-                assertEqualSamples(samples[1], self.sample3)
-                XCTAssertNotNil(samples[2].uuid)
-                XCTAssertNil(samples[2].healthKitEligibleDate)
-                assertEqualSamples(samples[2], self.sample2)
-            }
-            getGlucoseSamples1Completion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        await glucoseStore.saveSamplesToHealthKit()
 
-        let getGlucoseSamples2Completion = expectation(description: "getGlucoseSamples2")
-        glucoseStore.getGlucoseSamples(start: Date(timeIntervalSinceNow: -.minutes(5)), end: Date(timeIntervalSinceNow: -.minutes(3))) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let samples):
-                XCTAssertEqual(samples.count, 1)
-                XCTAssertNotNil(samples[0].uuid)
-                XCTAssertNil(samples[0].healthKitEligibleDate)
-                assertEqualSamples(samples[0], self.sample3)
-            }
-            getGlucoseSamples2Completion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        samples = try await glucoseStore.getGlucoseSamples()
+        XCTAssertEqual(samples.count, 3)
+        XCTAssertNotNil(samples[0].uuid)
+        XCTAssertNil(samples[0].healthKitEligibleDate)
+        assertEqualSamples(samples[0], self.sample1)
+        XCTAssertNotNil(samples[1].uuid)
+        XCTAssertNil(samples[1].healthKitEligibleDate)
+        assertEqualSamples(samples[1], self.sample3)
+        XCTAssertNotNil(samples[2].uuid)
+        XCTAssertNil(samples[2].healthKitEligibleDate)
+        assertEqualSamples(samples[2], self.sample2)
 
-        let purgeCachedGlucoseObjectsCompletion = expectation(description: "purgeCachedGlucoseObjects")
-        glucoseStore.purgeCachedGlucoseObjects() { error in
-            XCTAssertNil(error)
-            purgeCachedGlucoseObjectsCompletion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        samples = try await glucoseStore.getGlucoseSamples(
+            start: Date(timeIntervalSinceNow: -.minutes(5)),
+            end: Date(timeIntervalSinceNow: -.minutes(3))
+        )
+        XCTAssertEqual(samples.count, 1)
+        XCTAssertNotNil(samples[0].uuid)
+        XCTAssertNil(samples[0].healthKitEligibleDate)
+        assertEqualSamples(samples[0], self.sample3)
 
-        let getGlucoseSamples3Completion = expectation(description: "getGlucoseSamples3")
-        glucoseStore.getGlucoseSamples() { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let samples):
-                XCTAssertEqual(samples.count, 0)
-            }
-            getGlucoseSamples3Completion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        try await glucoseStore.purgeCachedGlucoseObjects()
+
+        samples = try await glucoseStore.getGlucoseSamples()
+        XCTAssertEqual(samples.count, 0)
     }
     
     enum Error: Swift.Error { case arbitrary }
 
-    func testGetGlucoseSamplesDelayedHealthKitStorage() {
+    func testGetGlucoseSamplesDelayedHealthKitStorage() async throws {
         glucoseStore.healthKitStorageDelay = .minutes(5)
         var hkobjects = [HKObject]()
         mockHealthStore.setSaveHandler { o, _, _ in hkobjects = o }
-        let addGlucoseSamplesCompletion = expectation(description: "addGlucoseSamples")
-        glucoseStore.addGlucoseSamples([sample1, sample2, sample3]) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
-            }
-            addGlucoseSamplesCompletion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        var samples = try await glucoseStore.addGlucoseSamples([sample1, sample2, sample3])
+        XCTAssertEqual(samples.count, 3)
 
-        let getGlucoseSamples1Completion = expectation(description: "getGlucoseSamples1")
-        glucoseStore.getGlucoseSamples() { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
-                // HealthKit storage is deferred, so the second 1 UUIDs is nil
-                XCTAssertNotNil(samples[0].uuid)
-                XCTAssertNil(samples[0].healthKitEligibleDate)
-                assertEqualSamples(samples[0], self.sample1)
-                XCTAssertNil(samples[1].uuid)
-                XCTAssertNotNil(samples[1].healthKitEligibleDate)
-                assertEqualSamples(samples[1], self.sample3)
-                XCTAssertNotNil(samples[2].uuid)
-                XCTAssertNil(samples[2].healthKitEligibleDate)
-                assertEqualSamples(samples[2], self.sample2)
-            }
-            getGlucoseSamples1Completion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        await glucoseStore.saveSamplesToHealthKit()
+
+        samples = try await glucoseStore.getGlucoseSamples()
+        XCTAssertEqual(samples.count, 3)
+        // HealthKit storage is deferred, so the second 1 UUIDs is nil
+        XCTAssertNotNil(samples[0].uuid)
+        XCTAssertNil(samples[0].healthKitEligibleDate)
+        assertEqualSamples(samples[0], self.sample1)
+        XCTAssertNil(samples[1].uuid)
+        XCTAssertNotNil(samples[1].healthKitEligibleDate)
+        assertEqualSamples(samples[1], self.sample3)
+        XCTAssertNotNil(samples[2].uuid)
+        XCTAssertNil(samples[2].healthKitEligibleDate)
+        assertEqualSamples(samples[2], self.sample2)
 
         let stored = hkobjects[0] as! HKQuantitySample
         XCTAssertEqual(sample1.quantitySample.quantity, stored.quantity)
     }
     
-    func testGetGlucoseSamplesErrorHealthKitStorage() {
+    func testGetGlucoseSamplesErrorHealthKitStorage() async throws {
         mockHealthStore.saveError = Error.arbitrary
         var hkobjects = [HKObject]()
         mockHealthStore.setSaveHandler { o, _, _ in hkobjects = o }
-        let addGlucoseSamplesCompletion = expectation(description: "addGlucoseSamples")
-        glucoseStore.addGlucoseSamples([sample1, sample2, sample3]) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
-            }
-            addGlucoseSamplesCompletion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
 
-        let getGlucoseSamples1Completion = expectation(description: "getGlucoseSamples1")
-        glucoseStore.getGlucoseSamples() { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
-                // HealthKit storage is deferred, so the second 2 UUIDs are nil
-                XCTAssertNil(samples[0].uuid)
-                XCTAssertNotNil(samples[0].healthKitEligibleDate)
-                assertEqualSamples(samples[0], self.sample1)
-                XCTAssertNil(samples[1].uuid)
-                XCTAssertNotNil(samples[1].healthKitEligibleDate)
-                assertEqualSamples(samples[1], self.sample3)
-                XCTAssertNil(samples[2].uuid)
-                XCTAssertNotNil(samples[2].healthKitEligibleDate)
-                assertEqualSamples(samples[2], self.sample2)
-            }
-            getGlucoseSamples1Completion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        var samples = try await glucoseStore.addGlucoseSamples([sample1, sample2, sample3])
+        XCTAssertEqual(samples.count, 3)
+
+        samples = try await glucoseStore.getGlucoseSamples()
+        XCTAssertEqual(samples.count, 3)
+        // HealthKit storage is deferred, so the second 2 UUIDs are nil
+        XCTAssertNil(samples[0].uuid)
+        XCTAssertNotNil(samples[0].healthKitEligibleDate)
+        assertEqualSamples(samples[0], self.sample1)
+        XCTAssertNil(samples[1].uuid)
+        XCTAssertNotNil(samples[1].healthKitEligibleDate)
+        assertEqualSamples(samples[1], self.sample3)
+        XCTAssertNil(samples[2].uuid)
+        XCTAssertNotNil(samples[2].healthKitEligibleDate)
+        assertEqualSamples(samples[2], self.sample2)
 
         XCTAssertEqual(3, hkobjects.count)
     }
 
-    func testGetGlucoseSamplesDeniedHealthKitStorage() {
+    func testGetGlucoseSamplesDeniedHealthKitStorage() async throws {
         mockHealthStore.authorizationStatus = .sharingDenied
         var hkobjects = [HKObject]()
         mockHealthStore.setSaveHandler { o, _, _ in hkobjects = o }
-        let addGlucoseSamplesCompletion = expectation(description: "addGlucoseSamples")
-        glucoseStore.addGlucoseSamples([sample1, sample2, sample3]) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
-            }
-            addGlucoseSamplesCompletion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        let storedSamples = try await glucoseStore.addGlucoseSamples([sample1, sample2, sample3])
+        XCTAssertEqual(storedSamples.count, 3)
 
-        let getGlucoseSamples1Completion = expectation(description: "getGlucoseSamples1")
-        glucoseStore.getGlucoseSamples() { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
-                // HealthKit storage is denied, so all UUIDs are nil
-                XCTAssertNil(samples[0].uuid)
-                XCTAssertNil(samples[0].healthKitEligibleDate)
-                assertEqualSamples(samples[0], self.sample1)
-                XCTAssertNil(samples[1].uuid)
-                XCTAssertNil(samples[1].healthKitEligibleDate)
-                assertEqualSamples(samples[1], self.sample3)
-                XCTAssertNil(samples[2].uuid)
-                XCTAssertNil(samples[2].healthKitEligibleDate)
-                assertEqualSamples(samples[2], self.sample2)
-            }
-            getGlucoseSamples1Completion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        let samples = try await glucoseStore.getGlucoseSamples()
+        XCTAssertEqual(samples.count, 3)
+        // HealthKit storage is denied, so all UUIDs are nil
+        XCTAssertNil(samples[0].uuid)
+        XCTAssertNil(samples[0].healthKitEligibleDate)
+        assertEqualSamples(samples[0], self.sample1)
+        XCTAssertNil(samples[1].uuid)
+        XCTAssertNil(samples[1].healthKitEligibleDate)
+        assertEqualSamples(samples[1], self.sample3)
+        XCTAssertNil(samples[2].uuid)
+        XCTAssertNil(samples[2].healthKitEligibleDate)
+        assertEqualSamples(samples[2], self.sample2)
 
         XCTAssertTrue(hkobjects.isEmpty)
     }
     
-    func testGetGlucoseSamplesSomeDeniedHealthKitStorage() {
+    func testGetGlucoseSamplesSomeDeniedHealthKitStorage() async throws {
         glucoseStore.healthKitStorageDelay = 0
         var hkobjects = [HKObject]()
         mockHealthStore.setSaveHandler { o, _, _ in hkobjects = o }
-        let addGlucoseSamples1Completion = expectation(description: "addGlucoseSamples1")
+
         // Authorized
-        glucoseStore.addGlucoseSamples([sample1]) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let samples):
-                XCTAssertEqual(samples.count, 1)
-            }
-            addGlucoseSamples1Completion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        var samples = try await glucoseStore.addGlucoseSamples([sample1])
+        await glucoseStore.saveSamplesToHealthKit()
+        XCTAssertEqual(samples.count, 1)
         XCTAssertEqual(1, hkobjects.count)
         hkobjects = []
         
         mockHealthStore.authorizationStatus = .sharingDenied
-        let addGlucoseSamples2Completion = expectation(description: "addGlucoseSamples2")
         // Denied
-        glucoseStore.addGlucoseSamples([sample2]) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let samples):
-                XCTAssertEqual(samples.count, 1)
-            }
-            addGlucoseSamples2Completion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        samples = try await glucoseStore.addGlucoseSamples([sample2])
+        await glucoseStore.saveSamplesToHealthKit()
+        XCTAssertEqual(samples.count, 1)
         XCTAssertEqual(0, hkobjects.count)
         hkobjects = []
 
         mockHealthStore.authorizationStatus = .sharingAuthorized
-        let addGlucoseSamples3Completion = expectation(description: "addGlucoseSamples3")
         // Authorized
-        glucoseStore.addGlucoseSamples([sample3]) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let samples):
-                XCTAssertEqual(samples.count, 1)
-            }
-            addGlucoseSamples3Completion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        samples = try await glucoseStore.addGlucoseSamples([sample3])
+        await glucoseStore.saveSamplesToHealthKit()
+        XCTAssertEqual(samples.count, 1)
         XCTAssertEqual(1, hkobjects.count)
         hkobjects = []
 
-        let getGlucoseSamples1Completion = expectation(description: "getGlucoseSamples1")
-        glucoseStore.getGlucoseSamples() { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
-                XCTAssertNotNil(samples[0].uuid)
-                XCTAssertNil(samples[0].healthKitEligibleDate)
-                assertEqualSamples(samples[0], self.sample1)
-                XCTAssertNotNil(samples[1].uuid)
-                XCTAssertNil(samples[1].healthKitEligibleDate)
-                assertEqualSamples(samples[1], self.sample3)
-                XCTAssertNil(samples[2].uuid)
-                XCTAssertNil(samples[2].healthKitEligibleDate)
-                assertEqualSamples(samples[2], self.sample2)
-            }
-            getGlucoseSamples1Completion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        samples = try await glucoseStore.getGlucoseSamples()
+        XCTAssertEqual(samples.count, 3)
+        XCTAssertNotNil(samples[0].uuid)
+        XCTAssertNil(samples[0].healthKitEligibleDate)
+        assertEqualSamples(samples[0], self.sample1)
+        XCTAssertNotNil(samples[1].uuid)
+        XCTAssertNil(samples[1].healthKitEligibleDate)
+        assertEqualSamples(samples[1], self.sample3)
+        XCTAssertNil(samples[2].uuid)
+        XCTAssertNil(samples[2].healthKitEligibleDate)
+        assertEqualSamples(samples[2], self.sample2)
     }
     
-    func testLatestGlucose() {
+    func testLatestGlucose() async throws {
         XCTAssertNil(glucoseStore.latestGlucose)
 
-        let addGlucoseSamplesCompletion = expectation(description: "addGlucoseSamples")
-        glucoseStore.addGlucoseSamples([sample1, sample2, sample3]) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
-                assertEqualSamples(samples[0], self.sample1)
-                assertEqualSamples(samples[1], self.sample2)
-                assertEqualSamples(samples[2], self.sample3)
-            }
-            addGlucoseSamplesCompletion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        let samples = try await glucoseStore.addGlucoseSamples([sample1, sample2, sample3])
+        XCTAssertEqual(samples.count, 3)
+        assertEqualSamples(samples[0], self.sample1)
+        assertEqualSamples(samples[1], self.sample2)
+        assertEqualSamples(samples[2], self.sample3)
 
         XCTAssertNotNil(glucoseStore.latestGlucose)
         XCTAssertEqual(glucoseStore.latestGlucose?.startDate, sample2.date)
@@ -512,128 +381,71 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
         XCTAssertEqual(glucoseStore.latestGlucose?.isDisplayOnly, sample2.isDisplayOnly)
         XCTAssertEqual(glucoseStore.latestGlucose?.wasUserEntered, sample2.wasUserEntered)
 
-        let purgeCachedGlucoseObjectsCompletion = expectation(description: "purgeCachedGlucoseObjects")
-        glucoseStore.purgeCachedGlucoseObjects() { error in
-            XCTAssertNil(error)
-            purgeCachedGlucoseObjectsCompletion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        try await glucoseStore.purgeCachedGlucoseObjects()
 
         XCTAssertNil(glucoseStore.latestGlucose)
     }
 
     // MARK: - Modification
 
-    func testAddGlucoseSamples() {
-        let addGlucoseSamples1Completion = expectation(description: "addGlucoseSamples1")
-        glucoseStore.addGlucoseSamples([sample1, sample2, sample3, sample1, sample2, sample3]) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
-                // Note: the HealthKit UUID is no longer updated before being returned as a result of addGlucoseSamples.
-                XCTAssertNil(samples[0].uuid)
-                XCTAssertNotNil(samples[0].healthKitEligibleDate)
-                assertEqualSamples(samples[0], self.sample1)
-                XCTAssertNil(samples[1].uuid)
-                XCTAssertNotNil(samples[1].healthKitEligibleDate)
-                assertEqualSamples(samples[1], self.sample2)
-                XCTAssertNil(samples[2].uuid)
-                XCTAssertNotNil(samples[2].healthKitEligibleDate)
-                assertEqualSamples(samples[2], self.sample3)
-            }
-            addGlucoseSamples1Completion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+    func testAddGlucoseSamples() async throws {
+        var samples = try await glucoseStore.addGlucoseSamples([sample1, sample2, sample3, sample1, sample2, sample3])
+        XCTAssertEqual(samples.count, 3)
+        // Note: the HealthKit UUID is no longer updated before being returned as a result of addGlucoseSamples.
+        XCTAssertNil(samples[0].uuid)
+        XCTAssertNotNil(samples[0].healthKitEligibleDate)
+        assertEqualSamples(samples[0], self.sample1)
+        XCTAssertNil(samples[1].uuid)
+        XCTAssertNotNil(samples[1].healthKitEligibleDate)
+        assertEqualSamples(samples[1], self.sample2)
+        XCTAssertNil(samples[2].uuid)
+        XCTAssertNotNil(samples[2].healthKitEligibleDate)
+        assertEqualSamples(samples[2], self.sample3)
 
-        let getGlucoseSamples1Completion = expectation(description: "getGlucoseSamples1")
-        glucoseStore.getGlucoseSamples() { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
-                XCTAssertNotNil(samples[0].uuid)
-                XCTAssertNil(samples[0].healthKitEligibleDate)
-                assertEqualSamples(samples[0], self.sample1)
-                XCTAssertNotNil(samples[1].uuid)
-                XCTAssertNil(samples[1].healthKitEligibleDate)
-                assertEqualSamples(samples[1], self.sample3)
-                XCTAssertNotNil(samples[2].uuid)
-                XCTAssertNil(samples[2].healthKitEligibleDate)
-                assertEqualSamples(samples[2], self.sample2)
-            }
-            getGlucoseSamples1Completion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        samples = try await glucoseStore.getGlucoseSamples()
+        XCTAssertEqual(samples.count, 3)
+        XCTAssertNotNil(samples[0].uuid)
+        XCTAssertNil(samples[0].healthKitEligibleDate)
+        assertEqualSamples(samples[0], self.sample1)
+        XCTAssertNotNil(samples[1].uuid)
+        XCTAssertNil(samples[1].healthKitEligibleDate)
+        assertEqualSamples(samples[1], self.sample3)
+        XCTAssertNotNil(samples[2].uuid)
+        XCTAssertNil(samples[2].healthKitEligibleDate)
+        assertEqualSamples(samples[2], self.sample2)
 
-        let addGlucoseSamples2Completion = expectation(description: "addGlucoseSamples2")
-        glucoseStore.addGlucoseSamples([sample3, sample1, sample2]) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let samples):
-                XCTAssertEqual(samples.count, 0)
-            }
-            addGlucoseSamples2Completion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        samples = try await glucoseStore.addGlucoseSamples([sample3, sample1, sample2])
+        XCTAssertEqual(samples.count, 0)
 
-        let getGlucoseSamples2Completion = expectation(description: "getGlucoseSamples2Completion")
-        glucoseStore.getGlucoseSamples() { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
-                XCTAssertNotNil(samples[0].uuid)
-                XCTAssertNil(samples[0].healthKitEligibleDate)
-                assertEqualSamples(samples[0], self.sample1)
-                XCTAssertNotNil(samples[1].uuid)
-                XCTAssertNil(samples[1].healthKitEligibleDate)
-                assertEqualSamples(samples[1], self.sample3)
-                XCTAssertNotNil(samples[2].uuid)
-                XCTAssertNil(samples[2].healthKitEligibleDate)
-                assertEqualSamples(samples[2], self.sample2)
-            }
-            getGlucoseSamples2Completion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        samples = try await glucoseStore.getGlucoseSamples()
+        XCTAssertEqual(samples.count, 3)
+        XCTAssertNotNil(samples[0].uuid)
+        XCTAssertNil(samples[0].healthKitEligibleDate)
+        assertEqualSamples(samples[0], self.sample1)
+        XCTAssertNotNil(samples[1].uuid)
+        XCTAssertNil(samples[1].healthKitEligibleDate)
+        assertEqualSamples(samples[1], self.sample3)
+        XCTAssertNotNil(samples[2].uuid)
+        XCTAssertNil(samples[2].healthKitEligibleDate)
+        assertEqualSamples(samples[2], self.sample2)
     }
 
-    func testAddGlucoseSamplesEmpty() {
-        let addGlucoseSamplesCompletion = expectation(description: "addGlucoseSamples")
-        glucoseStore.addGlucoseSamples([]) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let samples):
-                XCTAssertEqual(samples.count, 0)
-            }
-            addGlucoseSamplesCompletion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+    func testAddGlucoseSamplesEmpty() async throws {
+        let samples = try await glucoseStore.addGlucoseSamples([])
+        XCTAssertEqual(samples.count, 0)
     }
 
-    func testAddGlucoseSamplesNotification() {
+    func testAddGlucoseSamplesNotification() async throws {
         delegateCompletion = expectation(description: "delegate")
         let glucoseSamplesDidChangeCompletion = expectation(description: "glucoseSamplesDidChange")
         let observer = NotificationCenter.default.addObserver(forName: GlucoseStore.glucoseSamplesDidChange, object: glucoseStore, queue: nil) { notification in
             glucoseSamplesDidChangeCompletion.fulfill()
         }
 
-        let addGlucoseSamplesCompletion = expectation(description: "addGlucoseSamples")
-        glucoseStore.addGlucoseSamples([sample1, sample2, sample3]) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
-            }
-            addGlucoseSamplesCompletion.fulfill()
-        }
-        wait(for: [glucoseSamplesDidChangeCompletion, delegateCompletion!, addGlucoseSamplesCompletion], timeout: 30, enforceOrder: true)
+        let samples = try await glucoseStore.addGlucoseSamples([sample1, sample2, sample3])
+        XCTAssertEqual(samples.count, 3)
+
+        await fulfillment(of: [glucoseSamplesDidChangeCompletion, delegateCompletion!])
 
         NotificationCenter.default.removeObserver(observer)
         delegateCompletion = nil
@@ -641,98 +453,48 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
 
     // MARK: - Watch Synchronization
 
-    func testSyncGlucoseSamples() {
+    func testSyncGlucoseSamples() async throws {
         var syncGlucoseSamples: [StoredGlucoseSample] = []
 
-        let addGlucoseSamplesCompletion = expectation(description: "addGlucoseSamples")
-        glucoseStore.addGlucoseSamples([sample1, sample2, sample3]) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
-            }
-            addGlucoseSamplesCompletion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        var samples = try await glucoseStore.addGlucoseSamples([sample1, sample2, sample3])
+        XCTAssertEqual(samples.count, 3)
 
-        let getSyncGlucoseSamples1Completion = expectation(description: "getSyncGlucoseSamples1")
-        glucoseStore.getSyncGlucoseSamples() { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let objects):
-                XCTAssertEqual(objects.count, 3)
-                XCTAssertNotNil(objects[0].uuid)
-                assertEqualSamples(objects[0], self.sample1)
-                XCTAssertNotNil(objects[1].uuid)
-                assertEqualSamples(objects[1], self.sample3)
-                XCTAssertNotNil(objects[2].uuid)
-                assertEqualSamples(objects[2], self.sample2)
-                syncGlucoseSamples = objects
-            }
-            getSyncGlucoseSamples1Completion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        await glucoseStore.saveSamplesToHealthKit()
 
-        let getSyncGlucoseSamples2Completion = expectation(description: "getSyncGlucoseSamples2")
-        glucoseStore.getSyncGlucoseSamples(start: Date(timeIntervalSinceNow: -.minutes(5)), end: Date(timeIntervalSinceNow: -.minutes(3))) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let objects):
-                XCTAssertEqual(objects.count, 1)
-                XCTAssertNotNil(objects[0].uuid)
-                assertEqualSamples(objects[0], self.sample3)
-            }
-            getSyncGlucoseSamples2Completion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        var objects = try await glucoseStore.getSyncGlucoseSamples()
+        XCTAssertEqual(objects.count, 3)
+        XCTAssertNotNil(objects[0].uuid)
+        assertEqualSamples(objects[0], self.sample1)
+        XCTAssertNotNil(objects[1].uuid)
+        assertEqualSamples(objects[1], self.sample3)
+        XCTAssertNotNil(objects[2].uuid)
+        assertEqualSamples(objects[2], self.sample2)
+        syncGlucoseSamples = objects
 
-        let purgeCachedGlucoseObjectsCompletion = expectation(description: "purgeCachedGlucoseObjects")
-        glucoseStore.purgeCachedGlucoseObjects() { error in
-            XCTAssertNil(error)
-            purgeCachedGlucoseObjectsCompletion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        objects = try await glucoseStore.getSyncGlucoseSamples(
+            start: Date(timeIntervalSinceNow: -.minutes(5)),
+            end: Date(timeIntervalSinceNow: -.minutes(3))
+        )
+        XCTAssertEqual(objects.count, 1)
+        XCTAssertNotNil(objects[0].uuid)
+        assertEqualSamples(objects[0], self.sample3)
 
-        let getSyncGlucoseSamples3Completion = expectation(description: "getSyncGlucoseSamples3")
-        glucoseStore.getSyncGlucoseSamples() { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let samples):
-                XCTAssertEqual(samples.count, 0)
-            }
-            getSyncGlucoseSamples3Completion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        try await glucoseStore.purgeCachedGlucoseObjects()
 
-        let setSyncGlucoseSamplesCompletion = expectation(description: "setSyncGlucoseSamples")
-        glucoseStore.setSyncGlucoseSamples(syncGlucoseSamples) { error in
-            XCTAssertNil(error)
-            setSyncGlucoseSamplesCompletion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        samples = try await glucoseStore.getSyncGlucoseSamples()
+        XCTAssertEqual(samples.count, 0)
 
-        let getSyncGlucoseSamples4Completion = expectation(description: "getSyncGlucoseSamples4")
-        glucoseStore.getSyncGlucoseSamples() { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let objects):
-                XCTAssertEqual(objects.count, 3)
-                XCTAssertNotNil(objects[0].uuid)
-                assertEqualSamples(objects[0], self.sample1)
-                XCTAssertNotNil(objects[1].uuid)
-                assertEqualSamples(objects[1], self.sample3)
-                XCTAssertNotNil(objects[2].uuid)
-                assertEqualSamples(objects[2], self.sample2)
-                syncGlucoseSamples = objects
-            }
-            getSyncGlucoseSamples4Completion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        try await glucoseStore.setSyncGlucoseSamples(syncGlucoseSamples)
+
+        objects = try await glucoseStore.getSyncGlucoseSamples()
+        XCTAssertEqual(objects.count, 3)
+        XCTAssertNotNil(objects[0].uuid)
+        assertEqualSamples(objects[0], self.sample1)
+        XCTAssertNotNil(objects[1].uuid)
+        assertEqualSamples(objects[1], self.sample3)
+        XCTAssertNotNil(objects[2].uuid)
+        assertEqualSamples(objects[2], self.sample2)
+        syncGlucoseSamples = objects
     }
 
     // MARK: - Cache Management
@@ -741,53 +503,20 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
         XCTAssertEqual(glucoseStore.earliestCacheDate.timeIntervalSinceNow, -.hours(1), accuracy: 1)
     }
 
-    func testPurgeAllGlucoseSamples() {
-        let addGlucoseSamplesCompletion = expectation(description: "addGlucoseSamples")
-        glucoseStore.addGlucoseSamples([sample1, sample2, sample3]) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
-            }
-            addGlucoseSamplesCompletion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+    func testPurgeAllGlucoseSamples() async throws {
+        var samples = try await glucoseStore.addGlucoseSamples([sample1, sample2, sample3])
+        XCTAssertEqual(samples.count, 3)
 
-        let getGlucoseSamples1Completion = expectation(description: "getGlucoseSamples1")
-        glucoseStore.getGlucoseSamples() { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
-            }
-            getGlucoseSamples1Completion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        samples = try await glucoseStore.getGlucoseSamples()
+        XCTAssertEqual(samples.count, 3)
 
-        let purgeAllGlucoseSamplesCompletion = expectation(description: "purgeAllGlucoseSamples")
-        glucoseStore.purgeAllGlucoseSamples(healthKitPredicate: HKQuery.predicateForObjects(from: HKSource.default())) { error in
-            XCTAssertNil(error)
-            purgeAllGlucoseSamplesCompletion.fulfill()
+        try await glucoseStore.purgeAllGlucose(for: HKSource.default())
 
-        }
-        waitForExpectations(timeout: 30)
-
-        let getGlucoseSamples2Completion = expectation(description: "getGlucoseSamples2")
-        glucoseStore.getGlucoseSamples() { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let samples):
-                XCTAssertEqual(samples.count, 0)
-            }
-            getGlucoseSamples2Completion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        samples = try await glucoseStore.getGlucoseSamples()
+        XCTAssertEqual(samples.count, 0)
     }
 
-    func testPurgeExpiredGlucoseObjects() {
+    func testPurgeExpiredGlucoseObjects() async throws {
         let expiredSample = NewGlucoseSample(date: Date(timeIntervalSinceNow: -.hours(2)),
                                              quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 198.7),
                                              condition: nil,
@@ -798,109 +527,34 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
                                              syncIdentifier: "6AB8C7F3-A2CE-442F-98C4-3D0514626B5F",
                                              syncVersion: 3)
 
-        let addGlucoseSamplesCompletion = expectation(description: "addGlucoseSamples")
-        glucoseStore.addGlucoseSamples([sample1, sample2, sample3, expiredSample]) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let samples):
-                XCTAssertEqual(samples.count, 4)
-            }
-            addGlucoseSamplesCompletion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        let storedSamples = try await glucoseStore.addGlucoseSamples([sample1, sample2, sample3, expiredSample])
+        XCTAssertEqual(storedSamples.count, 4)
 
-        let getGlucoseSamplesCompletion = expectation(description: "getGlucoseSamples")
-        glucoseStore.getGlucoseSamples() { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
-            }
-            getGlucoseSamplesCompletion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        let samples = try await glucoseStore.getGlucoseSamples()
+        XCTAssertEqual(samples.count, 3)
     }
 
-    func testPurgeCachedGlucoseObjects() {
-        let addGlucoseSamplesCompletion = expectation(description: "addGlucoseSamples")
-        glucoseStore.addGlucoseSamples([sample1, sample2, sample3]) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
-            }
-            addGlucoseSamplesCompletion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+    func testPurgeCachedGlucoseObjects() async throws {
+        var samples = try await glucoseStore.addGlucoseSamples([sample1, sample2, sample3])
+        XCTAssertEqual(samples.count, 3)
 
-        let getGlucoseSamples1Completion = expectation(description: "getGlucoseSamples1")
-        glucoseStore.getGlucoseSamples() { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
-            }
-            getGlucoseSamples1Completion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        samples = try await glucoseStore.getGlucoseSamples()
+        XCTAssertEqual(samples.count, 3)
 
-        let purgeCachedGlucoseObjects1Completion = expectation(description: "purgeCachedGlucoseObjects1")
-        glucoseStore.purgeCachedGlucoseObjects(before: Date(timeIntervalSinceNow: -.minutes(5))) { error in
-            XCTAssertNil(error)
-            purgeCachedGlucoseObjects1Completion.fulfill()
+        try await glucoseStore.purgeCachedGlucoseObjects(before: Date(timeIntervalSinceNow: -.minutes(5)))
 
-        }
-        waitForExpectations(timeout: 30)
+        samples = try await glucoseStore.getGlucoseSamples()
+        XCTAssertEqual(samples.count, 2)
 
-        let getGlucoseSamples2Completion = expectation(description: "getGlucoseSamples2")
-        glucoseStore.getGlucoseSamples() { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let samples):
-                XCTAssertEqual(samples.count, 2)
-            }
-            getGlucoseSamples2Completion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        try await glucoseStore.purgeCachedGlucoseObjects()
 
-        let purgeCachedGlucoseObjects2Completion = expectation(description: "purgeCachedGlucoseObjects2")
-        glucoseStore.purgeCachedGlucoseObjects() { error in
-            XCTAssertNil(error)
-            purgeCachedGlucoseObjects2Completion.fulfill()
-
-        }
-        waitForExpectations(timeout: 30)
-
-        let getGlucoseSamples3Completion = expectation(description: "getGlucoseSamples3")
-        glucoseStore.getGlucoseSamples() { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let samples):
-                XCTAssertEqual(samples.count, 0)
-            }
-            getGlucoseSamples3Completion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        samples = try await glucoseStore.getGlucoseSamples()
+        XCTAssertEqual(samples.count, 0)
     }
 
-    func testPurgeCachedGlucoseObjectsNotification() {
-        let addGlucoseSamplesCompletion = expectation(description: "addGlucoseSamples")
-        glucoseStore.addGlucoseSamples([sample1, sample2, sample3]) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
-            }
-            addGlucoseSamplesCompletion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+    func testPurgeCachedGlucoseObjectsNotification() async throws {
+        let samples = try await glucoseStore.addGlucoseSamples([sample1, sample2, sample3])
+        XCTAssertEqual(samples.count, 3)
 
         delegateCompletion = expectation(description: "delegate")
         let glucoseSamplesDidChangeCompletion = expectation(description: "glucoseSamplesDidChange")
@@ -908,13 +562,9 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             glucoseSamplesDidChangeCompletion.fulfill()
         }
 
-        let purgeCachedGlucoseObjectsCompletion = expectation(description: "purgeCachedGlucoseObjects")
-        glucoseStore.purgeCachedGlucoseObjects() { error in
-            XCTAssertNil(error)
-            purgeCachedGlucoseObjectsCompletion.fulfill()
+        try await glucoseStore.purgeCachedGlucoseObjects()
 
-        }
-        wait(for: [glucoseSamplesDidChangeCompletion, delegateCompletion!, purgeCachedGlucoseObjectsCompletion], timeout: 30, enforceOrder: true)
+        await fulfillment(of: [glucoseSamplesDidChangeCompletion, delegateCompletion!])
 
         NotificationCenter.default.removeObserver(observer)
         delegateCompletion = nil

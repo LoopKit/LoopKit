@@ -28,7 +28,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
 
     let doseStoreDelegate = DoseStoreDelegateMock()
 
-    func defaultStore(testingDate: Date? = nil, basalRateSchedule: BasalRateSchedule? = nil) -> DoseStore {
+    func defaultStore(testingDate: Date? = nil, basalRateSchedule: BasalRateSchedule? = nil) async -> DoseStore {
 
         let healthStore = HKHealthStoreMock()
 
@@ -64,7 +64,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
 
         doseStoreDelegate.basal = basal
 
-        let doseStore = DoseStore(
+        let doseStore = await DoseStore(
             healthKitSampleStore: sampleStore,
             cacheStore: cacheStore,
             longestEffectDuration: .hours(4),
@@ -73,12 +73,6 @@ class DoseStoreTests: PersistenceControllerTestCase {
             test_currentDate: testingDate
         )
         doseStore.delegate = doseStoreDelegate
-
-        let semaphore = DispatchSemaphore(value: 0)
-        cacheStore.onReady { (error) in
-            semaphore.signal()
-        }
-        semaphore.wait()
 
         return doseStore
     }
@@ -168,7 +162,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
         let doseStoreDelegate = DoseStoreDelegateMock()
         doseStoreDelegate.basal = basal
 
-        let doseStore = DoseStore(
+        let doseStore = await DoseStore(
             healthKitSampleStore: sampleStore,
             cacheStore: cacheStore,
             longestEffectDuration: .hours(4),
@@ -301,7 +295,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
         let doseStoreDelegate = DoseStoreDelegateMock()
         doseStoreDelegate.basal = basal
 
-        let doseStore = DoseStore(
+        let doseStore = await DoseStore(
             healthKitSampleStore: sampleStore,
             cacheStore: cacheStore,
             longestEffectDuration: .hours(4),
@@ -470,7 +464,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
         let doseStoreInitialization = expectation(description: "Expect DoseStore to finish initialization")
 
         // 1. Create a DoseStore
-        let doseStore = DoseStore(
+        let doseStore = await DoseStore(
             cacheStore: cacheStore,
             longestEffectDuration: .hours(4),
             syncVersion: 1,
@@ -526,7 +520,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
         let start = testingDate("2018-12-12 17:00:00 +0000")
         let now = start.addingTimeInterval(.minutes(20))
 
-        let doseStore = defaultStore(testingDate: now)
+        let doseStore = await defaultStore(testingDate: now)
 
         doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate = start
 
@@ -576,7 +570,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
         let doseStart = f("2018-12-12 16:45:00 +0000")
         let currentTime = doseStart.addingTimeInterval(.minutes(2))
 
-        let doseStore = defaultStore(testingDate: currentTime)
+        let doseStore = await defaultStore(testingDate: currentTime)
 
         doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate = doseStart //.addingTimeInterval(.minutes(-2))
 
@@ -600,7 +594,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
 
     func testLaggingPumpReconciliationWithReservoir() async throws {
         let now = testingDate("2024-06-04 17:20:16 +0000")
-        let doseStore = defaultStore(testingDate: now)
+        let doseStore = await defaultStore(testingDate: now)
 
         let pumpEvents = [
             NewPumpEvent(
@@ -1107,172 +1101,100 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
     let insulinSensitivitySchedule = InsulinSensitivitySchedule(rawValue: ["unit": "mg/dL", "timeZone": -28800, "items": [["value": 40.0, "startTime": 0.0], ["value": 35.0, "startTime": 21600.0], ["value": 40.0, "startTime": 57600.0]]])
     
     var doseStore: DoseStore!
-    var completion: XCTestExpectation!
     var queryAnchor: DoseStore.QueryAnchor!
     var limit: Int!
     
-    override func setUp() {
-        super.setUp()
-        
-        doseStore = DoseStore(cacheStore: cacheStore,
+    override func setUp() async throws {
+        try await super.setUp()
+
+        doseStore = await DoseStore(cacheStore: cacheStore,
                               longestEffectDuration: insulinModel.effectDuration,
                               provenanceIdentifier: Bundle.main.bundleIdentifier!)
 
-        let semaphore = DispatchSemaphore(value: 0)
-        cacheStore.onReady { (error) in
-            semaphore.signal()
-        }
-        semaphore.wait()
-
-        completion = expectation(description: "Completion")
         queryAnchor = DoseStore.QueryAnchor()
         limit = Int.max
     }
     
-    override func tearDown() {
+    override func tearDown() async throws {
         limit = nil
         queryAnchor = nil
-        completion = nil
         doseStore = nil
         
-        super.tearDown()
+        try await super.tearDown()
     }
 
-    func testPumpEventEmptyWithDefaultQueryAnchor() {
-        doseStore.executePumpEventQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let anchor, let data):
-                XCTAssertEqual(anchor.modificationCounter, 0)
-                XCTAssertEqual(data.count, 0)
-            }
-            self.completion.fulfill()
-        }
-        
-        wait(for: [completion], timeout: 30, enforceOrder: true)
+    func testPumpEventEmptyWithDefaultQueryAnchor() async throws {
+        let (anchor, data) = try await doseStore.executePumpEventQuery(fromQueryAnchor: queryAnchor, limit: limit)
+        XCTAssertEqual(anchor.modificationCounter, 0)
+        XCTAssertEqual(data.count, 0)
     }
     
-    func testPumpEventEmptyWithMissingQueryAnchor() {
+    func testPumpEventEmptyWithMissingQueryAnchor() async throws {
         queryAnchor = nil
         
-        doseStore.executePumpEventQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let anchor, let data):
-                XCTAssertEqual(anchor.modificationCounter, 0)
-                XCTAssertEqual(data.count, 0)
-            }
-            self.completion.fulfill()
-        }
-        
-        wait(for: [completion], timeout: 30, enforceOrder: true)
+        let (anchor, data) = try await doseStore.executePumpEventQuery(fromQueryAnchor: queryAnchor, limit: limit)
+        XCTAssertEqual(anchor.modificationCounter, 0)
+        XCTAssertEqual(data.count, 0)
     }
     
-    func testPumpEventEmptyWithNonDefaultQueryAnchor() {
+    func testPumpEventEmptyWithNonDefaultQueryAnchor() async throws {
         queryAnchor.modificationCounter = 1
         
-        doseStore.executePumpEventQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let anchor, let data):
-                XCTAssertEqual(anchor.modificationCounter, 1)
-                XCTAssertEqual(data.count, 0)
-            }
-            self.completion.fulfill()
-        }
-        
-        wait(for: [completion], timeout: 30, enforceOrder: true)
+        let (anchor, data) = try await doseStore.executePumpEventQuery(fromQueryAnchor: queryAnchor, limit: limit)
+        XCTAssertEqual(anchor.modificationCounter, 1)
+        XCTAssertEqual(data.count, 0)
     }
     
-    func testPumpEventDataWithUnusedQueryAnchor() {
+    func testPumpEventDataWithUnusedQueryAnchor() async throws {
         let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
         
         addPumpEventData(withSyncIdentifiers: syncIdentifiers)
 
-        doseStore.executePumpEventQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let anchor, let data):
-                XCTAssertEqual(anchor.modificationCounter, 3)
-                XCTAssertEqual(data.count, 3)
-                for (index, syncIdentifier) in syncIdentifiers.enumerated() {
-                    XCTAssertEqual(data[index].raw?.hexadecimalString, syncIdentifier)
-                }
-            }
-            self.completion.fulfill()
+        let (anchor, data) = try await doseStore.executePumpEventQuery(fromQueryAnchor: queryAnchor, limit: limit)
+        XCTAssertEqual(anchor.modificationCounter, 3)
+        XCTAssertEqual(data.count, 3)
+        for (index, syncIdentifier) in syncIdentifiers.enumerated() {
+            XCTAssertEqual(data[index].raw?.hexadecimalString, syncIdentifier)
         }
-        
-        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
     
-    func testPumpEventDataWithStaleQueryAnchor() {
+    func testPumpEventDataWithStaleQueryAnchor() async throws {
         let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
         
         addPumpEventData(withSyncIdentifiers: syncIdentifiers)
 
         queryAnchor.modificationCounter = 2
         
-        doseStore.executePumpEventQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let anchor, let data):
-                XCTAssertEqual(anchor.modificationCounter, 3)
-                XCTAssertEqual(data.count, 1)
-                XCTAssertEqual(data[0].raw?.hexadecimalString, syncIdentifiers[2])
-            }
-            self.completion.fulfill()
-        }
-        
-        wait(for: [completion], timeout: 30, enforceOrder: true)
+        let (anchor, data) = try await doseStore.executePumpEventQuery(fromQueryAnchor: queryAnchor, limit: limit)
+        XCTAssertEqual(anchor.modificationCounter, 3)
+        XCTAssertEqual(data.count, 1)
+        XCTAssertEqual(data[0].raw?.hexadecimalString, syncIdentifiers[2])
     }
     
-    func testPumpEventDataWithCurrentQueryAnchor() {
+    func testPumpEventDataWithCurrentQueryAnchor() async throws {
         let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
         
         addPumpEventData(withSyncIdentifiers: syncIdentifiers)
 
         queryAnchor.modificationCounter = 3
         
-        doseStore.executePumpEventQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let anchor, let data):
-                XCTAssertEqual(anchor.modificationCounter, 3)
-                XCTAssertEqual(data.count, 0)
-            }
-            self.completion.fulfill()
-        }
-        
-        wait(for: [completion], timeout: 30, enforceOrder: true)
+        let (anchor, data) = try await doseStore.executePumpEventQuery(fromQueryAnchor: queryAnchor, limit: limit)
+        XCTAssertEqual(anchor.modificationCounter, 3)
+        XCTAssertEqual(data.count, 0)
     }
     
-    func testPumpEventDataWithLimitCoveredByData() {
+    func testPumpEventDataWithLimitCoveredByData() async throws {
         let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
         
         addPumpEventData(withSyncIdentifiers: syncIdentifiers)
 
         limit = 2
         
-        doseStore.executePumpEventQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let anchor, let data):
-                XCTAssertEqual(anchor.modificationCounter, 2)
-                XCTAssertEqual(data.count, 2)
-                XCTAssertEqual(data[0].raw?.hexadecimalString, syncIdentifiers[0])
-                XCTAssertEqual(data[1].raw?.hexadecimalString, syncIdentifiers[1])
-            }
-            self.completion.fulfill()
-        }
-        
-        wait(for: [completion], timeout: 30, enforceOrder: true)
+        let (anchor, data) = try await doseStore.executePumpEventQuery(fromQueryAnchor: queryAnchor, limit: limit)
+        XCTAssertEqual(anchor.modificationCounter, 2)
+        XCTAssertEqual(data.count, 2)
+        XCTAssertEqual(data[0].raw?.hexadecimalString, syncIdentifiers[0])
+        XCTAssertEqual(data[1].raw?.hexadecimalString, syncIdentifiers[1])
     }
     
     private func addPumpEventData(withSyncIdentifiers syncIdentifiers: [String]) {
@@ -1303,8 +1225,8 @@ class DoseStoreCriticalEventLogTests: PersistenceControllerTestCase {
     var outputStream: MockOutputStream!
     var progress: Progress!
     
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
 
         let persistedDate = dateFormatter.date(from: "2100-01-02T03:00:00Z")!
         let url = URL(string: "http://a.b.com")!
@@ -1316,29 +1238,23 @@ class DoseStoreCriticalEventLogTests: PersistenceControllerTestCase {
 
         let semaphore = DispatchSemaphore(value: 0)
 
-        doseStore = DoseStore(cacheStore: cacheStore,
+        doseStore = await DoseStore(cacheStore: cacheStore,
                               longestEffectDuration: insulinModel.effectDuration,
                               provenanceIdentifier: Bundle.main.bundleIdentifier!, onReady: { error in
                                     semaphore.signal()
                                 }
         )
 
-        semaphore.wait()
-
-        Task {
-            try await doseStore.addPumpEvents(events: events)
-            semaphore.signal()
-        }
-        semaphore.wait()
+        try await doseStore.addPumpEvents(events: events)
 
         outputStream = MockOutputStream()
         progress = Progress()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         doseStore = nil
 
-        super.tearDown()
+        try await super.tearDown()
     }
     
     func testExportProgressTotalUnitCount() {
@@ -1406,8 +1322,8 @@ class DoseStoreEffectTests: PersistenceControllerTestCase {
 
     let dateFormatter = ISO8601DateFormatter.localTimeDate()
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         let healthStore = HKHealthStoreMock()
         let exponentialInsulinModel: InsulinModel = ExponentialInsulinModelPreset.rapidActingAdult
         let startDate = dateFormatter.date(from: "2015-07-13T12:00:00")!
@@ -1419,7 +1335,7 @@ class DoseStoreEffectTests: PersistenceControllerTestCase {
             type: HealthKitSampleStore.insulinQuantityType,
             observationEnabled: false)
 
-        doseStore = DoseStore(
+        doseStore = await DoseStore(
             healthKitSampleStore: sampleStore,
             cacheStore: cacheStore,
             longestEffectDuration: exponentialInsulinModel.effectDuration,
@@ -1428,10 +1344,10 @@ class DoseStoreEffectTests: PersistenceControllerTestCase {
         )
     }
     
-    override func tearDown() {
+    override func tearDown() async throws {
         doseStore = nil
         
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func loadGlucoseEffectFixture(_ resourceName: String) -> [GlucoseEffect] {

@@ -15,8 +15,8 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
     var healthStore: HKHealthStoreMock!
     var carbStore: CarbStore!
     
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
 
         healthStore = HKHealthStoreMock()
 
@@ -29,22 +29,16 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
             provenanceIdentifier: Bundle.main.bundleIdentifier!)
         carbStore.delegate = self
 
-        let semaphore = DispatchSemaphore(value: 0)
-        cacheStore.onReady { (error) in
-            semaphore.signal()
-        }
-        semaphore.wait()
-
     }
     
-    override func tearDown() {
+    override func tearDown() async throws {
         carbStore.delegate = nil
         carbStore = nil
         healthStore = nil
         
         carbStoreHasUpdatedCarbDataHandler = nil
         
-        super.tearDown()
+        try await super.tearDown()
     }
     
     // MARK: - CarbStoreDelegate
@@ -1016,8 +1010,8 @@ class CarbStoreQueryTests: PersistenceControllerTestCase {
     var queryAnchor: CarbStore.QueryAnchor!
     var limit: Int!
     
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
 
         let healthStore = HKHealthStoreMock()
 
@@ -1029,24 +1023,18 @@ class CarbStoreQueryTests: PersistenceControllerTestCase {
             cacheLength: .hours(24),
             provenanceIdentifier: Bundle.main.bundleIdentifier!)
 
-        let semaphore = DispatchSemaphore(value: 0)
-        cacheStore.onReady { (error) in
-            semaphore.signal()
-        }
-        semaphore.wait()
-
         completion = expectation(description: "Completion")
         queryAnchor = CarbStore.QueryAnchor()
         limit = Int.max
     }
     
-    override func tearDown() {
+    override func tearDown() async throws {
         limit = nil
         queryAnchor = nil
         completion = nil
         carbStore = nil
 
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testEmptyWithDefaultQueryAnchor() {
@@ -1256,8 +1244,8 @@ class CarbStoreCriticalEventLogTests: PersistenceControllerTestCase {
     var outputStream: MockOutputStream!
     var progress: Progress!
     
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
 
         let objects = [SyncCarbObject(absorptionTime: nil, createdByCurrentApp: true, foodType: nil, grams: 11, startDate: dateFormatter.date(from: "2100-01-02T03:08:00Z")!, uuid: nil, provenanceIdentifier: Bundle.main.bundleIdentifier!, syncIdentifier: nil, syncVersion: nil, userCreatedDate: nil, userUpdatedDate: nil, userDeletedDate: nil, operation: .create, addedDate: dateFormatter.date(from: "2100-01-02T03:08:00Z")!, supercededDate: nil),
                        SyncCarbObject(absorptionTime: nil, createdByCurrentApp: true, foodType: nil, grams: 12, startDate: dateFormatter.date(from: "2100-01-02T03:10:00Z")!, uuid: nil, provenanceIdentifier: Bundle.main.bundleIdentifier!, syncIdentifier: nil, syncVersion: nil, userCreatedDate: nil, userUpdatedDate: nil, userDeletedDate: nil, operation: .create, addedDate: dateFormatter.date(from: "2100-01-02T03:10:00Z")!, supercededDate: nil),
@@ -1290,10 +1278,10 @@ class CarbStoreCriticalEventLogTests: PersistenceControllerTestCase {
         progress = Progress()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         carbStore = nil
 
-        super.tearDown()
+        try await super.tearDown()
     }
     
     func testExportProgressTotalUnitCount() {

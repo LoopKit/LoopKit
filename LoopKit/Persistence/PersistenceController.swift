@@ -292,6 +292,14 @@ extension PersistenceController {
             }
         }
     }
+
+    func fetchAnchor(key: String) async -> HKQueryAnchor? {
+        await withCheckedContinuation { continuation in
+            fetchAnchor(key: key) { anchor in
+                continuation.resume(returning: anchor)
+            }
+        }
+    }
 }
 
 fileprivate extension FileManager {

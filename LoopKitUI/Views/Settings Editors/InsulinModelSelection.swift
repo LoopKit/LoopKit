@@ -207,7 +207,7 @@ public struct InsulinModelSelection: View {
                 InsulinMath.longestInsulinActivityDuration
             )
         )
-        let effects = [bolus].glucoseEffects(longestEffectDuration: .hours(6), insulinSensitivityTimeline: isfTimeline)
+        let effects = [bolus].glucoseEffects(insulinSensitivityHistory: isfTimeline)
         return LoopMath.predictGlucose(startingAt: startingGlucoseSample, effects: effects)
     }
 

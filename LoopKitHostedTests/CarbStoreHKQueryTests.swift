@@ -16,8 +16,8 @@ class CarbStoreHKQueryTestsBase: PersistenceControllerTestCase {
     var authorizationStatus: HKAuthorizationStatus = .notDetermined
     var hkSampleStore: HealthKitSampleStore!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
 
         mockHealthStore = HKHealthStoreMock()
         mockHealthStore.authorizationStatus = authorizationStatus
@@ -31,27 +31,21 @@ class CarbStoreHKQueryTestsBase: PersistenceControllerTestCase {
                               cacheStore: cacheStore,
                               cacheLength: .hours(24),
                               provenanceIdentifier: Bundle.main.bundleIdentifier!)
-
-        let semaphore = DispatchSemaphore(value: 0)
-        cacheStore.onReady { (error) in
-            semaphore.signal()
-        }
-        semaphore.wait()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         carbStore = nil
         mockHealthStore = nil
 
-        super.tearDown()
+        try await super.tearDown()
     }
     
 }
 
 class CarbStoreHKQueryTestsAuthorized: CarbStoreHKQueryTestsBase {
-    override func setUp() {
+    override func setUp() async throws {
         authorizationStatus = .sharingAuthorized
-        super.setUp()
+        try await super.setUp()
     }
 
     func testObserverQueryStartup() {

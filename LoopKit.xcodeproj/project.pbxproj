@@ -677,6 +677,7 @@
 		C10DF6E02C2CA4270076DA10 /* PeripheralManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10DF6DB2C2CA4270076DA10 /* PeripheralManager.swift */; };
 		C10DF6E32C2CB7FF0076DA10 /* OSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10DF6E22C2CB7FF0076DA10 /* OSLog.swift */; };
 		C10DF6E72C2CBA0D0076DA10 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10DF6E62C2CBA0D0076DA10 /* Data.swift */; };
+		C11A17482CB713C10019C517 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B41E10512C3D314600E186F7 /* Model.xcdatamodeld */; };
 		C13FF4262C5ADC8100FD2869 /* DiscoveredFob+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13FF4252C5ADC8100FD2869 /* DiscoveredFob+UI.swift */; };
 		C140E0522602908A000A4FF7 /* SettingsPresentationMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C140E0512602908A000A4FF7 /* SettingsPresentationMode.swift */; };
 		C1475B33264C30800040C7B1 /* LoopKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BA7154201E484D0058961E /* LoopKitUI.framework */; };
@@ -4430,6 +4431,7 @@
 				C17F39CB23CD2D2F00FA1113 /* DeviceLogEntryType.swift in Sources */,
 				A9E675AF22713F4700E25293 /* PumpEventType.swift in Sources */,
 				C1614F062AAFC36200F636E5 /* CgmEvent.swift in Sources */,
+				C11A17482CB713C10019C517 /* Model.xcdatamodeld in Sources */,
 				C1A174ED23DEAD6A0034DF11 /* DeviceLogEntry+CoreDataProperties.swift in Sources */,
 				A9E675B222713F4700E25293 /* GlucoseRangeSchedule.swift in Sources */,
 				A9E675B322713F4700E25293 /* PersistedPumpEvent.swift in Sources */,

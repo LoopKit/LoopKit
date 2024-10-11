@@ -49,8 +49,8 @@ class InsulinDeliveryStoreTestsBase: PersistenceControllerTestCase {
     var hkSampleStore: HealthKitSampleStore!
     var authorizationStatus: HKAuthorizationStatus = .notDetermined
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
 
         mockHealthStore = HKHealthStoreMock()
 
@@ -59,47 +59,49 @@ class InsulinDeliveryStoreTestsBase: PersistenceControllerTestCase {
         hkSampleStore.anchoredObjectQueryType = MockHKAnchoredObjectQuery.self
 
         mockHealthStore.authorizationStatus = authorizationStatus
-        insulinDeliveryStore = InsulinDeliveryStore(healthKitSampleStore: hkSampleStore,
+
+        insulinDeliveryStore = await InsulinDeliveryStore(healthKitSampleStore: hkSampleStore,
                                                     cacheStore: cacheStore,
                                                     cacheLength: .hours(1),
                                                     provenanceIdentifier: HKSource.default().bundleIdentifier)
 
-        let semaphore = DispatchSemaphore(value: 0)
-        cacheStore.onReady { error in
-            XCTAssertNil(error)
-            semaphore.signal()
-        }
-        semaphore.wait()
     }
 
-    override func tearDown() {
-        let semaphore = DispatchSemaphore(value: 0)
-        insulinDeliveryStore.purgeAllDoseEntries(healthKitPredicate: HKQuery.predicateForObjects(from: HKSource.default())) { error in
-            XCTAssertNil(error)
-            semaphore.signal()
-        }
-        semaphore.wait()
 
+    override func tearDown() async throws {
+        try await insulinDeliveryStore.purgeDoseEntriesForSource(HKSource.default())
         insulinDeliveryStore = nil
         mockHealthStore = nil
 
-        super.tearDown()
+        try await super.tearDown()
     }
 }
 
-class InsulinDeliveryStoreTestsAuthorized: InsulinDeliveryStoreTestsBase {
-    override func setUp() {
-        authorizationStatus = .sharingAuthorized
-        super.setUp()
-    }
-    
-    func testObserverQueryStartup() {
-        // Check that an observer query is registered when authorization is already determined.
-        XCTAssertFalse(hkSampleStore.authorizationRequired);
+class InsulinDeliveryStoreTestsAuthorized: PersistenceControllerTestCase {
+    var mockHealthStore: HKHealthStoreMock!
+    var insulinDeliveryStore: InsulinDeliveryStore!
+    var hkSampleStore: HealthKitSampleStore!
 
+    func testObserverQueryStartup() async throws {
+        // Check that an observer query is registered when authorization is already determined.
+
+        mockHealthStore = HKHealthStoreMock()
         mockHealthStore.observerQueryStartedExpectation = expectation(description: "observer query started")
 
-        waitForExpectations(timeout: 30)
+        hkSampleStore = HealthKitSampleStore(healthStore: mockHealthStore, type: HealthKitSampleStore.insulinQuantityType)
+        hkSampleStore.observerQueryType = MockHKObserverQuery.self
+        hkSampleStore.anchoredObjectQueryType = MockHKAnchoredObjectQuery.self
+
+        mockHealthStore.authorizationStatus = .sharingAuthorized
+
+        insulinDeliveryStore = await InsulinDeliveryStore(healthKitSampleStore: hkSampleStore,
+                                                    cacheStore: cacheStore,
+                                                    cacheLength: .hours(1),
+                                                    provenanceIdentifier: HKSource.default().bundleIdentifier)
+
+        XCTAssertFalse(hkSampleStore.authorizationRequired);
+
+        await fulfillment(of: [mockHealthStore.observerQueryStartedExpectation!], timeout: 30)
 
         XCTAssertNotNil(mockHealthStore.observerQuery)
     }
@@ -108,7 +110,7 @@ class InsulinDeliveryStoreTestsAuthorized: InsulinDeliveryStoreTestsBase {
 class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
     // MARK: - HealthKitSampleStore
 
-    func testHealthKitQueryAnchorPersistence() {
+    func testHealthKitQueryAnchorPersistence() async {
 
         XCTAssert(hkSampleStore.authorizationRequired);
         XCTAssertNil(hkSampleStore.observerQuery);
@@ -118,7 +120,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
         mockHealthStore.authorizationStatus = .sharingAuthorized
         hkSampleStore.authorizationIsDetermined()
 
-        waitForExpectations(timeout: 3)
+        await fulfillment(of: [mockHealthStore.observerQueryStartedExpectation!], timeout: 3)
 
         XCTAssertNotNil(mockHealthStore.observerQuery)
 
@@ -135,7 +137,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
         // This simulates a signal marking the arrival of new HK Data.
         mockObserverQuery.updateHandler?(mockObserverQuery, observerQueryCompletionHandler, nil)
 
-        wait(for: [mockHealthStore.anchorQueryStartedExpectation!])
+        await fulfillment(of: [mockHealthStore.anchorQueryStartedExpectation!])
 
         let currentAnchor = HKQueryAnchor(fromValue: 5)
 
@@ -143,7 +145,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
         mockAnchoredObjectQuery.resultsHandler?(mockAnchoredObjectQuery, [], [], currentAnchor, nil)
 
         // Wait for observerQueryCompletionExpectation
-        waitForExpectations(timeout: 3)
+        await fulfillment(of: [observerQueryCompletionExpectation])
 
         XCTAssertNotNil(hkSampleStore.queryAnchor)
 
@@ -156,17 +158,17 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
         newSampleStore.anchoredObjectQueryType = MockHKAnchoredObjectQuery.self
 
         // Create a new glucose store, and ensure it uses the last query anchor
-        let _ = InsulinDeliveryStore(healthKitSampleStore: newSampleStore,
+        mockHealthStore.observerQueryStartedExpectation = expectation(description: "new observer query started")
+        let _ = await InsulinDeliveryStore(healthKitSampleStore: newSampleStore,
                                      cacheStore: cacheStore,
                                      provenanceIdentifier: HKSource.default().bundleIdentifier)
 
-        mockHealthStore.observerQueryStartedExpectation = expectation(description: "new observer query started")
 
         mockHealthStore.authorizationStatus = .sharingAuthorized
         newSampleStore.authorizationIsDetermined()
 
         // Wait for observerQueryCompletionExpectation
-        waitForExpectations(timeout: 3)
+        await fulfillment(of: [mockHealthStore.observerQueryStartedExpectation!])
 
         mockHealthStore.anchorQueryStartedExpectation = expectation(description: "new anchored object query started")
 
@@ -176,7 +178,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
         mockObserverQuery2.updateHandler?(mockObserverQuery2, {}, nil)
 
         // Wait for anchorQueryStartedExpectation
-        waitForExpectations(timeout: 3)
+        await fulfillment(of: [mockHealthStore.anchorQueryStartedExpectation!])
 
         // Assert new carb store is querying with the last anchor that our HealthKit mock returned
         let mockAnchoredObjectQuery2 = mockHealthStore.anchoredObjectQuery as! MockHKAnchoredObjectQuery
@@ -189,17 +191,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
     // MARK: - Fetching
 
     func testGetDoseEntries() async throws {
-        let addDoseEntriesCompletion = expectation(description: "addDoseEntries")
-        insulinDeliveryStore.addDoseEntries([entry1, entry2, entry3], from: device, syncVersion: 2) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success:
-                break
-            }
-            addDoseEntriesCompletion.fulfill()
-        }
-        await fulfillment(of: [addDoseEntriesCompletion], timeout: 30)
+        try await insulinDeliveryStore.addDoseEntries([entry1, entry2, entry3], from: device, syncVersion: 2)
 
         var entries = try await insulinDeliveryStore.getDoseEntries()
         XCTAssertEqual(entries.count, 3)
@@ -231,7 +223,10 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
         XCTAssertEqual(entries[2].syncIdentifier, self.entry2.syncIdentifier)
         XCTAssertEqual(entries[2].scheduledBasalRate, self.entry2.scheduledBasalRate)
 
-        entries = try await insulinDeliveryStore.getDoseEntries(start: Date(timeIntervalSinceNow: -.minutes(3.75)), end: Date(timeIntervalSinceNow: -.minutes(1.75)))
+        let start = entry3.startDate.addingTimeInterval(.minutes(0.25))
+        let end = entry2.startDate.addingTimeInterval(.minutes(0.25))
+
+        entries = try await insulinDeliveryStore.getDoseEntries(start: start, end: end)
         XCTAssertEqual(entries.count, 2)
         XCTAssertEqual(entries[0].type, self.entry3.type)
         XCTAssertEqual(entries[0].startDate, self.entry3.startDate)
@@ -252,73 +247,31 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
         XCTAssertEqual(entries[1].syncIdentifier, self.entry2.syncIdentifier)
         XCTAssertEqual(entries[1].scheduledBasalRate, self.entry2.scheduledBasalRate)
 
-        let purgeCachedInsulinDeliveryObjectsCompletion = expectation(description: "purgeCachedInsulinDeliveryObjects")
-        insulinDeliveryStore.purgeCachedInsulinDeliveryObjects() { error in
-            XCTAssertNil(error)
-            purgeCachedInsulinDeliveryObjectsCompletion.fulfill()
-        }
-        await fulfillment(of: [purgeCachedInsulinDeliveryObjectsCompletion], timeout: 30)
+        await insulinDeliveryStore.purgeCachedInsulinDeliveryObjects()
 
         entries = try await insulinDeliveryStore.getDoseEntries()
         XCTAssertEqual(entries.count, 0)
     }
 
-    func testLastBasalEndDate() {
-        let getLastImmutableBasalEndDate1Completion = expectation(description: "getLastImmutableBasalEndDate1")
-        insulinDeliveryStore.getLastImmutableBasalEndDate() { lastBasalEndDate in
-            XCTAssertNil(lastBasalEndDate)
-            getLastImmutableBasalEndDate1Completion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+    func testLastBasalEndDate() async throws {
+        var lastBasalEndDate = await insulinDeliveryStore.getLastImmutableBasalEndDate()
+        XCTAssertNil(lastBasalEndDate)
 
-        let addDoseEntriesCompletion = expectation(description: "addDoseEntries")
-        insulinDeliveryStore.addDoseEntries([entry1, entry2, entry3], from: device, syncVersion: 2) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success:
-                break
-            }
-            addDoseEntriesCompletion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        try await insulinDeliveryStore.addDoseEntries([entry1, entry2, entry3], from: device, syncVersion: 2)
 
-        let getLastImmutableBasalEndDate2Completion = expectation(description: "getLastImmutableBasalEndDate2")
-        insulinDeliveryStore.getLastImmutableBasalEndDate() { lastBasalEndDate in
-            XCTAssertEqual(lastBasalEndDate, self.entry2.endDate)
-            getLastImmutableBasalEndDate2Completion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        lastBasalEndDate = await insulinDeliveryStore.getLastImmutableBasalEndDate()
+        XCTAssertEqual(lastBasalEndDate, self.entry2.endDate)
 
-        let purgeCachedInsulinDeliveryObjectsCompletion = expectation(description: "purgeCachedInsulinDeliveryObjects")
-        insulinDeliveryStore.purgeCachedInsulinDeliveryObjects() { error in
-            XCTAssertNil(error)
-            purgeCachedInsulinDeliveryObjectsCompletion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        await insulinDeliveryStore.purgeCachedInsulinDeliveryObjects()
 
-        let getLastImmutableBasalEndDate3Completion = expectation(description: "getLastImmutableBasalEndDate3")
-        insulinDeliveryStore.getLastImmutableBasalEndDate() { lastBasalEndDate in
-            XCTAssertNil(lastBasalEndDate)
-            getLastImmutableBasalEndDate3Completion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        lastBasalEndDate = await insulinDeliveryStore.getLastImmutableBasalEndDate()
+        XCTAssertNil(lastBasalEndDate)
     }
 
     // MARK: - Modification
 
     func testAddDoseEntries() async throws {
-        let addDoseEntries1Completion = expectation(description: "addDoseEntries1")
-        insulinDeliveryStore.addDoseEntries([entry1, entry2, entry3], from: device, syncVersion: 2) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success:
-                break
-            }
-            addDoseEntries1Completion.fulfill()
-        }
-        await fulfillment(of: [addDoseEntries1Completion], timeout: 30)
+        try await insulinDeliveryStore.addDoseEntries([entry1, entry2, entry3], from: device, syncVersion: 2)
 
         var entries = try await insulinDeliveryStore.getDoseEntries()
         XCTAssertEqual(entries.count, 3)
@@ -350,17 +303,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
         XCTAssertEqual(entries[2].syncIdentifier, self.entry2.syncIdentifier)
         XCTAssertEqual(entries[2].scheduledBasalRate, self.entry2.scheduledBasalRate)
 
-        let addDoseEntries2Completion = expectation(description: "addDoseEntries2")
-        insulinDeliveryStore.addDoseEntries([entry3, entry1, entry2], from: device, syncVersion: 2) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success:
-                break
-            }
-            addDoseEntries2Completion.fulfill()
-        }
-        await fulfillment(of: [addDoseEntries2Completion], timeout: 30)
+        try await insulinDeliveryStore.addDoseEntries([entry3, entry1, entry2], from: device, syncVersion: 2)
 
         entries = try await insulinDeliveryStore.getDoseEntries()
         XCTAssertEqual(entries.count, 3)
@@ -393,42 +336,23 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
         XCTAssertEqual(entries[2].scheduledBasalRate, self.entry2.scheduledBasalRate)
     }
 
-    func testAddDoseEntriesEmpty() {
-        let addDoseEntriesCompletion = expectation(description: "addDoseEntries")
-        insulinDeliveryStore.addDoseEntries([], from: device, syncVersion: 2) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success:
-                break
-            }
-            addDoseEntriesCompletion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+    func testAddDoseEntriesEmpty() async throws {
+        try await insulinDeliveryStore.addDoseEntries([], from: device, syncVersion: 2)
     }
 
-    func testAddDoseEntriesNotification() {
+    func testAddDoseEntriesNotification() async throws {
         let doseEntriesDidChangeCompletion = expectation(description: "doseEntriesDidChange")
         let observer = NotificationCenter.default.addObserver(forName: InsulinDeliveryStore.doseEntriesDidChange, object: insulinDeliveryStore, queue: nil) { notification in
             doseEntriesDidChangeCompletion.fulfill()
         }
 
-        let addDoseEntriesCompletion = expectation(description: "addDoseEntries")
-        insulinDeliveryStore.addDoseEntries([entry1, entry2, entry3], from: device, syncVersion: 2) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success:
-                break
-            }
-            addDoseEntriesCompletion.fulfill()
-        }
-        wait(for: [doseEntriesDidChangeCompletion, addDoseEntriesCompletion], timeout: 30, enforceOrder: true)
+        try await insulinDeliveryStore.addDoseEntries([entry1, entry2, entry3], from: device, syncVersion: 2)
+        await fulfillment(of: [doseEntriesDidChangeCompletion], timeout: 30)
 
         NotificationCenter.default.removeObserver(observer)
     }
 
-    func testManuallyEnteredDoses() {
+    func testManuallyEnteredDoses() async throws {
         let manualEntry = DoseEntry(type: .bolus,
                                     startDate: Date(timeIntervalSinceNow: -.minutes(15)),
                                     endDate: Date(timeIntervalSinceNow: -.minutes(10)),
@@ -438,81 +362,25 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
                                     syncIdentifier: "C0AB1CBD-6B36-4113-9D49-709A022B2451",
                                     manuallyEntered: true)
 
-        let addDoseEntriesCompletion = expectation(description: "addDoseEntries")
-        insulinDeliveryStore.addDoseEntries([entry1, manualEntry, entry2, entry3], from: device, syncVersion: 2) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success:
-                break
-            }
-            addDoseEntriesCompletion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        try await insulinDeliveryStore.addDoseEntries([entry1, manualEntry, entry2, entry3], from: device, syncVersion: 2)
 
-        let getManuallyEnteredDoses1Completion = expectation(description: "getManuallyEnteredDoses1")
-        insulinDeliveryStore.getManuallyEnteredDoses(since: .distantPast) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let entries):
-                XCTAssertEqual(entries.count, 1)
-                XCTAssertEqual(entries[0], manualEntry)
-            }
-            getManuallyEnteredDoses1Completion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        var entries = try await insulinDeliveryStore.getManuallyEnteredDoses(since: .distantPast)
+        XCTAssertEqual(entries.count, 1)
+        XCTAssertEqual(entries[0], manualEntry)
 
-        let getManuallyEnteredDoses2Completion = expectation(description: "getManuallyEnteredDoses2")
-        insulinDeliveryStore.getManuallyEnteredDoses(since: Date(timeIntervalSinceNow: -.minutes(12))) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let entries):
-                XCTAssertEqual(entries.count, 0)
-            }
-            getManuallyEnteredDoses2Completion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        entries = try await insulinDeliveryStore.getManuallyEnteredDoses(since: Date(timeIntervalSinceNow: -.minutes(12)))
+        XCTAssertEqual(entries.count, 0)
 
-        let deleteAllManuallyEnteredDoses1Completion = expectation(description: "deleteAllManuallyEnteredDoses1")
-        insulinDeliveryStore.deleteAllManuallyEnteredDoses(since: Date(timeIntervalSinceNow: -.minutes(12))) { error in
-            XCTAssertNil(error)
-            deleteAllManuallyEnteredDoses1Completion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        try await insulinDeliveryStore.deleteAllManuallyEnteredDoses(since: Date(timeIntervalSinceNow: -.minutes(12)))
 
-        let getManuallyEnteredDoses3Completion = expectation(description: "getManuallyEnteredDoses3")
-        insulinDeliveryStore.getManuallyEnteredDoses(since: .distantPast) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let entries):
-                XCTAssertEqual(entries.count, 1)
-                XCTAssertEqual(entries[0], manualEntry)
-            }
-            getManuallyEnteredDoses3Completion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        entries = try await insulinDeliveryStore.getManuallyEnteredDoses(since: .distantPast)
+        XCTAssertEqual(entries.count, 1)
+        XCTAssertEqual(entries[0], manualEntry)
 
-        let deleteAllManuallyEnteredDose2Completion = expectation(description: "deleteAllManuallyEnteredDose2")
-        insulinDeliveryStore.deleteAllManuallyEnteredDoses(since: Date(timeIntervalSinceNow: -.minutes(20))) { error in
-            XCTAssertNil(error)
-            deleteAllManuallyEnteredDose2Completion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        try await insulinDeliveryStore.deleteAllManuallyEnteredDoses(since: Date(timeIntervalSinceNow: -.minutes(20)))
 
-        let getManuallyEnteredDoses4Completion = expectation(description: "getManuallyEnteredDoses4")
-        insulinDeliveryStore.getManuallyEnteredDoses(since: .distantPast) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let entries):
-                XCTAssertEqual(entries.count, 0)
-            }
-            getManuallyEnteredDoses4Completion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+        entries = try await insulinDeliveryStore.getManuallyEnteredDoses(since: .distantPast)
+        XCTAssertEqual(entries.count, 0)
     }
 
     // MARK: - Cache Management
@@ -522,28 +390,12 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
     }
 
     func testPurgeAllDoseEntries() async throws {
-        let addDoseEntriesCompletion = expectation(description: "addDoseEntries")
-        insulinDeliveryStore.addDoseEntries([entry1, entry2, entry3], from: device, syncVersion: 2) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success:
-                break
-            }
-            addDoseEntriesCompletion.fulfill()
-        }
-        await fulfillment(of: [addDoseEntriesCompletion], timeout: 30)
+        try await insulinDeliveryStore.addDoseEntries([entry1, entry2, entry3], from: device, syncVersion: 2)
 
         var entries = try await insulinDeliveryStore.getDoseEntries()
         XCTAssertEqual(entries.count, 3)
 
-        let purgeAllDoseEntriesCompletion = expectation(description: "purgeAllDoseEntries")
-        insulinDeliveryStore.purgeAllDoseEntries(healthKitPredicate: HKQuery.predicateForObjects(from: HKSource.default())) { error in
-            XCTAssertNil(error)
-            purgeAllDoseEntriesCompletion.fulfill()
-
-        }
-        await fulfillment(of: [purgeAllDoseEntriesCompletion], timeout: 30)
+        try await insulinDeliveryStore.purgeDoseEntriesForSource(HKSource.default())
 
         entries = try await insulinDeliveryStore.getDoseEntries()
         XCTAssertEqual(entries.count, 0)
@@ -559,86 +411,39 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
                                      syncIdentifier: "7530B8CA-827A-4DE8-ADE3-9E10FF80A4A9",
                                      scheduledBasalRate: nil)
 
-        let addDoseEntriesCompletion = expectation(description: "addDoseEntries")
-        insulinDeliveryStore.addDoseEntries([entry1, entry2, entry3, expiredEntry], from: device, syncVersion: 2) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success:
-                break
-            }
-            addDoseEntriesCompletion.fulfill()
-        }
-        await fulfillment(of: [addDoseEntriesCompletion], timeout: 30)
+        try await insulinDeliveryStore.addDoseEntries([entry1, entry2, entry3, expiredEntry], from: device, syncVersion: 2)
 
         let entries = try await insulinDeliveryStore.getDoseEntries()
         XCTAssertEqual(entries.count, 3)
     }
 
     func testPurgeCachedInsulinDeliveryObjects() async throws {
-        let addDoseEntriesCompletion = expectation(description: "addDoseEntries")
-        insulinDeliveryStore.addDoseEntries([entry1, entry2, entry3], from: device, syncVersion: 2) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success:
-                break
-            }
-            addDoseEntriesCompletion.fulfill()
-        }
-        await fulfillment(of: [addDoseEntriesCompletion], timeout: 30)
+        try await insulinDeliveryStore.addDoseEntries([entry1, entry2, entry3], from: device, syncVersion: 2)
 
         var entries = try await insulinDeliveryStore.getDoseEntries()
         XCTAssertEqual(entries.count, 3)
 
-        let purgeCachedInsulinDeliveryObjects1Completion = expectation(description: "purgeCachedInsulinDeliveryObjects1")
-        insulinDeliveryStore.purgeCachedInsulinDeliveryObjects(before: Date(timeIntervalSinceNow: -.minutes(5))) { error in
-            XCTAssertNil(error)
-            purgeCachedInsulinDeliveryObjects1Completion.fulfill()
-
-        }
-        await fulfillment(of: [purgeCachedInsulinDeliveryObjects1Completion], timeout: 30)
+        await insulinDeliveryStore.purgeCachedInsulinDeliveryObjects(before: Date(timeIntervalSinceNow: -.minutes(5)))
 
         entries = try await insulinDeliveryStore.getDoseEntries()
         XCTAssertEqual(entries.count, 2)
 
-        let purgeCachedInsulinDeliveryObjects2Completion = expectation(description: "purgeCachedInsulinDeliveryObjects2")
-        insulinDeliveryStore.purgeCachedInsulinDeliveryObjects() { error in
-            XCTAssertNil(error)
-            purgeCachedInsulinDeliveryObjects2Completion.fulfill()
-
-        }
-        await fulfillment(of: [purgeCachedInsulinDeliveryObjects2Completion], timeout: 30)
+        await insulinDeliveryStore.purgeCachedInsulinDeliveryObjects()
 
         entries = try await insulinDeliveryStore.getDoseEntries()
         XCTAssertEqual(entries.count, 0)
     }
 
-    func testPurgeCachedInsulinDeliveryObjectsNotification() {
-        let addDoseEntriesCompletion = expectation(description: "addDoseEntries")
-        insulinDeliveryStore.addDoseEntries([entry1, entry2, entry3], from: device, syncVersion: 2) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success:
-                break
-            }
-            addDoseEntriesCompletion.fulfill()
-        }
-        waitForExpectations(timeout: 30)
+    func testPurgeCachedInsulinDeliveryObjectsNotification() async throws {
+        try await insulinDeliveryStore.addDoseEntries([entry1, entry2, entry3], from: device, syncVersion: 2)
 
         let doseEntriesDidChangeCompletion = expectation(description: "doseEntriesDidChange")
         let observer = NotificationCenter.default.addObserver(forName: InsulinDeliveryStore.doseEntriesDidChange, object: insulinDeliveryStore, queue: nil) { notification in
             doseEntriesDidChangeCompletion.fulfill()
         }
 
-        let purgeCachedInsulinDeliveryObjectsCompletion = expectation(description: "purgeCachedInsulinDeliveryObjects")
-        insulinDeliveryStore.purgeCachedInsulinDeliveryObjects() { error in
-            XCTAssertNil(error)
-            purgeCachedInsulinDeliveryObjectsCompletion.fulfill()
-
-        }
-        wait(for: [doseEntriesDidChangeCompletion, purgeCachedInsulinDeliveryObjectsCompletion], timeout: 30, enforceOrder: true)
+        await insulinDeliveryStore.purgeCachedInsulinDeliveryObjects()
+        await fulfillment(of: [doseEntriesDidChangeCompletion], timeout: 30)
 
         NotificationCenter.default.removeObserver(observer)
     }
@@ -698,23 +503,23 @@ class InsulinDeliveryStoreQueryTests: PersistenceControllerTestCase {
     var queryAnchor: InsulinDeliveryStore.QueryAnchor!
     var limit: Int!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
 
-        insulinDeliveryStore = InsulinDeliveryStore(cacheStore: cacheStore,
+        insulinDeliveryStore = await InsulinDeliveryStore(cacheStore: cacheStore,
                                                     provenanceIdentifier: HKSource.default().bundleIdentifier)
         completion = expectation(description: "Completion")
         queryAnchor = InsulinDeliveryStore.QueryAnchor()
         limit = Int.max
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         limit = nil
         queryAnchor = nil
         completion = nil
         insulinDeliveryStore = nil
 
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testDoseEmptyWithDefaultQueryAnchor() {

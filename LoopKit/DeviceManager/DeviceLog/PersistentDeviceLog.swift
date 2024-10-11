@@ -12,7 +12,7 @@ import os.log
 
 
 // Using a framework specific class will search the framework's bundle for model files.
-class PersistentContainer: NSPersistentContainer { }
+class PersistentContainer: NSPersistentContainer, @unchecked Sendable { }
 
 public class PersistentDeviceLog {
 

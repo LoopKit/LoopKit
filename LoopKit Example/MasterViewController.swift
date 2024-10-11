@@ -19,8 +19,10 @@ class MasterViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil {
-            dataManager = DeviceDataManager()
+        Task {
+            if ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil {
+                dataManager = await DeviceDataManager()
+            }
         }
     }
 
@@ -226,8 +228,6 @@ class MasterViewController: UITableViewController {
                         return "dataManager is nil"
                     }
 
-                    let group = DispatchGroup()
-
                     var unitVolume = 150.0
 
                     reservoir: for index in sequence(first: TimeInterval(hours: -6), next: { $0 + .minutes(5) }) {
@@ -236,20 +236,6 @@ class MasterViewController: UITableViewController {
                         }
 
                         unitVolume -= (drand48() * 2.0)
-
-//                        group.enter()
-//                        dataManager.doseStore.addReservoirValue(unitVolume, at: Date(timeIntervalSinceNow: index)) { (_, _, _, error) in
-//                            group.leave()
-//                        }
-                    }
-
-                    group.enter()
-                    dataManager.glucoseStore.addGlucoseSamples([NewGlucoseSample(date: Date(), quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 101), condition: nil, trend: nil, trendRate: nil, isDisplayOnly: false, wasUserEntered: false, syncIdentifier: UUID().uuidString)], completion: { (result) in
-                        group.leave()
-                    })
-
-                    group.notify(queue: .main) {
-                        completionHandler("Completed")
                     }
 
                     return "Generating…"
