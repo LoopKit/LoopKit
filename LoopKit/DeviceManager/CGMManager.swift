@@ -90,7 +90,7 @@ public protocol CGMManagerDelegate: DeviceManagerDelegate, CGMManagerStatusObser
     /// Informs the delegate that the manager is deactivating and should be deleted
     ///
     /// - Parameter manager: The manager instance
-    func cgmManagerWantsDeletion(_ manager: CGMManager)
+    func cgmManagerWantsDeletion(_ manager: CGMManager) async
 
     /// Informs the delegate that the manager has updated its state and should be persisted.
     ///
@@ -190,8 +190,10 @@ public extension CGMManager {
     ///   - completion: A closure called from the delegate queue after the delegate is called
     func notifyDelegateOfDeletion(completion: @escaping () -> Void) {
         delegateQueue.async {
-            self.cgmManagerDelegate?.cgmManagerWantsDeletion(self)
-            completion()
+            Task {
+                await self.cgmManagerDelegate?.cgmManagerWantsDeletion(self)
+                completion()
+            }
         }
     }
     
