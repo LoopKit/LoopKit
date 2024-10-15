@@ -984,7 +984,7 @@ extension DoseStore {
             chronological: true
             ).compactMap({ $0.dose })
         let normalizedDoses = doses.filterDateRange(start, nil).reconciled()
-        return normalizedDoses.map { $0.trimmed(from: start) }
+        return normalizedDoses.compactMap { $0.trimmed(from: start) }
     }
 
 
@@ -1091,7 +1091,10 @@ extension DoseStore {
                     let endOfReservoirData = self.lastStoredReservoirValue?.endDate ?? .distantPast
                     let startOfReservoirData = reservoirDoses.first?.startDate ?? filteredStart
                     let mutableDoses = try self.getNormalizedMutablePumpEventDoseEntries(start: endOfReservoirData)
-                    doses = insulinDeliveryDoses.map({ $0.trimmed(to: startOfReservoirData) }) + reservoirDoses + mutableDoses.map({ $0.trimmed(from: endOfReservoirData) })
+                    doses =
+                        insulinDeliveryDoses.compactMap({ $0.trimmed(to: startOfReservoirData) }) +
+                        reservoirDoses +
+                        mutableDoses.compactMap({ $0.trimmed(from: endOfReservoirData) })
                 } else {
                     // Deduplicates doses by syncIdentifier
                     doses = insulinDeliveryDoses.appendedUnion(with: try self.getNormalizedPumpEventDoseEntries(start: filteredStart, end: end))

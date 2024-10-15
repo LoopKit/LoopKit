@@ -12,7 +12,11 @@ import LoopAlgorithm
 
 extension DoseEntry {
 
-    public func trimmed(from start: Date? = nil, to end: Date? = nil, syncIdentifier: String? = nil) -> DoseEntry {
+    public func trimmed(from start: Date? = nil, to end: Date? = nil, syncIdentifier: String? = nil) -> DoseEntry? {
+
+        guard startDate < end ?? .distantFuture, endDate > start ?? .distantPast else {
+            return nil
+        }
 
         let originalDuration = endDate.timeIntervalSince(startDate)
 
@@ -38,6 +42,7 @@ extension DoseEntry {
         newDose.value = trimmedValue
         newDose.deliveredUnits = trimmedDeliveredUnits
         newDose.syncIdentifier = syncIdentifier
+
         return newDose
     }
 }
@@ -197,8 +202,8 @@ extension Collection where Element == DoseEntry {
                     let endDate = Swift.min(last.endDate, dose.startDate)
 
                     // Ignore 0-duration doses
-                    if endDate > last.startDate {
-                        reconciled.append(last.trimmed(from: nil, to: endDate, syncIdentifier: last.syncIdentifier))
+                    if let dose = last.trimmed(from: nil, to: endDate, syncIdentifier: last.syncIdentifier) {
+                        reconciled.append(dose)
                     }
                 } else if var suspend = lastSuspend, dose.type == .tempBasal {
                     // Handle missing resume. Basal following suspend, with no resume.

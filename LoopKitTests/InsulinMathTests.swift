@@ -584,7 +584,7 @@ class InsulinMathTests: XCTestCase {
 
         // Last temp ends at 2015-10-15T22:29:50
         let endDate = dateFormatter.date(from: "2015-10-15T22:25:50")!
-        let trimmed = input.map { $0.trimmed(to: endDate) }
+        let trimmed = input.compactMap { $0.trimmed(to: endDate) }
 
         print(input, "\n\n\n")
         print(trimmed)
@@ -599,7 +599,7 @@ class InsulinMathTests: XCTestCase {
 
         // Last temp ends at 2015-10-15T22:29:50
         let endDate = dateFormatter.date(from: "2015-10-15T22:25:50")!
-        let trimmed = input.map { $0.trimmed(to: endDate) }
+        let trimmed = input.compactMap { $0.trimmed(to: endDate) }
 
         XCTAssertTrue(trimmed.last!.isMutable)
     }
