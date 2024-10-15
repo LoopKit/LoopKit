@@ -23,7 +23,6 @@ public class DisplayGlucosePreference: ObservableObject {
         self.unit = displayGlucoseUnit
         self.rateUnit = rateUnit
         let formatter = QuantityFormatter(for: displayGlucoseUnit)
-        formatter.unitStyle = .short
         self.formatter = formatter
         self.minuteRateFormatter = QuantityFormatter(for: rateUnit)
         self.formatter.numberFormatter.notANumberSymbol = "–"
@@ -56,7 +55,6 @@ extension DisplayGlucosePreference: DisplayGlucoseUnitObserver {
     public func unitDidChange(to displayGlucoseUnit: HKUnit) {
         self.unit = displayGlucoseUnit
         let formatter = QuantityFormatter(for: displayGlucoseUnit)
-        formatter.unitStyle = .short
         self.formatter = formatter
     }
 }
