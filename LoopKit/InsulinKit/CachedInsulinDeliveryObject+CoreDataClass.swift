@@ -283,3 +283,22 @@ extension CachedInsulinDeliveryObject {
         updateModificationCounter()  // Maintains modificationCounter order
     }
 }
+
+extension CachedInsulinDeliveryObject {
+    var issueReportDescription: String {
+        return "CachedInsulinDeliveryObject(startDate: \(startDate), endDate: \(endDate), reason: \(reason.issueReportDescription), syncIdentifier: \(syncIdentifier ?? "nil"), deletedAt: \(String(describing: deletedAt)), programmedUnits: \(String(describing: programmedUnits)), programmedTempBasalRate: \(String(describing: programmedTempBasalRate)), deliveredUnits: \(deliveredUnits), scheduledBasalRate: \(String(describing: scheduledBasalRate)), insulinType: \(String(describing: insulinType)), automaticallyIssued: \(String(describing: automaticallyIssued)), manuallyEntered: \(manuallyEntered), isSuspend: \(isSuspend), isMutable: \(isMutable), wasProgrammedByPumpUI: \(wasProgrammedByPumpUI))"
+    }
+}
+
+extension HKInsulinDeliveryReason {
+    var issueReportDescription: String {
+        switch self {
+        case .basal:
+            return "basal"
+        case .bolus:
+            return "bolus"
+        @unknown default:
+            return "unknown"
+        }
+    }
+}

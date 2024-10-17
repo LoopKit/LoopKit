@@ -381,7 +381,7 @@ extension DoseStore {
                     // If no error on purge, continue with creation
                 } else if isSameDate && previousValue.unitVolume == unitVolume {
                     // Ignore duplicate adds
-                    self.log.error("Ignoring duplicate reservoir value at %{public}@", String(describing: date))
+                    self.log.error("Ignoring duplicate reservoir value of %{public}@ at %{public}@", String(describing: unitVolume), String(describing: date))
                     return (previousValue, previousValue, self.areReservoirValuesValid)
                 }
             }
@@ -608,11 +608,11 @@ extension DoseStore {
         }
 
         let now = self.currentDate()
-        self.log.debug("addPumpEvents: lastReconciliation = %@ (%@ hours ago)", String(describing: lastReconciliation), String(describing: now.timeIntervalSince(lastReconciliation ?? now).hours))
+        self.log.default("addPumpEvents: lastReconciliation = %{public}@ (%{public}@ hours ago)", String(describing: lastReconciliation), String(describing: now.timeIntervalSince(lastReconciliation ?? now).hours))
 
         for event in events {
             if let dose = event.dose {
-                self.log.debug("Add %@, isMutable=%@", String(describing: dose), String(describing: event.dose?.isMutable))
+                self.log.default("Add dose: %{public}@", String(describing: dose))
             }
         }
 
@@ -834,7 +834,7 @@ extension DoseStore {
         }
 
         for dose in doses {
-            self.log.debug("Adding dose to insulin delivery store: %@", String(describing: dose))
+            self.log.default("Adding dose to insulin delivery store: %{public}@", String(describing: dose))
         }
 
         try await insulinDeliveryStore.addDoseEntries(doses, from: self.device, syncVersion: self.syncVersion, resolveMutable: resolveMutable)
@@ -849,9 +849,12 @@ extension DoseStore {
     ///   - result: The doses along with schedule basal
     private func getPumpEventDoseEntriesForSavingToInsulinDeliveryStore(startingAt: Date) async throws -> [DoseEntry] {
         // Can't store to insulin delivery store if we don't know end of reconciled range, or if we already have doses after the end
-        guard let endingAt = lastPumpEventsReconciliation, endingAt > startingAt else {
-            self.log.error("lastPumpEventsReconciliation of %@ < startingAt %@. (lastImmutableBasalEndDate after lastPumpEventsReconciliation???", String(describing: lastPumpEventsReconciliation), String(describing: startingAt))
+        guard let endingAt = lastPumpEventsReconciliation else {
+            self.log.error("Unable to fetch doses to store to insulin delivery store with missing lastPumpEventsReconciliation")
             return []
+        }
+        if endingAt < startingAt {
+            self.log.error("lastPumpEventsReconciliation of %{public}@ < startingAt %{public}@. (lastImmutableBasalEndDate after lastPumpEventsReconciliation!)", String(describing: lastPumpEventsReconciliation), String(describing: startingAt))
         }
 
         let doses = try await self.persistenceController.managedObjectContext.perform {

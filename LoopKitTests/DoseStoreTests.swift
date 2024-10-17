@@ -339,9 +339,6 @@ class DoseStoreTests: PersistenceControllerTestCase {
         healthStore.setSaveHandler({ (objects, success, error) in
             XCTFail()
         })
-        doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDateDidSet = {
-            XCTFail()
-        }
         try await doseStore.addPumpEvents(pumpEvents1, lastReconciliation: f("2018-11-29 10:59:28 +0000"))
         
         XCTAssertEqual(f("2018-11-29 10:59:28 +0000"), doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate)
