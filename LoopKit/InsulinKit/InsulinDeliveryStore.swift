@@ -135,10 +135,10 @@ extension InsulinDeliveryStore: HealthKitSampleStoreDelegate {
                     if let samples = added as? [HKQuantitySample] {
                         for sample in samples {
                             if try self.addDoseEntry(for: sample) {
-                                self.log.debug("Saved sample %@ into cache from HKAnchoredObjectQuery", sample.uuid.uuidString)
+                                self.log.debug("Saved sample %{public}@ into cache from HKAnchoredObjectQuery", sample.uuid.uuidString)
                                 changed = true
                             } else {
-                                self.log.default("Sample %@ from HKAnchoredObjectQuery already present in cache", sample.uuid.uuidString)
+                                self.log.default("Sample %{public}@ from HKAnchoredObjectQuery already present in cache", sample.uuid.uuidString)
                             }
                         }
                     }
@@ -371,7 +371,7 @@ extension InsulinDeliveryStore {
                 self.lastImmutableBasalEndDate = endDate
             }
         } catch {
-            self.log.error("updateLastImmutableBasalEndDate failed: %@", String(describing: error))
+            self.log.error("updateLastImmutableBasalEndDate failed: %{public}@", String(describing: error))
         }
     }
 }
@@ -425,7 +425,7 @@ extension InsulinDeliveryStore {
 
                 // If we have a mutable object that matches this sync identifier, then update, it will mark as NOT deleted
                 if let object = mutableObjects.first(where: { $0.provenanceIdentifier == self.provenanceIdentifier && $0.syncIdentifier == entry.syncIdentifier }) {
-                    self.log.debug("ISD Update: %{public}@", String(describing: entry))
+                    self.log.default("Update: %{public}@", entry.syncIdentifier ?? "nil")
                     object.update(from: entry)
                     return (quantitySample, object)
 
@@ -433,14 +433,14 @@ extension InsulinDeliveryStore {
                 } else {
                     let object = CachedInsulinDeliveryObject(context: self.cacheStore.managedObjectContext)
                     object.create(from: entry, by: self.provenanceIdentifier, at: now)
-                    self.log.debug("IDS Add: %{public}@", String(describing: entry))
+                    self.log.default("Add: %{public}@", entry.syncIdentifier ?? "nil")
                     return (quantitySample, object)
                 }
             }
 
             for dose in mutableObjects {
                 if dose.deletedAt != nil {
-                    self.log.debug("Delete: %{public}@", String(describing: dose))
+                    self.log.default("Delete: %{public}@", dose.syncIdentifier ?? "nil")
                 }
             }
 
@@ -604,7 +604,7 @@ extension InsulinDeliveryStore {
                         hkSampleStore.healthStore.deleteObjects(of: HealthKitSampleStore.insulinQuantityType, predicate: healthKitPredicate)
                         { success, deletedObjectCount, error in
                             if let error = error {
-                                self.log.error("Unable to delete dose from Health: %@", error.localizedDescription)
+                                self.log.error("Unable to delete dose from Health: %{public}@", error.localizedDescription)
                             }
                         }
                     }
@@ -791,9 +791,16 @@ extension InsulinDeliveryStore {
         ]
 
         do {
-            let entries = try await getDoseEntries(start: Date(timeIntervalSinceNow: -.hours(24)), includeMutable: true)
+            let entries = try await cacheStore.managedObjectContext.perform {
+                let start = Date(timeIntervalSinceNow: -.hours(24))
+                let request: NSFetchRequest<CachedInsulinDeliveryObject> = CachedInsulinDeliveryObject.fetchRequest()
+                request.predicate = NSPredicate(format: "endDate >= %@", start as NSDate)
+                request.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: true)]
+                return try self.cacheStore.managedObjectContext.fetch(request)
+            }
+
             for entry in entries {
-                report.append(String(describing: entry))
+                report.append(entry.issueReportDescription)
             }
         } catch {
             report.append("Error: \(error)")
