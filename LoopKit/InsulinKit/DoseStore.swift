@@ -1012,10 +1012,12 @@ extension DoseStore {
             matching: NSCompoundPredicate(orPredicateWithSubpredicates: [afterBasalStart, allBoluses]),
             chronological: true
         ).compactMap({ $0.dose })
-        // Ignore any doses which have not yet ended by the specified date.
+
+        // Ignore any doses that are not a bolus which have not yet ended by the specified date.
         // Also, since we are retrieving dosing history older than basalStart for
         // reconciliation purposes, we need to filter that out after reconciliation.
-        let normalizedDoses = doses.reconciled().filter({ $0.endDate <= end || $0.isMutable }).filter({ $0.startDate >= basalStart || $0.type == .bolus })
+        assert(!doses.contains(where: { $0.type == .bolus && $0.endDate > end && !$0.isMutable }), "There is a bolus that ends in the future and is immutable")
+        let normalizedDoses = doses.reconciled().filter({ $0.type == .bolus || $0.endDate <= end || $0.isMutable }).filter({ $0.startDate >= basalStart || $0.type == .bolus })
 
         return normalizedDoses
     }
