@@ -5917,7 +5917,7 @@
 /* Begin XCRemoteSwiftPackageReference section */
 		C1B431C42B90E31400D1DA9F /* XCRemoteSwiftPackageReference "LoopAlgorithm" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/tidepool-org/LoopAlgorithm";
+			repositoryURL = "https://github.com/LoopKit/LoopAlgorithm";
 			requirement = {
 				branch = main;
 				kind = branch;
