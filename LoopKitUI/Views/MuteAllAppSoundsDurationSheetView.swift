@@ -102,7 +102,6 @@ public struct DurationSheet: View {
             
             VStack(spacing: 12) {
                 Button {
-                    dismiss()
                     durationWasSelected = true
                 } label: {
                     Text("Mute All App Sounds")
