@@ -17,11 +17,11 @@ extension MockService: ServiceUI {
         return UIImage(systemName: "icloud.and.arrow.up")
     }
     
-    public static func setupViewController(colorPalette: LoopUIColorPalette, pluginHost: PluginHost) -> SetupUIResult<ServiceViewController, ServiceUI> {
+    public static func setupViewController(colorPalette: LoopUIColorPalette, pluginHost: PluginHost, allowDebugFeatures: Bool) -> SetupUIResult<ServiceViewController, ServiceUI> {
         return .userInteractionRequired(ServiceNavigationController(rootViewController: MockServiceTableViewController(service: MockService(), for: .create)))
     }
 
-    public func settingsViewController(colorPalette: LoopUIColorPalette) -> ServiceViewController {
+    public func settingsViewController(colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool) -> ServiceViewController {
       return ServiceNavigationController(rootViewController: MockServiceTableViewController(service: self, for: .update))
     }
     
