@@ -1333,10 +1333,11 @@ extension DoseStore {
     /// - Parameters:
     ///   - start: The earliest date of effects to retrieve
     ///   - end: The latest date of effects to retrieve, if provided
+    ///   - doseEnd: the latest startDate of doses whose effects will be considered. If not provided, then equal to end.
     ///   - basalDosingEnd: The date at which continuing doses should be assumed to be cancelled
     ///   - completion: A closure called once the effects have been retrieved
     ///   - result: An array of effects, in chronological order
-    public func getGlucoseEffects(start: Date, end: Date? = nil, basalDosingEnd: Date? = Date(), completion: @escaping (_ result: DoseStoreResult<[GlucoseEffect]>) -> Void) {
+    public func getGlucoseEffects(start: Date, end: Date? = nil, doseEnd: Date? = nil, basalDosingEnd: Date? = Date(), completion: @escaping (_ result: DoseStoreResult<[GlucoseEffect]>) -> Void) {
         guard let insulinSensitivitySchedule = self.insulinSensitivityScheduleApplyingOverrideHistory else {
             completion(.failure(.configurationError))
             return
@@ -1344,7 +1345,7 @@ extension DoseStore {
 
         // To properly know glucose effects at startDate, we need to go back another DIA hours
         let doseStart = start.addingTimeInterval(-longestEffectDuration)
-        getNormalizedDoseEntries(start: doseStart, end: end) { (result) in
+        getNormalizedDoseEntries(start: doseStart, end: doseEnd ?? end) { (result) in
             switch result {
             case .failure(let error):
                 completion(.failure(error))
