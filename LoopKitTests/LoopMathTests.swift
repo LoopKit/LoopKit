@@ -29,8 +29,7 @@ class LoopMathTests: XCTestCase {
         let fixture: [JSONDictionary] = loadFixture(resourceName)
 
         return fixture.map {
-            let doubleValue = Double(Decimal(string: "\($0["value"]!)")!.description)!
-            return GlucoseEffect(startDate: formatter.date(from: $0["date"] as! String)!, quantity: LoopQuantity(unit: LoopUnit(from: $0["unit"] as! String), doubleValue: doubleValue))
+            return GlucoseEffect(startDate: formatter.date(from: $0["date"] as! String)!, quantity: LoopQuantity(unit: LoopUnit(from: $0["unit"] as! String), doubleValue: $0["value"] as! Double))
         }
     }
 
@@ -338,7 +337,7 @@ class LoopMathTests: XCTestCase {
 
         let expected = loadGlucoseEffectFixture("ice_minus_carb_effect_with_gaps_output", formatter: DateFormatter.descriptionFormatter)
 
-        XCTAssertEqual(expected, calculated)
+        XCTAssertSampleValueEqual(expected, calculated)
     }
      
     func testSubtractingFlatCarbEffectFromICE() {
@@ -373,7 +372,7 @@ class LoopMathTests: XCTestCase {
 
         let expected = loadGlucoseEffectFixture("ice_minus_flat_carb_effect_output", formatter: DateFormatter.descriptionFormatter)
 
-        XCTAssertEqual(expected, calculated)
+        XCTAssertSampleValueEqual(expected, calculated)
     }
 
     func testCombinedSumsWithGaps() {
@@ -412,7 +411,7 @@ class LoopMathTests: XCTestCase {
 
         let calculated = input.combinedSums(of: .minutes(30))
 
-        XCTAssertEqual(expected, calculated)
+        XCTAssertSampleValueEqual(expected, calculated)
     }
 
 
@@ -493,5 +492,16 @@ class LoopMathTests: XCTestCase {
                                         .compactMap { $0.offset.isMultiple(of: 2) ? $0.element : nil }
         let differentDeltaOutput = LoopMath.simulationDateRange(from: unroundedStartDate, to: unroundedEndDate, delta: .minutes(10))
         XCTAssertEqual(differentDeltaExpected, differentDeltaOutput)
+    }
+}
+
+public func XCTAssertSampleValueEqual(_ expression1: [SampleValue], _ expression2: [SampleValue], _ message: @autoclosure () -> String = "", file: StaticString = #filePath, line: UInt = #line) {
+    XCTAssertEqual(expression1.map(\.startDate), expression2.map(\.startDate), message(), file: file, line: line)
+    XCTAssertEqual(expression1.map(\.endDate), expression2.map(\.endDate), message(), file: file, line: line)
+    XCTAssertEqual(expression1.map(\.quantity.unit), expression2.map(\.quantity.unit), message(), file: file, line: line)
+    
+    for (index, effect) in expression1.enumerated() {
+        let mirroredEffect = expression2[index]
+        XCTAssertEqual(effect.quantity.doubleValue(for: effect.quantity.unit), mirroredEffect.quantity.doubleValue(for: mirroredEffect.quantity.unit), accuracy: 0.0000000001, message())
     }
 }
