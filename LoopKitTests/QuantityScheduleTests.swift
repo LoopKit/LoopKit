@@ -7,7 +7,7 @@
 //
 
 import XCTest
-import HealthKit
+import LoopAlgorithm
 @testable import LoopKit
 
 class QuantityScheduleTests: XCTestCase {
@@ -28,13 +28,13 @@ class QuantityScheduleTests: XCTestCase {
 
     func testCarbRatioScheduleLocalTimeZone() {
         let therapyTimeZone = TimeZone(secondsFromGMT: -6*60*60)!
-        let schedule = CarbRatioSchedule(unit: HKUnit.gram(), dailyItems: items, timeZone: therapyTimeZone)!
+        let schedule = CarbRatioSchedule(unit: .gram, dailyItems: items, timeZone: therapyTimeZone)!
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = therapyTimeZone
 
         let midnight = calendar.startOfDay(for: Date())
 
-        XCTAssertEqual(HKQuantity(unit: HKUnit.gram(), doubleValue: 10), schedule.quantity(at: midnight))
+        XCTAssertEqual(LoopQuantity(unit: .gram, doubleValue: 10), schedule.quantity(at: midnight))
         XCTAssertEqual(9,
             schedule.quantity(at: midnight.addingTimeInterval(-1)).doubleValue(for: schedule.unit)
         )
@@ -56,7 +56,7 @@ class QuantityScheduleTests: XCTestCase {
     }
 
     func testCarbRatioScheduleUTC() {
-        let schedule = CarbRatioSchedule(unit: HKUnit.gram(), dailyItems: items, timeZone: TimeZone(secondsFromGMT: 0))!
+        let schedule = CarbRatioSchedule(unit: .gram, dailyItems: items, timeZone: TimeZone(secondsFromGMT: 0))!
         var calendar = Calendar.current
 
         calendar.timeZone = TimeZone(identifier: "America/Los_Angeles")!
@@ -69,7 +69,7 @@ class QuantityScheduleTests: XCTestCase {
         let midnight = calendar.startOfDay(for: june1)
 
         // This is 7 AM the next day in the Schedule's time zone
-        XCTAssertEqual(HKQuantity(unit: HKUnit.gram(), doubleValue: 10), schedule.quantity(at: midnight))
+        XCTAssertEqual(LoopQuantity(unit: .gram, doubleValue: 10), schedule.quantity(at: midnight))
         XCTAssertEqual(10,
             schedule.quantity(at: midnight.addingTimeInterval(-1)).doubleValue(for: schedule.unit)
         )

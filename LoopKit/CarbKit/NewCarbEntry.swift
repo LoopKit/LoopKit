@@ -15,13 +15,13 @@ public struct NewCarbEntry: CarbEntry, Equatable, RawRepresentable {
     public typealias RawValue = [String: Any]
 
     public let date: Date
-    public let quantity: HKQuantity
+    public let quantity: LoopQuantity
     public let startDate: Date
     public let foodType: String?
     public let absorptionTime: TimeInterval?
     public let favoriteFoodID: String?
 
-    public init(date: Date = Date(), quantity: HKQuantity, startDate: Date, foodType: String?, absorptionTime: TimeInterval?, favoriteFoodID: String? = nil) {
+    public init(date: Date = Date(), quantity: LoopQuantity, startDate: Date, foodType: String?, absorptionTime: TimeInterval?, favoriteFoodID: String? = nil) {
         self.date = date
         self.quantity = quantity
         self.startDate = startDate
@@ -41,7 +41,7 @@ public struct NewCarbEntry: CarbEntry, Equatable, RawRepresentable {
 
         self.init(
             date: date,
-            quantity: HKQuantity(unit: .gram(), doubleValue: grams),
+            quantity: LoopQuantity(unit: .gram, doubleValue: grams),
             startDate: startDate,
             foodType: rawValue["foodType"] as? String,
             absorptionTime: rawValue["absorptionTime"] as? TimeInterval,
@@ -52,7 +52,7 @@ public struct NewCarbEntry: CarbEntry, Equatable, RawRepresentable {
     public var rawValue: RawValue {
         var rawValue: RawValue = [
             "date": date,
-            "grams": quantity.doubleValue(for: .gram()),
+            "grams": quantity.doubleValue(for: .gram),
             "startDate": startDate
         ]
 
@@ -64,6 +64,6 @@ public struct NewCarbEntry: CarbEntry, Equatable, RawRepresentable {
     }
 
     public var amount: Double {
-        quantity.doubleValue(for: .gram())
+        quantity.doubleValue(for: .gram)
     }
 }

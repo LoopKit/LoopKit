@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-import HealthKit
 import LoopKit
 import LoopAlgorithm
 
@@ -21,8 +20,8 @@ private struct PickerValueBoundsKey: PreferenceKey {
 }
 
 public struct QuantityPicker: View {
-    @Binding var value: HKQuantity
-    var unit: HKUnit
+    @Binding var value: LoopQuantity
+    var unit: LoopUnit
     var isUnitLabelVisible: Bool
     var colorForValue: (_ value: Double) -> Color
 
@@ -32,9 +31,9 @@ public struct QuantityPicker: View {
     private let unitLabelSpacing: CGFloat = -6
     
     public init(
-        value: Binding<HKQuantity>,
-        unit: HKUnit,
-        guardrail: Guardrail<HKQuantity>,
+        value: Binding<LoopQuantity>,
+        unit: LoopUnit,
+        guardrail: Guardrail<LoopQuantity>,
         formatter: NumberFormatter? = nil,
         isUnitLabelVisible: Bool = true,
         guidanceColors: GuidanceColors = GuidanceColors()
@@ -50,9 +49,9 @@ public struct QuantityPicker: View {
     }
 
     public init(
-        value: Binding<HKQuantity>,
-        unit: HKUnit,
-        guardrail: Guardrail<HKQuantity>,
+        value: Binding<LoopQuantity>,
+        unit: LoopUnit,
+        guardrail: Guardrail<LoopQuantity>,
         selectableValues: [Double],
         formatter: NumberFormatter? = nil,
         isUnitLabelVisible: Bool = true,
@@ -65,15 +64,15 @@ public struct QuantityPicker: View {
             formatter: formatter,
             isUnitLabelVisible: isUnitLabelVisible,
             colorForValue: { value in
-                let quantity = HKQuantity(unit: unit, doubleValue: value)
+                let quantity = LoopQuantity(unit: unit, doubleValue: value)
                 return guardrail.color(for: quantity, guidanceColors: guidanceColors)
             }
         )
     }
 
     public init(
-        value: Binding<HKQuantity>,
-        unit: HKUnit,
+        value: Binding<LoopQuantity>,
+        unit: LoopUnit,
         selectableValues: [Double],
         formatter: NumberFormatter? = nil,
         isUnitLabelVisible: Bool = true,
@@ -96,7 +95,7 @@ public struct QuantityPicker: View {
                 unit.roundForPicker(value: value.doubleValue(for: unit))
             },
             set: { newValue in
-                self.value = HKQuantity(unit: unit, doubleValue: newValue)
+                self.value = LoopQuantity(unit: unit, doubleValue: newValue)
             }
         )
     }

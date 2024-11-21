@@ -7,6 +7,7 @@
 //
 
 import HealthKit
+import LoopAlgorithm
 
 
 extension HKUnit {
@@ -16,6 +17,10 @@ extension HKUnit {
 
     static let millimolesPerLiter: HKUnit = {
         return HKUnit.moleUnit(with: .milli, molarMass: HKUnitMolarMassBloodGlucose).unitDivided(by: .liter())
+    }()
+    
+    static let milligramsPerDeciliterPerSecond: HKUnit = {
+        return HKUnit.milligramsPerDeciliter.unitDivided(by: .second())
     }()
 
     static let milligramsPerDeciliterPerMinute: HKUnit = {
@@ -44,6 +49,33 @@ extension HKUnit {
         }
 
         if self == HKUnit.gram() {
+            return UnitMass.grams
+        }
+
+        return nil
+    }
+    
+    /// The smallest value expected to be visible on a chart
+    var chartableIncrement: Double {
+        if self == .milligramsPerDeciliter {
+            return 1
+        } else {
+            return 1 / 25
+        }
+    }
+}
+
+public extension LoopUnit {
+    var foundationUnit: Unit? {
+        if self == .milligramsPerDeciliter {
+            return UnitConcentrationMass.milligramsPerDeciliter
+        }
+
+        if self == .millimolesPerLiter {
+            return UnitConcentrationMass.millimolesPerLiter(withGramsPerMole: HKUnitMolarMassBloodGlucose)
+        }
+
+        if self == .gram {
             return UnitMass.grams
         }
 

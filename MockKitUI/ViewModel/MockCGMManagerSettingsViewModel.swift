@@ -8,7 +8,7 @@
 
 import SwiftUI
 import Combine
-import HealthKit
+import LoopAlgorithm
 import LoopKit
 import LoopKitUI
 import MockKit
@@ -107,7 +107,7 @@ class MockCGMManagerSettingsViewModel: ObservableObject {
         cgmManager.addStatusObserver(self, queue: .main)
     }
     
-    func setLastGlucoseTrend(_ trendRate: HKQuantity?) {
+    func setLastGlucoseTrend(_ trendRate: LoopQuantity?) {
         guard let trendRate = trendRate else {
             lastGlucoseTrendFormatted = nil
             return

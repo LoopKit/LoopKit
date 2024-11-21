@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import HealthKit
+import LoopAlgorithm
 import LoopKit
 
 struct CorrectionRangeScheduleEditorViewModel {
@@ -16,7 +16,7 @@ struct CorrectionRangeScheduleEditorViewModel {
 
     let glucoseTargetRangeSchedule: GlucoseRangeSchedule?
 
-    let minValue: HKQuantity?
+    let minValue: LoopQuantity?
 
     var saveGlucoseTargetRangeSchedule: (_ glucoseTargetRangeSchedule: GlucoseRangeSchedule) -> Void
 

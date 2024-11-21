@@ -7,13 +7,13 @@
 //
 
 import SwiftUI
-import HealthKit
+import LoopAlgorithm
 import LoopKit
 
 
-fileprivate extension HKUnit {
-    static let storedCarbRatioScheduleUnit = HKUnit.gram()
-    static let realCarbRatioScheduleUnit = HKUnit.gramsPerUnit
+fileprivate extension LoopUnit {
+    static let storedCarbRatioScheduleUnit = LoopUnit.gram
+    static let realCarbRatioScheduleUnit = LoopUnit.gramsPerUnit
 }
 
 public struct CarbRatioScheduleEditor: View {

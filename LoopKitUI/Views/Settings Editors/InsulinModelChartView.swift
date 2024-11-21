@@ -14,10 +14,10 @@ import LoopAlgorithm
 
 struct InsulinModelChartView: UIViewRepresentable {
     let chartManager: ChartsManager
-    var glucoseUnit: HKUnit
+    var glucoseUnit: LoopUnit
     var selectedInsulinModelValues: [GlucoseValue]
     var unselectedInsulinModelValues: [[GlucoseValue]]
-    var glucoseDisplayRange: ClosedRange<HKQuantity>
+    var glucoseDisplayRange: ClosedRange<LoopQuantity>
 
     func makeUIView(context: Context) -> ChartContainerView {
         let view = ChartContainerView()

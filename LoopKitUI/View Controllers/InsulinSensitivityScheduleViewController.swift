@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import HealthKit
+import LoopAlgorithm
 import LoopKit
 
 public enum SaveInsulinSensitivityScheduleResult {
@@ -21,7 +21,7 @@ public protocol InsulinSensitivityScheduleStorageDelegate {
 
 public class InsulinSensitivityScheduleViewController : DailyValueScheduleTableViewController {
 
-    public init(allowedValues: [Double], unit: HKUnit, minimumTimeInterval: TimeInterval = TimeInterval(30 * 60)) {
+    public init(allowedValues: [Double], unit: LoopUnit, minimumTimeInterval: TimeInterval = TimeInterval(30 * 60)) {
         self.allowedValues = allowedValues
         self.minimumTimeInterval = minimumTimeInterval
         self.unit = unit
@@ -49,7 +49,7 @@ public class InsulinSensitivityScheduleViewController : DailyValueScheduleTableV
 
     public var insulinSensitivityScheduleStorageDelegate: InsulinSensitivityScheduleStorageDelegate?
 
-    public var unit: HKUnit = HKUnit.milligramsPerDeciliter.unitDivided(by: .internationalUnit())
+    public var unit: LoopUnit = .milligramsPerDeciliterPerInternationalUnit
 
     public var schedule: InsulinSensitivitySchedule? {
         get {
@@ -238,8 +238,15 @@ public class InsulinSensitivityScheduleViewController : DailyValueScheduleTableV
         case .schedule:
             let cell = tableView.dequeueReusableCell(withIdentifier: SetConstrainedScheduleEntryTableViewCell.className, for: indexPath) as! SetConstrainedScheduleEntryTableViewCell
 
-            cell.unit = unit.unitDivided(by: .internationalUnit())
-
+            switch unit {
+            case .milligramsPerDeciliter:
+                cell.unit = .milligramsPerDeciliterPerInternationalUnit
+            case .millimolesPerLiter:
+                cell.unit = .millimolesPerLiterPerInternationalUnit
+            default:
+                break
+            }
+            
             let item = internalItems[indexPath.row]
 
             cell.allowedValues = allowedValues

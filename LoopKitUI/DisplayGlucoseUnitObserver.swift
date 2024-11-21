@@ -6,9 +6,8 @@
 //  Copyright © 2021 LoopKit Authors. All rights reserved.
 //
 
-import Foundation
-import HealthKit
+import LoopAlgorithm
 
 public protocol DisplayGlucoseUnitObserver {
-    func unitDidChange(to displayGlucoseUnit: HKUnit)
+    func unitDidChange(to displayGlucoseUnit: LoopUnit)
 }

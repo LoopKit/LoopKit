@@ -7,15 +7,14 @@
 //
 
 import SwiftUI
-import HealthKit
 import LoopKit
 import LoopAlgorithm
 
 
 public struct GuardrailConstrainedQuantityRangeView: View {
-    var range: ClosedRange<HKQuantity>?
-    var unit: HKUnit
-    var guardrail: Guardrail<HKQuantity>
+    var range: ClosedRange<LoopQuantity>?
+    var unit: LoopUnit
+    var guardrail: Guardrail<LoopQuantity>
     var isEditing: Bool
     var formatter: NumberFormatter
     var forceDisableAnimations: Bool
@@ -23,9 +22,9 @@ public struct GuardrailConstrainedQuantityRangeView: View {
     @State var hasAppeared = false
 
     public init(
-        range: ClosedRange<HKQuantity>?,
-        unit: HKUnit,
-        guardrail: Guardrail<HKQuantity>,
+        range: ClosedRange<LoopQuantity>?,
+        unit: LoopUnit,
+        guardrail: Guardrail<LoopQuantity>,
         isEditing: Bool,
         forceDisableAnimations: Bool = false
     ) {

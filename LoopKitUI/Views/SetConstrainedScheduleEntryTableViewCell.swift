@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import HealthKit
+import LoopAlgorithm
 import LoopKit
 import UIKit
 
@@ -70,7 +70,7 @@ class SetConstrainedScheduleEntryTableViewCell: UITableViewCell {
         }
     }
 
-    public var unit: HKUnit? {
+    public var unit: LoopUnit? {
         didSet {
             if let unit = unit {
                 valueQuantityFormatter = QuantityFormatter(for: unit)
@@ -243,7 +243,7 @@ class SetConstrainedScheduleEntryTableViewCell: UITableViewCell {
 
     private func formatValue(_ value: Double) -> String? {
         if let unit = unit, let formatter = valueQuantityFormatter {
-            let quantity = HKQuantity(unit: unit, doubleValue: value)
+            let quantity = LoopQuantity(unit: unit, doubleValue: value)
             return formatter.string(from: quantity)
         } else {
             return NumberFormatter().string(from: value)

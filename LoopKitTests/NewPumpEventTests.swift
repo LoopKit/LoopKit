@@ -7,7 +7,7 @@
 //
 
 import XCTest
-import HealthKit
+import LoopAlgorithm
 @testable import LoopKit
 
 class NewPumpEventRawRepresentableTests: XCTestCase {
@@ -21,7 +21,7 @@ class NewPumpEventRawRepresentableTests: XCTestCase {
                                                     deliveredUnits: 0.5,
                                                     description: "Test Dose Entry",
                                                     syncIdentifier: UUID().uuidString,
-                                                    scheduledBasalRate: HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 2.0),
+                                                    scheduledBasalRate: LoopQuantity(unit: .internationalUnitsPerHour, doubleValue: 2.0),
                                                     insulinType: .fiasp,
                                                     automatic: true,
                                                     manuallyEntered: false,

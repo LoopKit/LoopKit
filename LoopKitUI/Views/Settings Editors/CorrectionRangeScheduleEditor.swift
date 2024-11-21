@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-import HealthKit
 import LoopKit
 import LoopAlgorithm
 
@@ -18,11 +17,11 @@ public struct CorrectionRangeScheduleEditor: View {
     let mode: SettingsPresentationMode
     let viewModel: CorrectionRangeScheduleEditorViewModel
 
-    @State var scheduleItems: [RepeatingScheduleValue<ClosedRange<HKQuantity>>]
+    @State var scheduleItems: [RepeatingScheduleValue<ClosedRange<LoopQuantity>>]
 
     @State private var userDidTap: Bool = false
 
-    var displayGlucoseUnit: HKUnit {
+    var displayGlucoseUnit: LoopUnit {
         displayGlucosePreference.unit
     }
 
@@ -104,7 +103,7 @@ public struct CorrectionRangeScheduleEditor: View {
         })
     }
 
-    var defaultFirstScheduleItemValue: ClosedRange<HKQuantity> {
+    var defaultFirstScheduleItemValue: ClosedRange<LoopQuantity> {
         switch displayGlucoseUnit {
         case .milligramsPerDeciliter:
             return DoubleRange(minValue: 100, maxValue: 115).quantityRange(for: displayGlucoseUnit)

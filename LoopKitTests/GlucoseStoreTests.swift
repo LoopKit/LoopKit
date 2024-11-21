@@ -8,6 +8,7 @@
 
 import XCTest
 import HealthKit
+import LoopAlgorithm
 import CoreData
 @testable import LoopKit
 
@@ -32,7 +33,7 @@ class GlucoseStoreTests: PersistenceControllerTestCase {
     }
     
     func testLatestGlucoseIsSetAfterStoreAndClearedAfterPurge() async throws {
-        let storedQuantity = HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 80)
+        let storedQuantity = LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 80)
         let device = HKDevice(name: "Unit Test Mock CGM",
             manufacturer: "Device Manufacturer",
             model: "Device Model",
@@ -213,7 +214,7 @@ class GlucoseStoreRemoteDataServiceQueryTests: PersistenceControllerTestCase {
                 cachedGlucoseObject.syncIdentifier = syncIdentifier
                 cachedGlucoseObject.syncVersion = index
                 cachedGlucoseObject.value = 123
-                cachedGlucoseObject.unitString = HKUnit.milligramsPerDeciliter.unitString
+                cachedGlucoseObject.unitString = LoopUnit.milligramsPerDeciliter.unitString
                 cachedGlucoseObject.startDate = Date()
                 self.cacheStore.save()
             }
@@ -233,11 +234,11 @@ class GlucoseStoreCriticalEventLogExportTests: PersistenceControllerTestCase {
     override func setUp() async throws {
         try await super.setUp()
 
-        let samples = [NewGlucoseSample(date: dateFormatter.date(from: "2100-01-02T03:08:00Z")!, quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 111), condition: nil, trend: nil, trendRate: nil, isDisplayOnly: false, wasUserEntered: false, syncIdentifier: "18CF3948-0B3D-4B12-8BFE-14986B0E6784", syncVersion: 1),
-                       NewGlucoseSample(date: dateFormatter.date(from: "2100-01-02T03:10:00Z")!, quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 112), condition: nil, trend: .up, trendRate: HKQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: 1.0), isDisplayOnly: false, wasUserEntered: false, syncIdentifier: "C86DEB61-68E9-464E-9DD5-96A9CB445FD3", syncVersion: 2),
-                       NewGlucoseSample(date: dateFormatter.date(from: "2100-01-02T03:04:00Z")!, quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 113), condition: nil, trend: .up, trendRate: HKQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: 1.0), isDisplayOnly: false, wasUserEntered: false, syncIdentifier: "2B03D96C-6F5D-4140-99CD-80C3E64D6010", syncVersion: 3),
-                       NewGlucoseSample(date: dateFormatter.date(from: "2100-01-02T03:06:00Z")!, quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 114), condition: nil, trend: .up, trendRate: HKQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: 1.0), isDisplayOnly: false, wasUserEntered: false, syncIdentifier: "FF1C4F01-3558-4FB2-957E-FA1522C4735E", syncVersion: 4),
-                       NewGlucoseSample(date: dateFormatter.date(from: "2100-01-02T03:02:00Z")!, quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 400), condition: .aboveRange, trend: .upUpUp, trendRate: HKQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: 1.0), isDisplayOnly: false, wasUserEntered: false, syncIdentifier: "71B699D7-0E8F-4B13-B7A1-E7751EB78E74", syncVersion: 5)]
+        let samples = [NewGlucoseSample(date: dateFormatter.date(from: "2100-01-02T03:08:00Z")!, quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 111), condition: nil, trend: nil, trendRate: nil, isDisplayOnly: false, wasUserEntered: false, syncIdentifier: "18CF3948-0B3D-4B12-8BFE-14986B0E6784", syncVersion: 1),
+                       NewGlucoseSample(date: dateFormatter.date(from: "2100-01-02T03:10:00Z")!, quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 112), condition: nil, trend: .up, trendRate: LoopQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: 1.0), isDisplayOnly: false, wasUserEntered: false, syncIdentifier: "C86DEB61-68E9-464E-9DD5-96A9CB445FD3", syncVersion: 2),
+                       NewGlucoseSample(date: dateFormatter.date(from: "2100-01-02T03:04:00Z")!, quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 113), condition: nil, trend: .up, trendRate: LoopQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: 1.0), isDisplayOnly: false, wasUserEntered: false, syncIdentifier: "2B03D96C-6F5D-4140-99CD-80C3E64D6010", syncVersion: 3),
+                       NewGlucoseSample(date: dateFormatter.date(from: "2100-01-02T03:06:00Z")!, quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 114), condition: nil, trend: .up, trendRate: LoopQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: 1.0), isDisplayOnly: false, wasUserEntered: false, syncIdentifier: "FF1C4F01-3558-4FB2-957E-FA1522C4735E", syncVersion: 4),
+                       NewGlucoseSample(date: dateFormatter.date(from: "2100-01-02T03:02:00Z")!, quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 400), condition: .aboveRange, trend: .upUpUp, trendRate: LoopQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: 1.0), isDisplayOnly: false, wasUserEntered: false, syncIdentifier: "71B699D7-0E8F-4B13-B7A1-E7751EB78E74", syncVersion: 5)]
 
         glucoseStore = await GlucoseStore(cacheStore: cacheStore,
                                     provenanceIdentifier: Bundle.main.bundleIdentifier!)

@@ -28,13 +28,13 @@ class CorrectionRangeOverridesTests: XCTestCase {
     }()
 
     func testInitializerDouble() throws {
-        let unit = HKUnit.milligramsPerDeciliter
+        let unit = LoopUnit.milligramsPerDeciliter
         let correctionRangeOverrides = CorrectionRangeOverrides(
             preMeal: DoubleRange(minValue: 75, maxValue: 90),
             workout: DoubleRange(minValue: 80, maxValue: 100),
             unit: unit)
 
-        var expectedRanges: [CorrectionRangeOverrides.Preset: ClosedRange<HKQuantity>] = [:]
+        var expectedRanges: [CorrectionRangeOverrides.Preset: ClosedRange<LoopQuantity>] = [:]
         expectedRanges[.preMeal] = DoubleRange(minValue: 75, maxValue: 90).quantityRange(for: unit)
         expectedRanges[.workout] = DoubleRange(minValue: 80, maxValue: 100).quantityRange(for: unit)
 
@@ -44,12 +44,12 @@ class CorrectionRangeOverridesTests: XCTestCase {
     }
 
     func testInitializerGlucoseRange() throws {
-        let unit = HKUnit.milligramsPerDeciliter
+        let unit = LoopUnit.milligramsPerDeciliter
         let correctionRangeOverrides = CorrectionRangeOverrides(
             preMeal: GlucoseRange(minValue: 75, maxValue: 90, unit: unit),
             workout: GlucoseRange(minValue: 80, maxValue: 100, unit: unit))
 
-        var expectedRanges: [CorrectionRangeOverrides.Preset: ClosedRange<HKQuantity>] = [:]
+        var expectedRanges: [CorrectionRangeOverrides.Preset: ClosedRange<LoopQuantity>] = [:]
         expectedRanges[.preMeal] = DoubleRange(minValue: 75, maxValue: 90).quantityRange(for: unit)
         expectedRanges[.workout] = DoubleRange(minValue: 80, maxValue: 100).quantityRange(for: unit)
 
@@ -59,12 +59,12 @@ class CorrectionRangeOverridesTests: XCTestCase {
     }
 
     func testInitializerQuantity() throws {
-        let unit = HKUnit.millimolesPerLiter
+        let unit = LoopUnit.millimolesPerLiter
         let correctionRangeOverrides = CorrectionRangeOverrides(
             preMeal: DoubleRange(minValue: 4.0, maxValue: 5.0).quantityRange(for: unit),
             workout: DoubleRange(minValue: 4.5, maxValue: 6.0).quantityRange(for: unit))
 
-        var expectedRanges: [CorrectionRangeOverrides.Preset: ClosedRange<HKQuantity>] = [:]
+        var expectedRanges: [CorrectionRangeOverrides.Preset: ClosedRange<LoopQuantity>] = [:]
         expectedRanges[.preMeal] = DoubleRange(minValue: 4.0, maxValue: 5.0).quantityRange(for: unit)
         expectedRanges[.workout] = DoubleRange(minValue: 4.5, maxValue: 6.0).quantityRange(for: unit)
 
@@ -124,7 +124,7 @@ class CorrectionRangeOverridesTests: XCTestCase {
     }
 
     func testRawValue() throws {
-        let unit = HKUnit.milligramsPerDeciliter
+        let unit = LoopUnit.milligramsPerDeciliter
         let preMealDoubleRange = DoubleRange(minValue: 75, maxValue: 90)
         let workoutDoubleRange = DoubleRange(minValue: 80, maxValue: 100)
         let correctionRangeOverrides = CorrectionRangeOverrides(
@@ -145,13 +145,13 @@ class CorrectionRangeOverridesTests: XCTestCase {
     }
 
     func testInitializeFromRawValue() throws {
-        let unit = HKUnit.milligramsPerDeciliter
+        let unit = LoopUnit.milligramsPerDeciliter
         var rawValue: [String:Any] = [:]
         rawValue["preMealTargetRange"] = GlucoseRange(minValue: 80, maxValue: 100, unit: unit).rawValue
         rawValue["workoutTargetRange"] = GlucoseRange(minValue: 110, maxValue: 130, unit: unit).rawValue
 
         let correctionRangeOverrides = CorrectionRangeOverrides(rawValue: rawValue)
-        var expectedRanges: [CorrectionRangeOverrides.Preset: ClosedRange<HKQuantity>] = [:]
+        var expectedRanges: [CorrectionRangeOverrides.Preset: ClosedRange<LoopQuantity>] = [:]
         expectedRanges[.preMeal] = DoubleRange(minValue: 80, maxValue: 100).quantityRange(for: unit)
         expectedRanges[.workout] = DoubleRange(minValue: 110, maxValue: 130).quantityRange(for: unit)
         XCTAssertEqual(correctionRangeOverrides?.ranges, expectedRanges)

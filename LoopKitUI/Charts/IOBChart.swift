@@ -8,14 +8,13 @@
 import Foundation
 import LoopKit
 import SwiftCharts
-import HealthKit
 import UIKit
 import LoopAlgorithm
 
 
 public class IOBChart: ChartProviding {
 
-    static let chartUnit = HKUnit.internationalUnit()
+    static let chartUnit = LoopUnit.internationalUnit
 
     public init() {
     }

@@ -89,8 +89,8 @@ public final class CarbStore {
     public let hkSampleStore: HealthKitSampleStore?
 
     /// The preferred unit. iOS currently only supports grams for dietary carbohydrates.
-    public var preferredUnit: HKUnit! {
-        return .gram()
+    public var preferredUnit: LoopUnit! {
+        return .gram
     }
 
     /// The interval of carb data to keep in cache

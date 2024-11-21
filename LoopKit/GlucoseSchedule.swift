@@ -7,19 +7,20 @@
 //
 
 import Foundation
-import HealthKit
+import LoopAlgorithm
+//import HealthKit
 
 public typealias InsulinSensitivitySchedule = SingleQuantitySchedule
 
 public extension InsulinSensitivitySchedule {
-    private func convertTo(unit: HKUnit) -> InsulinSensitivitySchedule? {
+    private func convertTo(unit: LoopUnit) -> InsulinSensitivitySchedule? {
         guard unit != self.unit else {
             return self
         }
 
         let convertedDailyItems: [RepeatingScheduleValue<Double>] = self.items.map {
             RepeatingScheduleValue(startTime: $0.startTime,
-                                   value: HKQuantity(unit: self.unit, doubleValue: $0.value).doubleValue(for: unit, withRounding: true)
+                                   value: LoopQuantity(unit: self.unit, doubleValue: $0.value).doubleValue(for: unit)
             )
         }
 
@@ -28,14 +29,14 @@ public extension InsulinSensitivitySchedule {
                                           timeZone: timeZone)
     }
 
-    func schedule(for glucoseUnit: HKUnit) -> InsulinSensitivitySchedule? {
+    func schedule(for glucoseUnit: LoopUnit) -> InsulinSensitivitySchedule? {
         // InsulinSensitivitySchedule stores only the glucose unit.
         precondition(glucoseUnit == .millimolesPerLiter || glucoseUnit == .milligramsPerDeciliter)
         return self.convertTo(unit: glucoseUnit)
     }
     
-    func value(for glucoseUnit: HKUnit, at time: Date) -> Double {
+    func value(for glucoseUnit: LoopUnit, at time: Date) -> Double {
         let unconvertedValue = self.value(at: time)
-        return HKQuantity(unit: self.unit, doubleValue: unconvertedValue).doubleValue(for: glucoseUnit, withRounding: true)
+        return LoopQuantity(unit: self.unit, doubleValue: unconvertedValue).doubleValue(for: glucoseUnit)
     }
 }

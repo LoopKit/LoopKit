@@ -1063,13 +1063,13 @@ fileprivate extension StoredDosingDecision {
         let lastReservoirValue = StoredDosingDecision.LastReservoirValue(startDate: dateFormatter.date(from: "2020-05-14T22:07:19Z")!,
                                                                          unitVolume: 113.3)
         let historicalGlucose = [HistoricalGlucoseValue(startDate: dateFormatter.date(from: "2020-05-14T22:29:15Z")!,
-                                                        quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 117.3)),
+                                                        quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 117.3)),
                                  HistoricalGlucoseValue(startDate: dateFormatter.date(from: "2020-05-14T22:33:15Z")!,
-                                                        quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 119.5)),
+                                                        quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 119.5)),
                                  HistoricalGlucoseValue(startDate: dateFormatter.date(from: "2020-05-14T22:38:15Z")!,
-                                                        quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 121.8))]
+                                                        quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 121.8))]
         let originalCarbEntry = StoredCarbEntry(startDate: dateFormatter.date(from: "2020-01-02T03:00:23Z")!,
-                                                quantity: HKQuantity(unit: .gram(), doubleValue: 19),
+                                                quantity: LoopQuantity(unit: .gram, doubleValue: 19),
                                                 uuid: UUID(uuidString: "18CF3948-0B3D-4B12-8BFE-14986B0E6784")!,
                                                 provenanceIdentifier: "com.loopkit.loop",
                                                 syncIdentifier: "2B03D96C-6F5D-4140-99CD-80C3E64D6010",
@@ -1080,7 +1080,7 @@ fileprivate extension StoredDosingDecision {
                                                 userCreatedDate: dateFormatter.date(from: "2020-05-14T22:06:12Z")!,
                                                 userUpdatedDate: nil)
         let carbEntry = StoredCarbEntry(startDate: dateFormatter.date(from: "2020-01-02T03:00:23Z")!,
-                                        quantity: HKQuantity(unit: .gram(), doubleValue: 29),
+                                        quantity: LoopQuantity(unit: .gram, doubleValue: 29),
                                         uuid: UUID(uuidString: "135CDABE-9343-7242-4233-1020384789AE")!,
                                         provenanceIdentifier: "com.loopkit.loop",
                                         syncIdentifier: "2B03D96C-6F5D-4140-99CD-80C3E64D6010",
@@ -1095,10 +1095,10 @@ fileprivate extension StoredDosingDecision {
                                                       syncIdentifier: "d3876f59-adb3-4a4f-8b29-315cda22062e",
                                                       syncVersion: 1,
                                                       startDate: dateFormatter.date(from: "2020-05-14T22:09:00Z")!,
-                                                      quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 400),
+                                                      quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 400),
                                                       condition: .aboveRange,
                                                       trend: .downDownDown,
-                                                      trendRate: HKQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: -10.2),
+                                                      trendRate: LoopQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: -10.2),
                                                       isDisplayOnly: false,
                                                       wasUserEntered: true,
                                                       device: HKDevice(name: "Device Name",
@@ -1123,17 +1123,17 @@ fileprivate extension StoredDosingDecision {
                                                                                                       start: dateFormatter.date(from: "2020-05-14T21:12:17Z")!,
                                                                                                       end: dateFormatter.date(from: "2020-05-14T23:12:17Z")!))
         let predictedGlucose = [PredictedGlucoseValue(startDate: dateFormatter.date(from: "2020-05-14T22:43:15Z")!,
-                                                      quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 123.3)),
+                                                      quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 123.3)),
                                 PredictedGlucoseValue(startDate: dateFormatter.date(from: "2020-05-14T22:48:15Z")!,
-                                                      quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 125.5)),
+                                                      quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 125.5)),
                                 PredictedGlucoseValue(startDate: dateFormatter.date(from: "2020-05-14T22:53:15Z")!,
-                                                      quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 127.8))]
+                                                      quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 127.8))]
         let tempBasalRecommendation = TempBasalRecommendation(unitsPerHour: 0.75,
                                                               duration: .minutes(30))
         let automaticDoseRecommendation = AutomaticDoseRecommendation(basalAdjustment: tempBasalRecommendation, bolusUnits: 1.25)
         let manualBolusRecommendation = ManualBolusRecommendationWithDate(recommendation: ManualBolusRecommendation(amount: 1.2,
                                                                                                                     notice: .predictedGlucoseBelowTarget(minGlucose: SimpleGlucoseValue(startDate: dateFormatter.date(from: "2020-05-14T23:03:15Z")!,
-                                                                                                                                                                                           quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 75.5)))),
+                                                                                                                                                                                           quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 75.5)))),
                                                                           date: dateFormatter.date(from: "2020-05-14T22:38:16Z")!)
         let manualBolusRequested = 0.8
         let warnings: [Issue] = [Issue(id: "one"),

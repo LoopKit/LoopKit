@@ -367,8 +367,8 @@ class TemporaryScheduleOverrideTests: XCTestCase {
     }
 
     func testTargetOverride() {
-        let scheduledRange = HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 100)...HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 110)
-        let overrideRange = HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 80)...HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 90)
+        let scheduledRange = LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 100)...LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 110)
+        let overrideRange = LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 80)...LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 90)
 
         let timeline = [
             AbsoluteScheduleValue(
@@ -398,7 +398,7 @@ class TemporaryScheduleOverrideTests: XCTestCase {
         XCTAssertEqual(.t(4), applied.last!.endDate)
 
         var values = applied.map { $0.value }
-        var expectedValues: [ClosedRange<HKQuantity>] = [
+        var expectedValues: [ClosedRange<LoopQuantity>] = [
             scheduledRange,
             overrideRange
         ]
@@ -463,8 +463,8 @@ class TemporaryScheduleOverrideTests: XCTestCase {
             FixtureGlucoseSample(startDate: d(.minutes(-4)), quantity: .glucose(value: 105)),
         ]
 
-        let scheduledRange = HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 100)...HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 110)
-        let overrideRange = HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 80)...HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 90)
+        let scheduledRange = LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 100)...LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 110)
+        let overrideRange = LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 80)...LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 90)
 
         let overrideStartTime = d(.minutes(-10))
 
@@ -479,7 +479,7 @@ class TemporaryScheduleOverrideTests: XCTestCase {
             )
         ]
 
-        let targetTimeline: [AbsoluteScheduleValue<ClosedRange<HKQuantity>>] = [
+        let targetTimeline: [AbsoluteScheduleValue<ClosedRange<LoopQuantity>>] = [
             AbsoluteScheduleValue(startDate: d(.hours(-2)), endDate: d(.hours(10)), value: scheduledRange)
         ]
 
@@ -508,8 +508,8 @@ extension TemporaryScheduleOverride {
     static func custom(scale: Double? = nil, target: ClosedRange<Double>? = nil, start: Date, end: Date?) -> TemporaryScheduleOverride {
         let targetRange = target.map {
             ClosedRange(uncheckedBounds: (
-                lower: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: $0.lowerBound),
-                upper: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: $0.upperBound)))
+                lower: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: $0.lowerBound),
+                upper: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: $0.upperBound)))
         }
         let settings = TemporaryScheduleOverrideSettings(targetRange: targetRange, insulinNeedsScaleFactor: scale)
         let duration: TimeInterval? = end.map { $0.timeIntervalSince(start) }
@@ -796,13 +796,13 @@ extension AlgorithmInputFixture {
     }
 }
 
-extension HKQuantity {
-    static func glucose(value: Double) -> HKQuantity {
+extension LoopQuantity {
+    static func glucose(value: Double) -> LoopQuantity {
         return .init(unit: .milligramsPerDeciliter, doubleValue: value)
     }
 
-    static func carbs(value: Double) -> HKQuantity {
-        return .init(unit: .gram(), doubleValue: value)
+    static func carbs(value: Double) -> LoopQuantity {
+        return .init(unit: .gram, doubleValue: value)
     }
 
 }

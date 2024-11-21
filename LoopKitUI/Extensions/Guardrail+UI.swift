@@ -7,12 +7,12 @@
 //
 
 import SwiftUI
-import HealthKit
+import LoopAlgorithm
 import LoopKit
 
 
-extension Guardrail where Value == HKQuantity {
-    func color(for quantity: HKQuantity,
+extension Guardrail where Value == LoopQuantity {
+    func color(for quantity: LoopQuantity,
                guidanceColors: GuidanceColors) -> Color
     {
         switch classification(for: quantity) {

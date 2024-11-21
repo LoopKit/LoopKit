@@ -134,7 +134,7 @@ extension GlucoseCarbChart {
     private func generateCarbChartPoints(_ carbEntries: [StoredCarbEntry], fixedYValue: Double?, overrideColor: UIColor) -> [ChartPoint] {
         guard let fixedYValue else { return [] }
         
-        let carbFormatter = QuantityFormatter(for: .gram())
+        let carbFormatter = QuantityFormatter(for: .gram)
         carbFormatter.unitStyle = .short
         let unitString = carbFormatter.localizedUnitStringWithPlurality()
         let dateFormatter = DateFormatter(timeStyle: .short)

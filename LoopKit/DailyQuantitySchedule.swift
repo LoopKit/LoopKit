@@ -13,10 +13,10 @@ import LoopAlgorithm
 
 public struct DailyQuantitySchedule<T: RawRepresentable>: DailySchedule {
     public typealias RawValue = [String: Any]
-    public let unit: HKUnit
+    public let unit: LoopUnit
     var valueSchedule: DailyValueSchedule<T>
 
-    public init?(unit: HKUnit, dailyItems: [RepeatingScheduleValue<T>], timeZone: TimeZone? = nil) {
+    public init?(unit: LoopUnit, dailyItems: [RepeatingScheduleValue<T>], timeZone: TimeZone? = nil) {
         guard let valueSchedule = DailyValueSchedule<T>(dailyItems: dailyItems, timeZone: timeZone) else {
             return nil
         }
@@ -25,7 +25,7 @@ public struct DailyQuantitySchedule<T: RawRepresentable>: DailySchedule {
         self.valueSchedule = valueSchedule
     }
 
-    init(unit: HKUnit, valueSchedule: DailyValueSchedule<T>) {
+    init(unit: LoopUnit, valueSchedule: DailyValueSchedule<T>) {
         self.unit = unit
         self.valueSchedule = valueSchedule
     }
@@ -38,7 +38,7 @@ public struct DailyQuantitySchedule<T: RawRepresentable>: DailySchedule {
             return nil
         }
 
-        self.unit = HKUnit(from: rawUnit)
+        self.unit = LoopUnit(from: rawUnit)
         self.valueSchedule = valueSchedule
     }
 
@@ -75,7 +75,7 @@ public struct DailyQuantitySchedule<T: RawRepresentable>: DailySchedule {
 extension DailyQuantitySchedule: Codable where T: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.unit = HKUnit(from: try container.decode(String.self, forKey: .unit))
+        self.unit = LoopUnit(from: try container.decode(String.self, forKey: .unit))
         self.valueSchedule = try container.decode(DailyValueSchedule<T>.self, forKey: .valueSchedule)
     }
 
@@ -102,8 +102,8 @@ public typealias SingleQuantitySchedule = DailyQuantitySchedule<Double>
 
 
 public extension DailyQuantitySchedule where T == Double {
-    func quantity(at time: Date) -> HKQuantity {
-        return HKQuantity(unit: unit, doubleValue: valueSchedule.value(at: time))
+    func quantity(at time: Date) -> LoopQuantity {
+        return LoopQuantity(unit: unit, doubleValue: valueSchedule.value(at: time))
     }
 
     func averageValue() -> Double {
@@ -122,25 +122,25 @@ public extension DailyQuantitySchedule where T == Double {
         return total / valueSchedule.repeatInterval
     }
 
-    func averageQuantity() -> HKQuantity {
-        return HKQuantity(unit: unit, doubleValue: averageValue())
+    func averageQuantity() -> LoopQuantity {
+        return LoopQuantity(unit: unit, doubleValue: averageValue())
     }
     
     func lowestValue() -> Double? {
         return valueSchedule.items.min(by: { $0.value < $1.value } )?.value
     }
 
-    var quantities: [RepeatingScheduleValue<HKQuantity>] {
+    var quantities: [RepeatingScheduleValue<LoopQuantity>] {
         return self.items.map {
-            RepeatingScheduleValue<HKQuantity>(startTime: $0.startTime,
-                                               value: HKQuantity(unit: unit, doubleValue: $0.value))
+            RepeatingScheduleValue<LoopQuantity>(startTime: $0.startTime,
+                                               value: LoopQuantity(unit: unit, doubleValue: $0.value))
         }
     }
     
-    func quantities(using unit: HKUnit) -> [RepeatingScheduleValue<HKQuantity>] {
+    func quantities(using unit: LoopUnit) -> [RepeatingScheduleValue<LoopQuantity>] {
         return self.items.map {
-            RepeatingScheduleValue<HKQuantity>(startTime: $0.startTime,
-                                               value: HKQuantity(unit: unit, doubleValue: $0.value))
+            RepeatingScheduleValue<LoopQuantity>(startTime: $0.startTime,
+                                               value: LoopQuantity(unit: unit, doubleValue: $0.value))
         }
     }
 
@@ -153,8 +153,8 @@ public extension DailyQuantitySchedule where T == Double {
         }
     }
     
-    init?(unit: HKUnit,
-          dailyQuantities: [RepeatingScheduleValue<HKQuantity>],
+    init?(unit: LoopUnit,
+          dailyQuantities: [RepeatingScheduleValue<LoopQuantity>],
           timeZone: TimeZone? = nil)
     {
         guard let valueSchedule = DailyValueSchedule(
@@ -172,8 +172,8 @@ public extension DailyQuantitySchedule where T == Double {
 }
 
 public extension DailyQuantitySchedule where T == DoubleRange {
-    init?(unit: HKUnit,
-          dailyQuantities: [RepeatingScheduleValue<ClosedRange<HKQuantity>>],
+    init?(unit: LoopUnit,
+          dailyQuantities: [RepeatingScheduleValue<ClosedRange<LoopQuantity>>],
           timeZone: TimeZone? = nil)
     {
         guard let valueSchedule = DailyValueSchedule(
@@ -198,24 +198,24 @@ extension DailyQuantitySchedule: Equatable where T: Equatable {
 
 extension DailyQuantitySchedule where T: Numeric {
     public static func * (lhs: DailyQuantitySchedule, rhs: DailyQuantitySchedule) -> DailyQuantitySchedule {
-        let unit = lhs.unit.unitMultiplied(by: rhs.unit)
+        let unit = lhs.unit.hkUnit.unitMultiplied(by: rhs.unit.hkUnit)
         let schedule = DailyValueSchedule.zip(lhs.valueSchedule, rhs.valueSchedule).map(*)
-        return DailyQuantitySchedule(unit: unit, valueSchedule: schedule)
+        return DailyQuantitySchedule(unit: LoopUnit(from: unit.unitString), valueSchedule: schedule)
     }
 }
 
 extension DailyQuantitySchedule where T: FloatingPoint {
     public static func / (lhs: DailyQuantitySchedule, rhs: DailyQuantitySchedule) -> DailyQuantitySchedule {
-        let unit = lhs.unit.unitDivided(by: rhs.unit)
+        let unit = lhs.unit.hkUnit.unitDivided(by: rhs.unit.hkUnit)
         let schedule = DailyValueSchedule.zip(lhs.valueSchedule, rhs.valueSchedule).map(/)
-        return DailyQuantitySchedule(unit: unit, valueSchedule: schedule)
+        return DailyQuantitySchedule(unit: LoopUnit(from: unit.unitString), valueSchedule: schedule)
     }
 }
 
 extension DailyQuantitySchedule where T == Double {
-    public func quantitiesBetween(start: Date, end: Date) -> [AbsoluteScheduleValue<HKQuantity>] {
+    public func quantitiesBetween(start: Date, end: Date) -> [AbsoluteScheduleValue<LoopQuantity>] {
         return between(start: start, end: end).map {
-            AbsoluteScheduleValue(startDate: $0.startDate, endDate: $0.endDate, value: HKQuantity(unit: unit, doubleValue: $0.value))
+            AbsoluteScheduleValue(startDate: $0.startDate, endDate: $0.endDate, value: LoopQuantity(unit: unit, doubleValue: $0.value))
         }
     }
 }

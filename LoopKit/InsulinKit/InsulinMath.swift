@@ -308,7 +308,7 @@ extension Collection where Element == DoseEntry {
                             value: curRate,
                             unit: .unitsPerHour,
                             syncIdentifier: syncIdentifier,
-                            scheduledBasalRate: HKQuantity(unit: .internationalUnitsPerHour, doubleValue: curRate),
+                            scheduledBasalRate: LoopQuantity(unit: .internationalUnitsPerHour, doubleValue: curRate),
                             automatic: nil,  // To be filled in later
                             isMutable: entryEnd >= lastPumpEventsReconciliation))
 

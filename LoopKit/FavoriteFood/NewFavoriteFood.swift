@@ -6,15 +6,15 @@
 //  Copyright © 2023 LoopKit Authors. All rights reserved.
 //
 
-import HealthKit
+import LoopAlgorithm
 
 public struct NewFavoriteFood: FavoriteFood {
     public var name: String
-    public var carbsQuantity: HKQuantity
+    public var carbsQuantity: LoopQuantity
     public var foodType: String
     public var absorptionTime: TimeInterval
 
-    public init(name: String, carbsQuantity: HKQuantity, foodType: String, absorptionTime: TimeInterval) {
+    public init(name: String, carbsQuantity: LoopQuantity, foodType: String, absorptionTime: TimeInterval) {
         self.name = name
         self.carbsQuantity = carbsQuantity
         self.foodType = foodType

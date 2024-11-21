@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-import HealthKit
 import LoopKit
 import LoopAlgorithm
 
@@ -25,8 +24,8 @@ public struct FractionalQuantityPicker: View {
     @Environment(\.guidanceColors) var guidanceColors
     @Binding var whole: Double
     @Binding var fraction: Double
-    var unit: HKUnit
-    var guardrail: Guardrail<HKQuantity>
+    var unit: LoopUnit
+    var guardrail: Guardrail<LoopQuantity>
     var selectableWholeValues: [Double]
     var fractionalValuesByWhole: [Double: [Double]]
     var usageContext: UsageContext
@@ -49,9 +48,9 @@ public struct FractionalQuantityPicker: View {
     }()
 
     public init(
-        value: Binding<HKQuantity>,
-        unit: HKUnit,
-        guardrail: Guardrail<HKQuantity>,
+        value: Binding<LoopQuantity>,
+        unit: LoopUnit,
+        guardrail: Guardrail<LoopQuantity>,
         selectableValues: [Double],
         usageContext: UsageContext = .independent
     ) {
@@ -153,7 +152,7 @@ public struct FractionalQuantityPicker: View {
 
         let fractionIfWholeSelected = Self.matchingFraction(for: fraction, from: fractionalValuesByWhole[whole] ?? [0.0])
         let valueIfWholeSelected = whole + fractionIfWholeSelected
-        let quantityIfWholeSelected = HKQuantity(unit: unit, doubleValue: valueIfWholeSelected)
+        let quantityIfWholeSelected = LoopQuantity(unit: unit, doubleValue: valueIfWholeSelected)
         return guardrail.color(for: quantityIfWholeSelected, guidanceColors: guidanceColors)
     }
 
@@ -161,7 +160,7 @@ public struct FractionalQuantityPicker: View {
         assert(fraction.fraction == fraction)
 
         let valueIfFractionSelected = whole + fraction
-        let quantityIfFractionSelected = HKQuantity(unit: unit, doubleValue: valueIfFractionSelected)
+        let quantityIfFractionSelected = LoopQuantity(unit: unit, doubleValue: valueIfFractionSelected)
         return guardrail.color(for: quantityIfFractionSelected, guidanceColors: guidanceColors)
     }
 

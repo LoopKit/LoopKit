@@ -33,8 +33,8 @@ class GlucoseRangeScheduleTests: XCTestCase {
         XCTAssertEqual(glucoseRangeSchedule!.rangeSchedule.items[2].startTime, 6000)
         XCTAssertEqual(glucoseRangeSchedule!.rangeSchedule.items[2].value, DoubleRange(minValue: 130.0, maxValue: 150.0))
         XCTAssertEqual(glucoseRangeSchedule!.timeZone, TimeZone(secondsFromGMT: -14400))
-        XCTAssertEqual(glucoseRangeSchedule!.minLowerBound(), HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 75))
-        XCTAssertEqual(glucoseRangeSchedule!.scheduleRange(), HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 75)...HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 150))
+        XCTAssertEqual(glucoseRangeSchedule!.minLowerBound(), LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 75))
+        XCTAssertEqual(glucoseRangeSchedule!.scheduleRange(), LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 75)...LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 150))
     }
 
     func testInitializerWithOverride() {
@@ -212,9 +212,9 @@ class GlucoseRangeScheduleTests: XCTestCase {
         let inDay1Hour = inDay30Min.addingTimeInterval(TimeInterval.minutes(30))
         let inDay2Hours = inDay1Hour.addingTimeInterval(TimeInterval.minutes(60))
 
-        XCTAssertEqual(glucoseRangeSchedule!.quantityRange(at: inDay30Min), HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 75.0)...HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 90.0))
-        XCTAssertEqual(glucoseRangeSchedule!.quantityRange(at: inDay1Hour), HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 100.0)...HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 120.0))
-        XCTAssertEqual(glucoseRangeSchedule!.quantityRange(at: inDay2Hours), HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 130.0)...HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 150.0))
+        XCTAssertEqual(glucoseRangeSchedule!.quantityRange(at: inDay30Min), LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 75.0)...LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 90.0))
+        XCTAssertEqual(glucoseRangeSchedule!.quantityRange(at: inDay1Hour), LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 100.0)...LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 120.0))
+        XCTAssertEqual(glucoseRangeSchedule!.quantityRange(at: inDay2Hours), LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 130.0)...LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 150.0))
     }
 
     func testScheduleFor() {

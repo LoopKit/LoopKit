@@ -7,6 +7,7 @@
 
 import XCTest
 import HealthKit
+import LoopAlgorithm
 import CoreData
 @testable import LoopKit
 
@@ -54,9 +55,9 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
     // MARK: -
     
     func testGetCarbEntriesAfterAdd() {
-        let firstCarbEntry = NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 10), startDate: Date(timeIntervalSinceNow: -1), foodType: "First", absorptionTime: .hours(5))
-        let secondCarbEntry = NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 20), startDate: Date(), foodType: "Second", absorptionTime: .hours(3))
-        let thirdCarbEntry = NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 30), startDate: Date(timeIntervalSinceNow: 1), foodType: "Third", absorptionTime: .minutes(30))
+        let firstCarbEntry = NewCarbEntry(quantity: LoopQuantity(unit: .gram, doubleValue: 10), startDate: Date(timeIntervalSinceNow: -1), foodType: "First", absorptionTime: .hours(5))
+        let secondCarbEntry = NewCarbEntry(quantity: LoopQuantity(unit: .gram, doubleValue: 20), startDate: Date(), foodType: "Second", absorptionTime: .hours(3))
+        let thirdCarbEntry = NewCarbEntry(quantity: LoopQuantity(unit: .gram, doubleValue: 30), startDate: Date(timeIntervalSinceNow: 1), foodType: "Third", absorptionTime: .minutes(30))
         let getCarbEntriesCompletion = expectation(description: "Get carb entries completion")
 
         carbStore.addCarbEntry(firstCarbEntry) { (_) in
@@ -126,7 +127,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
     // MARK: -
 
     func testAddCarbEntry() {
-        let addCarbEntry = NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 10), startDate: Date(), foodType: "Add", absorptionTime: .hours(3))
+        let addCarbEntry = NewCarbEntry(quantity: LoopQuantity(unit: .gram, doubleValue: 10), startDate: Date(), foodType: "Add", absorptionTime: .hours(3))
         let addHealthStoreHandler = expectation(description: "Add health store handler")
         let addCarbEntryCompletion = expectation(description: "Add carb entry completion")
         let addCarbEntryHandler = expectation(description: "Add carb entry handler")
@@ -144,7 +145,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
 
             XCTAssertEqual(sample.absorptionTime, addCarbEntry.absorptionTime)
             XCTAssertEqual(sample.foodType, addCarbEntry.foodType)
-            XCTAssertEqual(sample.quantity, addCarbEntry.quantity)
+            XCTAssertEqual(sample.quantity, addCarbEntry.quantity.hkQuantity)
             XCTAssertEqual(sample.startDate, addCarbEntry.startDate)
             XCTAssertNotNil(sample.syncIdentifier)
             XCTAssertEqual(sample.syncVersion, 1)
@@ -171,7 +172,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                     XCTAssertEqual(objects[0].absorptionTime, addCarbEntry.absorptionTime)
                     XCTAssertEqual(objects[0].createdByCurrentApp, true)
                     XCTAssertEqual(objects[0].foodType, addCarbEntry.foodType)
-                    XCTAssertEqual(objects[0].grams, addCarbEntry.quantity.doubleValue(for: .gram()))
+                    XCTAssertEqual(objects[0].grams, addCarbEntry.quantity.doubleValue(for: .gram))
                     XCTAssertEqual(objects[0].startDate, addCarbEntry.startDate)
                     XCTAssertEqual(objects[0].uuid, addUUID)
                     XCTAssertEqual(objects[0].provenanceIdentifier, Bundle.main.bundleIdentifier!)
@@ -223,8 +224,8 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
     }
 
     func testAddAndReplaceCarbEntry() {
-        let addCarbEntry = NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 10), startDate: Date(), foodType: "Add", absorptionTime: .hours(3))
-        let replaceCarbEntry = NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 15), startDate: Date(), foodType: "Replace", absorptionTime: .hours(4))
+        let addCarbEntry = NewCarbEntry(quantity: LoopQuantity(unit: .gram, doubleValue: 10), startDate: Date(), foodType: "Add", absorptionTime: .hours(3))
+        let replaceCarbEntry = NewCarbEntry(quantity: LoopQuantity(unit: .gram, doubleValue: 15), startDate: Date(), foodType: "Replace", absorptionTime: .hours(4))
         let addHealthStoreHandler = expectation(description: "Add health store handler")
         let addCarbEntryCompletion = expectation(description: "Add carb entry completion")
         let addCarbEntryHandler = expectation(description: "Add carb entry handler")
@@ -247,7 +248,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
 
             XCTAssertEqual(sample.absorptionTime, addCarbEntry.absorptionTime)
             XCTAssertEqual(sample.foodType, addCarbEntry.foodType)
-            XCTAssertEqual(sample.quantity, addCarbEntry.quantity)
+            XCTAssertEqual(sample.quantity, addCarbEntry.quantity.hkQuantity)
             XCTAssertEqual(sample.startDate, addCarbEntry.startDate)
             XCTAssertNotNil(sample.syncIdentifier)
             XCTAssertEqual(sample.syncVersion, 1)
@@ -274,7 +275,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                     XCTAssertEqual(objects[0].absorptionTime, addCarbEntry.absorptionTime)
                     XCTAssertEqual(objects[0].createdByCurrentApp, true)
                     XCTAssertEqual(objects[0].foodType, addCarbEntry.foodType)
-                    XCTAssertEqual(objects[0].grams, addCarbEntry.quantity.doubleValue(for: .gram()))
+                    XCTAssertEqual(objects[0].grams, addCarbEntry.quantity.doubleValue(for: .gram))
                     XCTAssertEqual(objects[0].startDate, addCarbEntry.startDate)
                     XCTAssertEqual(objects[0].uuid, addUUID)
                     XCTAssertEqual(objects[0].provenanceIdentifier, Bundle.main.bundleIdentifier!)
@@ -298,7 +299,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                         XCTAssertNotEqual(sample.uuid, addUUID)
                         XCTAssertEqual(sample.absorptionTime, replaceCarbEntry.absorptionTime)
                         XCTAssertEqual(sample.foodType, replaceCarbEntry.foodType)
-                        XCTAssertEqual(sample.quantity, replaceCarbEntry.quantity)
+                        XCTAssertEqual(sample.quantity, replaceCarbEntry.quantity.hkQuantity)
                         XCTAssertEqual(sample.startDate, replaceCarbEntry.startDate)
                         XCTAssertEqual(sample.syncIdentifier, addSyncIdentifier)
                         XCTAssertEqual(sample.syncVersion, 2)
@@ -322,7 +323,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                     XCTAssertEqual(objects[0].absorptionTime, addCarbEntry.absorptionTime)
                     XCTAssertEqual(objects[0].createdByCurrentApp, true)
                     XCTAssertEqual(objects[0].foodType, addCarbEntry.foodType)
-                    XCTAssertEqual(objects[0].grams, addCarbEntry.quantity.doubleValue(for: .gram()))
+                    XCTAssertEqual(objects[0].grams, addCarbEntry.quantity.doubleValue(for: .gram))
                     XCTAssertEqual(objects[0].startDate, addCarbEntry.startDate)
                     XCTAssertEqual(objects[0].uuid, addUUID)
                     XCTAssertEqual(objects[0].provenanceIdentifier, Bundle.main.bundleIdentifier!)
@@ -340,7 +341,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                     XCTAssertEqual(objects[1].absorptionTime, replaceCarbEntry.absorptionTime)
                     XCTAssertEqual(objects[1].createdByCurrentApp, true)
                     XCTAssertEqual(objects[1].foodType, replaceCarbEntry.foodType)
-                    XCTAssertEqual(objects[1].grams, replaceCarbEntry.quantity.doubleValue(for: .gram()))
+                    XCTAssertEqual(objects[1].grams, replaceCarbEntry.quantity.doubleValue(for: .gram))
                     XCTAssertEqual(objects[1].startDate, replaceCarbEntry.startDate)
                     XCTAssertEqual(objects[1].uuid, updateUUID)
                     XCTAssertEqual(objects[1].provenanceIdentifier, Bundle.main.bundleIdentifier!)
@@ -392,7 +393,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
     }
 
     func testAddAndDeleteCarbEntry() {
-        let addCarbEntry = NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 10), startDate: Date(), foodType: "Add", absorptionTime: .hours(3))
+        let addCarbEntry = NewCarbEntry(quantity: LoopQuantity(unit: .gram, doubleValue: 10), startDate: Date(), foodType: "Add", absorptionTime: .hours(3))
         let addHealthStoreHandler = expectation(description: "Add health store handler")
         let addCarbEntryCompletion = expectation(description: "Add carb entry completion")
         let addCarbEntryHandler = expectation(description: "Add carb entry handler")
@@ -414,7 +415,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
 
             XCTAssertEqual(sample.absorptionTime, addCarbEntry.absorptionTime)
             XCTAssertEqual(sample.foodType, addCarbEntry.foodType)
-            XCTAssertEqual(sample.quantity, addCarbEntry.quantity)
+            XCTAssertEqual(sample.quantity, addCarbEntry.quantity.hkQuantity)
             XCTAssertEqual(sample.startDate, addCarbEntry.startDate)
             XCTAssertNotNil(sample.syncIdentifier)
             XCTAssertEqual(sample.syncVersion, 1)
@@ -441,7 +442,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                     XCTAssertEqual(objects[0].absorptionTime, addCarbEntry.absorptionTime)
                     XCTAssertEqual(objects[0].createdByCurrentApp, true)
                     XCTAssertEqual(objects[0].foodType, addCarbEntry.foodType)
-                    XCTAssertEqual(objects[0].grams, addCarbEntry.quantity.doubleValue(for: .gram()))
+                    XCTAssertEqual(objects[0].grams, addCarbEntry.quantity.doubleValue(for: .gram))
                     XCTAssertEqual(objects[0].startDate, addCarbEntry.startDate)
                     XCTAssertEqual(objects[0].uuid, addUUID)
                     XCTAssertEqual(objects[0].provenanceIdentifier, Bundle.main.bundleIdentifier!)
@@ -478,7 +479,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                     XCTAssertEqual(objects[0].absorptionTime, addCarbEntry.absorptionTime)
                     XCTAssertEqual(objects[0].createdByCurrentApp, true)
                     XCTAssertEqual(objects[0].foodType, addCarbEntry.foodType)
-                    XCTAssertEqual(objects[0].grams, addCarbEntry.quantity.doubleValue(for: .gram()))
+                    XCTAssertEqual(objects[0].grams, addCarbEntry.quantity.doubleValue(for: .gram))
                     XCTAssertEqual(objects[0].startDate, addCarbEntry.startDate)
                     XCTAssertEqual(objects[0].uuid, addUUID)
                     XCTAssertEqual(objects[0].provenanceIdentifier, Bundle.main.bundleIdentifier!)
@@ -496,7 +497,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                     XCTAssertEqual(objects[1].absorptionTime, addCarbEntry.absorptionTime)
                     XCTAssertEqual(objects[1].createdByCurrentApp, true)
                     XCTAssertEqual(objects[1].foodType, addCarbEntry.foodType)
-                    XCTAssertEqual(objects[1].grams, addCarbEntry.quantity.doubleValue(for: .gram()))
+                    XCTAssertEqual(objects[1].grams, addCarbEntry.quantity.doubleValue(for: .gram))
                     XCTAssertEqual(objects[1].startDate, addCarbEntry.startDate)
                     XCTAssertNil(objects[1].uuid)
                     XCTAssertEqual(objects[1].provenanceIdentifier, Bundle.main.bundleIdentifier!)
@@ -536,8 +537,8 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
     }
 
     func testAddAndReplaceAndDeleteCarbEntry() {
-        let addCarbEntry = NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 10), startDate: Date(), foodType: "Add", absorptionTime: .hours(3))
-        let replaceCarbEntry = NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 15), startDate: Date(), foodType: "Replace", absorptionTime: .hours(4))
+        let addCarbEntry = NewCarbEntry(quantity: LoopQuantity(unit: .gram, doubleValue: 10), startDate: Date(), foodType: "Add", absorptionTime: .hours(3))
+        let replaceCarbEntry = NewCarbEntry(quantity: LoopQuantity(unit: .gram, doubleValue: 15), startDate: Date(), foodType: "Replace", absorptionTime: .hours(4))
         let addHealthStoreHandler = expectation(description: "Add health store handler")
         let addCarbEntryCompletion = expectation(description: "Add carb entry completion")
         let addCarbEntryHandler = expectation(description: "Add carb entry handler")
@@ -564,7 +565,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
 
             XCTAssertEqual(sample.absorptionTime, addCarbEntry.absorptionTime)
             XCTAssertEqual(sample.foodType, addCarbEntry.foodType)
-            XCTAssertEqual(sample.quantity, addCarbEntry.quantity)
+            XCTAssertEqual(sample.quantity, addCarbEntry.quantity.hkQuantity)
             XCTAssertEqual(sample.startDate, addCarbEntry.startDate)
             XCTAssertNotNil(sample.syncIdentifier)
             XCTAssertEqual(sample.syncVersion, 1)
@@ -591,7 +592,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                     XCTAssertEqual(objects[0].absorptionTime, addCarbEntry.absorptionTime)
                     XCTAssertEqual(objects[0].createdByCurrentApp, true)
                     XCTAssertEqual(objects[0].foodType, addCarbEntry.foodType)
-                    XCTAssertEqual(objects[0].grams, addCarbEntry.quantity.doubleValue(for: .gram()))
+                    XCTAssertEqual(objects[0].grams, addCarbEntry.quantity.doubleValue(for: .gram))
                     XCTAssertEqual(objects[0].startDate, addCarbEntry.startDate)
                     XCTAssertEqual(objects[0].uuid, addUUID)
                     XCTAssertEqual(objects[0].provenanceIdentifier, Bundle.main.bundleIdentifier!)
@@ -615,7 +616,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                         XCTAssertNotEqual(sample.uuid, addUUID)
                         XCTAssertEqual(sample.absorptionTime, replaceCarbEntry.absorptionTime)
                         XCTAssertEqual(sample.foodType, replaceCarbEntry.foodType)
-                        XCTAssertEqual(sample.quantity, replaceCarbEntry.quantity)
+                        XCTAssertEqual(sample.quantity, replaceCarbEntry.quantity.hkQuantity)
                         XCTAssertEqual(sample.startDate, replaceCarbEntry.startDate)
                         XCTAssertEqual(sample.syncIdentifier, addSyncIdentifier)
                         XCTAssertEqual(sample.syncVersion, 2)
@@ -639,7 +640,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                     XCTAssertEqual(objects[0].absorptionTime, addCarbEntry.absorptionTime)
                     XCTAssertEqual(objects[0].createdByCurrentApp, true)
                     XCTAssertEqual(objects[0].foodType, addCarbEntry.foodType)
-                    XCTAssertEqual(objects[0].grams, addCarbEntry.quantity.doubleValue(for: .gram()))
+                    XCTAssertEqual(objects[0].grams, addCarbEntry.quantity.doubleValue(for: .gram))
                     XCTAssertEqual(objects[0].startDate, addCarbEntry.startDate)
                     XCTAssertEqual(objects[0].uuid, addUUID)
                     XCTAssertEqual(objects[0].provenanceIdentifier, Bundle.main.bundleIdentifier!)
@@ -657,7 +658,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                     XCTAssertEqual(objects[1].absorptionTime, replaceCarbEntry.absorptionTime)
                     XCTAssertEqual(objects[1].createdByCurrentApp, true)
                     XCTAssertEqual(objects[1].foodType, replaceCarbEntry.foodType)
-                    XCTAssertEqual(objects[1].grams, replaceCarbEntry.quantity.doubleValue(for: .gram()))
+                    XCTAssertEqual(objects[1].grams, replaceCarbEntry.quantity.doubleValue(for: .gram))
                     XCTAssertEqual(objects[1].startDate, replaceCarbEntry.startDate)
                     XCTAssertEqual(objects[1].uuid, updateUUID)
                     XCTAssertEqual(objects[1].provenanceIdentifier, Bundle.main.bundleIdentifier!)
@@ -692,7 +693,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                     XCTAssertEqual(objects[0].absorptionTime, addCarbEntry.absorptionTime)
                     XCTAssertEqual(objects[0].createdByCurrentApp, true)
                     XCTAssertEqual(objects[0].foodType, addCarbEntry.foodType)
-                    XCTAssertEqual(objects[0].grams, addCarbEntry.quantity.doubleValue(for: .gram()))
+                    XCTAssertEqual(objects[0].grams, addCarbEntry.quantity.doubleValue(for: .gram))
                     XCTAssertEqual(objects[0].startDate, addCarbEntry.startDate)
                     XCTAssertEqual(objects[0].uuid, addUUID)
                     XCTAssertEqual(objects[0].provenanceIdentifier, Bundle.main.bundleIdentifier!)
@@ -710,7 +711,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                     XCTAssertEqual(objects[1].absorptionTime, replaceCarbEntry.absorptionTime)
                     XCTAssertEqual(objects[1].createdByCurrentApp, true)
                     XCTAssertEqual(objects[1].foodType, replaceCarbEntry.foodType)
-                    XCTAssertEqual(objects[1].grams, replaceCarbEntry.quantity.doubleValue(for: .gram()))
+                    XCTAssertEqual(objects[1].grams, replaceCarbEntry.quantity.doubleValue(for: .gram))
                     XCTAssertEqual(objects[1].startDate, replaceCarbEntry.startDate)
                     XCTAssertEqual(objects[1].uuid, updateUUID)
                     XCTAssertEqual(objects[1].provenanceIdentifier, Bundle.main.bundleIdentifier!)
@@ -728,7 +729,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                     XCTAssertEqual(objects[2].absorptionTime, replaceCarbEntry.absorptionTime)
                     XCTAssertEqual(objects[2].createdByCurrentApp, true)
                     XCTAssertEqual(objects[2].foodType, replaceCarbEntry.foodType)
-                    XCTAssertEqual(objects[2].grams, replaceCarbEntry.quantity.doubleValue(for: .gram()))
+                    XCTAssertEqual(objects[2].grams, replaceCarbEntry.quantity.doubleValue(for: .gram))
                     XCTAssertEqual(objects[2].startDate, replaceCarbEntry.startDate)
                     XCTAssertNil(objects[2].uuid)
                     XCTAssertEqual(objects[2].provenanceIdentifier, Bundle.main.bundleIdentifier!)
@@ -770,9 +771,9 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
     // MARK: -
 
     func testGetSyncCarbObjects() {
-        let firstCarbEntry = NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 10), startDate: Date(timeIntervalSinceNow: -1), foodType: "First", absorptionTime: .hours(5))
-        let secondCarbEntry = NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 20), startDate: Date(), foodType: "Second", absorptionTime: .hours(3))
-        let thirdCarbEntry = NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 30), startDate: Date(timeIntervalSinceNow: 1), foodType: "Third", absorptionTime: .minutes(30))
+        let firstCarbEntry = NewCarbEntry(quantity: LoopQuantity(unit: .gram, doubleValue: 10), startDate: Date(timeIntervalSinceNow: -1), foodType: "First", absorptionTime: .hours(5))
+        let secondCarbEntry = NewCarbEntry(quantity: LoopQuantity(unit: .gram, doubleValue: 20), startDate: Date(), foodType: "Second", absorptionTime: .hours(3))
+        let thirdCarbEntry = NewCarbEntry(quantity: LoopQuantity(unit: .gram, doubleValue: 30), startDate: Date(timeIntervalSinceNow: 1), foodType: "Third", absorptionTime: .minutes(30))
         let getSyncCarbObjectsCompletion = expectation(description: "Get sync carb objects completion")
 
         carbStore.addCarbEntry(firstCarbEntry) { (_) in
@@ -793,7 +794,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                                         XCTAssertEqual(objects[0].absorptionTime, firstCarbEntry.absorptionTime)
                                         XCTAssertEqual(objects[0].createdByCurrentApp, true)
                                         XCTAssertEqual(objects[0].foodType, firstCarbEntry.foodType)
-                                        XCTAssertEqual(objects[0].grams, firstCarbEntry.quantity.doubleValue(for: .gram()))
+                                        XCTAssertEqual(objects[0].grams, firstCarbEntry.quantity.doubleValue(for: .gram))
                                         XCTAssertEqual(objects[0].startDate, firstCarbEntry.startDate)
                                         XCTAssertNotNil(objects[0].uuid)
                                         XCTAssertEqual(objects[0].provenanceIdentifier, Bundle.main.bundleIdentifier!)
@@ -810,7 +811,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                                         XCTAssertEqual(objects[1].absorptionTime, secondCarbEntry.absorptionTime)
                                         XCTAssertEqual(objects[1].createdByCurrentApp, true)
                                         XCTAssertEqual(objects[1].foodType, secondCarbEntry.foodType)
-                                        XCTAssertEqual(objects[1].grams, secondCarbEntry.quantity.doubleValue(for: .gram()))
+                                        XCTAssertEqual(objects[1].grams, secondCarbEntry.quantity.doubleValue(for: .gram))
                                         XCTAssertEqual(objects[1].startDate, secondCarbEntry.startDate)
                                         XCTAssertNotNil(objects[1].uuid)
                                         XCTAssertEqual(objects[1].provenanceIdentifier, Bundle.main.bundleIdentifier!)
@@ -827,7 +828,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                                         XCTAssertEqual(objects[2].absorptionTime, thirdCarbEntry.absorptionTime)
                                         XCTAssertEqual(objects[2].createdByCurrentApp, true)
                                         XCTAssertEqual(objects[2].foodType, thirdCarbEntry.foodType)
-                                        XCTAssertEqual(objects[2].grams, thirdCarbEntry.quantity.doubleValue(for: .gram()))
+                                        XCTAssertEqual(objects[2].grams, thirdCarbEntry.quantity.doubleValue(for: .gram))
                                         XCTAssertEqual(objects[2].startDate, thirdCarbEntry.startDate)
                                         XCTAssertNotNil(objects[2].uuid)
                                         XCTAssertEqual(objects[2].provenanceIdentifier, Bundle.main.bundleIdentifier!)
@@ -852,7 +853,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
     }
 
     func testSetSyncCarbObjects() {
-        let carbEntry = NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 10), startDate: Date(timeIntervalSinceNow: -1), foodType: "First", absorptionTime: .hours(5))
+        let carbEntry = NewCarbEntry(quantity: LoopQuantity(unit: .gram, doubleValue: 10), startDate: Date(timeIntervalSinceNow: -1), foodType: "First", absorptionTime: .hours(5))
         let syncCarbObjects = [SyncCarbObject(absorptionTime: .hours(5),
                                               createdByCurrentApp: true,
                                               foodType: "Pizza",

@@ -28,7 +28,7 @@ class GlucoseRangeTests: XCTestCase {
     }()
 
     func testInitializerDouble() throws {
-        let unit = HKUnit.milligramsPerDeciliter
+        let unit = LoopUnit.milligramsPerDeciliter
         let glucoseRange = GlucoseRange(
             minValue: 75,
             maxValue: 90,
@@ -40,7 +40,7 @@ class GlucoseRangeTests: XCTestCase {
     }
 
     func testInitializerGlucoseRange() throws {
-        let unit = HKUnit.milligramsPerDeciliter
+        let unit = LoopUnit.milligramsPerDeciliter
         let expectedRange = DoubleRange(minValue: 75, maxValue: 90)
         let glucoseRange = GlucoseRange(
             range: expectedRange,
@@ -51,7 +51,7 @@ class GlucoseRangeTests: XCTestCase {
     }
 
     func testQuantityRange() throws {
-        let unit = HKUnit.milligramsPerDeciliter
+        let unit = LoopUnit.milligramsPerDeciliter
         let range = DoubleRange(minValue: 75, maxValue: 90)
         let glucoseRange = GlucoseRange(
             range: range,

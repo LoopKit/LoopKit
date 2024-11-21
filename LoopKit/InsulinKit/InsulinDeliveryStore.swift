@@ -413,7 +413,7 @@ extension InsulinDeliveryStore {
                 }
 
                 guard let quantitySample = HKQuantitySample(type: HealthKitSampleStore.insulinQuantityType,
-                                                            unit: HKUnit.internationalUnit(),
+                                                            unit: .internationalUnit(),
                                                             dose: entry,
                                                             device: device,
                                                             provenanceIdentifier: self.provenanceIdentifier,

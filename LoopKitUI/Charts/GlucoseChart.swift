@@ -15,7 +15,7 @@ open class GlucoseChart {
     public init() {
     }
 
-    public var glucoseUnit: HKUnit = .milligramsPerDeciliter {
+    public var glucoseUnit: LoopUnit = .milligramsPerDeciliter {
         didSet {
             if glucoseUnit != oldValue {
                 // Regenerate the glucose display points
@@ -25,7 +25,7 @@ open class GlucoseChart {
         }
     }
 
-    public var glucoseDisplayRange: ClosedRange<HKQuantity>? {
+    public var glucoseDisplayRange: ClosedRange<LoopQuantity>? {
         didSet {
             if let range = glucoseDisplayRange {
                 glucoseDisplayRangePoints = [

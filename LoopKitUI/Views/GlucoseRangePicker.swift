@@ -20,21 +20,21 @@ public struct GlucoseRangePicker: View {
         case independent
     }
 
-    @Binding var lowerBound: HKQuantity
-    @Binding var upperBound: HKQuantity
-    var unit: HKUnit
-    var minValue: HKQuantity?
-    var maxValue: HKQuantity?
-    var guardrail: Guardrail<HKQuantity>
+    @Binding var lowerBound: LoopQuantity
+    @Binding var upperBound: LoopQuantity
+    var unit: LoopUnit
+    var minValue: LoopQuantity?
+    var maxValue: LoopQuantity?
+    var guardrail: Guardrail<LoopQuantity>
     var formatter: NumberFormatter
     var usageContext: UsageContext
 
     public init(
-        range: Binding<ClosedRange<HKQuantity>>,
-        unit: HKUnit,
-        minValue: HKQuantity?,
-        maxValue: HKQuantity? = nil,
-        guardrail: Guardrail<HKQuantity>,
+        range: Binding<ClosedRange<LoopQuantity>>,
+        unit: LoopUnit,
+        minValue: LoopQuantity?,
+        maxValue: LoopQuantity? = nil,
+        guardrail: Guardrail<LoopQuantity>,
         usageContext: UsageContext = .independent
     ) {
         self._lowerBound = Binding(
@@ -145,14 +145,14 @@ public struct GlucoseRangePicker: View {
         return attributedUnitString.size().width
     }
 
-    var lowerBoundRange: ClosedRange<HKQuantity> {
+    var lowerBoundRange: ClosedRange<LoopQuantity> {
         let min = minValue.map { Swift.max(guardrail.absoluteBounds.lowerBound, $0) }
             ?? guardrail.absoluteBounds.lowerBound
         let max = Swift.min(guardrail.absoluteBounds.upperBound, upperBound)
         return min...max
     }
 
-    var upperBoundRange: ClosedRange<HKQuantity> {
+    var upperBoundRange: ClosedRange<LoopQuantity> {
         let min = max(guardrail.absoluteBounds.lowerBound, lowerBound)
         let max = maxValue.map { Swift.min(guardrail.absoluteBounds.upperBound, $0) }
             ?? guardrail.absoluteBounds.upperBound

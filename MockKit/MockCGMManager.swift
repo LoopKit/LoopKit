@@ -16,11 +16,11 @@ import LoopAlgorithm
 public struct MockCGMState: GlucoseDisplayable {
     public var isStateValid: Bool
 
-    public var currentGlucose: HKQuantity?
+    public var currentGlucose: LoopQuantity?
 
     public var trendType: GlucoseTrend?
 
-    public var trendRate: HKQuantity?
+    public var trendRate: LoopQuantity?
 
     public var isLocal: Bool {
         return true
@@ -28,7 +28,7 @@ public struct MockCGMState: GlucoseDisplayable {
     
     public var glucoseRangeCategory: GlucoseRangeCategory?
 
-    public let unit: HKUnit = .milligramsPerDeciliter
+    public let unit: LoopUnit = .milligramsPerDeciliter
 
     public var glucoseAlertingEnabled: Bool
 
@@ -41,9 +41,9 @@ public struct MockCGMState: GlucoseDisplayable {
 
 
     // HKQuantity isn't codable
-    public var cgmLowerLimit: HKQuantity {
+    public var cgmLowerLimit: LoopQuantity {
         get {
-            return HKQuantity.init(unit: unit, doubleValue: cgmLowerLimitValue)
+            return LoopQuantity.init(unit: unit, doubleValue: cgmLowerLimitValue)
         }
         set {
             var newDoubleValue = newValue.doubleValue(for: unit)
@@ -56,9 +56,9 @@ public struct MockCGMState: GlucoseDisplayable {
     
     private var urgentLowGlucoseThresholdValue: Double
     
-    public var urgentLowGlucoseThreshold: HKQuantity {
+    public var urgentLowGlucoseThreshold: LoopQuantity {
         get {
-            return HKQuantity.init(unit: unit, doubleValue: urgentLowGlucoseThresholdValue)
+            return LoopQuantity.init(unit: unit, doubleValue: urgentLowGlucoseThresholdValue)
         }
         set {
             var newDoubleValue = newValue.doubleValue(for: unit)
@@ -74,9 +74,9 @@ public struct MockCGMState: GlucoseDisplayable {
     
     private var lowGlucoseThresholdValue: Double
 
-    public var lowGlucoseThreshold: HKQuantity {
+    public var lowGlucoseThreshold: LoopQuantity {
         get {
-            return HKQuantity.init(unit: unit, doubleValue: lowGlucoseThresholdValue)
+            return LoopQuantity.init(unit: unit, doubleValue: lowGlucoseThresholdValue)
         }
         set {
             var newDoubleValue = newValue.doubleValue(for: unit)
@@ -92,9 +92,9 @@ public struct MockCGMState: GlucoseDisplayable {
 
     private var highGlucoseThresholdValue: Double
 
-    public var highGlucoseThreshold: HKQuantity {
+    public var highGlucoseThreshold: LoopQuantity {
         get {
-            return HKQuantity.init(unit: unit, doubleValue: highGlucoseThresholdValue)
+            return LoopQuantity.init(unit: unit, doubleValue: highGlucoseThresholdValue)
         }
         set {
             var newDoubleValue = newValue.doubleValue(for: unit)
@@ -110,9 +110,9 @@ public struct MockCGMState: GlucoseDisplayable {
     
     private var cgmUpperLimitValue: Double
     
-    public var cgmUpperLimit: HKQuantity {
+    public var cgmUpperLimit: LoopQuantity {
         get {
-            return HKQuantity.init(unit: unit, doubleValue: cgmUpperLimitValue)
+            return LoopQuantity.init(unit: unit, doubleValue: cgmUpperLimitValue)
         }
         set {
             var newDoubleValue = newValue.doubleValue(for: unit)
@@ -453,7 +453,7 @@ public final class MockCGMManager: TestingCGMManager {
             let dataSource = MockCGMDataSource(rawValue: dataSourceRawValue) {
             self.lockedDataSource.value = dataSource
         } else {
-            self.lockedDataSource.value = MockCGMDataSource(model: .sineCurve(parameters: (baseGlucose: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 110), amplitude: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 20), period: TimeInterval(hours: 6), referenceDate: Date())))
+            self.lockedDataSource.value = MockCGMDataSource(model: .sineCurve(parameters: (baseGlucose: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 110), amplitude: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 20), period: TimeInterval(hours: 6), referenceDate: Date())))
         }
 
         setupHeartbeatFob()
@@ -518,7 +518,7 @@ public final class MockCGMManager: TestingCGMManager {
                 mockSensorState.currentGlucose = currentValue.quantity
                 mockSensorState.trendType = currentValue.trend
                 mockSensorState.trendRate = currentValue.trendRate
-                mockSensorState.glucoseRangeCategory = glucoseRangeCategory(for: currentValue.quantitySample)
+                mockSensorState.glucoseRangeCategory = glucoseRangeCategory(for: LoopQuantitySample(with: currentValue.quantitySample))
                 issueAlert(for: currentValue)
             }
 
@@ -877,7 +877,7 @@ extension MockCGMState: RawRepresentable {
         self.cgmBatteryChargeRemaining = rawValue["cgmBatteryChargeRemaining"] as? Double
         
         if let trendRateValue = rawValue["trendRateValue"] as? Double {
-            self.trendRate = HKQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: trendRateValue)
+            self.trendRate = LoopQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: trendRateValue)
         }
         
         if let trendTypeRaw = rawValue["trendType"] as? GlucoseTrend.RawValue {
@@ -885,7 +885,7 @@ extension MockCGMState: RawRepresentable {
         }
         
         if let currentGlucoseValue = rawValue["currentGlucoseValue"] as? Double {
-            self.currentGlucose = HKQuantity(unit: .milligramsPerDeciliter, doubleValue: currentGlucoseValue)
+            self.currentGlucose = LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: currentGlucoseValue)
         }
         
         setProgressColor()
