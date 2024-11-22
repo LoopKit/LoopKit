@@ -8,7 +8,6 @@
 
 import Foundation
 import LoopAlgorithm
-//import HealthKit
 
 public typealias InsulinSensitivitySchedule = SingleQuantitySchedule
 
