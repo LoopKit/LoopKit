@@ -50,7 +50,7 @@ public extension LoopUnit {
 
 public extension LoopQuantity {
     var hkQuantity: HKQuantity {
-        HKQuantity(unit: unit.hkUnit, doubleValue: value)
+        HKQuantity(unit: unit.hkUnit, doubleValue: doubleValue(for: unit))
     }
 }
 
