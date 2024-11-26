@@ -9,7 +9,7 @@
 import HealthKit
 
 
-public enum SafetyClassification: Equatable {
+public enum SafetyClassification: Equatable, Hashable {
     public enum Threshold: Equatable {
         case minimum
         case belowRecommended
