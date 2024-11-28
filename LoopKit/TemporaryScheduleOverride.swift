@@ -73,6 +73,10 @@ public struct TemporaryScheduleOverride: Hashable {
             precondition(duration.timeInterval > 0)
         }
     }
+    
+    public var actualDuration: Duration {
+        Duration.finite(actualEndDate.timeIntervalSince(startDate))
+    }
 
     public var scheduledEndDate: Date {
         get {
