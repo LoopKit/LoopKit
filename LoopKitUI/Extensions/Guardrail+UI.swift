@@ -12,7 +12,7 @@ import LoopKit
 
 
 extension Guardrail where Value == HKQuantity {
-    func color(for quantity: HKQuantity,
+    public func color(for quantity: HKQuantity,
                guidanceColors: GuidanceColors) -> Color
     {
         switch classification(for: quantity) {

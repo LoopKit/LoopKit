@@ -91,9 +91,7 @@ public struct TherapySettingsView: View {
         cards.append(suspendThresholdSection)
         cards.append(correctionRangeSection)
         cards.append(preMealCorrectionRangeSection)
-        if !viewModel.sensitivityOverridesEnabled {
-            cards.append(workoutCorrectionRangeSection)
-        }
+        cards.append(workoutCorrectionRangeSection)
         cards.append(carbRatioSection)
         cards.append(basalRatesSection)
         cards.append(deliveryLimitsSection)
