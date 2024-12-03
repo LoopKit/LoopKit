@@ -101,7 +101,7 @@ class CachedGlucoseObjectOperationsTests: PersistenceControllerTestCase {
             let quantitySample = HKQuantitySample(type: type, quantity: quantity, start: startDate, end: startDate, device: device, metadata: metadata)
             let object = CachedGlucoseObject(context: cacheStore.managedObjectContext)
             object.create(from: quantitySample)
-//            XCTAssertEqual(quantitySample.quantity, object.quantitySample.quantity)
+            XCTAssertEqual(quantitySample.quantity, object.quantitySample.quantity)
             XCTAssertEqual(quantitySample.quantityType, object.quantitySample.quantityType)
             XCTAssertEqual(quantitySample.condition, object.quantitySample.condition)
             XCTAssertEqual(quantitySample.trend, object.quantitySample.trend)
