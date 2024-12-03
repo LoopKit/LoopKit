@@ -46,6 +46,45 @@ public extension LoopUnit {
             return .second()
         }
     }
+    
+    init(from unit: HKUnit) {
+        switch unit {
+        case .gram():
+            self = .gram
+        case .gramsPerUnit:
+            self = .gramsPerUnit
+        case .internationalUnit():
+            self = .internationalUnit
+        case .internationalUnitsPerHour:
+            self = .internationalUnitsPerHour
+        case .milligramsPerDeciliter:
+            self = .milligramsPerDeciliter
+        case .milligramsPerDeciliterPerSecond:
+            self = .milligramsPerDeciliterPerSecond
+        case .milligramsPerDeciliterPerMinute:
+            self = .milligramsPerDeciliterPerMinute
+        case .milligramsPerDeciliter.unitDivided(by: .internationalUnit()):
+            self = .milligramsPerDeciliterPerInternationalUnit
+        case .millimolesPerLiter:
+            self = .millimolesPerLiter
+        case .millimolesPerLiter.unitDivided(by: .second()):
+            self = .millimolesPerLiterPerSecond
+        case .millimolesPerLiter.unitDivided(by: .minute()):
+            self = .millimolesPerLiterPerMinute
+        case .millimolesPerLiter.unitDivided(by: .internationalUnit()):
+            self = .millimolesPerLiterPerInternationalUnit
+        case .percent():
+            self = .percent
+        case .hour():
+            self = .hour
+        case .minute():
+            self = .minute
+        case .second():
+            self = .second
+        default:
+            fatalError("HKUnit (\(unit.unitString)) -> LoopUnit conversion failed.")
+        }
+    }
 }
 
 public extension LoopQuantity {

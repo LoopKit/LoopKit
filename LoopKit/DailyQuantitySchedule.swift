@@ -200,7 +200,7 @@ extension DailyQuantitySchedule where T: Numeric {
     public static func * (lhs: DailyQuantitySchedule, rhs: DailyQuantitySchedule) -> DailyQuantitySchedule {
         let unit = lhs.unit.hkUnit.unitMultiplied(by: rhs.unit.hkUnit)
         let schedule = DailyValueSchedule.zip(lhs.valueSchedule, rhs.valueSchedule).map(*)
-        return DailyQuantitySchedule(unit: LoopUnit(from: unit.unitString), valueSchedule: schedule)
+        return DailyQuantitySchedule(unit: LoopUnit(from: unit), valueSchedule: schedule)
     }
 }
 
@@ -208,7 +208,7 @@ extension DailyQuantitySchedule where T: FloatingPoint {
     public static func / (lhs: DailyQuantitySchedule, rhs: DailyQuantitySchedule) -> DailyQuantitySchedule {
         let unit = lhs.unit.hkUnit.unitDivided(by: rhs.unit.hkUnit)
         let schedule = DailyValueSchedule.zip(lhs.valueSchedule, rhs.valueSchedule).map(/)
-        return DailyQuantitySchedule(unit: LoopUnit(from: unit.unitString), valueSchedule: schedule)
+        return DailyQuantitySchedule(unit: LoopUnit(from: unit), valueSchedule: schedule)
     }
 }
 

@@ -126,7 +126,7 @@ class InsulinMathTests: XCTestCase {
                 }
 
                 if let scheduledBasalRate = value.scheduledBasalRate {
-                    obj["scheduled"] = scheduledBasalRate.doubleValue(for: LoopUnit(from: "IU/hr"))
+                    obj["scheduled"] = scheduledBasalRate.doubleValue(for: .internationalUnitsPerHour)
                 }
 
                 return obj
