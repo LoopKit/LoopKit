@@ -18,21 +18,12 @@ public class DisplayGlucosePreference: ObservableObject {
     @Published public private(set) var minuteRateFormatter: QuantityFormatter
 
     public init(displayGlucoseUnit: LoopUnit) {
-        let _rateUnit: LoopUnit
-        switch displayGlucoseUnit.hkUnit {
-        case .milligramsPerDeciliter:
-            _rateUnit = .milligramsPerDeciliterPerMinute
-        case .millimolesPerLiter:
-            _rateUnit = .millimolesPerLiterPerMinute
-        default:
-            fatalError()
-        }
-
         self.unit = displayGlucoseUnit
         let formatter = QuantityFormatter(for: displayGlucoseUnit)
-        self.rateUnit = _rateUnit
+        let rateUnit = displayGlucoseUnit.glucose(per: .minutes)
+        self.rateUnit = rateUnit
         self.formatter = formatter
-        self.minuteRateFormatter = QuantityFormatter(for: _rateUnit)
+        self.minuteRateFormatter = QuantityFormatter(for: rateUnit)
         self.formatter.numberFormatter.notANumberSymbol = "–"
         self.minuteRateFormatter.numberFormatter.notANumberSymbol = "–"
     }
