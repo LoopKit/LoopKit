@@ -12,9 +12,7 @@ import LoopKit
 
 
 extension Guardrail where Value == LoopQuantity {
-    func color(for quantity: LoopQuantity,
-               guidanceColors: GuidanceColors) -> Color
-    {
+    public func color(for quantity: LoopQuantity, guidanceColors: GuidanceColors) -> Color {
         switch classification(for: quantity) {
         case .withinRecommendedRange:
             return guidanceColors.acceptable
