@@ -13,7 +13,7 @@ public struct TemporaryScheduleOverrideSettings: Hashable {
     private var targetRangeInMgdl: DoubleRange?
     public var insulinNeedsScaleFactor: Double?
 
-    public var targetRange: ClosedRange<HKQuantity>? {
+    public var targetRange: ClosedRange<LoopQuantity>? {
         return targetRangeInMgdl.map { $0.quantityRange(for: .milligramsPerDeciliter) }
     }
 
@@ -33,11 +33,11 @@ public struct TemporaryScheduleOverrideSettings: Hashable {
         return insulinNeedsScaleFactor ?? 1.0
     }
 
-    public init(unit: HKUnit, targetRange: DoubleRange?, insulinNeedsScaleFactor: Double? = nil) {
+    public init(unit: LoopUnit, targetRange: DoubleRange?, insulinNeedsScaleFactor: Double? = nil) {
         self.init(targetRange: targetRange?.quantityRange(for: unit), insulinNeedsScaleFactor: insulinNeedsScaleFactor)
     }
 
-    public init(targetRange: ClosedRange<HKQuantity>?, insulinNeedsScaleFactor: Double? = nil) {
+    public init(targetRange: ClosedRange<LoopQuantity>?, insulinNeedsScaleFactor: Double? = nil) {
         self.targetRangeInMgdl = targetRange?.doubleRange(for: .milligramsPerDeciliter)
         self.insulinNeedsScaleFactor = insulinNeedsScaleFactor
     }

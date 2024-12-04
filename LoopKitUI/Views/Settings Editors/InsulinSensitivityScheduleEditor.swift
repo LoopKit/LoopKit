@@ -8,6 +8,7 @@
 
 import SwiftUI
 import HealthKit
+import LoopAlgorithm
 import LoopKit
 
 
@@ -18,7 +19,7 @@ public struct InsulinSensitivityScheduleEditor: View {
     let mode: SettingsPresentationMode
     let viewModel: InsulinSensitivityScheduleEditorViewModel
 
-    var displayGlucoseUnit: HKUnit {
+    var displayGlucoseUnit: LoopUnit {
         displayGlucosePreference.unit
     }
 
@@ -61,8 +62,15 @@ public struct InsulinSensitivityScheduleEditor: View {
         Text(TherapySetting.insulinSensitivity.descriptiveText(appName: appName))
     }
 
-    private var sensitivityUnit: HKUnit {
-        displayGlucoseUnit.unitDivided(by: .internationalUnit())
+    private var sensitivityUnit: LoopUnit {
+        switch displayGlucoseUnit {
+        case .milligramsPerDeciliter:
+            return .milligramsPerDeciliterPerInternationalUnit
+        case .millimolesPerLiter:
+            return .millimolesPerLiterPerInternationalUnit
+        default:
+            fatalError()
+        }
     }
 
     private var confirmationAlertContent: AlertContent {

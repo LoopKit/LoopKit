@@ -50,7 +50,7 @@ extension HKQuantitySample {
             metadata[HKMetadataKeyInsulinDeliveryReason] = HKInsulinDeliveryReason.basal.rawValue
 
             if let basalRate = dose.scheduledBasalRate {
-                metadata[MetadataKeyScheduledBasalRate] = basalRate
+                metadata[MetadataKeyScheduledBasalRate] = basalRate.hkQuantity
             }
             metadata[MetadataKeyIsSuspend] = true
 
@@ -63,7 +63,7 @@ extension HKQuantitySample {
             metadata[HKMetadataKeyInsulinDeliveryReason] = HKInsulinDeliveryReason.basal.rawValue
 
             if let basalRate = dose.scheduledBasalRate {
-                metadata[MetadataKeyScheduledBasalRate] = basalRate
+                metadata[MetadataKeyScheduledBasalRate] = basalRate.hkQuantity
             }
 
             if dose.type == .tempBasal {
@@ -116,12 +116,19 @@ extension HKQuantitySample {
         return HKInsulinDeliveryReason(rawValue: reason)
     }
 
-    var scheduledBasalRate: HKQuantity? {
-        return metadata?[MetadataKeyScheduledBasalRate] as? HKQuantity
+    var scheduledBasalRate: LoopQuantity? {
+        guard let hkQuantity = metadata?[MetadataKeyScheduledBasalRate] as? HKQuantity, let unit = LoopUnit.firstCompatible(with: hkQuantity) else {
+            return nil
+        }
+        return LoopQuantity(unit: unit, doubleValue: hkQuantity.doubleValue(for: unit.hkUnit))
     }
 
-    var programmedTempBasalRate: HKQuantity? {
-        return metadata?[MetadataKeyProgrammedTempBasalRate] as? HKQuantity
+    var programmedTempBasalRate: LoopQuantity? {
+        guard let hkQuantity = metadata?[MetadataKeyProgrammedTempBasalRate] as? HKQuantity, let unit = LoopUnit.firstCompatible(with: hkQuantity) else {
+            return nil
+        }
+        
+        return LoopQuantity(unit: unit, doubleValue: hkQuantity.doubleValue(for: unit.hkUnit))
     }
 
     var isSuspend: Bool {

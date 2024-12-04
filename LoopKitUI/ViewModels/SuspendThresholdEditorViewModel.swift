@@ -7,19 +7,19 @@
 //
 
 import Foundation
-import HealthKit
+import LoopAlgorithm
 import LoopKit
 
 struct SuspendThresholdEditorViewModel {
     let guardrail = Guardrail.suspendThreshold
 
-    let suspendThreshold: HKQuantity?
+    let suspendThreshold: LoopQuantity?
 
-    let suspendThresholdUnit: HKUnit
+    let suspendThresholdUnit: LoopUnit
 
-    let maxSuspendThresholdValue: HKQuantity
+    let maxSuspendThresholdValue: LoopQuantity
 
-    var saveSuspendThreshold: (_ suspendThreshold: HKQuantity, _ displayGlucoseUnit: HKUnit) -> Void
+    var saveSuspendThreshold: (_ suspendThreshold: LoopQuantity, _ displayGlucoseUnit: LoopUnit) -> Void
 
     public init(therapySettingsViewModel: TherapySettingsViewModel,
                 mode: SettingsPresentationMode,

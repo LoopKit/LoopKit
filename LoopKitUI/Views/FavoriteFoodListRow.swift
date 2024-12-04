@@ -8,7 +8,7 @@
 
 import SwiftUI
 import LoopKit
-import HealthKit
+import LoopAlgorithm
 
 public struct FavoriteFoodListRow: View {
     @Environment(\.editMode) var editMode
@@ -23,9 +23,9 @@ public struct FavoriteFoodListRow: View {
     
     let carbFormatter: QuantityFormatter
     let absorptionTimeFormatter: DateComponentsFormatter
-    let preferredCarbUnit: HKUnit
+    let preferredCarbUnit: LoopUnit
 
-    public init(food: StoredFavoriteFood, foodToConfirmDeleteId: Binding<String?>, onFoodTap: @escaping (StoredFavoriteFood) -> Void, onFoodDelete: @escaping (StoredFavoriteFood) -> Void, carbFormatter: QuantityFormatter, absorptionTimeFormatter: DateComponentsFormatter, preferredCarbUnit: HKUnit = .gram()) {
+    public init(food: StoredFavoriteFood, foodToConfirmDeleteId: Binding<String?>, onFoodTap: @escaping (StoredFavoriteFood) -> Void, onFoodDelete: @escaping (StoredFavoriteFood) -> Void, carbFormatter: QuantityFormatter, absorptionTimeFormatter: DateComponentsFormatter, preferredCarbUnit: LoopUnit = .gram) {
         self.food = food
         self._foodToConfirmDeleteId = foodToConfirmDeleteId
         self.onTap = onFoodTap

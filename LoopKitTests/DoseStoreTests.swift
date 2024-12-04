@@ -1096,7 +1096,7 @@ class DoseStoreEffectTests: PersistenceControllerTestCase {
     var doseStore: DoseStore!
 
     var insulinSensitivitySchedule: InsulinSensitivitySchedule {
-        return InsulinSensitivitySchedule(unit: HKUnit.milligramsPerDeciliter, dailyItems: [RepeatingScheduleValue(startTime: 0.0, value: 40.0)], timeZone: .currentFixed)!
+        return InsulinSensitivitySchedule(unit: LoopUnit.milligramsPerDeciliter, dailyItems: [RepeatingScheduleValue(startTime: 0.0, value: 40.0)], timeZone: .currentFixed)!
     }
 
     let dateFormatter = ISO8601DateFormatter.localTimeDate()
@@ -1134,7 +1134,7 @@ class DoseStoreEffectTests: PersistenceControllerTestCase {
         let dateFormatter = ISO8601DateFormatter.localTimeDate()
 
         return fixture.map {
-            return GlucoseEffect(startDate: dateFormatter.date(from: $0["date"] as! String)!, quantity: HKQuantity(unit: HKUnit(from: $0["unit"] as! String), doubleValue:$0["amount"] as! Double))
+            return GlucoseEffect(startDate: dateFormatter.date(from: $0["date"] as! String)!, quantity: LoopQuantity(unit: LoopUnit(from: $0["unit"] as! String), doubleValue:$0["amount"] as! Double))
         }
     }
 
@@ -1145,14 +1145,13 @@ class DoseStoreEffectTests: PersistenceControllerTestCase {
         return fixture.compactMap {
             guard let unit = DoseUnit(rawValue: $0["unit"] as! String),
                 let pumpType = PumpEventType(rawValue: $0["type"] as! String),
-                let type = DoseType(pumpEventType: pumpType)
-                else {
+                let type = DoseType(pumpEventType: pumpType) else {
                     return nil
             }
 
-            var scheduledBasalRate: HKQuantity? = nil
+            var scheduledBasalRate: LoopQuantity? = nil
             if let scheduled = $0["scheduled"] as? Double {
-                scheduledBasalRate = HKQuantity(unit: unit.unit, doubleValue: scheduled)
+                scheduledBasalRate = LoopQuantity(unit: unit.unit, doubleValue: scheduled)
             }
 
             return DoseEntry(

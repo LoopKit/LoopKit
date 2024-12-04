@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import HealthKit
 import LoopKit
 import SwiftCharts
 import UIKit
@@ -92,7 +91,7 @@ public extension COBChart {
         let dateFormatter = DateFormatter(timeStyle: .short)
         let integerFormatter = NumberFormatter.integer
 
-        let unit = HKUnit.gram()
+        let unit = LoopUnit.gram
         let unitString = unit.unitString
 
         cobPoints = cobValues.map {

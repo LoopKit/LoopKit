@@ -36,7 +36,7 @@ class CachedInsulinDeliveryObject: NSManagedObject {
         }
     }
 
-    var scheduledBasalRate: HKQuantity? {
+    var scheduledBasalRate: LoopQuantity? {
         get {
             willAccessValue(forKey: "scheduledBasalRate")
             defer { didAccessValue(forKey: "scheduledBasalRate") }
@@ -45,7 +45,7 @@ class CachedInsulinDeliveryObject: NSManagedObject {
                 return nil
             }
 
-            return HKQuantity(unit: DoseEntry.unitsPerHour, doubleValue: rate.doubleValue)
+            return LoopQuantity(unit: DoseEntry.unitsPerHour, doubleValue: rate.doubleValue)
         }
         set {
             willChangeValue(forKey: "scheduledBasalRate")
@@ -60,7 +60,7 @@ class CachedInsulinDeliveryObject: NSManagedObject {
         }
     }
 
-    var programmedTempBasalRate: HKQuantity? {
+    var programmedTempBasalRate: LoopQuantity? {
         get {
             willAccessValue(forKey: "programmedTempBasalRate")
             defer { didAccessValue(forKey: "programmedTempBasalRate") }
@@ -69,7 +69,7 @@ class CachedInsulinDeliveryObject: NSManagedObject {
                 return nil
             }
 
-            return HKQuantity(unit: DoseEntry.unitsPerHour, doubleValue: rate.doubleValue)
+            return LoopQuantity(unit: DoseEntry.unitsPerHour, doubleValue: rate.doubleValue)
         }
         set {
             willChangeValue(forKey: "programmedTempBasalRate")
@@ -245,7 +245,7 @@ extension CachedInsulinDeliveryObject {
         self.syncIdentifier = entry.syncIdentifier
         self.deliveredUnits = entry.unitsInDeliverableIncrements
         self.scheduledBasalRate = entry.scheduledBasalRate
-        self.programmedTempBasalRate = (entry.type == .tempBasal) ? HKQuantity(unit: .internationalUnitsPerHour, doubleValue: entry.unitsPerHour) : nil
+        self.programmedTempBasalRate = (entry.type == .tempBasal) ? LoopQuantity(unit: .internationalUnitsPerHour, doubleValue: entry.unitsPerHour) : nil
         self.programmedUnits = (entry.type == .bolus) ? entry.programmedUnits : nil
         self.reason = (entry.type == .bolus) ? .bolus : .basal
         self.createdAt = date
@@ -270,7 +270,7 @@ extension CachedInsulinDeliveryObject {
         self.syncIdentifier = entry.syncIdentifier
         self.deliveredUnits = entry.unitsInDeliverableIncrements
         self.scheduledBasalRate = entry.scheduledBasalRate
-        self.programmedTempBasalRate = (entry.type == .tempBasal) ? HKQuantity(unit: .internationalUnitsPerHour, doubleValue: entry.unitsPerHour) : nil
+        self.programmedTempBasalRate = (entry.type == .tempBasal) ? LoopQuantity(unit: .internationalUnitsPerHour, doubleValue: entry.unitsPerHour) : nil
         self.programmedUnits = (entry.type == .bolus) ? entry.programmedUnits : nil
         self.reason = (entry.type == .bolus) ? .bolus : .basal
         self.deletedAt = nil

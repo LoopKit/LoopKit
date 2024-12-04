@@ -65,7 +65,7 @@ extension Collection where Element: CarbEntry {
             return nil
         }
 
-        let unit = HKUnit.gram()
+        let unit = LoopUnit.gram
         var startDate = Date.distantFuture
         var totalGrams: Double = 0
 

@@ -301,7 +301,7 @@ fileprivate extension TherapySettings {
                          RepeatingScheduleValue(startTime: .hours(16), value: 40.0)],
             timeZone: timeZone)!
         let carbRatioSchedule = CarbRatioSchedule(
-            unit: .gram(),
+            unit: .gram,
 
             dailyItems: [RepeatingScheduleValue(startTime: .hours(0), value: 10.0),
                          RepeatingScheduleValue(startTime: .hours(8), value: 12.0),

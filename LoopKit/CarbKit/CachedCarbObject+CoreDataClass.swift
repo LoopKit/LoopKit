@@ -9,6 +9,7 @@
 import Foundation
 import CoreData
 import HealthKit
+import LoopAlgorithm
 
 class CachedCarbObject: NSManagedObject {
     var absorptionTime: TimeInterval? {
@@ -59,7 +60,7 @@ class CachedCarbObject: NSManagedObject {
 // MARK: - Helpers
 
 extension CachedCarbObject {
-    var quantity: HKQuantity { HKQuantity(unit: .gram(), doubleValue: grams) }
+    var quantity: LoopQuantity { LoopQuantity(unit: .gram, doubleValue: grams) }
 }
 
 // MARK: - Operations
@@ -71,7 +72,7 @@ extension CachedCarbObject {
         self.absorptionTime = entry.absorptionTime
         self.createdByCurrentApp = true
         self.foodType = entry.foodType
-        self.grams = entry.quantity.doubleValue(for: .gram())
+        self.grams = entry.quantity.doubleValue(for: .gram)
         self.startDate = entry.startDate
         self.uuid = nil
         self.favoriteFoodID = entry.favoriteFoodID
@@ -121,7 +122,7 @@ extension CachedCarbObject {
         self.absorptionTime = entry.absorptionTime
         self.createdByCurrentApp = object.createdByCurrentApp
         self.foodType = entry.foodType
-        self.grams = entry.quantity.doubleValue(for: .gram())
+        self.grams = entry.quantity.doubleValue(for: .gram)
         self.startDate = entry.startDate
         self.uuid = nil
         self.favoriteFoodID = entry.favoriteFoodID
@@ -229,7 +230,7 @@ extension CachedCarbObject {
 
         return HKQuantitySample(
             type: HealthKitSampleStore.carbType,
-            quantity: quantity,
+            quantity: quantity.hkQuantity,
             start: startDate,
             end: startDate,
             metadata: metadata
@@ -244,7 +245,7 @@ extension CachedCarbObject {
         self.absorptionTime = entry.absorptionTime
         self.createdByCurrentApp = entry.createdByCurrentApp
         self.foodType = entry.foodType
-        self.grams = entry.quantity.doubleValue(for: .gram())
+        self.grams = entry.quantity.doubleValue(for: .gram)
         self.startDate = entry.startDate
         self.uuid = entry.uuid
         self.favoriteFoodID = entry.favoriteFoodID

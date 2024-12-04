@@ -1,5 +1,5 @@
 //
-//  HKUnitTests.swift
+//  LoopUnitTests.swift
 //  LoopKitTests
 //
 //  Created by Nathaniel Hamming on 2021-03-18.
@@ -7,46 +7,46 @@
 //
 
 import XCTest
-import HealthKit
+import LoopAlgorithm
 
 @testable import LoopKit
 
-class HKUnitTests: XCTestCase {
+class LoopUnitTests: XCTestCase {
 
     func testPreferredFractionDigits() throws {
-        XCTAssertEqual(HKUnit.millimolesPerLiter.preferredFractionDigits, 1)
-        XCTAssertEqual(HKUnit.millimolesPerLiter.unitDivided(by: .internationalUnit()).preferredFractionDigits, 1)
-        XCTAssertEqual(HKUnit.millimolesPerLiter.unitDivided(by: .minute()).preferredFractionDigits, 1)
+        XCTAssertEqual(LoopUnit.millimolesPerLiter.preferredFractionDigits, 1)
+        XCTAssertEqual(LoopUnit.millimolesPerLiterPerInternationalUnit.preferredFractionDigits, 1)
+        XCTAssertEqual(LoopUnit.millimolesPerLiterPerMinute.preferredFractionDigits, 1)
 
-        XCTAssertEqual(HKUnit.gram().preferredFractionDigits, 0)
-        XCTAssertEqual(HKUnit.gram().unitDivided(by: .internationalUnit()).preferredFractionDigits, 0)
-        XCTAssertEqual(HKUnit.milligramsPerDeciliter.preferredFractionDigits, 0)
-        XCTAssertEqual(HKUnit.milligramsPerDeciliter.unitDivided(by: .internationalUnit()).preferredFractionDigits, 0)
-        XCTAssertEqual(HKUnit.milligramsPerDeciliter.unitDivided(by: .minute()).preferredFractionDigits, 1)
-        XCTAssertEqual(HKUnit.internationalUnit().preferredFractionDigits, 0)
-        XCTAssertEqual(HKUnit.internationalUnit().unitDivided(by: .hour()).preferredFractionDigits, 0)
+        XCTAssertEqual(LoopUnit.gram.preferredFractionDigits, 0)
+        XCTAssertEqual(LoopUnit.gramsPerUnit.preferredFractionDigits, 0)
+        XCTAssertEqual(LoopUnit.milligramsPerDeciliter.preferredFractionDigits, 0)
+        XCTAssertEqual(LoopUnit.milligramsPerDeciliterPerInternationalUnit.preferredFractionDigits, 0)
+        XCTAssertEqual(LoopUnit.milligramsPerDeciliterPerMinute.preferredFractionDigits, 1)
+        XCTAssertEqual(LoopUnit.internationalUnit.preferredFractionDigits, 0)
+        XCTAssertEqual(LoopUnit.internationalUnitsPerHour.preferredFractionDigits, 0)
     }
 
     func testRoundValue() throws {
-        XCTAssertEqual(HKUnit.millimolesPerLiter.roundForPreferredDigits(value: 1.34), 1.3)
-        XCTAssertEqual(HKUnit.millimolesPerLiter.roundForPicker(value: 2.56), 2.6)
+        XCTAssertEqual(LoopUnit.millimolesPerLiter.roundForPreferredDigits(value: 1.34), 1.3)
+        XCTAssertEqual(LoopUnit.millimolesPerLiter.roundForPicker(value: 2.56), 2.6)
 
-        XCTAssertEqual(HKUnit.milligramsPerDeciliter.roundForPreferredDigits(value: 1.34), 1)
-        XCTAssertEqual(HKUnit.milligramsPerDeciliter.roundForPicker(value: 2.56), 3)
+        XCTAssertEqual(LoopUnit.milligramsPerDeciliter.roundForPreferredDigits(value: 1.34), 1)
+        XCTAssertEqual(LoopUnit.milligramsPerDeciliter.roundForPicker(value: 2.56), 3)
     }
 
     func testMaxFractionDigits() throws {
-        XCTAssertEqual(HKUnit.internationalUnit().maxFractionDigits, 3)
-        XCTAssertEqual(HKUnit.internationalUnit().unitDivided(by: .hour()).maxFractionDigits, 3)
+        XCTAssertEqual(LoopUnit.internationalUnit.maxFractionDigits, 3)
+        XCTAssertEqual(LoopUnit.internationalUnitsPerHour.maxFractionDigits, 3)
 
-        XCTAssertEqual(HKUnit.millimolesPerLiter.maxFractionDigits, 1)
-        XCTAssertEqual(HKUnit.millimolesPerLiter.unitDivided(by: .internationalUnit()).maxFractionDigits, 1)
-        XCTAssertEqual(HKUnit.millimolesPerLiter.unitDivided(by: .minute()).maxFractionDigits, 1)
-        XCTAssertEqual(HKUnit.gram().unitDivided(by: .internationalUnit()).maxFractionDigits, 1)
-        XCTAssertEqual(HKUnit.milligramsPerDeciliter.unitDivided(by: .minute()).maxFractionDigits, 1)
+        XCTAssertEqual(LoopUnit.millimolesPerLiter.maxFractionDigits, 1)
+        XCTAssertEqual(LoopUnit.millimolesPerLiterPerInternationalUnit.maxFractionDigits, 1)
+        XCTAssertEqual(LoopUnit.millimolesPerLiterPerMinute.maxFractionDigits, 1)
+        XCTAssertEqual(LoopUnit.gramsPerUnit.maxFractionDigits, 1)
+        XCTAssertEqual(LoopUnit.milligramsPerDeciliterPerMinute.maxFractionDigits, 1)
 
-        XCTAssertEqual(HKUnit.gram().maxFractionDigits, 0)
-        XCTAssertEqual(HKUnit.milligramsPerDeciliter.maxFractionDigits, 0)
-        XCTAssertEqual(HKUnit.milligramsPerDeciliter.unitDivided(by: .internationalUnit()).maxFractionDigits, 0)
+        XCTAssertEqual(LoopUnit.gram.maxFractionDigits, 0)
+        XCTAssertEqual(LoopUnit.milligramsPerDeciliter.maxFractionDigits, 0)
+        XCTAssertEqual(LoopUnit.milligramsPerDeciliterPerInternationalUnit.maxFractionDigits, 0)
     }
 }

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import HealthKit
+import LoopAlgorithm
 import LoopKit
 
 struct CorrectionRangeOverridesEditorViewModel {
@@ -16,11 +16,11 @@ struct CorrectionRangeOverridesEditorViewModel {
 
     let suspendThreshold: GlucoseThreshold?
 
-    let correctionRangeScheduleRange: ClosedRange<HKQuantity>
+    let correctionRangeScheduleRange: ClosedRange<LoopQuantity>
 
     let preset: CorrectionRangeOverrides.Preset
 
-    let guardrail: Guardrail<HKQuantity>
+    let guardrail: Guardrail<LoopQuantity>
 
     var saveCorrectionRangeOverride: (_ correctionRangeOverrides: CorrectionRangeOverrides) -> Void
     

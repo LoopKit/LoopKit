@@ -6,7 +6,7 @@
 //  Copyright © 2020 LoopKit Authors. All rights reserved.
 //
 
-import HealthKit
+import LoopAlgorithm
 
 public struct DeliveryLimits: Equatable {
     public enum Setting: Equatable {
@@ -14,20 +14,20 @@ public struct DeliveryLimits: Equatable {
         case maximumBolus
     }
 
-    private var settings: [Setting: HKQuantity]
+    private var settings: [Setting: LoopQuantity]
 
-    public init(maximumBasalRate: HKQuantity?, maximumBolus: HKQuantity?) {
+    public init(maximumBasalRate: LoopQuantity?, maximumBolus: LoopQuantity?) {
         settings = [:]
         settings[.maximumBasalRate] = maximumBasalRate
         settings[.maximumBolus] = maximumBolus
     }
 
-    public var maximumBasalRate: HKQuantity? {
+    public var maximumBasalRate: LoopQuantity? {
         get { settings[.maximumBasalRate] }
         set { settings[.maximumBasalRate] = newValue }
     }
 
-    public var maximumBolus: HKQuantity? {
+    public var maximumBolus: LoopQuantity? {
         get { settings[.maximumBolus] }
         set { settings[.maximumBolus] = newValue }
     }

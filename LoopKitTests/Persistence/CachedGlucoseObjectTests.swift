@@ -6,7 +6,7 @@
 //
 
 import XCTest
-import HealthKit
+import LoopAlgorithm
 @testable import LoopKit
 
 class CachedGlucoseObjectTests: PersistenceControllerTestCase {
@@ -195,8 +195,8 @@ class CachedGlucoseObjectQuantityTests: PersistenceControllerTestCase {
         cacheStore.managedObjectContext.performAndWait {
             let cachedGlucoseObject = CachedGlucoseObject(context: cacheStore.managedObjectContext)
             cachedGlucoseObject.value = 123.45
-            cachedGlucoseObject.unitString = HKUnit.milligramsPerDeciliter.unitString
-            XCTAssertEqual(cachedGlucoseObject.quantity, HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 123.45))
+            cachedGlucoseObject.unitString = LoopUnit.milligramsPerDeciliter.unitString
+            XCTAssertEqual(cachedGlucoseObject.quantity, LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 123.45))
         }
     }
 }
@@ -210,7 +210,7 @@ class CachedGlucoseObjectEncodableTests: PersistenceControllerTestCase {
             cachedGlucoseObject.syncIdentifier = "7723A0EE-F6D5-46E0-BBFE-1DEEBF8ED6F2"
             cachedGlucoseObject.syncVersion = 2
             cachedGlucoseObject.value = 98.7
-            cachedGlucoseObject.unitString = HKUnit.milligramsPerDeciliter.unitString
+            cachedGlucoseObject.unitString = LoopUnit.milligramsPerDeciliter.unitString
             cachedGlucoseObject.startDate = dateFormatter.date(from: "2020-05-14T22:38:14Z")!
             cachedGlucoseObject.isDisplayOnly = false
             cachedGlucoseObject.wasUserEntered = true
@@ -238,7 +238,7 @@ class CachedGlucoseObjectEncodableTests: PersistenceControllerTestCase {
             let cachedGlucoseObject = CachedGlucoseObject(context: cacheStore.managedObjectContext)
             cachedGlucoseObject.provenanceIdentifier = "238E41EA-9576-4981-A1A4-51E10228584F"
             cachedGlucoseObject.value = 87.6
-            cachedGlucoseObject.unitString = HKUnit.milligramsPerDeciliter.unitString
+            cachedGlucoseObject.unitString = LoopUnit.milligramsPerDeciliter.unitString
             cachedGlucoseObject.startDate = dateFormatter.date(from: "2020-05-14T22:38:14Z")!
             cachedGlucoseObject.isDisplayOnly = true
             cachedGlucoseObject.wasUserEntered = false
@@ -280,12 +280,12 @@ extension CachedGlucoseObject {
         self.syncIdentifier = UUID().uuidString
         self.syncVersion = 2
         self.value = 99.9
-        self.unitString = HKUnit.milligramsPerDeciliter.unitString
+        self.unitString = LoopUnit.milligramsPerDeciliter.unitString
         self.startDate = Date()
         self.isDisplayOnly = false
         self.wasUserEntered = false
         self.condition = nil
         self.trend = .up
-        self.trendRate = HKQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: 1.0)
+        self.trendRate = LoopQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: 1.0)
     }
 }

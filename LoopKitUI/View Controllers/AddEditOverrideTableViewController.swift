@@ -103,7 +103,7 @@ public final class AddEditOverrideTableViewController: UITableViewController {
 
     // MARK: - Override properties
 
-    private let glucoseUnit: HKUnit
+    private let glucoseUnit: LoopUnit
 
     private var symbol: String? { didSet { updateSaveButtonEnabled() } }
 
@@ -141,7 +141,7 @@ public final class AddEditOverrideTableViewController: UITableViewController {
 
     // MARK: - Initialization & view life cycle
 
-    public init(glucoseUnit: HKUnit) {
+    public init(glucoseUnit: LoopUnit) {
         self.glucoseUnit = glucoseUnit
         super.init(style: .grouped)
     }

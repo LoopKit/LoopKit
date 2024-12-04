@@ -6,17 +6,17 @@
 //  Copyright © 2023 LoopKit Authors. All rights reserved.
 //
 
-import HealthKit
+import LoopAlgorithm
 
 public struct StoredFavoriteFood: FavoriteFood, Identifiable {
     public var id: String
     
     public var name: String
-    public var carbsQuantity: HKQuantity
+    public var carbsQuantity: LoopQuantity
     public var foodType: String
     public var absorptionTime: TimeInterval
     
-    public init(id: String = UUID().uuidString, name: String, carbsQuantity: HKQuantity, foodType: String, absorptionTime: TimeInterval) {
+    public init(id: String = UUID().uuidString, name: String, carbsQuantity: LoopQuantity, foodType: String, absorptionTime: TimeInterval) {
         self.id = id
         self.name = name
         self.carbsQuantity = carbsQuantity
@@ -37,7 +37,7 @@ extension StoredFavoriteFood: Codable {
         self.init(
             id: try container.decode(String.self, forKey: .id),
             name: try container.decode(String.self, forKey: .name),
-            carbsQuantity: HKQuantity(unit: .gram(), doubleValue: try container.decode(Double.self, forKey: .carbsQuantity)),
+            carbsQuantity: LoopQuantity(unit: .gram, doubleValue: try container.decode(Double.self, forKey: .carbsQuantity)),
             foodType: try container.decode(String.self, forKey: .foodType),
             absorptionTime: try container.decode(TimeInterval.self, forKey: .absorptionTime)
         )
@@ -47,7 +47,7 @@ extension StoredFavoriteFood: Codable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(id, forKey: .id)
         try container.encode(name, forKey: .name)
-        try container.encode(carbsQuantity.doubleValue(for: .gram()), forKey: .carbsQuantity)
+        try container.encode(carbsQuantity.doubleValue(for: .gram), forKey: .carbsQuantity)
         try container.encode(foodType, forKey: .foodType)
         try container.encode(absorptionTime, forKey: .absorptionTime)
     }

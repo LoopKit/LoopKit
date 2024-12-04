@@ -8,6 +8,7 @@
 
 import SwiftUI
 import HealthKit
+import LoopAlgorithm
 import LoopKit
 
 public typealias SyncBasalRateSchedule = (_ items: [RepeatingScheduleValue<Double>], _ completion: @escaping (Result<BasalRateSchedule, Error>) -> Void) -> Void
@@ -15,7 +16,7 @@ public typealias SyncBasalRateSchedule = (_ items: [RepeatingScheduleValue<Doubl
 public struct BasalRateScheduleEditor: View {
     var schedule: DailyQuantitySchedule<Double>?
     var supportedBasalRates: [Double]
-    var guardrail: Guardrail<HKQuantity>
+    var guardrail: Guardrail<LoopQuantity>
     var maximumScheduleEntryCount: Int
     var syncBasalRateSchedule: SyncBasalRateSchedule?
     var save: (BasalRateSchedule) -> Void
@@ -53,7 +54,7 @@ public struct BasalRateScheduleEditor: View {
         self.mode = mode
         
         self.supportedBasalRates.removeAll(where: {
-            !self.guardrail.absoluteBounds.contains(HKQuantity(unit: .internationalUnitsPerHour, doubleValue: $0))
+            !self.guardrail.absoluteBounds.contains(LoopQuantity(unit: .internationalUnitsPerHour, doubleValue: $0))
         })
     }
     

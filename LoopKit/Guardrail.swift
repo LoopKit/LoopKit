@@ -6,7 +6,7 @@
 //  Copyright © 2020 LoopKit Authors. All rights reserved.
 //
 
-import HealthKit
+import LoopAlgorithm
 
 
 public enum SafetyClassification: Equatable, Hashable {
@@ -61,13 +61,13 @@ extension Guardrail where Value: Strideable {
     }
 }
 
-extension Guardrail where Value == HKQuantity {
-    public init(absoluteBounds: ClosedRange<Double>, recommendedBounds: ClosedRange<Double>, unit: HKUnit, startingSuggestion: Double? = nil) {
-        let absoluteBoundsWithUnit = HKQuantity(unit: unit, doubleValue: absoluteBounds.lowerBound)...HKQuantity(unit: unit, doubleValue: absoluteBounds.upperBound)
-        let recommendedBoundsWithUnit = HKQuantity(unit: unit, doubleValue: recommendedBounds.lowerBound)...HKQuantity(unit: unit, doubleValue: recommendedBounds.upperBound)
-        let startingSuggestionQuantity: HKQuantity?
+extension Guardrail where Value == LoopQuantity {
+    public init(absoluteBounds: ClosedRange<Double>, recommendedBounds: ClosedRange<Double>, unit: LoopUnit, startingSuggestion: Double? = nil) {
+        let absoluteBoundsWithUnit = LoopQuantity(unit: unit, doubleValue: absoluteBounds.lowerBound)...LoopQuantity(unit: unit, doubleValue: absoluteBounds.upperBound)
+        let recommendedBoundsWithUnit = LoopQuantity(unit: unit, doubleValue: recommendedBounds.lowerBound)...LoopQuantity(unit: unit, doubleValue: recommendedBounds.upperBound)
+        let startingSuggestionQuantity: LoopQuantity?
         if let startingSuggestion = startingSuggestion {
-            startingSuggestionQuantity = HKQuantity(unit: unit, doubleValue: startingSuggestion)
+            startingSuggestionQuantity = LoopQuantity(unit: unit, doubleValue: startingSuggestion)
         } else {
             startingSuggestionQuantity = nil
         }
@@ -75,13 +75,13 @@ extension Guardrail where Value == HKQuantity {
     }
 
     /// if fractionDigits is nil, defaults to the unit maxFractionDigits
-    public func allQuantities(forUnit unit: HKUnit, usingFractionDigits fractionDigits: Int? = nil) -> [HKQuantity] {
+    public func allQuantities(forUnit unit: LoopUnit, usingFractionDigits fractionDigits: Int? = nil) -> [LoopQuantity] {
         allValues(forUnit: unit, usingFractionDigits: fractionDigits ?? unit.maxFractionDigits)
-            .map { HKQuantity(unit: unit, doubleValue: $0) }
+            .map { LoopQuantity(unit: unit, doubleValue: $0) }
     }
 
     /// if fractionDigits is nil, defaults to the unit maxFractionDigits
-    public func allValues(forUnit unit: HKUnit, usingFractionDigits fractionDigits: Int? = nil) -> [Double] {
+    public func allValues(forUnit unit: LoopUnit, usingFractionDigits fractionDigits: Int? = nil) -> [Double] {
         unit.allValues(from: absoluteBounds.lowerBound, through: absoluteBounds.upperBound, usingFractionDigits: fractionDigits ?? unit.maxFractionDigits)
     }
 }

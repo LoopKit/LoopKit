@@ -13,17 +13,17 @@ import LoopAlgorithm
 
 public struct GlucoseValuePicker: View {
     @Environment(\.guidanceColors) var guidanceColors
-    @Binding var value: HKQuantity
-    var unit: HKUnit
-    var guardrail: Guardrail<HKQuantity>
-    var bounds: ClosedRange<HKQuantity>
+    @Binding var value: LoopQuantity
+    var unit: LoopUnit
+    var guardrail: Guardrail<LoopQuantity>
+    var bounds: ClosedRange<LoopQuantity>
     var isUnitLabelVisible: Bool
 
     public init(
-        value: Binding<HKQuantity>,
-        unit: HKUnit,
-        guardrail: Guardrail<HKQuantity>,
-        bounds: ClosedRange<HKQuantity>,
+        value: Binding<LoopQuantity>,
+        unit: LoopUnit,
+        guardrail: Guardrail<LoopQuantity>,
+        bounds: ClosedRange<LoopQuantity>,
         isUnitLabelVisible: Bool = true
     ) {
         self._value = value
@@ -34,9 +34,9 @@ public struct GlucoseValuePicker: View {
     }
 
     public init(
-        value: Binding<HKQuantity>,
-        unit: HKUnit,
-        guardrail: Guardrail<HKQuantity>,
+        value: Binding<LoopQuantity>,
+        unit: LoopUnit,
+        guardrail: Guardrail<LoopQuantity>,
         isUnitLabelVisible: Bool = true
     ) {
         self.init(value: value, unit: unit, guardrail: guardrail, bounds: guardrail.absoluteBounds, isUnitLabelVisible: isUnitLabelVisible)
@@ -54,19 +54,19 @@ public struct GlucoseValuePicker: View {
     var selectableValues: [Double] {
         Array(
             Swift.stride(
-                from: bounds.lowerBound.doubleValue(for: unit, withRounding: true),
-                through: bounds.upperBound.doubleValue(for: unit, withRounding: true),
-                by: stride.doubleValue(for: unit, withRounding: true)
+                from: bounds.lowerBound.doubleValue(for: unit),
+                through: bounds.upperBound.doubleValue(for: unit),
+                by: stride.doubleValue(for: unit)
             )
         )
     }
 
-    private var stride: HKQuantity {
+    private var stride: LoopQuantity {
         switch unit {
         case .milligramsPerDeciliter:
-            return HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 1)
+            return LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 1)
         case .millimolesPerLiter:
-            return HKQuantity(unit: .millimolesPerLiter, doubleValue: 0.1)
+            return LoopQuantity(unit: .millimolesPerLiter, doubleValue: 0.1)
         default:
             fatalError("Unsupported glucose unit \(unit)")
         }
@@ -74,11 +74,11 @@ public struct GlucoseValuePicker: View {
 }
 
 private struct GlucoseValuePickerTester: View {
-    @State var value = HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 80)
+    @State var value = LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 80)
 
     private let guardrail = Guardrail(absoluteBounds: 54...180, recommendedBounds: 71...120, unit: .milligramsPerDeciliter, startingSuggestion: 80)
 
-    var unit: HKUnit
+    var unit: LoopUnit
 
     var body: some View {
         GlucoseValuePicker(value: $value, unit: unit, guardrail: guardrail)
@@ -87,7 +87,7 @@ private struct GlucoseValuePickerTester: View {
 
 struct GlucoseValuePicker_Previews: PreviewProvider {
     static var previews: some View {
-        ForEach([HKUnit.milligramsPerDeciliter, .millimolesPerLiter], id: \.self) { unit in
+        ForEach([LoopUnit.milligramsPerDeciliter, .millimolesPerLiter], id: \.self) { unit in
             GlucoseValuePickerTester(unit: unit)
         }
     }

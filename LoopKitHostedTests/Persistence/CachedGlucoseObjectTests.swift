@@ -8,19 +8,20 @@
 
 import XCTest
 import HealthKit
+import LoopAlgorithm
 @testable import LoopKit
 
 class CachedGlucoseObjectOperationsTests: PersistenceControllerTestCase {
     func testCreateFromNewGlucoseSample() {
         cacheStore.managedObjectContext.performAndWait {
             let startDate = dateFormatter.date(from: "2020-01-02T03:04:05Z")!
-            let quantity = HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 123.4)
+            let quantity = LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 123.4)
             let device = HKDevice(name: "NAME", manufacturer: "MANUFACTURER", model: "MODEL", hardwareVersion: "HARDWAREVERSION", firmwareVersion: "FIRMWAREVERSION", softwareVersion: "SOFTWAREVERSION", localIdentifier: "LOCALIDENTIFIER", udiDeviceIdentifier: "UDIDEVICEIDENTIFIER")
             let newGlucoseSample = NewGlucoseSample(date: startDate,
                                                     quantity: quantity,
                                                     condition: .belowRange,
                                                     trend: .flat,
-                                                    trendRate: HKQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: 0.1),
+                                                    trendRate: LoopQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: 0.1),
                                                     isDisplayOnly: true,
                                                     wasUserEntered: false,
                                                     syncIdentifier: "F4C094AA-9EBE-4804-8F02-90C7B613BDEC",

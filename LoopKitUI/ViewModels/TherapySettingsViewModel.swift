@@ -8,7 +8,6 @@
 
 import Combine
 import LoopKit
-import HealthKit
 import SwiftUI
 import LoopAlgorithm
 
@@ -44,8 +43,8 @@ public class TherapySettingsViewModel: ObservableObject {
     }
 
     var deliveryLimits: DeliveryLimits {
-        return DeliveryLimits(maximumBasalRate: therapySettings.maximumBasalRatePerHour.map { HKQuantity(unit: .internationalUnitsPerHour, doubleValue: $0) },
-                              maximumBolus: therapySettings.maximumBolus.map { HKQuantity(unit: .internationalUnit(), doubleValue: $0) } )
+        return DeliveryLimits(maximumBasalRate: therapySettings.maximumBasalRatePerHour.map { LoopQuantity(unit: .internationalUnitsPerHour, doubleValue: $0) },
+                              maximumBolus: therapySettings.maximumBolus.map { LoopQuantity(unit: .internationalUnit, doubleValue: $0) } )
     }
 
     var suspendThreshold: GlucoseThreshold? {
@@ -56,7 +55,7 @@ public class TherapySettingsViewModel: ObservableObject {
         return therapySettings.glucoseTargetRangeSchedule
     }
 
-    func glucoseTargetRangeSchedule(for glucoseUnit: HKUnit) -> GlucoseRangeSchedule? {
+    func glucoseTargetRangeSchedule(for glucoseUnit: LoopUnit) -> GlucoseRangeSchedule? {
         return glucoseTargetRangeSchedule?.schedule(for: glucoseUnit)
     }
 
@@ -65,7 +64,7 @@ public class TherapySettingsViewModel: ObservableObject {
                                         workout: therapySettings.correctionRangeOverrides?.workout)
     }
 
-    var correctionRangeScheduleRange: ClosedRange<HKQuantity> {
+    var correctionRangeScheduleRange: ClosedRange<LoopQuantity> {
         precondition(therapySettings.glucoseTargetRangeSchedule != nil)
         return therapySettings.glucoseTargetRangeSchedule!.scheduleRange()
     }
@@ -74,7 +73,7 @@ public class TherapySettingsViewModel: ObservableObject {
         return therapySettings.insulinSensitivitySchedule
     }
 
-    func insulinSensitivitySchedule(for glucoseUnit: HKUnit) -> InsulinSensitivitySchedule? {
+    func insulinSensitivitySchedule(for glucoseUnit: LoopUnit) -> InsulinSensitivitySchedule? {
         return insulinSensitivitySchedule?.schedule(for: glucoseUnit)
     }
 
@@ -118,7 +117,7 @@ extension TherapySettingsViewModel {
         delegate?.saveCompletion(therapySettings: therapySettings)
     }
 
-    public func saveSuspendThreshold(quantity: HKQuantity, withDisplayGlucoseUnit displayGlucoseUnit: HKUnit) {
+    public func saveSuspendThreshold(quantity: LoopQuantity, withDisplayGlucoseUnit displayGlucoseUnit: LoopUnit) {
         therapySettings.suspendThreshold = GlucoseThreshold(unit: displayGlucoseUnit, value: quantity.doubleValue(for: displayGlucoseUnit))
 
         // TODO: Eventually target editors should support conflicting initial values
@@ -136,11 +135,11 @@ extension TherapySettingsViewModel {
         }
 
         if let overrides = therapySettings.correctionRangeOverrides {
-            let adjusted = [overrides.preMeal, overrides.workout].map { item -> ClosedRange<HKQuantity>? in
+            let adjusted = [overrides.preMeal, overrides.workout].map { item -> ClosedRange<LoopQuantity>? in
                 guard let item = item else {
                     return nil
                 }
-                return ClosedRange<HKQuantity>.init(
+                return ClosedRange<LoopQuantity>.init(
                     uncheckedBounds: (
                         lower: max(quantity, item.lowerBound),
                         upper:  max(quantity, item.upperBound)))
@@ -155,7 +154,7 @@ extension TherapySettingsViewModel {
                 if let targetRange = preset.settings.targetRange {
                     var newPreset = preset
                     newPreset.settings = TemporaryScheduleOverrideSettings(
-                        targetRange: ClosedRange<HKQuantity>.init(
+                        targetRange: ClosedRange<LoopQuantity>.init(
                             uncheckedBounds: (
                                 lower: max(quantity, targetRange.lowerBound),
                                 upper:  max(quantity, targetRange.upperBound))),
@@ -177,7 +176,7 @@ extension TherapySettingsViewModel {
     
     public func saveDeliveryLimits(limits: DeliveryLimits) {
         therapySettings.maximumBasalRatePerHour = limits.maximumBasalRate?.doubleValue(for: .internationalUnitsPerHour)
-        therapySettings.maximumBolus = limits.maximumBolus?.doubleValue(for: .internationalUnit())
+        therapySettings.maximumBolus = limits.maximumBolus?.doubleValue(for: .internationalUnit)
         delegate?.saveCompletion(therapySettings: therapySettings)
     }
     

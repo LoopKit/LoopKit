@@ -6,10 +6,10 @@
 //  Copyright © 2020 LoopKit Authors. All rights reserved.
 //
 
-import HealthKit
 import SwiftUI
 import LoopKit
 import LoopAlgorithm
+import HealthKit
 
 public struct InsulinModelSelection: View {
     @EnvironmentObject private var displayGlucosePreference: DisplayGlucosePreference
@@ -27,7 +27,7 @@ public struct InsulinModelSelection: View {
 
     static let defaultInsulinSensitivitySchedule = InsulinSensitivitySchedule(unit: .milligramsPerDeciliter, dailyItems: [RepeatingScheduleValue<Double>(startTime: 0, value: 40)])!
     
-    private var displayGlucoseUnit: HKUnit {
+    private var displayGlucoseUnit: LoopUnit {
         displayGlucosePreference.unit
     }
     
@@ -200,7 +200,7 @@ public struct InsulinModelSelection: View {
     
     private func oneUnitBolusEffectPrediction(using modelPreset: ExponentialInsulinModelPreset) -> [GlucoseValue] {
         let bolus = BasalRelativeDose(type: .bolus, startDate: chartManager.startDate, endDate: chartManager.startDate, volume: 1, insulinModel: modelPreset.model)
-        let startingGlucoseSample = HKQuantitySample(type: HealthKitSampleStore.glucoseType, quantity: startingGlucoseQuantity, start: chartManager.startDate, end: chartManager.startDate)
+        let startingGlucoseSample = SimpleGlucoseValue(startDate: chartManager.startDate, endDate: chartManager.startDate, quantity: startingGlucoseQuantity)
         let isfTimeline = insulinSensitivitySchedule.quantitiesBetween(
             start: chartManager.startDate,
             end: chartManager.startDate.addingTimeInterval(
@@ -211,13 +211,13 @@ public struct InsulinModelSelection: View {
         return LoopMath.predictGlucose(startingAt: startingGlucoseSample, effects: effects)
     }
 
-    private var startingGlucoseQuantity: HKQuantity {
+    private var startingGlucoseQuantity: LoopQuantity {
         let startingGlucoseValue = insulinSensitivitySchedule.quantity(at: chartManager.startDate).doubleValue(for: displayGlucoseUnit) + displayGlucoseUnit.glucoseExampleTargetValue
-        return HKQuantity(unit: displayGlucoseUnit, doubleValue: startingGlucoseValue)
+        return LoopQuantity(unit: displayGlucoseUnit, doubleValue: startingGlucoseValue)
     }
 
-    private var endingGlucoseQuantity: HKQuantity {
-        HKQuantity(unit: displayGlucoseUnit, doubleValue: displayGlucoseUnit.glucoseExampleTargetValue)
+    private var endingGlucoseQuantity: LoopQuantity {
+        LoopQuantity(unit: displayGlucoseUnit, doubleValue: displayGlucoseUnit.glucoseExampleTargetValue)
     }
 
     private func isSelected(_ preset: ExponentialInsulinModelPreset) -> Binding<Bool> {
@@ -257,7 +257,7 @@ public struct InsulinModelSelection: View {
     }
 }
 
-fileprivate extension HKUnit {
+fileprivate extension LoopUnit {
     /// An example value for the "ideal" target
     var glucoseExampleTargetValue: Double {
         if self == .milligramsPerDeciliter {

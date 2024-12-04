@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-import HealthKit
+import LoopAlgorithm
 import LoopKit
 
 
@@ -17,9 +17,9 @@ public struct CorrectionRangeOverridesExpandableSetting<ExpandedContent: View>: 
     @Binding var isEditing: Bool
     @Binding var value: CorrectionRangeOverrides
     let preset: CorrectionRangeOverrides.Preset
-    let unit: HKUnit
+    let unit: LoopUnit
     let suspendThreshold: GlucoseThreshold?
-    var correctionRangeScheduleRange: ClosedRange<HKQuantity>
+    var correctionRangeScheduleRange: ClosedRange<LoopQuantity>
     var expandedContent: () -> ExpandedContent
 
     public var body: some View {
@@ -44,7 +44,7 @@ public struct CorrectionRangeOverridesExpandableSetting<ExpandedContent: View>: 
         )
     }
 
-    private func guardrail(for preset: CorrectionRangeOverrides.Preset) -> Guardrail<HKQuantity> {
+    private func guardrail(for preset: CorrectionRangeOverrides.Preset) -> Guardrail<LoopQuantity> {
         return Guardrail.correctionRangeOverride(for: preset, correctionRangeScheduleRange: correctionRangeScheduleRange, suspendThreshold: suspendThreshold)
     }
 }

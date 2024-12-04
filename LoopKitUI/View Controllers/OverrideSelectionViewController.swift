@@ -7,8 +7,8 @@
 //
 
 import UIKit
-import HealthKit
 import LoopKit
+import LoopAlgorithm
 import SwiftUI
 import Intents
 import os.log
@@ -23,7 +23,7 @@ public protocol OverrideSelectionViewControllerDelegate: AnyObject {
 
 public final class OverrideSelectionViewController: UICollectionViewController, IdentifiableClass {
 
-    public var glucoseUnit: HKUnit!
+    public var glucoseUnit: LoopUnit!
 
     public var scheduledOverride: TemporaryScheduleOverride?
 
@@ -241,7 +241,7 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
         }
     }
 
-    private func makeTargetRangeText(from targetRange: ClosedRange<HKQuantity>) -> String {
+    private func makeTargetRangeText(from targetRange: ClosedRange<LoopQuantity>) -> String {
         guard
             let minTarget = glucoseNumberFormatter.string(from: targetRange.lowerBound.doubleValue(for: glucoseUnit)),
             let maxTarget = glucoseNumberFormatter.string(from: targetRange.upperBound.doubleValue(for: glucoseUnit))

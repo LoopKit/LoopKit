@@ -15,7 +15,7 @@ public extension Array where Element == GlucoseEffect {
         guard count > 1 else {
             return []
         }
-        let unit = HKUnit.milligramsPerDeciliter
+        let unit = LoopUnit.milligramsPerDeciliter
         var previousEffectValue: Double = first!.quantity.doubleValue(for: unit)
         var previousEffectDate: Date = first!.startDate
 
@@ -27,7 +27,7 @@ public extension Array where Element == GlucoseEffect {
             let timespan = effect.startDate.timeIntervalSince(previousEffectDate).minutes
             let velocity = delta / timespan
 
-            velocities.append(GlucoseEffectVelocity(startDate: previousEffectDate, endDate: effect.startDate, quantity: HKQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: velocity)))
+            velocities.append(GlucoseEffectVelocity(startDate: previousEffectDate, endDate: effect.startDate, quantity: LoopQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: velocity)))
 
             previousEffectValue = value
             previousEffectDate = effect.startDate

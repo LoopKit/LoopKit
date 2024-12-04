@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-import HealthKit
+import LoopAlgorithm
 import LoopKit
 
 struct InsulinStatusView: View {
@@ -41,7 +41,7 @@ struct InsulinStatusView: View {
     }
 
     let basalRateFormatter = QuantityFormatter(for: .internationalUnitsPerHour)
-    let reservoirVolumeFormatter = QuantityFormatter(for: .internationalUnit())
+    let reservoirVolumeFormatter = QuantityFormatter(for: .internationalUnit)
 
     private var inNoDelivery: Bool {
         !viewModel.isDeliverySuspended && viewModel.basalDeliveryRate == nil
@@ -83,8 +83,8 @@ struct InsulinStatusView: View {
         HStack(alignment: .center) {
             VStack(alignment: .leading) {
                 HStack(alignment: .lastTextBaseline, spacing: 3) {
-                    let unit = HKUnit.internationalUnitsPerHour
-                    let quantity = HKQuantity(unit: unit, doubleValue: basalRate)
+                    let unit = LoopUnit.internationalUnitsPerHour
+                    let quantity = LoopQuantity(unit: unit, doubleValue: basalRate)
                     if viewModel.presentDeliveryWarning == true {
                         Image(systemName: "exclamationmark.circle.fill")
                             .foregroundColor(guidanceColors.warning)

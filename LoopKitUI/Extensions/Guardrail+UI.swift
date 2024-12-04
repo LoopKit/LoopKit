@@ -7,14 +7,12 @@
 //
 
 import SwiftUI
-import HealthKit
+import LoopAlgorithm
 import LoopKit
 
 
-extension Guardrail where Value == HKQuantity {
-    public func color(for quantity: HKQuantity,
-               guidanceColors: GuidanceColors) -> Color
-    {
+extension Guardrail where Value == LoopQuantity {
+    public func color(for quantity: LoopQuantity, guidanceColors: GuidanceColors) -> Color {
         switch classification(for: quantity) {
         case .withinRecommendedRange:
             return guidanceColors.acceptable

@@ -8,6 +8,7 @@
 
 import XCTest
 import HealthKit
+import LoopAlgorithm
 @testable import LoopKit
 
 class InsulinDeliveryStoreTestsBase: PersistenceControllerTestCase {
@@ -26,7 +27,7 @@ class InsulinDeliveryStoreTestsBase: PersistenceControllerTestCase {
                                     unit: .unitsPerHour,
                                     deliveredUnits: 0.02,
                                     syncIdentifier: "A1F8E29B-33D6-4B38-B4CD-D84F14744871",
-                                    scheduledBasalRate: HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 1.8))
+                                    scheduledBasalRate: LoopQuantity(unit: .internationalUnitsPerHour, doubleValue: 1.8))
     internal let entry3 = DoseEntry(type: .bolus,
                                     startDate: Date(timeIntervalSinceNow: -.minutes(4)),
                                     endDate: Date(timeIntervalSinceNow: -.minutes(3.5)),

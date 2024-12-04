@@ -9,7 +9,7 @@
 import UIKit
 import LoopKit
 import LoopKitUI
-import HealthKit
+import LoopAlgorithm
 
 
 class MasterViewController: UITableViewController {
@@ -166,7 +166,7 @@ class MasterViewController: UITableViewController {
 
                 scheduleVC.delegate = self
                 scheduleVC.title = NSLocalizedString("Carb Ratios", comment: "The title of the carb ratios schedule screen")
-                scheduleVC.unit = .gram()
+                scheduleVC.unit = .gram
 
                 if let schedule = dataManager?.carbRatioSchedule {
                     scheduleVC.timeZone = schedule.timeZone
@@ -189,7 +189,7 @@ class MasterViewController: UITableViewController {
                 let scheduleVC = DismissibleHostingController(content: view, dismissalMode: .pop(to:  type(of: self)), isModalInPresentation: false)
                 show(scheduleVC, sender: sender)
             case .insulinSensitivity:
-                let unit = dataManager?.insulinSensitivitySchedule?.unit ?? HKUnit.milligramsPerDeciliter
+                let unit = dataManager?.insulinSensitivitySchedule?.unit ?? LoopUnit.milligramsPerDeciliter
                 let scheduleVC = InsulinSensitivityScheduleViewController(allowedValues: unit.allowedSensitivityValues, unit: unit)
 
                 scheduleVC.unit = unit
@@ -294,13 +294,13 @@ extension MasterViewController: InsulinSensitivityScheduleStorageDelegate {
     }
 }
 
-private extension HKUnit {
+private extension LoopUnit {
     var allowedSensitivityValues: [Double] {
-        if self == HKUnit.milligramsPerDeciliter {
+        if self == LoopUnit.milligramsPerDeciliter {
             return (10...500).map { Double($0) }
         }
 
-        if self == HKUnit.millimolesPerLiter {
+        if self == LoopUnit.millimolesPerLiter {
             return (6...270).map { Double($0) / 10.0 }
         }
 
@@ -308,11 +308,11 @@ private extension HKUnit {
     }
 
     var allowedCorrectionRangeValues: [Double] {
-        if self == HKUnit.milligramsPerDeciliter {
+        if self == LoopUnit.milligramsPerDeciliter {
             return (60...180).map { Double($0) }
         }
 
-        if self == HKUnit.millimolesPerLiter {
+        if self == LoopUnit.millimolesPerLiter {
             return (33...100).map { Double($0) / 10.0 }
         }
 

@@ -24,7 +24,7 @@ public struct StoredGlucoseSample: GlucoseSampleValue, Equatable {
     // MARK: - SampleValue
 
     public let startDate: Date
-    public let quantity: HKQuantity
+    public let quantity: LoopQuantity
 
     // MARK: - GlucoseSampleValue
 
@@ -32,7 +32,7 @@ public struct StoredGlucoseSample: GlucoseSampleValue, Equatable {
     public let wasUserEntered: Bool
     public let condition: GlucoseCondition?
     public let trend: GlucoseTrend?
-    public let trendRate: HKQuantity?
+    public let trendRate: LoopQuantity?
 
     public init(sample: HKQuantitySample) {
         self.init(
@@ -41,7 +41,7 @@ public struct StoredGlucoseSample: GlucoseSampleValue, Equatable {
             syncIdentifier: sample.syncIdentifier,
             syncVersion: sample.syncVersion,
             startDate: sample.startDate,
-            quantity: sample.quantity,
+            quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: sample.quantity.doubleValue(for: .milligramsPerDeciliter)),
             condition: sample.condition,
             trend: sample.trend,
             trendRate: sample.trendRate,
@@ -57,10 +57,10 @@ public struct StoredGlucoseSample: GlucoseSampleValue, Equatable {
         syncIdentifier: String? = nil,
         syncVersion: Int? = nil,
         startDate: Date,
-        quantity: HKQuantity,
+        quantity: LoopQuantity,
         condition: GlucoseCondition? = nil,
         trend: GlucoseTrend? = nil,
-        trendRate: HKQuantity? = nil,
+        trendRate: LoopQuantity? = nil,
         isDisplayOnly: Bool = false,
         wasUserEntered: Bool = false,
         device: HKDevice? = nil,
@@ -114,10 +114,10 @@ extension StoredGlucoseSample: Codable {
                   syncIdentifier: try container.decodeIfPresent(String.self, forKey: .syncIdentifier),
                   syncVersion: try container.decodeIfPresent(Int.self, forKey: .syncVersion),
                   startDate: try container.decode(Date.self, forKey: .startDate),
-                  quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: try container.decode(Double.self, forKey: .quantity)),
+                  quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: try container.decode(Double.self, forKey: .quantity)),
                   condition: try container.decodeIfPresent(GlucoseCondition.self, forKey: .condition),
                   trend: try container.decodeIfPresent(GlucoseTrend.self, forKey: .trend),
-                  trendRate: try container.decodeIfPresent(Double.self, forKey: .trendRate).map { HKQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: $0) },
+                  trendRate: try container.decodeIfPresent(Double.self, forKey: .trendRate).map { LoopQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: $0) },
                   isDisplayOnly: isDisplayOnly,
                   wasUserEntered: wasUserEntered,
                   device: try container.decodeIfPresent(CodableDevice.self, forKey: .device).map { $0.device },

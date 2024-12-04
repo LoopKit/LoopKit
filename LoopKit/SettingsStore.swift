@@ -293,8 +293,8 @@ public struct StoredSettings: Equatable {
     public var controllerTimeZone: TimeZone
     public var dosingEnabled: Bool
     public var glucoseTargetRangeSchedule: GlucoseRangeSchedule?
-    public var preMealTargetRange: ClosedRange<HKQuantity>?
-    public var workoutTargetRange: ClosedRange<HKQuantity>?
+    public var preMealTargetRange: ClosedRange<LoopQuantity>?
+    public var workoutTargetRange: ClosedRange<LoopQuantity>?
     public var overridePresets: [TemporaryScheduleOverridePreset]
     public var maximumBasalRatePerHour: Double?
     public var maximumBolus: Double?
@@ -310,7 +310,7 @@ public struct StoredSettings: Equatable {
     public var cgmDevice: HKDevice?
     public var pumpDevice: HKDevice?
     // This is the user's display preference glucose unit. TODO: Rename?
-    public var bloodGlucoseUnit: HKUnit?
+    public var bloodGlucoseUnit: LoopUnit?
     public var automaticDosingStrategy: AutomaticDosingStrategy
     public var syncIdentifier: UUID
 
@@ -318,8 +318,8 @@ public struct StoredSettings: Equatable {
                 controllerTimeZone: TimeZone = TimeZone.current,
                 dosingEnabled: Bool = false,
                 glucoseTargetRangeSchedule: GlucoseRangeSchedule? = nil,
-                preMealTargetRange: ClosedRange<HKQuantity>? = nil,
-                workoutTargetRange: ClosedRange<HKQuantity>? = nil,
+                preMealTargetRange: ClosedRange<LoopQuantity>? = nil,
+                workoutTargetRange: ClosedRange<LoopQuantity>? = nil,
                 overridePresets: [TemporaryScheduleOverridePreset] = [],
                 maximumBasalRatePerHour: Double? = nil,
                 maximumBolus: Double? = nil,
@@ -334,7 +334,7 @@ public struct StoredSettings: Equatable {
                 controllerDevice: ControllerDevice? = nil,
                 cgmDevice: HKDevice? = nil,
                 pumpDevice: HKDevice? = nil,
-                bloodGlucoseUnit: HKUnit? = nil,
+                bloodGlucoseUnit: LoopUnit? = nil,
                 automaticDosingStrategy: AutomaticDosingStrategy = .tempBasalOnly,
                 syncIdentifier: UUID = UUID()) {
         self.date = date
@@ -364,11 +364,11 @@ public struct StoredSettings: Equatable {
 }
 
 extension StoredSettings: Codable {
-    fileprivate static let codingGlucoseUnit = HKUnit.milligramsPerDeciliter
+    fileprivate static let codingGlucoseUnit = LoopUnit.milligramsPerDeciliter
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        let bloodGlucoseUnit = HKUnit(from: try container.decode(String.self, forKey: .bloodGlucoseUnit))
+        let bloodGlucoseUnit = LoopUnit(from: try container.decode(String.self, forKey: .bloodGlucoseUnit))
         self.init(date: try container.decode(Date.self, forKey: .date),
                   controllerTimeZone: try container.decode(TimeZone.self, forKey: .controllerTimeZone),
                   dosingEnabled: try container.decode(Bool.self, forKey: .dosingEnabled),
@@ -584,7 +584,7 @@ extension SettingsStore {
 // MARK: Historical queries
 
 extension SettingsStore {
-    public func getTargetRangeHistory(startDate: Date, endDate: Date) async throws -> [AbsoluteScheduleValue<ClosedRange<HKQuantity>>] {
+    public func getTargetRangeHistory(startDate: Date, endDate: Date) async throws -> [AbsoluteScheduleValue<ClosedRange<LoopQuantity>>] {
         // Get any changes during the period
         var settingsHistory = try await getStoredSettings(start: startDate, end: endDate)
 
@@ -613,7 +613,7 @@ extension SettingsStore {
 
         var idx = schedules.startIndex
         var date = startDate
-        var items = [AbsoluteScheduleValue<ClosedRange<HKQuantity>>]()
+        var items = [AbsoluteScheduleValue<ClosedRange<LoopQuantity>>]()
         while date < endDate {
             let scheduleActiveEnd: Date
             if idx+1 < schedules.endIndex {
@@ -667,7 +667,7 @@ extension SettingsStore {
     }
 
 
-    public func getInsulinSensitivityHistory(startDate: Date, endDate: Date) async throws -> [AbsoluteScheduleValue<HKQuantity>] {
+    public func getInsulinSensitivityHistory(startDate: Date, endDate: Date) async throws -> [AbsoluteScheduleValue<LoopQuantity>] {
         // Get any settings changes during the period
         var settingsHistory = try await getStoredSettings(start: startDate, end: endDate)
 
@@ -696,7 +696,7 @@ extension SettingsStore {
 
         var idx = schedules.startIndex
         var date = startDate
-        var items = [AbsoluteScheduleValue<HKQuantity>]()
+        var items = [AbsoluteScheduleValue<LoopQuantity>]()
         while date < endDate {
             let scheduleActiveEnd: Date
             if idx+1 < schedules.endIndex {
@@ -711,7 +711,7 @@ extension SettingsStore {
                 AbsoluteScheduleValue(
                     startDate: $0.startDate,
                     endDate: $0.endDate,
-                    value: HKQuantity(unit: schedule.unit, doubleValue: $0.value))
+                    value: LoopQuantity(unit: schedule.unit, doubleValue: $0.value))
             }
 
             items.append(contentsOf: absoluteScheduleValues)
@@ -787,11 +787,11 @@ extension SettingsStore {
 }
 
 public struct DosingLimits {
-    public var suspendThreshold: HKQuantity?
+    public var suspendThreshold: LoopQuantity?
     public var maxBolus: Double?
     public var maxBasalRate: Double?
 
-    public init(suspendThreshold: HKQuantity? = nil, maxBolus: Double? = nil, maxBasalRate: Double? = nil) {
+    public init(suspendThreshold: LoopQuantity? = nil, maxBolus: Double? = nil, maxBasalRate: Double? = nil) {
         self.suspendThreshold = suspendThreshold
         self.maxBolus = maxBolus
         self.maxBasalRate = maxBasalRate

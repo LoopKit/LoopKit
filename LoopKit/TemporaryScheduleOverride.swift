@@ -435,10 +435,10 @@ extension Array where Element == TemporaryScheduleOverride {
         }
     }
 
-    public func applySensitivity(over timeline: [AbsoluteScheduleValue<HKQuantity>]) -> [AbsoluteScheduleValue<HKQuantity>] {
+    public func applySensitivity(over timeline: [AbsoluteScheduleValue<LoopQuantity>]) -> [AbsoluteScheduleValue<LoopQuantity>] {
         apply(over: timeline) { quantity, override in
             let value = quantity.doubleValue(for: .milligramsPerDeciliter)
-            return HKQuantity(
+            return LoopQuantity(
                 unit: .milligramsPerDeciliter,
                 doubleValue: value / override.settings.effectiveInsulinNeedsScaleFactor
             )
@@ -465,7 +465,7 @@ extension Array where Element == TemporaryScheduleOverride {
     ///   - date: The date indicating the current time for use in a forecast creation
     ///
     /// - returns: A new timeline with an override applied, if one is applicable.
-    public func applyTarget(over timeline: [AbsoluteScheduleValue<ClosedRange<HKQuantity>>], at date: Date) -> [AbsoluteScheduleValue<ClosedRange<HKQuantity>>] {
+    public func applyTarget(over timeline: [AbsoluteScheduleValue<ClosedRange<LoopQuantity>>], at date: Date) -> [AbsoluteScheduleValue<ClosedRange<LoopQuantity>>] {
 
         guard timeline.count > 0 else {
             return []
@@ -484,7 +484,7 @@ extension Array where Element == TemporaryScheduleOverride {
         }
 
         if let applicableOverride, let overrideTarget = applicableOverride.settings.targetRange {
-            var result: [AbsoluteScheduleValue<ClosedRange<HKQuantity>>] = []
+            var result: [AbsoluteScheduleValue<ClosedRange<LoopQuantity>>] = []
 
             let overrideStart = applicableOverride.startDate
 

@@ -147,7 +147,7 @@ extension TherapySettings {
                          RepeatingScheduleValue(startTime: .hours(9), value: 55.0)],
             timeZone: timeZone)!
         let carbRatioSchedule = CarbRatioSchedule(
-            unit: .gram(),
+            unit: .gram,
             dailyItems: [RepeatingScheduleValue(startTime: .hours(0), value: 10.0)],
             timeZone: timeZone)!
         return TherapySettings(

@@ -7,7 +7,6 @@
 //
 
 import XCTest
-import HealthKit
 import LoopAlgorithm
 
 @testable import LoopKit
@@ -16,7 +15,7 @@ class SimpleGlucoseValueTests: XCTestCase {
     func testInitializerMilligramsPerDeciliter() {
         let startDate = Date()
         let endDate = Date().addingTimeInterval(.hours(1))
-        let quantity = HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 234.5)
+        let quantity = LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 234.5)
         let simpleGlucoseValue = SimpleGlucoseValue(startDate: startDate, endDate: endDate, quantity: quantity)
         XCTAssertEqual(simpleGlucoseValue.startDate, startDate)
         XCTAssertEqual(simpleGlucoseValue.endDate, endDate)
@@ -26,7 +25,7 @@ class SimpleGlucoseValueTests: XCTestCase {
     func testInitializerMillimolesPerLiter() {
         let startDate = Date()
         let endDate = Date().addingTimeInterval(.hours(1))
-        let quantity = HKQuantity(unit: .millimolesPerLiter, doubleValue: 12.3)
+        let quantity = LoopQuantity(unit: .millimolesPerLiter, doubleValue: 12.3)
         let simpleGlucoseValue = SimpleGlucoseValue(startDate: startDate, endDate: endDate, quantity: quantity)
         XCTAssertEqual(simpleGlucoseValue.startDate, startDate)
         XCTAssertEqual(simpleGlucoseValue.endDate, endDate)
@@ -35,7 +34,7 @@ class SimpleGlucoseValueTests: XCTestCase {
     
     func testInitializerMissingEndDate() {
         let startDate = Date()
-        let quantity = HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 234.5)
+        let quantity = LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 234.5)
         let simpleGlucoseValue = SimpleGlucoseValue(startDate: startDate, quantity: quantity)
         XCTAssertEqual(simpleGlucoseValue.startDate, startDate)
         XCTAssertEqual(simpleGlucoseValue.endDate, startDate)
@@ -45,7 +44,7 @@ class SimpleGlucoseValueTests: XCTestCase {
     func testInitializerGlucoseValue() {
         let startDate = Date()
         let endDate = Date().addingTimeInterval(.hours(1))
-        let quantity = HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 234.5)
+        let quantity = LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 234.5)
         let simpleGlucoseValue = SimpleGlucoseValue(SimpleGlucoseValue(startDate: startDate, endDate: endDate, quantity: quantity))
         XCTAssertEqual(simpleGlucoseValue.startDate, startDate)
         XCTAssertEqual(simpleGlucoseValue.endDate, endDate)
@@ -57,7 +56,7 @@ class SimpleGlucoseValueCodableTests: XCTestCase {
     func testCodableMilligramsPerDeciliter() throws {
         try assertSimpleGlucoseValueCodable(SimpleGlucoseValue(startDate: dateFormatter.date(from: "2020-05-14T22:00:03Z")!,
                                                                endDate: dateFormatter.date(from: "2020-05-14T23:00:03Z")!,
-                                                               quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 234.5)),
+                                                               quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 234.5)),
                                             encodesJSON: """
 {
   "endDate" : "2020-05-14T23:00:03Z",
@@ -72,11 +71,11 @@ class SimpleGlucoseValueCodableTests: XCTestCase {
     func testCodableMillimolesPerLiter() throws {
         try assertSimpleGlucoseValueCodable(SimpleGlucoseValue(startDate: dateFormatter.date(from: "2020-05-14T14:05:03Z")!,
                                                                endDate: dateFormatter.date(from: "2020-05-14T15:05:03Z")!,
-                                                               quantity: HKQuantity(unit: .millimolesPerLiter, doubleValue: 13.2)),
+                                                               quantity: LoopQuantity(unit: .millimolesPerLiter, doubleValue: 13.2)),
                                             encodesJSON: """
 {
   "endDate" : "2020-05-14T15:05:03Z",
-  "quantity" : 237.80576160007135,
+  "quantity" : 237.80576160007143,
   "quantityUnit" : "mg/dL",
   "startDate" : "2020-05-14T14:05:03Z"
 }
@@ -110,7 +109,7 @@ class SimpleGlucoseValueCodableTests: XCTestCase {
 class PredictedGlucoseValueCodableTests: XCTestCase {
     func testCodableMilligramsPerDeciliter() throws {
         try assertPredictedGlucoseValueCodable(PredictedGlucoseValue(startDate: dateFormatter.date(from: "2020-05-14T22:38:26Z")!,
-                                                                     quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 234.5)),
+                                                                     quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 234.5)),
                                                encodesJSON: """
 {
   "quantity" : 234.5,
@@ -123,10 +122,10 @@ class PredictedGlucoseValueCodableTests: XCTestCase {
     
     func testCodableMillimolesPerLiter() throws {
         try assertPredictedGlucoseValueCodable(PredictedGlucoseValue(startDate: dateFormatter.date(from: "2020-05-14T21:23:33Z")!,
-                                                                     quantity: HKQuantity(unit: .millimolesPerLiter, doubleValue: 12.3)),
+                                                                     quantity: LoopQuantity(unit: .millimolesPerLiter, doubleValue: 12.3)),
                                                encodesJSON: """
 {
-  "quantity" : 221.59173240006652,
+  "quantity" : 221.59173240006658,
   "quantityUnit" : "mg/dL",
   "startDate" : "2020-05-14T21:23:33Z"
 }

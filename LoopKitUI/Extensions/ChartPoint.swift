@@ -18,7 +18,7 @@ struct TargetChartBar {
 }
 
 extension ChartPoint {
-    static func barsForGlucoseRangeSchedule(_ glucoseRangeSchedule: GlucoseRangeSchedule, unit: HKUnit, xAxisValues: [ChartAxisValue], considering potentialOverride: TemporaryScheduleOverride? = nil) -> [TargetChartBar] {
+    static func barsForGlucoseRangeSchedule(_ glucoseRangeSchedule: GlucoseRangeSchedule, unit: LoopUnit, xAxisValues: [ChartAxisValue], considering potentialOverride: TemporaryScheduleOverride? = nil) -> [TargetChartBar] {
         let targetRanges = glucoseRangeSchedule.quantityBetween(
             start: ChartAxisValueDate.dateFromScalar(xAxisValues.first!.scalar),
             end: ChartAxisValueDate.dateFromScalar(xAxisValues.last!.scalar)
@@ -63,7 +63,7 @@ extension ChartPoint {
         return result.compactMap { $0 }
     }
     
-    static fileprivate func createBar(value: ClosedRange<HKQuantity>, unit: HKUnit, startDate: ChartAxisValueDate, endDate: ChartAxisValueDate, isOverride: Bool) -> TargetChartBar? {
+    static fileprivate func createBar(value: ClosedRange<LoopQuantity>, unit: LoopUnit, startDate: ChartAxisValueDate, endDate: ChartAxisValueDate, isOverride: Bool) -> TargetChartBar? {
         guard startDate.date < endDate.date else { return nil }
         
         let value = value.doubleRangeWithMinimumIncrement(in: unit)
@@ -80,7 +80,7 @@ extension ChartPoint {
             isOverride: isOverride)
     }
 
-    static func pointsForGlucoseRangeScheduleOverride(_ override: TemporaryScheduleOverride, unit: HKUnit, xAxisValues: [ChartAxisValue], extendEndDateToChart: Bool = false) -> [ChartPoint] {
+    static func pointsForGlucoseRangeScheduleOverride(_ override: TemporaryScheduleOverride, unit: LoopUnit, xAxisValues: [ChartAxisValue], extendEndDateToChart: Bool = false) -> [ChartPoint] {
         guard let targetRange = override.settings.targetRange else {
             return []
         }
@@ -94,7 +94,7 @@ extension ChartPoint {
         )
     }
 
-    private static func pointsForGlucoseRangeScheduleOverride(range: DoubleRange, activeInterval: DateInterval, unit: HKUnit, xAxisValues: [ChartAxisValue], extendEndDateToChart: Bool) -> [ChartPoint] {
+    private static func pointsForGlucoseRangeScheduleOverride(range: DoubleRange, activeInterval: DateInterval, unit: LoopUnit, xAxisValues: [ChartAxisValue], extendEndDateToChart: Bool) -> [ChartPoint] {
         guard let lastXAxisValue = xAxisValues.last as? ChartAxisValueDate else {
             return []
         }
@@ -177,9 +177,9 @@ extension Array where Element: ChartPoint {
     }
 }
 
-private extension ClosedRange where Bound == HKQuantity {
-    func doubleRangeWithMinimumIncrement(in unit: HKUnit) -> DoubleRange {
-        let increment = unit.chartableIncrement
+private extension ClosedRange where Bound == LoopQuantity {
+    func doubleRangeWithMinimumIncrement(in unit: LoopUnit) -> DoubleRange {
+        let increment = unit.hkUnit.chartableIncrement
 
         var minValue = self.lowerBound.doubleValue(for: unit)
         var maxValue = self.upperBound.doubleValue(for: unit)
