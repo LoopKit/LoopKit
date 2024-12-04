@@ -28,9 +28,9 @@ class InsulinSensitivityScheduleTests: XCTestCase {
             unit: .millimolesPerLiter,
             dailyItems: [
                 RepeatingScheduleValue(startTime: 0,
-                                       value: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: value1).doubleValue(for: .millimolesPerLiter)),
+                                       value: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: value1).doubleValue(for: .millimolesPerLiter, withRounding: true)),
                 RepeatingScheduleValue(startTime: 1000,
-                                       value: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: value2).doubleValue(for: .millimolesPerLiter))
+                                       value: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: value2).doubleValue(for: .millimolesPerLiter, withRounding: true))
             ], timeZone: .utcTimeZone)
 
 
