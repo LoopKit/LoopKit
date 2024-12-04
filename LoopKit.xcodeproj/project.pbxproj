@@ -5929,7 +5929,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/tidepool-org/LoopAlgorithm";
 			requirement = {
-				branch = "cameron/swift-6-plus-no-hk";
+				branch = main;
 				kind = branch;
 			};
 		};
