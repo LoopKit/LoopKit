@@ -111,14 +111,17 @@ public final class TemporaryScheduleOverrideHistory {
     /// Stored to enable retrieval via issue report after a deliberate crash.
     private var taintedEventLog: [OverrideEvent] = []
     
-    private var modificationCounter: Int64 = 0
+    private var modificationCounter: Int64
     
     @Transient private let relevantTimeWindow: TimeInterval = Bundle.main.localCacheDuration
 
     @Transient public weak var delegate: TemporaryScheduleOverrideHistoryDelegate?
 
-    public init() {}
+    public init() {
+        modificationCounter = 0
+    }
 
+    // GOOD
     public func recordOverride(_ override: TemporaryScheduleOverride?, at enableDate: Date = Date()) {
         guard override != lastUndeletedEvent?.override else {
             return
@@ -142,6 +145,7 @@ public final class TemporaryScheduleOverrideHistory {
         return recentEvents.reversed().first { $0.override.actualEnd != .deleted }
     }
 
+    // Good?
     private func deleteEventsStartingOnOrAfter(_ date: Date) {
         recentEvents.mutateEach { (event) in
             if event.override.startDate >= date {
@@ -175,6 +179,7 @@ public final class TemporaryScheduleOverrideHistory {
         recentEvents.append(enabledEvent)
     }
 
+    // GOOD?
     private func cancelActiveOverride(at date: Date) {
         var index = recentEvents.endIndex
         while index != recentEvents.startIndex {
@@ -341,11 +346,11 @@ private extension Date {
     }
 }
 
-public actor TemporaryScheduleOverrideHistoryContainer {
+@MainActor
+public class TemporaryScheduleOverrideHistoryContainer {
     public static let shared = TemporaryScheduleOverrideHistoryContainer()
     public let container: ModelContainer
-    
-    @MainActor
+
     public var context: ModelContext {
         container.mainContext
     }
@@ -359,7 +364,6 @@ public actor TemporaryScheduleOverrideHistoryContainer {
         }
     }
     
-    @MainActor
     public func fetch(descriptor: FetchDescriptor<TemporaryScheduleOverrideHistory>? = nil) -> TemporaryScheduleOverrideHistory {
         do {
             if let persisted = try context.fetch(descriptor ?? FetchDescriptor<TemporaryScheduleOverrideHistory>()).last {
@@ -374,7 +378,6 @@ public actor TemporaryScheduleOverrideHistoryContainer {
         }
     }
     
-    @MainActor
     public func deleteAll() {
         do {
             try context.delete(model: TemporaryScheduleOverrideHistory.self)
