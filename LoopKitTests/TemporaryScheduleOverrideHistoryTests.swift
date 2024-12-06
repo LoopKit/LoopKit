@@ -10,7 +10,7 @@ import XCTest
 import SwiftData
 @testable import LoopKit
 
-
+@MainActor
 final class TemporaryScheduleOverrideHistoryTests: XCTestCase {
     // Midnight of an arbitrary date
     let referenceDate = Calendar.current.startOfDay(for: Date(timeIntervalSinceReferenceDate: .hours(100_000)))
@@ -24,6 +24,7 @@ final class TemporaryScheduleOverrideHistoryTests: XCTestCase {
         timeZone: Calendar.current.timeZone
     )!
 
+    let historyContainer = TemporaryScheduleOverrideHistoryContainer.shared
     var history: TemporaryScheduleOverrideHistory!
 
     private func recordOverride(
@@ -53,14 +54,11 @@ final class TemporaryScheduleOverrideHistoryTests: XCTestCase {
         return actual.equals(expected, accuracy: 1e-6)
     }
 
-    @MainActor
     override func setUp() {
-        history = TemporaryScheduleOverrideHistoryContainer.shared.fetch()
+        TemporaryScheduleOverrideHistory.relevantTimeWindow = .hours(10)
+        historyContainer.deleteAll()
+        history = historyContainer.fetch()
         history.wipeHistory()
-    }
-    
-    override func tearDown() {
-        self.history = nil
     }
 
     func testEmptyHistory() {

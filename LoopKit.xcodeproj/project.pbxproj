@@ -283,8 +283,6 @@
 		84DF48892C33218100844FB1 /* MuteAllAppSoundsDurationSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DF48882C33217400844FB1 /* MuteAllAppSoundsDurationSheetView.swift */; };
 		84E8BBBE2CC9976E0078E6CF /* BulletedListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E8BBBD2CC9976E0078E6CF /* BulletedListView.swift */; };
 		84F295262B48CB4C00127C8E /* Callout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F295252B48CB4C00127C8E /* Callout.swift */; };
-		84FA9D352CF80982004162B4 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FA9D342CF80982004162B4 /* Bundle.swift */; };
-		84FA9D362CF80982004162B4 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FA9D342CF80982004162B4 /* Bundle.swift */; };
 		8907E35921A9D0EC00335852 /* GlucoseEntryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8907E35821A9D0EC00335852 /* GlucoseEntryTableViewController.swift */; };
 		89186C0524BEC9CA0003D0F3 /* SegmentedControlTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89186C0424BEC9CA0003D0F3 /* SegmentedControlTableViewCell.swift */; };
 		89186C0724BF7FC70003D0F3 /* Guardrail+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89186C0624BF7FC70003D0F3 /* Guardrail+UI.swift */; };
@@ -1319,7 +1317,6 @@
 		84DF48882C33217400844FB1 /* MuteAllAppSoundsDurationSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuteAllAppSoundsDurationSheetView.swift; sourceTree = "<group>"; };
 		84E8BBBD2CC9976E0078E6CF /* BulletedListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BulletedListView.swift; sourceTree = "<group>"; };
 		84F295252B48CB4C00127C8E /* Callout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Callout.swift; sourceTree = "<group>"; };
-		84FA9D342CF80982004162B4 /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
 		8907E35821A9D0EC00335852 /* GlucoseEntryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseEntryTableViewController.swift; sourceTree = "<group>"; };
 		8907E35A21A9D1B200335852 /* SineCurveParametersTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SineCurveParametersTableViewController.swift; sourceTree = "<group>"; };
 		89186C0424BEC9CA0003D0F3 /* SegmentedControlTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedControlTableViewCell.swift; sourceTree = "<group>"; };
@@ -2309,7 +2306,6 @@
 		437AFF22203BE382008C4892 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				84FA9D342CF80982004162B4 /* Bundle.swift */,
 				C187338329B9486200519CDF /* ClosedRange.swift */,
 				C187337F29B9486100519CDF /* Collection.swift */,
 				C187338029B9486100519CDF /* Comparable.swift */,
@@ -4210,7 +4206,6 @@
 				C1814B8C226371DF008D2D8E /* WeakSynchronizedDelegate.swift in Sources */,
 				C187339129B9486200519CDF /* Data.swift in Sources */,
 				1D1FCE2724BE4DE2000300A8 /* CorrectionRangeOverrides.swift in Sources */,
-				84FA9D362CF80982004162B4 /* Bundle.swift in Sources */,
 				1D1FCE2924BE4F11000300A8 /* TherapySetting.swift in Sources */,
 				4352A73C20DECF0700CAC200 /* CGMManager.swift in Sources */,
 				4353D16F203D104F007B4ECD /* CarbStoreError.swift in Sources */,
@@ -4460,7 +4455,6 @@
 				89AE2230228BC68100BDFD85 /* DoseProgressReporter.swift in Sources */,
 				A9E675BD22713F4700E25293 /* HKQuantitySample+InsulinKit.swift in Sources */,
 				C17F39CA23CD2D2000FA1113 /* PersistentDeviceLog.swift in Sources */,
-				84FA9D352CF80982004162B4 /* Bundle.swift in Sources */,
 				E9A6D0E828DBCF5800DFF9D9 /* LoopNotificationUserInfoKey.swift in Sources */,
 				89AE222D228BC66E00BDFD85 /* Locked.swift in Sources */,
 				A9E675BF22713F4700E25293 /* QuantityFormatter.swift in Sources */,

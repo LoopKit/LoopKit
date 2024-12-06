@@ -71,6 +71,8 @@ public protocol TemporaryScheduleOverrideHistoryDelegate: AnyObject {
 
 @Model
 public final class TemporaryScheduleOverrideHistory {
+    
+    public static var relevantTimeWindow: TimeInterval = 1
 
     public struct QueryAnchor: RawRepresentable {
         public typealias RawValue = [String: Any]
@@ -111,15 +113,11 @@ public final class TemporaryScheduleOverrideHistory {
     /// Stored to enable retrieval via issue report after a deliberate crash.
     private var taintedEventLog: [OverrideEvent] = []
     
-    private var modificationCounter: Int64
-    
-    @Transient private let relevantTimeWindow: TimeInterval = Bundle.main.localCacheDuration
+    private var modificationCounter: Int64 = 0
 
     @Transient public weak var delegate: TemporaryScheduleOverrideHistoryDelegate?
 
-    public init() {
-        modificationCounter = 0
-    }
+    public init() {}
 
     // GOOD
     public func recordOverride(_ override: TemporaryScheduleOverride?, at enableDate: Date = Date()) {
@@ -239,8 +237,8 @@ public final class TemporaryScheduleOverrideHistory {
 
     private func relevantPeriod(relativeTo referenceDate: Date) -> DateInterval {
         return DateInterval(
-            start: referenceDate.addingTimeInterval(-relevantTimeWindow),
-            end: referenceDate.addingTimeInterval(relevantTimeWindow)
+            start: referenceDate.addingTimeInterval(-Self.relevantTimeWindow),
+            end: referenceDate.addingTimeInterval(Self.relevantTimeWindow)
         )
     }
 
