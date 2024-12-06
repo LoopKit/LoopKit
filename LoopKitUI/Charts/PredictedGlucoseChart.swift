@@ -8,7 +8,6 @@
 import Foundation
 import LoopKit
 import SwiftCharts
-import HealthKit
 import UIKit
 import LoopAlgorithm
 
@@ -271,7 +270,7 @@ extension PredictedGlucoseChart {
 
 // MARK: - Clamping the predicted glucose values
 extension PredictedGlucoseChart {
-    var chartMaximumValue: HKQuantity? {
+    var chartMaximumValue: LoopQuantity? {
         guard let glucosePointMaximum = glucosePoints.max(by: { point1, point2 in point1.y.scalar < point2.y.scalar }) else {
             return nil
         }
@@ -281,13 +280,13 @@ extension PredictedGlucoseChart {
         if let maxYAxisValue = yAxisValues.last,
             maxYAxisValue.scalar > glucosePointMaximum.y.scalar
         {
-            return HKQuantity(unit: glucoseUnit, doubleValue: maxYAxisValue.scalar)
+            return LoopQuantity(unit: glucoseUnit, doubleValue: maxYAxisValue.scalar)
         }
         
-        return HKQuantity(unit: glucoseUnit, doubleValue: glucosePointMaximum.y.scalar)
+        return LoopQuantity(unit: glucoseUnit, doubleValue: glucosePointMaximum.y.scalar)
     }
         
-    var chartMinimumValue: HKQuantity? {
+    var chartMinimumValue: LoopQuantity? {
         guard let glucosePointMinimum = glucosePoints.min(by: { point1, point2 in point1.y.scalar < point2.y.scalar }) else {
             return nil
         }
@@ -297,10 +296,10 @@ extension PredictedGlucoseChart {
         if let minYAxisValue = yAxisValues.first,
             minYAxisValue.scalar < glucosePointMinimum.y.scalar
         {
-            return HKQuantity(unit: glucoseUnit, doubleValue: minYAxisValue.scalar)
+            return LoopQuantity(unit: glucoseUnit, doubleValue: minYAxisValue.scalar)
         }
         
-        return HKQuantity(unit: glucoseUnit, doubleValue: glucosePointMinimum.y.scalar)
+        return LoopQuantity(unit: glucoseUnit, doubleValue: glucosePointMinimum.y.scalar)
     }
     
     func clampPredictedGlucoseValues(_ glucoseValues: [GlucoseValue]) -> [GlucoseValue] {
@@ -323,12 +322,12 @@ extension PredictedGlucoseChart {
         }
     }
     
-    var chartedGlucoseValueMinimum: HKQuantity? {
+    var chartedGlucoseValueMinimum: LoopQuantity? {
         guard let glucosePointMinimum = glucosePoints.min(by: { point1, point2 in point1.y.scalar < point2.y.scalar }) else {
             return nil
         }
         
-        return HKQuantity(unit: glucoseUnit, doubleValue: glucosePointMinimum.y.scalar)
+        return LoopQuantity(unit: glucoseUnit, doubleValue: glucosePointMinimum.y.scalar)
     }
     
     func glucoseValueBelowSoftBoundsMinimum() -> Bool {
@@ -342,12 +341,12 @@ extension PredictedGlucoseChart {
     }
     
     public struct PredictedGlucoseBounds {
-        var minimum: HKQuantity
-        var maximum: HKQuantity
+        var minimum: LoopQuantity
+        var maximum: LoopQuantity
         
         public static var `default`: PredictedGlucoseBounds {
-            return PredictedGlucoseBounds(minimum: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 40),
-                                          maximum: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 400))
+            return PredictedGlucoseBounds(minimum: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 40),
+                                          maximum: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 400))
         }
     }
 }

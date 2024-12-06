@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-import HealthKit
+import LoopAlgorithm
 import LoopKit
 
 public struct DeliveryLimitsEditor: View {
@@ -69,11 +69,11 @@ public struct DeliveryLimitsEditor: View {
         precondition(therapySettingsViewModel.pumpSupportedIncrements() != nil)
         
         let maxBasal = therapySettingsViewModel.therapySettings.maximumBasalRatePerHour.map {
-            HKQuantity(unit: .internationalUnitsPerHour, doubleValue: $0)
+            LoopQuantity(unit: .internationalUnitsPerHour, doubleValue: $0)
         }
 
         let maxBolus = therapySettingsViewModel.therapySettings.maximumBolus.map {
-            HKQuantity(unit: .internationalUnit(), doubleValue: $0)
+            LoopQuantity(unit: .internationalUnit, doubleValue: $0)
         }
         
         self.init(
@@ -171,7 +171,7 @@ public struct DeliveryLimitsEditor: View {
         return value == initialValue && mode != .acceptanceFlow ? .disabled : .enabled
     }
 
-    var maximumBasalRateGuardrail: Guardrail<HKQuantity> {
+    var maximumBasalRateGuardrail: Guardrail<LoopQuantity> {
         return Guardrail.maximumBasalRate(supportedBasalRates: supportedBasalRates, scheduledBasalRange: scheduledBasalRange, lowestCarbRatio: lowestCarbRatio)
     }
 
@@ -221,7 +221,7 @@ public struct DeliveryLimitsEditor: View {
         }
     }
 
-    var maximumBolusGuardrail: Guardrail<HKQuantity> {
+    var maximumBolusGuardrail: Guardrail<LoopQuantity> {
         return Guardrail.maximumBolus(supportedBolusVolumes: supportedMaximumBolusVolumes)
     }
 
@@ -244,7 +244,7 @@ public struct DeliveryLimitsEditor: View {
                 trailingValueContent: {
                     GuardrailConstrainedQuantityView(
                         value: value.maximumBolus,
-                        unit: .internationalUnit(),
+                        unit: .internationalUnit,
                         guardrail: maximumBolusGuardrail,
                         isEditing: settingBeingEdited == .maximumBolus,
                         forceDisableAnimations: true
@@ -260,7 +260,7 @@ public struct DeliveryLimitsEditor: View {
                                 }
                             }
                         ),
-                        unit: .internationalUnit(),
+                        unit: .internationalUnit,
                         guardrail: self.maximumBolusGuardrail,
                         selectableValues: self.selectableMaximumBolusVolumes,
                         usageContext: .independent

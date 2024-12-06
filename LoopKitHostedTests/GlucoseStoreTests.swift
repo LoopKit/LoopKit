@@ -8,12 +8,13 @@
 
 import XCTest
 import HealthKit
+import LoopAlgorithm
 @testable import LoopKit
 
 class GlucoseStoreTestsBase: PersistenceControllerTestCase, GlucoseStoreDelegate {
     private static let device = HKDevice(name: "NAME", manufacturer: "MANUFACTURER", model: "MODEL", hardwareVersion: "HARDWAREVERSION", firmwareVersion: "FIRMWAREVERSION", softwareVersion: "SOFTWAREVERSION", localIdentifier: "LOCALIDENTIFIER", udiDeviceIdentifier: "UDIDEVICEIDENTIFIER")
     internal let sample1 = NewGlucoseSample(date: Date(timeIntervalSinceNow: -.minutes(6)),
-                                            quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 123.4),
+                                            quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 123.4),
                                             condition: nil,
                                             trend: nil,
                                             trendRate: nil,
@@ -23,20 +24,20 @@ class GlucoseStoreTestsBase: PersistenceControllerTestCase, GlucoseStoreDelegate
                                             syncVersion: 2,
                                             device: device)
     internal let sample2 = NewGlucoseSample(date: Date(timeIntervalSinceNow: -.minutes(2)),
-                                            quantity: HKQuantity(unit: .millimolesPerLiter, doubleValue: 7.4),
+                                            quantity: LoopQuantity(unit: .millimolesPerLiter, doubleValue: 7.4),
                                             condition: nil,
                                             trend: .flat,
-                                            trendRate: HKQuantity(unit: .millimolesPerLiterPerMinute, doubleValue: 0.0),
+                                            trendRate: LoopQuantity(unit: .millimolesPerLiterPerMinute, doubleValue: 0.0),
                                             isDisplayOnly: false,
                                             wasUserEntered: true,
                                             syncIdentifier: "535F103C-3DFE-48F2-B15A-47313191E7B7",
                                             syncVersion: 3,
                                             device: device)
     internal let sample3 = NewGlucoseSample(date: Date(timeIntervalSinceNow: -.minutes(4)),
-                                            quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 400.0),
+                                            quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 400.0),
                                             condition: .aboveRange,
                                             trend: .upUpUp,
-                                            trendRate: HKQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: 4.2),
+                                            trendRate: LoopQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: 4.2),
                                             isDisplayOnly: false,
                                             wasUserEntered: false,
                                             syncIdentifier: "E1624D2B-A971-41B8-B8A0-3A8212AC3D71",
@@ -518,7 +519,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
 
     func testPurgeExpiredGlucoseObjects() async throws {
         let expiredSample = NewGlucoseSample(date: Date(timeIntervalSinceNow: -.hours(2)),
-                                             quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 198.7),
+                                             quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 198.7),
                                              condition: nil,
                                              trend: nil,
                                              trendRate: nil,

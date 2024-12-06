@@ -85,7 +85,7 @@ class CachedGlucoseObject: NSManagedObject {
 // MARK: - Helpers
 
 extension CachedGlucoseObject {
-    var quantity: HKQuantity { HKQuantity(unit: HKUnit(from: unitString), doubleValue: value) }
+    var quantity: LoopQuantity { LoopQuantity(unit: LoopUnit(from: unitString), doubleValue: value) }
 
     var quantitySample: HKQuantitySample {
         var metadata: [String: Any] = [:]
@@ -103,7 +103,7 @@ extension CachedGlucoseObject {
 
         return HKQuantitySample(
             type: HealthKitSampleStore.glucoseType,
-            quantity: quantity,
+            quantity: quantity.hkQuantity,
             start: startDate,
             end: startDate,
             device: device,
@@ -111,17 +111,17 @@ extension CachedGlucoseObject {
         )
     }
 
-    var trendRate: HKQuantity? {
+    var trendRate: LoopQuantity? {
         get {
             guard let trendRateValue = trendRateValue else {
                 return nil
             }
-            return HKQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: trendRateValue.doubleValue)
+            return LoopQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: trendRateValue.doubleValue)
         }
 
         set {
             if let newValue = newValue {
-                let unit = HKUnit(from: unitString).unitDivided(by: .minute())
+                let unit = LoopUnit.milligramsPerDeciliterPerMinute
                 trendRateValue = NSNumber(value: newValue.doubleValue(for: unit))
             } else {
                 trendRateValue = nil

@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import HealthKit
 import LoopAlgorithm
 
 
@@ -27,7 +26,7 @@ public struct DoseEntry: TimelineValue, Equatable {
     public var wasProgrammedByPumpUI: Bool
 
     /// The scheduled basal rate during this dose entry
-    public var scheduledBasalRate: HKQuantity?
+    public var scheduledBasalRate: LoopQuantity?
 
     public init(suspendDate: Date, automatic: Bool? = nil, isMutable: Bool = false, wasProgrammedByPumpUI: Bool = false) {
         self.init(type: .suspend, startDate: suspendDate, value: 0, unit: .units, automatic: automatic, isMutable: isMutable, wasProgrammedByPumpUI: wasProgrammedByPumpUI)
@@ -38,7 +37,7 @@ public struct DoseEntry: TimelineValue, Equatable {
     }
 
     // If the insulin model field is nil, it's assumed that the model is the type of insulin the pump dispenses
-    public init(type: DoseType, startDate: Date, endDate: Date? = nil, value: Double, unit: DoseUnit, deliveredUnits: Double? = nil, description: String? = nil, syncIdentifier: String? = nil, scheduledBasalRate: HKQuantity? = nil, insulinType: InsulinType? = nil, automatic: Bool? = nil, manuallyEntered: Bool = false, isMutable: Bool = false, wasProgrammedByPumpUI: Bool = false) {
+    public init(type: DoseType, startDate: Date, endDate: Date? = nil, value: Double, unit: DoseUnit, deliveredUnits: Double? = nil, description: String? = nil, syncIdentifier: String? = nil, scheduledBasalRate: LoopQuantity? = nil, insulinType: InsulinType? = nil, automatic: Bool? = nil, manuallyEntered: Bool = false, isMutable: Bool = false, wasProgrammedByPumpUI: Bool = false) {
         self.type = type
         self.startDate = startDate
         self.endDate = endDate ?? startDate
@@ -58,9 +57,9 @@ public struct DoseEntry: TimelineValue, Equatable {
 
 
 extension DoseEntry {
-    public static var units = HKUnit.internationalUnit()
+    public static var units = LoopUnit.internationalUnit
     
-    public static let unitsPerHour = HKUnit.internationalUnit().unitDivided(by: .hour())
+    public static let unitsPerHour = LoopUnit.internationalUnitsPerHour
 
     private var hours: Double {
         return endDate.timeIntervalSince(startDate).hours
@@ -172,7 +171,7 @@ extension DoseEntry: Codable {
         self.insulinType = try container.decodeIfPresent(InsulinType.self, forKey: .insulinType)
         if let scheduledBasalRate = try container.decodeIfPresent(Double.self, forKey: .scheduledBasalRate),
             let scheduledBasalRateUnit = try container.decodeIfPresent(String.self, forKey: .scheduledBasalRateUnit) {
-            self.scheduledBasalRate = HKQuantity(unit: HKUnit(from: scheduledBasalRateUnit), doubleValue: scheduledBasalRate)
+            self.scheduledBasalRate = LoopQuantity(unit: LoopUnit(from: scheduledBasalRateUnit), doubleValue: scheduledBasalRate)
         }
         self.automatic = try container.decodeIfPresent(Bool.self, forKey: .automatic)
         self.manuallyEntered = try container.decodeIfPresent(Bool.self, forKey: .manuallyEntered) ?? false
@@ -254,7 +253,7 @@ extension DoseEntry: RawRepresentable {
         self.insulinType = (rawValue["insulinType"] as? InsulinType.RawValue).flatMap { InsulinType(rawValue: $0) }
         self.automatic = rawValue["automatic"] as? Bool
         self.syncIdentifier = rawValue["syncIdentifier"] as? String
-        self.scheduledBasalRate = (rawValue["scheduledBasalRate"] as? Double).flatMap { HKQuantity(unit: .internationalUnitsPerHour, doubleValue: $0) }
+        self.scheduledBasalRate = (rawValue["scheduledBasalRate"] as? Double).flatMap { LoopQuantity(unit: .internationalUnitsPerHour, doubleValue: $0) }
         self.isMutable = rawValue["isMutable"] as? Bool ?? false
         self.wasProgrammedByPumpUI = rawValue["wasProgrammedByPumpUI"] as? Bool ?? false
     }

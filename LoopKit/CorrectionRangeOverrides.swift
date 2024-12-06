@@ -16,9 +16,9 @@ public struct CorrectionRangeOverrides: Equatable {
         case workout
     }
 
-    public var ranges: [Preset: ClosedRange<HKQuantity>]
+    public var ranges: [Preset: ClosedRange<LoopQuantity>]
 
-    public init(preMeal: DoubleRange?, workout: DoubleRange?, unit: HKUnit) {
+    public init(preMeal: DoubleRange?, workout: DoubleRange?, unit: LoopUnit) {
         ranges = [:]
         ranges[.preMeal] = preMeal?.quantityRange(for: unit)
         ranges[.workout] = workout?.quantityRange(for: unit)
@@ -30,14 +30,14 @@ public struct CorrectionRangeOverrides: Equatable {
         ranges[.workout] = workout?.quantityRange
     }
 
-    public init(preMeal: ClosedRange<HKQuantity>?, workout: ClosedRange<HKQuantity>?) {
+    public init(preMeal: ClosedRange<LoopQuantity>?, workout: ClosedRange<LoopQuantity>?) {
         ranges = [:]
         ranges[.preMeal] = preMeal
         ranges[.workout] = workout
     }
 
-    public var preMeal: ClosedRange<HKQuantity>? { ranges[.preMeal] }
-    public var workout: ClosedRange<HKQuantity>? { ranges[.workout] }
+    public var preMeal: ClosedRange<LoopQuantity>? { ranges[.preMeal] }
+    public var workout: ClosedRange<LoopQuantity>? { ranges[.workout] }
 }
 
 public extension CorrectionRangeOverrides.Preset {
@@ -59,7 +59,7 @@ public extension CorrectionRangeOverrides.Preset {
 }
 
 extension CorrectionRangeOverrides: Codable {
-    fileprivate var codingGlucoseUnit: HKUnit {
+    fileprivate var codingGlucoseUnit: LoopUnit {
         return .milligramsPerDeciliter
     }
 
@@ -113,8 +113,8 @@ extension CorrectionRangeOverrides: RawRepresentable {
     }
 }
 
-extension ClosedRange<HKQuantity> {
-    public func localizedDescription(unit: HKUnit) -> String {
-        String(format: NSLocalizedString("%.0f - %.0f %3$@", comment: ""), lowerBound.doubleValue(for: unit, withRounding: true), upperBound.doubleValue(for: unit, withRounding: true), unit.unitString)
+extension ClosedRange<LoopQuantity> {
+    public func localizedDescription(unit: LoopUnit) -> String {
+        String(format: NSLocalizedString("%.0f - %.0f %3$@", comment: ""), lowerBound.doubleValue(for: unit), upperBound.doubleValue(for: unit), unit.unitString)
     }
 }

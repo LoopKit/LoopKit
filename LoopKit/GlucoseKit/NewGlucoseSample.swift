@@ -10,10 +10,10 @@ import LoopAlgorithm
 
 public struct NewGlucoseSample: Equatable, RawRepresentable {
     public let date: Date
-    public let quantity: HKQuantity
+    public let quantity: LoopQuantity
     public let condition: GlucoseCondition?
     public let trend: GlucoseTrend?
-    public let trendRate: HKQuantity?
+    public let trendRate: LoopQuantity?
     public let isDisplayOnly: Bool
     public let wasUserEntered: Bool
     public let syncIdentifier: String
@@ -30,10 +30,10 @@ public struct NewGlucoseSample: Equatable, RawRepresentable {
     ///   - syncVersion: A version number for determining resolution in de-duplication
     ///   - device: The description of the device the collected the sample
     public init(date: Date,
-                quantity: HKQuantity,
+                quantity: LoopQuantity,
                 condition: GlucoseCondition?,
                 trend: GlucoseTrend?,
-                trendRate: HKQuantity?,
+                trendRate: LoopQuantity?,
                 isDisplayOnly: Bool,
                 wasUserEntered: Bool,
                 syncIdentifier: String,
@@ -62,12 +62,12 @@ public struct NewGlucoseSample: Equatable, RawRepresentable {
         }
         
         self.date = Date(timeIntervalSince1970: dateInterval)
-        self.quantity = HKQuantity(unit: .milligramsPerDeciliter, doubleValue: quantityValue)
+        self.quantity = LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: quantityValue)
         self.condition = rawValue["condition"] as? GlucoseCondition ?? nil
         self.trend = rawValue["trend"] as? GlucoseTrend ?? nil
         
         if let trendRateValue = rawValue["trendRateValue"] as? Double {
-            self.trendRate = HKQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: trendRateValue)
+            self.trendRate = LoopQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: trendRateValue)
         } else {
             self.trendRate = nil
         }
@@ -109,6 +109,7 @@ extension NewGlucoseSample {
         if let trendRate = trendRate {
             metadata[MetadataKeyGlucoseTrendRateValue] = trendRate.doubleValue(for: .milligramsPerDeciliterPerMinute)
         }
+    
         if isDisplayOnly {
             metadata[MetadataKeyGlucoseIsDisplayOnly] = true
         }
@@ -118,7 +119,7 @@ extension NewGlucoseSample {
 
         return HKQuantitySample(
             type: HealthKitSampleStore.glucoseType,
-            quantity: quantity,
+            quantity: quantity.hkQuantity,
             start: date,
             end: date,
             device: device,

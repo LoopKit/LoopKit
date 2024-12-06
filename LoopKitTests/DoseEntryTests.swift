@@ -7,7 +7,7 @@
 //
 
 import XCTest
-import HealthKit
+import LoopAlgorithm
 
 @testable import LoopKit
 
@@ -38,7 +38,7 @@ class DoseEntryCodableTests: XCTestCase {
                                              deliveredUnits: 0.5,
                                              description: "Temporary Basal",
                                              syncIdentifier: "238E41EA-9576-4981-A1A4-51E10228584F",
-                                             scheduledBasalRate: HKQuantity(unit: DoseEntry.unitsPerHour, doubleValue: 1.5),
+                                             scheduledBasalRate: LoopQuantity(unit: DoseEntry.unitsPerHour, doubleValue: 1.5),
                                              insulinType: .fiasp,
                                              automatic: true,
                                              manuallyEntered: true,
@@ -108,7 +108,7 @@ class DoseEntryRawRepresentableTests: XCTestCase {
                                  deliveredUnits: 0.5,
                                  description: "Temporary Basal",
                                  syncIdentifier: UUID().uuidString,
-                                 scheduledBasalRate: HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 1.5),
+                                 scheduledBasalRate: LoopQuantity(unit: .internationalUnitsPerHour, doubleValue: 1.5),
                                  insulinType: .fiasp,
                                  automatic: true,
                                  manuallyEntered: true,

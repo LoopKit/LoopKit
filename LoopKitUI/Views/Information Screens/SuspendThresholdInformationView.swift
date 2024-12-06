@@ -6,14 +6,14 @@
 //  Copyright © 2020 LoopKit Authors. All rights reserved.
 //
 
-import HealthKit
+import LoopAlgorithm
 import SwiftUI
 import LoopKit
 
 public struct SuspendThresholdInformationView: View {
     var onExit: (() -> Void)?
     var mode: SettingsPresentationMode
-    var preferredUnit: HKUnit = HKUnit.milligramsPerDeciliter
+    var preferredUnit: LoopUnit = LoopUnit.milligramsPerDeciliter
     
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.appName) var appName

@@ -94,18 +94,18 @@ public final class MockPumpManager: TestingPumpManager {
         }
     }
 
-    public var currentBasalRate: HKQuantity? {
+    public var currentBasalRate: LoopQuantity? {
         switch status.basalDeliveryState {
         case .suspending, .suspended(_):
-            return HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 0)
+            return LoopQuantity(unit: .internationalUnitsPerHour, doubleValue: 0)
         case .tempBasal(let dose):
-            return HKQuantity(unit: .internationalUnitsPerHour, doubleValue: dose.unitsPerHour)
+            return LoopQuantity(unit: .internationalUnitsPerHour, doubleValue: dose.unitsPerHour)
         case .none:
             return nil
         default:
             guard let scheduledBasalRate = state.basalRateSchedule?.value(at: Date()) else { return nil }
 
-            return HKQuantity(unit: .internationalUnitsPerHour, doubleValue: scheduledBasalRate)
+            return LoopQuantity(unit: .internationalUnitsPerHour, doubleValue: scheduledBasalRate)
         }
     }
 

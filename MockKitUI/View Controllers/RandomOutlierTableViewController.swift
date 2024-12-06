@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import HealthKit
+import LoopAlgorithm
 import LoopKit
 import LoopKitUI
 import MockKit
@@ -19,7 +19,7 @@ protocol RandomOutlierTableViewControllerDelegate: AnyObject {
 
 final class RandomOutlierTableViewController: UITableViewController {
 
-    let glucoseUnit: HKUnit
+    let glucoseUnit: LoopUnit
 
     var randomOutlier: MockCGMDataSource.Effects.RandomOutlier? {
         get {
@@ -46,7 +46,7 @@ final class RandomOutlierTableViewController: UITableViewController {
         }
     }
 
-    private var delta: HKQuantity? {
+    private var delta: LoopQuantity? {
         didSet {
             delegate?.randomOutlierTableViewControllerDidChangeOutlier(self)
         }
@@ -61,7 +61,7 @@ final class RandomOutlierTableViewController: UITableViewController {
 
     private var glucoseFormatter: QuantityFormatter
 
-    init(glucoseUnit: HKUnit) {
+    init(glucoseUnit: LoopUnit) {
         self.glucoseUnit = glucoseUnit
         self.glucoseFormatter = QuantityFormatter(for: glucoseUnit)
         super.init(style: .grouped)

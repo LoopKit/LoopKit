@@ -952,7 +952,7 @@ fileprivate extension StoredSettings {
                                                                                  RepeatingScheduleValue(startTime: .hours(3), value: 40.0),
                                                                                  RepeatingScheduleValue(startTime: .hours(15), value: 50.0)],
                                                                     timeZone: scheduleTimeZone)
-        let carbRatioSchedule = CarbRatioSchedule(unit: .gram(),
+        let carbRatioSchedule = CarbRatioSchedule(unit: .gram,
                                                   dailyItems: [RepeatingScheduleValue(startTime: .hours(0), value: 15.0),
                                                                RepeatingScheduleValue(startTime: .hours(9), value: 14.0),
                                                                RepeatingScheduleValue(startTime: .hours(20), value: 18.0)],
@@ -993,7 +993,7 @@ fileprivate extension StoredSettings {
                                   softwareVersion: "Pump Software Version",
                                   localIdentifier: "Pump Local Identifier",
                                   udiDeviceIdentifier: "Pump UDI Device Identifier")
-        let bloodGlucoseUnit = HKUnit.milligramsPerDeciliter
+        let bloodGlucoseUnit = LoopUnit.milligramsPerDeciliter
 
         return StoredSettings(date: dateFormatter.date(from: "2020-05-14T22:48:15Z")!,
                               controllerTimeZone: controllerTimeZone,

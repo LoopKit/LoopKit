@@ -34,6 +34,6 @@ extension BidirectionalCollection where Element == GlucoseEffect {
 
         let net = last!.quantity.doubleValue(for: .milligramsPerDeciliter) - firstEffect.quantity.doubleValue(for: .milligramsPerDeciliter)
 
-        return GlucoseChange(startDate: firstEffect.startDate, endDate: last!.endDate, quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: net))
+        return GlucoseChange(startDate: firstEffect.startDate, endDate: last!.endDate, quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: net))
     }
 }

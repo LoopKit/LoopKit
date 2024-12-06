@@ -31,8 +31,8 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private let reservoirFormatter = QuantityFormatter(for: .internationalUnit())
-    private let rateFormatter = QuantityFormatter(for: .internationalUnit().unitDivided(by: .hour()))
+    private let reservoirFormatter = QuantityFormatter(for: .internationalUnit)
+    private let rateFormatter = QuantityFormatter(for: .internationalUnitsPerHour)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -236,7 +236,7 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
             case .reservoirRemaining:
                 let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
                 cell.textLabel?.text = "Reservoir Remaining"
-                cell.detailTextLabel?.text = reservoirFormatter.string(from: HKQuantity(unit: .internationalUnit(), doubleValue: pumpManager.state.reservoirUnitsRemaining))
+                cell.detailTextLabel?.text = reservoirFormatter.string(from: LoopQuantity(unit: .internationalUnit, doubleValue: pumpManager.state.reservoirUnitsRemaining))
                 cell.accessoryType = .disclosureIndicator
                 cell.accessibilityIdentifier = "mockPumpSettingsReservoirRemaining"
                 return cell

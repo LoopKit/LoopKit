@@ -25,7 +25,7 @@ public struct StoredCarbEntry: CarbEntry, Equatable {
     // MARK: - SampleValue
 
     public let startDate: Date
-    public let quantity: HKQuantity
+    public let quantity: LoopQuantity
 
     // MARK: - CarbEntry
 
@@ -41,7 +41,7 @@ public struct StoredCarbEntry: CarbEntry, Equatable {
 
     public init(
         startDate: Date,
-        quantity: HKQuantity,
+        quantity: LoopQuantity,
         uuid: UUID? = nil,
         provenanceIdentifier: String = Self.defaultProvenanceIdentifier,
         syncIdentifier: String? = nil,
@@ -68,7 +68,7 @@ public struct StoredCarbEntry: CarbEntry, Equatable {
     }
 
     public var amount: Double {
-        quantity.doubleValue(for: .gram())
+        quantity.doubleValue(for: .gram)
     }
 }
 
@@ -96,7 +96,7 @@ extension StoredCarbEntry: Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.init(
             startDate: try container.decode(Date.self, forKey: .startDate),
-            quantity: HKQuantity(unit: .gram(), doubleValue: try container.decode(Double.self, forKey: .quantity)),
+            quantity: LoopQuantity(unit: .gram, doubleValue: try container.decode(Double.self, forKey: .quantity)),
             uuid: try container.decodeIfPresent(UUID.self, forKey: .uuid),
             provenanceIdentifier: (try container.decodeIfPresent(String.self, forKey: .provenanceIdentifier)) ?? Self.defaultProvenanceIdentifier,
             syncIdentifier: try container.decodeIfPresent(String.self, forKey: .syncIdentifier),
@@ -118,7 +118,7 @@ extension StoredCarbEntry: Codable {
         try container.encodeIfPresent(syncIdentifier, forKey: .syncIdentifier)
         try container.encodeIfPresent(syncVersion, forKey: .syncVersion)
         try container.encode(startDate, forKey: .startDate)
-        try container.encode(quantity.doubleValue(for: .gram()), forKey: .quantity)
+        try container.encode(quantity.doubleValue(for: .gram), forKey: .quantity)
         try container.encodeIfPresent(foodType, forKey: .foodType)
         try container.encodeIfPresent(absorptionTime, forKey: .absorptionTime)
         if !createdByCurrentApp {
@@ -170,7 +170,7 @@ extension StoredCarbEntry {
 
         self.init(
             startDate: startDate,
-            quantity: HKQuantity(unit: HKUnit(from: unitString), doubleValue: value),
+            quantity: LoopQuantity(unit: LoopUnit(from: unitString), doubleValue: value),
             uuid: uuid,
             provenanceIdentifier: createdByCurrentApp ? HKSource.default().bundleIdentifier : "",
             syncIdentifier: syncIdentifier,

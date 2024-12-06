@@ -14,8 +14,48 @@ let MetadataKeyGlucoseCondition = "com.LoopKit.GlucoseKit.HKMetadataKey.GlucoseC
 let MetadataKeyGlucoseTrend = "com.LoopKit.GlucoseKit.HKMetadataKey.GlucoseTrend"
 let MetadataKeyGlucoseTrendRateValue = "com.LoopKit.GlucoseKit.HKMetadataKey.GlucoseTrendRateValue"
 
+public struct LoopQuantitySample: GlucoseSampleValue {
+    
+    public let hkQuantitySample: HKQuantitySample
+    
+    public init(with sample: HKQuantitySample) {
+        self.hkQuantitySample = sample
+    }
+    
+    public var provenanceIdentifier: String {
+        hkQuantitySample.provenanceIdentifier
+    }
+    
+    public var isDisplayOnly: Bool {
+        hkQuantitySample.isDisplayOnly
+    }
+    
+    public var wasUserEntered: Bool {
+        hkQuantitySample.wasUserEntered
+    }
+    
+    public var condition: GlucoseCondition? {
+        hkQuantitySample.condition
+    }
+    
+    public var trendRate: LoopQuantity? {
+        hkQuantitySample.trendRate
+    }
+    
+    public var quantity: LoopQuantity {
+        guard let unit = LoopUnit.firstCompatible(with: hkQuantitySample.quantity) else {
+            fatalError()
+        }
+        
+        return LoopQuantity(unit: unit, doubleValue: hkQuantitySample.quantity.doubleValue(for: unit.hkUnit))
+    }
+    
+    public var startDate: Date {
+        hkQuantitySample.startDate
+    }
+}
 
-extension HKQuantitySample: GlucoseSampleValue {
+extension HKQuantitySample {
     public var provenanceIdentifier: String {
         return sourceRevision.source.bundleIdentifier
     }
@@ -42,10 +82,10 @@ extension HKQuantitySample: GlucoseSampleValue {
         return GlucoseTrend(symbol: symbol)
     }
 
-    public var trendRate: HKQuantity? {
+    public var trendRate: LoopQuantity? {
         guard let value = metadata?[MetadataKeyGlucoseTrendRateValue] as? Double else {
             return nil
         }
-        return HKQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: value)
+        return LoopQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: value)
     }
 }

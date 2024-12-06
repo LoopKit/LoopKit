@@ -12,13 +12,13 @@ import LoopAlgorithm
 
 public struct GlucoseRange {
     public let range: DoubleRange
-    public let unit: HKUnit
+    public let unit: LoopUnit
 
-    public init(minValue: Double, maxValue: Double, unit: HKUnit) {
+    public init(minValue: Double, maxValue: Double, unit: LoopUnit) {
         self.init(range: DoubleRange(minValue: minValue, maxValue: maxValue), unit: unit)
     }
 
-    public init(range: DoubleRange, unit: HKUnit) {
+    public init(range: DoubleRange, unit: LoopUnit) {
         precondition(unit == .milligramsPerDeciliter || unit == .millimolesPerLiter)
         self.range = range
         self.unit = unit
@@ -28,7 +28,7 @@ public struct GlucoseRange {
         return abs(range.minValue) < .ulpOfOne && abs(range.maxValue) < .ulpOfOne
     }
 
-    public var quantityRange: ClosedRange<HKQuantity> {
+    public var quantityRange: ClosedRange<LoopQuantity> {
         range.quantityRange(for: unit)
     }
 }
@@ -48,7 +48,7 @@ extension GlucoseRange: RawRepresentable {
             return nil
         }
         self.range = range
-        self.unit = HKUnit(from: bloodGlucoseUnit)
+        self.unit = LoopUnit(from: bloodGlucoseUnit)
     }
 
     public var rawValue: RawValue {
@@ -62,7 +62,7 @@ extension GlucoseRange: RawRepresentable {
 extension GlucoseRange: Codable  {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        unit = HKUnit(from: try container.decode(String.self, forKey: .bloodGlucoseUnit))
+        unit = LoopUnit(from: try container.decode(String.self, forKey: .bloodGlucoseUnit))
         range = try container.decode(DoubleRange.self, forKey: .range)
     }
 

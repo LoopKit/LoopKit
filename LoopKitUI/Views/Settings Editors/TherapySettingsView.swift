@@ -7,7 +7,6 @@
 //
 
 import AVFoundation
-import HealthKit
 import LoopKit
 import SwiftUI
 import LoopAlgorithm
@@ -312,7 +311,7 @@ extension TherapySettingsView {
             Spacer()
             if let basalRates = self.viewModel.pumpSupportedIncrements()?.basalRates {
                 GuardrailConstrainedQuantityView(
-                    value: self.viewModel.therapySettings.maximumBasalRatePerHour.map { HKQuantity(unit: .internationalUnitsPerHour, doubleValue: $0) },
+                    value: self.viewModel.therapySettings.maximumBasalRatePerHour.map { LoopQuantity(unit: .internationalUnitsPerHour, doubleValue: $0) },
                     unit: .internationalUnitsPerHour,
                     guardrail: .maximumBasalRate(
                         supportedBasalRates: basalRates,
@@ -333,8 +332,8 @@ extension TherapySettingsView {
             Spacer()
             if let maximumBolusVolumes = self.viewModel.pumpSupportedIncrements()?.maximumBolusVolumes {
                 GuardrailConstrainedQuantityView(
-                    value: self.viewModel.therapySettings.maximumBolus.map { HKQuantity(unit: .internationalUnit(), doubleValue: $0) },
-                    unit: .internationalUnit(),
+                    value: self.viewModel.therapySettings.maximumBolus.map { LoopQuantity(unit: .internationalUnit, doubleValue: $0) },
+                    unit: .internationalUnit,
                     guardrail: .maximumBolus(supportedBolusVolumes: maximumBolusVolumes),
                     isEditing: false,
                     // Workaround for strange animation behavior on appearance
@@ -455,12 +454,19 @@ extension TherapySettingsView {
 // MARK: Utilities
 extension TherapySettingsView {
     
-    private var glucoseUnit: HKUnit {
+    private var glucoseUnit: LoopUnit {
         displayGlucosePreference.unit
     }
     
-    private var sensitivityUnit: HKUnit {
-        glucoseUnit.unitDivided(by: .internationalUnit())
+    private var sensitivityUnit: LoopUnit {
+        switch glucoseUnit {
+        case .milligramsPerDeciliter:
+            return .milligramsPerDeciliterPerInternationalUnit
+        case .millimolesPerLiter:
+            return .millimolesPerLiterPerInternationalUnit
+        default:
+            fatalError()
+        }
     }
     
     private func card<Content>(for therapySetting: TherapySetting, @ViewBuilder content: @escaping () -> Content) -> Card where Content: View {
@@ -479,13 +485,13 @@ extension TherapySettingsView {
     }
 }
 
-typealias HKQuantityGuardrail = Guardrail<HKQuantity>
+typealias LoopQuantityGuardrail = Guardrail<LoopQuantity>
 
 struct ScheduleRangeItem: View {
     let time: TimeInterval
     let range: DoubleRange
-    let unit: HKUnit
-    let guardrail: HKQuantityGuardrail
+    let unit: LoopUnit
+    let guardrail: LoopQuantityGuardrail
     
     public var body: some View {
         ScheduleItemView(time: time,
@@ -501,14 +507,14 @@ struct ScheduleRangeItem: View {
 struct ScheduleValueItem: View {
     let time: TimeInterval
     let value: Double
-    let unit: HKUnit
-    let guardrail: HKQuantityGuardrail
+    let unit: LoopUnit
+    let guardrail: LoopQuantityGuardrail
     
     public var body: some View {
         ScheduleItemView(time: time,
                          isEditing: .constant(false),
                          valueContent: {
-                            GuardrailConstrainedQuantityView(value: HKQuantity(unit: unit, doubleValue: value), unit: unit, guardrail: guardrail, isEditing: false)
+                            GuardrailConstrainedQuantityView(value: LoopQuantity(unit: unit, doubleValue: value), unit: unit, guardrail: guardrail, isEditing: false)
                                 .padding(.leading, 10)
                          },
                          expandedContent: { EmptyView() })
@@ -517,10 +523,10 @@ struct ScheduleValueItem: View {
 
 struct CorrectionRangeOverridesRangeItem: View {
     let value: CorrectionRangeOverrides
-    let displayGlucoseUnit: HKUnit
+    let displayGlucoseUnit: LoopUnit
     let preset: CorrectionRangeOverrides.Preset
     let suspendThreshold: GlucoseThreshold?
-    let correctionRangeScheduleRange: ClosedRange<HKQuantity>
+    let correctionRangeScheduleRange: ClosedRange<LoopQuantity>
     
     public var body: some View {
         CorrectionRangeOverridesExpandableSetting(
@@ -611,7 +617,7 @@ public struct TherapySettingsView_Previews: PreviewProvider {
                                                            unit: .milligramsPerDeciliter),
         maximumBolus: 4,
         suspendThreshold: GlucoseThreshold.init(unit: .milligramsPerDeciliter, value: 60),
-        insulinSensitivitySchedule: InsulinSensitivitySchedule(unit: HKUnit.milligramsPerDeciliter.unitDivided(by: HKUnit.internationalUnit()), dailyItems: []),
+        insulinSensitivitySchedule: InsulinSensitivitySchedule(unit: .milligramsPerDeciliterPerInternationalUnit, dailyItems: []),
         carbRatioSchedule: nil,
         basalRateSchedule: BasalRateSchedule(dailyItems: [RepeatingScheduleValue(startTime: 0, value: 0.2), RepeatingScheduleValue(startTime: 1800, value: 0.75)]))
 

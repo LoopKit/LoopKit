@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-import HealthKit
+import LoopAlgorithm
 import LoopKit
 
 // Also known as "Glucose Safety Limit"
@@ -22,11 +22,11 @@ public struct SuspendThresholdEditor: View {
     let viewModel: SuspendThresholdEditorViewModel
 
     @State private var userDidTap: Bool = false
-    @State var value: HKQuantity
+    @State var value: LoopQuantity
     @State var isEditing = false
     @State var showingConfirmationAlert = false
 
-    private var initialValue: HKQuantity? {
+    private var initialValue: LoopQuantity? {
         viewModel.suspendThreshold
     }
 
@@ -43,12 +43,12 @@ public struct SuspendThresholdEditor: View {
         self.viewModel = viewModel
     }
 
-    private static func defaultValue(for unit: HKUnit) -> HKQuantity {
+    private static func defaultValue(for unit: LoopUnit) -> LoopQuantity {
         switch unit {
         case .milligramsPerDeciliter:
-            return HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 80)
+            return LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 80)
         case .millimolesPerLiter:
-            return HKQuantity(unit: .millimolesPerLiter, doubleValue: 4.5)
+            return LoopQuantity(unit: .millimolesPerLiter, doubleValue: 4.5)
         default:
             fatalError("Unsupported glucose unit \(unit)")
         }

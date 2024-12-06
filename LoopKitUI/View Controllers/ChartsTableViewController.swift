@@ -7,7 +7,7 @@
 
 import UIKit
 import Combine
-import HealthKit
+import LoopAlgorithm
 
 /// Abstract class providing boilerplate setup for chart-based table view controllers
 @MainActor
@@ -95,7 +95,7 @@ open class ChartsTableViewController: UITableViewController, UIGestureRecognizer
 
     // MARK: - State
     // This function should only be called from the main thread
-    public func unitPreferencesDidChange(to unit: HKUnit?) {
+    public func unitPreferencesDidChange(to unit: LoopUnit?) {
         if let unit = unit {
             self.charts.setGlucoseUnit(unit)
             self.glucoseUnitDidChange()
@@ -183,7 +183,7 @@ open class ChartsTableViewController: UITableViewController, UIGestureRecognizer
 }
 
 fileprivate extension ChartsManager {
-    func setGlucoseUnit(_ unit: HKUnit) {
+    func setGlucoseUnit(_ unit: LoopUnit) {
         for case let chart as GlucoseChart in charts {
             chart.glucoseUnit = unit
         }

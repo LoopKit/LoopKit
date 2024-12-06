@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import HealthKit
+import LoopAlgorithm
 import LoopKit
 
 
@@ -17,19 +17,19 @@ public protocol GlucoseEntryTableViewControllerDelegate: AnyObject {
 
 public class GlucoseEntryTableViewController: TextFieldTableViewController {
 
-    let glucoseUnit: HKUnit
+    let glucoseUnit: LoopUnit
 
     private lazy var glucoseFormatter: NumberFormatter = {
         let quantityFormatter = QuantityFormatter(for: glucoseUnit)
         return quantityFormatter.numberFormatter
     }()
 
-    public var glucose: HKQuantity? {
+    public var glucose: LoopQuantity? {
         get {
             guard let value = value, let doubleValue = Double(value) else {
                 return nil
             }
-            return HKQuantity(unit: glucoseUnit, doubleValue: doubleValue)
+            return LoopQuantity(unit: glucoseUnit, doubleValue: doubleValue)
         }
         set {
             if let newValue = newValue {
@@ -42,7 +42,7 @@ public class GlucoseEntryTableViewController: TextFieldTableViewController {
 
     public weak var glucoseEntryDelegate: GlucoseEntryTableViewControllerDelegate?
 
-    public init(glucoseUnit: HKUnit) {
+    public init(glucoseUnit: LoopUnit) {
         self.glucoseUnit = glucoseUnit
         super.init(style: .grouped)
         unit = glucoseUnit.shortLocalizedUnitString()

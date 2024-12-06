@@ -6,23 +6,23 @@
 //  Copyright © 2020 LoopKit Authors. All rights reserved.
 //
 
-import HealthKit
-import SwiftUI
+import LoopAlgorithm
 import LoopKit
+import SwiftUI
 
 public struct GlucoseTherapySettingInformationView<Content: View>: View {
     var text: Content?
     let onExit: (() -> Void)?
     let mode: SettingsPresentationMode
     let therapySetting: TherapySetting
-    let preferredUnit: HKUnit
+    let preferredUnit: LoopUnit
     let appName: String
     
     @Environment(\.presentationMode) var presentationMode
 
     public init(
         therapySetting: TherapySetting,
-        preferredUnit: HKUnit? = nil,
+        preferredUnit: LoopUnit? = nil,
         onExit: (() -> Void)?,
         mode: SettingsPresentationMode = .acceptanceFlow,
         appName: String,
@@ -38,7 +38,7 @@ public struct GlucoseTherapySettingInformationView<Content: View>: View {
     
     public init(
         therapySetting: TherapySetting,
-        preferredUnit: HKUnit? = nil,
+        preferredUnit: LoopUnit? = nil,
         onExit: (() -> Void)?,
         mode: SettingsPresentationMode = .acceptanceFlow,
         appName: String,
@@ -85,7 +85,7 @@ public struct GlucoseTherapySettingInformationView<Content: View>: View {
     }
     
     private var illustrationImageName: String {
-        return "\(therapySetting) \(preferredUnit.description.replacingOccurrences(of: "/", with: ""))"
+        return "\(therapySetting) \(preferredUnit.hkUnit.description.replacingOccurrences(of: "/", with: ""))"
     }
 }
 
@@ -109,7 +109,7 @@ fileprivate extension TherapySetting {
         }
     }
        
-    func lowHighText(for guardrail: Guardrail<HKQuantity>) -> String {
+    func lowHighText(for guardrail: Guardrail<LoopQuantity>) -> String {
         return lowHighText(lowerBoundString: guardrail.absoluteBounds.lowerBound.bothUnitsString,
                            upperBoundString: guardrail.absoluteBounds.upperBound.bothUnitsString)
     }

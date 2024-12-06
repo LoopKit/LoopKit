@@ -7,14 +7,14 @@
 //
 
 import UIKit
-import HealthKit
+import LoopAlgorithm
 
 
 public class DailyQuantityScheduleTableViewController: SingleValueScheduleTableViewController {
 
-    public var unit: HKUnit = HKUnit.gram() {
+    public var unit: LoopUnit = .gram {
         didSet {
-            unitDisplayString = unit.unitDivided(by: .internationalUnit()).shortLocalizedUnitString()
+            unitDisplayString = LoopUnit.gramsPerUnit.shortLocalizedUnitString()
         }
     }
 

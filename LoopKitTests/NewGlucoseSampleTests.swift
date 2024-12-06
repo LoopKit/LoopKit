@@ -8,13 +8,14 @@
 
 import XCTest
 import HealthKit
+import LoopAlgorithm
 @testable import LoopKit
 
 class NewGlucoseSampleTests: XCTestCase {
     func testQuantitySample() {
         let date = Date()
-        let quantity = HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 145.3)
-        let trendRate = HKQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: 1.1)
+        let quantity = LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 145.3)
+        let trendRate = LoopQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: 1.1)
         let device = HKDevice(name: "Device Name",
                               manufacturer: "Device Manufacturer",
                               model: "Device Model",
@@ -36,7 +37,7 @@ class NewGlucoseSampleTests: XCTestCase {
                                                 device: device)
         let quantitySample = newGlucoseSample.quantitySample
         XCTAssertEqual(quantitySample.quantityType, HealthKitSampleStore.glucoseType)
-        XCTAssertEqual(quantitySample.quantity, quantity)
+        XCTAssertEqual(quantitySample.quantity, quantity.hkQuantity)
         XCTAssertEqual(quantitySample.startDate, date)
         XCTAssertEqual(quantitySample.endDate, date)
         XCTAssertEqual(quantitySample.device, device)

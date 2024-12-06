@@ -7,16 +7,15 @@
 //
 
 import SwiftUI
-import HealthKit
 import LoopKit
 import LoopAlgorithm
 
 
 public struct GuardrailConstrainedQuantityView: View {
     @Environment(\.guidanceColors) var guidanceColors
-    var value: HKQuantity?
-    var unit: HKUnit
-    var guardrail: Guardrail<HKQuantity>
+    var value: LoopQuantity?
+    var unit: LoopUnit
+    var guardrail: Guardrail<LoopQuantity>
     var isEditing: Bool
     var isSupportedValue: Bool
     var formatter: NumberFormatter
@@ -27,9 +26,9 @@ public struct GuardrailConstrainedQuantityView: View {
     @State private var hasAppeared = false
 
     public init(
-        value: HKQuantity?,
-        unit: HKUnit,
-        guardrail: Guardrail<HKQuantity>,
+        value: LoopQuantity?,
+        unit: LoopUnit,
+        guardrail: Guardrail<LoopQuantity>,
         isEditing: Bool,
         isSupportedValue: Bool = true,
         iconSpacing: CGFloat = 8,

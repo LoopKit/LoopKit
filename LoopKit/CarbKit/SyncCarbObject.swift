@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import HealthKit
+import LoopAlgorithm
 
 public enum Operation: Int, CaseIterable, Codable {
     case create
@@ -64,7 +64,7 @@ public struct SyncCarbObject: Codable, Equatable {
         self.supercededDate = supercededDate
     }
 
-    public var quantity: HKQuantity { HKQuantity(unit: .gram(), doubleValue: grams) }
+    public var quantity: LoopQuantity { LoopQuantity(unit: .gram, doubleValue: grams) }
 }
 
 extension SyncCarbObject {

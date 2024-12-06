@@ -8,17 +8,17 @@
 
 import SwiftUI
 import LoopKit
-import HealthKit
+import LoopAlgorithm
 
 public class OverrideHistoryViewModel: ObservableObject {
     var overrides: [TemporaryScheduleOverride]
-    var glucoseUnit: HKUnit
+    var glucoseUnit: LoopUnit
     var didEditOverride: ((TemporaryScheduleOverride) -> Void)?
     var didDeleteOverride: ((TemporaryScheduleOverride) -> Void)?
 
     public init(
         overrides: [TemporaryScheduleOverride],
-        glucoseUnit: HKUnit
+        glucoseUnit: LoopUnit
     ) {
         self.overrides = overrides
         self.glucoseUnit = glucoseUnit
@@ -73,7 +73,7 @@ public struct OverrideSelectionHistory: View {
         .navigationBarTitle(Text(LocalizedString("Override History", comment: "Title for override history view")), displayMode: .large)
     }
     
-    private func makeTargetRangeText(from targetRange: ClosedRange<HKQuantity>) -> String {
+    private func makeTargetRangeText(from targetRange: ClosedRange<LoopQuantity>) -> String {
         guard
             let minTarget = glucoseNumberFormatter.string(from: targetRange.lowerBound.doubleValue(for: model.glucoseUnit)),
             let maxTarget = glucoseNumberFormatter.string(from: targetRange.upperBound.doubleValue(for: model.glucoseUnit))

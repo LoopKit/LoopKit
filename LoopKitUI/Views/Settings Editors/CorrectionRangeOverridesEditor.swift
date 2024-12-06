@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-import HealthKit
+import LoopAlgorithm
 import LoopKit
 
 public struct CorrectionRangeOverridesEditor: View {
@@ -42,7 +42,7 @@ public struct CorrectionRangeOverridesEditor: View {
         viewModel.preset
     }
 
-    var displayGlucoseUnit: HKUnit {
+    var displayGlucoseUnit: LoopUnit {
         displayGlucosePreference.unit
     }
     
@@ -255,11 +255,11 @@ public struct CorrectionRangeOverridesEditor: View {
         }
     }
 
-    private func selectableBounds(for preset: CorrectionRangeOverrides.Preset) -> ClosedRange<HKQuantity> {
+    private func selectableBounds(for preset: CorrectionRangeOverrides.Preset) -> ClosedRange<LoopQuantity> {
         viewModel.guardrail.absoluteBounds
     }
 
-    private func initiallySelectedValue(for preset: CorrectionRangeOverrides.Preset) -> ClosedRange<HKQuantity> {
+    private func initiallySelectedValue(for preset: CorrectionRangeOverrides.Preset) -> ClosedRange<LoopQuantity> {
         viewModel.guardrail.recommendedBounds.clamped(to: selectableBounds(for: preset))
     }
 

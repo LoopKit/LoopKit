@@ -7,16 +7,16 @@
 //
 
 import XCTest
-import HealthKit
+import LoopAlgorithm
 
 @testable import LoopKit
 
 class GlucoseThresholdTests: XCTestCase {
     
     func testInitializer() {
-        let glucoseThreshold = GlucoseThreshold(unit: HKUnit.gram(), value: 1.23)
+        let glucoseThreshold = GlucoseThreshold(unit: LoopUnit.gram, value: 1.23)
         XCTAssertEqual(glucoseThreshold.value, 1.23)
-        XCTAssertEqual(glucoseThreshold.unit, HKUnit.gram())
+        XCTAssertEqual(glucoseThreshold.unit, LoopUnit.gram)
     }
     
     func testInitializerWithRawValueValid() {
@@ -27,7 +27,7 @@ class GlucoseThresholdTests: XCTestCase {
         let glucoseThreshold = GlucoseThreshold(rawValue: rawValue)
         XCTAssertNotNil(glucoseThreshold)
         XCTAssertEqual(glucoseThreshold!.value, 1.23)
-        XCTAssertEqual(glucoseThreshold!.unit, HKUnit.gram())
+        XCTAssertEqual(glucoseThreshold!.unit, LoopUnit.gram)
     }
     
     func testInitializerWithRawValueWithValueMissing() {
@@ -61,12 +61,12 @@ class GlucoseThresholdTests: XCTestCase {
     }
     
     func testQuantity() {
-        let glucoseThreshold = GlucoseThreshold(unit: HKUnit.gram(), value: 1.23)
-        XCTAssertEqual(glucoseThreshold.quantity, HKQuantity(unit: HKUnit.gram(), doubleValue: 1.23))
+        let glucoseThreshold = GlucoseThreshold(unit: LoopUnit.gram, value: 1.23)
+        XCTAssertEqual(glucoseThreshold.quantity, LoopQuantity(unit: .gram, doubleValue: 1.23))
     }
     
     func testRawValue() {
-        let glucoseThreshold = GlucoseThreshold(unit: HKUnit.gram(), value: 1.23)
+        let glucoseThreshold = GlucoseThreshold(unit: .gram, value: 1.23)
         XCTAssertEqual(glucoseThreshold.rawValue.count, 2)
         XCTAssertEqual(glucoseThreshold.rawValue["units"] as! String, "g")
         XCTAssertEqual(glucoseThreshold.rawValue["value"] as! Double, 1.23)
@@ -76,7 +76,7 @@ class GlucoseThresholdTests: XCTestCase {
         let glucoseThresholdMMOLL = GlucoseThreshold(unit: .millimolesPerLiter, value: 4.4)
         let glucoseThresholdMGDL = glucoseThresholdMMOLL.convertTo(unit: .milligramsPerDeciliter)
         XCTAssertEqual(glucoseThresholdMGDL.unit, .milligramsPerDeciliter)
-        XCTAssertEqual(glucoseThresholdMGDL.value, HKQuantity(unit: .millimolesPerLiter, doubleValue: glucoseThresholdMMOLL.value).doubleValue(for: .milligramsPerDeciliter))
+        XCTAssertEqual(glucoseThresholdMGDL.value, LoopQuantity(unit: .millimolesPerLiter, doubleValue: glucoseThresholdMMOLL.value).doubleValue(for: .milligramsPerDeciliter))
     }
 }
 

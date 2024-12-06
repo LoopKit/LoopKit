@@ -7,7 +7,6 @@
 //
 
 import XCTest
-import HealthKit
 import LoopKit
 import SwiftCharts
 import LoopAlgorithm
@@ -19,19 +18,19 @@ class PredictedGlucoseChartTests: XCTestCase {
     
     func testClampingPredictedGlucoseValues40To400() {
         let glucoseValues = [
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 40), startDate: Date()),
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 120), startDate: Date()),
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 250), startDate: Date()),
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 400), startDate: Date())
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 40), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 120), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 250), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 400), startDate: Date())
         ]
         let predictedGlucoseValues =  [
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 0), startDate: Date()),
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 40), startDate: Date()),
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 280), startDate: Date()),
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 380), startDate: Date()),
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 400), startDate: Date()),
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 480), startDate: Date()),
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 580), startDate: Date())
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 0), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 40), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 280), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 380), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 400), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 480), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 580), startDate: Date())
         ]
         let predictedGlucoseChart = PredictedGlucoseChart(predictedGlucoseBounds: .default,
                                                           yAxisStepSizeMGDLOverride: yAxisStepSizeMGDL)
@@ -50,20 +49,20 @@ class PredictedGlucoseChartTests: XCTestCase {
     func testClampingPredictedGlucoseValues40To600() {
         // the max expected value is 600, but the y-axis will go to 680 due to the step size
         let glucoseValues = [
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 40), startDate: Date()),
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 120), startDate: Date()),
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 350), startDate: Date()),
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 480), startDate: Date()),
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 600), startDate: Date())
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 40), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 120), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 350), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 480), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 600), startDate: Date())
         ]
         let predictedGlucoseValues =  [
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 0), startDate: Date()),
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 40), startDate: Date()),
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 300), startDate: Date()),
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 450), startDate: Date()),
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 600), startDate: Date()),
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 750), startDate: Date()),
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 1000), startDate: Date())
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 0), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 40), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 300), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 450), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 600), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 750), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 1000), startDate: Date())
         ]
         let predictedGlucoseChart = PredictedGlucoseChart(predictedGlucoseBounds: .default,
                                                           yAxisStepSizeMGDLOverride: yAxisStepSizeMGDL)
@@ -81,19 +80,19 @@ class PredictedGlucoseChartTests: XCTestCase {
 
     func testClampingPredictedGlucoseValues0To400() {
         let glucoseValues = [
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 0), startDate: Date()),
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 120), startDate: Date()),
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 250), startDate: Date()),
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 400), startDate: Date())
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 0), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 120), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 250), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 400), startDate: Date())
         ]
         let predictedGlucoseValues =  [
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: -100), startDate: Date()),
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 0), startDate: Date()),
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 100), startDate: Date()),
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 380), startDate: Date()),
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 400), startDate: Date()),
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 480), startDate: Date()),
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 580), startDate: Date())
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: -100), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 0), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 100), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 380), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 400), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 480), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 580), startDate: Date())
         ]
         let predictedGlucoseChart = PredictedGlucoseChart(predictedGlucoseBounds: .default,
                                                           yAxisStepSizeMGDLOverride: yAxisStepSizeMGDL)
@@ -111,20 +110,20 @@ class PredictedGlucoseChartTests: XCTestCase {
     
     func testClampingPredictedGlucoseValues0To600() {
         let glucoseValues = [
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 0), startDate: Date()),
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 120), startDate: Date()),
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 350), startDate: Date()),
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 480), startDate: Date()),
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 600), startDate: Date())
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 0), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 120), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 350), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 480), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 600), startDate: Date())
         ]
         let predictedGlucoseValues =  [
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: -100), startDate: Date()),
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 0), startDate: Date()),
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 150), startDate: Date()),
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 350), startDate: Date()),
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 600), startDate: Date()),
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 750), startDate: Date()),
-            GlucoseValueTestable(quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 1000), startDate: Date())
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: -100), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 0), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 150), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 350), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 600), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 750), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 1000), startDate: Date())
         ]
         let predictedGlucoseChart = PredictedGlucoseChart(predictedGlucoseBounds: .default,
                                                           yAxisStepSizeMGDLOverride: yAxisStepSizeMGDL)
@@ -142,7 +141,7 @@ class PredictedGlucoseChartTests: XCTestCase {
 }
 
 struct GlucoseValueTestable: GlucoseValue {
-    var quantity: HKQuantity
+    var quantity: LoopQuantity
     
     var startDate: Date
 }

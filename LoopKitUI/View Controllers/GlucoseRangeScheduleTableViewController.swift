@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import HealthKit
 import LoopKit
 import LoopAlgorithm
 
@@ -32,7 +31,7 @@ private struct EditableRange {
 
 public class GlucoseRangeScheduleTableViewController: UITableViewController {
 
-    public init(allowedValues: [Double], unit: HKUnit, minimumTimeInterval: TimeInterval = TimeInterval(30 * 60)) {
+    public init(allowedValues: [Double], unit: LoopUnit, minimumTimeInterval: TimeInterval = TimeInterval(30 * 60)) {
         self.allowedValues = allowedValues
         self.unit = unit
         self.minimumTimeInterval = minimumTimeInterval
@@ -208,7 +207,7 @@ public class GlucoseRangeScheduleTableViewController: UITableViewController {
 
     public var timeZone = TimeZone.currentFixed
 
-    private var unit: HKUnit = HKUnit.milligramsPerDeciliter
+    private var unit: LoopUnit = LoopUnit.milligramsPerDeciliter
 
     private var isScheduleModified = false {
         didSet {

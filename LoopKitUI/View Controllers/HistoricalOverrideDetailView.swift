@@ -7,17 +7,17 @@
 //
 import SwiftUI
 import LoopKit
-import HealthKit
+import LoopAlgorithm
 
 
 public struct HistoricalOverrideDetailView: UIViewControllerRepresentable {
     public var override: TemporaryScheduleOverride
-    public var glucoseUnit: HKUnit
+    public var glucoseUnit: LoopUnit
     public weak var delegate: AddEditOverrideTableViewControllerDelegate?
     
     public init(
         override: TemporaryScheduleOverride,
-        glucoseUnit: HKUnit,
+        glucoseUnit: LoopUnit,
         delegate: AddEditOverrideTableViewControllerDelegate?
     ) {
         self.override = override

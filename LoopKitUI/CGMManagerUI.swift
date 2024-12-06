@@ -62,7 +62,7 @@ extension CGMManagerUI {
     }
 
     /// When conformance to the DisplayGlucoseUnitObserver is desired, use this function to be notified when the user display glucose unit changes
-    public func unitDidChange(to displayGlucoseUnit: HKUnit) {
+    public func unitDidChange(to displayGlucoseUnit: LoopUnit) {
         // optional
     }
 }
