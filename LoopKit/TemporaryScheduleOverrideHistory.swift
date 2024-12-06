@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftData
 
 public enum End: Equatable, Hashable, Codable {
     case natural
@@ -51,9 +52,9 @@ public enum End: Equatable, Hashable, Codable {
     }
 }
 
-private struct OverrideEvent: Equatable {
+public struct OverrideEvent: Equatable, Codable, Hashable {
 
-    var override: TemporaryScheduleOverride
+    public var override: TemporaryScheduleOverride
     var modificationCounter: Int64
 
     init(override: TemporaryScheduleOverride, modificationCounter: Int64) {
@@ -67,7 +68,11 @@ public protocol TemporaryScheduleOverrideHistoryDelegate: AnyObject {
     func temporaryScheduleOverrideHistoryDidUpdate(_ history: TemporaryScheduleOverrideHistory)
 }
 
+
+@Model
 public final class TemporaryScheduleOverrideHistory {
+    
+    public static var relevantTimeWindow: TimeInterval = 1
 
     public struct QueryAnchor: RawRepresentable {
         public typealias RawValue = [String: Any]
@@ -92,7 +97,7 @@ public final class TemporaryScheduleOverrideHistory {
         }
     }
 
-    private var recentEvents: [OverrideEvent] = [] {
+    public var recentEvents: [OverrideEvent] = [] {
         didSet {
             modificationCounter += 1
 
@@ -108,16 +113,13 @@ public final class TemporaryScheduleOverrideHistory {
     /// Stored to enable retrieval via issue report after a deliberate crash.
     private var taintedEventLog: [OverrideEvent] = []
     
-    private var modificationCounter: Int64
-    
-    public var relevantTimeWindow: TimeInterval = TimeInterval.hours(10)
+    private var modificationCounter: Int64 = 0
 
-    public weak var delegate: TemporaryScheduleOverrideHistoryDelegate?
+    @Transient public weak var delegate: TemporaryScheduleOverrideHistoryDelegate?
 
-    public init() {
-        modificationCounter = 0
-    }
+    public init() {}
 
+    // GOOD
     public func recordOverride(_ override: TemporaryScheduleOverride?, at enableDate: Date = Date()) {
         guard override != lastUndeletedEvent?.override else {
             return
@@ -141,6 +143,7 @@ public final class TemporaryScheduleOverrideHistory {
         return recentEvents.reversed().first { $0.override.actualEnd != .deleted }
     }
 
+    // Good?
     private func deleteEventsStartingOnOrAfter(_ date: Date) {
         recentEvents.mutateEach { (event) in
             if event.override.startDate >= date {
@@ -174,6 +177,7 @@ public final class TemporaryScheduleOverrideHistory {
         recentEvents.append(enabledEvent)
     }
 
+    // GOOD?
     private func cancelActiveOverride(at date: Date) {
         var index = recentEvents.endIndex
         while index != recentEvents.startIndex {
@@ -233,8 +237,8 @@ public final class TemporaryScheduleOverrideHistory {
 
     private func relevantPeriod(relativeTo referenceDate: Date) -> DateInterval {
         return DateInterval(
-            start: referenceDate.addingTimeInterval(-relevantTimeWindow),
-            end: referenceDate.addingTimeInterval(relevantTimeWindow)
+            start: referenceDate.addingTimeInterval(-Self.relevantTimeWindow),
+            end: referenceDate.addingTimeInterval(Self.relevantTimeWindow)
         )
     }
 
@@ -327,77 +331,6 @@ public final class TemporaryScheduleOverrideHistory {
 }
 
 
-extension OverrideEvent: RawRepresentable {
-    typealias RawValue = [String: Any]
-
-    init?(rawValue: RawValue) {
-        guard
-            let overrideRawValue = rawValue["override"] as? TemporaryScheduleOverride.RawValue,
-            let override = TemporaryScheduleOverride(rawValue: overrideRawValue)
-        else {
-            return nil
-        }
-
-        self.override = override
-        
-        self.modificationCounter = rawValue["modificationCounter"] as? Int64 ?? 0
-        
-        if let isDeleted = rawValue["isDeleted"] as? Bool, isDeleted {
-            self.override.actualEnd = .deleted
-        } else if let endDate = rawValue["endDate"] as? Date {
-            self.override.actualEnd = .early(endDate)
-        }
-    }
-
-    var rawValue: RawValue {
-        var raw: RawValue = [
-            "override": override.rawValue,
-            "modificationCounter": modificationCounter,
-            "isDeleted": override.actualEnd == .deleted,
-        ]
-
-        if case .early(let endDate) = override.actualEnd {
-            raw["endDate"] = endDate
-        }
-
-        return raw
-    }
-}
-
-
-extension TemporaryScheduleOverrideHistory: RawRepresentable {
-    public typealias RawValue = [String: Any]
-
-    public convenience init?(rawValue: RawValue) {
-        self.init()
-        if let recentEventsRawValue = rawValue["recentEvents"] as? [[String: Any]] {
-            let recentEvents = recentEventsRawValue.compactMap(OverrideEvent.init(rawValue:))
-            guard recentEvents.count == recentEventsRawValue.count else {
-                return nil
-            }
-            self.recentEvents = recentEvents
-        }
-        if let taintedEventsRawValue = rawValue["taintedEventLog"] as? [[String: Any]] {
-            let taintedEventLog = taintedEventsRawValue.compactMap(OverrideEvent.init(rawValue:))
-            guard taintedEventLog.count == taintedEventsRawValue.count else {
-                return nil
-            }
-            self.taintedEventLog = taintedEventLog
-        }
-        
-        self.modificationCounter = rawValue["modificationCounter"] as? Int64 ?? 0
-    }
-
-    public var rawValue: RawValue {
-        return [
-            "recentEvents": recentEvents.map { $0.rawValue },
-            "taintedEventLog": taintedEventLog.map { $0.rawValue },
-            "modificationCounter": modificationCounter
-        ]
-    }
-}
-
-
 extension TemporaryScheduleOverrideHistory: CustomDebugStringConvertible {
     public var debugDescription: String {
         return "TemporaryScheduleOverrideHistory(recentEvents: \(recentEvents), taintedEventLog: \(taintedEventLog))"
@@ -408,5 +341,46 @@ extension TemporaryScheduleOverrideHistory: CustomDebugStringConvertible {
 private extension Date {
     var nearestPrevious: Date {
         return Date(timeIntervalSince1970: timeIntervalSince1970.nextDown)
+    }
+}
+
+@MainActor
+public class TemporaryScheduleOverrideHistoryContainer {
+    public static let shared = TemporaryScheduleOverrideHistoryContainer()
+    public let container: ModelContainer
+
+    public var context: ModelContext {
+        container.mainContext
+    }
+
+    private init() {
+        do {
+            let schema = Schema([TemporaryScheduleOverrideHistory.self])
+            container = try ModelContainer(for: schema)
+        } catch {
+            fatalError()
+        }
+    }
+    
+    public func fetch(descriptor: FetchDescriptor<TemporaryScheduleOverrideHistory>? = nil) -> TemporaryScheduleOverrideHistory {
+        do {
+            if let persisted = try context.fetch(descriptor ?? FetchDescriptor<TemporaryScheduleOverrideHistory>()).last {
+                return persisted
+            } else {
+                let history = TemporaryScheduleOverrideHistory()
+                context.insert(history)
+                return history
+            }
+        } catch {
+            fatalError()
+        }
+    }
+    
+    public func deleteAll() {
+        do {
+            try context.delete(model: TemporaryScheduleOverrideHistory.self)
+        } catch {
+            fatalError()
+        }
     }
 }
