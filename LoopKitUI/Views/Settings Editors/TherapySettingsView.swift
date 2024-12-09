@@ -89,8 +89,6 @@ public struct TherapySettingsView: View {
         }
         cards.append(suspendThresholdSection)
         cards.append(correctionRangeSection)
-        cards.append(preMealCorrectionRangeSection)
-        cards.append(workoutCorrectionRangeSection)
         cards.append(carbRatioSection)
         cards.append(basalRatesSection)
         cards.append(deliveryLimitsSection)
@@ -228,38 +226,6 @@ extension TherapySettingsView {
                                       unit: glucoseUnit,
                                       guardrail: .correctionRange)
                 }
-            }
-        }
-    }
-    
-    private var preMealCorrectionRangeSection: Card {
-        card(for: .preMealCorrectionRangeOverride) {
-            let correctionRangeOverrides = self.viewModel.correctionRangeOverrides
-            if let schedule = self.viewModel.glucoseTargetRangeSchedule {
-                SectionDivider()
-                CorrectionRangeOverridesRangeItem(
-                    value: correctionRangeOverrides,
-                    displayGlucoseUnit: glucoseUnit,
-                    preset: CorrectionRangeOverrides.Preset.preMeal,
-                    suspendThreshold: viewModel.suspendThreshold,
-                    correctionRangeScheduleRange: schedule.scheduleRange()
-                )
-            }
-        }
-    }
-    
-    private var workoutCorrectionRangeSection: Card {
-        card(for: .workoutCorrectionRangeOverride) {
-            let correctionRangeOverrides = self.viewModel.correctionRangeOverrides
-            if let schedule = self.viewModel.glucoseTargetRangeSchedule {
-                SectionDivider()
-                CorrectionRangeOverridesRangeItem(
-                    value: correctionRangeOverrides,
-                    displayGlucoseUnit: glucoseUnit,
-                    preset: CorrectionRangeOverrides.Preset.workout,
-                    suspendThreshold: self.viewModel.suspendThreshold,
-                    correctionRangeScheduleRange: schedule.scheduleRange()
-                )
             }
         }
     }
