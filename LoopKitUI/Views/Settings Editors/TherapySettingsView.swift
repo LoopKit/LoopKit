@@ -89,8 +89,10 @@ public struct TherapySettingsView: View {
         }
         cards.append(suspendThresholdSection)
         cards.append(correctionRangeSection)
-        cards.append(preMealCorrectionRangeSection)
-        cards.append(workoutCorrectionRangeSection)
+        if mode == .acceptanceFlow {
+            cards.append(preMealCorrectionRangeSection)
+            cards.append(workoutCorrectionRangeSection)
+        }
         cards.append(carbRatioSection)
         cards.append(basalRatesSection)
         cards.append(deliveryLimitsSection)
