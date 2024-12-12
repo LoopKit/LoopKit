@@ -13,6 +13,7 @@ public struct ActionButtonStyle: ButtonStyle {
     public enum ButtonType {
         case primary
         case secondary
+        case tertiary
         case destructive
     }
 
@@ -36,6 +37,10 @@ public struct ActionButtonStyle: ButtonStyle {
             fontColor = .accentColor
             backgroundColor = .clear
             edgeColor = .accentColor
+        case .tertiary:
+            fontColor = .accentColor
+            backgroundColor = Color(UIColor.secondarySystemBackground)
+            edgeColor = .clear
         }
     }
 

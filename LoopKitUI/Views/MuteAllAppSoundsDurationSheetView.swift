@@ -138,8 +138,6 @@ public struct ConfirmationSheet: View {
     @Environment(\.guidanceColors) private var guidanceColors
     
     private let resumeDate: Date
-
-    @State private var sheetContentHeight = Double(0)
     
     public init(resumeDate: Date) {
         self.resumeDate = resumeDate
@@ -170,13 +168,7 @@ public struct ConfirmationSheet: View {
         .padding(.horizontal)
         .padding(.top, 40)
         .padding(.bottom, 2)
-        .readContentHeight()
-        .onPreferenceChange(ContentHeightPreferenceKey.self) { height in
-            if let height {
-                sheetContentHeight = height
-            }
-        }
-        .sheetDetent(height: sheetContentHeight)
+        .presentationHuggingDetent()
         .task {
             try? await Task.sleep(nanoseconds: NSEC_PER_SEC * 3)
             dismiss()
@@ -184,23 +176,48 @@ public struct ConfirmationSheet: View {
     }
 }
 
-private extension View {
-    @ViewBuilder
-    func sheetDetent(height: Double) -> some View {
-        if #available(iOS 16, *) {
-            self
-                .presentationDetents([.height(height)])
-                .presentationDragIndicator(.visible)
-        } else {
-            self
-        }
+public extension View {
+    func presentationHuggingDetent() -> some View {
+        HuggingDetentView { self }
     }
 }
 
-private struct ContentHeightPreferenceKey: PreferenceKey {
-    static var defaultValue: CGFloat?
+public extension View {
+    @ViewBuilder
+    func sheetDetent(height: Double) -> some View {
+        self
+            .presentationDetents([])
+            .presentationDetents([.height(height)])
+            .presentationDragIndicator(.visible)
+    }
+}
 
-    static func reduce(value: inout CGFloat?, nextValue: () -> CGFloat?) {
+private struct HuggingDetentView<Content: View>: View {
+    
+    @State private var sheetContentHeight: Double = 0
+    
+    private let content: Content
+    
+    public init(@ViewBuilder content: @escaping () -> Content) {
+        self.content = content()
+    }
+    
+    public var body: some View {
+        content
+            .readContentHeight()
+            .onPreferenceChange(ContentHeightPreferenceKey.self) { height in
+                if let height {
+                    sheetContentHeight = height
+                }
+            }
+            .sheetDetent(height: sheetContentHeight)
+    }
+}
+
+public struct ContentHeightPreferenceKey: PreferenceKey {
+    public static var defaultValue: CGFloat?
+
+    public static func reduce(value: inout CGFloat?, nextValue: () -> CGFloat?) {
         guard let nextValue = nextValue() else { return }
         value = nextValue
     }
@@ -215,14 +232,14 @@ private struct ActionContentHeightPreferenceKey: PreferenceKey {
     }
 }
 
-private struct ReadContentHeightModifier: ViewModifier {
+public struct ReadContentHeightModifier: ViewModifier {
     private var sizeView: some View {
         GeometryReader { geometry in
             Color.clear.preference(key: ContentHeightPreferenceKey.self, value: geometry.size.height)
         }
     }
 
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         content.background(sizeView)
     }
 }
@@ -239,7 +256,7 @@ private struct ReadActionContentHeightModifier: ViewModifier {
     }
 }
 
-private extension View {
+public extension View {
     func readContentHeight() -> some View {
         self
             .modifier(ReadContentHeightModifier())
