@@ -1428,7 +1428,7 @@ class DoseStoreEffectTests: PersistenceControllerTestCase {
     override func setUp() {
         super.setUp()
         let healthStore = HKHealthStoreMock()
-        let exponentialInsulinModel: InsulinModel = ExponentialInsulinModelPreset.rapidActingAdult
+        let exponentialInsulinModel: InsulinModel = ExponentialInsulinModelPreset.rapidActingAdult.model
         let startDate = dateFormatter.date(from: "2015-07-13T12:00:00")!
 
         let sampleStore = HealthKitSampleStore(
