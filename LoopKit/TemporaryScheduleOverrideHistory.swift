@@ -119,7 +119,6 @@ public final class TemporaryScheduleOverrideHistory {
 
     public init() {}
 
-    // GOOD
     public func recordOverride(_ override: TemporaryScheduleOverride?, at enableDate: Date = Date()) {
         guard override != lastUndeletedEvent?.override else {
             return
@@ -143,7 +142,6 @@ public final class TemporaryScheduleOverrideHistory {
         return recentEvents.reversed().first { $0.override.actualEnd != .deleted }
     }
 
-    // Good?
     private func deleteEventsStartingOnOrAfter(_ date: Date) {
         recentEvents.mutateEach { (event) in
             if event.override.startDate >= date {
