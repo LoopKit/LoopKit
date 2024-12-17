@@ -130,6 +130,7 @@ public final class TemporaryScheduleOverrideHistory {
             cancelActiveOverride(at: enableDate)
         }
         delegate?.temporaryScheduleOverrideHistoryDidUpdate(self)
+        try? modelContext?.save()
     }
 
     public func activeOverride(at date: Date) -> TemporaryScheduleOverride? {
@@ -149,6 +150,7 @@ public final class TemporaryScheduleOverrideHistory {
                 event.modificationCounter = modificationCounter
             }
         }
+        try? modelContext?.save()
     }
     
     // Deletes overrides that start after the passed in override.
@@ -173,9 +175,9 @@ public final class TemporaryScheduleOverrideHistory {
 
         let enabledEvent = OverrideEvent(override: override, modificationCounter: modificationCounter)
         recentEvents.append(enabledEvent)
+        try? modelContext?.save()
     }
 
-    // GOOD?
     private func cancelActiveOverride(at date: Date) {
         var index = recentEvents.endIndex
         while index != recentEvents.startIndex {
@@ -193,6 +195,8 @@ public final class TemporaryScheduleOverrideHistory {
                 break
             }
         }
+        
+        try? modelContext?.save()
     }
 
     public func resolvingRecentBasalSchedule(_ base: BasalRateSchedule, relativeTo referenceDate: Date = Date()) -> BasalRateSchedule {
@@ -304,6 +308,7 @@ public final class TemporaryScheduleOverrideHistory {
     func wipeHistory() {
         recentEvents.removeAll()
         modificationCounter = 0
+        try? modelContext?.save()
     }
     
     public func queryByAnchor(_ anchor: QueryAnchor?) -> (resultOverrides: [TemporaryScheduleOverride], deletedOverrides: [TemporaryScheduleOverride], newAnchor: QueryAnchor)  {
@@ -345,16 +350,13 @@ private extension Date {
 @MainActor
 public class TemporaryScheduleOverrideHistoryContainer {
     public static let shared = TemporaryScheduleOverrideHistoryContainer()
-    public let container: ModelContainer
-
-    public var context: ModelContext {
-        container.mainContext
-    }
+    public let context: ModelContext
 
     private init() {
         do {
             let schema = Schema([TemporaryScheduleOverrideHistory.self])
-            container = try ModelContainer(for: schema)
+            let container = try ModelContainer(for: schema)
+            context = ModelContext(container)
         } catch {
             fatalError()
         }
@@ -362,21 +364,18 @@ public class TemporaryScheduleOverrideHistoryContainer {
     
     public func fetch(descriptor: FetchDescriptor<TemporaryScheduleOverrideHistory>? = nil) -> TemporaryScheduleOverrideHistory {
         do {
-            if let persisted = try context.fetch(descriptor ?? FetchDescriptor<TemporaryScheduleOverrideHistory>()).last {
-                return persisted
-            } else {
+            let fetch = try context.fetch(descriptor ?? FetchDescriptor<TemporaryScheduleOverrideHistory>())
+            guard fetch.count == 1, let persisted = fetch.first else {
+                if fetch.count > 1 {
+                    fatalError("Should not have more than 1 item")
+                }
+                
                 let history = TemporaryScheduleOverrideHistory()
                 context.insert(history)
                 return history
             }
-        } catch {
-            fatalError()
-        }
-    }
-    
-    public func deleteAll() {
-        do {
-            try context.delete(model: TemporaryScheduleOverrideHistory.self)
+            
+            return persisted
         } catch {
             fatalError()
         }
