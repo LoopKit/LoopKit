@@ -56,7 +56,6 @@ final class TemporaryScheduleOverrideHistoryTests: XCTestCase {
 
     override func setUp() {
         TemporaryScheduleOverrideHistory.relevantTimeWindow = .hours(10)
-        historyContainer.deleteAll()
         history = historyContainer.fetch()
         history.wipeHistory()
     }
