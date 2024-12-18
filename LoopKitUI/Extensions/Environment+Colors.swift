@@ -109,6 +109,7 @@ private struct ChartColorPaletteKey: EnvironmentKey {
     static let defaultValue: ChartColorPalette = ChartColorPalette(axisLine: .clear,
                                                                    axisLabel: .secondaryLabel,
                                                                    grid: .systemGray3,
+                                                                   presetTint: .systemIndigo,
                                                                    glucoseTint: .systemTeal,
                                                                    insulinTint: .orange,
                                                                    carbTint: .systemGreen)

@@ -135,7 +135,7 @@ extension PredictedGlucoseChart {
 
         // The glucose targets
         let targetFill = colors.glucoseTint.withAlphaComponent(0.2)
-        let overrideFill: UIColor = colors.glucoseTint.withAlphaComponent(0.45)
+        let overrideFill: UIColor = colors.presetTint.withAlphaComponent(0.6)
         let fills =
             targetGlucosePoints.map {
                 if $0.isOverride {
