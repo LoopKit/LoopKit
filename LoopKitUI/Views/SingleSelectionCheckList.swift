@@ -27,7 +27,7 @@ public struct SingleSelectionCheckList<Item: Hashable>: View {
 
     public var body: some View {
         Section(header: header.map { Text($0) }, footer: footer.map { Text($0) }) {
-            ForEach(items, id:\.self) { item in
+            ForEach(items, id:\.hashValue) { item in
                 CheckSelectionRow<Item>(item: item,
                                         selectedItem: self.$selectedItem)
             }
