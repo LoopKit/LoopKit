@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftUI
 import HealthKit
 import LoopKit
 
@@ -53,8 +54,7 @@ public final class AddEditOverrideTableViewController: UITableViewController {
             case .newPreset:
                 symbol = nil
                 name = nil
-                targetRange = nil
-                insulinNeedsScaleFactor = 1.0
+                configure(with: TemporaryScheduleOverrideSettings())
                 duration = .finite(.defaultOverrideDuration)
             case .editPreset(let preset), .customizePresetOverride(let preset):
                 symbol = preset.symbol
@@ -64,8 +64,7 @@ public final class AddEditOverrideTableViewController: UITableViewController {
             case .customOverride:
                 symbol = nil
                 name = nil
-                targetRange = nil
-                insulinNeedsScaleFactor = 1.0
+                configure(with: TemporaryScheduleOverrideSettings())
                 startDate = Date()
                 duration = .finite(.defaultOverrideDuration)
             case .editOverride(let override):
@@ -104,6 +103,8 @@ public final class AddEditOverrideTableViewController: UITableViewController {
     // MARK: - Override properties
 
     private let glucoseUnit: HKUnit
+    
+    private let autoBolusCarbsEnabled: Bool
 
     private var symbol: String? { didSet { updateSaveButtonEnabled() } }
 
@@ -112,6 +113,8 @@ public final class AddEditOverrideTableViewController: UITableViewController {
     private var targetRange: DoubleRange? { didSet { updateSaveButtonEnabled() } }
 
     private var insulinNeedsScaleFactor = 1.0 { didSet { updateSaveButtonEnabled() }}
+    
+    private var autoBolusCarbsActive: AutoBolusCarbOptions = .useDefault { didSet {updateSaveButtonEnabled()} }
 
     private var startDate = Date()
 
@@ -120,6 +123,8 @@ public final class AddEditOverrideTableViewController: UITableViewController {
     private var enactTrigger: TemporaryScheduleOverride.EnactTrigger = .local
 
     private var syncIdentifier = UUID()
+    
+    private var initialSettings: TemporaryScheduleOverrideSettings?
     
     private var isConfiguringPreset: Bool {
         switch inputMode {
@@ -131,18 +136,23 @@ public final class AddEditOverrideTableViewController: UITableViewController {
     }
 
     private func configure(with settings: TemporaryScheduleOverrideSettings) {
+        if self.initialSettings == nil {
+            self.initialSettings = settings
+        }
         if let targetRange = settings.targetRange {
             self.targetRange = DoubleRange(minValue: targetRange.lowerBound.doubleValue(for: glucoseUnit), maxValue: targetRange.upperBound.doubleValue(for: glucoseUnit))
         } else {
             self.targetRange = nil
         }
         insulinNeedsScaleFactor = settings.effectiveInsulinNeedsScaleFactor
+        autoBolusCarbsActive = AutoBolusCarbOptions.from(settings.autoBolusCarbsActive)
     }
 
     // MARK: - Initialization & view life cycle
 
-    public init(glucoseUnit: HKUnit) {
+    public init(glucoseUnit: HKUnit, autoBolusCarbsEnabled: Bool) {
         self.glucoseUnit = glucoseUnit
+        self.autoBolusCarbsEnabled = autoBolusCarbsEnabled
         super.init(style: .grouped)
     }
     
@@ -161,6 +171,7 @@ public final class AddEditOverrideTableViewController: UITableViewController {
         tableView.register(DecimalTextFieldTableViewCell.nib(), forCellReuseIdentifier: DecimalTextFieldTableViewCell.className)
         tableView.register(InsulinSensitivityScalingTableViewCell.nib(), forCellReuseIdentifier: InsulinSensitivityScalingTableViewCell.className)
         tableView.register(DateAndDurationTableViewCell.nib(), forCellReuseIdentifier: DateAndDurationTableViewCell.className)
+        tableView.register(SegmentedControlTableViewCell.self, forCellReuseIdentifier: SegmentedControlTableViewCell.className)
         tableView.register(SwitchTableViewCell.self, forCellReuseIdentifier: SwitchTableViewCell.className)
         tableView.register(TextButtonTableViewCell.self, forCellReuseIdentifier: TextButtonTableViewCell.className)
     }
@@ -181,24 +192,30 @@ public final class AddEditOverrideTableViewController: UITableViewController {
         case endDate
         case durationFiniteness
         case duration
+        case autoBolusCarbs
     }
 
     private var propertyRows: [PropertyRow] {
         var rows: [PropertyRow] = {
             if isConfiguringPreset {
-                return [.symbol, .name, .insulinNeeds, .targetRange, .durationFiniteness]
+                return [.symbol, .name, .insulinNeeds, .targetRange, .autoBolusCarbs, .durationFiniteness]
             } else if case let .viewOverride(override) = inputMode, override.hasFinished() {
-                return [.insulinNeeds, .targetRange, .startDate, .endDate]
+                return [.insulinNeeds, .targetRange, .autoBolusCarbs, .startDate, .endDate]
             } else {
-                return [.insulinNeeds, .targetRange, .startDate, .durationFiniteness]
+                return [.insulinNeeds, .targetRange, .autoBolusCarbs, .startDate, .durationFiniteness]
             }
         }()
 
         if duration.isFinite {
             rows.append(.duration)
         }
+        
+        if !autoBolusCarbsEnabled {
+            rows.remove(at: rows.firstIndex{$0 == .autoBolusCarbs}!)
+        }
 
         rows.sort(by: { $0.rawValue < $1.rawValue })
+        
         return rows
     }
 
@@ -274,6 +291,21 @@ public final class AddEditOverrideTableViewController: UITableViewController {
                 cell.range = targetRange
                 cell.unitLabel.text = quantityFormatter.localizedUnitStringWithPlurality()
                 cell.delegate = self
+                return cell
+            case .autoBolusCarbs:
+                var cell = tableView.dequeueReusableCell(withIdentifier: SegmentedControlTableViewCell.className, for: indexPath) as! SegmentedControlTableViewCell
+                
+                let items: [AutoBolusCarbOptions] = [.useDefault, .active, .inactive]
+                
+                // include spaces to be sure the segmented control leaves a gap
+                cell.textLabel?.text = LocalizedString("Auto-Bolus Carbs   ", comment:"The text for auto-bolus carbs setting")
+                
+                cell.options = items.map{$0.label}
+                cell.segmentedControl.selectedSegmentIndex = items.firstIndex(of: autoBolusCarbsActive)!
+                cell.onSelection { index in
+                    self.autoBolusCarbsActive = items[index]
+                }                
+
                 return cell
             case .startDate:
                 let cell = tableView.dequeueReusableCell(withIdentifier: DateAndDurationTableViewCell.className, for: indexPath) as! DateAndDurationTableViewCell
@@ -491,17 +523,20 @@ extension AddEditOverrideTableViewController {
             guard targetRange.maxValue >= targetRange.minValue else {
                 return nil
             }
-        } else {
-            guard insulinNeedsScaleFactor != 1.0 else {
-                return nil
-            }
         }
-
-        return TemporaryScheduleOverrideSettings(
+        
+        let result = TemporaryScheduleOverrideSettings(
             unit: glucoseUnit,
             targetRange: targetRange,
-            insulinNeedsScaleFactor: insulinNeedsScaleFactor == 1.0 ? nil : insulinNeedsScaleFactor
+            insulinNeedsScaleFactor: insulinNeedsScaleFactor == 1.0 ? nil : insulinNeedsScaleFactor,
+            autoBolusCarbsActive: autoBolusCarbsActive.asBool
         )
+        
+        guard result != initialSettings else {
+            return nil
+        }
+
+        return result
     }
 
     private var configuredPreset: TemporaryScheduleOverridePreset? {
@@ -707,3 +742,30 @@ private extension UIFont {
         return UIFont(descriptor: descriptor, size: pointSize)
     }
 }
+
+private enum AutoBolusCarbOptions : Int, Labeled {
+    case useDefault
+    case active
+    case inactive
+    
+    static func from(_ val: Bool?) -> AutoBolusCarbOptions {
+        return val == nil ? .useDefault : val! ? .active : .inactive
+    }
+    
+    var label: String {
+        switch self {
+        case .useDefault: return "\u{00002014}" // emdash
+        case .active: return "🔶"
+        case .inactive: return "❌"
+        }
+    }
+    
+    var asBool: Bool? {
+        switch self {
+        case .useDefault: return nil
+        case .active: return true
+        case .inactive: return false
+        }
+    }
+}
+

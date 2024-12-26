@@ -22,6 +22,7 @@ open class SegmentedControlTableViewCell: UITableViewCell {
     }
 
     private var select: (_ index: Int) -> Void = { _ in }
+    
 
     public override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .value1, reuseIdentifier: Self.className)
