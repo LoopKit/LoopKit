@@ -186,9 +186,19 @@ public actor LoopAlgorithm {
             // NID will change the final prediction so that positive changes will be multiplied by weight alpha
             // the long term slope will be marginalSlope
             // in the initial linear scaling region alpha will be anchorAlpha at anchorPoint
-            let marginalSlope = 0.1
-            let anchorPoint = 50.0 // FIXME change to basal * ISF
-            let anchorAlpha = 0.8
+            
+            // we assume here that the last insulinType is what we should be using
+            let anchorScale: Double
+            let insulinType = input.doses.last!.insulinType
+            if let expModel = insulinType as? ExponentialInsulinModel {
+                anchorScale = 0.8 * expModel.peakActivityTime.hours
+            } else {
+                anchorScale = 1.0
+            }
+            
+            let marginalSlope = 0.05
+            let anchorPoint = anchorScale * curBasal * curSensitivity.doubleValue(for: .milligramsPerDeciliter)
+            let anchorAlpha = 0.75
             
             let linearScaleSlope = (1.0 - anchorAlpha)/anchorPoint // how alpha scales down in the linear scale region
             
