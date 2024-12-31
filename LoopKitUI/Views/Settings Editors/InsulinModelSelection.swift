@@ -125,6 +125,7 @@ public struct InsulinModelSelection: View {
             // Styling to mimic the floating button of a ConfigurationPage
             .padding(.bottom)
             .background(Color(.secondarySystemGroupedBackground).shadow(radius: 5))
+            .accessibilityIdentifier("button_confirmSave")
         }
         .supportedInterfaceOrientations(.portrait)
         .edgesIgnoringSafeArea(.bottom)

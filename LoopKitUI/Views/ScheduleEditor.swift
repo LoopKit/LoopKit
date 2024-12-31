@@ -285,8 +285,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
                     )
                 }
             )
-        }
-        .accessibility(identifier: "schedule_item_\(index)")
+        }.accessibility(identifier: "schedule_item_\(index)")
     }
 
     private func isEditing(_ index: Int) -> Binding<Bool> {
@@ -365,7 +364,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
                     .fontWeight(.regular)
             }
             .offset(x: -6, y: 0)
-        }
+        }.accessibilityIdentifier("button_back")
     }
 
     private var backButtonTitle: String { LocalizedString("Back", comment: "Back navigation button title") }
@@ -386,6 +385,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
             }
         )
         .disabled(scheduleItems.count == 1)
+        .accessibilityIdentifier("button_edit")
     }
 
     var doneButton: some View {
@@ -398,7 +398,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
             label: {
                 Text(LocalizedString("Done", comment: "Text for done button")).bold()
             }
-        )
+        ).accessibilityIdentifier("button_done")
     }
 
     var addButton: some View {
@@ -415,6 +415,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
             }
         )
         .disabled(tableDeletionState != .disabled || scheduleItems.count >= scheduleItemLimit)
+        .accessibilityIdentifier("button_add")
     }
 
     private func startSaving() {

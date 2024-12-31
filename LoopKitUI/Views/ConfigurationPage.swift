@@ -52,6 +52,7 @@ public struct ConfigurationPage<ActionAreaContent: View>: View {
                 .buttonStyle(ActionButtonStyle(.primary))
                 .disabled(actionButtonState != .enabled)
                 .padding()
+                .accessibilityIdentifier("button_confirmSave")
             }
             .padding(.bottom) // FIXME: unnecessary on iPhone 8 size devices
             .background(Color(.secondarySystemGroupedBackground).shadow(radius: 5))

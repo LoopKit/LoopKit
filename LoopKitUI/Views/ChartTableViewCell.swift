@@ -26,6 +26,8 @@ public final class ChartTableViewCell: UITableViewCell {
     public var doesNavigate: Bool = true {
         didSet {
             rightArrowHint?.isHidden = !doesNavigate
+            rightArrowHint?.accessibilityIdentifier =
+            "image_navigateToGlucoseDetails_\(doesNavigate)"
         }
     }
     

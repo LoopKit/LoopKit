@@ -57,11 +57,13 @@ public struct GuardrailConstrainedQuantityView: View {
                         Image(systemName: "exclamationmark.triangle.fill")
                             .foregroundColor(warningColor)
                             .transition(.springInDisappear)
+                            .accessibilityIdentifier(accessibilityIdentifier)
                     }
 
                     Text(formatter.string(from: value!.doubleValue(for: unit)) ?? "\(value!.doubleValue(for: unit))")
                         .foregroundColor(warningColor)
                         .fixedSize(horizontal: true, vertical: false)
+                        .accessibilityIdentifier("text_setGlucoseValue")
                 } else {
                     Text("–")
                         .foregroundColor(.secondary)
@@ -106,6 +108,25 @@ public struct GuardrailConstrainedQuantityView: View {
                 return guidanceColors.critical
             case .belowRecommended, .aboveRecommended:
                 return guidanceColors.warning
+            }
+        }
+    }
+    
+    private var accessibilityIdentifier: String {
+        guard let value = value else {
+            return "noWarningImage"
+        }
+        
+
+        switch guardrail.classification(for: value) {
+        case .withinRecommendedRange:
+            return "noWarningImage"
+        case .outsideRecommendedRange(let threshold):
+            switch threshold {
+            case .minimum, .maximum:
+                return "imageNextToText_warningTriangleRed"
+            case .belowRecommended, .aboveRecommended:
+                return "imageNextToText_warningTriangleOrange"
             }
         }
     }
