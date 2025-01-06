@@ -267,8 +267,9 @@ extension TherapySettingsView {
     }
 
     private var basalRatesSection: Card {
-        card(for: .basalRate) {
-            if let schedule = viewModel.therapySettings.basalRateSchedule,
+        @State var basalRateSchedule = viewModel.therapySettings.basalRateSchedule // work-around for issue 2267 where basalRateSchedule doesn't update in the card
+        return card(for: .basalRate, onAppear: {basalRateSchedule = viewModel.therapySettings.basalRateSchedule}) {
+            if let schedule = basalRateSchedule,
                let supportedBasalRates = viewModel.pumpSupportedIncrements()?.basalRates
             {
                 let items = schedule.items
@@ -464,7 +465,7 @@ extension TherapySettingsView {
         glucoseUnit.unitDivided(by: .internationalUnit())
     }
     
-    private func card<Content>(for therapySetting: TherapySetting, @ViewBuilder content: @escaping () -> Content) -> Card where Content: View {
+    private func card<Content>(for therapySetting: TherapySetting, onAppear: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content) -> Card where Content: View {
         Card {
             SectionWithTapToEdit(
                 isEnabled: mode != .acceptanceFlow,
@@ -475,7 +476,7 @@ extension TherapySettingsView {
                         .environment(\.dismissAction, dismiss)
                 },
                 content: content
-            )
+            ).onAppear(perform: onAppear)
         }
     }
 }
