@@ -28,14 +28,6 @@ public struct DurationSheet: View {
         self._durationWasSelected = durationWasSelected.projectedValue
     }
     
-    private var pickerHeight: Double {
-        if #available(iOS 16, *) {
-            return 170
-        } else {
-            return 220
-        }
-    }
-    
     private var formatter: DateComponentsFormatter = {
         let formatter = DateComponentsFormatter()
         formatter.unitsStyle = .full
@@ -88,16 +80,11 @@ public struct DurationSheet: View {
                     }
                     .font(.title3)
                     .pickerStyle(.wheel)
-                    .frame(height: pickerHeight)
+                    .frame(height: 170)
                     .padding(.horizontal)
                 }
                 .padding(.top, 32)
-                .readContentHeight()
-                .onPreferenceChange(ContentHeightPreferenceKey.self) { height in
-                    if let height {
-                        sheetContentHeight = height
-                    }
-                }
+                .readContentHeight(to: $sheetContentHeight)
             }
             
             VStack(spacing: 12) {
@@ -121,12 +108,7 @@ public struct DurationSheet: View {
             .padding([.horizontal, .top])
             .padding(.bottom, 2)
             .background(Color(.secondarySystemGroupedBackground).shadow(radius: 5).ignoresSafeArea())
-            .readActionContentHeight()
-            .onPreferenceChange(ActionContentHeightPreferenceKey.self) { height in
-                if let height {
-                    sheetActionContentHeight = height
-                }
-            }
+            .readContentHeight(to: $sheetActionContentHeight)
         }
         .sheetDetent(height: sheetContentHeight + sheetActionContentHeight)
     }
@@ -186,7 +168,6 @@ public extension View {
     @ViewBuilder
     func sheetDetent(height: Double) -> some View {
         self
-            .presentationDetents([])
             .presentationDetents([.height(height)])
             .presentationDragIndicator(.visible)
     }
@@ -223,15 +204,6 @@ public struct ContentHeightPreferenceKey: PreferenceKey {
     }
 }
 
-private struct ActionContentHeightPreferenceKey: PreferenceKey {
-    static var defaultValue: CGFloat?
-
-    static func reduce(value: inout CGFloat?, nextValue: () -> CGFloat?) {
-        guard let nextValue = nextValue() else { return }
-        value = nextValue
-    }
-}
-
 public struct ReadContentHeightModifier: ViewModifier {
     private var sizeView: some View {
         GeometryReader { geometry in
@@ -244,26 +216,19 @@ public struct ReadContentHeightModifier: ViewModifier {
     }
 }
 
-private struct ReadActionContentHeightModifier: ViewModifier {
-    private var sizeView: some View {
-        GeometryReader { geometry in
-            Color.clear.preference(key: ActionContentHeightPreferenceKey.self, value: geometry.size.height)
-        }
-    }
-
-    func body(content: Content) -> some View {
-        content.background(sizeView)
-    }
-}
-
 public extension View {
     func readContentHeight() -> some View {
         self
             .modifier(ReadContentHeightModifier())
     }
     
-    func readActionContentHeight() -> some View {
+    func readContentHeight(to contentHeight: Binding<Double>) -> some View {
         self
-            .modifier(ReadActionContentHeightModifier())
+            .modifier(ReadContentHeightModifier())
+            .onPreferenceChange(ContentHeightPreferenceKey.self) { height in
+                if let height {
+                    contentHeight.wrappedValue = height
+                }
+            }
     }
 }
