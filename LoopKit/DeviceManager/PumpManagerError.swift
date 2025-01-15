@@ -26,6 +26,10 @@ public enum PumpManagerError: Error {
 
 
 extension PumpManagerError: LocalizedError {
+    private var appName: String {
+        return Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String ?? "Loop"
+    }
+    
     public var errorDescription: String? {
         switch self {
         case .communication(let error):
@@ -52,7 +56,7 @@ extension PumpManagerError: LocalizedError {
         case .deviceState(let error):
             return error?.failureReason
         case .uncertainDelivery:
-            return LocalizedString("Communication between your pump and the app was interrupted. The app will continue to try to reach your pump, but insulin delivery information cannot be updated.", comment: "Failure reason for uncertain delivery")
+            return LocalizedString("Communication between your pump and the \(appName) app was interrupted. The app will continue to try to reach your pump, but insulin delivery information cannot be updated.", comment: "Failure reason for uncertain delivery")
         }
     }
 
