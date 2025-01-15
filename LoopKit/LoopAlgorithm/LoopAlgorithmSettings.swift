@@ -29,7 +29,6 @@ public struct LoopAlgorithmSettings {
     public var maximumBolus: Double? = nil
     public var suspendThreshold: GlucoseThreshold? = nil
     public var useIntegralRetrospectiveCorrection: Bool = false
-    public var useNegativeInsulinDamper: Bool = false
 
     public init(
         basal: [AbsoluteScheduleValue<Double>],
@@ -42,8 +41,7 @@ public struct LoopAlgorithmSettings {
         maximumBasalRatePerHour: Double? = nil,
         maximumBolus: Double? = nil,
         suspendThreshold: GlucoseThreshold? = nil,
-        useIntegralRetrospectiveCorrection: Bool = false,
-        useNegativeInsulinDamper: Bool = false)
+        useIntegralRetrospectiveCorrection: Bool = false)
     {
         self.basal = basal
         self.sensitivity = sensitivity
@@ -56,7 +54,6 @@ public struct LoopAlgorithmSettings {
         self.maximumBolus = maximumBolus
         self.suspendThreshold = suspendThreshold
         self.useIntegralRetrospectiveCorrection = useIntegralRetrospectiveCorrection
-        self.useNegativeInsulinDamper = useNegativeInsulinDamper
     }
 }
 
@@ -82,8 +79,6 @@ extension LoopAlgorithmSettings: Codable {
         self.maximumBolus = try container.decodeIfPresent(Double.self, forKey: .maximumBolus)
         self.suspendThreshold = try container.decodeIfPresent(GlucoseThreshold.self, forKey: .suspendThreshold)
         self.useIntegralRetrospectiveCorrection = try container.decodeIfPresent(Bool.self, forKey: .useIntegralRetrospectiveCorrection) ?? false
-        self.useNegativeInsulinDamper = try container.decodeIfPresent(Bool.self, forKey: .useNegativeInsulinDamper) ?? false
-
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -105,9 +100,6 @@ extension LoopAlgorithmSettings: Codable {
         if useIntegralRetrospectiveCorrection {
             try container.encode(useIntegralRetrospectiveCorrection, forKey: .useIntegralRetrospectiveCorrection)
         }
-        if useNegativeInsulinDamper {
-            try container.encode(useNegativeInsulinDamper, forKey: .useNegativeInsulinDamper)
-        }
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -122,7 +114,6 @@ extension LoopAlgorithmSettings: Codable {
         case maximumBolus
         case suspendThreshold
         case useIntegralRetrospectiveCorrection
-        case useNegativeInsulinDamper
     }
 }
 
