@@ -84,6 +84,7 @@ open class ChartsTableViewController: UITableViewController, UIGestureRecognizer
 
         Task {
             await reloadData(animated: false)
+            tableView.reloadData() // needed to have cells load properly on orientation change
         }
     }
 
