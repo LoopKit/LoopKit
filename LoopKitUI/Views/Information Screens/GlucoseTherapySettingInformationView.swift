@@ -82,6 +82,9 @@ public struct GlucoseTherapySettingInformationView<Content: View>: View {
             Text(therapySetting.guardrailInformationText)
         }
         .fixedSize(horizontal: false, vertical: true)
+        .accessibilityIdentifier(
+            "text_\(self.therapySetting.title.replacing(" ", with: ""))Information"
+        )
     }
     
     private var illustrationImageName: String {

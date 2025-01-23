@@ -142,6 +142,7 @@ public struct TherapySettingsView: View {
                 }
                 .buttonStyle(ActionButtonStyle(.primary))
                 .padding()
+                .accessibilityIdentifier("button_\(actionButton.localizedString.lowercased())")
             }
         }
     }
@@ -156,8 +157,10 @@ extension TherapySettingsView {
                 VStack(alignment: .leading) {
                     Text(LocalizedString("Prescription", comment: "title for prescription section"))
                         .bold()
+                        .accessibilityIdentifier("titleText_Prescription")
                     Spacer()
                     DescriptiveText(label: prescriptionDescriptiveText)
+                        .accessibilityIdentifier("descriptiveText_Prescription")
                 }
                 Spacer()
             }
@@ -211,7 +214,7 @@ extension TherapySettingsView {
                     isEditing: false,
                     // Workaround for strange animation behavior on appearance
                     forceDisableAnimations: true
-                )
+                ).accessibilityIdentifier("glucoseSafetyLimitValue")
             }
         }
     }
@@ -229,6 +232,7 @@ extension TherapySettingsView {
                                       range: items[index].value,
                                       unit: glucoseUnit,
                                       guardrail: .correctionRange)
+                    .accessibilityIdentifier("correctionRangeValue")
                 }
             }
         }
@@ -245,7 +249,7 @@ extension TherapySettingsView {
                     preset: CorrectionRangeOverrides.Preset.preMeal,
                     suspendThreshold: viewModel.suspendThreshold,
                     correctionRangeScheduleRange: schedule.scheduleRange()
-                )
+                ).accessibilityIdentifier("preMealPresetValue")
             }
         }
     }
@@ -261,7 +265,7 @@ extension TherapySettingsView {
                     preset: CorrectionRangeOverrides.Preset.workout,
                     suspendThreshold: self.viewModel.suspendThreshold,
                     correctionRangeScheduleRange: schedule.scheduleRange()
-                )
+                ).accessibilityIdentifier("workoutPresetValue")
             }
         }
     }
@@ -282,6 +286,7 @@ extension TherapySettingsView {
                                       value:  items[index].value,
                                       unit: .internationalUnitsPerHour,
                                       guardrail: .basalRate(supportedBasalRates: supportedBasalRates))
+                    .accessibilityIdentifier("basalRateValue")
                 }
                 SectionDivider()
                 HStack {
@@ -289,10 +294,11 @@ extension TherapySettingsView {
                         .bold()
                         .foregroundColor(.primary)
                     Spacer()
-                    Text(String(format: "%.2f ",total))
+                    (Text(String(format: "%.2f ",total))
                         .foregroundColor(.primary) +
                     Text(NSLocalizedString("U/day", comment: "The text indicating U/day for Daily Schedule Basal"))
-                        .foregroundColor(.secondary)
+                        .foregroundColor(.secondary))
+                    .accessibilityIdentifier("basalRateTotalValue")
                 }
             }
         }
@@ -322,7 +328,7 @@ extension TherapySettingsView {
                     isEditing: false,
                     // Workaround for strange animation behavior on appearance
                     forceDisableAnimations: true
-                )
+                ).accessibilityIdentifier("maxBasalRateValue")
             }
         }
         .accessibilityElement(children: .combine)
@@ -340,7 +346,7 @@ extension TherapySettingsView {
                     isEditing: false,
                     // Workaround for strange animation behavior on appearance
                     forceDisableAnimations: true
-                )
+                ).accessibilityIdentifier("maxBolusValue")
             }
         }
         .accessibilityElement(children: .combine)
@@ -385,6 +391,7 @@ extension TherapySettingsView {
                                       value: items[index].value,
                                       unit: .gramsPerUnit,
                                       guardrail: .carbRatio)
+                    .accessibilityIdentifier("carbRatioValue")
                 }
             }
         }
@@ -402,6 +409,7 @@ extension TherapySettingsView {
                                       value: items[index].value,
                                       unit: sensitivityUnit,
                                       guardrail: .insulinSensitivity)
+                    .accessibilityIdentifier("insulinSensitivityValue")
                 }
             }
         }
@@ -577,10 +585,12 @@ struct SectionWithTapToEdit<Content, NavigationDestination>: View where Content:
             VStack(alignment: .leading) {
                 Text(title)
                     .bold()
+                    .accessibilityIdentifier("titleText_\(title.replacingOccurrences(of: " ", with: ""))")
                 Spacer()
                 HStack {
                     DescriptiveText(label: descriptiveText)
                         .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityIdentifier("descriptiveText_\(title.replacingOccurrences(of: " ", with: ""))")
                     Spacer()
                     if isEnabled {
                         NavigationLink(destination: destination(onFinish), isActive: $isActive) {
