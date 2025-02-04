@@ -17,6 +17,7 @@ public struct CorrectionRangeOverrides: Equatable {
     }
 
     public var ranges: [Preset: ClosedRange<LoopQuantity>]
+    public var workoutDuration: TemporaryScheduleOverride.Duration?
 
     public init(preMeal: DoubleRange?, workout: DoubleRange?, unit: LoopUnit) {
         ranges = [:]
@@ -30,11 +31,17 @@ public struct CorrectionRangeOverrides: Equatable {
         ranges[.workout] = workout?.quantityRange
     }
 
-    public init(preMeal: ClosedRange<LoopQuantity>?, workout: ClosedRange<LoopQuantity>?) {
+    public init(
+        preMeal: ClosedRange<LoopQuantity>?,
+        workout: ClosedRange<LoopQuantity>?,
+        workoutDuration: TemporaryScheduleOverride.Duration? = .indefinite
+    ) {
         ranges = [:]
         ranges[.preMeal] = preMeal
         ranges[.workout] = workout
+        self.workoutDuration = workoutDuration
     }
+
 
     public var preMeal: ClosedRange<LoopQuantity>? { ranges[.preMeal] }
     public var workout: ClosedRange<LoopQuantity>? { ranges[.workout] }

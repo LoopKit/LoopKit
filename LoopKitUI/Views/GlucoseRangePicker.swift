@@ -75,52 +75,76 @@ public struct GlucoseRangePicker: View {
         switch usageContext {
         case .component(availableWidth: let availableWidth):
             body(availableWidth: availableWidth)
+                .frame(height: 216)
         case .independent:
-            GeometryReader { geometry in
+            centeredBody
+                .frame(height: 216)
+        }
+    }
+
+    private var centeredBody: some View {
+        GeometryReader { geometry in
+            HStack(spacing: 0) {
+                Spacer()
                 HStack(spacing: 0) {
-                    Spacer()
-                    self.body(availableWidth: geometry.size.width)
-                    Spacer()
+                    lowerBoundPicker
+                        .frame(width: geometry.size.width / 3)
+
+                    Text(separator)
+                        .foregroundColor(Color(.secondaryLabel))
+
+                    upperBoundPicker
+                        .frame(width: geometry.size.width / 3)
                 }
+                Spacer()
             }
-            .frame(height: 216)
         }
     }
 
     private func body(availableWidth: CGFloat) -> some View {
         HStack(spacing: 0) {
-            GlucoseValuePicker(
-                value: $lowerBound,
-                unit: unit,
-                guardrail: guardrail,
-                bounds: lowerBoundRange,
-                isUnitLabelVisible: false
-            )
-            .frame(width: availableWidth / 3)
-            .overlay(
-                Text(separator)
-                    .foregroundColor(Color(.secondaryLabel))
-                    .offset(x: spacing + separatorWidth),
-                alignment: .trailing
-            )
-            .padding(.leading, usageContext == .independent ? unitLabelWidth : 0)
-            .padding(.trailing, spacing + separatorWidth + spacing)
-            .clipped()
-            .compositingGroup()
-            .accessibility(identifier: "min_glucose_picker")
+            lowerBoundPicker
+                .frame(width: availableWidth / 3)
+                .overlay(
+                    Text(separator)
+                        .foregroundColor(Color(.secondaryLabel))
+                        .offset(x: spacing + separatorWidth),
+                    alignment: .trailing
+                )
+                .padding(.leading, usageContext == .independent ? unitLabelWidth : 0)
+                .padding(.trailing, spacing + separatorWidth + spacing)
+                .clipped()
+                .compositingGroup()
+                .accessibility(identifier: "min_glucose_picker")
 
-            GlucoseValuePicker(
-                value: $upperBound,
-                unit: unit,
-                guardrail: guardrail,
-                bounds: upperBoundRange
-            )
-            .frame(width: availableWidth / 3)
-            .padding(.trailing, unitLabelWidth)
-            .clipped()
-            .compositingGroup()
-            .accessibility(identifier: "max_glucose_picker")
+            upperBoundPicker
+                .frame(width: availableWidth / 3)
+                .padding(.trailing, unitLabelWidth)
+                .clipped()
+                .compositingGroup()
+                .accessibility(identifier: "max_glucose_picker")
         }
+    }
+
+    private var lowerBoundPicker: some View {
+        GlucoseValuePicker(
+            value: $lowerBound,
+            unit: unit,
+            guardrail: guardrail,
+            bounds: lowerBoundRange,
+            isUnitLabelVisible: false
+        )
+        .accessibility(identifier: "min_glucose_picker")
+    }
+
+    private var upperBoundPicker: some View {
+        GlucoseValuePicker(
+            value: $upperBound,
+            unit: unit,
+            guardrail: guardrail,
+            bounds: upperBoundRange
+        )
+        .accessibility(identifier: "max_glucose_picker")
     }
 
     var separator: String { "–" }
