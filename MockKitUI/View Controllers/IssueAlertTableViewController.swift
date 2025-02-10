@@ -23,6 +23,7 @@ final class IssueAlertTableViewController: UITableViewController {
         case repeating
         case issueLater
         case buzz
+        case buzzCritical
         case critical
         case criticalDelayed
         case retract // should be kept at the bottom of the list
@@ -35,6 +36,7 @@ final class IssueAlertTableViewController: UITableViewController {
             case .issueLater: return "Issue an immediate alert \(delay) seconds from now"
             case .retract: return "Retract any alert above"
             case .buzz: return "Issue an immediate vibrate alert"
+            case .buzzCritical: return "Issue an immediate critical vibrate alert"
             case .critical: return "Issue a critical immediate alert"
             case .criticalDelayed: return "Issue a \"delayed \(delay) seconds\" critical alert"
             }
@@ -50,6 +52,7 @@ final class IssueAlertTableViewController: UITableViewController {
             case .repeating: return .repeating(repeatInterval: delay)
             case .issueLater: return .immediate
             case .buzz: return .immediate
+            case .buzzCritical: return .immediate
             }
         }
         
@@ -63,6 +66,7 @@ final class IssueAlertTableViewController: UITableViewController {
         var identifier: Alert.AlertIdentifier {
             switch self {
             case .buzz: return MockCGMManager.buzz.identifier
+            case .buzzCritical: return MockCGMManager.buzzCritical.identifier
             case .critical, .criticalDelayed: return MockCGMManager.critical.identifier
             default: return MockCGMManager.submarine.identifier
             }

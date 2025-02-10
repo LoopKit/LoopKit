@@ -324,7 +324,7 @@ public final class MockCGMManager: TestingCGMManager {
         public let interruptionLevel: Alert.InterruptionLevel
     }
     let alerts: [Alert.AlertIdentifier: MockAlert] = [
-        submarine.identifier: submarine, buzz.identifier: buzz, critical.identifier: critical, signalLoss.identifier: signalLoss
+        submarine.identifier: submarine, buzz.identifier: buzz, buzzCritical.identifier: buzzCritical, critical.identifier: critical, signalLoss.identifier: signalLoss
     ]
     
     public static let submarine = MockAlert(sound: .sound(name: "sub.caf"), identifier: "submarine",
@@ -339,6 +339,10 @@ public final class MockCGMManager: TestingCGMManager {
                                        foregroundContent: Alert.Content(title: "Alert: FG Title", body: "FG bzzzt", acknowledgeActionButtonLabel: "Buzz"),
                                        backgroundContent: Alert.Content(title: "Alert: BG Title", body: "BG bzzzt", acknowledgeActionButtonLabel: "Buzz"),
                                        interruptionLevel: .active)
+    public static let buzzCritical = MockAlert(sound: .vibrate, identifier: "buzzCritical",
+                                               foregroundContent: Alert.Content(title: "Alert: FG Title", body: "FG Critical bzzzt", acknowledgeActionButtonLabel: "Buzz"),
+                                               backgroundContent: Alert.Content(title: "Alert: BG Title", body: "BG Critical bzzzt", acknowledgeActionButtonLabel: "Buzz"),
+                                               interruptionLevel: .critical)
     public static let signalLoss = MockAlert(sound: .sound(name: "critical.caf"),
                                              identifier: "signalLoss",
                                              foregroundContent: Alert.Content(title: "Signal Loss", body: "CGM simulator signal loss", acknowledgeActionButtonLabel: "Dismiss"),
