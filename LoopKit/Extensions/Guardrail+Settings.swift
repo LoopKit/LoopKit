@@ -80,7 +80,7 @@ public extension Guardrail where Value == LoopQuantity {
     }
     
     static let insulinSensitivity = Guardrail(
-        absoluteBounds: 5...500,
+        absoluteBounds: 10...500,
         recommendedBounds: 16...399,
         unit: .milligramsPerDeciliterPerInternationalUnit,
         startingSuggestion: 50
