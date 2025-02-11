@@ -48,6 +48,7 @@ public struct ExpandableSetting<
                     self.isEditing.toggle()
                 }
             }
+            .accessibilityIdentifier("schedule_item_")
 
             if isEditing {
                 expandedContent()
