@@ -21,7 +21,7 @@ public protocol TherapySettingsViewModelDelegate: AnyObject {
 @Observable
 public class TherapySettingsViewModel {
     
-    public var therapySettings: TherapySettings
+    public private(set) var therapySettings: TherapySettings
     
     @ObservationIgnored private let initialTherapySettings: TherapySettings
     @ObservationIgnored let sensitivityOverridesEnabled: Bool
