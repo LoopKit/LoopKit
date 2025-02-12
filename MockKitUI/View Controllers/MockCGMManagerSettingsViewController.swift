@@ -504,7 +504,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
                 return
             case .cgmLowerLimit:
                 vc.title = "CGM Lower Limit"
-                vc.contextHelp = "The glucose value that marks the lower limit of the CGM. Any value at or below this value is presented at `LOW`. This value must be lower than the urgent low threshold. If not, it will be set to 1 below the urgent low glucose threshold."
+                vc.contextHelp = "The glucose value that marks the lower limit of the CGM. Any value below this value is presented as `LOW`. This value must be lower than the urgent low threshold. If not, it will be set to 1 below the urgent low glucose threshold."
             case .urgentLowGlucoseThreshold:
                 vc.title = "Urgent Low Glucose Threshold"
                 vc.contextHelp = "The glucose value that marks the urgent low glucose threshold. Any value at or below this value is considered urgent low. This value must be above the cgm lower limit and lower than the low threshold. If not, it will be set to a value above the lower limit and below the low glucose threshold."
@@ -516,7 +516,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
                 vc.contextHelp = "The glucose value that marks the high glucose threshold. Any value at or above this value is considered high. This value must be above the low threshold and lower than the cgm upper limit. If not, it will be set to a value above the low glucose threshold and below the upper limit."
             case .cgmUpperLimit:
                 vc.title = "CGM Upper Limit"
-                vc.contextHelp = "The glucose value that marks the upper limit of the CGM. Any value at or above this value is presented at `HIGH`. This value must be above the high threshold. If not, it will be set to 1 above the high glucose threshold."
+                vc.contextHelp = "The glucose value that marks the upper limit of the CGM. Any value above this value is presented as `HIGH`. This value must be above the high threshold. If not, it will be set to 1 above the high glucose threshold."
             }
             show(vc, sender: sender)
         case .effects:
