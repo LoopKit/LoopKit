@@ -185,27 +185,6 @@ class LoopMathTests: XCTestCase {
 
     func testDecayEffect() {
         let calendar = Calendar(identifier: Calendar.Identifier.gregorian)
-        let glucoseDate = calendar.date(from: DateComponents(year: 2016, month: 2, day: 1, hour: 10, minute: 13, second: 20))!
-        let type = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)!
-        let unit = HKUnit.milligramsPerDeciliter
-        let glucose = HKQuantitySample(type: type, quantity: HKQuantity(unit: unit, doubleValue: 100), start: glucoseDate, end: glucoseDate)
-
-        var startingEffect = HKQuantity(unit: unit.unitDivided(by: HKUnit.minute()), doubleValue: 2)
-
-        var effects = glucose.decayEffect(atRate: startingEffect, for: .minutes(30))
-
-        XCTAssertEqual([100, 110, 118, 124, 128, 130, 130], effects.map { $0.quantity.doubleValue(for: unit) })
-
-        let startDate = effects.first!.startDate
-        XCTAssertEqual([0, 5, 10, 15, 20, 25, 30], effects.map { $0.startDate.timeIntervalSince(startDate).minutes })
-
-        startingEffect = HKQuantity(unit: unit.unitDivided(by: HKUnit.minute()), doubleValue: -0.5)
-        effects = glucose.decayEffect(atRate: startingEffect, for: .minutes(30))
-        XCTAssertEqual([100, 97.5, 95.5, 94, 93, 92.5, 92.5], effects.map { $0.quantity.doubleValue(for: unit) })
-    }
-
-    func testDecayEffectWithEvenGlucose() {
-        let calendar = Calendar(identifier: Calendar.Identifier.gregorian)
         let glucoseDate = calendar.date(from: DateComponents(year: 2016, month: 2, day: 1, hour: 10, minute: 15, second: 0))!
         let type = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)!
         let unit = HKUnit.milligramsPerDeciliter
@@ -223,6 +202,19 @@ class LoopMathTests: XCTestCase {
         startingEffect = HKQuantity(unit: unit.unitDivided(by: HKUnit.minute()), doubleValue: -0.5)
         effects = glucose.decayEffect(atRate: startingEffect, for: .minutes(30))
         XCTAssertEqual([100, 97.5, 95.5, 94, 93, 92.5], effects.map { $0.quantity.doubleValue(for: unit) })
+        
+        let glucose2Date = glucoseDate.addingTimeInterval(TimeInterval(-1E-6))
+        let glucose2 = HKQuantitySample(type: type, quantity: HKQuantity(unit: unit, doubleValue: 100), start: glucose2Date, end: glucose2Date)
+        let effects2 = glucose2.decayEffect(atRate: startingEffect, for: .minutes(30))
+
+        XCTAssertEqual(effects.count + 1, effects2.count)
+        XCTAssertEqual(100, effects2[0].quantity.doubleValue(for: unit))
+        XCTAssertEqual(-5, effects2[0].startDate.timeIntervalSince(startDate).minutes)
+        for (index, effect) in effects.enumerated() {
+            let effect2 = effects2[index+1]
+            XCTAssertEqual(effect.startDate, effect2.startDate)
+            XCTAssertEqual(effect.quantity.doubleValue(for: unit), effect2.quantity.doubleValue(for: unit), accuracy: 1E-6)
+        }
     }
 
     func testSubtractingCarbEffectFromICEWithGaps() {
