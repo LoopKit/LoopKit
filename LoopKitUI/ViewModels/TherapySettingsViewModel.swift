@@ -18,15 +18,17 @@ public protocol TherapySettingsViewModelDelegate: AnyObject {
     func pumpSupportedIncrements() -> PumpSupportedIncrements?
 }
 
-public class TherapySettingsViewModel: ObservableObject {
+@Observable
+public class TherapySettingsViewModel {
     
-    @Published public var therapySettings: TherapySettings
-    private let initialTherapySettings: TherapySettings
-    let sensitivityOverridesEnabled: Bool
-    let adultChildInsulinModelSelectionEnabled: Bool
-    public var prescription: Prescription?
+    public private(set) var therapySettings: TherapySettings
+    
+    @ObservationIgnored private let initialTherapySettings: TherapySettings
+    @ObservationIgnored let sensitivityOverridesEnabled: Bool
+    @ObservationIgnored let adultChildInsulinModelSelectionEnabled: Bool
+    @ObservationIgnored public var prescription: Prescription?
 
-    private weak var delegate: TherapySettingsViewModelDelegate?
+    @ObservationIgnored private weak var delegate: TherapySettingsViewModelDelegate?
     
     public init(therapySettings: TherapySettings,
                 pumpSupportedIncrements: (() -> PumpSupportedIncrements?)? = nil,

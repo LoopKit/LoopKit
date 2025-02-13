@@ -28,7 +28,7 @@ public struct TherapySettingsView: View {
 
     private let mode: SettingsPresentationMode
 
-    @ObservedObject var viewModel: TherapySettingsViewModel
+    @State var viewModel: TherapySettingsViewModel
         
     private let actionButton: ActionButton?
 
