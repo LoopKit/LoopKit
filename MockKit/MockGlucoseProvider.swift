@@ -179,7 +179,7 @@ extension MockGlucoseProvider {
     }
     
     fileprivate static var signalLoss: MockGlucoseProvider {
-        return MockGlucoseProvider { _, _ in }
+        return MockGlucoseProvider { _, completion in completion(.noData) }
     }
     
     fileprivate static var unreliableData: MockGlucoseProvider {
