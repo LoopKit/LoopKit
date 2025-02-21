@@ -19,6 +19,27 @@ public enum SafetyClassification: Equatable, Hashable {
 
     case withinRecommendedRange
     case outsideRecommendedRange(Threshold)
+
+    public static func captionForCrossedThresholds(_ thresholds: [Threshold], isRange: Bool) -> String {
+        if thresholds.count > 1 {
+            return LocalizedString("Some of the values you have entered are outside of what is typically recommended for most people.", comment: "Descriptive text for guardrail high value warning for schedule interface")
+        } else {
+            switch thresholds[0] {
+            case .aboveRecommended, .maximum:
+                if isRange {
+                    return LocalizedString("A value you have entered is higher than what is typically recommended for most people.", comment: "Descriptive text for guardrail high value warning for schedule interface")
+                } else {
+                    return LocalizedString("The value you have entered is higher than what is typically recommended for most people.", comment: "Descriptive text for guardrail high value warning")
+                }
+            case .belowRecommended, .minimum:
+                if isRange {
+                    return LocalizedString("A value you have entered is lower than what is typically recommended for most people.", comment: "Descriptive text for guardrail low value warning for schedule interface")
+                } else {
+                    return LocalizedString("The value you have entered is lower than what is typically recommended for most people.", comment: "Descriptive text for guardrail low value warning")
+                }
+            }
+        }
+    }
 }
 
 public struct Guardrail<Value: Comparable> {
@@ -85,3 +106,5 @@ extension Guardrail where Value == LoopQuantity {
         unit.allValues(from: absoluteBounds.lowerBound, through: absoluteBounds.upperBound, usingFractionDigits: fractionDigits ?? unit.maxFractionDigits)
     }
 }
+
+

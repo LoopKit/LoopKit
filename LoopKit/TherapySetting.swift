@@ -18,6 +18,16 @@ public enum TherapySetting {
     case carbRatio
     case insulinSensitivity
     case none
+
+    public var isRange: Bool {
+        switch self {
+        case .glucoseTargetRange, .preMealCorrectionRangeOverride, .workoutCorrectionRangeOverride:
+            return true
+        default:
+            return false
+        }
+    }
+
 }
 
 public extension TherapySetting {
@@ -91,32 +101,6 @@ public extension TherapySetting {
 
 // MARK: Guardrails
 public extension TherapySetting {
-    var guardrailCaptionForLowValue: String {
-        switch self {
-        case .glucoseTargetRange, .preMealCorrectionRangeOverride, .workoutCorrectionRangeOverride:
-            return LocalizedString("A value you have entered is lower than what is typically recommended for most people.", comment: "Descriptive text for guardrail low value warning for schedule interface")
-        default:
-            return LocalizedString("The value you have entered is lower than what is typically recommended for most people.", comment: "Descriptive text for guardrail low value warning")
-        }
-    }
-    
-    var guardrailCaptionForHighValue: String {
-        switch self {
-        case .glucoseTargetRange, .preMealCorrectionRangeOverride, .workoutCorrectionRangeOverride:
-            return LocalizedString("A value you have entered is higher than what is typically recommended for most people.", comment: "Descriptive text for guardrail high value warning for schedule interface")
-        default:
-            return LocalizedString("The value you have entered is higher than what is typically recommended for most people.", comment: "Descriptive text for guardrail high value warning")
-        }
-    }
-    
-    var guardrailCaptionForOutsideValues: String {
-        switch self {
-        case .deliveryLimits:
-            return LocalizedString("The values you have entered are outside of what is typically recommended for most people.", comment: "Descriptive text for guardrail high value warning")
-        default:
-            return LocalizedString("Some of the values you have entered are outside of what is typically recommended for most people.", comment: "Descriptive text for guardrail high value warning for schedule interface")
-        }
-    }
     
     var guardrailSaveWarningCaption: String {
         switch self {
@@ -125,3 +109,4 @@ public extension TherapySetting {
         }
     }
 }
+

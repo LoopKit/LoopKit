@@ -11,14 +11,10 @@ import LoopKit
 
 
 public struct GuardrailWarning: View {
-    private enum CrossedThresholds {
-        case one(SafetyClassification.Threshold)
-        case oneOrMore([SafetyClassification.Threshold])
-    }
 
     private var therapySetting: TherapySetting
     private var title: Text
-    private var crossedThresholds: CrossedThresholds
+    private var crossedThresholds: [SafetyClassification.Threshold]
     private var captionOverride: Text?
 
     public init(
@@ -29,7 +25,7 @@ public struct GuardrailWarning: View {
     ) {
         self.therapySetting = therapySetting
         self.title = title
-        self.crossedThresholds = .one(threshold)
+        self.crossedThresholds = [threshold]
         self.captionOverride = caption
     }
 
@@ -42,7 +38,7 @@ public struct GuardrailWarning: View {
         precondition(!thresholds.isEmpty)
         self.therapySetting = therapySetting
         self.title = title
-        self.crossedThresholds = .oneOrMore(thresholds)
+        self.crossedThresholds = thresholds
         self.captionOverride = caption
     }
 
@@ -51,12 +47,7 @@ public struct GuardrailWarning: View {
     }
 
     private var severity: WarningSeverity {
-        switch crossedThresholds {
-        case .one(let threshold):
-            return threshold.severity
-        case .oneOrMore(let thresholds):
-            return thresholds.lazy.map({ $0.severity }).max()!
-        }
+        return crossedThresholds.map { $0.severity }.max()!
     }
 
     private var caption: Text {
@@ -64,34 +55,12 @@ public struct GuardrailWarning: View {
             return caption
         }
 
-        switch crossedThresholds {
-        case .one(let threshold):
-            return captionForThreshold(threshold)
-        case .oneOrMore(let thresholds):
-            if thresholds.count == 1, let threshold = thresholds.first {
-                return captionForThreshold(threshold)
-            } else {
-                return captionForThresholds()
-            }
-        }
-    }
-
-    private func captionForThreshold(_ threshold: SafetyClassification.Threshold) -> Text {
-        switch threshold {
-        case .minimum, .belowRecommended:
-            return Text(therapySetting.guardrailCaptionForLowValue)
-        case .aboveRecommended, .maximum:
-            return Text(therapySetting.guardrailCaptionForHighValue)
-        }
-    }
-
-    private func captionForThresholds() -> Text {
-        return Text(therapySetting.guardrailCaptionForOutsideValues)
+        return Text(SafetyClassification.captionForCrossedThresholds(crossedThresholds, isRange: therapySetting.isRange));
     }
 }
 
-fileprivate extension SafetyClassification.Threshold {
-    var severity: WarningSeverity {
+extension SafetyClassification.Threshold {
+    public var severity: WarningSeverity {
         switch self {
         case .belowRecommended, .aboveRecommended:
             return .default
