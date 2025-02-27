@@ -363,6 +363,7 @@ extension TherapySettingsView {
                             .font(.body)
                             .padding(.top, 5)
                             .fixedSize(horizontal: false, vertical: true)
+                            .accessibilityIdentifier("text_InsulinModelTitle")
                         Text(insulinModelPreset.subtitle)
                             .font(.footnote)
                             .foregroundColor(.secondary)

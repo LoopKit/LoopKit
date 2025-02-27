@@ -160,6 +160,7 @@ public struct InsulinModelSelection: View {
                     )
                     .padding(.vertical, 4)
                     .contentShape(Rectangle())
+                    .accessibilityIdentifier("item_RapidActingAdults")
                 }
 
                 SectionDivider()
@@ -170,6 +171,7 @@ public struct InsulinModelSelection: View {
                 )
                 .padding(.vertical, 4)
                 .padding(.bottom, 4)
+                .accessibilityIdentifier("item_RapidActingChildren")
             }
             .buttonStyle(PlainButtonStyle()) // Disable row highlighting on selection
         }

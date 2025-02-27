@@ -189,7 +189,7 @@ public struct DeliveryLimitsEditor: View {
                     }
                 ),
                 leadingValueContent: {
-                    Text(DeliveryLimits.Setting.maximumBasalRate.title)
+                    Text(DeliveryLimits.Setting.maximumBasalRate.title).accessibilityIdentifier("text_MaximumBasalRateLimit")
                 },
                 trailingValueContent: {
                     GuardrailConstrainedQuantityView(
@@ -239,7 +239,7 @@ public struct DeliveryLimitsEditor: View {
                     }
                 ),
                 leadingValueContent: {
-                    Text(DeliveryLimits.Setting.maximumBolus.title)
+                    Text(DeliveryLimits.Setting.maximumBolus.title).accessibilityIdentifier("text_MaximumBolusLimit")
                 },
                 trailingValueContent: {
                     GuardrailConstrainedQuantityView(
