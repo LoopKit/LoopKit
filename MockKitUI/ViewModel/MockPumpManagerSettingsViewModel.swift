@@ -8,6 +8,7 @@
 
 import SwiftUI
 import LoopKit
+import LoopKitUI
 import MockKit
 
 class MockPumpManagerSettingsViewModel: ObservableObject {
@@ -75,6 +76,24 @@ class MockPumpManagerSettingsViewModel: ObservableObject {
     }
 
     @Published private(set) var basalDeliveryRate: Double?
+    
+    @Published private(set) var basalDeliveryRateDate: Date?
+    var basalDeliveryRateDateString: String? {
+        guard let basalDeliveryRateDate else { return nil }
+        return Self.shortTimeFormatter.string(from: basalDeliveryRateDate)
+    }
+    
+    @Published private(set) var basalDisplayState: BasalDisplayState
+    var basalDisplayStateString: String {
+        switch basalDisplayState {
+        case .basalScheduled:
+            return LocalizedString("Scheduled\nbasal", comment: "Label for scheduled basal")
+        case .basalTempAutoAbove:
+            return LocalizedString("More than\nscheduled", comment: "Label for when temp basal is above the scheduled basal")
+        default:
+            return LocalizedString("Less than\nscheduled", comment: "Label for when temp basal is below the scheduled basal")
+        }
+    }
 
     @Published private(set) var presentDeliveryWarning: Bool?
     
@@ -99,9 +118,12 @@ class MockPumpManagerSettingsViewModel: ObservableObject {
     init(pumpManager: MockPumpManager) {
         self.pumpManager = pumpManager
         
+        let now = Date()
         isDeliverySuspended = pumpManager.status.basalDeliveryState?.isSuspended == true
         basalDeliveryState = pumpManager.status.basalDeliveryState
-        basalDeliveryRate = pumpManager.state.basalDeliveryRate(at: Date())
+        basalDeliveryRate = pumpManager.state.basalDeliveryRate(at: now)
+        basalDeliveryRateDate = now
+        basalDisplayState = pumpManager.state.basalDisplayState(at: now) ?? .basalScheduled
         setSuspenededAtString()
         
         pumpManager.addStateObserver(self, queue: .main)
@@ -148,8 +170,11 @@ class MockPumpManagerSettingsViewModel: ObservableObject {
 extension MockPumpManagerSettingsViewModel: MockPumpManagerStateObserver {
     func mockPumpManager(_ manager: MockKit.MockPumpManager, didUpdate state: MockKit.MockPumpManagerState) {
         guard !transitioningSuspendResumeInsulinDelivery else { return }
-        basalDeliveryRate = state.basalDeliveryRate(at: Date())
+        let now = Date()
+        basalDeliveryRateDate = now
+        basalDeliveryRate = state.basalDeliveryRate(at: now)
         basalDeliveryState = manager.status.basalDeliveryState
+        basalDisplayState = state.basalDisplayState(at: now) ?? basalDisplayState
     }
     
     func mockPumpManager(_ manager: MockKit.MockPumpManager, didUpdate status: LoopKit.PumpManagerStatus, oldStatus: LoopKit.PumpManagerStatus) {
@@ -167,6 +192,37 @@ extension MockPumpManagerState {
                 return tempBasal.rate
             } else {
                 return basalRateSchedule?.value(at: now)
+            }
+        case .suspended:
+            return nil
+        }
+    }
+    
+    func basalDisplayState(at now: Date) -> BasalDisplayState? {
+        guard let scheduledBasalRate = basalRateSchedule?.value(at: now),
+              let currentBasalRate = basalDeliveryRate(at: now)
+        else {
+            return nil
+        }
+        
+        if currentBasalRate == scheduledBasalRate {
+            return .basalScheduled
+        } else if currentBasalRate == 0 {
+            return .basalTempAutoNoDelivery
+        } else if currentBasalRate < scheduledBasalRate {
+            return .basalTempAutoBelow
+        } else {
+            return .basalTempAutoAbove
+        }
+    }
+    
+    func basalDeliveryStartDate(at now: Date) -> Date? {
+        switch suspendState {
+        case .resumed:
+            if let tempBasal = unfinalizedTempBasal, !tempBasal.isFinished(at: now) {
+                return tempBasal.startTime
+            } else {
+                return basalRateSchedule?.startDate(at: now)
             }
         case .suspended:
             return nil

@@ -9,6 +9,7 @@
 import SwiftUI
 import LoopAlgorithm
 import LoopKit
+import LoopKitUI
 
 struct InsulinStatusView: View {
     @Environment(\.guidanceColors) var guidanceColors
@@ -16,7 +17,7 @@ struct InsulinStatusView: View {
 
     @ObservedObject var viewModel: MockPumpManagerSettingsViewModel
 
-    private let subViewSpacing: CGFloat = 14
+    private let subViewSpacing: CGFloat = 16
 
     var body: some View {
         HStack(alignment: .top, spacing: 0) {
@@ -48,7 +49,7 @@ struct InsulinStatusView: View {
     }
 
     private var deliveryStatusSpacing: CGFloat {
-        return subViewSpacing
+        return subViewSpacing - 8
     }
 
     var deliveryStatus: some View {
@@ -58,8 +59,10 @@ struct InsulinStatusView: View {
                 .fixedSize(horizontal: false, vertical: true)
             if viewModel.isDeliverySuspended {
                 insulinSuspended
-            } else if let basalRate = viewModel.basalDeliveryRate {
-                basalRateView(basalRate)
+            } else if let basalRate = viewModel.basalDeliveryRate,
+                      let date = viewModel.basalDeliveryRateDate
+            {
+                basalRateView(basalRate, at: date)
             } else {
                 noDelivery
             }
@@ -79,34 +82,31 @@ struct InsulinStatusView: View {
         }
     }
 
-    private func basalRateView(_ basalRate: Double) -> some View {
+    private func basalRateView(_ basalRate: Double, at date: Date) -> some View {
         HStack(alignment: .center) {
             VStack(alignment: .leading) {
-                HStack(alignment: .lastTextBaseline, spacing: 3) {
-                    let unit = LoopUnit.internationalUnitsPerHour
-                    let quantity = LoopQuantity(unit: unit, doubleValue: basalRate)
+                HStack(spacing: 3) {
                     if viewModel.presentDeliveryWarning == true {
                         Image(systemName: "exclamationmark.circle.fill")
                             .foregroundColor(guidanceColors.warning)
                             .font(.system(size: 28))
                             .fixedSize()
                     }
-                    Text(basalRateFormatter.string(from: quantity, includeUnit: false) ?? "")
-                        .font(.system(size: 28))
-                        .fontWeight(.heavy)
-                        .fixedSize()
-                    Text(basalRateFormatter.localizedUnitStringWithPlurality(forQuantity: quantity))
-                        .foregroundColor(.secondary)
-                }
-                Group {
-                    if viewModel.isScheduledBasal {
-                        Text("Scheduled\(String.nonBreakingSpace)Basal")
-                    } else if viewModel.isTempBasal {
-                        Text("Temporary\(String.nonBreakingSpace)Basal")
+                    if let basalStateImageName = viewModel.basalDisplayState.imageName {
+                        Image(systemName: basalStateImageName)
+                            .font(.largeTitle)
+                            .foregroundColor(.accentColor)
                     }
+                    Text(viewModel.basalDisplayStateString)
+                        .lineSpacing(1)
+                        .font(.callout)
+                        .fontWeight(.heavy)
                 }
-                .font(.footnote)
-                .foregroundColor(.accentColor)
+                if let basalDeliveryRateDateString = viewModel.basalDeliveryRateDateString {
+                    Text("at \(basalDeliveryRateDateString)")
+                        .font(.footnote)
+                        .foregroundColor(.accentColor)
+                }
             }
         }
     }

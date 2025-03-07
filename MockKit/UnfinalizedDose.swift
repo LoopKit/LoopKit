@@ -37,7 +37,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
     public var units: Double
     var scheduledUnits: Double?     // Tracks the scheduled units, as boluses may be canceled before finishing, at which point units would reflect actual delivered volume.
     var scheduledTempRate: Double?  // Tracks the original temp rate, as during finalization the units are discretized to pump pulses, changing the actual rate
-    let startTime: Date
+    public let startTime: Date
     var duration: TimeInterval
     let insulinType: InsulinType?
     let automatic: Bool?
