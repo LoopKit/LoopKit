@@ -49,7 +49,7 @@ extension CarbEffectChart {
         carbEffectChartCache = nil
     }
 
-    public func generate(withFrame frame: CGRect, xAxisModel: ChartAxisModel, xAxisValues: [ChartAxisValue], axisLabelSettings: ChartLabelSettings, guideLinesLayerSettings: ChartGuideLinesLayerSettings, colors: ChartColorPalette, chartSettings: ChartSettings, labelsWidthY: CGFloat, gestureRecognizer: UIGestureRecognizer?, traitCollection: UITraitCollection) -> Chart
+    public func generate(withFrame frame: CGRect, xAxisModel: ChartAxisModel, xAxisValues: [ChartAxisValue], axisLabelSettings: ChartLabelSettings, guideLinesLayerSettings: ChartGuideLinesLayerSettings, colors: ChartColorPalette, chartSettings: ChartSettings, labelsWidthY: CGFloat, gestureRecognizer: UIGestureRecognizer?, traitCollection: UITraitCollection, highlightLabelOffsetY: CGFloat) -> Chart
     {
         /// The minimum range to display for carb effect values.
         let carbEffectDisplayRangePoints: [ChartPoint] = [0, glucoseUnit.chartableIncrement].map {
@@ -123,6 +123,7 @@ extension CarbEffectChart {
                 axisLabelSettings: axisLabelSettings,
                 chartPoints: allCarbEffectPoints,
                 tintColor: colors.carbTint,
+                highlightLabelOffsetY: highlightLabelOffsetY,
                 gestureRecognizer: gestureRecognizer
             )
         }
