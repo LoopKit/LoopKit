@@ -71,8 +71,14 @@ public protocol DailySchedule {
 
 
 public extension DailySchedule {
+    func scheduleSegment(at time: Date) -> AbsoluteScheduleValue<T> {
+        return between(start: time, end: time).first!
+    }
     func value(at time: Date) -> T {
-        return between(start: time, end: time).first!.value
+        return scheduleSegment(at: time).value
+    }
+    func startDate(at time: Date) -> Date {
+        return scheduleSegment(at: time).startDate
     }
 }
 

@@ -28,7 +28,7 @@ public struct InsulinModelInformationView: View {
                 VStack (alignment: .leading, spacing: 20) {
                     diaInfo
                     modelPeakInfo
-                }
+                }.accessibilityIdentifier("text_InsulinModelInformation")
             },
             onExit: onExit ?? { self.presentationMode.wrappedValue.dismiss() },
             mode: mode

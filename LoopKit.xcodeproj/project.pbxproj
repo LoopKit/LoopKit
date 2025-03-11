@@ -670,6 +670,7 @@
 		B4C004D12416961300B40429 /* GuidePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C004B3241085DB00B40429 /* GuidePage.swift */; };
 		B4C004D22416961300B40429 /* GuideNavigationButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C004B4241085DC00B40429 /* GuideNavigationButton.swift */; };
 		B4C004D32416961300B40429 /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C004B2241085DB00B40429 /* ActionButton.swift */; };
+		B4CA4D3D2D79B252005F8FF3 /* BasalDisplayState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4CA4D3C2D79B252005F8FF3 /* BasalDisplayState.swift */; };
 		B4CEE2A5256E912A0093111B /* DoseProgressTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4CEE2A4256E91290093111B /* DoseProgressTests.swift */; };
 		B4CEE2E3257129780093111B /* UnfinalizedDoseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4CEE2E2257129780093111B /* UnfinalizedDoseTests.swift */; };
 		B4CEE2E5257129780093111B /* MockKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89D2047221CC7BD7001238CC /* MockKit.framework */; };
@@ -1607,6 +1608,7 @@
 		B4C004B2241085DB00B40429 /* ActionButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
 		B4C004B3241085DB00B40429 /* GuidePage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GuidePage.swift; sourceTree = "<group>"; };
 		B4C004B4241085DC00B40429 /* GuideNavigationButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GuideNavigationButton.swift; sourceTree = "<group>"; };
+		B4CA4D3C2D79B252005F8FF3 /* BasalDisplayState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasalDisplayState.swift; sourceTree = "<group>"; };
 		B4CEE2A4256E91290093111B /* DoseProgressTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoseProgressTests.swift; sourceTree = "<group>"; };
 		B4CEE2E0257129780093111B /* MockKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MockKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B4CEE2E2257129780093111B /* UnfinalizedDoseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfinalizedDoseTests.swift; sourceTree = "<group>"; };
@@ -3161,6 +3163,7 @@
 		E9086B4624B5404D0062F5C8 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				B4CA4D3C2D79B252005F8FF3 /* BasalDisplayState.swift */,
 				14C9706F2C5A8E1500E8A01B /* ChartAxisValueDoubleCarbEntry.swift */,
 				A9D3FF0F2A6C19CA000C891D /* ChartAxisValueDoubleLog.swift */,
 				E9086B4724B5405E0062F5C8 /* ChartAxisValueDoubleUnit.swift */,
@@ -3879,6 +3882,7 @@
 				E949E38F24B3711E00024DA0 /* InsulinModelInformationView.swift in Sources */,
 				895FE08B22011F0C00FCF18A /* EmojiInputHeaderView.swift in Sources */,
 				895FE08322011F0C00FCF18A /* OverrideSelectionFooterView.swift in Sources */,
+				B4CA4D3D2D79B252005F8FF3 /* BasalDisplayState.swift in Sources */,
 				89AF78C22447E353002B4FCC /* Splat.swift in Sources */,
 				893C9F8C2447DBD900CD4185 /* CardBuilder.swift in Sources */,
 				B4D4C20D25F95A8700DA809D /* DisplayGlucosePreference.swift in Sources */,
