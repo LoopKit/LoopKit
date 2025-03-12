@@ -38,7 +38,7 @@ final class ChartPointsTouchHighlightLayerViewCache {
 
     private(set) var highlightLayer: ChartPointsTouchHighlightLayer<ChartPoint, UIView>!
 
-    init(xAxisLayer: ChartAxisLayer, yAxisLayer: ChartAxisLayer, axisLabelSettings: ChartLabelSettings, chartPoints: [ChartPoint], tintColor: UIColor, allowOverridingTintColor: Bool = false, allowOverridingHighlightPointSize: Bool = false, highlightPointOffsetY: CGFloat = 0, gestureRecognizer: UIGestureRecognizer? = nil, onCompleteHighlight: (() -> Void)? = nil) {
+    init(xAxisLayer: ChartAxisLayer, yAxisLayer: ChartAxisLayer, axisLabelSettings: ChartLabelSettings, chartPoints: [ChartPoint], tintColor: UIColor, allowOverridingTintColor: Bool = false, allowOverridingHighlightPointSize: Bool = false, highlightPointOffsetY: CGFloat = 0, highlightLabelOffsetY: CGFloat = 0, gestureRecognizer: UIGestureRecognizer? = nil, onCompleteHighlight: (() -> Void)? = nil) {
 
         self.axisLabelSettings = axisLabelSettings
 
@@ -98,23 +98,29 @@ final class ChartPointsTouchHighlightLayerViewCache {
                     containerView.addSubview(point)
                 }
 
-                if let text = chartPointModel.chartPoint.y.labels.first?.text {
-                    let label = strongSelf.labelY
+                let text = chartPointModel.chartPoint.y
+                let label = strongSelf.labelY
 
-                    label.text = text
-                    label.sizeToFit()
-                    label.center.y = containerView.frame.minY - 21
-                    label.center.x = chartPointModel.screenLoc.x
-                    label.frame.origin.x = min(max(label.frame.origin.x, containerView.bounds.minX), containerView.bounds.maxX - label.frame.size.width)
-                    label.frame.origin.makeIntegralInPlaceWithDisplayScale(chart.view.traitCollection.displayScale)
+                let valueAttributedString = NSMutableAttributedString(string: String(describing: text.copy), attributes: [.font: UIFont.systemFont(ofSize: 20, weight: .semibold), .foregroundColor: newColor])
+                let spacer = NSAttributedString(string: "\u{00a0}")
+                let unitAttributedString =  NSAttributedString(string: String(describing: text).replacingOccurrences(of: String(describing: text.copy), with: "").trimmingCharacters(in: .whitespacesAndNewlines), attributes: [.font: UIFont.systemFont(ofSize: 15, weight: .regular), .foregroundColor: newColor])
+                
+                valueAttributedString.append(spacer)
+                valueAttributedString.append(unitAttributedString)
+                
+                label.attributedText = valueAttributedString
+                label.sizeToFit()
+                label.center.y = containerView.frame.minY - 21 - highlightLabelOffsetY
+                label.center.x = chartPointModel.screenLoc.x
+                label.frame.origin.x = min(max(label.frame.origin.x, containerView.bounds.minX), containerView.bounds.maxX - label.frame.size.width)
+                label.frame.origin.makeIntegralInPlaceWithDisplayScale(chart.view.traitCollection.displayScale)
 
-                    if label.superview == nil || (allowOverridingTintColor && label.textColor != newColor) {
-                        // Color the label when view is initialized and every time overridden tint color does not match previous value
-                        label.textColor = newColor
-                    }
-                    if label.superview == nil {
-                        containerView.addSubview(label)
-                    }
+                if label.superview == nil || (allowOverridingTintColor && label.textColor != newColor) {
+                    // Color the label when view is initialized and every time overridden tint color does not match previous value
+                    label.textColor = newColor
+                }
+                if label.superview == nil {
+                    containerView.addSubview(label)
                 }
 
                 if let text = chartPointModel.chartPoint.x.labels.first?.text {

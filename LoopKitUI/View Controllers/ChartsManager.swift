@@ -147,13 +147,13 @@ open class ChartsManager {
 
     // MARK: - Generators
 
-    public func chart(atIndex index: Int, frame: CGRect) -> Chart? {
+    public func chart(atIndex index: Int, frame: CGRect, highlightLabelOffsetY: CGFloat = 0) -> Chart? {
         if let chart = chartsCache[index], chart.frame != frame {
             chartsCache[index] = nil
         }
 
         if chartsCache[index] == nil, let xAxisModel = xAxisModel, let xAxisValues = xAxisValues {
-            chartsCache[index] = charts[index].generate(withFrame: frame, xAxisModel: xAxisModel, xAxisValues: xAxisValues, axisLabelSettings: axisLabelSettings, guideLinesLayerSettings: guideLinesLayerSettings, colors: colors, chartSettings: chartSettings, labelsWidthY: labelsWidthY, gestureRecognizer: gestureRecognizer, traitCollection: traitCollection)
+            chartsCache[index] = charts[index].generate(withFrame: frame, xAxisModel: xAxisModel, xAxisValues: xAxisValues, axisLabelSettings: axisLabelSettings, guideLinesLayerSettings: guideLinesLayerSettings, colors: colors, chartSettings: chartSettings, labelsWidthY: labelsWidthY, gestureRecognizer: gestureRecognizer, traitCollection: traitCollection, highlightLabelOffsetY: highlightLabelOffsetY)
         }
 
         return chartsCache[index]
@@ -235,6 +235,7 @@ public protocol ChartProviding {
         chartSettings: ChartSettings,
         labelsWidthY: CGFloat,
         gestureRecognizer: UIGestureRecognizer?,
-        traitCollection: UITraitCollection
+        traitCollection: UITraitCollection,
+        highlightLabelOffsetY: CGFloat
     ) -> Chart
 }
