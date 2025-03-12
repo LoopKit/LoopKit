@@ -145,6 +145,38 @@ extension TherapySettings: Codable {
 }
 
 extension TherapySettings {
+    public typealias InsulinMultiplierImpact = (basalRate: LoopQuantity?, carbRatio: LoopQuantity?, isf: LoopQuantity?)
+    
+    public func impact(for insulinMultiplier: Double) -> InsulinMultiplierImpact {
+        var basalRate: LoopQuantity? {
+            if let baseValue = basalRateSchedule?.value(at: Date()) {
+                return LoopQuantity(unit: .internationalUnitsPerHour, doubleValue: baseValue * insulinMultiplier)
+            } else {
+                return nil
+            }
+        }
+        var carbRatio: LoopQuantity? {
+            if let baseValue = carbRatioSchedule?.value(at: Date()) {
+                return LoopQuantity(unit: .gram, doubleValue: baseValue / insulinMultiplier)
+            } else {
+                return nil
+            }
+        }
+        var isf: LoopQuantity? {
+            if let baseQuantity = insulinSensitivitySchedule?.quantity(at: Date()) {
+                let value = baseQuantity.doubleValue(for: .milligramsPerDeciliter)
+                let adjustedValue = value / insulinMultiplier
+                return LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: adjustedValue)
+            } else {
+                return nil
+            }
+        }
+
+        return (basalRate, carbRatio, isf)
+    }
+}
+
+extension TherapySettings {
     // Mock therapy settings for QA and mock prescriptions
     public static var mockTherapySettings: TherapySettings {
         let timeZone = TimeZone(identifier: "America/Los_Angeles")!
