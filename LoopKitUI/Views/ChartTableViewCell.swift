@@ -12,7 +12,7 @@ import UIKit
 
 public final class ChartTableViewCell: UITableViewCell {
 
-    @IBOutlet public weak var supplementalChartContentView: ChartContainerView!
+    @IBOutlet public weak var supplementalChartContentView: ChartContainerView?
     
     @IBOutlet weak var chartContentView: ChartContainerView!
 
@@ -48,13 +48,13 @@ public final class ChartTableViewCell: UITableViewCell {
     public override func prepareForReuse() {
         super.prepareForReuse()
         doesNavigate = true
-        supplementalChartContentView.isHidden = true
-        supplementalChartContentView.chartGenerator = nil
+        supplementalChartContentView?.isHidden = true
+        supplementalChartContentView?.chartGenerator = nil
         chartContentView.chartGenerator = nil
     }
 
     public func reloadChart() {
-        supplementalChartContentView.reloadChart()
+        supplementalChartContentView?.reloadChart()
         chartContentView.reloadChart()
     }
     
@@ -63,8 +63,8 @@ public final class ChartTableViewCell: UITableViewCell {
     }
     
     public func setSupplementalChartGenerator(generator: ((CGRect) -> UIView?)?) {
-        supplementalChartContentView.chartGenerator = generator
-        supplementalChartContentView.isHidden = generator == nil
+        supplementalChartContentView?.chartGenerator = generator
+        supplementalChartContentView?.isHidden = generator == nil
     }
     
     public func setTitleLabelText(label: String?) {
