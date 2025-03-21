@@ -121,7 +121,7 @@ public protocol ServiceProvider: AnyObject {
     var availableServices: [ServiceDescriptor] { get }
 }
 
-public protocol TherapySettingsProvider {
+public protocol OnboardingTherapySettingsProvider {
     var onboardingTherapySettings: TherapySettings { get }
 }
 
@@ -129,7 +129,7 @@ public protocol SupportProvider: AnyObject {
     var availableSupports: [SupportUI] { get }
 }
 
-public protocol OnboardingProvider: NotificationAuthorizationProvider, HealthStoreAuthorizationProvider, BluetoothProvider, CGMManagerProvider, PumpManagerProvider, StatefulPluggableProvider, ServiceProvider, TherapySettingsProvider, SupportProvider, PluginHost {
+public protocol OnboardingProvider: NotificationAuthorizationProvider, HealthStoreAuthorizationProvider, BluetoothProvider, CGMManagerProvider, PumpManagerProvider, StatefulPluggableProvider, ServiceProvider, OnboardingTherapySettingsProvider, SupportProvider, PluginHost {
     var allowDebugFeatures: Bool { get }   // NOTE: DEBUG FEATURES - DEBUG AND TEST ONLY
 }
 

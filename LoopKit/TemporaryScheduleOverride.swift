@@ -10,20 +10,20 @@ import Foundation
 import HealthKit
 import LoopAlgorithm
 
-public struct TemporaryScheduleOverride: Hashable {
-    public enum Context: Hashable {
+public struct TemporaryScheduleOverride: Hashable, Sendable {
+    public enum Context: Hashable, Sendable {
         case preMeal
         case legacyWorkout
         case preset(TemporaryScheduleOverridePreset)
         case custom
     }
     
-    public enum EnactTrigger: Hashable {
+    public enum EnactTrigger: Hashable, Sendable {
         case local
         case remote(String)
     }
 
-    public enum Duration: Hashable, Comparable {
+    public enum Duration: Hashable, Comparable, Sendable {
         case finite(TimeInterval)
         case indefinite
 

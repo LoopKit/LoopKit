@@ -67,30 +67,6 @@ public struct TherapySettings: Equatable {
         self.basalRateSchedule = basalRateSchedule
         self.defaultRapidActingModel = defaultRapidActingModel
     }
-
-    public var preMealGuardrail: Guardrail<LoopQuantity> {
-        if let scheduleRange = glucoseTargetRangeSchedule?.scheduleRange() {
-            return Guardrail.correctionRangeOverride(
-                for: .preMeal,
-                correctionRangeScheduleRange: scheduleRange,
-                suspendThreshold: suspendThreshold
-            )
-        } else {
-            return Guardrail.correctionRange
-        }
-    }
-
-    public var legacyWorkoutPresetGuardrail: Guardrail<LoopQuantity> {
-        if let scheduleRange = glucoseTargetRangeSchedule?.scheduleRange() {
-            return Guardrail.correctionRangeOverride(
-                for: .workout,
-                correctionRangeScheduleRange: scheduleRange,
-                suspendThreshold: suspendThreshold
-            )
-        } else {
-            return Guardrail.correctionRange
-        }
-    }
 }
 
 extension TherapySettings: Codable {
@@ -174,6 +150,7 @@ extension TherapySettings {
 
         return (basalRate, carbRatio, isf)
     }
+
 }
 
 extension TherapySettings {

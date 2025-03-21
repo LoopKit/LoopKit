@@ -9,7 +9,7 @@
 import Foundation
 
 
-public struct TemporaryScheduleOverridePreset: Hashable {
+public struct TemporaryScheduleOverridePreset: Hashable, Sendable {
     public let id: UUID
     public var symbol: String
     public var name: String

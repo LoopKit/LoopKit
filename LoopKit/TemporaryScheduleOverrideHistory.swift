@@ -9,7 +9,7 @@
 import Foundation
 import SwiftData
 
-public enum End: Equatable, Hashable, Codable {
+public enum End: Equatable, Hashable, Codable, Sendable {
     case natural
     case early(Date)
     case deleted // Ended before started
@@ -134,9 +134,10 @@ public final class TemporaryScheduleOverrideHistory {
     }
 
     public func activeOverride(at date: Date) -> TemporaryScheduleOverride? {
-        recentEvents.first { event in
+        let active = recentEvents.filter({$0.override.actualEnd != .deleted}).first { event in
             event.override.isActive(at: date)
-        }?.override
+        }
+        return active?.override
     }
 
     private var lastUndeletedEvent: OverrideEvent? {

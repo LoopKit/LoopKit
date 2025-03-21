@@ -10,7 +10,7 @@ import Foundation
 import HealthKit
 import LoopAlgorithm
 
-public struct DoubleRange {
+public struct DoubleRange: Sendable {
     public let minValue: Double
     public let maxValue: Double
 
