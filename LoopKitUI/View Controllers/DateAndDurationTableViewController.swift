@@ -48,6 +48,7 @@ public class DateAndDurationTableViewController: UITableViewController {
     public func onSave(_ completion: @escaping (InputMode) -> Void) {
         let saveBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(save))
         navigationItem.rightBarButtonItem = saveBarButtonItem
+        navigationItem.rightBarButtonItem?.accessibilityIdentifier = "button_Save"
         self.completion = completion
     }
 

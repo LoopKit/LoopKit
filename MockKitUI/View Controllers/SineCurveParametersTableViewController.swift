@@ -130,15 +130,19 @@ final class SineCurveParametersTableViewController: UITableViewController {
         switch Row(rawValue: indexPath.row)! {
         case .baseGlucose:
             cell.textLabel?.text = "Base Glucose"
+            cell.accessibilityIdentifier = "cell_BaseGlucose"
             cell.detailTextLabel?.text = baseGlucose.map(formatGlucose) ?? SettingsTableViewCell.NoValueString
         case .amplitude:
             cell.textLabel?.text = "Amplitude"
+            cell.accessibilityIdentifier = "cell_Amplitude"
             cell.detailTextLabel?.text = amplitude.map(formatGlucose) ?? SettingsTableViewCell.NoValueString
         case .period:
             cell.textLabel?.text = "Period"
+            cell.accessibilityIdentifier = "cell_Period"
             cell.detailTextLabel?.text = period.flatMap(durationFormatter.string(from:)) ?? SettingsTableViewCell.NoValueString
         case .referenceDate:
             cell.textLabel?.text = "Reference Date"
+            cell.accessibilityIdentifier = "cell_ReferenceDate"
             cell.detailTextLabel?.text = referenceDate.map(dateFormatter.string(from:)) ?? SettingsTableViewCell.NoValueString
         }
 
