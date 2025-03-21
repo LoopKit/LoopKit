@@ -107,6 +107,7 @@ final class IssueAlertTableViewController: UITableViewController {
         tableView.register(TextButtonTableViewCell.self, forCellReuseIdentifier: TextButtonTableViewCell.className)
 
         let button = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneTapped(_:)))
+        button.accessibilityIdentifier = "button_done"
         navigationItem.setRightBarButton(button, animated: false)
     }
     
