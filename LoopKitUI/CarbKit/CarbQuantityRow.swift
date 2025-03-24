@@ -51,6 +51,7 @@ public struct CarbQuantityRow: View {
                     rowTapped()
                 }
             }
+            .accessibilityIdentifier("textField_CarbsAmount")
             
             carbUnitsLabel
         }
