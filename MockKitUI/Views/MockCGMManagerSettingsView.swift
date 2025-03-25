@@ -89,6 +89,7 @@ struct MockCGMManagerSettingsView: View {
                 .aspectRatio(contentMode: ContentMode.fit)
                 .frame(maxHeight: 70)
                 .frame(width: 70)
+                .accessibilityIdentifier("image_CgmSimulator")
         }
     }
     
