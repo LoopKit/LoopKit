@@ -40,8 +40,6 @@ public final class ChartTableViewCell: UITableViewCell {
     public var doesNavigate: Bool = true {
         didSet {
             rightArrowHint?.isHidden = !doesNavigate
-            rightArrowHint?.accessibilityIdentifier =
-            "image_navigateToGlucoseDetails_\(doesNavigate)"
         }
     }
     
@@ -70,6 +68,7 @@ public final class ChartTableViewCell: UITableViewCell {
     public func setTitleLabelText(label: String?) {
         titleLabel?.text = label
         titleLabel?.font = .systemFont(ofSize: 17, weight: .semibold)
+        titleLabel?.accessibilityIdentifier = "chartTitleText_\(label!.replacing(" ", with: ""))"
     }
     
     public func setTitleLabelText(label: NSAttributedString?) {
