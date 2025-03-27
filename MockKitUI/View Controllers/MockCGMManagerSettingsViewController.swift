@@ -285,6 +285,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
                 return cell
             case .cgmLowerLimit:
                 cell.textLabel?.text = "CGM Lower Limit"
+                cell.accessibilityIdentifier = "cell_CgmLowerLimit"
                 cell.detailTextLabel?.text = quantityFormatter.string(from: cgmManager.mockSensorState.cgmLowerLimit)
             case .urgentLowGlucoseThreshold:
                 cell.textLabel?.text = "Urgent Low Glucose Threshold"
