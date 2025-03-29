@@ -141,7 +141,7 @@ extension TherapySettings {
         var isf: LoopQuantity? {
             if let baseQuantity = insulinSensitivitySchedule?.quantity(at: Date()) {
                 let value = baseQuantity.doubleValue(for: .milligramsPerDeciliter)
-                let adjustedValue = value / insulinMultiplier
+                let adjustedValue = value * insulinMultiplier
                 return LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: adjustedValue)
             } else {
                 return nil
