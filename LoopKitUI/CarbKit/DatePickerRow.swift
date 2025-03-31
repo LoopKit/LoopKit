@@ -64,10 +64,12 @@ public struct DatePickerRow: View {
                         .opacity(decrementButtonEnabled ? 1 : 0.7)
                 }
                 .disabled(!decrementButtonEnabled)
+                .accessibilityIdentifier("button_TimeDecrement")
                 
                 let dateTextColor: Color = isFocused ? .accentColor : Color(UIColor.secondaryLabel)
                 Text(dateString())
                     .foregroundColor(dateTextColor)
+                    .accessibilityIdentifier("text_TimeCarbEntry")
                 
                 Button(action: incrementTime) {
                     Image(systemName: "plus.circle.fill")
@@ -76,6 +78,7 @@ public struct DatePickerRow: View {
                         .opacity(incrementButtonEnabled ? 1 : 0.7)
                 }
                 .disabled(!incrementButtonEnabled)
+                .accessibilityIdentifier("button_TimeIncrement")
             }
             
             if isFocused {
@@ -83,6 +86,7 @@ public struct DatePickerRow: View {
                     .datePickerStyle(.wheel)
                     .labelsHidden()
                     .opacity(isFocused ? 1 : 0)
+                    .accessibilityIdentifier("datePicker_TimeCarbEntry")
             }
         }
         .onAppear {
