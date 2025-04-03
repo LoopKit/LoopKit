@@ -105,17 +105,21 @@ public final class ChartTableViewCell: UITableViewCell {
         footerView?.alpha = alpha
     }
     
-    public func setFooterView(@ViewBuilder content: () -> some View) {
+    public func removeFooterView() {
         self.footerView?.removeFromSuperview()
         self.footerView = nil
+    }
+    
+    public func setFooterView(content: (() -> some View)?) {
+        removeFooterView()
         
-        let content = content()
-        
-        guard !(content is EmptyView), let rootView = UIHostingController(rootView: content).view else {
-            return
+        if let content = content?() {
+            guard !(content is EmptyView), let rootView = UIHostingController(rootView: content).view else {
+                return
+            }
+            
+            self.footerView = rootView
+            self.mainStackView.addArrangedSubview(rootView)
         }
-        
-        self.footerView = rootView
-        self.mainStackView.addArrangedSubview(rootView)
     }
 }
