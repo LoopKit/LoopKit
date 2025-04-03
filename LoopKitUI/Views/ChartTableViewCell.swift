@@ -49,6 +49,8 @@ public final class ChartTableViewCell: UITableViewCell {
         supplementalChartContentView?.isHidden = true
         supplementalChartContentView?.chartGenerator = nil
         chartContentView.chartGenerator = nil
+        footerView?.isHidden = true
+        footerView = nil
     }
 
     public func reloadChart() {
