@@ -152,7 +152,7 @@ extension CarbEffectChart {
     /// - Parameter effects: A timeline of glucose values representing glucose change
     public func setCarbEffects(_ effects: [GlucoseEffect]) {
         let unit = glucoseUnit.unitDivided(by: .minute)
-        let unitString = unit?.unitString
+        let unitString = unit.unitString
 
         var lastDate = effects.first?.endDate
         var lastValue = effects.first?.quantity.doubleValue(for: glucoseUnit)
@@ -163,10 +163,6 @@ extension CarbEffectChart {
         let zero = ChartAxisValueInt(0)
 
         for effect in effects.dropFirst() {
-            guard let unitString else {
-                continue
-            }
-            
             let value = effect.quantity.doubleValue(for: glucoseUnit)
             let valuePerMinute = (value - lastValue!) / minuteInterval
             lastValue = value
@@ -201,10 +197,6 @@ extension CarbEffectChart {
         let zero = ChartAxisValueInt(0)
 
         for effect in effects {
-            guard let unit else {
-                continue
-            }
-            
             let startX = ChartAxisValueDate(date: effect.startDate, formatter: dateFormatter)
             let endX = ChartAxisValueDate(date: effect.endDate, formatter: dateFormatter)
             let value = ChartAxisValueDoubleUnit(effect.quantity.doubleValue(for: unit), unitString: unitString, formatter: decimalFormatter)
