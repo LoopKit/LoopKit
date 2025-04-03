@@ -123,9 +123,7 @@ extension TherapySettings: Codable {
 extension TherapySettings {
     public typealias InsulinMultiplierImpact = (basalRate: LoopQuantity?, carbRatio: LoopQuantity?, isf: LoopQuantity?)
     
-    public func impact(for insulinMultiplier: Double, invert: Bool = false) -> InsulinMultiplierImpact {
-        let insulinMultiplier: Double = invert ? 1.0 / insulinMultiplier : insulinMultiplier
-        
+    public func impact(for insulinMultiplier: Double) -> InsulinMultiplierImpact {
         var basalRate: LoopQuantity? {
             if let baseValue = basalRateSchedule?.value(at: Date()) {
                 return LoopQuantity(unit: .internationalUnitsPerHour, doubleValue: baseValue * insulinMultiplier)
