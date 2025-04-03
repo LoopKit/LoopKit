@@ -123,19 +123,19 @@ extension TherapySettings: Codable {
 extension TherapySettings {
     public typealias InsulinMultiplierImpact = (basalRate: LoopQuantity?, carbRatio: LoopQuantity?, isf: LoopQuantity?)
     
-    public func impact(for insulinMultiplier: Double, invert: Bool) -> InsulinMultiplierImpact {
+    public func impact(for insulinMultiplier: Double, invert: Bool = false) -> InsulinMultiplierImpact {
         let insulinMultiplier: Double = invert ? 1.0 / insulinMultiplier : insulinMultiplier
         
         var basalRate: LoopQuantity? {
             if let baseValue = basalRateSchedule?.value(at: Date()) {
-                return LoopQuantity(unit: .internationalUnitsPerHour, doubleValue: baseValue / insulinMultiplier)
+                return LoopQuantity(unit: .internationalUnitsPerHour, doubleValue: baseValue * insulinMultiplier)
             } else {
                 return nil
             }
         }
         var carbRatio: LoopQuantity? {
             if let baseValue = carbRatioSchedule?.value(at: Date()) {
-                return LoopQuantity(unit: .gram, doubleValue: baseValue * insulinMultiplier)
+                return LoopQuantity(unit: .gram, doubleValue: baseValue / insulinMultiplier)
             } else {
                 return nil
             }
@@ -143,7 +143,7 @@ extension TherapySettings {
         var isf: LoopQuantity? {
             if let baseQuantity = insulinSensitivitySchedule?.quantity(at: Date()) {
                 let value = baseQuantity.doubleValue(for: .milligramsPerDeciliter)
-                let adjustedValue = value * insulinMultiplier
+                let adjustedValue = value / insulinMultiplier
                 return LoopQuantity(unit: .milligramsPerDeciliterPerInternationalUnit, doubleValue: adjustedValue)
             } else {
                 return nil
