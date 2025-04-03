@@ -24,6 +24,8 @@ public extension Guardrail where Value == LoopQuantity {
         .min()!
     }
 
+    static let presetInsulinNeeds = Guardrail(absoluteBounds: 10...200, recommendedBounds: 35...185, unit: .percent, startingSuggestion: 100)
+
     static let correctionRange = Guardrail(absoluteBounds: 87...180, recommendedBounds: 100...125, unit: .milligramsPerDeciliter, startingSuggestion: 100)
 
     static func minCorrectionRangeValue(suspendThreshold: GlucoseThreshold?) -> LoopQuantity {
