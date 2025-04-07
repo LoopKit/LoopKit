@@ -13,19 +13,13 @@ import LoopKit
 
 public class DisplayGlucosePreference: ObservableObject {
     @Published public private(set) var unit: LoopUnit
-    @Published public private(set) var rateUnit: LoopUnit
     @Published public private(set) var formatter: QuantityFormatter
-    @Published public private(set) var minuteRateFormatter: QuantityFormatter
 
     public init(displayGlucoseUnit: LoopUnit) {
         self.unit = displayGlucoseUnit
         let formatter = QuantityFormatter(for: displayGlucoseUnit)
-        let rateUnit = displayGlucoseUnit.glucose(per: .minutes)
-        self.rateUnit = rateUnit
         self.formatter = formatter
-        self.minuteRateFormatter = QuantityFormatter(for: rateUnit)
         self.formatter.numberFormatter.notANumberSymbol = "–"
-        self.minuteRateFormatter.numberFormatter.notANumberSymbol = "–"
     }
 
     /// Formats a glucose HKQuantity and unit as a localized string
@@ -53,7 +47,8 @@ public class DisplayGlucosePreference: ObservableObject {
     ///   - includeUnit: Whether or not to include the unit in the returned string
     /// - Returns: A localized string, or the numberFormatter's notANumberSymbol (default is "–")
     open func formatMinuteRate(_ quantity: LoopQuantity, includeUnit: Bool = true) -> String {
-        return minuteRateFormatter.string(from: quantity, includeUnit: includeUnit) ?? self.formatter.numberFormatter.notANumberSymbol
+        let minuteRateFormatter = QuantityFormatter(for: unit.unitDivided(by: .minute))
+        return  minuteRateFormatter.string(from: quantity, includeUnit: includeUnit) ?? formatter.numberFormatter.notANumberSymbol
     }
 
 }
