@@ -53,11 +53,13 @@ public struct AbsorptionTimePickerRow: View {
                 
                 Text(durationString())
                     .foregroundColor(Color(UIColor.secondaryLabel))
+                    .accessibilityIdentifier("text_AbsorbtionTimeValue")
             }
             
             if isFocused {
                 DurationPicker(duration: $absorptionTime, validDurationRange: validDurationRange, minuteInterval: minuteStride)
                     .frame(maxWidth: .infinity)
+                    .accessibilityIdentifier("datePicker_AbsorbtionTime")
             }
         }
         .onTapGesture {

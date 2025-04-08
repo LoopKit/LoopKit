@@ -52,7 +52,7 @@ struct RowEmojiTextField: View {
                 textField.autocorrectionType = .no
                 textField.autocapitalizationType = .none
                 textField.placeholder = placeholder
-            }
+            }.accessibilityIdentifier("textField_FoodType")
         }
         else {
             RowTextField(text: $text, isFocused: $isFocused, maxLength: 20) { textField in
@@ -62,7 +62,7 @@ struct RowEmojiTextField: View {
                 emojiController.delegate = viewModel
                 textField.customInput = emojiController
                 textField.placeholder = placeholder
-            }
+            }.accessibilityIdentifier("textField_FoodType")
         }
     }
 }
