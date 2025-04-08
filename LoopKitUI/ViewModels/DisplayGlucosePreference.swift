@@ -48,6 +48,7 @@ public class DisplayGlucosePreference: ObservableObject {
     /// - Returns: A localized string, or the numberFormatter's notANumberSymbol (default is "–")
     open func formatMinuteRate(_ quantity: LoopQuantity, includeUnit: Bool = true) -> String {
         let minuteRateFormatter = QuantityFormatter(for: unit.unitDivided(by: .minute))
+        minuteRateFormatter.numberFormatter.notANumberSymbol = "-"
         return  minuteRateFormatter.string(from: quantity, includeUnit: includeUnit) ?? formatter.numberFormatter.notANumberSymbol
     }
 
