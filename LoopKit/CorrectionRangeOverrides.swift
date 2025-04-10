@@ -124,4 +124,26 @@ extension ClosedRange<LoopQuantity> {
     public func localizedDescription(unit: LoopUnit) -> String {
         String(format: NSLocalizedString("%.0f - %.0f %3$@", comment: ""), lowerBound.doubleValue(for: unit), upperBound.doubleValue(for: unit), unit.unitString)
     }
+
+    public func selectableValues(unit: LoopUnit, stride: Double = 1.0) -> [Double] {
+        let lower = lowerBound.doubleValue(for: unit)
+        let upper = upperBound.doubleValue(for: unit)
+
+        // Generate values that are aligned to stride from zero
+        let minIndex = Int(ceil(lower / stride))
+        let maxIndex = Int(floor(upper / stride))
+
+        var selectableValues = (minIndex...maxIndex).map { Double($0) * stride }
+
+        // Ensure lower and upper bounds are included explicitly (in case they’re not exactly on stride)
+        if !selectableValues.contains(where: { abs($0 - lower) < 0.0001 }) {
+            selectableValues.insert(lower, at: 0)
+        }
+        if !selectableValues.contains(where: { abs($0 - upper) < 0.0001 }) {
+            selectableValues.append(upper)
+        }
+
+        return selectableValues;
+    }
 }
+

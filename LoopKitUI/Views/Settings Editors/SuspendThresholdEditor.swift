@@ -87,12 +87,25 @@ public struct SuspendThresholdEditor: View {
         Button(action: { self.dismiss() } ) { Text(LocalizedString("Cancel", comment: "Cancel editing settings button title")) }
     }
 
+    private var stride: Double {
+        switch displayGlucosePreference.unit {
+        case .milligramsPerDeciliter:
+            return 1
+        case .millimolesPerLiter:
+            return 0.1
+        default:
+            fatalError("Unsupported glucose unit \(displayGlucosePreference.unit)")
+        }
+    }
+
     private var picker: GlucoseValuePicker {
-        GlucoseValuePicker(
+        let bounds = viewModel.guardrail.absoluteBounds.lowerBound...viewModel.maxSuspendThresholdValue
+        let selectableValues = bounds.selectableValues(unit: displayGlucosePreference.unit, stride: stride)
+        return GlucoseValuePicker(
             value: self.$value.animation(),
             unit: displayGlucosePreference.unit,
             guardrail: viewModel.guardrail,
-            bounds: viewModel.guardrail.absoluteBounds.lowerBound...viewModel.maxSuspendThresholdValue
+            selectableValues: selectableValues
         )
     }
     

@@ -16,30 +16,21 @@ public struct GlucoseValuePicker: View {
     @Binding var value: LoopQuantity
     var unit: LoopUnit
     var guardrail: Guardrail<LoopQuantity>
-    var bounds: ClosedRange<LoopQuantity>
     var isUnitLabelVisible: Bool
+    let selectableValues: [Double]
 
     public init(
         value: Binding<LoopQuantity>,
         unit: LoopUnit,
         guardrail: Guardrail<LoopQuantity>,
-        bounds: ClosedRange<LoopQuantity>,
+        selectableValues: [Double],
         isUnitLabelVisible: Bool = true
     ) {
         self._value = value
         self.unit = unit
         self.guardrail = guardrail
-        self.bounds = bounds
+        self.selectableValues = selectableValues
         self.isUnitLabelVisible = isUnitLabelVisible
-    }
-
-    public init(
-        value: Binding<LoopQuantity>,
-        unit: LoopUnit,
-        guardrail: Guardrail<LoopQuantity>,
-        isUnitLabelVisible: Bool = true
-    ) {
-        self.init(value: value, unit: unit, guardrail: guardrail, bounds: guardrail.absoluteBounds, isUnitLabelVisible: isUnitLabelVisible)
     }
 
     public var body: some View {
@@ -51,26 +42,6 @@ public struct GlucoseValuePicker: View {
                        guidanceColors: guidanceColors)
     }
 
-    var selectableValues: [Double] {
-        Array(
-            Swift.stride(
-                from: bounds.lowerBound.doubleValue(for: unit),
-                through: bounds.upperBound.doubleValue(for: unit),
-                by: stride.doubleValue(for: unit)
-            )
-        )
-    }
-
-    private var stride: LoopQuantity {
-        switch unit {
-        case .milligramsPerDeciliter:
-            return LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 1)
-        case .millimolesPerLiter:
-            return LoopQuantity(unit: .millimolesPerLiter, doubleValue: 0.1)
-        default:
-            fatalError("Unsupported glucose unit \(unit)")
-        }
-    }
 }
 
 private struct GlucoseValuePickerTester: View {
@@ -81,7 +52,7 @@ private struct GlucoseValuePickerTester: View {
     var unit: LoopUnit
 
     var body: some View {
-        GlucoseValuePicker(value: $value, unit: unit, guardrail: guardrail)
+        GlucoseValuePicker(value: $value, unit: unit, guardrail: guardrail, selectableValues: [100, 105, 110])
     }
 }
 

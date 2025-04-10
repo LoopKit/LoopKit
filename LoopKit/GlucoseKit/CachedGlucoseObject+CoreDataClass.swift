@@ -90,7 +90,7 @@ extension CachedGlucoseObject {
     var quantitySample: HKQuantitySample {
         var metadata: [String: Any] = [:]
         metadata[HKMetadataKeySyncIdentifier] = syncIdentifier
-        metadata[HKMetadataKeySyncVersion] = syncVersion
+        metadata[HKMetadataKeySyncVersion] = syncVersion ?? 1
         if isDisplayOnly {
             metadata[MetadataKeyGlucoseIsDisplayOnly] = true
         }
