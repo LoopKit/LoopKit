@@ -76,7 +76,9 @@ public struct CarbQuantityRow: View {
     
     // Update quantity based on text field input
     private func updateQuantity(with input: String) {
-        let filtered = input.filter { "0123456789.".contains($0) }
+        let decimalSeparator = formatter.decimalSeparator ?? "."
+        let allowedCharacters = "0123456789" + decimalSeparator
+        let filtered = input.filter { allowedCharacters.contains($0) }
         if filtered != input {
             self.carbInput = filtered
         }
