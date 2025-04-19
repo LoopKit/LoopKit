@@ -28,7 +28,7 @@ public struct TherapySettingsView: View {
 
     private let mode: SettingsPresentationMode
 
-    @ObservedObject var viewModel: TherapySettingsViewModel
+    @StateObject var viewModel: TherapySettingsViewModel
         
     private let actionButton: ActionButton?
 
@@ -36,7 +36,7 @@ public struct TherapySettingsView: View {
                 viewModel: TherapySettingsViewModel,
                 actionButton: ActionButton? = nil) {
         self.mode = mode
-        self.viewModel = viewModel
+        self._viewModel = StateObject(wrappedValue: viewModel)
         self.actionButton = actionButton
     }
         
