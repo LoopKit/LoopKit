@@ -69,7 +69,10 @@ public final class ChartTableViewCell: UITableViewCell {
     public func setTitleLabelText(label: String?) {
         titleLabel?.text = label
         titleLabel?.font = .systemFont(ofSize: 17, weight: .semibold)
-        titleLabel?.accessibilityIdentifier = "chartTitleText_\(label!.replacing(" ", with: ""))"
+    }
+    
+    public func setTitleLabelAccessibilityIdentifier(_ value: String) {
+        titleLabel?.accessibilityIdentifier = "chartTitleText_\(value)"
     }
     
     public func setTitleLabelText(label: NSAttributedString?) {
