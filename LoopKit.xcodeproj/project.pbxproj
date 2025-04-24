@@ -373,9 +373,9 @@
 		89ADE12F226BDED40067222B /* DateRelativeBolusEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89ADE12E226BDED40067222B /* DateRelativeBolusEntry.swift */; };
 		89ADE134226BF0490067222B /* TestingScenarioInstance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89ADE133226BF0490067222B /* TestingScenarioInstance.swift */; };
 		89ADE136226BF0BE0067222B /* DateRelativeGlucoseSample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89ADE135226BF0BE0067222B /* DateRelativeGlucoseSample.swift */; };
-		89AE2226228BC54C00BDFD85 /* TemporaryScheduleOverridePreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AE221F228BC54C00BDFD85 /* TemporaryScheduleOverridePreset.swift */; };
+		89AE2226228BC54C00BDFD85 /* TemporaryPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AE221F228BC54C00BDFD85 /* TemporaryPreset.swift */; };
 		89AE2227228BC54C00BDFD85 /* TemporaryScheduleOverride.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AE2223228BC54C00BDFD85 /* TemporaryScheduleOverride.swift */; };
-		89AE2228228BC54C00BDFD85 /* TemporaryScheduleOverrideSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AE2224228BC54C00BDFD85 /* TemporaryScheduleOverrideSettings.swift */; };
+		89AE2228228BC54C00BDFD85 /* TemporaryPresetSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AE2224228BC54C00BDFD85 /* TemporaryPresetSettings.swift */; };
 		89AE2229228BC54C00BDFD85 /* TemporaryScheduleOverrideHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AE2225228BC54C00BDFD85 /* TemporaryScheduleOverrideHistory.swift */; };
 		89AE222B228BC56A00BDFD85 /* WeakSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AE222A228BC56A00BDFD85 /* WeakSet.swift */; };
 		89AE222C228BC66E00BDFD85 /* Locked.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AC792E224C781200B8E9BA /* Locked.swift */; };
@@ -391,8 +391,8 @@
 		89AE2237228BCAAB00BDFD85 /* EGPSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A3FD8224BEB4500378B27 /* EGPSchedule.swift */; };
 		89AE2238228BCAAB00BDFD85 /* TemporaryScheduleOverride.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AE2223228BC54C00BDFD85 /* TemporaryScheduleOverride.swift */; };
 		89AE2239228BCAAB00BDFD85 /* TemporaryScheduleOverrideHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AE2225228BC54C00BDFD85 /* TemporaryScheduleOverrideHistory.swift */; };
-		89AE223A228BCAAB00BDFD85 /* TemporaryScheduleOverridePreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AE221F228BC54C00BDFD85 /* TemporaryScheduleOverridePreset.swift */; };
-		89AE223B228BCAAB00BDFD85 /* TemporaryScheduleOverrideSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AE2224228BC54C00BDFD85 /* TemporaryScheduleOverrideSettings.swift */; };
+		89AE223A228BCAAB00BDFD85 /* TemporaryPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AE221F228BC54C00BDFD85 /* TemporaryPreset.swift */; };
+		89AE223B228BCAAB00BDFD85 /* TemporaryPresetSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AE2224228BC54C00BDFD85 /* TemporaryPresetSettings.swift */; };
 		89AE223C228BCAAB00BDFD85 /* WeakSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AE222A228BC56A00BDFD85 /* WeakSet.swift */; };
 		89AE223E228BD3C400BDFD85 /* SetConstrainedScheduleEntryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 892A5D62222F6B13008961AB /* SetConstrainedScheduleEntryTableViewCell.xib */; };
 		89AF78C02447E285002B4FCC /* CardStackBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AF78BF2447E285002B4FCC /* CardStackBuilder.swift */; };
@@ -1421,9 +1421,9 @@
 		89ADE12E226BDED40067222B /* DateRelativeBolusEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateRelativeBolusEntry.swift; sourceTree = "<group>"; };
 		89ADE133226BF0490067222B /* TestingScenarioInstance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingScenarioInstance.swift; sourceTree = "<group>"; };
 		89ADE135226BF0BE0067222B /* DateRelativeGlucoseSample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateRelativeGlucoseSample.swift; sourceTree = "<group>"; };
-		89AE221F228BC54C00BDFD85 /* TemporaryScheduleOverridePreset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemporaryScheduleOverridePreset.swift; sourceTree = "<group>"; };
+		89AE221F228BC54C00BDFD85 /* TemporaryPreset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemporaryPreset.swift; sourceTree = "<group>"; };
 		89AE2223228BC54C00BDFD85 /* TemporaryScheduleOverride.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemporaryScheduleOverride.swift; sourceTree = "<group>"; };
-		89AE2224228BC54C00BDFD85 /* TemporaryScheduleOverrideSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemporaryScheduleOverrideSettings.swift; sourceTree = "<group>"; };
+		89AE2224228BC54C00BDFD85 /* TemporaryPresetSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemporaryPresetSettings.swift; sourceTree = "<group>"; };
 		89AE2225228BC54C00BDFD85 /* TemporaryScheduleOverrideHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemporaryScheduleOverrideHistory.swift; sourceTree = "<group>"; };
 		89AE222A228BC56A00BDFD85 /* WeakSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeakSet.swift; sourceTree = "<group>"; };
 		89AF78BF2447E285002B4FCC /* CardStackBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardStackBuilder.swift; sourceTree = "<group>"; };
@@ -2531,8 +2531,8 @@
 				A932803A2798D63B0091D0A1 /* SyncAlertObject.swift */,
 				89AE2223228BC54C00BDFD85 /* TemporaryScheduleOverride.swift */,
 				89AE2225228BC54C00BDFD85 /* TemporaryScheduleOverrideHistory.swift */,
-				89AE221F228BC54C00BDFD85 /* TemporaryScheduleOverridePreset.swift */,
-				89AE2224228BC54C00BDFD85 /* TemporaryScheduleOverrideSettings.swift */,
+				89AE221F228BC54C00BDFD85 /* TemporaryPreset.swift */,
+				89AE2224228BC54C00BDFD85 /* TemporaryPresetSettings.swift */,
 				1D1FCE2824BE4F11000300A8 /* TherapySetting.swift */,
 				E9086B3824B3CB4B0062F5C8 /* TherapySettings.swift */,
 				C1ABE38D2245CFCD00570E82 /* UnfairLock.swift */,
@@ -4150,7 +4150,7 @@
 				4322B783202FA2AF0002837D /* Reservoir.swift in Sources */,
 				1DA649AB2445174400F61E75 /* Alert.swift in Sources */,
 				4322B782202FA2AF0002837D /* PumpEventType.swift in Sources */,
-				89AE2228228BC54C00BDFD85 /* TemporaryScheduleOverrideSettings.swift in Sources */,
+				89AE2228228BC54C00BDFD85 /* TemporaryPresetSettings.swift in Sources */,
 				43D8FDFA1C7290350073BE78 /* GlucoseRangeSchedule.swift in Sources */,
 				4322B77E202FA2AF0002837D /* PersistedPumpEvent.swift in Sources */,
 				437AFEEE2036A156008C4892 /* CachedCarbObject+CoreDataProperties.swift in Sources */,
@@ -4159,7 +4159,7 @@
 				4322B77B202FA2790002837D /* StoredCarbEntry.swift in Sources */,
 				4322B78C202FA2B30002837D /* HKQuantitySample+InsulinKit.swift in Sources */,
 				C187339229B9486200519CDF /* MutableCollection.swift in Sources */,
-				89AE2226228BC54C00BDFD85 /* TemporaryScheduleOverridePreset.swift in Sources */,
+				89AE2226228BC54C00BDFD85 /* TemporaryPreset.swift in Sources */,
 				434C5F9C2098352500B2FD1A /* QuantityFormatter.swift in Sources */,
 				43F503642106C78C009FA89A /* ServiceAuthentication.swift in Sources */,
 				A93761C125ED670200F6BE43 /* BluetoothProvider.swift in Sources */,
@@ -4407,8 +4407,8 @@
 				A933DB8924BF97CC009B417A /* CriticalEventLog.swift in Sources */,
 				89AE2238228BCAAB00BDFD85 /* TemporaryScheduleOverride.swift in Sources */,
 				89AE2239228BCAAB00BDFD85 /* TemporaryScheduleOverrideHistory.swift in Sources */,
-				89AE223A228BCAAB00BDFD85 /* TemporaryScheduleOverridePreset.swift in Sources */,
-				89AE223B228BCAAB00BDFD85 /* TemporaryScheduleOverrideSettings.swift in Sources */,
+				89AE223A228BCAAB00BDFD85 /* TemporaryPreset.swift in Sources */,
+				89AE223B228BCAAB00BDFD85 /* TemporaryPresetSettings.swift in Sources */,
 				A987CD4724A5893500439ADC /* JSONStreamEncoder.swift in Sources */,
 				C1CEBFD929BA9D81007FD8A3 /* TimeZone.swift in Sources */,
 				89AE223C228BCAAB00BDFD85 /* WeakSet.swift in Sources */,

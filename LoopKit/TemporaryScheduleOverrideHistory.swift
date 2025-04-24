@@ -378,7 +378,7 @@ public class TemporaryScheduleOverrideHistoryContainer {
             
             return persisted
         } catch {
-            fatalError()
+            fatalError(error.localizedDescription)
         }
     }
 }

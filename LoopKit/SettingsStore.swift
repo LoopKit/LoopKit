@@ -296,7 +296,7 @@ public struct StoredSettings: Equatable {
     public var preMealTargetRange: ClosedRange<LoopQuantity>?
     public var workoutTargetRange: ClosedRange<LoopQuantity>?
     public var workoutDefaultDuration: TemporaryScheduleOverride.Duration?
-    public var overridePresets: [TemporaryScheduleOverridePreset]
+    public var overridePresets: [TemporaryPreset]
     public var maximumBasalRatePerHour: Double?
     public var maximumBolus: Double?
     public var suspendThreshold: GlucoseThreshold?
@@ -322,7 +322,7 @@ public struct StoredSettings: Equatable {
                 preMealTargetRange: ClosedRange<LoopQuantity>? = nil,
                 workoutTargetRange: ClosedRange<LoopQuantity>? = nil,
                 workoutDefaultDuration: TemporaryScheduleOverride.Duration? = nil,
-                overridePresets: [TemporaryScheduleOverridePreset] = [],
+                overridePresets: [TemporaryPreset] = [],
                 maximumBasalRatePerHour: Double? = nil,
                 maximumBolus: Double? = nil,
                 suspendThreshold: GlucoseThreshold? = nil,
@@ -380,7 +380,7 @@ extension StoredSettings: Codable {
                   preMealTargetRange: try container.decodeIfPresent(DoubleRange.self, forKey: .preMealTargetRange)?.quantityRange(for: bloodGlucoseUnit),
                   workoutTargetRange: try container.decodeIfPresent(DoubleRange.self, forKey: .workoutTargetRange)?.quantityRange(for: bloodGlucoseUnit),
                   workoutDefaultDuration: try container.decodeIfPresent(TemporaryScheduleOverride.Duration.self, forKey: .workoutDefaultDuration),
-                  overridePresets: try container.decodeIfPresent([TemporaryScheduleOverridePreset].self, forKey: .overridePresets) ?? [],
+                  overridePresets: try container.decodeIfPresent([TemporaryPreset].self, forKey: .overridePresets) ?? [],
                   maximumBasalRatePerHour: try container.decodeIfPresent(Double.self, forKey: .maximumBasalRatePerHour),
                   maximumBolus: try container.decodeIfPresent(Double.self, forKey: .maximumBolus),
                   suspendThreshold: try container.decodeIfPresent(GlucoseThreshold.self, forKey: .suspendThreshold),

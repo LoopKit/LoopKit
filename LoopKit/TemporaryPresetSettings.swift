@@ -9,7 +9,7 @@
 import HealthKit
 import LoopAlgorithm
 
-public struct TemporaryScheduleOverrideSettings: Hashable, Sendable {
+public struct TemporaryPresetSettings: Hashable, Sendable {
     private var targetRangeInMgdl: DoubleRange?
     public var insulinNeedsScaleFactor: Double?
 
@@ -43,7 +43,7 @@ public struct TemporaryScheduleOverrideSettings: Hashable, Sendable {
     }
 }
 
-extension TemporaryScheduleOverrideSettings: RawRepresentable {
+extension TemporaryPresetSettings: RawRepresentable {
     public typealias RawValue = [String: Any]
 
     private enum Key {
@@ -84,4 +84,4 @@ extension TemporaryScheduleOverrideSettings: RawRepresentable {
     }
 }
 
-extension TemporaryScheduleOverrideSettings: Codable {}
+extension TemporaryPresetSettings: Codable {}

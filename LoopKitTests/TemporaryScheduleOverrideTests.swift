@@ -52,7 +52,7 @@ class TemporaryScheduleOverrideTests: XCTestCase {
     private func basalUpOverride(start: String, end: String) -> TemporaryScheduleOverride {
         return TemporaryScheduleOverride(
             context: .custom,
-            settings: TemporaryScheduleOverrideSettings(
+            settings: TemporaryPresetSettings(
                 unit: .milligramsPerDeciliter,
                 targetRange: nil,
                 insulinNeedsScaleFactor: 1.5
@@ -255,7 +255,7 @@ class TemporaryScheduleOverrideTests: XCTestCase {
         let overrideRange = DoubleRange(minValue: 120, maxValue: 140)
         let overrideStart = Date()
         let overrideDuration = TimeInterval(hours: 4)
-        let settings = TemporaryScheduleOverrideSettings(unit: .milligramsPerDeciliter, targetRange: overrideRange)
+        let settings = TemporaryPresetSettings(unit: .milligramsPerDeciliter, targetRange: overrideRange)
         let override = TemporaryScheduleOverride(context: .custom, settings: settings, startDate: overrideStart, duration: .finite(overrideDuration), enactTrigger: .local, syncIdentifier: UUID())
         let normalRange = DoubleRange(minValue: 95, maxValue: 105)
         let rangeSchedule = GlucoseRangeSchedule(unit: .milligramsPerDeciliter, dailyItems: [RepeatingScheduleValue(startTime: 0, value: normalRange)])!.applyingOverride(override)
@@ -270,7 +270,7 @@ class TemporaryScheduleOverrideTests: XCTestCase {
         let overrideRange = DoubleRange(minValue: 120, maxValue: 140)
         let overrideStart = Date() + .hours(2)
         let overrideDuration = TimeInterval(hours: 4)
-        let settings = TemporaryScheduleOverrideSettings(unit: .milligramsPerDeciliter, targetRange: overrideRange)
+        let settings = TemporaryPresetSettings(unit: .milligramsPerDeciliter, targetRange: overrideRange)
         let futureOverride = TemporaryScheduleOverride(context: .custom, settings: settings, startDate: overrideStart, duration: .finite(overrideDuration), enactTrigger: .local, syncIdentifier: UUID())
         let normalRange = DoubleRange(minValue: 95, maxValue: 105)
         let rangeSchedule = GlucoseRangeSchedule(unit: .milligramsPerDeciliter, dailyItems: [RepeatingScheduleValue(startTime: 0, value: normalRange)])!.applyingOverride(futureOverride)
@@ -511,7 +511,7 @@ extension TemporaryScheduleOverride {
                 lower: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: $0.lowerBound),
                 upper: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: $0.upperBound)))
         }
-        let settings = TemporaryScheduleOverrideSettings(targetRange: targetRange, insulinNeedsScaleFactor: scale)
+        let settings = TemporaryPresetSettings(targetRange: targetRange, insulinNeedsScaleFactor: scale)
         let duration: TimeInterval? = end.map { $0.timeIntervalSince(start) }
         return TemporaryScheduleOverride(
             context: .custom,
@@ -544,10 +544,10 @@ class TemporaryScheduleOverrideContextCodableTests: XCTestCase {
     }
 
     func testCodablePreset() throws {
-        let preset = TemporaryScheduleOverridePreset(id: UUID(uuidString: "238E41EA-9576-4981-A1A4-51E10228584F")!,
+        let preset = TemporaryPreset(id: UUID(uuidString: "238E41EA-9576-4981-A1A4-51E10228584F")!,
                                                      symbol: "🚀",
                                                      name: "Rocket",
-                                                     settings: TemporaryScheduleOverrideSettings(unit: .milligramsPerDeciliter,
+                                                     settings: TemporaryPresetSettings(unit: .milligramsPerDeciliter,
                                                                                                  targetRange: DoubleRange(minValue: 90, maxValue: 100)),
                                                      duration: .indefinite)
         try assertTemporaryScheduleOverrideContextCodable(.preset(preset), encodesJSON: """
@@ -558,6 +558,7 @@ class TemporaryScheduleOverrideContextCodableTests: XCTestCase {
         "duration" : "indefinite",
         "id" : "238E41EA-9576-4981-A1A4-51E10228584F",
         "name" : "Rocket",
+        "repeatOptions" : 0,
         "settings" : {
           "targetRangeInMgdl" : {
             "maxValue" : 100,

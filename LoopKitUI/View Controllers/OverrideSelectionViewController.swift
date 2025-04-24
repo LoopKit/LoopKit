@@ -15,8 +15,8 @@ import os.log
 
 
 public protocol OverrideSelectionViewControllerDelegate: AnyObject {
-    func overrideSelectionViewController(_ vc: OverrideSelectionViewController, didUpdatePresets presets: [TemporaryScheduleOverridePreset])
-    func overrideSelectionViewController(_ vc: OverrideSelectionViewController, didConfirmPreset preset: TemporaryScheduleOverridePreset)
+    func overrideSelectionViewController(_ vc: OverrideSelectionViewController, didUpdatePresets presets: [TemporaryPreset])
+    func overrideSelectionViewController(_ vc: OverrideSelectionViewController, didConfirmPreset preset: TemporaryPreset)
     func overrideSelectionViewController(_ vc: OverrideSelectionViewController, didConfirmOverride override: TemporaryScheduleOverride)
     func overrideSelectionViewController(_ vc: OverrideSelectionViewController, didCancelOverride override: TemporaryScheduleOverride)
 }
@@ -27,7 +27,7 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
 
     public var scheduledOverride: TemporaryScheduleOverride?
 
-    public var presets: [TemporaryScheduleOverridePreset] = [] {
+    public var presets: [TemporaryPreset] = [] {
         didSet {
             delegate?.overrideSelectionViewController(self, didUpdatePresets: presets)
         }
@@ -78,7 +78,7 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
 
     private enum CellContent {
         case scheduledOverride(TemporaryScheduleOverride)
-        case preset(TemporaryScheduleOverridePreset)
+        case preset(TemporaryPreset)
         case customOverride
         case history
     }
@@ -220,7 +220,7 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
         }
     }
 
-    private func configure(_ cell: OverridePresetCollectionViewCell, with settings: TemporaryScheduleOverrideSettings, duration: TemporaryScheduleOverride.Duration) {
+    private func configure(_ cell: OverridePresetCollectionViewCell, with settings: TemporaryPresetSettings, duration: TemporaryScheduleOverride.Duration) {
         if let targetRange = settings.targetRange {
             cell.targetRangeLabel.text = makeTargetRangeText(from: targetRange)
         } else {
@@ -441,7 +441,7 @@ extension OverrideSelectionViewController: UICollectionViewDelegateFlowLayout {
 }
 
 extension OverrideSelectionViewController: AddEditOverrideTableViewControllerDelegate {
-    public func addEditOverrideTableViewController(_ vc: AddEditOverrideTableViewController, didSavePreset preset: TemporaryScheduleOverridePreset) {
+    public func addEditOverrideTableViewController(_ vc: AddEditOverrideTableViewController, didSavePreset preset: TemporaryPreset) {
         if let selectedIndexPath = collectionView.indexPathsForSelectedItems?.first {
             presets[selectedIndexPath.row] = preset
             collectionView.reloadItems(at: [selectedIndexPath])

@@ -155,7 +155,7 @@ extension TherapySettingsViewModel {
             therapySettings.overridePresets = presets.map { preset in
                 if let targetRange = preset.settings.targetRange {
                     var newPreset = preset
-                    newPreset.settings = TemporaryScheduleOverrideSettings(
+                    newPreset.settings = TemporaryPresetSettings(
                         targetRange: ClosedRange<LoopQuantity>.init(
                             uncheckedBounds: (
                                 lower: max(quantity, targetRange.lowerBound),

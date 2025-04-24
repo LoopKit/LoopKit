@@ -33,7 +33,7 @@ final class TemporaryScheduleOverrideHistoryTests: XCTestCase {
         insulinNeedsScaleFactor scaleFactor: Double,
         recordedAt enableDateOffset: TimeInterval? = nil
     ) {
-        let settings = TemporaryScheduleOverrideSettings(unit: .milligramsPerDeciliter, targetRange: nil, insulinNeedsScaleFactor: scaleFactor)
+        let settings = TemporaryPresetSettings(unit: .milligramsPerDeciliter, targetRange: nil, insulinNeedsScaleFactor: scaleFactor)
         let override = TemporaryScheduleOverride(context: .custom, settings: settings, startDate: referenceDate + offset, duration: duration, enactTrigger: .local, syncIdentifier: UUID())
         let enableDate: Date
         if let enableDateOffset = enableDateOffset {

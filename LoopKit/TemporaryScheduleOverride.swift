@@ -14,7 +14,7 @@ public struct TemporaryScheduleOverride: Hashable, Sendable {
     public enum Context: Hashable, Sendable {
         case preMeal
         case legacyWorkout
-        case preset(TemporaryScheduleOverridePreset)
+        case preset(TemporaryPreset)
         case custom
     }
     
@@ -50,7 +50,7 @@ public struct TemporaryScheduleOverride: Hashable, Sendable {
     }
 
     public var context: Context
-    public var settings: TemporaryScheduleOverrideSettings
+    public var settings: TemporaryPresetSettings
     public var startDate: Date
     public let enactTrigger: EnactTrigger
     public let syncIdentifier: UUID
@@ -112,7 +112,7 @@ public struct TemporaryScheduleOverride: Hashable, Sendable {
 
     public init(
         context: Context,
-        settings: TemporaryScheduleOverrideSettings,
+        settings: TemporaryPresetSettings,
         startDate: Date,
         duration: Duration,
         enactTrigger: EnactTrigger,
@@ -141,8 +141,8 @@ extension TemporaryScheduleOverride: RawRepresentable {
         guard
             let contextRawValue = rawValue["context"] as? Context.RawValue,
             let context = Context(rawValue: contextRawValue),
-            let settingsRawValue = rawValue["settings"] as? TemporaryScheduleOverrideSettings.RawValue,
-            let settings = TemporaryScheduleOverrideSettings(rawValue: settingsRawValue),
+            let settingsRawValue = rawValue["settings"] as? TemporaryPresetSettings.RawValue,
+            let settings = TemporaryPresetSettings(rawValue: settingsRawValue),
             let startDateSeconds = rawValue["startDate"] as? TimeInterval,
             let durationRawValue = rawValue["duration"] as? Duration.RawValue,
             let duration = Duration(rawValue: durationRawValue)
@@ -201,8 +201,8 @@ extension TemporaryScheduleOverride.Context: RawRepresentable {
             self = .legacyWorkout
         case "preset":
             guard
-                let presetRawValue = rawValue["preset"] as? TemporaryScheduleOverridePreset.RawValue,
-                let preset = TemporaryScheduleOverridePreset(rawValue: presetRawValue)
+                let presetRawValue = rawValue["preset"] as? TemporaryPreset.RawValue,
+                let preset = TemporaryPreset(rawValue: presetRawValue)
             else {
                 return nil
             }
@@ -272,7 +272,7 @@ extension TemporaryScheduleOverride.Context: Codable {
     }
 
     private struct Preset: Codable {
-        let preset: TemporaryScheduleOverridePreset
+        let preset: TemporaryPreset
     }
 
     private enum CodableKeys: String, CodingKey {

@@ -66,7 +66,7 @@ extension DailyValueSchedule where T == Double {
     fileprivate func applyingOverride(
         _ override: TemporaryScheduleOverride,
         relativeTo date: Date,
-        multiplier multiplierKeyPath: KeyPath<TemporaryScheduleOverrideSettings, Double?>
+        multiplier multiplierKeyPath: KeyPath<TemporaryPresetSettings, Double?>
     ) -> DailyValueSchedule {
         guard let multiplier = override.settings[keyPath: multiplierKeyPath] else {
             return self
