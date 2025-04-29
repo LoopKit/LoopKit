@@ -20,7 +20,8 @@ class UnfinalizedDoseTests: XCTestCase {
                                                startTime: startTime,
                                                duration: duration,
                                                insulinType: nil,
-                                               automatic: false)
+                                               automatic: false,
+                                               decisionId: nil)
         XCTAssertEqual(unfinalizedBolus.doseType, .bolus)
         XCTAssertEqual(unfinalizedBolus.units, amount)
         XCTAssertNil(unfinalizedBolus.scheduledUnits)
@@ -93,12 +94,14 @@ class UnfinalizedDoseTests: XCTestCase {
         let duration = TimeInterval.minutes(1)
         var unfinalizedBolus = UnfinalizedDose(bolusAmount: amount,
                                                startTime: now,
-                                               duration: duration)
+                                               duration: duration,
+                                               decisionId: nil)
         XCTAssertNil(unfinalizedBolus.finalizedUnits)
 
         unfinalizedBolus = UnfinalizedDose(bolusAmount: amount,
                                            startTime: now-duration,
-                                           duration: duration)
+                                           duration: duration,
+                                           decisionId: nil)
         XCTAssertEqual(unfinalizedBolus.finalizedUnits, amount)
     }
 
@@ -123,7 +126,8 @@ class UnfinalizedDoseTests: XCTestCase {
         let duration = TimeInterval.minutes(1)
         let unfinalizedBolus = UnfinalizedDose(bolusAmount: amount,
                                                startTime: startTime,
-                                               duration: duration)
+                                               duration: duration,
+                                               decisionId: nil)
         let rawValue = unfinalizedBolus.rawValue
         XCTAssertEqual(UnfinalizedDose.DoseType(rawValue: rawValue["doseType"] as! UnfinalizedDose.DoseType.RawValue), .bolus)
         XCTAssertEqual(rawValue["units"] as! Double, amount)
@@ -139,7 +143,8 @@ class UnfinalizedDoseTests: XCTestCase {
         let duration = TimeInterval.minutes(1)
         var unfinalizedBolus = UnfinalizedDose(bolusAmount: amount,
                                                startTime: startTime,
-                                               duration: duration)
+                                               duration: duration,
+                                               decisionId: nil)
         unfinalizedBolus.scheduledUnits = amount
         let rawValue = unfinalizedBolus.rawValue
         XCTAssertEqual(UnfinalizedDose.DoseType(rawValue: rawValue["doseType"] as! UnfinalizedDose.DoseType.RawValue), .bolus)
@@ -212,7 +217,8 @@ class UnfinalizedDoseTests: XCTestCase {
         let duration = TimeInterval.minutes(1)
         let unfinalizedBolus = UnfinalizedDose(bolusAmount: amount,
                                                startTime: now,
-                                               duration: duration)
+                                               duration: duration,
+                                               decisionId: nil)
         let doseEntry = DoseEntry(unfinalizedBolus)
         XCTAssertEqual(doseEntry.type, .bolus)
         XCTAssertEqual(doseEntry.startDate, now)
@@ -266,7 +272,7 @@ class UnfinalizedDoseTests: XCTestCase {
     func testBolusCancelLongAfterFinishTime() {
         let end = Date()
         let duration = TimeInterval(1)
-        var dose = UnfinalizedDose(bolusAmount: 1, startTime: end-duration, duration: duration)
+        var dose = UnfinalizedDose(bolusAmount: 1, startTime: end-duration, duration: duration, decisionId: nil)
         dose.cancel(at: end + .hours(1))
 
         XCTAssertEqual(1.0, dose.units)
@@ -278,7 +284,8 @@ class UnfinalizedDoseTests: XCTestCase {
         let duration = TimeInterval.minutes(1)
         var dose = UnfinalizedDose(bolusAmount: 5,
                                    startTime: end - duration/2,
-                                   duration: duration)
+                                   duration: duration,
+                                   decisionId: nil)
         dose.cancel(at: end)
 
         XCTAssertEqual(dose.units, 2.5)

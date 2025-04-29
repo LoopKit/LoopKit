@@ -167,7 +167,7 @@ public protocol PumpManager: DeviceManager {
     ///   - automatic: Whether the dose was triggered automatically as opposed to commanded by user
     ///   - completion: A closure called after the command is complete
     ///   - error: An optional error describing why the command failed
-    func enactBolus(units: Double, activationType: BolusActivationType, completion: @escaping (_ error: PumpManagerError?) -> Void)
+    func enactBolus(decisionId: UUID?, units: Double, activationType: BolusActivationType, completion: @escaping (_ error: PumpManagerError?) -> Void)
 
     /// Cancels the current, in progress, bolus.
     ///
@@ -267,10 +267,9 @@ public extension PumpManager {
         }
     }
 
-    func enactBolus(units: Double, activationType: BolusActivationType) async throws
-    {
+    func enactBolus(decisionId: UUID?, units: Double, activationType: BolusActivationType) async throws {
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
-            enactBolus(units: units, activationType: activationType, completion: { error in
+            enactBolus(decisionId: decisionId, units: units, activationType: activationType, completion: { error in
                 if let error = error {
                     continuation.resume(throwing: error)
                 } else {

@@ -88,6 +88,7 @@ extension Collection where Element: ReservoirValue {
                         endDate: value.startDate,
                         value: volumeDrop,
                         unit: .units,
+                        decisionId: nil,
                         deliveredUnits: volumeDrop
                     ))
                 }
@@ -175,7 +176,7 @@ extension DoseEntry {
                 return self
             }
         }
-        return DoseEntry(type: type, startDate: startDate, endDate: endDate, value: value, unit: unit, deliveredUnits: resolvedUnits, description: description, syncIdentifier: syncIdentifier, scheduledBasalRate: scheduledBasalRate, insulinType: insulinType, automatic: automatic, isMutable: isMutable, wasProgrammedByPumpUI: wasProgrammedByPumpUI)
+        return DoseEntry(type: type, startDate: startDate, endDate: endDate, value: value, unit: unit, decisionId: decisionId, deliveredUnits: resolvedUnits, description: description, syncIdentifier: syncIdentifier, scheduledBasalRate: scheduledBasalRate, insulinType: insulinType, automatic: automatic, isMutable: isMutable, wasProgrammedByPumpUI: wasProgrammedByPumpUI)
     }
 }
 
@@ -307,6 +308,7 @@ extension Collection where Element == DoseEntry {
                             endDate: entryEnd,
                             value: curRate,
                             unit: .unitsPerHour,
+                            decisionId: nil,
                             syncIdentifier: syncIdentifier,
                             scheduledBasalRate: LoopQuantity(unit: .internationalUnitsPerHour, doubleValue: curRate),
                             automatic: nil,  // To be filled in later

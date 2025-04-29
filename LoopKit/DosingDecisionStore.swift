@@ -226,6 +226,36 @@ extension DosingDecisionStore {
             }
         }
     }
+    
+    public func findDosingDecisionsByDate(_ date: Date) async throws -> [StoredDosingDecision] {
+        try await withCheckedThrowingContinuation { continuation in
+            let enqueueTime = DispatchTime.now()
+
+            self.store.managedObjectContext.performAndWait {
+                let startTime = DispatchTime.now()
+
+                defer {
+                    let endTime = DispatchTime.now()
+                    let queueWait = Double(startTime.uptimeNanoseconds - enqueueTime.uptimeNanoseconds) / 1_000_000_000
+                    let fetchWait = Double(endTime.uptimeNanoseconds - startTime.uptimeNanoseconds) / 1_000_000_000
+                    self.log.debug("executeDosingDecisionQuery (queueWait(%.03f), fetch(%.03f)",  queueWait, fetchWait)
+                }
+
+                let storedRequest: NSFetchRequest<DosingDecisionObject> = DosingDecisionObject.fetchRequest()
+
+                storedRequest.predicate = NSPredicate(format: "date >= %@ AND date <= %@", date.addingTimeInterval(.minutes(-10)) as NSDate, date.addingTimeInterval(.minutes(10)) as NSDate)
+                storedRequest.fetchLimit = 1
+
+                do {
+                    let stored = try self.store.managedObjectContext.fetch(storedRequest).compactMap({ StoredDosingDecisionData(date: $0.date, data: $0.data) }).compactMap({ decodeDosingDecision(fromData: $0.data) })
+                    continuation.resume(returning: stored)
+                } catch let error {
+                    continuation.resume(throwing: error)
+                    return
+                }
+            }
+        }
+    }
 }
 
 public struct StoredDosingDecisionData {
@@ -241,6 +271,7 @@ public struct StoredDosingDecisionData {
 public typealias HistoricalGlucoseValue = PredictedGlucoseValue
 
 public struct StoredDosingDecision {
+    public var id: UUID
     public var date: Date
     public var controllerTimeZone: TimeZone
     public var reason: String
@@ -266,7 +297,8 @@ public struct StoredDosingDecision {
     public var errors: [Issue]
     public var syncIdentifier: UUID
 
-    public init(date: Date = Date(),
+    public init(id: UUID = UUID(),
+                date: Date = Date(),
                 controllerTimeZone: TimeZone = TimeZone.current,
                 reason: String,
                 settings: Settings? = nil,
@@ -290,6 +322,7 @@ public struct StoredDosingDecision {
                 warnings: [Issue] = [],
                 errors: [Issue] = [],
                 syncIdentifier: UUID = UUID()) {
+        self.id = id
         self.date = date
         self.controllerTimeZone = controllerTimeZone
         self.reason = reason
@@ -387,7 +420,8 @@ public struct ManualBolusRecommendationWithDate: Codable {
 extension StoredDosingDecision: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.init(date: try container.decode(Date.self, forKey: .date),
+        self.init(id: try container.decodeIfPresent(UUID.self, forKey: .id) ?? UUID(),
+                  date: try container.decode(Date.self, forKey: .date),
                   controllerTimeZone: try container.decode(TimeZone.self, forKey: .controllerTimeZone),
                   reason: try container.decode(String.self, forKey: .reason),
                   settings: try container.decodeIfPresent(Settings.self, forKey: .settings),
@@ -415,6 +449,7 @@ extension StoredDosingDecision: Codable {
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
         try container.encode(date, forKey: .date)
         try container.encode(controllerTimeZone, forKey: .controllerTimeZone)
         try container.encode(reason, forKey: .reason)
@@ -442,6 +477,7 @@ extension StoredDosingDecision: Codable {
     }
 
     private enum CodingKeys: String, CodingKey {
+        case id
         case date
         case controllerTimeZone
         case reason

@@ -16,7 +16,8 @@ class DoseEntryCodableTests: XCTestCase {
         try assertDoseEntryCodable(DoseEntry(type: .bolus,
                                              startDate: dateFormatter.date(from: "2020-05-14T22:07:19Z")!,
                                              value: 2.5,
-                                             unit: .units),
+                                             unit: .units,
+                                             decisionId: nil),
         encodesJSON: """
 {
   "endDate" : "2020-05-14T22:07:19Z",
@@ -35,6 +36,7 @@ class DoseEntryCodableTests: XCTestCase {
                                              endDate: dateFormatter.date(from: "2020-05-14T22:37:19Z")!,
                                              value: 1.25,
                                              unit: .unitsPerHour,
+                                             decisionId: nil,
                                              deliveredUnits: 0.5,
                                              description: "Temporary Basal",
                                              syncIdentifier: "238E41EA-9576-4981-A1A4-51E10228584F",
@@ -94,7 +96,8 @@ class DoseEntryRawRepresentableTests: XCTestCase {
         let original = DoseEntry(type: .bolus,
                                  startDate: Date(),
                                  value: 2.5,
-                                 unit: .units)
+                                 unit: .units,
+                                 decisionId: nil)
         let actual = DoseEntry(rawValue: original.rawValue)
         XCTAssertEqual(actual, original)
     }
@@ -105,6 +108,7 @@ class DoseEntryRawRepresentableTests: XCTestCase {
                                  endDate: Date().addingTimeInterval(.minutes(30)),
                                  value: 1.25,
                                  unit: .unitsPerHour,
+                                 decisionId: nil,
                                  deliveredUnits: 0.5,
                                  description: "Temporary Basal",
                                  syncIdentifier: UUID().uuidString,
