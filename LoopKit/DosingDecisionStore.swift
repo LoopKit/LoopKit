@@ -39,6 +39,7 @@ public class DosingDecisionStore {
                 if let data = self.encodeDosingDecision(dosingDecision) {
                     self.store.managedObjectContext.performAndWait {
                         let object = DosingDecisionObject(context: self.store.managedObjectContext)
+                        object.id = dosingDecision.id
                         object.data = data
                         object.date = dosingDecision.date
                         self.store.save()
@@ -227,7 +228,7 @@ extension DosingDecisionStore {
         }
     }
     
-    public func findDosingDecisionsByDate(_ date: Date) async throws -> [StoredDosingDecision] {
+    public func findDosingDecisionsById(_ id: UUID) async throws -> StoredDosingDecision? {
         try await withCheckedThrowingContinuation { continuation in
             let enqueueTime = DispatchTime.now()
 
@@ -243,12 +244,12 @@ extension DosingDecisionStore {
 
                 let storedRequest: NSFetchRequest<DosingDecisionObject> = DosingDecisionObject.fetchRequest()
 
-                storedRequest.predicate = NSPredicate(format: "date >= %@ AND date <= %@", date.addingTimeInterval(.minutes(-10)) as NSDate, date.addingTimeInterval(.minutes(10)) as NSDate)
-                storedRequest.fetchLimit = 1
+                storedRequest.predicate = NSPredicate(format: "id == %@", id.uuidString)
+                storedRequest.fetchLimit = 10
 
                 do {
                     let stored = try self.store.managedObjectContext.fetch(storedRequest).compactMap({ StoredDosingDecisionData(date: $0.date, data: $0.data) }).compactMap({ decodeDosingDecision(fromData: $0.data) })
-                    continuation.resume(returning: stored)
+                    continuation.resume(returning: stored.first)
                 } catch let error {
                     continuation.resume(throwing: error)
                     return
@@ -601,6 +602,7 @@ extension DosingDecisionStore {
                         continue
                     }
                     let object = DosingDecisionObject(context: self.store.managedObjectContext)
+                    object.id = dosingDecision.id
                     object.data = data
                     object.date = dosingDecision.date
                 }

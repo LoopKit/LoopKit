@@ -92,6 +92,7 @@ class DosingDecisionStorePersistenceTests: PersistenceControllerTestCase, Dosing
         cacheStore.managedObjectContext.performAndWait {
             do {
                 let object = DosingDecisionObject(context: cacheStore.managedObjectContext)
+                object.id = UUID()
                 object.data = try PropertyListEncoder().encode(StoredDosingDecision.test)
                 object.date = dateFormatter.date(from: "2100-01-02T03:03:00Z")!
                 object.modificationCounter = 123
