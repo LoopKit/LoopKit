@@ -245,7 +245,6 @@ extension DosingDecisionStore {
                 let storedRequest: NSFetchRequest<DosingDecisionObject> = DosingDecisionObject.fetchRequest()
 
                 storedRequest.predicate = NSPredicate(format: "id == %@", id.uuidString)
-                storedRequest.fetchLimit = 10
 
                 do {
                     let stored = try self.store.managedObjectContext.fetch(storedRequest).compactMap({ StoredDosingDecisionData(date: $0.date, data: $0.data) }).compactMap({ decodeDosingDecision(fromData: $0.data) })
