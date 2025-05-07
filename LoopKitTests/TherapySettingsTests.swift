@@ -267,6 +267,53 @@ class TherapySettingsCodableTests: XCTestCase {
         XCTAssertEqual(decoded.defaultRapidActingModel, expected.defaultRapidActingModel)
         XCTAssertEqual(decoded.glucoseTargetRangeSchedule, expected.glucoseTargetRangeSchedule)
     }
+
+    func testMinimumConfiguredTargetLowerBound() {
+        let timeZone = TimeZone(secondsFromGMT: -25200)
+
+        // Start with no ranges set (before onboarding)
+        var settings = TherapySettings.test
+        settings.glucoseTargetRangeSchedule = nil
+        settings.correctionRangeOverrides = nil
+        settings.overridePresets = []
+
+        XCTAssertNil(settings.minimumConfiguredTargetLowerBound?.doubleValue(for: .milligramsPerDeciliter))
+
+        settings.glucoseTargetRangeSchedule = GlucoseRangeSchedule(
+            rangeSchedule: DailyQuantitySchedule(
+                unit: .milligramsPerDeciliter,
+                dailyItems: [RepeatingScheduleValue(startTime: .hours(0), value: DoubleRange(minValue: 100.0, maxValue: 110.0))],
+                timeZone: timeZone
+            )!
+        )
+
+        XCTAssertEqual(100 ,settings.minimumConfiguredTargetLowerBound?.doubleValue(for: .milligramsPerDeciliter))
+
+        settings.correctionRangeOverrides = CorrectionRangeOverrides(
+            preMeal: DoubleRange(minValue: 85.0, maxValue: 90.0),
+            workout: DoubleRange(minValue: 130.0, maxValue: 140.0),
+            unit: .milligramsPerDeciliter)
+
+        XCTAssertEqual(85 ,settings.minimumConfiguredTargetLowerBound?.doubleValue(for: .milligramsPerDeciliter))
+
+        let presetRange = LoopQuantity(
+            unit: .milligramsPerDeciliter,
+            doubleValue: 80
+        )...LoopQuantity(
+            unit: .milligramsPerDeciliter,
+            doubleValue: 90
+        )
+
+        settings.overridePresets = [TemporaryPreset(
+            symbol: "🏈",
+            name: "Football",
+            settings: TemporaryPresetSettings(targetRange: presetRange),
+            duration: .finite(300)
+        )]
+
+        XCTAssertEqual(80 ,settings.minimumConfiguredTargetLowerBound?.doubleValue(for: .milligramsPerDeciliter))
+
+    }
 }
 
 fileprivate extension TherapySettings {

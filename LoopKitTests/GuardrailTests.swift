@@ -28,27 +28,19 @@ class GuardrailTests: XCTestCase {
     }
 
     func testMaxSuspensionThresholdValue() {
-        let correctionRangeInputs = [ nil, correctionRangeSchedule120, correctionRangeSchedule80 ]
-        let preMealInputs = [ nil, preMealTargetRange120, preMealTargetRange85 ]
-        let workoutInputs = [ nil, workoutTargetRange120, workoutTargetRange90 ]
-        let expected: [Double] = [ 110, 110, 90,
-                                   110, 110, 90,
-                                   85, 85, 85,
-                                   110, 110, 90,
-                                   110, 110, 90,
-                                   85, 85, 85,
-                                   80, 80, 80,
-                                   80, 80, 80,
-                                   80, 80, 80 ]
-        var index = 0
-        for correctionRange in correctionRangeInputs {
-            for preMeal in preMealInputs {
-                for workout in workoutInputs {
-                    let maxSuspendThresholdValue = Guardrail.maxSuspendThresholdValue(correctionRangeSchedule: correctionRange, preMealTargetRange: preMeal, workoutTargetRange: workout).doubleValue(for: .milligramsPerDeciliter)
-                    XCTAssertEqual(expected[index], maxSuspendThresholdValue, "Index \(index) failed")
-                    index += 1
-                }
-            }
+        let bounds = [
+            LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 115),
+            LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 80),
+            nil
+        ]
+
+        let expectedValues: [Double] = [
+            110,
+            80,
+            110
+        ]
+        for (bound, expectedValue) in zip(bounds, expectedValues) {
+            XCTAssertEqual(expectedValue, Guardrail.maxSuspendThresholdValue(minimumConfiguredLowerBound: bound).doubleValue(for: .milligramsPerDeciliter))
         }
     }
     

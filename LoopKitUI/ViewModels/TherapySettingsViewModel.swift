@@ -53,6 +53,8 @@ public class TherapySettingsViewModel {
         return therapySettings.suspendThreshold
     }
 
+    
+
     var glucoseTargetRangeSchedule: GlucoseRangeSchedule? {
         return therapySettings.glucoseTargetRangeSchedule
     }

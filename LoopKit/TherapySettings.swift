@@ -43,7 +43,21 @@ public struct TherapySettings: Equatable {
             carbRatioSchedule != nil &&
             basalRateSchedule != nil
     }
-    
+
+    public var minimumConfiguredTargetLowerBound: LoopQuantity? {
+        var lowerBounds = [
+            glucoseTargetRangeSchedule?.minLowerBound(),
+            correctionRangeOverrides?.preMeal?.lowerBound,
+            correctionRangeOverrides?.workout?.lowerBound
+        ]
+
+        if let overridePresets {
+            lowerBounds.append(contentsOf: overridePresets.map { $0.settings.targetRange?.lowerBound } )
+        }
+
+        return lowerBounds.compactMap { $0 }.min()
+    }
+
     public init(
         glucoseTargetRangeSchedule: GlucoseRangeSchedule? = nil,
         correctionRangeOverrides: CorrectionRangeOverrides? = nil,
