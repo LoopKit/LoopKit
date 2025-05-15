@@ -11,6 +11,7 @@ import LoopKit
 import LoopTestingKit
 import LoopAlgorithm
 
+@MainActor
 public protocol MockPumpManagerStateObserver {
     func mockPumpManager(_ manager: MockPumpManager, didUpdate state: MockPumpManagerState)
     func mockPumpManager(_ manager: MockPumpManager, didUpdate status: PumpManagerStatus, oldStatus: PumpManagerStatus)
@@ -287,7 +288,11 @@ public final class MockPumpManager: TestingPumpManager {
                 stopInsulinDelivery()
             }
             
-            stateObservers.forEach { $0.mockPumpManager(self, didUpdate: self.state) }
+            stateObservers.forEach {observer in
+                Task { @MainActor in
+                    observer.mockPumpManager(self, didUpdate: self.state)
+                }
+            }
 
             delegate.notify { (delegate) in
                 if newValue.reservoirUnitsRemaining != oldValue.reservoirUnitsRemaining {

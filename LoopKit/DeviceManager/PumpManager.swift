@@ -13,6 +13,14 @@ public enum PumpManagerResult<T> {
     case failure(PumpManagerError)
 }
 
+public enum AutomatedTreatmentState: Equatable {
+    case neutralNoOverride
+    case neutralOverride
+    case increasedInsulin
+    case decreasedInsulin
+    case minimumDelivery
+}
+
 public protocol PumpManagerStatusObserver: AnyObject {
     func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus, oldStatus: PumpManagerStatus)
 }
@@ -61,6 +69,9 @@ public protocol PumpManagerDelegate: DeviceManagerDelegate, PumpManagerStatusObs
 
     /// Indicates if automatic dosing has been enabled
     var automaticDosingEnabled: Bool { get }
+
+    @MainActor
+    var automatedTreatmentState: AutomatedTreatmentState? { get }
 }
 
 

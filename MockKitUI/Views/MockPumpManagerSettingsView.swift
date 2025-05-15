@@ -176,7 +176,10 @@ struct MockPumpManagerSettingsView: View {
             LabeledValueView(label: "Pump Paired", value: viewModel.lastPumpPairedDateTimeString)
             
             LabeledValueView(label: "Pump Expires", value: viewModel.pumpExpirationDateTimeString)
-            
+
+            LabeledValueView(label: "Current Basal Rate", value: viewModel.currentBasalRate)
+
+
             NavigationLink(destination: DemoPlaceHolderView(appName: appName)) {
                 Text("Device Details")
             }
