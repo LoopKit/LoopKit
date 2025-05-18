@@ -74,8 +74,8 @@ public struct CheckmarkListItem: View {
                 .foregroundColor(.accentColor)
         } else {
             Circle()
-                .stroke()
-                .foregroundColor(Color(.systemGray4))
+                .stroke(lineWidth: 2)
+                .foregroundColor(Color(.systemGray))
         }
     }
     
