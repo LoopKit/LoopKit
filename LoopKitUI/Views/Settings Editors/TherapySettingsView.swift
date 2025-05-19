@@ -127,8 +127,7 @@ public struct TherapySettingsView: View {
         Button(action: dismissAction) {
             Text(LocalizedString("Done", comment: "Text for dismiss button"))
                 .bold()
-                .accessibilityIdentifier("button_done")
-        }
+        }.accessibilityIdentifier("button_done")
     }
     
     @ViewBuilder
