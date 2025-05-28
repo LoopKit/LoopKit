@@ -95,7 +95,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.decisionId = decisionId
     }
 
-    init(tempBasalRate: Double, startTime: Date, duration: TimeInterval, insulinType: InsulinType? = nil) {
+    init(tempBasalRate: Double, startTime: Date, duration: TimeInterval, insulinType: InsulinType? = nil, decisionId: UUID?) {
         self.doseType = .tempBasal
         self.units = tempBasalRate * duration.hours
         self.startTime = startTime
@@ -103,7 +103,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.scheduledUnits = nil
         self.insulinType = insulinType
         self.automatic = true
-        self.decisionId = nil
+        self.decisionId = decisionId
     }
 
     init(suspendStartTime: Date, automatic: Bool? = nil) {
@@ -286,7 +286,7 @@ extension NewPumpEvent {
             case .suspend:
                 return UnfinalizedDose(suspendStartTime: dose.startDate, automatic: dose.automatic)
             case .tempBasal:
-                return UnfinalizedDose(tempBasalRate: dose.unitsPerHour, startTime: dose.startDate, duration: duration, insulinType: dose.insulinType ?? defaultInsulinType)
+                return UnfinalizedDose(tempBasalRate: dose.unitsPerHour, startTime: dose.startDate, duration: duration, insulinType: dose.insulinType ?? defaultInsulinType, decisionId: dose.decisionId)
             }
         }
         return nil

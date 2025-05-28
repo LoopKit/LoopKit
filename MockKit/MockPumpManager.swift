@@ -412,7 +412,7 @@ public final class MockPumpManager: TestingPumpManager {
         }
     }
 
-    public func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (PumpManagerError?) -> Void) {
+    public func enactTempBasal(decisionId: UUID?, unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (PumpManagerError?) -> Void) {
         logDeviceComms(.send, message: "Temp Basal \(unitsPerHour) U/hr Duration:\(duration.hours)")
 
         if state.tempBasalShouldCrash {
@@ -454,7 +454,7 @@ public final class MockPumpManager: TestingPumpManager {
                     completion(nil)
                 }
             } else {
-                let temp = UnfinalizedDose(tempBasalRate: unitsPerHour, startTime: now, duration: duration, insulinType: state.insulinType)
+                let temp = UnfinalizedDose(tempBasalRate: unitsPerHour, startTime: now, duration: duration, insulinType: state.insulinType, decisionId: decisionId)
                 state.unfinalizedTempBasal = temp
                 storePumpEvents { (error) in
                     completion(nil)
