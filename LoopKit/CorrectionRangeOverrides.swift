@@ -130,8 +130,8 @@ extension ClosedRange<LoopQuantity> {
         let upper = upperBound.doubleValue(for: unit)
 
         // Generate values that are aligned to stride from zero
-        let minIndex = Int(ceil(lower / stride))
-        let maxIndex = Int(floor(upper / stride))
+        let minIndex = Int(floor(lower / stride))
+        let maxIndex = Int(ceil(upper / stride))
 
         var selectableValues = (minIndex...maxIndex).map { Double($0) * stride }
 

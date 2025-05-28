@@ -32,10 +32,7 @@ struct SuspendThresholdEditorViewModel {
             // During a review/acceptance flow, do not limit suspend threshold by other targets
             self.maxSuspendThresholdValue = Guardrail.suspendThreshold.absoluteBounds.upperBound
         } else {
-            self.maxSuspendThresholdValue = Guardrail.maxSuspendThresholdValue(
-                correctionRangeSchedule: therapySettingsViewModel.glucoseTargetRangeSchedule,
-                preMealTargetRange: therapySettingsViewModel.correctionRangeOverrides.preMeal,
-                workoutTargetRange: therapySettingsViewModel.correctionRangeOverrides.workout)
+            self.maxSuspendThresholdValue = Guardrail.maxSuspendThresholdValue(minimumConfiguredLowerBound: therapySettingsViewModel.therapySettings.minimumConfiguredTargetLowerBound)
         }
         
         self.saveSuspendThreshold = { [weak therapySettingsViewModel] suspendThreshold, displayGlucoseUnit in

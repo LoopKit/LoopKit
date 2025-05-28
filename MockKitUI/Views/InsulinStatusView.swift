@@ -92,11 +92,9 @@ struct InsulinStatusView: View {
                             .font(.system(size: 28))
                             .fixedSize()
                     }
-                    if let basalStateImageName = viewModel.basalDisplayState.imageName {
-                        Image(systemName: basalStateImageName)
-                            .font(.largeTitle)
-                            .foregroundColor(.accentColor)
-                    }
+                    Image(systemName: viewModel.automatedTreatmentState.imageName)
+                        .font(.largeTitle)
+                        .foregroundColor(.accentColor)
                     Text(viewModel.basalDisplayStateString)
                         .lineSpacing(1)
                         .font(.callout)

@@ -11,6 +11,7 @@ import LoopKit
 import LoopKitUI
 import MockKit
 
+@MainActor
 class MockPumpManagerSettingsViewModel: ObservableObject {
     let pumpManager: MockPumpManager
     
@@ -46,7 +47,11 @@ class MockPumpManagerSettingsViewModel: ObservableObject {
         formatter.timeStyle = .short
         return formatter
     }()
-    
+
+    static private let basalRateFormatter: QuantityFormatter = {
+        QuantityFormatter(for: .internationalUnitsPerHour)
+    }()
+
     private var pumpPairedInterval: TimeInterval {
         pumpExpirationRemaing - pumpLifeTime
     }
@@ -64,7 +69,13 @@ class MockPumpManagerSettingsViewModel: ObservableObject {
     var pumpExpirationDateTimeString: String {
         Self.dateTimeFormatter.string(from: Date().addingTimeInterval(pumpExpirationRemaing))
     }
-    
+
+    var currentBasalRate: String {
+        guard let currentBasalRate = pumpManager.currentBasalRate else { return "-" }
+        return Self.basalRateFormatter.string(from: currentBasalRate) ?? "-"
+    }
+
+
     var pumpTimeString: String {
         Self.shortTimeFormatter.string(from: Date())
     }
@@ -83,15 +94,17 @@ class MockPumpManagerSettingsViewModel: ObservableObject {
         return Self.shortTimeFormatter.string(from: basalDeliveryRateDate)
     }
     
-    @Published private(set) var basalDisplayState: BasalDisplayState
+    @Published private(set) var automatedTreatmentState: AutomatedTreatmentState
     var basalDisplayStateString: String {
-        switch basalDisplayState {
-        case .basalScheduled:
-            return LocalizedString("Scheduled\nbasal", comment: "Label for scheduled basal")
-        case .basalTempAutoAbove:
-            return LocalizedString("More than\nscheduled", comment: "Label for when temp basal is above the scheduled basal")
+        switch automatedTreatmentState {
+        case .neutralOverride:
+            return LocalizedString("Preset\nDelivery", comment: "Label for neutral basal with override")
+        case .neutralNoOverride:
+            return LocalizedString("Scheduled\nBasal", comment: "Label for neutral basal without override")
+        case .increasedInsulin:
+            return LocalizedString("Increased\nDelivery", comment: "Label for when temp basal is above the neutral basal")
         default:
-            return LocalizedString("Less than\nscheduled", comment: "Label for when temp basal is below the scheduled basal")
+            return LocalizedString("Decreased\nDelivery", comment: "Label for when temp basal is below the neutral basal")
         }
     }
 
@@ -123,7 +136,7 @@ class MockPumpManagerSettingsViewModel: ObservableObject {
         basalDeliveryState = pumpManager.status.basalDeliveryState
         basalDeliveryRate = pumpManager.state.basalDeliveryRate(at: now)
         basalDeliveryRateDate = now
-        basalDisplayState = pumpManager.state.basalDisplayState(at: now) ?? .basalScheduled
+        automatedTreatmentState = pumpManager.pumpManagerDelegate?.automatedTreatmentState ?? .neutralNoOverride
         setSuspenededAtString()
         
         pumpManager.addStateObserver(self, queue: .main)
@@ -174,7 +187,7 @@ extension MockPumpManagerSettingsViewModel: MockPumpManagerStateObserver {
         basalDeliveryRateDate = now
         basalDeliveryRate = state.basalDeliveryRate(at: now)
         basalDeliveryState = manager.status.basalDeliveryState
-        basalDisplayState = state.basalDisplayState(at: now) ?? basalDisplayState
+        automatedTreatmentState = manager.pumpManagerDelegate?.automatedTreatmentState ?? .neutralNoOverride
     }
     
     func mockPumpManager(_ manager: MockKit.MockPumpManager, didUpdate status: LoopKit.PumpManagerStatus, oldStatus: LoopKit.PumpManagerStatus) {
@@ -197,25 +210,7 @@ extension MockPumpManagerState {
             return nil
         }
     }
-    
-    func basalDisplayState(at now: Date) -> BasalDisplayState? {
-        guard let scheduledBasalRate = basalRateSchedule?.value(at: now),
-              let currentBasalRate = basalDeliveryRate(at: now)
-        else {
-            return nil
-        }
-        
-        if currentBasalRate == scheduledBasalRate {
-            return .basalScheduled
-        } else if currentBasalRate == 0 {
-            return .basalTempAutoNoDelivery
-        } else if currentBasalRate < scheduledBasalRate {
-            return .basalTempAutoBelow
-        } else {
-            return .basalTempAutoAbove
-        }
-    }
-    
+
     func basalDeliveryStartDate(at now: Date) -> Date? {
         switch suspendState {
         case .resumed:
