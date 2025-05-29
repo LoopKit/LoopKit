@@ -34,8 +34,6 @@ extension TherapySetting {
             BasalRatesInformationView(onExit: nil, mode: .settings, maximumScheduleEntryCount: maximumScheduleEntryCount)
         case .deliveryLimits:
             DeliveryLimitsInformationView(onExit: nil, mode: .settings)
-        case .insulinModel:
-            InsulinModelInformationView(onExit: nil, mode: .settings)
         case .carbRatio:
             CarbRatioInformationView(onExit: nil, mode: .settings)
         case .insulinSensitivity:

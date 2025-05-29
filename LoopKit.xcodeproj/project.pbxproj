@@ -826,11 +826,9 @@
 		E916F56924AD32F000BE3547 /* CorrectionRangeOverridesEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E916F56824AD32F000BE3547 /* CorrectionRangeOverridesEditor.swift */; };
 		E916F56F24AE2FFE00BE3547 /* CorrectionRangeOverrideInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E916F56E24AE2FFE00BE3547 /* CorrectionRangeOverrideInformationView.swift */; };
 		E93BA06624A39DBC00C5D7E6 /* DismissibleHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93BA06524A39DBC00C5D7E6 /* DismissibleHostingController.swift */; };
-		E93C86A024C8F6E00073089B /* InsulinModelSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93C869F24C8F6E00073089B /* InsulinModelSelection.swift */; };
 		E93C86A224C8F7550073089B /* InsulinModelChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93C86A124C8F7550073089B /* InsulinModelChart.swift */; };
 		E93C86A424C8F79C0073089B /* ChartLineModel+LoopKitUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93C86A324C8F79C0073089B /* ChartLineModel+LoopKitUI.swift */; };
 		E93C86A624C8F7D90073089B /* ChartSettings+LoopKitUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93C86A524C8F7D90073089B /* ChartSettings+LoopKitUI.swift */; };
-		E93C86A824C8F7F70073089B /* InsulinModelChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93C86A724C8F7F60073089B /* InsulinModelChartView.swift */; };
 		E93C86B024CF7C470073089B /* TherapySettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93C86AF24CF7C470073089B /* TherapySettingsTests.swift */; };
 		E93C86B224D080E00073089B /* CarbRatioInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93C86B124D080E00073089B /* CarbRatioInformationView.swift */; };
 		E93C86B624D08CAD0073089B /* InsulinSensitivityInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93C86B524D08CAD0073089B /* InsulinSensitivityInformationView.swift */; };
@@ -841,7 +839,6 @@
 		E93E866A24DD05FA00FF40C8 /* OverrideSelectionHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93E866924DD05FA00FF40C8 /* OverrideSelectionHistory.swift */; };
 		E94141D024C8F31C0096C326 /* DeliveryLimitsEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94141CF24C8F31C0096C326 /* DeliveryLimitsEditor.swift */; };
 		E949E38924AFC82F00024DA0 /* DeliveryLimitsInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E949E38824AFC82F00024DA0 /* DeliveryLimitsInformationView.swift */; };
-		E949E38F24B3711E00024DA0 /* InsulinModelInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E949E38E24B3711E00024DA0 /* InsulinModelInformationView.swift */; };
 		E96175AE24B7BE38008E5080 /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96175AD24B7BE38008E5080 /* Dictionary.swift */; };
 		E96DCB5824AEF50F007117BC /* SuspendThresholdInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96DCB5724AEF50F007117BC /* SuspendThresholdInformationView.swift */; };
 		E96DCB5A24AF74AC007117BC /* SuspendThresholdEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96DCB5924AF74AC007117BC /* SuspendThresholdEditor.swift */; };
@@ -1841,11 +1838,9 @@
 		E916F56824AD32F000BE3547 /* CorrectionRangeOverridesEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionRangeOverridesEditor.swift; sourceTree = "<group>"; };
 		E916F56E24AE2FFE00BE3547 /* CorrectionRangeOverrideInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionRangeOverrideInformationView.swift; sourceTree = "<group>"; };
 		E93BA06524A39DBC00C5D7E6 /* DismissibleHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissibleHostingController.swift; sourceTree = "<group>"; };
-		E93C869F24C8F6E00073089B /* InsulinModelSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsulinModelSelection.swift; sourceTree = "<group>"; };
 		E93C86A124C8F7550073089B /* InsulinModelChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsulinModelChart.swift; sourceTree = "<group>"; };
 		E93C86A324C8F79C0073089B /* ChartLineModel+LoopKitUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChartLineModel+LoopKitUI.swift"; sourceTree = "<group>"; };
 		E93C86A524C8F7D90073089B /* ChartSettings+LoopKitUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChartSettings+LoopKitUI.swift"; sourceTree = "<group>"; };
-		E93C86A724C8F7F60073089B /* InsulinModelChartView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsulinModelChartView.swift; sourceTree = "<group>"; };
 		E93C86AF24CF7C470073089B /* TherapySettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TherapySettingsTests.swift; sourceTree = "<group>"; };
 		E93C86B124D080E00073089B /* CarbRatioInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarbRatioInformationView.swift; sourceTree = "<group>"; };
 		E93C86B524D08CAD0073089B /* InsulinSensitivityInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsulinSensitivityInformationView.swift; sourceTree = "<group>"; };
@@ -1856,7 +1851,6 @@
 		E93E866924DD05FA00FF40C8 /* OverrideSelectionHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverrideSelectionHistory.swift; sourceTree = "<group>"; };
 		E94141CF24C8F31C0096C326 /* DeliveryLimitsEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryLimitsEditor.swift; sourceTree = "<group>"; };
 		E949E38824AFC82F00024DA0 /* DeliveryLimitsInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryLimitsInformationView.swift; sourceTree = "<group>"; };
-		E949E38E24B3711E00024DA0 /* InsulinModelInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsulinModelInformationView.swift; sourceTree = "<group>"; };
 		E96175AD24B7BE38008E5080 /* Dictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
 		E96DCB5724AEF50F007117BC /* SuspendThresholdInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuspendThresholdInformationView.swift; sourceTree = "<group>"; };
 		E96DCB5924AF74AC007117BC /* SuspendThresholdEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuspendThresholdEditor.swift; sourceTree = "<group>"; };
@@ -3135,7 +3129,6 @@
 				E916F56E24AE2FFE00BE3547 /* CorrectionRangeOverrideInformationView.swift */,
 				E949E38824AFC82F00024DA0 /* DeliveryLimitsInformationView.swift */,
 				E9077D2624ACD59F0066A88D /* InformationView.swift */,
-				E949E38E24B3711E00024DA0 /* InsulinModelInformationView.swift */,
 				E93C86B524D08CAD0073089B /* InsulinSensitivityInformationView.swift */,
 				E96DCB5724AEF50F007117BC /* SuspendThresholdInformationView.swift */,
 				1D1438B725633E2100BE8F06 /* GlucoseTherapySettingInformationView.swift */,
@@ -3182,8 +3175,6 @@
 				1DC64C7B24BF6BFD004A63A1 /* CorrectionRangeOverridesExtension.swift */,
 				898B4E7A246DC6A70053C484 /* CorrectionRangeScheduleEditor.swift */,
 				E94141CF24C8F31C0096C326 /* DeliveryLimitsEditor.swift */,
-				E93C86A724C8F7F60073089B /* InsulinModelChartView.swift */,
-				E93C869F24C8F6E00073089B /* InsulinModelSelection.swift */,
 				89FC688A245A2D670075CF59 /* InsulinSensitivityScheduleEditor.swift */,
 				1D6EAB9024C12C090081249D /* PumpSupportedIncrements.swift */,
 				C140E0512602908A000A4FF7 /* SettingsPresentationMode.swift */,
@@ -3879,7 +3870,6 @@
 				A9D3FF122A6C19ED000C891D /* ChartPointsContextFillLayer.swift in Sources */,
 				E93C86A424C8F79C0073089B /* ChartLineModel+LoopKitUI.swift in Sources */,
 				B43D69D62A26642300DF0925 /* DemoPlaceHolderView.swift in Sources */,
-				E949E38F24B3711E00024DA0 /* InsulinModelInformationView.swift in Sources */,
 				895FE08B22011F0C00FCF18A /* EmojiInputHeaderView.swift in Sources */,
 				895FE08322011F0C00FCF18A /* OverrideSelectionFooterView.swift in Sources */,
 				B4CA4D3D2D79B252005F8FF3 /* AutomatedTreatmentState.swift in Sources */,
@@ -3968,7 +3958,6 @@
 				898B4E77246DAE280053C484 /* GlucoseRangePicker.swift in Sources */,
 				E0E99C342C0E7AD300F9300C /* ConfirmationToggle.swift in Sources */,
 				432CF86D20D76C470066B889 /* SwitchTableViewCell.swift in Sources */,
-				E93C86A824C8F7F70073089B /* InsulinModelChartView.swift in Sources */,
 				E93C86B224D080E00073089B /* CarbRatioInformationView.swift in Sources */,
 				89F6E30D2449713600CB9E15 /* CardStack.swift in Sources */,
 				89BE75C324649C4C00B145D9 /* RoundedCorners.swift in Sources */,
@@ -4026,7 +4015,6 @@
 				43BA7184201EE7090058961E /* TextFieldTableViewController.swift in Sources */,
 				1452F4B22A8521CD00F8B9E4 /* TextFieldRow.swift in Sources */,
 				1D1A019E24B678BF0077D86E /* TherapySettingsView.swift in Sources */,
-				E93C86A024C8F6E00073089B /* InsulinModelSelection.swift in Sources */,
 				895FE09122011F4800FCF18A /* AddEditOverrideTableViewController.swift in Sources */,
 				C1E4B305242E98E900E70CCB /* ProgressView.swift in Sources */,
 				C16DA84522E9330A008624C2 /* LoopUIPlugin.swift in Sources */,

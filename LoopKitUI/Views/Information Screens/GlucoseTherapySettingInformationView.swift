@@ -107,7 +107,7 @@ fileprivate extension TherapySetting {
                 upperBoundString: Guardrail.unconstrainedWorkoutCorrectionRange.absoluteBounds.upperBound.bothUnitsString)
         case .suspendThreshold:
             return lowHighText(for: Guardrail.suspendThreshold)
-        case .basalRate, .deliveryLimits, .insulinModel, .carbRatio, .insulinSensitivity, .none:
+        case .basalRate, .deliveryLimits, .carbRatio, .insulinSensitivity, .none:
             fatalError("Unexpected")
         }
     }
