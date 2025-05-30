@@ -133,7 +133,9 @@ extension ClosedRange<LoopQuantity> {
         let minIndex = Int(floor(lower / stride))
         let maxIndex = Int(ceil(upper / stride))
 
-        var selectableValues = (minIndex...maxIndex).map { Double($0) * stride }
+        var selectableValues = (minIndex...maxIndex)
+            .map { Double($0) * stride }
+            .filter { $0 >= lower && $0 <= upper }
 
         // Ensure lower and upper bounds are included explicitly (in case they’re not exactly on stride)
         if !selectableValues.contains(where: { abs($0 - lower) < 0.0001 }) {

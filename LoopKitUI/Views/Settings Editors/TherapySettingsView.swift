@@ -96,9 +96,6 @@ public struct TherapySettingsView: View {
         cards.append(carbRatioSection)
         cards.append(basalRatesSection)
         cards.append(deliveryLimitsSection)
-        if viewModel.adultChildInsulinModelSelectionEnabled {
-            cards.append(insulinModelSection)
-        }
         cards.append(insulinSensitivitiesSection)
 
         return CardStack(cards: cards)
@@ -352,34 +349,6 @@ extension TherapySettingsView {
         .accessibilityElement(children: .combine)
     }
         
-    private var insulinModelSection: Card {
-        card(for: .insulinModel) {
-            if let insulinModelPreset = self.viewModel.therapySettings.defaultRapidActingModel {
-                SectionDivider()
-                HStack {
-                    // Spacing and paddings here is my best guess based on the design...
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(insulinModelPreset.title)
-                            .font(.body)
-                            .padding(.top, 5)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .accessibilityIdentifier("text_InsulinModelTitle")
-                        Text(insulinModelPreset.subtitle)
-                            .font(.footnote)
-                            .foregroundColor(.secondary)
-                            .padding(.bottom, 8)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                    Spacer()
-                    Image(systemName: "checkmark")
-                        .font(Font.system(.title2).weight(.semibold))
-                        .foregroundColor(.accentColor)
-                }
-                .accessibilityElement(children: .combine)
-            }
-        }
-    }
-
     private var carbRatioSection: Card {
         card(for: .carbRatio) {
             if let items = viewModel.therapySettings.carbRatioSchedule?.items {
@@ -450,8 +419,6 @@ extension TherapySettingsView {
             BasalRateScheduleEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss)
         case .deliveryLimits:
             DeliveryLimitsEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss)
-        case .insulinModel:
-            InsulinModelSelection(mode: mode, therapySettingsViewModel: viewModel, chartColors: chartColorPalette, didSave: dismiss)
         case .carbRatio:
             CarbRatioScheduleEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss)
         case .insulinSensitivity:
