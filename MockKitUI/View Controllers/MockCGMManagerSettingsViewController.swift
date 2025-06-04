@@ -255,6 +255,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
                 }
             case .signalLoss:
                 cell.textLabel?.text = "Signal Loss"
+                cell.accessibilityIdentifier = "cell_SignalLoss"
                 if case .signalLoss = cgmManager.dataSource.model {
                     cell.accessoryType = .checkmark
                 }
