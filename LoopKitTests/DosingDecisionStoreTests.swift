@@ -92,6 +92,7 @@ class DosingDecisionStorePersistenceTests: PersistenceControllerTestCase, Dosing
         cacheStore.managedObjectContext.performAndWait {
             do {
                 let object = DosingDecisionObject(context: cacheStore.managedObjectContext)
+                object.id = UUID(uuidString: "A3290A49-2072-4F20-AD21-28856710E53D")!
                 object.data = try PropertyListEncoder().encode(StoredDosingDecision.test)
                 object.date = dateFormatter.date(from: "2100-01-02T03:03:00Z")!
                 object.modificationCounter = 123
@@ -103,7 +104,8 @@ class DosingDecisionStorePersistenceTests: PersistenceControllerTestCase, Dosing
         "duration" : 1800,
         "unitsPerHour" : 0.75
       },
-      "bolusUnits" : 1.25
+      "bolusUnits" : 1.25,
+      "direction" : "increase"
     },
     "carbEntry" : {
       "absorptionTime" : 18000,
@@ -215,6 +217,7 @@ class DosingDecisionStorePersistenceTests: PersistenceControllerTestCase, Dosing
         "startDate" : "2020-05-14T22:38:15Z"
       }
     ],
+    "id" : "A3290A49-2072-4F20-AD21-28856710E53D",
     "insulinOnBoard" : {
       "startDate" : "2020-05-14T22:38:26Z",
       "value" : 1.5
@@ -348,6 +351,7 @@ class DosingDecisionStorePersistenceTests: PersistenceControllerTestCase, Dosing
     ]
   },
   "date" : "2100-01-02T03:03:00Z",
+  "id" : "A3290A49-2072-4F20-AD21-28856710E53D",
   "modificationCounter" : 123
 }
 """
@@ -619,11 +623,11 @@ class DosingDecisionStoreCriticalEventLogTests: PersistenceControllerTestCase {
     override func setUp() {
         super.setUp()
 
-        let dosingDecisions = [StoredDosingDecision(date: dateFormatter.date(from: "2100-01-02T03:08:00Z")!, controllerTimeZone: TimeZone(identifier: "America/Los_Angeles")!, reason: "test", syncIdentifier: UUID(uuidString: "18CF3948-0B3D-4B12-8BFE-14986B0E6784")!),
-                               StoredDosingDecision(date: dateFormatter.date(from: "2100-01-02T03:10:00Z")!, controllerTimeZone: TimeZone(identifier: "America/Los_Angeles")!, reason: "test", syncIdentifier: UUID(uuidString: "C86DEB61-68E9-464E-9DD5-96A9CB445FD3")!),
-                               StoredDosingDecision(date: dateFormatter.date(from: "2100-01-02T03:04:00Z")!, controllerTimeZone: TimeZone(identifier: "America/Los_Angeles")!, reason: "test", syncIdentifier: UUID(uuidString: "2B03D96C-6F5D-4140-99CD-80C3E64D6010")!),
-                               StoredDosingDecision(date: dateFormatter.date(from: "2100-01-02T03:06:00Z")!, controllerTimeZone: TimeZone(identifier: "America/Los_Angeles")!, reason: "test", syncIdentifier: UUID(uuidString: "FF1C4F01-3558-4FB2-957E-FA1522C4735E")!),
-                               StoredDosingDecision(date: dateFormatter.date(from: "2100-01-02T03:02:00Z")!, controllerTimeZone: TimeZone(identifier: "America/Los_Angeles")!, reason: "test", syncIdentifier: UUID(uuidString: "71B699D7-0E8F-4B13-B7A1-E7751EB78E74")!)]
+        let dosingDecisions = [StoredDosingDecision(id: UUID(uuidString: "c0623af6-85ac-402a-b306-9ee146378ac5")!, date: dateFormatter.date(from: "2100-01-02T03:08:00Z")!, controllerTimeZone: TimeZone(identifier: "America/Los_Angeles")!, reason: "test", syncIdentifier: UUID(uuidString: "18CF3948-0B3D-4B12-8BFE-14986B0E6784")!),
+                               StoredDosingDecision(id: UUID(uuidString: "1b59e4c8-8ea0-4fc3-bf39-e7293f578654")!, date: dateFormatter.date(from: "2100-01-02T03:10:00Z")!, controllerTimeZone: TimeZone(identifier: "America/Los_Angeles")!, reason: "test", syncIdentifier: UUID(uuidString: "C86DEB61-68E9-464E-9DD5-96A9CB445FD3")!),
+                               StoredDosingDecision(id: UUID(uuidString: "0c392b23-4486-4338-9a7e-e992abecc0f1")!, date: dateFormatter.date(from: "2100-01-02T03:04:00Z")!, controllerTimeZone: TimeZone(identifier: "America/Los_Angeles")!, reason: "test", syncIdentifier: UUID(uuidString: "2B03D96C-6F5D-4140-99CD-80C3E64D6010")!),
+                               StoredDosingDecision(id: UUID(uuidString: "5f78cb0b-7038-4943-8a05-24a97e90fd53")!, date: dateFormatter.date(from: "2100-01-02T03:06:00Z")!, controllerTimeZone: TimeZone(identifier: "America/Los_Angeles")!, reason: "test", syncIdentifier: UUID(uuidString: "FF1C4F01-3558-4FB2-957E-FA1522C4735E")!),
+                               StoredDosingDecision(id: UUID(uuidString: "b3cadadc-d590-4a68-b2e5-2b6459f81f80")!, date: dateFormatter.date(from: "2100-01-02T03:02:00Z")!, controllerTimeZone: TimeZone(identifier: "America/Los_Angeles")!, reason: "test", syncIdentifier: UUID(uuidString: "71B699D7-0E8F-4B13-B7A1-E7751EB78E74")!)]
 
         dosingDecisionStore = DosingDecisionStore(store: cacheStore, expireAfter: .hours(1))
 
@@ -672,9 +676,9 @@ class DosingDecisionStoreCriticalEventLogTests: PersistenceControllerTestCase {
                                                 progress: progress))
         XCTAssertEqual(outputStream.string, """
 [
-{"data":{"controllerTimeZone":{"identifier":"America/Los_Angeles"},"date":"2100-01-02T03:08:00.000Z","reason":"test","syncIdentifier":"18CF3948-0B3D-4B12-8BFE-14986B0E6784"},"date":"2100-01-02T03:08:00.000Z","modificationCounter":1},
-{"data":{"controllerTimeZone":{"identifier":"America/Los_Angeles"},"date":"2100-01-02T03:04:00.000Z","reason":"test","syncIdentifier":"2B03D96C-6F5D-4140-99CD-80C3E64D6010"},"date":"2100-01-02T03:04:00.000Z","modificationCounter":3},
-{"data":{"controllerTimeZone":{"identifier":"America/Los_Angeles"},"date":"2100-01-02T03:06:00.000Z","reason":"test","syncIdentifier":"FF1C4F01-3558-4FB2-957E-FA1522C4735E"},"date":"2100-01-02T03:06:00.000Z","modificationCounter":4}
+{"data":{"controllerTimeZone":{"identifier":"America/Los_Angeles"},"date":"2100-01-02T03:08:00.000Z","id":"C0623AF6-85AC-402A-B306-9EE146378AC5","reason":"test","syncIdentifier":"18CF3948-0B3D-4B12-8BFE-14986B0E6784"},"date":"2100-01-02T03:08:00.000Z","id":"C0623AF6-85AC-402A-B306-9EE146378AC5","modificationCounter":1},
+{"data":{"controllerTimeZone":{"identifier":"America/Los_Angeles"},"date":"2100-01-02T03:04:00.000Z","id":"0C392B23-4486-4338-9A7E-E992ABECC0F1","reason":"test","syncIdentifier":"2B03D96C-6F5D-4140-99CD-80C3E64D6010"},"date":"2100-01-02T03:04:00.000Z","id":"0C392B23-4486-4338-9A7E-E992ABECC0F1","modificationCounter":3},
+{"data":{"controllerTimeZone":{"identifier":"America/Los_Angeles"},"date":"2100-01-02T03:06:00.000Z","id":"5F78CB0B-7038-4943-8A05-24A97E90FD53","reason":"test","syncIdentifier":"FF1C4F01-3558-4FB2-957E-FA1522C4735E"},"date":"2100-01-02T03:06:00.000Z","id":"5F78CB0B-7038-4943-8A05-24A97E90FD53","modificationCounter":4}
 ]
 """
         )
@@ -710,7 +714,8 @@ class StoredDosingDecisionCodableTests: XCTestCase {
       "duration" : 1800,
       "unitsPerHour" : 0.75
     },
-    "bolusUnits" : 1.25
+    "bolusUnits" : 1.25,
+    "direction" : "increase"
   },
   "carbEntry" : {
     "absorptionTime" : 18000,
@@ -822,6 +827,7 @@ class StoredDosingDecisionCodableTests: XCTestCase {
       "startDate" : "2020-05-14T22:38:15Z"
     }
   ],
+  "id" : "A3290A49-2072-4F20-AD21-28856710E53D",
   "insulinOnBoard" : {
     "startDate" : "2020-05-14T22:38:26Z",
     "value" : 1.5
@@ -1130,7 +1136,7 @@ fileprivate extension StoredDosingDecision {
                                                       quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 127.8))]
         let tempBasalRecommendation = TempBasalRecommendation(unitsPerHour: 0.75,
                                                               duration: .minutes(30))
-        let automaticDoseRecommendation = AutomaticDoseRecommendation(basalAdjustment: tempBasalRecommendation, bolusUnits: 1.25)
+        let automaticDoseRecommendation = AutomaticDoseRecommendation(basalAdjustment: tempBasalRecommendation, direction: .increase, bolusUnits: 1.25)
         let manualBolusRecommendation = ManualBolusRecommendationWithDate(recommendation: ManualBolusRecommendation(amount: 1.2,
                                                                                                                     notice: .predictedGlucoseBelowTarget(minGlucose: SimpleGlucoseValue(startDate: dateFormatter.date(from: "2020-05-14T23:03:15Z")!,
                                                                                                                                                                                            quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 75.5)))),
@@ -1141,7 +1147,8 @@ fileprivate extension StoredDosingDecision {
         let errors: [Issue] = [Issue(id: "alpha"),
                                Issue(id: "bravo", details: ["size": "tiny"])]
 
-        return StoredDosingDecision(date: dateFormatter.date(from: "2020-05-14T22:38:14Z")!,
+        return StoredDosingDecision(id: UUID(uuidString: "A3290A49-2072-4F20-AD21-28856710E53D")!,
+                                    date: dateFormatter.date(from: "2020-05-14T22:38:14Z")!,
                                     controllerTimeZone: controllerTimeZone,
                                     reason: reason,
                                     settings: settings,

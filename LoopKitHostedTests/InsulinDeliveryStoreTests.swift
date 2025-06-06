@@ -17,6 +17,7 @@ class InsulinDeliveryStoreTestsBase: PersistenceControllerTestCase {
                                     endDate: Date(timeIntervalSinceNow: -.minutes(5.5)),
                                     value: 1.8,
                                     unit: .unitsPerHour,
+                                    decisionId: nil,
                                     deliveredUnits: 0.015,
                                     syncIdentifier: "4B14522E-A7B5-4E73-B76B-5043CD7176B0",
                                     scheduledBasalRate: nil)
@@ -25,6 +26,7 @@ class InsulinDeliveryStoreTestsBase: PersistenceControllerTestCase {
                                     endDate: Date(timeIntervalSinceNow: -.minutes(1.5)),
                                     value: 2.4,
                                     unit: .unitsPerHour,
+                                    decisionId: nil,
                                     deliveredUnits: 0.02,
                                     syncIdentifier: "A1F8E29B-33D6-4B38-B4CD-D84F14744871",
                                     scheduledBasalRate: LoopQuantity(unit: .internationalUnitsPerHour, doubleValue: 1.8))
@@ -33,6 +35,7 @@ class InsulinDeliveryStoreTestsBase: PersistenceControllerTestCase {
                                     endDate: Date(timeIntervalSinceNow: -.minutes(3.5)),
                                     value: 1.0,
                                     unit: .units,
+                                    decisionId: nil,
                                     deliveredUnits: 1.0,
                                     syncIdentifier: "1A1D6192-1521-4469-B962-1B82C4534BB1",
                                     scheduledBasalRate: nil)
@@ -359,6 +362,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
                                     endDate: Date(timeIntervalSinceNow: -.minutes(10)),
                                     value: 3.0,
                                     unit: .units,
+                                    decisionId: nil,
                                     deliveredUnits: 3.0,
                                     syncIdentifier: "C0AB1CBD-6B36-4113-9D49-709A022B2451",
                                     manuallyEntered: true)
@@ -408,6 +412,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
                                      endDate: Date(timeIntervalSinceNow: -.hours(2)),
                                      value: 3.0,
                                      unit: .units,
+                                     decisionId: nil,
                                      deliveredUnits: nil,
                                      syncIdentifier: "7530B8CA-827A-4DE8-ADE3-9E10FF80A4A9",
                                      scheduledBasalRate: nil)

@@ -490,7 +490,7 @@ class TemporaryScheduleOverrideTests: XCTestCase {
 
         let output = LoopAlgorithm.run(input: input)
 
-        let recommendedRate = output.recommendation!.automatic!.basalAdjustment!.unitsPerHour
+        let recommendedRate = output.recommendation!.automatic!.basalAdjustment.unitsPerHour
         let activeInsulin = output.activeInsulin!
         XCTAssertEqual(activeInsulin, 0)
         XCTAssertEqual(recommendedRate, 1.727, accuracy: 0.01)

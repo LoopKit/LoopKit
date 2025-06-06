@@ -18,7 +18,7 @@ struct DateRelativeBasalEntry: DateRelativeQuantity, Codable {
     func doseEntry(relativeTo referenceDate: Date) -> DoseEntry {
         let startDate = referenceDate.addingTimeInterval(dateOffset)
         let endDate = startDate.addingTimeInterval(duration)
-        return DoseEntry(type: .tempBasal, startDate: startDate, endDate: endDate, value: unitsPerHourValue, unit: .unitsPerHour)
+        return DoseEntry(type: .tempBasal, startDate: startDate, endDate: endDate, value: unitsPerHourValue, unit: .unitsPerHour, decisionId: nil)
     }
 
     func newPumpEvent(relativeTo referenceDate: Date) -> NewPumpEvent {

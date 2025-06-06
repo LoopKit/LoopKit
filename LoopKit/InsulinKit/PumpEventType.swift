@@ -10,7 +10,7 @@ import Foundation
 
 
 /// A subset of pump event types
-public enum PumpEventType: CaseIterable, Equatable {
+public enum PumpEventType: CaseIterable, Hashable {
    typealias RawValue = String
     
     case alarm

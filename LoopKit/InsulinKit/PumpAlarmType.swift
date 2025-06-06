@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum PumpAlarmType: Equatable, Codable {
+public enum PumpAlarmType: Hashable, Codable {
     case autoOff
     case lowInsulin
     case lowPower

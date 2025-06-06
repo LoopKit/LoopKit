@@ -106,14 +106,14 @@ class DoseStoreTests: PersistenceControllerTestCase {
             bolus1.date = DateFormatter.descriptionFormatter.date(from: "2018-04-30 02:12:42 +0000")
             bolus1.raw = Data(hexadecimalString: "0100a600a6001b006a0c335d12")!
             bolus1.type = PumpEventType.bolus
-            bolus1.dose = DoseEntry(type: .bolus, startDate: bolus1.date!, value: 4.15, unit: .units, syncIdentifier: bolus1.raw?.hexadecimalString)
+            bolus1.dose = DoseEntry(type: .bolus, startDate: bolus1.date!, value: 4.15, unit: .units, decisionId: nil, syncIdentifier: bolus1.raw?.hexadecimalString)
             
             let bolus2 = PumpEvent(context: cacheStore.managedObjectContext)
             
             bolus2.date = DateFormatter.descriptionFormatter.date(from: "2018-04-30 00:00:00 +0000")
             bolus2.raw = Data(hexadecimalString: "0100a600a6001b006a0c335d12")!
             bolus2.type = PumpEventType.bolus
-            bolus2.dose = DoseEntry(type: .bolus, startDate: bolus2.date!, value: 0.15, unit: .units, syncIdentifier: bolus1.raw?.hexadecimalString)
+            bolus2.dose = DoseEntry(type: .bolus, startDate: bolus2.date!, value: 0.15, unit: .units, decisionId: nil, syncIdentifier: bolus1.raw?.hexadecimalString)
             
             let request: NSFetchRequest<PumpEvent> = PumpEvent.fetchRequest()
             let eventsBeforeSave = try! cacheStore.managedObjectContext.fetch(request)
@@ -181,7 +181,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
         // 2. Add a temp basal which has already ended. It should be saved to Health
         let pumpEvents1 = [
             NewPumpEvent(date: f("2018-12-12 17:35:58 +0000"), dose: nil, raw: UUID().data, title: "TempBasalPumpEvent(length: 8, rawData: 8 bytes, rateType: MinimedKit.TempBasalPumpEvent.RateType.Absolute, rate: 2.125, timestamp: calendar: gregorian (fixed) year: 2018 month: 12 day: 12 hour: 9 minute: 35 second: 58 isLeapMonth: false )", type: nil),
-            NewPumpEvent(date: f("2018-12-12 17:35:58 +0000"), dose: DoseEntry(type: .tempBasal, startDate: f("2018-12-12 17:35:58 +0000"), endDate: f("2018-12-12 18:05:58 +0000"), value: 2.125, unit: .unitsPerHour), raw: Data(hexadecimalString: "1601fa23094c12")!, title: "TempBasalDurationPumpEvent(length: 7, rawData: 7 bytes, duration: 30, timestamp: calendar: gregorian (fixed) year: 2018 month: 12 day: 12 hour: 9 minute: 35 second: 58 isLeapMonth: false )", type: .tempBasal)
+            NewPumpEvent(date: f("2018-12-12 17:35:58 +0000"), dose: DoseEntry(type: .tempBasal, startDate: f("2018-12-12 17:35:58 +0000"), endDate: f("2018-12-12 18:05:58 +0000"), value: 2.125, unit: .unitsPerHour, decisionId: nil), raw: Data(hexadecimalString: "1601fa23094c12")!, title: "TempBasalDurationPumpEvent(length: 7, rawData: 7 bytes, duration: 30, timestamp: calendar: gregorian (fixed) year: 2018 month: 12 day: 12 hour: 9 minute: 35 second: 58 isLeapMonth: false )", type: .tempBasal)
         ]
         
         doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate = f("2018-12-12 17:35:58 +0000")
@@ -211,7 +211,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
         doseStore.insulinDeliveryStore.test_currentDate = f("2018-12-12 18:16:23 +0000")
         
         let pumpEvents2 = [
-            NewPumpEvent(date: f("2018-12-12 18:05:14 +0000"), dose: DoseEntry(type: .bolus, startDate: f("2018-12-12 18:05:14 +0000"), endDate: f("2018-12-12 18:05:14 +0000"), value: 5.0, unit: .units), raw: Data(hexadecimalString: "01323200ce052a0c12")!, title: "BolusNormalPumpEvent(length: 9, rawData: 9 bytes, timestamp: calendar: gregorian (fixed) year: 2018 month: 12 day: 12 hour: 10 minute: 5 second: 14 isLeapMonth: false , unabsorbedInsulinRecord: nil, amount: 5.0, programmed: 5.0, unabsorbedInsulinTotal: 0.0, type: MinimedKit.BolusNormalPumpEvent.BolusType.normal, duration: 0.0, deliveryUnitsPerMinute: 1.5)", type: .bolus)
+            NewPumpEvent(date: f("2018-12-12 18:05:14 +0000"), dose: DoseEntry(type: .bolus, startDate: f("2018-12-12 18:05:14 +0000"), endDate: f("2018-12-12 18:05:14 +0000"), value: 5.0, unit: .units, decisionId: nil), raw: Data(hexadecimalString: "01323200ce052a0c12")!, title: "BolusNormalPumpEvent(length: 9, rawData: 9 bytes, timestamp: calendar: gregorian (fixed) year: 2018 month: 12 day: 12 hour: 10 minute: 5 second: 14 isLeapMonth: false , unabsorbedInsulinRecord: nil, amount: 5.0, programmed: 5.0, unabsorbedInsulinTotal: 0.0, type: MinimedKit.BolusNormalPumpEvent.BolusType.normal, duration: 0.0, deliveryUnitsPerMinute: 1.5)", type: .bolus)
         ]
         
         let addPumpEvents2 = expectation(description: "add pumpEvents2")
@@ -240,7 +240,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
         
         let pumpEvents3 = [
             NewPumpEvent(date: f("2018-12-12 18:16:31 +0000"), dose: nil, raw: UUID().data, title: "TempBasalPumpEvent(length: 8, rawData: 8 bytes, rateType: MinimedKit.TempBasalPumpEvent.RateType.Absolute, rate: 0.0, timestamp: calendar: gregorian (fixed) year: 2018 month: 12 day: 12 hour: 10 minute: 16 second: 31 isLeapMonth: false )", type: nil),
-            NewPumpEvent(date: f("2018-12-12 18:16:31 +0000"), dose: DoseEntry(type: .tempBasal, startDate: f("2018-12-12 18:16:31 +0000"), endDate: f("2018-12-12 18:46:31 +0000"), value: 0.0, unit: .unitsPerHour), raw: Data(hexadecimalString: "1601df100a4c12")!, title: "TempBasalDurationPumpEvent(length: 7, rawData: 7 bytes, duration: 30, timestamp: calendar: gregorian (fixed) year: 2018 month: 12 day: 12 hour: 10 minute: 16 second: 31 isLeapMonth: false )", type: .tempBasal),
+            NewPumpEvent(date: f("2018-12-12 18:16:31 +0000"), dose: DoseEntry(type: .tempBasal, startDate: f("2018-12-12 18:16:31 +0000"), endDate: f("2018-12-12 18:46:31 +0000"), value: 0.0, unit: .unitsPerHour, decisionId: nil), raw: Data(hexadecimalString: "1601df100a4c12")!, title: "TempBasalDurationPumpEvent(length: 7, rawData: 7 bytes, duration: 30, timestamp: calendar: gregorian (fixed) year: 2018 month: 12 day: 12 hour: 10 minute: 16 second: 31 isLeapMonth: false )", type: .tempBasal),
         ]
         
         healthStore.setSaveHandler({ (objects, success, error) in
@@ -318,7 +318,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
         
         // Add a temp basal. It hasn't finished yet, and should not be saved to Health
         let pumpEvents1 = [
-            NewPumpEvent(date: f("2018-11-29 10:59:28 +0000"), dose: DoseEntry(type: .tempBasal, startDate: f("2018-11-29 10:59:28 +0000"), endDate: f("2018-11-29 11:29:28 +0000"), value: 0.3, unit: .unitsPerHour, isMutable: true), raw: Data(hexadecimalString: "5bffc7cace53e48e87f7cfcb")!, title: "TempBasalDurationPumpEvent(length: 7, rawData: 7 bytes, duration: 30, timestamp: calendar: gregorian (fixed) year: 2018 month: 11 day: 29 hour: 2 minute: 59 second: 28 isLeapMonth: false )", type: .tempBasal)
+            NewPumpEvent(date: f("2018-11-29 10:59:28 +0000"), dose: DoseEntry(type: .tempBasal, startDate: f("2018-11-29 10:59:28 +0000"), endDate: f("2018-11-29 11:29:28 +0000"), value: 0.3, unit: .unitsPerHour, decisionId: nil, isMutable: true), raw: Data(hexadecimalString: "5bffc7cace53e48e87f7cfcb")!, title: "TempBasalDurationPumpEvent(length: 7, rawData: 7 bytes, duration: 30, timestamp: calendar: gregorian (fixed) year: 2018 month: 11 day: 29 hour: 2 minute: 59 second: 28 isLeapMonth: false )", type: .tempBasal)
         ]
         
         healthStore.setSaveHandler({ (objects, success, error) in
@@ -349,8 +349,8 @@ class DoseStoreTests: PersistenceControllerTestCase {
         doseStore.insulinDeliveryStore.test_currentDate = f("2018-11-29 11:14:28 +0000")
         
         let pumpEvents3 = [
-            NewPumpEvent(date: f("2018-11-29 10:59:28 +0000"), dose: DoseEntry(type: .tempBasal, startDate: f("2018-11-29 10:59:28 +0000"), endDate: f("2018-11-29 11:09:27 +0000"), value: 0.3, unit: .unitsPerHour, isMutable: false), raw: Data(hexadecimalString: "5bffc7cace53e48e87f7cfcb")!, title: "TempBasalDurationPumpEvent(length: 7, rawData: 7 bytes, duration: 30, timestamp: calendar: gregorian (fixed) year: 2018 month: 11 day: 29 hour: 2 minute: 59 second: 28 isLeapMonth: false )", type: .tempBasal),
-            NewPumpEvent(date: f("2018-11-29 11:09:27 +0000"), dose: DoseEntry(type: .tempBasal, startDate: f("2018-11-29 11:09:27 +0000"), endDate: f("2018-11-29 11:39:27 +0000"), value: 0.325, unit: .unitsPerHour), raw: Data(hexadecimalString: "5bffca22ce53e48e87f7d624")!, title: "TempBasalDurationPumpEvent(length: 7, rawData: 7 bytes, duration: 30, timestamp: calendar: gregorian (fixed) year: 2018 month: 11 day: 29 hour: 3 minute: 9 second: 27 isLeapMonth: false )", type: .tempBasal)
+            NewPumpEvent(date: f("2018-11-29 10:59:28 +0000"), dose: DoseEntry(type: .tempBasal, startDate: f("2018-11-29 10:59:28 +0000"), endDate: f("2018-11-29 11:09:27 +0000"), value: 0.3, unit: .unitsPerHour, decisionId: nil, isMutable: false), raw: Data(hexadecimalString: "5bffc7cace53e48e87f7cfcb")!, title: "TempBasalDurationPumpEvent(length: 7, rawData: 7 bytes, duration: 30, timestamp: calendar: gregorian (fixed) year: 2018 month: 11 day: 29 hour: 2 minute: 59 second: 28 isLeapMonth: false )", type: .tempBasal),
+            NewPumpEvent(date: f("2018-11-29 11:09:27 +0000"), dose: DoseEntry(type: .tempBasal, startDate: f("2018-11-29 11:09:27 +0000"), endDate: f("2018-11-29 11:39:27 +0000"), value: 0.325, unit: .unitsPerHour, decisionId: nil), raw: Data(hexadecimalString: "5bffca22ce53e48e87f7d624")!, title: "TempBasalDurationPumpEvent(length: 7, rawData: 7 bytes, duration: 30, timestamp: calendar: gregorian (fixed) year: 2018 month: 11 day: 29 hour: 3 minute: 9 second: 27 isLeapMonth: false )", type: .tempBasal)
         ]
         
         let addPumpEvents3 = expectation(description: "add pumpEvents3")
@@ -381,7 +381,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
         
         let pumpEvents4 = [
             NewPumpEvent(date: f("2018-11-29 11:14:28 +0000"), dose: nil, raw: UUID().data, title: "TempBasalPumpEvent(length: 8, rawData: 8 bytes, rateType: MinimedKit.TempBasalPumpEvent.RateType.Absolute, rate: 0, timestamp: calendar: gregorian (fixed) year: 2018 month: 11 day: 29 hour: 3 minute: 14 second: 28 isLeapMonth: false )", type: nil),
-            NewPumpEvent(date: f("2018-11-29 11:14:28 +0000"), dose: DoseEntry(type: .tempBasal, startDate: f("2018-11-29 11:14:28 +0000"), endDate: f("2018-11-29 11:14:28 +0000"), value: 0.0, unit: .unitsPerHour), raw: Data(hexadecimalString: "5bffced1ce53e48e87f7e33b")!, title: "TempBasalDurationPumpEvent(length: 7, rawData: 7 bytes, duration: 30, timestamp: calendar: gregorian (fixed) year: 2018 month: 11 day: 29 hour: 3 minute: 14 second: 28 isLeapMonth: false )", type: .tempBasal)
+            NewPumpEvent(date: f("2018-11-29 11:14:28 +0000"), dose: DoseEntry(type: .tempBasal, startDate: f("2018-11-29 11:14:28 +0000"), endDate: f("2018-11-29 11:14:28 +0000"), value: 0.0, unit: .unitsPerHour, decisionId: nil), raw: Data(hexadecimalString: "5bffced1ce53e48e87f7e33b")!, title: "TempBasalDurationPumpEvent(length: 7, rawData: 7 bytes, duration: 30, timestamp: calendar: gregorian (fixed) year: 2018 month: 11 day: 29 hour: 3 minute: 14 second: 28 isLeapMonth: false )", type: .tempBasal)
         ]
         
         let addPumpEvents4 = expectation(description: "add pumpEvents4")
@@ -410,7 +410,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
         doseStore.insulinDeliveryStore.test_currentDate = f("2018-11-29 11:24:28 +0000")
         
         let pumpEvents5 = [
-            NewPumpEvent(date: f("2018-11-29 11:14:28 +0000"), dose: DoseEntry(type: .tempBasal, startDate: f("2018-11-29 11:14:28 +0000"), endDate: f("2018-11-29 11:44:28 +0000"), value: 1.0, unit: .unitsPerHour, isMutable: true), raw: Data(hexadecimalString: "e48e87f7e33b5bffced1ce53")!, title: "TempBasalDurationPumpEvent(length: 7, rawData: 7 bytes, duration: 30, timestamp: calendar: gregorian (fixed) year: 2018 month: 11 day: 29 hour: 3 minute: 14 second: 28 isLeapMonth: false )", type: .tempBasal)
+            NewPumpEvent(date: f("2018-11-29 11:14:28 +0000"), dose: DoseEntry(type: .tempBasal, startDate: f("2018-11-29 11:14:28 +0000"), endDate: f("2018-11-29 11:44:28 +0000"), value: 1.0, unit: .unitsPerHour, decisionId: nil, isMutable: true), raw: Data(hexadecimalString: "e48e87f7e33b5bffced1ce53")!, title: "TempBasalDurationPumpEvent(length: 7, rawData: 7 bytes, duration: 30, timestamp: calendar: gregorian (fixed) year: 2018 month: 11 day: 29 hour: 3 minute: 14 second: 28 isLeapMonth: false )", type: .tempBasal)
         ]
         
         let addPumpEvents5 = expectation(description: "add pumpEvents5")
@@ -479,7 +479,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
         // 2. Add a temp basal which has already ended. It should persist in InsulinDeliveryStore.
         let pumpEvents1 = [
             NewPumpEvent(date: f("2018-12-12 17:35:00 +0000"), dose: nil, raw: UUID().data, title: "TempBasalPumpEvent(length: 8, rawData: 8 bytes, rateType: MinimedKit.TempBasalPumpEvent.RateType.Absolute, rate: 2.125, timestamp: calendar: gregorian (fixed) year: 2018 month: 12 day: 12 hour: 9 minute: 35 second: 0 isLeapMonth: false )", type: nil),
-            NewPumpEvent(date: f("2018-12-12 17:35:00 +0000"), dose: DoseEntry(type: .tempBasal, startDate: f("2018-12-12 17:35:00 +0000"), endDate: f("2018-12-12 18:05:00 +0000"), value: 2.125, unit: .unitsPerHour, wasProgrammedByPumpUI: true), raw: Data(hexadecimalString: "1601fa23094c12")!, title: "TempBasalDurationPumpEvent(length: 7, rawData: 7 bytes, duration: 30, timestamp: calendar: gregorian (fixed) year: 2018 month: 12 day: 12 hour: 9 minute: 35 second: 0 isLeapMonth: false )", type: .tempBasal)
+            NewPumpEvent(date: f("2018-12-12 17:35:00 +0000"), dose: DoseEntry(type: .tempBasal, startDate: f("2018-12-12 17:35:00 +0000"), endDate: f("2018-12-12 18:05:00 +0000"), value: 2.125, unit: .unitsPerHour, decisionId: nil, wasProgrammedByPumpUI: true), raw: Data(hexadecimalString: "1601fa23094c12")!, title: "TempBasalDurationPumpEvent(length: 7, rawData: 7 bytes, duration: 30, timestamp: calendar: gregorian (fixed) year: 2018 month: 12 day: 12 hour: 9 minute: 35 second: 0 isLeapMonth: false )", type: .tempBasal)
         ]
         
         doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate = f("2018-12-12 17:35:00 +0000")
@@ -531,6 +531,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
                     endDate: start.addingTimeInterval(.minutes(5)),
                     value: 1.5,
                     unit: .unitsPerHour,
+                    decisionId: nil,
                     automatic: true),
                 raw: Data(hexadecimalString: "01")!,
                 title: "First Temp",
@@ -543,6 +544,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
                     endDate: start.addingTimeInterval(.minutes(15)),
                     value: 1.5,
                     unit: .unitsPerHour,
+                    decisionId: nil,
                     automatic: true),
                 raw: Data(hexadecimalString: "02")!,
                 title: "Second Temp",
@@ -572,7 +574,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
         doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate = doseStart //.addingTimeInterval(.minutes(-2))
         
         let pumpEvent = [
-            NewPumpEvent(date: doseStart, dose: DoseEntry(type: .tempBasal, startDate: doseStart, endDate: doseStart.addingTimeInterval(.minutes(30)), value: 2.125, unit: .unitsPerHour, isMutable: true), raw: Data(hexadecimalString: "1234567890")!, title: "TempBasal Test Data", type: .tempBasal)
+            NewPumpEvent(date: doseStart, dose: DoseEntry(type: .tempBasal, startDate: doseStart, endDate: doseStart.addingTimeInterval(.minutes(30)), value: 2.125, unit: .unitsPerHour, decisionId: nil, isMutable: true), raw: Data(hexadecimalString: "1234567890")!, title: "TempBasal Test Data", type: .tempBasal)
         ]
         
         try await doseStore.addPumpEvents(pumpEvent, lastReconciliation: currentTime)
@@ -602,6 +604,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
                     endDate: testingDate("2024-06-04 17:01:27 +0000"),
                     value: 1.25,
                     unit: .unitsPerHour,
+                    decisionId: nil,
                     deliveredUnits: 0.09980625328687837,
                     syncIdentifier: "74656d70426173616c20302e36323520323032342d30362d30345431363a35363a32375a",
                     automatic: true,
@@ -618,6 +621,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
                     endDate: testingDate("2024-06-04 17:06:27 +0000"),
                     value: 0.3,
                     unit: .unitsPerHour,
+                    decisionId: nil,
                     deliveredUnits: 0.04986030185585366,
                     syncIdentifier: "74656d70426173616c20302e313520323032342d30362d30345431373a30313a32375a",
                     automatic: true,
@@ -634,6 +638,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
                     endDate: testingDate("2024-06-04 17:36:27 +0000"),
                     value: 0,
                     unit: .unitsPerHour,
+                    decisionId: nil,
                     deliveredUnits: nil,
                     syncIdentifier: "74656d70426173616c20302e3020323032342d30362d30345431373a30363a32375a",
                     automatic: true,
@@ -650,6 +655,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
                     endDate: testingDate("2024-06-04 17:14:20 +0000"),
                     value: 0.95,
                     unit: .units,
+                    decisionId: nil,
                     deliveredUnits: nil,
                     syncIdentifier: "626f6c757320302e393520323032342d30362d30345431373a31333a34345a",
                     automatic: false,
@@ -666,6 +672,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
                     endDate: testingDate("2024-06-04 17:22:59 +0000"),
                     value: 4.5,
                     unit: .units,
+                    decisionId: nil,
                     deliveredUnits: nil,
                     syncIdentifier: "626f6c757320342e3520323032342d30362d30345431373a31393a35395a",
                     automatic: false,
@@ -755,6 +762,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
                     endDate: testingDate("2024-10-14 16:27:07 +0000"),
                     value: 2.65,
                     unit: .unitsPerHour,
+                    decisionId: nil,
                     deliveredUnits: 0.02,
                     syncIdentifier: "74656d70426173616c20312e33323520323032342d31302d31345431363a32323a30375a",
                     automatic: true,
@@ -771,6 +779,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
                     endDate: testingDate("2024-10-14 16:36:20 +0000"),
                     value: 5.0,
                     unit: .unitsPerHour,
+                    decisionId: nil,
                     deliveredUnits: 0.75,
                     syncIdentifier: "74656d70426173616c20322e3520323032342d31302d31345431363a32373a30375a",
                     automatic: true,
@@ -1160,6 +1169,7 @@ class DoseStoreEffectTests: PersistenceControllerTestCase {
                 endDate: dateFormatter.date(from: $0["end_at"] as! String)!,
                 value: $0["amount"] as! Double,
                 unit: unit,
+                decisionId: nil,
                 description: $0["description"] as? String,
                 syncIdentifier: $0["raw"] as? String,
                 scheduledBasalRate: scheduledBasalRate

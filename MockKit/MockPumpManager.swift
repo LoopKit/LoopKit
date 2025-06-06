@@ -417,7 +417,7 @@ public final class MockPumpManager: TestingPumpManager {
         }
     }
 
-    public func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (PumpManagerError?) -> Void) {
+    public func enactTempBasal(decisionId: UUID?, unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (PumpManagerError?) -> Void) {
         logDeviceComms(.send, message: "Temp Basal \(unitsPerHour) U/hr Duration:\(duration.hours)")
 
         if state.tempBasalShouldCrash {
@@ -459,7 +459,7 @@ public final class MockPumpManager: TestingPumpManager {
                     completion(nil)
                 }
             } else {
-                let temp = UnfinalizedDose(tempBasalRate: unitsPerHour, startTime: now, duration: duration, insulinType: state.insulinType)
+                let temp = UnfinalizedDose(tempBasalRate: unitsPerHour, startTime: now, duration: duration, insulinType: state.insulinType, decisionId: decisionId)
                 state.unfinalizedTempBasal = temp
                 storePumpEvents { (error) in
                     completion(nil)
@@ -473,7 +473,7 @@ public final class MockPumpManager: TestingPumpManager {
         self.delegate.delegate?.deviceManager(self, logEventForDeviceIdentifier: "mockpump", type: type, message: message, completion: nil)
     }
 
-    public func enactBolus(units: Double, activationType: BolusActivationType, completion: @escaping (PumpManagerError?) -> Void) {
+    public func enactBolus(decisionId: UUID?, units: Double, activationType: BolusActivationType, completion: @escaping (PumpManagerError?) -> Void) {
 
         logDeviceCommunication("enactBolus(\(units), \(activationType))")
 
@@ -513,7 +513,7 @@ public final class MockPumpManager: TestingPumpManager {
             }
             
             
-            let bolus = UnfinalizedDose(bolusAmount: units, startTime: Date(), duration: .minutes(units / type(of: self).deliveryUnitsPerMinute), insulinType: state.insulinType, automatic: activationType.isAutomatic)
+            let bolus = UnfinalizedDose(bolusAmount: units, startTime: Date(), duration: .minutes(units / type(of: self).deliveryUnitsPerMinute), insulinType: state.insulinType, automatic: activationType.isAutomatic, decisionId: decisionId)
             state.unfinalizedBolus = bolus
             
             logDeviceComms(.receive, message: "Bolus accepted")

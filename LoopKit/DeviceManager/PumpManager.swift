@@ -178,7 +178,7 @@ public protocol PumpManager: DeviceManager {
     ///   - automatic: Whether the dose was triggered automatically as opposed to commanded by user
     ///   - completion: A closure called after the command is complete
     ///   - error: An optional error describing why the command failed
-    func enactBolus(units: Double, activationType: BolusActivationType, completion: @escaping (_ error: PumpManagerError?) -> Void)
+    func enactBolus(decisionId: UUID?, units: Double, activationType: BolusActivationType, completion: @escaping (_ error: PumpManagerError?) -> Void)
 
     /// Cancels the current, in progress, bolus.
     ///
@@ -194,7 +194,7 @@ public protocol PumpManager: DeviceManager {
     ///   - duration: The duration of the temporary basal rate.  If you pass in a duration of 0, that cancels any currently running Temp Basal
     ///   - completion: A closure called after the command is complete
     ///   - error: An optional error describing why the command failed
-    func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (_ error: PumpManagerError?) -> Void)
+    func enactTempBasal(decisionId: UUID?, unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (_ error: PumpManagerError?) -> Void)
 
     /// Send a command to the pump to suspend delivery
     ///
@@ -265,10 +265,10 @@ public extension PumpManager {
 
 public extension PumpManager {
 
-    func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval) async throws
+    func enactTempBasal(decisionId: UUID?, unitsPerHour: Double, for duration: TimeInterval) async throws
     {
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
-            enactTempBasal(unitsPerHour: unitsPerHour, for: duration, completion: { error in
+            enactTempBasal(decisionId: decisionId, unitsPerHour: unitsPerHour, for: duration, completion: { error in
                 if let error = error {
                     continuation.resume(throwing: error)
                 } else {
@@ -278,10 +278,9 @@ public extension PumpManager {
         }
     }
 
-    func enactBolus(units: Double, activationType: BolusActivationType) async throws
-    {
+    func enactBolus(decisionId: UUID?, units: Double, activationType: BolusActivationType) async throws {
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
-            enactBolus(units: units, activationType: activationType, completion: { error in
+            enactBolus(decisionId: decisionId, units: units, activationType: activationType, completion: { error in
                 if let error = error {
                     continuation.resume(throwing: error)
                 } else {

@@ -15,4 +15,5 @@ public enum LoopNotificationUserInfoKey: String {
     case missedMealTime
     case missedMealCarbAmount
     case expirationDate
+    case decisionId
 }
