@@ -128,10 +128,12 @@ open class ChartsManager {
     }
 
     // MARK: - State
-
+    public static var xAxisAccessibilityIDs: [ChartAxisValue]?
+        
     private var xAxisValues: [ChartAxisValue]? {
         didSet {
             if let xAxisValues = xAxisValues, xAxisValues.count > 1 {
+                ChartsManager.xAxisAccessibilityIDs =  xAxisValues
                 xAxisModel = ChartAxisModel(axisValues: xAxisValues, lineColor: colors.axisLine, labelSpaceReservationMode: .fixed(20))
             } else {
                 xAxisModel = nil

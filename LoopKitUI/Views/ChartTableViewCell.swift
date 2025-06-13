@@ -72,7 +72,8 @@ public final class ChartTableViewCell: UITableViewCell {
     }
     
     public func setTitleLabelAccessibilityIdentifier(_ value: String) {
-        titleLabel?.accessibilityIdentifier = "chartTitleText_\(value)"
+        titleLabel?.accessibilityIdentifier = 
+            "chartTitleText_\(value)_\(ChartsManager.xAxisAccessibilityIDs?.count ?? -1)"
     }
     
     public func setTitleLabelText(label: NSAttributedString?) {
