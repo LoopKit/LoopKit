@@ -56,19 +56,10 @@ public extension Guardrail where Value == LoopQuantity {
         )
     }
 
-    static func temporaryPresetCorrectionRange(suspendThreshold: GlucoseThreshold?) -> Guardrail<LoopQuantity> {
-        let absoluteLowerBound = suspendThreshold?.quantity ?? Guardrail.suspendThreshold.absoluteBounds.lowerBound
-        let recommendedLowerBound = [
-            absoluteLowerBound,
-            Guardrail.suspendThreshold.recommendedBounds.lowerBound
-        ].compactMap { $0 }.max()!
-
-        return Guardrail(
-            absoluteBounds: absoluteLowerBound...unconstrainedWorkoutCorrectionRange.absoluteBounds.upperBound,
-            recommendedBounds: recommendedLowerBound...unconstrainedWorkoutCorrectionRange.recommendedBounds.upperBound
+    static let temporaryPresetCorrectionRange = Guardrail(
+            absoluteBounds: Guardrail.suspendThreshold.absoluteBounds.lowerBound...unconstrainedWorkoutCorrectionRange.absoluteBounds.upperBound,
+            recommendedBounds: Guardrail.suspendThreshold.recommendedBounds.lowerBound...unconstrainedWorkoutCorrectionRange.recommendedBounds.upperBound
         )
-    }
-
 
     static let premealCorrectionRangeMaximum = LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 130.0)
 
