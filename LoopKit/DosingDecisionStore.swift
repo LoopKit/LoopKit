@@ -270,6 +270,8 @@ public struct StoredDosingDecisionData {
 
 public typealias HistoricalGlucoseValue = PredictedGlucoseValue
 
+public typealias EnactedTempBasal = TempBasalRecommendation
+
 public struct StoredDosingDecision {
     public var id: UUID
     public var date: Date
@@ -293,6 +295,8 @@ public struct StoredDosingDecision {
     public var automaticDoseRecommendation: AutomaticDoseRecommendation?
     public var manualBolusRecommendation: ManualBolusRecommendationWithDate?
     public var manualBolusRequested: Double?
+    public var enactedTempBasal: EnactedTempBasal?
+    public var enactedBolusAmount: Double?
     public var warnings: [Issue]
     public var errors: [Issue]
     public var syncIdentifier: UUID
@@ -319,6 +323,8 @@ public struct StoredDosingDecision {
                 automaticDoseRecommendation: AutomaticDoseRecommendation? = nil,
                 manualBolusRecommendation: ManualBolusRecommendationWithDate? = nil,
                 manualBolusRequested: Double? = nil,
+                enactedTempBasal: EnactedTempBasal? = nil,
+                enactedBolusAmount: Double? = nil,
                 warnings: [Issue] = [],
                 errors: [Issue] = [],
                 syncIdentifier: UUID = UUID()) {
@@ -344,6 +350,8 @@ public struct StoredDosingDecision {
         self.automaticDoseRecommendation = automaticDoseRecommendation
         self.manualBolusRecommendation = manualBolusRecommendation
         self.manualBolusRequested = manualBolusRequested
+        self.enactedTempBasal = enactedTempBasal
+        self.enactedBolusAmount = enactedBolusAmount
         self.warnings = warnings
         self.errors = errors
         self.syncIdentifier = syncIdentifier
@@ -442,6 +450,8 @@ extension StoredDosingDecision: Codable {
                   automaticDoseRecommendation: try container.decodeIfPresent(AutomaticDoseRecommendation.self, forKey: .automaticDoseRecommendation),
                   manualBolusRecommendation: try container.decodeIfPresent(ManualBolusRecommendationWithDate.self, forKey: .manualBolusRecommendation),
                   manualBolusRequested: try container.decodeIfPresent(Double.self, forKey: .manualBolusRequested),
+                  enactedTempBasal: try container.decodeIfPresent(EnactedTempBasal.self, forKey: .enactedTempBasal),
+                  enactedBolusAmount: try container.decodeIfPresent(Double.self, forKey: .enactedBolusAmount),
                   warnings: try container.decodeIfPresent([Issue].self, forKey: .warnings) ?? [],
                   errors: try container.decodeIfPresent([Issue].self, forKey: .errors) ?? [],
                   syncIdentifier: try container.decode(UUID.self, forKey: .syncIdentifier))
@@ -471,6 +481,8 @@ extension StoredDosingDecision: Codable {
         try container.encodeIfPresent(automaticDoseRecommendation, forKey: .automaticDoseRecommendation)
         try container.encodeIfPresent(manualBolusRecommendation, forKey: .manualBolusRecommendation)
         try container.encodeIfPresent(manualBolusRequested, forKey: .manualBolusRequested)
+        try container.encodeIfPresent(enactedTempBasal, forKey: .enactedTempBasal)
+        try container.encodeIfPresent(enactedBolusAmount, forKey: .enactedBolusAmount)
         try container.encodeIfPresent(!warnings.isEmpty ? warnings : nil, forKey: .warnings)
         try container.encodeIfPresent(!errors.isEmpty ? errors : nil, forKey: .errors)
         try container.encode(syncIdentifier, forKey: .syncIdentifier)
@@ -499,6 +511,8 @@ extension StoredDosingDecision: Codable {
         case automaticDoseRecommendation
         case manualBolusRecommendation
         case manualBolusRequested
+        case enactedTempBasal
+        case enactedBolusAmount
         case warnings
         case errors
         case syncIdentifier
