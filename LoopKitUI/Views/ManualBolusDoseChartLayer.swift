@@ -33,7 +33,6 @@ class ManualBolusDoseChartLayer<T: ChartPoint>: ChartPointsScatterLayer<T> {
             context.translateBy(x: -rect.width / 2, y: -rect.height / 2)
             let drawRect = CGRect(x: 0, y: 0, width: rect.width, height: rect.height)
             context.draw(image, in: drawRect)
-//            context.clip(to: drawRect, mask: image)
             context.restoreGState()
         }
     }
