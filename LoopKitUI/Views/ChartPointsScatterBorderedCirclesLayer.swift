@@ -52,7 +52,7 @@ class ChartPointsScatterBorderedCirclesLayer<T: ChartPoint>: ChartPointsScatterC
             displayDelay: displayDelay,
             itemSize: itemSize,
             itemFillColor: itemFillColor,
-            itemBorderColor: UIColor.white,
+            itemBorderColor: .systemBackground,
             tapSettings: tapSettings
         )
     }

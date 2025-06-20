@@ -77,7 +77,7 @@ public extension DoseChart {
         let manualBolusLayer: ManualBolusDoseChartLayer<ChartPoint>?
         
         if points.manualBolus.count > 0 {
-            manualBolusLayer = ManualBolusDoseChartLayer(xAxis: xAxisLayer.axis, yAxis: yAxisLayer.axis, chartPoints: points.manualBolus, displayDelay: 0, itemSize: CGSize(width: manualBolusPointSize, height: manualBolusPointSize), itemFillColor: colors.insulinTint)
+            manualBolusLayer = ManualBolusDoseChartLayer(xAxis: xAxisLayer.axis, yAxis: yAxisLayer.axis, chartPoints: points.manualBolus, displayDelay: 0, itemSize: CGSize(width: manualBolusPointSize, height: manualBolusPointSize))
         } else {
             manualBolusLayer = nil
         }
