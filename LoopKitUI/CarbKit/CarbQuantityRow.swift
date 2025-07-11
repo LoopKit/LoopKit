@@ -22,6 +22,7 @@ public struct CarbQuantityRow: View {
     private let formatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
+        formatter.maximumIntegerDigits = 3
         formatter.maximumFractionDigits = 1
         return formatter
     }()
@@ -76,13 +77,8 @@ public struct CarbQuantityRow: View {
     
     // Update quantity based on text field input
     private func updateQuantity(with input: String) {
-        let filtered = input.filter { "0123456789.".contains($0) }
-        if filtered != input {
-            self.carbInput = filtered
-        }
-        
-        if let doubleValue = Double(filtered) {
-            quantity = doubleValue
+        if let number = formatter.number(from: input) {
+            quantity = number.doubleValue
         } else {
             quantity = nil
         }
