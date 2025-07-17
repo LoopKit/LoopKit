@@ -1109,7 +1109,7 @@ extension DoseStore {
                 return doses.map { dose in
                     var dose = dose
                     if dose.type == .suspend && dose.startDate == dose.endDate {
-                        dose.endDate = end ?? self.currentDate()
+                        dose.endDate = end ?? self.currentDate() + InsulinMath.defaultInsulinActivityDuration
                     }
                     return dose
                 }
