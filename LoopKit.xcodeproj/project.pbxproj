@@ -469,7 +469,6 @@
 		A9498D8F23386CE800DAA9B9 /* MockServiceTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9498D8E23386CE800DAA9B9 /* MockServiceTableViewController.swift */; };
 		A9498D9123386D0800DAA9B9 /* MockService+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9498D9023386D0800DAA9B9 /* MockService+UI.swift */; };
 		A95A1D7F2460BBC70079378D /* DosingDecisionObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95A1D7E2460BBC70079378D /* DosingDecisionObject+CoreDataClass.swift */; };
-		A95A1D802460BBC70079378D /* DosingDecisionObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95A1D7E2460BBC70079378D /* DosingDecisionObject+CoreDataClass.swift */; };
 		A95A1D822460BBDC0079378D /* DosingDecisionObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95A1D812460BBDC0079378D /* DosingDecisionObject+CoreDataProperties.swift */; };
 		A95A1D852460CAD50079378D /* CarbValueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95A1D842460CAD50079378D /* CarbValueTests.swift */; };
 		A95A1D872460F1250079378D /* GlucoseValueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95A1D862460F1250079378D /* GlucoseValueTests.swift */; };
@@ -4459,7 +4458,6 @@
 				A9E675B722713F4700E25293 /* NSManagedObjectContext.swift in Sources */,
 				A9E675B822713F4700E25293 /* StoredCarbEntry.swift in Sources */,
 				C1CEBFD629BA9D6C007FD8A3 /* Collection.swift in Sources */,
-				A95A1D802460BBC70079378D /* DosingDecisionObject+CoreDataClass.swift in Sources */,
 				89AE2230228BC68100BDFD85 /* DoseProgressReporter.swift in Sources */,
 				A9E675BD22713F4700E25293 /* HKQuantitySample+InsulinKit.swift in Sources */,
 				C17F39CA23CD2D2000FA1113 /* PersistentDeviceLog.swift in Sources */,
