@@ -1,5 +1,5 @@
 //
-//  ModelMappingv5Tov6Policy.swift
+//  ModelMappingv4v5Tov6Policy.swift
 //  LoopKit
 //
 //  Created by Cameron Ingham on 7/29/25.
@@ -28,7 +28,6 @@ class DosingDecisionObjectMigrationPolicy: NSEntityMigrationPolicy {
             return
         }
         
-        // Assuming your JSON data is stored in `data` attribute as Data
         if let jsonData = sInstance.value(forKey: "data") as? Data {
             let decoder = JSONDecoder()
             struct Payload: Decodable { let id: UUID }

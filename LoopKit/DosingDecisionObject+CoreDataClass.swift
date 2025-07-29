@@ -17,7 +17,7 @@ class DosingDecisionObject: NSManagedObject {
         super.awakeFromInsert()
         updateModificationCounter()
     }
-    
+
     public override func willSave() {
         if isUpdated && !hasUpdatedModificationCounter {
             updateModificationCounter()
