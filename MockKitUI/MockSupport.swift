@@ -106,8 +106,10 @@ extension MockSupport {
             return
         }
         let interruptionLevel: LoopKit.Alert.InterruptionLevel = versionUpdate == .required ? .critical : .active
-        alertIssuer?.issueAlert(Alert(identifier: alertIdentifier, foregroundContent: alertContent, backgroundContent: alertContent, trigger: .immediate, interruptionLevel: interruptionLevel))
-        recordLastAlertDate()
+        Task {
+            await alertIssuer?.issueAlert(Alert(identifier: alertIdentifier, foregroundContent: alertContent, backgroundContent: alertContent, trigger: .immediate, interruptionLevel: interruptionLevel))
+            recordLastAlertDate()
+        }
     }
     
     private func noAlertNecessary() {

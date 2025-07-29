@@ -10,6 +10,7 @@ import SwiftUI
 import HealthKit
 import LoopKit
 
+@MainActor
 public protocol SupportInfoProvider {
     var pumpStatus: PumpManagerStatus? { get }
     var cgmStatus: CGMManagerStatus? { get }
@@ -53,6 +54,7 @@ public struct CustomMenuItem {
 }
 
 public protocol SupportUIDelegate: AlertIssuer, SupportInfoProvider  {
+    @MainActor
     func openURL(url: URL)
 }
 
@@ -66,6 +68,7 @@ public struct DeviceWhitelist: Hashable {
     }
 }
 
+@MainActor
 public protocol SupportUI: Pluggable {
 
     typealias RawStateValue = [String: Any]

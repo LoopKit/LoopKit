@@ -11,15 +11,22 @@ import Foundation
 /// Protocol that describes any class that issues and retract Alerts.
 public protocol AlertIssuer: AnyObject {
     /// Issue (post) the given alert, according to its trigger schedule.
-    func issueAlert(_ alert: Alert)
+    @MainActor
+    func issueAlert(_ alert: Alert) async
     /// Retract any alerts with the given identifier.  This includes both pending and delivered alerts.
-    func retractAlert(identifier: Alert.Identifier)
+    @MainActor
+    func retractAlert(identifier: Alert.Identifier) async
 }
 
 /// Protocol that describes something that can deal with a user's response to an alert.
 public protocol AlertResponder: AnyObject {
     /// Acknowledge alerts with a given type identifier. If the alert fails to clear, an error should be passed to the completion handler, indicating the cause of failure.
-    func acknowledgeAlert(alertIdentifier: Alert.AlertIdentifier, completion: @escaping (Error?) -> Void) -> Void
+    func acknowledgeAlert(alertIdentifier: Alert.AlertIdentifier) async throws
+    func handleAlertAction(actionIdentifier: String, from alert: Alert) async throws
+}
+
+extension AlertResponder {
+    public func handleAlertAction(actionIdentifier: String, from alert: Alert) async throws { }
 }
 
 public struct PersistedAlert: Equatable {
@@ -36,20 +43,21 @@ public struct PersistedAlert: Equatable {
 }
 
 /// Protocol for recording and looking up alerts persisted in storage
+@MainActor
 public protocol PersistedAlertStore {
     /// Determine if an alert is already issued for a given `Alert.Identifier`.
-    func doesIssuedAlertExist(identifier: Alert.Identifier, completion: @escaping (Swift.Result<Bool, Error>) -> Void)
+    func doesIssuedAlertExist(identifier: Alert.Identifier) async throws -> Bool
 
     /// Look up all issued, but unretracted, alerts for a given `managerIdentifier`.  This is useful for an Alert issuer to see what alerts are extant (outstanding).
     /// NOTE: the completion function may be called on a different queue than the caller.  Callers must be prepared for this.
-    func lookupAllUnretracted(managerIdentifier: String, completion: @escaping (Swift.Result<[PersistedAlert], Error>) -> Void)
+    func lookupAllUnretracted(managerIdentifier: String) async throws -> [PersistedAlert]
 
     /// Look up all issued, but unretracted, and unacknowledged, alerts for a given `managerIdentifier`.  This is useful for an Alert issuer to see what alerts are extant (outstanding).
     /// NOTE: the completion function may be called on a different queue than the caller.  Callers must be prepared for this.
-    func lookupAllUnacknowledgedUnretracted(managerIdentifier: String, completion: @escaping (Swift.Result<[PersistedAlert], Error>) -> Void)
+    func lookupAllUnacknowledgedUnretracted(managerIdentifier: String) async throws -> [PersistedAlert]
 
     /// Records an alert that occurred (likely in the past) but is already retracted. This alert will never be presented to the user by an AlertPresenter. Such a retracted alert has the same date for issued and retracted dates, and there is no acknowledged date
-    func recordRetractedAlert(_ alert: Alert, at date: Date)
+    func recordRetractedAlert(_ alert: Alert, at date: Date) async throws
 }
 
 /// Structure that represents an Alert that is issued from a Device.
@@ -73,19 +81,50 @@ public struct Alert: Equatable {
         /// The system makes every attempt at alerting the user, including (possibly) ignoring the mute switch, or the user's notification settings.
         case critical
     }
+
+    public struct UserAlertAction: Equatable {
+        public let label: String
+        public let identifier: String
+        public let style: Style
+
+        public enum Style : Int, Equatable {
+            case `default` = 0
+            case cancel = 1
+            case destructive = 2
+        }
+
+        public init(label: String, identifier: String, style: Style = .default) {
+            self.label = label
+            self.identifier = identifier
+            self.style = style
+        }
+
+        public static var `default`: UserAlertAction {
+            .init(label: "OK", identifier: "default")
+        }
+    }
+
     /// Content of the alert, either for foreground or background alerts
     public struct Content: Equatable  {
         public let title: String
         public let body: String
-        // TODO: when we have more complicated actions.  For now, all we have is "acknowledge".
-//        let actions: [UserAlertAction]
-        public let acknowledgeActionButtonLabel: String
+        public let actions: [UserAlertAction]
+
+        public init(title: String, body: String, actions: [UserAlertAction] = [.default]) {
+            self.title = title
+            self.body = body
+            self.actions = actions
+        }
+
         public init(title: String, body: String, acknowledgeActionButtonLabel: String) {
             self.title = title
             self.body = body
-            self.acknowledgeActionButtonLabel = acknowledgeActionButtonLabel
+            self.actions = [
+                UserAlertAction(label: acknowledgeActionButtonLabel, identifier: "acknowledge")
+            ]
         }
     }
+
     public struct Identifier: Equatable, Hashable {
         /// Unique device manager identifier from whence the alert came, and to which alert acknowledgements should be directed.
         public let managerIdentifier: String
@@ -117,6 +156,8 @@ public struct Alert: Equatable {
     /// find which device issued it, and send acknowledgment of that alert to the proper device manager.
     public let identifier: Identifier
 
+    public let categoryIdentifier: String?
+
     /// Representation of a "sound" (or other sound-like action, like vibrate) to perform when the alert is issued.
     public enum Sound: Equatable {
         case vibrate
@@ -135,7 +176,8 @@ public struct Alert: Equatable {
                 trigger: Trigger,
                 interruptionLevel: InterruptionLevel = .timeSensitive,
                 sound: Sound? = nil,
-                metadata: Metadata? = nil)
+                metadata: Metadata? = nil,
+                categoryIdentifier: String? = nil)
     {
         self.identifier = identifier
         self.foregroundContent = foregroundContent
@@ -144,6 +186,7 @@ public struct Alert: Equatable {
         self.interruptionLevel = interruptionLevel
         self.sound = sound
         self.metadata = metadata
+        self.categoryIdentifier = categoryIdentifier
     }
 }
 
@@ -168,6 +211,8 @@ public protocol AlertSoundVendor {
 
 extension Alert: Codable { }
 extension Alert.Content: Codable { }
+extension Alert.UserAlertAction.Style: Codable { }
+extension Alert.UserAlertAction: Codable { }
 extension Alert.Identifier: Codable { }
 extension Alert.InterruptionLevel: Codable { }
 // These Codable implementations of enums with associated values cannot be synthesized (yet) in Swift.
@@ -214,6 +259,37 @@ extension Alert.Trigger: Codable {
             var container = encoder.container(keyedBy: CodingKeys.self)
             try container.encode(Repeating(repeatInterval: repeatInterval), forKey: .repeating)
         }
+    }
+}
+
+extension Alert.Content {
+    private enum CodingKeys: String, CodingKey {
+        case title
+        case body
+        case actions
+        case acknowledgeActionButtonLabel
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        title = try container.decode(String.self, forKey: .title)
+        body = try container.decode(String.self, forKey: .body)
+
+        // Check if the new 'actions' key exists
+        if container.contains(.actions) {
+            actions = try container.decode([Alert.UserAlertAction].self, forKey: .actions)
+        } else {
+            // Fallback to old format: convert acknowledgeActionButtonLabel to actions
+            let label = try container.decode(String.self, forKey: .acknowledgeActionButtonLabel)
+            actions = [Alert.UserAlertAction(label: label, identifier: "acknowledge")]
+        }
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(title, forKey: .title)
+        try container.encode(body, forKey: .body)
+        try container.encode(actions, forKey: .actions)
     }
 }
 

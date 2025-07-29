@@ -770,86 +770,69 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
 
     // MARK: -
 
-    func testGetSyncCarbObjects() {
+    func testGetSyncCarbObjects() async throws {
         let firstCarbEntry = NewCarbEntry(quantity: LoopQuantity(unit: .gram, doubleValue: 10), startDate: Date(timeIntervalSinceNow: -1), foodType: "First", absorptionTime: .hours(5))
         let secondCarbEntry = NewCarbEntry(quantity: LoopQuantity(unit: .gram, doubleValue: 20), startDate: Date(), foodType: "Second", absorptionTime: .hours(3))
         let thirdCarbEntry = NewCarbEntry(quantity: LoopQuantity(unit: .gram, doubleValue: 30), startDate: Date(timeIntervalSinceNow: 1), foodType: "Third", absorptionTime: .minutes(30))
-        let getSyncCarbObjectsCompletion = expectation(description: "Get sync carb objects completion")
 
-        carbStore.addCarbEntry(firstCarbEntry) { (_) in
-            DispatchQueue.main.async {
-                self.carbStore.addCarbEntry(secondCarbEntry) { (_) in
-                    DispatchQueue.main.async {
-                        self.carbStore.addCarbEntry(thirdCarbEntry) { (_) in
-                            DispatchQueue.main.async {
-                                self.carbStore.getSyncCarbObjects(start: Date().addingTimeInterval(-.minutes(1))) { result in
-                                    getSyncCarbObjectsCompletion.fulfill()
-                                    switch result {
-                                    case .failure(let error):
-                                        XCTFail("Unexpected failure: \(error)")
-                                    case .success(let objects):
-                                        XCTAssertEqual(objects.count, 3)
+        let _ = try await carbStore.addCarbEntry(firstCarbEntry)
+        let _ = try await carbStore.addCarbEntry(secondCarbEntry)
+        let _ = try await carbStore.addCarbEntry(thirdCarbEntry)
 
-                                        // First
-                                        XCTAssertEqual(objects[0].absorptionTime, firstCarbEntry.absorptionTime)
-                                        XCTAssertEqual(objects[0].createdByCurrentApp, true)
-                                        XCTAssertEqual(objects[0].foodType, firstCarbEntry.foodType)
-                                        XCTAssertEqual(objects[0].grams, firstCarbEntry.quantity.doubleValue(for: .gram))
-                                        XCTAssertEqual(objects[0].startDate, firstCarbEntry.startDate)
-                                        XCTAssertNotNil(objects[0].uuid)
-                                        XCTAssertEqual(objects[0].provenanceIdentifier, Bundle.main.bundleIdentifier!)
-                                        XCTAssertNotNil(objects[0].syncIdentifier)
-                                        XCTAssertEqual(objects[0].syncVersion, 1)
-                                        XCTAssertEqual(objects[0].userCreatedDate, firstCarbEntry.date)
-                                        XCTAssertNil(objects[0].userUpdatedDate)
-                                        XCTAssertNil(objects[0].userDeletedDate)
-                                        XCTAssertEqual(objects[0].operation, .create)
-                                        XCTAssertNotNil(objects[0].addedDate)
-                                        XCTAssertNil(objects[0].supercededDate)
+        let objects = try await carbStore.getSyncCarbObjects(start: Date().addingTimeInterval(-.minutes(1)))
 
-                                        // Second
-                                        XCTAssertEqual(objects[1].absorptionTime, secondCarbEntry.absorptionTime)
-                                        XCTAssertEqual(objects[1].createdByCurrentApp, true)
-                                        XCTAssertEqual(objects[1].foodType, secondCarbEntry.foodType)
-                                        XCTAssertEqual(objects[1].grams, secondCarbEntry.quantity.doubleValue(for: .gram))
-                                        XCTAssertEqual(objects[1].startDate, secondCarbEntry.startDate)
-                                        XCTAssertNotNil(objects[1].uuid)
-                                        XCTAssertEqual(objects[1].provenanceIdentifier, Bundle.main.bundleIdentifier!)
-                                        XCTAssertNotNil(objects[1].syncIdentifier)
-                                        XCTAssertEqual(objects[1].syncVersion, 1)
-                                        XCTAssertEqual(objects[1].userCreatedDate, secondCarbEntry.date)
-                                        XCTAssertNil(objects[1].userUpdatedDate)
-                                        XCTAssertNil(objects[1].userDeletedDate)
-                                        XCTAssertEqual(objects[1].operation, .create)
-                                        XCTAssertNotNil(objects[1].addedDate)
-                                        XCTAssertNil(objects[1].supercededDate)
+        XCTAssertEqual(objects.count, 3)
 
-                                        // Third
-                                        XCTAssertEqual(objects[2].absorptionTime, thirdCarbEntry.absorptionTime)
-                                        XCTAssertEqual(objects[2].createdByCurrentApp, true)
-                                        XCTAssertEqual(objects[2].foodType, thirdCarbEntry.foodType)
-                                        XCTAssertEqual(objects[2].grams, thirdCarbEntry.quantity.doubleValue(for: .gram))
-                                        XCTAssertEqual(objects[2].startDate, thirdCarbEntry.startDate)
-                                        XCTAssertNotNil(objects[2].uuid)
-                                        XCTAssertEqual(objects[2].provenanceIdentifier, Bundle.main.bundleIdentifier!)
-                                        XCTAssertNotNil(objects[2].syncIdentifier)
-                                        XCTAssertEqual(objects[2].syncVersion, 1)
-                                        XCTAssertEqual(objects[2].userCreatedDate, thirdCarbEntry.date)
-                                        XCTAssertNil(objects[2].userUpdatedDate)
-                                        XCTAssertNil(objects[2].userDeletedDate)
-                                        XCTAssertEqual(objects[2].operation, .create)
-                                        XCTAssertNotNil(objects[2].addedDate)
-                                        XCTAssertNil(objects[2].supercededDate)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        // First
+        XCTAssertEqual(objects[0].absorptionTime, firstCarbEntry.absorptionTime)
+        XCTAssertEqual(objects[0].createdByCurrentApp, true)
+        XCTAssertEqual(objects[0].foodType, firstCarbEntry.foodType)
+        XCTAssertEqual(objects[0].grams, firstCarbEntry.quantity.doubleValue(for: .gram))
+        XCTAssertEqual(objects[0].startDate, firstCarbEntry.startDate)
+        XCTAssertNotNil(objects[0].uuid)
+        XCTAssertEqual(objects[0].provenanceIdentifier, Bundle.main.bundleIdentifier!)
+        XCTAssertNotNil(objects[0].syncIdentifier)
+        XCTAssertEqual(objects[0].syncVersion, 1)
+        XCTAssertEqual(objects[0].userCreatedDate, firstCarbEntry.date)
+        XCTAssertNil(objects[0].userUpdatedDate)
+        XCTAssertNil(objects[0].userDeletedDate)
+        XCTAssertEqual(objects[0].operation, .create)
+        XCTAssertNotNil(objects[0].addedDate)
+        XCTAssertNil(objects[0].supercededDate)
 
-        wait(for: [getSyncCarbObjectsCompletion], timeout: 30, enforceOrder: true)
+        // Second
+        XCTAssertEqual(objects[1].absorptionTime, secondCarbEntry.absorptionTime)
+        XCTAssertEqual(objects[1].createdByCurrentApp, true)
+        XCTAssertEqual(objects[1].foodType, secondCarbEntry.foodType)
+        XCTAssertEqual(objects[1].grams, secondCarbEntry.quantity.doubleValue(for: .gram))
+        XCTAssertEqual(objects[1].startDate, secondCarbEntry.startDate)
+        XCTAssertNotNil(objects[1].uuid)
+        XCTAssertEqual(objects[1].provenanceIdentifier, Bundle.main.bundleIdentifier!)
+        XCTAssertNotNil(objects[1].syncIdentifier)
+        XCTAssertEqual(objects[1].syncVersion, 1)
+        XCTAssertEqual(objects[1].userCreatedDate, secondCarbEntry.date)
+        XCTAssertNil(objects[1].userUpdatedDate)
+        XCTAssertNil(objects[1].userDeletedDate)
+        XCTAssertEqual(objects[1].operation, .create)
+        XCTAssertNotNil(objects[1].addedDate)
+        XCTAssertNil(objects[1].supercededDate)
+
+        // Third
+        XCTAssertEqual(objects[2].absorptionTime, thirdCarbEntry.absorptionTime)
+        XCTAssertEqual(objects[2].createdByCurrentApp, true)
+        XCTAssertEqual(objects[2].foodType, thirdCarbEntry.foodType)
+        XCTAssertEqual(objects[2].grams, thirdCarbEntry.quantity.doubleValue(for: .gram))
+        XCTAssertEqual(objects[2].startDate, thirdCarbEntry.startDate)
+        XCTAssertNotNil(objects[2].uuid)
+        XCTAssertEqual(objects[2].provenanceIdentifier, Bundle.main.bundleIdentifier!)
+        XCTAssertNotNil(objects[2].syncIdentifier)
+        XCTAssertEqual(objects[2].syncVersion, 1)
+        XCTAssertEqual(objects[2].userCreatedDate, thirdCarbEntry.date)
+        XCTAssertNil(objects[2].userUpdatedDate)
+        XCTAssertNil(objects[2].userDeletedDate)
+        XCTAssertEqual(objects[2].operation, .create)
+        XCTAssertNotNil(objects[2].addedDate)
+        XCTAssertNil(objects[2].supercededDate)
     }
 
     func testSetSyncCarbObjects() {
