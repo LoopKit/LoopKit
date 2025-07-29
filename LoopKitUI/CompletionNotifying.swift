@@ -9,6 +9,7 @@
 import Foundation
 
 public protocol CompletionDelegate: AnyObject {
+    @MainActor
     func completionNotifyingDidComplete(_ object: CompletionNotifying)
 }
 

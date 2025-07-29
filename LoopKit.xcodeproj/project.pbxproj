@@ -691,6 +691,7 @@
 		C11A17482CB713C10019C517 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B41E10512C3D314600E186F7 /* Model.xcdatamodeld */; };
 		C13FF4262C5ADC8100FD2869 /* DiscoveredFob+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13FF4252C5ADC8100FD2869 /* DiscoveredFob+UI.swift */; };
 		C140E0522602908A000A4FF7 /* SettingsPresentationMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C140E0512602908A000A4FF7 /* SettingsPresentationMode.swift */; };
+		C14604822E0087BA00153DFD /* TemporaryPresetScheduleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14604812E0087AE00153DFD /* TemporaryPresetScheduleTests.swift */; };
 		C1475B33264C30800040C7B1 /* LoopKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BA7154201E484D0058961E /* LoopKitUI.framework */; };
 		C14A7E7E295F43AB00CD87B4 /* ConfigurationPageScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14A7E7D295F43AB00CD87B4 /* ConfigurationPageScrollView.swift */; };
 		C15E994429C67866004AB926 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4B67E2CC289B4EDB002D92AF /* Localizable.strings */; };
@@ -1647,6 +1648,7 @@
 		C13F89C4297E495B00C71398 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C13FF4252C5ADC8100FD2869 /* DiscoveredFob+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DiscoveredFob+UI.swift"; sourceTree = "<group>"; };
 		C140E0512602908A000A4FF7 /* SettingsPresentationMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsPresentationMode.swift; sourceTree = "<group>"; };
+		C14604812E0087AE00153DFD /* TemporaryPresetScheduleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemporaryPresetScheduleTests.swift; sourceTree = "<group>"; };
 		C14690CF297E497A00124A99 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C1469E02297E498100042439 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C14A7E7D295F43AB00CD87B4 /* ConfigurationPageScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationPageScrollView.swift; sourceTree = "<group>"; };
@@ -2599,6 +2601,7 @@
 				A971C8A123C6B17D0099BEFC /* SettingsStoreTests.swift */,
 				A963B277252CE2510062AA12 /* StoredCarbEntryTests.swift */,
 				A9E068102534D87800BDAB59 /* StoredGlucoseSampleTests.swift */,
+				C14604812E0087AE00153DFD /* TemporaryPresetScheduleTests.swift */,
 				891A3FD02249948A00378B27 /* TemporaryScheduleOverrideHistoryTests.swift */,
 				8974AFBF22120D7A0043F01B /* TemporaryScheduleOverrideTests.swift */,
 				E93C86AF24CF7C470073089B /* TherapySettingsTests.swift */,
@@ -4292,6 +4295,7 @@
 				A9BFA03E245CCCB9001E4AE3 /* DailyQuantityScheduleTests.swift in Sources */,
 				A99C73772339A67A00C80963 /* GlucoseThresholdTests.swift in Sources */,
 				434113BC20F2C56100D05747 /* CachedGlucoseObjectTests.swift in Sources */,
+				C14604822E0087BA00153DFD /* TemporaryPresetScheduleTests.swift in Sources */,
 				E93C86B024CF7C470073089B /* TherapySettingsTests.swift in Sources */,
 				A95A1D872460F1250079378D /* GlucoseValueTests.swift in Sources */,
 				B46E095725F7E5910025A04D /* GlucoseRangeScheduleTests.swift in Sources */,

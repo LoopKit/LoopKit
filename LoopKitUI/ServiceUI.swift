@@ -50,12 +50,14 @@ public protocol ServiceOnboardingDelegate: AnyObject {
     ///
     /// - Parameters:
     ///     - service: The service created.
+    @MainActor
     func serviceOnboarding(didCreateService service: Service)
 
     /// Informs the delegate that the specified service was onboarded.
     ///
     /// - Parameters:
     ///     - service: The service onboarded.
+    @MainActor
     func serviceOnboarding(didOnboardService service: Service)
 }
 

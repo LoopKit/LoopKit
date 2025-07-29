@@ -42,6 +42,7 @@ public enum BluetoothState: Int {
     case poweredOn
 }
 
+@MainActor
 public protocol BluetoothObserver: AnyObject {
     /// Informs the observer that the Bluetooth state has changed to the given value.
     ///
@@ -50,6 +51,7 @@ public protocol BluetoothObserver: AnyObject {
     func bluetoothDidUpdateState(_ state: BluetoothState)
 }
 
+@MainActor
 public protocol BluetoothProvider: AnyObject {
     /// The current Bluetooth authorization.
     var bluetoothAuthorization: BluetoothAuthorization { get }

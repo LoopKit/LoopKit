@@ -635,8 +635,10 @@ extension MockPumpManager {
 
 // MARK: - AlertResponder implementation
 extension MockPumpManager {
-    public func acknowledgeAlert(alertIdentifier: Alert.AlertIdentifier, completion: @escaping (Error?) -> Void) {
-        completion(nil)
+    public func acknowledgeAlert(alertIdentifier: Alert.AlertIdentifier) async throws {
+    }
+
+    public func handleAlertAction(actionIdentifier: String, from alert: Alert) async throws {
     }
 }
 

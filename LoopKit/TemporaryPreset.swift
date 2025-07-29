@@ -70,6 +70,48 @@ public struct TemporaryPreset: Hashable, Sendable {
         self.repeatOptions = repeatOptions
     }
 
+    public func nextScheduledStartAfter(_ date: Date, calendar: Calendar = .current) -> Date? {
+        guard let scheduleStartDate = scheduleStartDate else { return nil }
+
+        // If no repeat options are set, this is a one-time preset
+        guard let repeatOptions = repeatOptions, repeatOptions != .none else {
+            // For one-time presets, return the schedule start date only if it's after the given date
+            return scheduleStartDate > date ? scheduleStartDate : nil
+        }
+
+        // Get the time components from the original schedule start date
+        let timeComponents = calendar.dateComponents([.hour, .minute, .second], from: scheduleStartDate)
+
+        let startDate = calendar.startOfDay(for: date)
+
+        // Look ahead up to 7 days (including today) to find the next occurrence
+        for dayOffset in 0..<8 {
+            let checkDate = calendar.date(byAdding: .day, value: dayOffset, to: startDate) ?? startDate
+            let weekday = calendar.component(.weekday, from: checkDate)
+
+            // Check if this weekday matches any of the repeat options
+            for repeatOption in PresetScheduleRepeatOptions.allCases {
+                if repeatOptions.contains(repeatOption),
+                   let optionWeekday = repeatOption.calendarWeekdayIndex,
+                   weekday == optionWeekday {
+
+                    // Create the full date with the original time components
+                    var fullDateComponents = calendar.dateComponents([.year, .month, .day], from: checkDate)
+                    fullDateComponents.hour = timeComponents.hour
+                    fullDateComponents.minute = timeComponents.minute
+                    fullDateComponents.second = timeComponents.second
+
+                    if let scheduledDate = calendar.date(from: fullDateComponents),
+                       scheduledDate > date {
+                        return scheduledDate
+                    }
+                }
+            }
+        }
+
+        return nil
+    }
+
     public func createOverride(enactTrigger: TemporaryScheduleOverride.EnactTrigger, beginningAt date: Date = Date()) -> TemporaryScheduleOverride {
         return TemporaryScheduleOverride(
             context: .preset(self),
