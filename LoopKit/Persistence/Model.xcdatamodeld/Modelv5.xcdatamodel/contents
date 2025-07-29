@@ -60,7 +60,7 @@
         <attribute name="automaticallyIssued" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="deletedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="deliveredUnits" attributeType="Double" usesScalarValueType="YES" versionHashModifier="1" elementID="value"/>
+        <attribute name="deliveredUnits" optional="YES" attributeType="Double" usesScalarValueType="YES" versionHashModifier="1" elementID="value"/>
         <attribute name="endDate" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="hasLoopKitOrigin" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="insulinType" optional="YES" attributeType="Integer 16" defaultValueString="0.0" usesScalarValueType="YES"/>

@@ -59,6 +59,30 @@ class CachedInsulinDeliveryObject: NSManagedObject {
             primitiveScheduledBasalRate = NSNumber(value: rate)
         }
     }
+    
+    var deliveredUnits: Double? {
+        get {
+            willAccessValue(forKey: "deliveredUnits")
+            defer { didAccessValue(forKey: "deliveredUnits") }
+
+            guard let deliveredUnits = primitiveDeliveredUnits else {
+                return nil
+            }
+
+            return deliveredUnits.doubleValue
+        }
+        set {
+            willChangeValue(forKey: "deliveredUnits")
+            defer { didChangeValue(forKey: "deliveredUnits") }
+
+            guard let deliveredUnits = newValue else {
+                primitiveDeliveredUnits = nil
+                return
+            }
+
+            primitiveDeliveredUnits = NSNumber(value: deliveredUnits)
+        }
+    }
 
     var programmedTempBasalRate: LoopQuantity? {
         get {
@@ -168,20 +192,22 @@ extension CachedInsulinDeliveryObject {
             fatalError("CachedInsulinDeliveryObject has unexpected reason value: \(String(describing: reason))")
         }
 
-        let programmedValue: Double
+        let programmedValue: Double?
         let unit: DoseUnit
-        let deliveredUnits: Double
+        let deliveredUnits: Double?
 
         if type == .tempBasal,
-           let programmedRate = programmedTempBasalRate
+           let programmedRate = programmedTempBasalRate,
+           let _deliveredUnits = self.deliveredUnits
         {
-            deliveredUnits = self.deliveredUnits
+            deliveredUnits = _deliveredUnits
             programmedValue = programmedRate.doubleValue(for: .internationalUnitsPerHour)
             unit = .unitsPerHour
         } else if type == .basal,
-                  let programmedRate = scheduledBasalRate
+                  let programmedRate = scheduledBasalRate,
+                  let _deliveredUnits = self.deliveredUnits
         {
-            deliveredUnits = self.deliveredUnits
+            deliveredUnits = _deliveredUnits
             programmedValue = programmedRate.doubleValue(for: .internationalUnitsPerHour)
             unit = .unitsPerHour
         } else if type == .suspend {
@@ -190,15 +216,19 @@ extension CachedInsulinDeliveryObject {
             unit = .units
         } else {
             deliveredUnits = self.deliveredUnits
-            programmedValue = self.programmedUnits ?? deliveredUnits
+            programmedValue = self.programmedUnits
             unit = .units
         }
 
+        if programmedValue == nil {
+            assertionFailure("programmedValue should always exist though not enforced via type system")
+        }
+        
         return DoseEntry(
             type: type,
             startDate: startDate,
             endDate: endDate,
-            value: programmedValue,
+            value: programmedValue ?? 0,
             unit: unit,
             decisionId: decisionId,
             deliveredUnits: !isMutable ? deliveredUnits : nil,
