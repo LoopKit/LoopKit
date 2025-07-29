@@ -192,7 +192,7 @@ extension CachedInsulinDeliveryObject {
             fatalError("CachedInsulinDeliveryObject has unexpected reason value: \(String(describing: reason))")
         }
 
-        let programmedValue: Double?
+        let programmedValue: Double
         let unit: DoseUnit
         let deliveredUnits: Double?
 
@@ -216,19 +216,19 @@ extension CachedInsulinDeliveryObject {
             unit = .units
         } else {
             deliveredUnits = self.deliveredUnits
-            programmedValue = self.programmedUnits
+            programmedValue = self.programmedUnits ?? self.deliveredUnits ?? 0
             unit = .units
         }
 
-        if programmedValue == nil {
-            assertionFailure("programmedValue should always exist though not enforced via type system")
+        if self.programmedUnits == nil && self.deliveredUnits == nil && type == .bolus {
+            assertionFailure("programmedUnits and deliveredUnits should always exist though not enforced via type system")
         }
         
         return DoseEntry(
             type: type,
             startDate: startDate,
             endDate: endDate,
-            value: programmedValue ?? 0,
+            value: programmedValue,
             unit: unit,
             decisionId: decisionId,
             deliveredUnits: !isMutable ? deliveredUnits : nil,
