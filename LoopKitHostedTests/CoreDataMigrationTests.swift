@@ -20,7 +20,7 @@ class CoreDataMigrationTests: XCTestCase {
     
     func testV4toV5Migration() throws {
         // create model V4
-        let modelV4Container = try startPersistentContainer("Modelv4")
+        let modelV4Container = try startPersistentContainer(.v4)
         
         let modelV4CachedInsulinDeliveryObjectDescription = NSEntityDescription.entity(forEntityName: "CachedInsulinDeliveryObject", in: modelV4Container.viewContext)!
         XCTAssertTrue(modelV4CachedInsulinDeliveryObjectDescription.propertiesByName.keys.contains("value"))
@@ -31,7 +31,7 @@ class CoreDataMigrationTests: XCTestCase {
         XCTAssertFalse(modelV4CachedCarbObjectDescription.propertiesByName.keys.contains("favoriteFoodID"))
         
         // migrate V4 -> V5
-        let modelV5Container = try migrate(container: modelV4Container, to: "Modelv5")
+        let modelV5Container = try migrate(container: modelV4Container, to: .v5)
         
         let modelV5CachedInsulinDeliveryObjectDescription = NSEntityDescription.entity(forEntityName: "CachedInsulinDeliveryObject", in: modelV5Container.viewContext)!
         XCTAssertFalse(modelV5CachedInsulinDeliveryObjectDescription.propertiesByName.keys.contains("value"))
@@ -40,27 +40,145 @@ class CoreDataMigrationTests: XCTestCase {
         
         let modelV5CachedCarbObjectDescription = NSEntityDescription.entity(forEntityName: "CachedCarbObject", in: modelV5Container.viewContext)!
         XCTAssertTrue(modelV5CachedCarbObjectDescription.propertiesByName.keys.contains("favoriteFoodID"))
+    }
+    
+    func testV5toV6Migration() throws {
+        // create model V5
+        let modelV5Container = try startPersistentContainer(.v5)
+        let oldContext = modelV5Container.viewContext
 
+        let date = Date()
+        let id = UUID()
+        let mock = StoredDosingDecision(id: id, reason: "test")
+        let encoded = try PropertyListEncoder().encode(mock)
+
+        let oldObject = NSEntityDescription.insertNewObject(forEntityName: "DosingDecisionObject", into: oldContext)
+        oldObject.setValue(encoded, forKey: "data")
+        oldObject.setValue(date, forKey: "date")
+        try oldContext.save()
+        
+        let v5Count = try modelV5Container.viewContext.count(for: NSFetchRequest<NSManagedObject>(entityName: "DosingDecisionObject"))
+        XCTAssertEqual(v5Count, 1)
+
+        let modelV6Container = try migrate(container: modelV5Container, to: .v6, migrationPlan: .v5Tov6)
+
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "DosingDecisionObject")
+        let migratedObjects = try modelV6Container.viewContext.fetch(fetchRequest)
+        XCTAssertEqual(migratedObjects.count, 1)
+
+        if let migratedObject = migratedObjects.first {
+            let dateValue = migratedObject.value(forKey: "date") as? Date
+            let dataValue = migratedObject.value(forKey: "data") as? Data
+            let idValue = migratedObject.value(forKey: "id") as? UUID
+            XCTAssertEqual(dateValue, date)
+            XCTAssertEqual(dataValue, encoded)
+            XCTAssertEqual(idValue, id)
+        }
+    }
+    
+    func testV4toV6Migration() throws {
+        // create model V4
+        let modelV5Container = try startPersistentContainer(.v4)
+        let oldContext = modelV5Container.viewContext
+
+        let date = Date()
+        let id = UUID()
+        let mock = StoredDosingDecision(id: id, reason: "test")
+        let encoded = try PropertyListEncoder().encode(mock)
+
+        let oldObject = NSEntityDescription.insertNewObject(forEntityName: "DosingDecisionObject", into: oldContext)
+        oldObject.setValue(encoded, forKey: "data")
+        oldObject.setValue(date, forKey: "date")
+        try oldContext.save()
+        
+        let v5Count = try modelV5Container.viewContext.count(for: NSFetchRequest<NSManagedObject>(entityName: "DosingDecisionObject"))
+        XCTAssertEqual(v5Count, 1)
+
+        let modelV6Container = try migrate(container: modelV5Container, to: .v6)
+
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "DosingDecisionObject")
+        let migratedObjects = try modelV6Container.viewContext.fetch(fetchRequest)
+        XCTAssertEqual(migratedObjects.count, 1)
+
+        if let migratedObject = migratedObjects.first {
+            let dateValue = migratedObject.value(forKey: "date") as? Date
+            let dataValue = migratedObject.value(forKey: "data") as? Data
+            let idValue = migratedObject.value(forKey: "id") as? UUID
+            XCTAssertEqual(dateValue, date)
+            XCTAssertEqual(dataValue, encoded)
+            XCTAssertEqual(idValue, id)
+        }
     }
 }
     
 // taken from https://ifcaselet.com/writing-unit-tests-for-core-data-migrations/
 extension CoreDataMigrationTests {
+    
+    enum ModelVersion {
+        case v4
+        case v5
+        case v6
+        
+        var name: String {
+            switch self {
+            case .v4: "Modelv4"
+            case .v5: "Modelv5"
+            case .v6: "Modelv6"
+            }
+        }
+    }
+    
+    enum MigrationPlan {
+        case v5Tov6
+        
+        var from: ModelVersion {
+            switch self {
+            case .v5Tov6:
+                return .v5
+            }
+        }
+        
+        var to: ModelVersion {
+            switch self {
+            case .v5Tov6:
+                return .v6
+            }
+        }
+    }
+    
     /// Create and load a store using the given model version. The store will be located in a
     /// temporary directory.
     ///
     /// - Parameter versionName: The name of the model (`.xcdatamodel`). For example, `"App V1"`.
     /// - Returns: An `NSPersistentContainer` that is loaded and ready for usage.
-    func startPersistentContainer(_ versionName: String) throws -> NSPersistentContainer {
-        let storeURL = makeTemporaryStoreURL()
-        let model = managedObjectModel(versionName: versionName)
-        
-        let container = makePersistentContainer(storeURL: storeURL,
-                                                managedObjectModel: model)
+    func startPersistentContainer(_ version: ModelVersion, storeURL: URL? = nil) throws -> NSPersistentContainer {
+        let storeURL = storeURL ?? makeTemporaryStoreURL()
+        let model = managedObjectModel(version: version)
+
+        let container = NSPersistentContainer(name: version.name, managedObjectModel: model)
+
+        let description = NSPersistentStoreDescription(url: storeURL)
+        description.type = NSSQLiteStoreType
+        description.shouldMigrateStoreAutomatically = true
+        description.shouldInferMappingModelAutomatically = false
+        description.setOption(true as NSNumber, forKey: NSMigratePersistentStoresAutomaticallyOption)
+        description.setOption(true as NSNumber, forKey: NSInferMappingModelAutomaticallyOption)
+
+        container.persistentStoreDescriptions = [description]
+
+        var loadError: Error?
+        let semaphore = DispatchSemaphore(value: 0)
         container.loadPersistentStores { _, error in
-            XCTAssertNil(error)
+            loadError = error
+            semaphore.signal()
         }
-        
+        semaphore.wait()
+
+        if let error = loadError {
+            XCTFail("Failed to load persistent store for version \(version.name): \(error)")
+            throw error
+        }
+
         return container
     }
     
@@ -74,10 +192,10 @@ extension CoreDataMigrationTests {
     ///
     /// - Returns: A migrated `NSPersistentContainer` that is loaded and ready for usage. This
     ///            container uses a different store URL than the original `container`.
-    func migrate(container: NSPersistentContainer, to versionName: String) throws -> NSPersistentContainer {
+    func migrate(container: NSPersistentContainer, to version: ModelVersion, migrationPlan: MigrationPlan? = nil) throws -> NSPersistentContainer {
         // Define the source and destination `NSManagedObjectModels`.
         let sourceModel = container.managedObjectModel
-        let destinationModel = managedObjectModel(versionName: versionName)
+        let destinationModel = managedObjectModel(version: version)
         
         let sourceStoreURL = storeURL(from: container)
         // Create a new temporary store URL. This is where the migrated data using the model
@@ -86,8 +204,14 @@ extension CoreDataMigrationTests {
         
         // Infer a mapping model between the source and destination `NSManagedObjectModels`.
         // Modify this line if you use a custom mapping model.
-        let mappingModel = try NSMappingModel.inferredMappingModel(forSourceModel: sourceModel,
-                                                                   destinationModel: destinationModel)
+        var mappingModel: NSMappingModel
+        if let migrationPlan {
+            let bundle = Bundle(for: PersistenceController.self)
+            mappingModel = NSMappingModel(from: [bundle], forSourceModel: sourceModel, destinationModel: destinationModel)!
+        } else {
+            mappingModel = try NSMappingModel.inferredMappingModel(forSourceModel: sourceModel,
+                                                                       destinationModel: destinationModel)
+        }
         
         let migrationManager = NSMigrationManager(sourceModel: sourceModel,
                                                   destinationModel: destinationModel)
@@ -125,8 +249,8 @@ extension CoreDataMigrationTests {
         return container
     }
     
-    private func managedObjectModel(versionName: String) -> NSManagedObjectModel {
-        let url = momdURL.appendingPathComponent(versionName).appendingPathExtension("mom")
+    private func managedObjectModel(version: ModelVersion) -> NSManagedObjectModel {
+        let url = momdURL.appendingPathComponent(version.name).appendingPathExtension("mom")
         return NSManagedObjectModel(contentsOf: url)!
     }
     

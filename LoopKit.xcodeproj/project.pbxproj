@@ -273,12 +273,12 @@
 		43FB610720DDF19B002B996B /* PumpManagerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FB610620DDF19B002B996B /* PumpManagerError.swift */; };
 		4B67E2CB289B4EDB002D92AF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4B67E2C9289B4EDB002D92AF /* InfoPlist.strings */; };
 		7D68A9AE1FE0A3D000522C49 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68A9B01FE0A3D000522C49 /* Localizable.strings */; };
-		840A2D7F2E39646E00D4E245 /* ModelMappingv5Tov6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 840A2D7E2E39646E00D4E245 /* ModelMappingv5Tov6.xcmappingmodel */; };
-		840A2D802E39646E00D4E245 /* ModelMappingv5Tov6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 840A2D7E2E39646E00D4E245 /* ModelMappingv5Tov6.xcmappingmodel */; };
 		840A2D822E39649500D4E245 /* ModelMappingv4v5Tov6Policy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840A2D812E39649500D4E245 /* ModelMappingv4v5Tov6Policy.swift */; };
 		840A2D832E39649500D4E245 /* ModelMappingv4v5Tov6Policy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840A2D812E39649500D4E245 /* ModelMappingv4v5Tov6Policy.swift */; };
-		840A2DB92E396FD500D4E245 /* ModelMappingv4Tov6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 840A2DB82E396FD500D4E245 /* ModelMappingv4Tov6.xcmappingmodel */; };
-		840A2DBA2E396FD500D4E245 /* ModelMappingv4Tov6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 840A2DB82E396FD500D4E245 /* ModelMappingv4Tov6.xcmappingmodel */; };
+		840A2DD32E399BD400D4E245 /* Modelv5ToModelv6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 840A2DD22E399BD400D4E245 /* Modelv5ToModelv6.xcmappingmodel */; };
+		840A2DD42E399BD400D4E245 /* Modelv5ToModelv6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 840A2DD22E399BD400D4E245 /* Modelv5ToModelv6.xcmappingmodel */; };
+		840A2DD62E39A30700D4E245 /* Modelv4ToModelv6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 840A2DD52E39A30700D4E245 /* Modelv4ToModelv6.xcmappingmodel */; };
+		840A2DD72E39A30700D4E245 /* Modelv4ToModelv6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 840A2DD52E39A30700D4E245 /* Modelv4ToModelv6.xcmappingmodel */; };
 		840A2F112C0F9882003D5E90 /* LoopCompletionFreshness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840A2F102C0F9882003D5E90 /* LoopCompletionFreshness.swift */; };
 		840A2F122C0F9A88003D5E90 /* LoopCompletionFreshness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840A2F102C0F9882003D5E90 /* LoopCompletionFreshness.swift */; };
 		84245E062CDED4910071D111 /* HealthKitWrappers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84245E052CDED4910071D111 /* HealthKitWrappers.swift */; };
@@ -1316,9 +1316,9 @@
 		7D68AABC1FE31BE700522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7D68AAC61FE31BE900522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		840A2D7D2E39635B00D4E245 /* Modelv6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Modelv6.xcdatamodel; sourceTree = "<group>"; };
-		840A2D7E2E39646E00D4E245 /* ModelMappingv5Tov6.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = ModelMappingv5Tov6.xcmappingmodel; sourceTree = "<group>"; };
 		840A2D812E39649500D4E245 /* ModelMappingv4v5Tov6Policy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelMappingv4v5Tov6Policy.swift; sourceTree = "<group>"; };
-		840A2DB82E396FD500D4E245 /* ModelMappingv4Tov6.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = ModelMappingv4Tov6.xcmappingmodel; sourceTree = "<group>"; };
+		840A2DD22E399BD400D4E245 /* Modelv5ToModelv6.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Modelv5ToModelv6.xcmappingmodel; sourceTree = "<group>"; };
+		840A2DD52E39A30700D4E245 /* Modelv4ToModelv6.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Modelv4ToModelv6.xcmappingmodel; sourceTree = "<group>"; };
 		840A2F102C0F9882003D5E90 /* LoopCompletionFreshness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopCompletionFreshness.swift; sourceTree = "<group>"; };
 		84245E052CDED4910071D111 /* HealthKitWrappers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitWrappers.swift; sourceTree = "<group>"; };
 		849B110C2C19E2A40083B30A /* NumberCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberCircle.swift; sourceTree = "<group>"; };
@@ -2300,8 +2300,8 @@
 			isa = PBXGroup;
 			children = (
 				B41E10512C3D314600E186F7 /* Model.xcdatamodeld */,
-				840A2D7E2E39646E00D4E245 /* ModelMappingv5Tov6.xcmappingmodel */,
-				840A2DB82E396FD500D4E245 /* ModelMappingv4Tov6.xcmappingmodel */,
+				840A2DD22E399BD400D4E245 /* Modelv5ToModelv6.xcmappingmodel */,
+				840A2DD52E39A30700D4E245 /* Modelv4ToModelv6.xcmappingmodel */,
 				840A2D812E39649500D4E245 /* ModelMappingv4v5Tov6Policy.swift */,
 				434113AC20F287DC00D05747 /* NSManagedObjectContext.swift */,
 				43D8FEE21C7294D50073BE78 /* PersistenceController.swift */,
@@ -4109,7 +4109,6 @@
 				43D8FDF61C7290350073BE78 /* DailyQuantitySchedule.swift in Sources */,
 				43D8FDF51C7290350073BE78 /* CarbRatioSchedule.swift in Sources */,
 				89AE222C228BC66E00BDFD85 /* Locked.swift in Sources */,
-				840A2DBA2E396FD500D4E245 /* ModelMappingv4Tov6.xcmappingmodel in Sources */,
 				432CF87120D76D5A0066B889 /* GlucoseDisplayable.swift in Sources */,
 				A919889F2355016B00B75EEE /* DosingDecisionStore.swift in Sources */,
 				4322B77F202FA2AF0002837D /* PersistenceController.swift in Sources */,
@@ -4130,7 +4129,6 @@
 				43D8FDF41C7290350073BE78 /* BasalRateSchedule.swift in Sources */,
 				4322B788202FA2B30002837D /* DoseStore.swift in Sources */,
 				C187338E29B9486200519CDF /* ClosedRange.swift in Sources */,
-				840A2D7F2E39646E00D4E245 /* ModelMappingv5Tov6.xcmappingmodel in Sources */,
 				B41E10542C3D314600E186F7 /* Model.xcdatamodeld in Sources */,
 				A93CA899278D08CC003B5A01 /* PumpAlarmType.swift in Sources */,
 				4322B781202FA2AF0002837D /* PumpEvent+CoreDataProperties.swift in Sources */,
@@ -4163,6 +4161,7 @@
 				434C5F9C2098352500B2FD1A /* QuantityFormatter.swift in Sources */,
 				43F503642106C78C009FA89A /* ServiceAuthentication.swift in Sources */,
 				A93761C125ED670200F6BE43 /* BluetoothProvider.swift in Sources */,
+				840A2DD32E399BD400D4E245 /* Modelv5ToModelv6.xcmappingmodel in Sources */,
 				433BC7A720523DB7000B1200 /* NewGlucoseSample.swift in Sources */,
 				4322B78E202FA2B30002837D /* InsulinMath.swift in Sources */,
 				840A2D822E39649500D4E245 /* ModelMappingv4v5Tov6Policy.swift in Sources */,
@@ -4189,6 +4188,7 @@
 				A932803B2798D63B0091D0A1 /* SyncAlertObject.swift in Sources */,
 				1D841AAD24577EE10069DBFF /* AlertSoundPlayer.swift in Sources */,
 				C187339A29B9488300519CDF /* UUID.swift in Sources */,
+				840A2DD62E39A30700D4E245 /* Modelv4ToModelv6.xcmappingmodel in Sources */,
 				C1CAB9E926A3254800A57273 /* StoredInsulinModel.swift in Sources */,
 				43CACE0E2247F89100F90AF5 /* WeakSynchronizedSet.swift in Sources */,
 				A912BE2B245B9E8600CBE199 /* SettingsObject+CoreDataProperties.swift in Sources */,
@@ -4405,7 +4405,6 @@
 			files = (
 				89AE2235228BCAAB00BDFD85 /* CarbSensitivitySchedule.swift in Sources */,
 				89AE2236228BCAAB00BDFD85 /* DailyQuantitySchedule+Override.swift in Sources */,
-				840A2D802E39646E00D4E245 /* ModelMappingv5Tov6.xcmappingmodel in Sources */,
 				89AE2237228BCAAB00BDFD85 /* EGPSchedule.swift in Sources */,
 				A933DB8924BF97CC009B417A /* CriticalEventLog.swift in Sources */,
 				89AE2238228BCAAB00BDFD85 /* TemporaryScheduleOverride.swift in Sources */,
@@ -4467,6 +4466,7 @@
 				C1614F062AAFC36200F636E5 /* CgmEvent.swift in Sources */,
 				C11A17482CB713C10019C517 /* Model.xcdatamodeld in Sources */,
 				C1A174ED23DEAD6A0034DF11 /* DeviceLogEntry+CoreDataProperties.swift in Sources */,
+				840A2DD72E39A30700D4E245 /* Modelv4ToModelv6.xcmappingmodel in Sources */,
 				A9E675B222713F4700E25293 /* GlucoseRangeSchedule.swift in Sources */,
 				A9E675B322713F4700E25293 /* PersistedPumpEvent.swift in Sources */,
 				89AE2231228BC68100BDFD85 /* DoseProgressTimerEstimator.swift in Sources */,
@@ -4509,8 +4509,8 @@
 				A9498D7F23386C3300DAA9B9 /* GlucoseThreshold.swift in Sources */,
 				A9E675D522713F4700E25293 /* WalshInsulinModel.swift in Sources */,
 				A9A53E2D2714E5BC0050C0B1 /* CodableDevice.swift in Sources */,
+				840A2DD42E399BD400D4E245 /* Modelv5ToModelv6.xcmappingmodel in Sources */,
 				B40C43912707408400F5D86C /* DeliveryLimits.swift in Sources */,
-				840A2DB92E396FD500D4E245 /* ModelMappingv4Tov6.xcmappingmodel in Sources */,
 				A9E675D722713F4700E25293 /* PumpEvent+CoreDataClass.swift in Sources */,
 				A9E675D922713F4700E25293 /* Reservoir+CoreDataProperties.swift in Sources */,
 				E9F54FBA258052130034795E /* InsulinType.swift in Sources */,
