@@ -15,31 +15,22 @@ class DosingDecisionObjectMigrationPolicy: NSEntityMigrationPolicy {
         in mapping: NSEntityMapping,
         manager: NSMigrationManager
     ) throws {
-        print("🟢 Custom migration policy is running!")
         try super.createDestinationInstances(
             forSource: sInstance,
             in: mapping,
             manager: manager
         )
 
-        guard let destInstance = manager.destinationInstances(
+        // Decode the ID from data
+        if let destInstance = manager.destinationInstances(
             forEntityMappingName: mapping.name,
             sourceInstances: [sInstance]
-        ).first else {
-            return
-        }
-
-        // Decode the ID from data
-        if let data = sInstance.value(forKey: "data") as? Data {
+        ).first, let data = sInstance.value(forKey: "data") as? Data {
             let decoder = PropertyListDecoder()
             struct Payload: Decodable { let id: UUID }
 
-            print("data exists \(data)")
-            
             if let payload = try? decoder.decode(Payload.self, from: data) {
-                print("payload exists \(payload)")
                 destInstance.setValue(payload.id, forKey: "id")
-                
                 assert(destInstance.value(forKey: "id") as? UUID == payload.id)
             }
         }
