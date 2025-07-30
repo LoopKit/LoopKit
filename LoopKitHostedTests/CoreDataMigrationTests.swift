@@ -60,7 +60,7 @@ class CoreDataMigrationTests: XCTestCase {
         let v5Count = try modelV5Container.viewContext.count(for: NSFetchRequest<NSManagedObject>(entityName: "DosingDecisionObject"))
         XCTAssertEqual(v5Count, 1)
 
-        let modelV6Container = try migrate(container: modelV5Container, to: .v6, migrationPlan: .v5Tov6)
+        let modelV6Container = try migrate(container: modelV5Container, to: .v6, manualMigrationPlan: .v5Tov6)
 
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "DosingDecisionObject")
         let migratedObjects = try modelV6Container.viewContext.fetch(fetchRequest)
@@ -78,8 +78,8 @@ class CoreDataMigrationTests: XCTestCase {
     
     func testV4toV6Migration() throws {
         // create model V4
-        let modelV5Container = try startPersistentContainer(.v4)
-        let oldContext = modelV5Container.viewContext
+        let modelV4Container = try startPersistentContainer(.v4)
+        let oldContext = modelV4Container.viewContext
 
         let date = Date()
         let id = UUID()
@@ -91,10 +91,10 @@ class CoreDataMigrationTests: XCTestCase {
         oldObject.setValue(date, forKey: "date")
         try oldContext.save()
         
-        let v5Count = try modelV5Container.viewContext.count(for: NSFetchRequest<NSManagedObject>(entityName: "DosingDecisionObject"))
+        let v5Count = try modelV4Container.viewContext.count(for: NSFetchRequest<NSManagedObject>(entityName: "DosingDecisionObject"))
         XCTAssertEqual(v5Count, 1)
 
-        let modelV6Container = try migrate(container: modelV5Container, to: .v6)
+        let modelV6Container = try migrate(container: modelV4Container, to: .v6, manualMigrationPlan: .v5Tov6)
 
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "DosingDecisionObject")
         let migratedObjects = try modelV6Container.viewContext.fetch(fetchRequest)
@@ -128,19 +128,22 @@ extension CoreDataMigrationTests {
         }
     }
     
-    enum MigrationPlan {
+    enum ManualMigrationPlan {
         case v5Tov6
+        case v4Tov6
         
         var from: ModelVersion {
             switch self {
             case .v5Tov6:
                 return .v5
+            case.v4Tov6:
+                return .v4
             }
         }
         
         var to: ModelVersion {
             switch self {
-            case .v5Tov6:
+            case .v5Tov6, .v4Tov6:
                 return .v6
             }
         }
@@ -192,7 +195,7 @@ extension CoreDataMigrationTests {
     ///
     /// - Returns: A migrated `NSPersistentContainer` that is loaded and ready for usage. This
     ///            container uses a different store URL than the original `container`.
-    func migrate(container: NSPersistentContainer, to version: ModelVersion, migrationPlan: MigrationPlan? = nil) throws -> NSPersistentContainer {
+    func migrate(container: NSPersistentContainer, to version: ModelVersion, manualMigrationPlan: ManualMigrationPlan? = nil) throws -> NSPersistentContainer {
         // Define the source and destination `NSManagedObjectModels`.
         let sourceModel = container.managedObjectModel
         let destinationModel = managedObjectModel(version: version)
@@ -205,7 +208,7 @@ extension CoreDataMigrationTests {
         // Infer a mapping model between the source and destination `NSManagedObjectModels`.
         // Modify this line if you use a custom mapping model.
         var mappingModel: NSMappingModel
-        if let migrationPlan {
+        if manualMigrationPlan != nil {
             let bundle = Bundle(for: PersistenceController.self)
             mappingModel = NSMappingModel(from: [bundle], forSourceModel: sourceModel, destinationModel: destinationModel)!
         } else {
