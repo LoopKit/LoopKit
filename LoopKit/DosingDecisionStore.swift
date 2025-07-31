@@ -256,6 +256,35 @@ extension DosingDecisionStore {
             }
         }
     }
+    
+    public func findDosingDecisionsSinceDate(date: Date) async throws -> [StoredDosingDecision] {
+        try await withCheckedThrowingContinuation { continuation in
+            let enqueueTime = DispatchTime.now()
+
+            self.store.managedObjectContext.performAndWait {
+                let startTime = DispatchTime.now()
+
+                defer {
+                    let endTime = DispatchTime.now()
+                    let queueWait = Double(startTime.uptimeNanoseconds - enqueueTime.uptimeNanoseconds) / 1_000_000_000
+                    let fetchWait = Double(endTime.uptimeNanoseconds - startTime.uptimeNanoseconds) / 1_000_000_000
+                    self.log.debug("executeDosingDecisionQuery (queueWait(%.03f), fetch(%.03f)",  queueWait, fetchWait)
+                }
+
+                let storedRequest: NSFetchRequest<DosingDecisionObject> = DosingDecisionObject.fetchRequest()
+
+                storedRequest.predicate = NSPredicate(format: "date >= %@", date as NSDate)
+
+                do {
+                    let stored = try self.store.managedObjectContext.fetch(storedRequest).compactMap({ StoredDosingDecisionData(date: $0.date, data: $0.data) }).compactMap({ decodeDosingDecision(fromData: $0.data) })
+                    continuation.resume(returning: stored)
+                } catch let error {
+                    continuation.resume(throwing: error)
+                    return
+                }
+            }
+        }
+    }
 }
 
 public struct StoredDosingDecisionData {
