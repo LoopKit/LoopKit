@@ -257,7 +257,7 @@ extension DosingDecisionStore {
         }
     }
     
-    public func findDosingDecisionsSinceDate(date: Date) async throws -> [StoredDosingDecision] {
+    public func findDosingDecisionsByIds(_ ids: [UUID]) async throws -> [StoredDosingDecision] {
         try await withCheckedThrowingContinuation { continuation in
             let enqueueTime = DispatchTime.now()
 
@@ -273,7 +273,7 @@ extension DosingDecisionStore {
 
                 let storedRequest: NSFetchRequest<DosingDecisionObject> = DosingDecisionObject.fetchRequest()
 
-                storedRequest.predicate = NSPredicate(format: "date >= %@", date as NSDate)
+                storedRequest.predicate = NSPredicate(format: "id in %@", ids)
 
                 do {
                     let stored = try self.store.managedObjectContext.fetch(storedRequest).compactMap({ StoredDosingDecisionData(date: $0.date, data: $0.data) }).compactMap({ decodeDosingDecision(fromData: $0.data) })
