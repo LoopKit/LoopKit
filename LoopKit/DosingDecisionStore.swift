@@ -11,6 +11,16 @@ import Foundation
 import CoreData
 import LoopAlgorithm
 
+public protocol DosingDecision: Decodable {
+    var automaticDoseRecommendation: AutomaticDoseRecommendation? { get }
+    var carbEntry: StoredCarbEntry? { get }
+    var id: UUID { get }
+    var manualBolusRecommendation: ManualBolusRecommendationWithDate? { get }
+    var manualBolusRequested: Double? { get }
+    var scheduleOverride: TemporaryScheduleOverride? { get }
+    var syncIdentifier: UUID { get }
+}
+
 public protocol DosingDecisionStoreDelegate: AnyObject {
     /**
      Informs the delegate that the dosing decision store has updated dosing decision data.
@@ -105,7 +115,7 @@ public class DosingDecisionStore {
                     do {
                         let dosingDecisionObjects = try self.store.managedObjectContext.fetch(request)
 
-                        let dosingDecisions = dosingDecisionObjects.compactMap { object in
+                        let dosingDecisions: [StoredDosingDecision] = dosingDecisionObjects.compactMap { object in
                             return self.decodeDosingDecision(fromData: object.data)
                         }
                         continuation.resume(returning: dosingDecisions.first)
@@ -135,9 +145,9 @@ public class DosingDecisionStore {
 
     private static var decoder = PropertyListDecoder()
 
-    private func decodeDosingDecision(fromData data: Data) -> StoredDosingDecision? {
+    private func decodeDosingDecision<D: DosingDecision>(fromData data: Data) -> D? {
         do {
-            return try Self.decoder.decode(StoredDosingDecision.self, from: data)
+            return try Self.decoder.decode(D.self, from: data)
         } catch let error {
             self.log.error("Error decoding StoredDosingDecision: %@", String(describing: error))
             return nil
@@ -228,7 +238,7 @@ extension DosingDecisionStore {
         }
     }
     
-    public func findDosingDecisionsById(_ id: UUID) async throws -> StoredDosingDecision? {
+    public func findDosingDecisionsById<D: DosingDecision>(_ id: UUID) async throws -> D? {
         try await withCheckedThrowingContinuation { continuation in
             let enqueueTime = DispatchTime.now()
 
@@ -247,8 +257,37 @@ extension DosingDecisionStore {
                 storedRequest.predicate = NSPredicate(format: "id == %@", id.uuidString)
 
                 do {
-                    let stored = try self.store.managedObjectContext.fetch(storedRequest).compactMap({ StoredDosingDecisionData(date: $0.date, data: $0.data) }).compactMap({ decodeDosingDecision(fromData: $0.data) })
+                    let stored: [D] = try self.store.managedObjectContext.fetch(storedRequest).compactMap({ StoredDosingDecisionData(date: $0.date, data: $0.data) }).compactMap({ decodeDosingDecision(fromData: $0.data) })
                     continuation.resume(returning: stored.first)
+                } catch let error {
+                    continuation.resume(throwing: error)
+                    return
+                }
+            }
+        }
+    }
+    
+    public func findDosingDecisionsByIds<D: DosingDecision>(_ ids: [UUID]) async throws -> [D] {
+        try await withCheckedThrowingContinuation { continuation in
+            let enqueueTime = DispatchTime.now()
+
+            self.store.managedObjectContext.performAndWait {
+                let startTime = DispatchTime.now()
+
+                defer {
+                    let endTime = DispatchTime.now()
+                    let queueWait = Double(startTime.uptimeNanoseconds - enqueueTime.uptimeNanoseconds) / 1_000_000_000
+                    let fetchWait = Double(endTime.uptimeNanoseconds - startTime.uptimeNanoseconds) / 1_000_000_000
+                    self.log.debug("executeDosingDecisionQuery (queueWait(%.03f), fetch(%.03f)",  queueWait, fetchWait)
+                }
+
+                let storedRequest: NSFetchRequest<DosingDecisionObject> = DosingDecisionObject.fetchRequest()
+
+                storedRequest.predicate = NSPredicate(format: "id in %@", ids)
+
+                do {
+                    let stored: [D] = try self.store.managedObjectContext.fetch(storedRequest).compactMap({ StoredDosingDecisionData(date: $0.date, data: $0.data) }).compactMap({ decodeDosingDecision(fromData: $0.data) })
+                    continuation.resume(returning: stored)
                 } catch let error {
                     continuation.resume(throwing: error)
                     return
@@ -272,7 +311,7 @@ public typealias HistoricalGlucoseValue = PredictedGlucoseValue
 
 public typealias EnactedTempBasal = TempBasalRecommendation
 
-public struct StoredDosingDecision {
+public struct StoredDosingDecision: DosingDecision {
     public var id: UUID
     public var date: Date
     public var controllerTimeZone: TimeZone
