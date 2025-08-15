@@ -22,6 +22,8 @@ public struct BasalRateScheduleEditor: View {
     var save: (BasalRateSchedule) -> Void
     let mode: SettingsPresentationMode
     @Environment(\.appName) private var appName
+    @Environment(\.dosingStrategySelectionEnabled) private var dosingStrategySelectionEnabled
+
 
     /// - Precondition: `supportedBasalRates` is nonempty and sorted in ascending order.
     public init(
@@ -103,7 +105,7 @@ public struct BasalRateScheduleEditor: View {
     }
     
     private var description: Text {
-        Text(TherapySetting.basalRate.descriptiveText(appName: appName))
+        Text(TherapySetting.basalRate.descriptiveText(appName: appName, dosingStrategySelectionEnabled: dosingStrategySelectionEnabled))
     }
 
     private var confirmationAlertContent: AlertContent {

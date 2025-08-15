@@ -70,7 +70,7 @@ public extension TherapySetting {
         }
     }
     
-    func descriptiveText(appName: String) -> String {
+    func descriptiveText(appName: String, dosingStrategySelectionEnabled: Bool) -> String {
         switch self {
         case .glucoseTargetRange:
             return String(format: LocalizedString("Correction Range is the glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin and helping you calculate your boluses.", comment: "Descriptive text for glucose target range (1: app name)"), appName)
@@ -83,7 +83,11 @@ public extension TherapySetting {
         case .basalRate:
             return LocalizedString("Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs.", comment: "Descriptive text for basal rate")
         case .deliveryLimits:
-            return "\(DeliveryLimits.Setting.maximumBasalRate.localizedDescriptiveText(appName: appName))\n\n\(DeliveryLimits.Setting.maximumBolus.localizedDescriptiveText(appName: appName))"
+            if dosingStrategySelectionEnabled {
+                return "\(DeliveryLimits.Setting.maximumBasalRate.localizedDescriptiveText(appName: appName))\n\n\(DeliveryLimits.Setting.maximumBolus.localizedDescriptiveText(appName: appName))"
+            } else {
+                return "\(DeliveryLimits.Setting.maximumBolus.localizedDescriptiveText(appName: appName))"
+            }
         case .carbRatio:
             return LocalizedString("Your Carb Ratio is the number of grams of carbohydrates covered by one unit of insulin.", comment: "Descriptive text for carb ratio")
         case .insulinSensitivity:

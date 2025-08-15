@@ -21,6 +21,8 @@ public struct CarbRatioScheduleEditor: View {
     private var mode: SettingsPresentationMode
     private var save: (CarbRatioSchedule) -> Void
     @Environment(\.appName) private var appName
+    @Environment(\.dosingStrategySelectionEnabled) private var dosingStrategySelectionEnabled
+
 
     public init(
         schedule: CarbRatioSchedule?,
@@ -75,7 +77,7 @@ public struct CarbRatioScheduleEditor: View {
     }
 
     private var description: Text {
-        Text(TherapySetting.carbRatio.descriptiveText(appName: appName))
+        Text(TherapySetting.carbRatio.descriptiveText(appName: appName, dosingStrategySelectionEnabled: dosingStrategySelectionEnabled))
     }
 
     private var confirmationAlertContent: AlertContent {

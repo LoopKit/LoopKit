@@ -13,6 +13,7 @@ import LoopAlgorithm
 public struct CorrectionRangeScheduleEditor: View {
     @EnvironmentObject private var displayGlucosePreference: DisplayGlucosePreference
     @Environment(\.appName) private var appName
+    @Environment(\.dosingStrategySelectionEnabled) private var dosingStrategySelectionEnabled
 
     let mode: SettingsPresentationMode
     let viewModel: CorrectionRangeScheduleEditorViewModel
@@ -115,7 +116,7 @@ public struct CorrectionRangeScheduleEditor: View {
     }
 
     var description: Text {
-        Text(TherapySetting.glucoseTargetRange.descriptiveText(appName: appName))
+        Text(TherapySetting.glucoseTargetRange.descriptiveText(appName: appName, dosingStrategySelectionEnabled: dosingStrategySelectionEnabled))
     }
 
     var saveConfirmation: SaveConfirmation {

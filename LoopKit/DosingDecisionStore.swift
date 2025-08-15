@@ -35,7 +35,6 @@ public class DosingDecisionStore {
     
     private let store: PersistenceController
     private let expireAfter: TimeInterval
-    private let dataAccessQueue = DispatchQueue(label: "com.loopkit.DosingDecisionStore.dataAccessQueue", qos: .utility)
     public let log = OSLog(category: "DosingDecisionStore")
 
     public init(store: PersistenceController, expireAfter: TimeInterval) {
@@ -44,22 +43,17 @@ public class DosingDecisionStore {
     }
 
     public func storeDosingDecision(_ dosingDecision: StoredDosingDecision) async {
-        await withCheckedContinuation { continuation in
-            dataAccessQueue.async {
-                if let data = self.encodeDosingDecision(dosingDecision) {
-                    self.store.managedObjectContext.performAndWait {
-                        let object = DosingDecisionObject(context: self.store.managedObjectContext)
-                        object.id = dosingDecision.id
-                        object.data = data
-                        object.date = dosingDecision.date
-                        self.store.save()
-                    }
-                }
-
-                self.purgeExpiredDosingDecisions()
-                continuation.resume()
+        if let data = self.encodeDosingDecision(dosingDecision) {
+            self.store.managedObjectContext.performAndWait {
+                let object = DosingDecisionObject(context: self.store.managedObjectContext)
+                object.id = dosingDecision.id
+                object.data = data
+                object.date = dosingDecision.date
+                self.store.save()
             }
         }
+
+        await self.purgeExpiredDosingDecisions()
     }
 
 
@@ -67,63 +61,40 @@ public class DosingDecisionStore {
         return Date(timeIntervalSinceNow: -expireAfter)
     }
 
-    private func purgeExpiredDosingDecisions() {
-        purgeDosingDecisionObjects(before: expireDate)
+    private func purgeExpiredDosingDecisions() async {
+        try? await purgeDosingDecisionObjects(before: expireDate)
     }
 
-    public func purgeDosingDecisions(before date: Date, completion: @escaping (Error?) -> Void) {
-        dataAccessQueue.async {
-            self.purgeDosingDecisionObjects(before: date, completion: completion)
-        }
-    }
+    public func purgeDosingDecisionObjects(before date: Date) async throws {
 
-    private func purgeDosingDecisionObjects(before date: Date, completion: ((Error?) -> Void)? = nil) {
-        dispatchPrecondition(condition: .onQueue(dataAccessQueue))
-
-        var purgeError: Error?
-
-        store.managedObjectContext.performAndWait {
+        try await store.managedObjectContext.perform {
             do {
                 let count = try self.store.managedObjectContext.purgeObjects(of: DosingDecisionObject.self, matching: NSPredicate(format: "date < %@", date as NSDate))
                 self.log.info("Purged %d DosingDecisionObjects", count)
             } catch let error {
                 self.log.error("Unable to purge DosingDecisionObjects: %{public}@", String(describing: error))
-                purgeError = error
+                throw error
             }
-        }
-
-        if let purgeError = purgeError {
-            completion?(purgeError)
-            return
         }
 
         delegate?.dosingDecisionStoreHasUpdatedDosingDecisionData(self)
-        completion?(nil)
     }
 
     public func fetchLatestDosingDecision(reason: String? = nil) async throws -> StoredDosingDecision? {
-        return try await withCheckedThrowingContinuation { continuation in
-            dataAccessQueue.async {
-                self.store.managedObjectContext.performAndWait {
-                    let request: NSFetchRequest<DosingDecisionObject> = DosingDecisionObject.fetchRequest()
-                    if let reason {
-                        request.predicate = NSPredicate(format: "reason == %@", reason)
-                    }
-                    request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
-                    request.fetchLimit = 1
-
-                    do {
-                        let dosingDecisionObjects = try self.store.managedObjectContext.fetch(request)
-
-                        let dosingDecisions: [StoredDosingDecision] = dosingDecisionObjects.compactMap { object in
-                            return self.decodeDosingDecision(fromData: object.data)
-                        }
-                        continuation.resume(returning: dosingDecisions.first)
-                    } catch {
-                        continuation.resume(throwing: error)
-                    }
-                }
+        try await self.store.managedObjectContext.perform {
+            let request: NSFetchRequest<DosingDecisionObject> = DosingDecisionObject.fetchRequest()
+            if let reason {
+                request.predicate = NSPredicate(format: "reason == %@", reason)
             }
+            request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
+            request.fetchLimit = 1
+
+            let dosingDecisionObjects = try self.store.managedObjectContext.fetch(request)
+
+            let dosingDecisions: [StoredDosingDecision] = dosingDecisionObjects.compactMap { object in
+                return self.decodeDosingDecision(fromData: object.data)
+            }
+            return dosingDecisions.first
         }
     }
 
@@ -185,56 +156,54 @@ extension DosingDecisionStore {
     }
     
     public func executeDosingDecisionQuery(fromQueryAnchor queryAnchor: QueryAnchor?, limit: Int, completion: @escaping (DosingDecisionQueryResult) -> Void) {
-        dataAccessQueue.async {
-            var queryAnchor = queryAnchor ?? QueryAnchor()
-            var queryResult = [StoredDosingDecisionData]()
-            var queryError: Error?
+        var queryAnchor = queryAnchor ?? QueryAnchor()
+        var queryResult = [StoredDosingDecisionData]()
+        var queryError: Error?
 
-            guard limit > 0 else {
-                completion(.success(queryAnchor, []))
+        guard limit > 0 else {
+            completion(.success(queryAnchor, []))
+            return
+        }
+
+        let enqueueTime = DispatchTime.now()
+
+        self.store.managedObjectContext.performAndWait {
+            let startTime = DispatchTime.now()
+
+            defer {
+                let endTime = DispatchTime.now()
+                let queueWait = Double(startTime.uptimeNanoseconds - enqueueTime.uptimeNanoseconds) / 1_000_000_000
+                let fetchWait = Double(endTime.uptimeNanoseconds - startTime.uptimeNanoseconds) / 1_000_000_000
+                self.log.debug("executeDosingDecisionQuery (anchor = %{public}@: queueWait(%.03f), fetch(%.03f)", String(describing: queryAnchor), queueWait, fetchWait)
+            }
+
+            let storedRequest: NSFetchRequest<DosingDecisionObject> = DosingDecisionObject.fetchRequest()
+
+            storedRequest.predicate = NSPredicate(format: "modificationCounter > %d", queryAnchor.modificationCounter)
+            storedRequest.sortDescriptors = [NSSortDescriptor(key: "modificationCounter", ascending: true)]
+            storedRequest.fetchLimit = limit
+
+            do {
+                let stored = try self.store.managedObjectContext.fetch(storedRequest)
+                if let modificationCounter = stored.max(by: { $0.modificationCounter < $1.modificationCounter })?.modificationCounter {
+                    queryAnchor.modificationCounter = modificationCounter
+                }
+                queryResult.append(contentsOf: stored.compactMap { StoredDosingDecisionData(date: $0.date, data: $0.data) })
+            } catch let error {
+                queryError = error
                 return
             }
+        }
 
-            let enqueueTime = DispatchTime.now()
+        if let queryError = queryError {
+            completion(.failure(queryError))
+            return
+        }
 
-            self.store.managedObjectContext.performAndWait {
-                let startTime = DispatchTime.now()
-
-                defer {
-                    let endTime = DispatchTime.now()
-                    let queueWait = Double(startTime.uptimeNanoseconds - enqueueTime.uptimeNanoseconds) / 1_000_000_000
-                    let fetchWait = Double(endTime.uptimeNanoseconds - startTime.uptimeNanoseconds) / 1_000_000_000
-                    self.log.debug("executeDosingDecisionQuery (anchor = %{public}@: queueWait(%.03f), fetch(%.03f)", String(describing: queryAnchor), queueWait, fetchWait)
-                }
-
-                let storedRequest: NSFetchRequest<DosingDecisionObject> = DosingDecisionObject.fetchRequest()
-
-                storedRequest.predicate = NSPredicate(format: "modificationCounter > %d", queryAnchor.modificationCounter)
-                storedRequest.sortDescriptors = [NSSortDescriptor(key: "modificationCounter", ascending: true)]
-                storedRequest.fetchLimit = limit
-
-                do {
-                    let stored = try self.store.managedObjectContext.fetch(storedRequest)
-                    if let modificationCounter = stored.max(by: { $0.modificationCounter < $1.modificationCounter })?.modificationCounter {
-                        queryAnchor.modificationCounter = modificationCounter
-                    }
-                    queryResult.append(contentsOf: stored.compactMap { StoredDosingDecisionData(date: $0.date, data: $0.data) })
-                } catch let error {
-                    queryError = error
-                    return
-                }
-            }
-
-            if let queryError = queryError {
-                completion(.failure(queryError))
-                return
-            }
-
-            // Decoding a large number of dosing decision can be very CPU intensive and may take considerable wall clock time.
-            // Do not block DosingDecisionStore dataAccessQueue. Perform work and callback in global utility queue.
-            DispatchQueue.global(qos: .utility).async {
-                completion(.success(queryAnchor, queryResult.compactMap { self.decodeDosingDecision(fromData: $0.data) }))
-            }
+        // Decoding a large number of dosing decision can be very CPU intensive and may take considerable wall clock time.
+        // Do not block DosingDecisionStore dataAccessQueue. Perform work and callback in global utility queue.
+        DispatchQueue.global(qos: .utility).async {
+            completion(.success(queryAnchor, queryResult.compactMap { self.decodeDosingDecision(fromData: $0.data) }))
         }
     }
     
@@ -645,30 +614,40 @@ extension DosingDecisionStore {
             return
         }
 
-        dataAccessQueue.async {
-            var error: Error?
+        var error: Error?
 
-            self.store.managedObjectContext.performAndWait {
-                for dosingDecision in dosingDecisions {
-                    guard let data = self.encodeDosingDecision(dosingDecision) else {
-                        continue
-                    }
-                    let object = DosingDecisionObject(context: self.store.managedObjectContext)
-                    object.id = dosingDecision.id
-                    object.data = data
-                    object.date = dosingDecision.date
+        self.store.managedObjectContext.performAndWait {
+            for dosingDecision in dosingDecisions {
+                guard let data = self.encodeDosingDecision(dosingDecision) else {
+                    continue
                 }
-                error = self.store.save()
+                let object = DosingDecisionObject(context: self.store.managedObjectContext)
+                object.id = dosingDecision.id
+                object.data = data
+                object.date = dosingDecision.date
             }
+            error = self.store.save()
+        }
 
-            guard error == nil else {
-                completion(error)
-                return
+        guard error == nil else {
+            completion(error)
+            return
+        }
+
+        self.log.info("Added %d DosingDecisionObjects", dosingDecisions.count)
+        self.delegate?.dosingDecisionStoreHasUpdatedDosingDecisionData(self)
+        completion(nil)
+    }
+
+    public func addStoredDosingDecisions(dosingDecisions: [StoredDosingDecision]) async throws {
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            addStoredDosingDecisions(dosingDecisions: dosingDecisions) { error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume()
+                }
             }
-
-            self.log.info("Added %d DosingDecisionObjects", dosingDecisions.count)
-            self.delegate?.dosingDecisionStoreHasUpdatedDosingDecisionData(self)
-            completion(nil)
         }
     }
 }

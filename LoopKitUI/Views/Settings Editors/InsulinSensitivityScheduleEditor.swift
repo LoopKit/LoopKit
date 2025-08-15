@@ -15,6 +15,8 @@ import LoopKit
 public struct InsulinSensitivityScheduleEditor: View {
     @EnvironmentObject private var displayGlucosePreference: DisplayGlucosePreference
     @Environment(\.appName) private var appName
+    @Environment(\.dosingStrategySelectionEnabled) private var dosingStrategySelectionEnabled
+
 
     let mode: SettingsPresentationMode
     let viewModel: InsulinSensitivityScheduleEditorViewModel
@@ -59,7 +61,7 @@ public struct InsulinSensitivityScheduleEditor: View {
     }
 
     private var description: Text {
-        Text(TherapySetting.insulinSensitivity.descriptiveText(appName: appName))
+        Text(TherapySetting.insulinSensitivity.descriptiveText(appName: appName, dosingStrategySelectionEnabled: dosingStrategySelectionEnabled))
     }
 
     private var sensitivityUnit: LoopUnit {

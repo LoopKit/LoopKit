@@ -75,6 +75,7 @@ public protocol PumpManagerUI: DeviceManagerUI, PumpStatusIndicator, PumpManager
     static func createHUDView(rawValue: HUDProvider.HUDViewRawState) -> BaseHUDView?
 }
 
+@MainActor
 public protocol PumpManagerOnboardingDelegate: AnyObject {
     /// Informs the delegate that the specified pump manager was created.
     ///

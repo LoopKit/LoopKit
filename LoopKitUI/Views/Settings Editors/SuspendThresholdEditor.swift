@@ -17,6 +17,7 @@ public struct SuspendThresholdEditor: View {
     @Environment(\.dismissAction) var dismiss
     @Environment(\.authenticate) var authenticate
     @Environment(\.appName) private var appName
+    @Environment(\.dosingStrategySelectionEnabled) private var dosingStrategySelectionEnabled
 
     let mode: SettingsPresentationMode
     let viewModel: SuspendThresholdEditorViewModel
@@ -159,7 +160,7 @@ public struct SuspendThresholdEditor: View {
     }
 
     var description: Text {
-        Text(TherapySetting.suspendThreshold.descriptiveText(appName: appName))
+        Text(TherapySetting.suspendThreshold.descriptiveText(appName: appName, dosingStrategySelectionEnabled: dosingStrategySelectionEnabled))
     }
     
     private var instructionalContentIfNecessary: some View {

@@ -15,6 +15,7 @@ public struct DeliveryLimitsInformationView: View {
     
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.appName) var appName
+    @Environment(\.dosingStrategySelectionEnabled) var dosingStrategySelectionEnabled
 
     public init(onExit: (() -> Void)?, mode: SettingsPresentationMode = .acceptanceFlow) {
         self.onExit = onExit
@@ -27,7 +28,9 @@ public struct DeliveryLimitsInformationView: View {
             informationalContent: {
                 VStack (alignment: .leading, spacing: 20) {
                     deliveryLimitDescription
-                    maxBasalDescription
+                    if dosingStrategySelectionEnabled {
+                        maxBasalDescription
+                    }
                     maxBolusDescription
                 }
                 .fixedSize(horizontal: false, vertical: true) // prevent text from being cut off

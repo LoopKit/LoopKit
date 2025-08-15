@@ -19,6 +19,7 @@ public struct GlucoseTherapySettingInformationView<Content: View>: View {
     let appName: String
     
     @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dosingStrategySelectionEnabled) var dosingStrategySelectionEnabled
 
     public init(
         therapySetting: TherapySetting,
@@ -76,7 +77,7 @@ public struct GlucoseTherapySettingInformationView<Content: View>: View {
             if let text {
                 text
             } else {
-                Text(therapySetting.descriptiveText(appName: appName))
+                Text(therapySetting.descriptiveText(appName: appName, dosingStrategySelectionEnabled: dosingStrategySelectionEnabled))
             }
             
             Text(therapySetting.guardrailInformationText)
