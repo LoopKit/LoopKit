@@ -574,6 +574,18 @@ extension SettingsStore {
             completion(nil)
         }
     }
+
+    public func addStoredSettings(settings: [StoredSettings]) async throws {
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) -> Void in
+            addStoredSettings(settings: settings) { error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume()
+                }
+            }
+        }
+    }
 }
 
 // MARK: Historical queries

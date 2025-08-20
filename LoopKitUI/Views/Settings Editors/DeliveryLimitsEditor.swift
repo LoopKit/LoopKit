@@ -35,6 +35,7 @@ public struct DeliveryLimitsEditor: View {
     @Environment(\.dismissAction) var dismiss
     @Environment(\.authenticate) var authenticate
     @Environment(\.appName) var appName
+    @Environment(\.dosingStrategySelectionEnabled) var dosingStrategySelectionEnabled
 
     private let lowestCarbRatio: Double?
 
@@ -132,7 +133,9 @@ public struct DeliveryLimitsEditor: View {
             actionButtonTitle: Text(mode.buttonText(isSaving: isSyncing)),
             actionButtonState: saveButtonState,
             cards: {
-                maximumBasalRateCard
+                if dosingStrategySelectionEnabled {
+                    maximumBasalRateCard
+                }
                 maximumBolusCard
             },
             actionAreaContent: {

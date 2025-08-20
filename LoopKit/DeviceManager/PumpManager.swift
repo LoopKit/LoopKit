@@ -62,12 +62,14 @@ public protocol PumpManagerDelegate: DeviceManagerDelegate, PumpManagerStatusObs
     
     func pumpManager(_ pumpManager: PumpManager, didRequestBasalRateScheduleChange basalRateSchedule: BasalRateSchedule, completion: @escaping (Error?) -> Void)
 
+    @MainActor
     func startDateToFilterNewPumpEvents(for manager: PumpManager) -> Date
 
     /// Indicates the system time offset from a trusted time source. If the return value is added to the system time, the result is the trusted time source value. If the trusted time source is earlier than the system time, the return value is negative.
     var detectedSystemTimeOffset: TimeInterval { get }
 
     /// Indicates if automatic dosing has been enabled
+    @MainActor
     var automaticDosingEnabled: Bool { get }
 
     @MainActor
@@ -289,6 +291,20 @@ public extension PumpManager {
             })
         }
     }
+
+    func cancelBolus() async throws -> DoseEntry? {
+        try await withCheckedThrowingContinuation { continuation in
+            cancelBolus() { result in
+                switch result {
+                case .success(let dose):
+                    continuation.resume(returning: dose)
+                case .failure(let pumpManagerError):
+                    continuation.resume(throwing: pumpManagerError)
+                }
+            }
+        }
+    }
+
 
     @discardableResult
     func ensureCurrentPumpData() async -> Date? {

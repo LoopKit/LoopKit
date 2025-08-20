@@ -16,6 +16,7 @@ public struct TherapySettingsView: View {
     @Environment(\.chartColorPalette) var chartColorPalette
     @Environment(\.dismissAction) var dismissAction
     @Environment(\.appName) private var appName
+    @Environment(\.dosingStrategySelectionEnabled) var dosingStrategySelectionEnabled
 
     public struct ActionButton {
         public init(localizedString: String, action: @escaping () -> Void) {
@@ -286,8 +287,10 @@ extension TherapySettingsView {
     
     private var deliveryLimitsSection: Card {
         card(for: .deliveryLimits) {
-            SectionDivider()
-            self.maxBasalRateItem
+            if dosingStrategySelectionEnabled {
+                SectionDivider()
+                self.maxBasalRateItem
+            }
             SettingsDivider()
             self.maxBolusItem
         }
@@ -433,7 +436,7 @@ extension TherapySettingsView {
             SectionWithTapToEdit(
                 isEnabled: mode != .acceptanceFlow,
                 title: therapySetting.title,
-                descriptiveText: therapySetting.descriptiveText(appName: appName),
+                descriptiveText: therapySetting.descriptiveText(appName: appName, dosingStrategySelectionEnabled: dosingStrategySelectionEnabled),
                 destination: { dismiss in
                     screen(for: therapySetting, dismiss: dismiss)
                         .environment(\.dismissAction, dismiss)
