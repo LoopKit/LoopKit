@@ -12,10 +12,10 @@ import LoopAlgorithm
 
 public struct ActivityPreset: Hashable, Identifiable, Sendable, RawRepresentable, Codable {
     public enum ActivityType: String, Hashable, Identifiable, Sendable, Codable {
-        case biking = "biking"
-        case jogging = "jogging"
-        case walking = "walking"
-        case strengthTraining = "strengthTraining"
+        case biking
+        case jogging
+        case walking
+        case strengthTraining
         
         public init?(fromId id: String) {
             guard let typeString = id.split(separator: "activity-").last, let activityType = ActivityType(rawValue: String(typeString)) else {
