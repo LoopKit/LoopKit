@@ -13,10 +13,8 @@ import LoopAlgorithm
 class GuardrailTests: XCTestCase {
     let correctionRangeSchedule120 = GlucoseRangeSchedule(unit: .milligramsPerDeciliter, dailyItems: [RepeatingScheduleValue(startTime: 0, value: DoubleRange(120...130))])
     let preMealTargetRange120 = DoubleRange(120...130).quantityRange(for: .milligramsPerDeciliter)
-    let workoutTargetRange120 = DoubleRange(120...130).quantityRange(for: .milligramsPerDeciliter)
     let correctionRangeSchedule80 = GlucoseRangeSchedule(unit: .milligramsPerDeciliter, dailyItems: [RepeatingScheduleValue(startTime: 0, value: DoubleRange(80...100))])
     let preMealTargetRange85 = DoubleRange(85...100).quantityRange(for: .milligramsPerDeciliter)
-    let workoutTargetRange90 = DoubleRange(90...100).quantityRange(for: .milligramsPerDeciliter)
 
     func testSuspendThresholdUnits() {
         XCTAssertTrue(Guardrail.suspendThreshold.absoluteBounds.contains(LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 67)))
@@ -65,25 +63,6 @@ class GuardrailTests: XCTestCase {
         
         for test in expectedAndTest {
             XCTAssertEqual(test.0, guardrail.classification(for: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: test.1)), "for \(test.1)")
-        }
-    }
-    
-    func testWorkoutCorrectionRange() {
-        let correctionRangeInputs = [ 70...80, 70...85, 70...90 ]
-        let suspendThresholdInputs: [Double?] = [ nil, 81, 91 ]
-        let expectedLow: [Double] = [ 87, 87, 91,
-                                      87, 87, 91,
-                                      90, 90, 91 ]
-        let expectedMin: [Double] = [ 87, 87, 91, 87, 87, 91, 87, 87, 91 ]
-
-        var index = 0
-        for correctionRange in correctionRangeInputs {
-            for suspendThreshold in suspendThresholdInputs {
-                let guardrail = Guardrail.correctionRangeOverride(for: .workout, correctionRangeScheduleRange: correctionRange.range(withUnit: .milligramsPerDeciliter), suspendThreshold: suspendThreshold.map { GlucoseThreshold(unit: .milligramsPerDeciliter, value: $0) })
-                XCTAssertEqual(expectedLow[index], guardrail.recommendedBounds.lowerBound.doubleValue(for: .milligramsPerDeciliter), "Index \(index) failed")
-                XCTAssertEqual(expectedMin[index], guardrail.absoluteBounds.lowerBound.doubleValue(for: .milligramsPerDeciliter), "Index \(index) failed")
-                index += 1
-            }
         }
     }
 

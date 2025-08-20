@@ -53,12 +53,6 @@ public struct CorrectionRangeOverrideInformationView: View {
                 Text(LocalizedString("This will typically be", comment: "Information about pre-meal range relative to correction range")) + Text(LocalizedString(" lower ", comment: "Information about pre-meal range relative to correction range")).bold().italic() + Text(LocalizedString("than your Correction Range.", comment: "Information about pre-meal range relative to correction range"))
             }
             .fixedSize(horizontal: false, vertical: true) // prevent text from being cut off
-        case .workout:
-            return VStack(alignment: .leading, spacing: 20) {
-                Text(String(format: LocalizedString("Your Workout Preset is the glucose value or range of values you want  %1$@ to target during physical activity. This range will be in effect when you activate the Workout Preset button.", comment: "Information about workout range format (1: app name)"), appName))
-                Text(LocalizedString("For exercise, this will typically be", comment: "Information about workout range relative to correction range")) + Text(LocalizedString(" higher ", comment: "Information about workout range relative to correction range")).bold().italic() + Text(LocalizedString("than your Correction Range.", comment: "Information about workout range relative to correction range"))
-            }
-            .fixedSize(horizontal: false, vertical: true) // prevent text from being cut off
         }
     }
 }
@@ -72,24 +66,11 @@ struct CorrectionRangeOverrideInformationView_Previews: PreviewProvider {
         .previewDevice(PreviewDevice(rawValue: "iPhone SE 2"))
         .previewDisplayName("Pre-Meal SE light")
         NavigationView {
-            CorrectionRangeOverrideInformationView(preset: .workout)
-        }
-        .colorScheme(.light)
-        .previewDevice(PreviewDevice(rawValue: "iPhone SE 2"))
-        .previewDisplayName("Workout SE light")
-        NavigationView {
             CorrectionRangeOverrideInformationView(preset: .preMeal)
         }
         .preferredColorScheme(.dark)
         .colorScheme(.dark)
         .previewDevice(PreviewDevice(rawValue: "iPhone 11 Pro Max"))
         .previewDisplayName("Pre-Meal 11 Pro dark")
-        NavigationView {
-            CorrectionRangeOverrideInformationView(preset: .workout)
-        }
-        .preferredColorScheme(.dark)
-        .colorScheme(.dark)
-        .previewDevice(PreviewDevice(rawValue: "iPhone 11 Pro Max"))
-        .previewDisplayName("Workout 11 Pro dark")
     }
 }

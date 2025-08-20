@@ -244,7 +244,7 @@ public class GlucoseRangeScheduleTableViewController: UITableViewController {
         }
     }
 
-    public var overrideContexts: [TemporaryScheduleOverride.Context] = [.preMeal, .legacyWorkout]
+    public var overrideContexts: [TemporaryScheduleOverride.Context] = [.preMeal]
 
     private var editableOverrideRanges: [TemporaryScheduleOverride.Context: EditableRange] = [:] {
         didSet {
@@ -344,9 +344,6 @@ public class GlucoseRangeScheduleTableViewController: UITableViewController {
             let image: UIImage?
 
             switch context {
-            case .legacyWorkout:
-                titleText = LocalizedString("Workout", comment: "Title for the workout override range")
-                image = UIImage(named: "workout", in: bundle, compatibleWith: traitCollection)
             case .preMeal:
                 titleText = LocalizedString("Pre-Meal", comment: "Title for the pre-meal override range")
                 image = UIImage(named: "Pre-Meal", in: bundle, compatibleWith: traitCollection)

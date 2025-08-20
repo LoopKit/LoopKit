@@ -10,7 +10,6 @@
 public enum TherapySetting {
     case glucoseTargetRange
     case preMealCorrectionRangeOverride
-    case workoutCorrectionRangeOverride
     case suspendThreshold
     case basalRate(Int?)
     case deliveryLimits
@@ -20,7 +19,7 @@ public enum TherapySetting {
 
     public var isRange: Bool {
         switch self {
-        case .glucoseTargetRange, .preMealCorrectionRangeOverride, .workoutCorrectionRangeOverride:
+        case .glucoseTargetRange, .preMealCorrectionRangeOverride:
             return true
         default:
             return false
@@ -46,8 +45,6 @@ public extension TherapySetting {
             return LocalizedString("Correction Range", comment: "Title text for glucose target range")
         case .preMealCorrectionRangeOverride:
             return String(format: LocalizedString("%@ Preset", comment: "Format for correction range override therapy setting card"), CorrectionRangeOverrides.Preset.preMeal.title)
-        case .workoutCorrectionRangeOverride:
-            return String(format: LocalizedString("%@ Preset", comment: "Format for correction range override therapy setting card"), CorrectionRangeOverrides.Preset.workout.title)
         case .suspendThreshold:
             return LocalizedString("Glucose Safety Limit", comment: "Title text for glucose safety limit")
         case .basalRate:
@@ -76,8 +73,6 @@ public extension TherapySetting {
             return String(format: LocalizedString("Correction Range is the glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin and helping you calculate your boluses.", comment: "Descriptive text for glucose target range (1: app name)"), appName)
         case .preMealCorrectionRangeOverride:
             return LocalizedString("Temporarily lower your glucose target before a meal to impact post-meal glucose spikes.", comment: "Descriptive text for pre-meal correction range override")
-        case .workoutCorrectionRangeOverride:
-            return LocalizedString("Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events.", comment: "Descriptive text for workout correction range override")
         case .suspendThreshold:
             return String(format: LocalizedString("%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours.", comment: "Descriptive format string for glucose safety limit (1: app name)"), appName)
         case .basalRate:

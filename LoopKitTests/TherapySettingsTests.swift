@@ -121,13 +121,6 @@ class TherapySettingsCodableTests: XCTestCase {
             "maxValue" : 90,
             "minValue" : 80
           }
-        },
-        "workoutRange" : {
-          "bloodGlucoseUnit" : "mg/dL",
-          "range" : {
-            "maxValue" : 140,
-            "minValue" : 130
-          }
         }
       },
       "defaultRapidActingModel" : "rapidActingAdult",
@@ -291,7 +284,6 @@ class TherapySettingsCodableTests: XCTestCase {
 
         settings.correctionRangeOverrides = CorrectionRangeOverrides(
             preMeal: DoubleRange(minValue: 85.0, maxValue: 90.0),
-            workout: DoubleRange(minValue: 130.0, maxValue: 140.0),
             unit: .milligramsPerDeciliter)
 
         XCTAssertEqual(85 ,settings.minimumConfiguredTargetLowerBound?.doubleValue(for: .milligramsPerDeciliter))
@@ -361,7 +353,6 @@ fileprivate extension TherapySettings {
             timeZone: timeZone)!
         let correctionRangeOverrides = CorrectionRangeOverrides(
             preMeal: DoubleRange(minValue: 80.0, maxValue: 90.0),
-            workout: DoubleRange(minValue: 130.0, maxValue: 140.0),
             unit: .milligramsPerDeciliter)
 
         return TherapySettings(

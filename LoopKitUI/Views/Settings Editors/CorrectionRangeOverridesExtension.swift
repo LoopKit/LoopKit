@@ -16,8 +16,6 @@ extension CorrectionRangeOverrides.Preset {
         switch self {
         case .preMeal:
             return icon(named: "Pre-Meal", tinted: carbTintColor, resizable: resizable)
-        case .workout:
-            return icon(named: "workout", tinted: glucoseTintColor, resizable: resizable)
         }
     }
         

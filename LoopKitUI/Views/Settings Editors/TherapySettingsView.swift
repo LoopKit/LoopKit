@@ -91,7 +91,6 @@ public struct TherapySettingsView: View {
         cards.append(correctionRangeSection)
         if mode == .acceptanceFlow {
             cards.append(preMealCorrectionRangeSection)
-            cards.append(workoutCorrectionRangeSection)
         }
         cards.append(carbRatioSection)
         cards.append(basalRatesSection)
@@ -250,22 +249,6 @@ extension TherapySettingsView {
             }
         }
     }
-    
-    private var workoutCorrectionRangeSection: Card {
-        card(for: .workoutCorrectionRangeOverride) {
-            let correctionRangeOverrides = self.viewModel.correctionRangeOverrides
-            if let schedule = self.viewModel.glucoseTargetRangeSchedule {
-                SectionDivider()
-                CorrectionRangeOverridesRangeItem(
-                    value: correctionRangeOverrides,
-                    displayGlucoseUnit: glucoseUnit,
-                    preset: CorrectionRangeOverrides.Preset.workout,
-                    suspendThreshold: self.viewModel.suspendThreshold,
-                    correctionRangeScheduleRange: schedule.scheduleRange()
-                ).accessibilityIdentifier("workoutPresetValue")
-            }
-        }
-    }
 
     private var basalRatesSection: Card {
         card(for: .basalRate) {
@@ -413,8 +396,6 @@ extension TherapySettingsView {
            CorrectionRangeScheduleEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss)
         case .preMealCorrectionRangeOverride:
             CorrectionRangeOverridesEditor(mode: mode, therapySettingsViewModel: viewModel, preset: .preMeal, didSave: dismiss)
-        case .workoutCorrectionRangeOverride:
-           CorrectionRangeOverridesEditor(mode: mode, therapySettingsViewModel: viewModel, preset: .workout, didSave: dismiss)
         case .basalRate:
             BasalRateScheduleEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss)
         case .deliveryLimits:
@@ -592,9 +573,7 @@ public struct TherapySettingsView_Previews: PreviewProvider {
 
     static let preview_therapySettings = TherapySettings(
         glucoseTargetRangeSchedule: GlucoseRangeSchedule(unit: .milligramsPerDeciliter, dailyItems: preview_glucoseScheduleItems),
-        correctionRangeOverrides: CorrectionRangeOverrides(preMeal: DoubleRange(88...99),
-                                                           workout: DoubleRange(99...111),
-                                                           unit: .milligramsPerDeciliter),
+        correctionRangeOverrides: CorrectionRangeOverrides(preMeal: DoubleRange(88...99), unit: .milligramsPerDeciliter),
         maximumBolus: 4,
         suspendThreshold: GlucoseThreshold.init(unit: .milligramsPerDeciliter, value: 60),
         insulinSensitivitySchedule: InsulinSensitivitySchedule(unit: .milligramsPerDeciliterPerInternationalUnit, dailyItems: []),

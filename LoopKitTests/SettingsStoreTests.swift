@@ -293,7 +293,11 @@ class SettingsStorePersistenceTests: PersistenceControllerTestCase, SettingsStor
             "minValue" : 130
           }
         },
-        "symbol" : "🍎"
+        "symbol" : {
+          "symbolType" : "emoji",
+          "tint" : null,
+          "value" : "🍎"
+        }
       }
     ],
     "preMealTargetRange" : {
@@ -314,11 +318,7 @@ class SettingsStorePersistenceTests: PersistenceControllerTestCase, SettingsStor
       "unit" : "mg/dL",
       "value" : 75
     },
-    "syncIdentifier" : "2A67A303-1234-4CB8-1234-79498265368E",
-    "workoutTargetRange" : {
-      "maxValue" : 160,
-      "minValue" : 150
-    }
+    "syncIdentifier" : "2A67A303-1234-4CB8-1234-79498265368E"
   },
   "date" : "2100-01-02T03:03:00Z",
   "modificationCounter" : 123
@@ -863,7 +863,11 @@ class StoredSettingsCodableTests: XCTestCase {
           "minValue" : 130
         }
       },
-      "symbol" : "🍎"
+      "symbol" : {
+        "symbolType" : "emoji",
+        "tint" : null,
+        "value" : "🍎"
+      }
     }
   ],
   "preMealTargetRange" : {
@@ -884,11 +888,7 @@ class StoredSettingsCodableTests: XCTestCase {
     "unit" : "mg/dL",
     "value" : 75
   },
-  "syncIdentifier" : "2A67A303-1234-4CB8-1234-79498265368E",
-  "workoutTargetRange" : {
-    "maxValue" : 160,
-    "minValue" : 150
-  }
+  "syncIdentifier" : "2A67A303-1234-4CB8-1234-79498265368E"
 }
 """
         )
@@ -931,8 +931,7 @@ fileprivate extension StoredSettings {
                                                                                                       start: dateFormatter.date(from: "2020-05-14T12:48:15Z")!,
                                                                                                       end: dateFormatter.date(from: "2020-05-14T14:48:15Z")!))
         let preMealTargetRange = DoubleRange(minValue: 80.0, maxValue: 90.0).quantityRange(for: .milligramsPerDeciliter)
-        let workoutTargetRange = DoubleRange(minValue: 150.0, maxValue: 160.0).quantityRange(for: .milligramsPerDeciliter)
-        let overridePresets = [TemporaryPreset(id: UUID(uuidString: "2A67A303-5203-4CB8-8263-79498265368E")!,
+        let overridePresets = [TemporaryPreset(id: "2A67A303-5203-4CB8-8263-79498265368E",
                                                                symbol: "🍎",
                                                                name: "Apple",
                                                                settings: TemporaryPresetSettings(unit: .milligramsPerDeciliter,
@@ -1002,7 +1001,6 @@ fileprivate extension StoredSettings {
                               dosingEnabled: dosingEnabled,
                               glucoseTargetRangeSchedule: glucoseTargetRangeSchedule,
                               preMealTargetRange: preMealTargetRange,
-                              workoutTargetRange: workoutTargetRange,
                               overridePresets: overridePresets,
                               maximumBasalRatePerHour: maximumBasalRatePerHour,
                               maximumBolus: maximumBolus,

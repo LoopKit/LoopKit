@@ -39,10 +39,6 @@ struct CorrectionRangeOverridesEditorViewModel {
         return "\(String(format: "%.0f", 100 * overallInsulinPercentage))% \(LocalizedString("of scheduled", comment: ""))"
     }
     
-    var correctionRangeString: String? {
-        correctionRangeOverrides.workout?.localizedDescription(unit: .milligramsPerDeciliter)
-    }
-    
     private let unitFormatter: DateComponentsFormatter = {
         let formatter = DateComponentsFormatter()
         formatter.allowedUnits = [.hour, .minute, .second]
