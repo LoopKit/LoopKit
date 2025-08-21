@@ -249,7 +249,7 @@ public final class AddEditOverrideTableViewController: UITableViewController {
             case .symbol:
                 let cell = tableView.dequeueReusableCell(withIdentifier: LabeledTextFieldTableViewCell.className, for: indexPath) as! LabeledTextFieldTableViewCell
                 cell.titleLabel.text = LocalizedString("Symbol", comment: "The text for the custom preset symbol setting")
-                cell.textField.attributedText = symbol?.textualRepresentation
+                cell.textField.text = symbol?.textualRepresentation
                 cell.textField.placeholder = SettingsTableViewCell.NoValueString
                 cell.maximumTextLength = 2
                 cell.customInput = overrideSymbolKeyboard
@@ -450,7 +450,7 @@ extension AddEditOverrideTableViewController {
     private func setupTitle() {
         if let symbol = symbol, let name = name {
             let format = LocalizedString("%1$@%2$@", comment: "The format for a preset symbol and name (1: symbol)(2: name)")
-            title = String(format: format, "\(symbol.textualRepresentation?.string ?? "") ", name)
+            title = String(format: format, "\(symbol.textualRepresentation ?? "") ", name)
         } else {
             switch inputMode {
             case .newPreset:
