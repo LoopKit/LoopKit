@@ -156,6 +156,10 @@ public struct PresetSymbol: Hashable, Sendable, Codable, RawRepresentable, Expre
             return nil
         }
     }
+    
+    public var isEmpty: Bool {
+        value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
 }
 
 public struct TemporaryPreset: Hashable, Sendable {
