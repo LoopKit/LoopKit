@@ -105,7 +105,7 @@ public final class AddEditOverrideTableViewController: UITableViewController {
 
     private let glucoseUnit: LoopUnit
 
-    private var symbol: String? { didSet { updateSaveButtonEnabled() } }
+    private var symbol: PresetSymbol? { didSet { updateSaveButtonEnabled() } }
 
     private var name: String? { didSet { updateSaveButtonEnabled() } }
 
@@ -249,7 +249,7 @@ public final class AddEditOverrideTableViewController: UITableViewController {
             case .symbol:
                 let cell = tableView.dequeueReusableCell(withIdentifier: LabeledTextFieldTableViewCell.className, for: indexPath) as! LabeledTextFieldTableViewCell
                 cell.titleLabel.text = LocalizedString("Symbol", comment: "The text for the custom preset symbol setting")
-                cell.textField.text = symbol
+                cell.textField.text = symbol?.textualRepresentation
                 cell.textField.placeholder = SettingsTableViewCell.NoValueString
                 cell.maximumTextLength = 2
                 cell.customInput = overrideSymbolKeyboard
@@ -449,8 +449,8 @@ public final class AddEditOverrideTableViewController: UITableViewController {
 extension AddEditOverrideTableViewController {
     private func setupTitle() {
         if let symbol = symbol, let name = name {
-            let format = LocalizedString("%1$@ %2$@", comment: "The format for a preset symbol and name (1: symbol)(2: name)")
-            title = String(format: format, symbol, name)
+            let format = LocalizedString("%1$@%2$@", comment: "The format for a preset symbol and name (1: symbol)(2: name)")
+            title = String(format: format, "\(symbol.textualRepresentation ?? "") ", name)
         } else {
             switch inputMode {
             case .newPreset:
@@ -506,18 +506,18 @@ extension AddEditOverrideTableViewController {
 
     private var configuredPreset: TemporaryPreset? {
         guard
-            let symbol = symbol, !symbol.isEmpty,
+            let symbol = symbol,
             let name = name, !name.isEmpty,
             let settings = configuredSettings
         else {
             return nil
         }
 
-        let id: UUID
+        let id: String
         if case .editPreset(let preset) = inputMode {
             id = preset.id
         } else {
-            id = UUID()
+            id = UUID().uuidString
         }
 
         return TemporaryPreset(id: id, symbol: symbol, name: name, settings: settings, duration: duration)
@@ -632,7 +632,9 @@ extension AddEditOverrideTableViewController: TextFieldTableViewCellDelegate {
 
         switch propertyRow(for: indexPath) {
         case .symbol:
-            symbol = cell.textField.text
+            if let text = cell.textField.text {
+                symbol = .emoji(text)
+            }
         case .name:
             name = cell.textField.text
         default:

@@ -47,8 +47,7 @@ public struct TherapySettings: Equatable {
     public var minimumConfiguredTargetLowerBound: LoopQuantity? {
         var lowerBounds = [
             glucoseTargetRangeSchedule?.minLowerBound(),
-            correctionRangeOverrides?.preMeal?.lowerBound,
-            correctionRangeOverrides?.workout?.lowerBound
+            correctionRangeOverrides?.preMeal?.lowerBound
         ]
 
         if let overridePresets {
@@ -181,9 +180,7 @@ extension TherapySettings {
                                                     start: Date().addingTimeInterval(.minutes(-30)),
                                                     end: Date().addingTimeInterval(.minutes(30)))
         )
-        let correctionRangeOverrides = CorrectionRangeOverrides(preMeal: DoubleRange(minValue: 80.0, maxValue: 90.0),
-                                                                workout: DoubleRange(minValue: 140.0, maxValue: 160.0),
-                                                                unit: .milligramsPerDeciliter)
+        let correctionRangeOverrides = CorrectionRangeOverrides(preMeal: DoubleRange(minValue: 80.0, maxValue: 90.0), unit: .milligramsPerDeciliter)
         let basalRateSchedule = BasalRateSchedule(
             dailyItems: [RepeatingScheduleValue(startTime: .hours(0), value: 1),
                          RepeatingScheduleValue(startTime: .hours(15), value: 0.85)],

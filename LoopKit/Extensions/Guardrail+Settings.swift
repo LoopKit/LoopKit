@@ -40,21 +40,6 @@ public extension Guardrail where Value == LoopQuantity {
         absoluteBounds: correctionRange.absoluteBounds.lowerBound.doubleValue(for: .milligramsPerDeciliter)...250,
         recommendedBounds: correctionRange.recommendedBounds.lowerBound.doubleValue(for: .milligramsPerDeciliter)...180,
         unit: .milligramsPerDeciliter)
-    
-    fileprivate static func workoutCorrectionRange(correctionRangeScheduleRange: ClosedRange<LoopQuantity>,
-                                                   suspendThreshold: GlucoseThreshold?) -> Guardrail<LoopQuantity> {
-        let absoluteLowerBound = [
-            unconstrainedWorkoutCorrectionRange.absoluteBounds.lowerBound,
-            suspendThreshold?.quantity
-        ]
-        .compactMap { $0 }
-        .max()!
-        let recommendedLowerBound = max(absoluteLowerBound, correctionRangeScheduleRange.upperBound)
-        return Guardrail(
-            absoluteBounds: absoluteLowerBound...unconstrainedWorkoutCorrectionRange.absoluteBounds.upperBound,
-            recommendedBounds: recommendedLowerBound...unconstrainedWorkoutCorrectionRange.recommendedBounds.upperBound
-        )
-    }
 
     static let temporaryPresetCorrectionRange = Guardrail(
             absoluteBounds: Guardrail.suspendThreshold.absoluteBounds.lowerBound...unconstrainedWorkoutCorrectionRange.absoluteBounds.upperBound,
@@ -77,8 +62,6 @@ public extension Guardrail where Value == LoopQuantity {
                                         suspendThreshold: GlucoseThreshold?) -> Guardrail {
         
         switch preset {
-        case .workout:
-            return workoutCorrectionRange(correctionRangeScheduleRange: correctionRangeScheduleRange, suspendThreshold: suspendThreshold)
         case .preMeal:
             return preMealCorrectionRange(correctionRangeScheduleRange: correctionRangeScheduleRange, suspendThreshold: suspendThreshold)
         }

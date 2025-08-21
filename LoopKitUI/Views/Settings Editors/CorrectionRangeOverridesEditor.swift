@@ -147,95 +147,42 @@ public struct CorrectionRangeOverridesEditor: View {
     
     @ViewBuilder
     private func cardContent(for preset: CorrectionRangeOverrides.Preset) -> some View {
-//        switch preset {
-//        case .preMeal:
-            CorrectionRangeOverridesExpandableSetting(
-                isEditing: Binding(
-                    get: { presetBeingEdited == preset },
-                    set: { isEditing in
-                        withAnimation {
-                            presetBeingEdited = isEditing ? preset : nil
+        CorrectionRangeOverridesExpandableSetting(
+            isEditing: Binding(
+                get: { presetBeingEdited == preset },
+                set: { isEditing in
+                    withAnimation {
+                        presetBeingEdited = isEditing ? preset : nil
+                    }
+                }
+            ),
+            value: $value,
+            preset: preset,
+            unit: displayGlucoseUnit,
+            suspendThreshold: viewModel.suspendThreshold,
+            correctionRangeScheduleRange: viewModel.correctionRangeScheduleRange,
+            expandedContent: {
+                GlucoseRangePicker(
+                    range: Binding(
+                        get: { value.ranges[preset] ?? initiallySelectedValue(for: preset) },
+                        set: { newValue in
+                            withAnimation {
+                                value.ranges[preset] = newValue
+                            }
                         }
-                }),
-                value: $value,
-                preset: preset,
-                unit: displayGlucoseUnit,
-                suspendThreshold: viewModel.suspendThreshold,
-                correctionRangeScheduleRange: viewModel.correctionRangeScheduleRange,
-                expandedContent: {
-                    GlucoseRangePicker(
-                        range: Binding(
-                            get: { value.ranges[preset] ?? initiallySelectedValue(for: preset) },
-                            set: { newValue in
-                                withAnimation {
-                                    value.ranges[preset] = newValue
-                                }
-                        }
-                        ),
-                        unit:
-                            displayGlucoseUnit,
-                        minValue: selectableBounds(for: preset).lowerBound,
-                        maxValue: selectableBounds(for: preset).upperBound,
-                        guardrail: viewModel.guardrail
-                    )
-                    .accessibility(identifier: "\(accessibilityIdentifier(for: preset))_picker")
-            })
-        // MARK: Reverted for Formative 3. To be updated post-formative 3
-//        case .workout:
-//            NavigationLink {
-//                EmptyView()
-//            } label: {
-//                VStack(alignment: .leading, spacing: 16) {
-//                    HStack(spacing: 4) {
-//                        preset.icon(usingCarbTintColor: carbTintColor, orGlucoseTintColor: glucoseTintColor, resizable: true)
-//                            .frame(width: 24, height: 24)
-//                        
-//                        Text(preset.title)
-//                            .font(.title3)
-//                            .fontWeight(.semibold)
-//                        
-//                        Spacer()
-//                        
-//                        if let duration = viewModel.durationString {
-//                            Group {
-//                                Text(Image(systemName: "timer")) + Text(" ") + Text(duration)
-//                            }
-//                            .font(.footnote)
-//                            .foregroundColor(.secondary)
-//                        }
-//                    }
-//                    
-//                    if let correctionRangeString = viewModel.correctionRangeString {
-//                        Divider()
-//                        
-//                        VStack(alignment: .leading) {
-//                            Text("Overall Insulin")
-//                                .font(.caption)
-//                                .foregroundColor(.secondary)
-//                            
-//                            Group {
-//                                Text(viewModel.insulinPercentageString)
-//                                    .fontWeight(.semibold)
-//                                + Text(" • ")
-//                                    .foregroundColor(.secondary)
-//                                + Text(correctionRangeString)
-//                            }
-//                            .font(.subheadline)
-//                        }
-//                    }
-//                }
-//            }
-//            .buttonStyle(.plain)
-//        }
+                    ),
+                    unit: displayGlucoseUnit,
+                    minValue: selectableBounds(for: preset).lowerBound,
+                    maxValue: selectableBounds(for: preset).upperBound,
+                    guardrail: viewModel.guardrail
+                )
+                .accessibility(identifier: "\(accessibilityIdentifier(for: preset))_picker")
+            }
+        )
     }
 
     private func description(of preset: CorrectionRangeOverrides.Preset) -> Text {
-        switch preset {
-        case .preMeal:
-            return Text(preset.descriptiveText)
-        case .workout:
-            return Text(preset.descriptiveText)
-        }
+        Text(preset.descriptiveText)
     }
 
     private var instructionalContentIfNecessary: some View {
@@ -293,8 +240,6 @@ public struct CorrectionRangeOverridesEditor: View {
         switch preset {
         case .preMeal:
             title = Text(LocalizedString("Save Pre-Meal Range?", comment: "Alert title for confirming pre-meal range overrides outside the recommended range"))
-        case .workout:
-            title = Text(LocalizedString("Save Workout Range?", comment: "Alert title for confirming workout range overrides outside the recommended range"))
         }
         
         return SwiftUI.Alert(
@@ -330,8 +275,6 @@ public struct CorrectionRangeOverridesEditor: View {
         switch preset {
         case .preMeal:
             return "pre-meal"
-        case .workout:
-            return "workout"
         }
     }
 }
@@ -343,7 +286,7 @@ private struct CorrectionRangeOverridesGuardrailWarning: View {
     var body: some View {
         assert(!crossedThresholds.isEmpty)
         return GuardrailWarning(
-            therapySetting: preset == .preMeal ? .preMealCorrectionRangeOverride : .workoutCorrectionRangeOverride,
+            therapySetting: .preMealCorrectionRangeOverride,
             title: title,
             thresholds: crossedThresholds)
     }
@@ -362,15 +305,11 @@ private struct CorrectionRangeOverridesGuardrailWarning: View {
             switch preset {
             case .preMeal:
                 return Text(LocalizedString("Low Pre-Meal Value", comment: "Title text for the low pre-meal value warning"))
-            case .workout:
-                return Text(LocalizedString("Low Workout Value", comment: "Title text for the low workout value warning"))
             }
         case .aboveRecommended, .maximum:
             switch preset {
             case .preMeal:
                 return Text(LocalizedString("High Pre-Meal Value", comment: "Title text for the low pre-meal value warning"))
-            case .workout:
-                return Text(LocalizedString("High Workout Value", comment: "Title text for the high workout value warning"))
             }
         }
     }
@@ -379,8 +318,6 @@ private struct CorrectionRangeOverridesGuardrailWarning: View {
         switch preset {
         case .preMeal:
             return Text(LocalizedString("Pre-Meal Values", comment: "Title text for multi-value pre-meal value warning"))
-        case .workout:
-            return Text(LocalizedString("Workout Values", comment: "Title text for multi-value workout value warning"))
         }
     }
 }
@@ -391,8 +328,6 @@ public extension CorrectionRangeOverrides.Preset {
         switch self {
         case .preMeal:
             return LocalizedString("Temporarily lower your glucose target before a meal to impact post-meal glucose spikes.", comment: "Description of pre-meal mode")
-        case .workout:
-            return LocalizedString("Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events.", comment: "Description of workout mode")
         }
     }
 

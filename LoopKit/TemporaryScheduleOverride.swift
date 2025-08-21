@@ -10,11 +10,129 @@ import Foundation
 import HealthKit
 import LoopAlgorithm
 
+public struct ActivityPreset: Hashable, Identifiable, Sendable, RawRepresentable, Codable {
+    public enum ActivityType: String, Hashable, Identifiable, Sendable, Codable, CaseIterable {
+        case biking
+        case jogging
+        case walking
+        case strengthTraining
+        
+        public init?(fromId id: String) {
+            guard let typeString = id.split(separator: "activity-").last, let activityType = ActivityType(rawValue: String(typeString)) else {
+                return nil
+            }
+            
+            self = activityType
+        }
+        
+        public var id: String {
+            "activity-\(rawValue)"
+        }
+        
+        public var symbol: PresetSymbol {
+            switch self {
+            case .biking: .systemImage("figure.outdoor.cycle")
+            case .jogging: .systemImage("figure.run")
+            case .walking: .systemImage("figure.walk")
+            case .strengthTraining: .systemImage("figure.strengthtraining.traditional")
+            }
+        }
+        
+        public var name: String {
+            switch self {
+            case .biking: NSLocalizedString("Biking", comment: "biking activity preset name")
+            case .jogging: NSLocalizedString("Jogging", comment: "jogging activity preset name")
+            case .walking: NSLocalizedString("Walking", comment: "walking activity preset name")
+            case .strengthTraining: NSLocalizedString("Strength Training", comment: "strength training activity preset name")
+            }
+        }
+        
+        private var defaultTargetRange: ClosedRange<LoopQuantity> {
+            LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 150)...LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 170)
+        }
+        
+        private var defaultInsulinNeedsScaleFactor: Double {
+            switch self {
+            case .biking:
+                0.25
+            case .jogging:
+                0.2
+            case .walking:
+                0.25
+            case .strengthTraining:
+                0.35
+            }
+        }
+        
+        private var defaultDuration: TemporaryScheduleOverride.Duration {
+            .finite(.hours(1))
+        }
+        
+        public var defaultPreset: TemporaryPreset {
+            TemporaryPreset(
+                id: id,
+                symbol: symbol,
+                name: name,
+                settings: TemporaryPresetSettings(
+                    targetRange: defaultTargetRange,
+                    insulinNeedsScaleFactor: defaultInsulinNeedsScaleFactor
+                ),
+                duration: defaultDuration
+            )
+        }
+    }
+    
+    public let activityType: ActivityType
+    public var preset: TemporaryPreset
+    
+    public init(activityType: ActivityType, preset: TemporaryPreset) {
+        self.activityType = activityType
+        self.preset = preset
+    }
+    
+    public init?(preset: TemporaryPreset) {
+        guard let activityType = ActivityType(fromId: preset.id) else {
+            return nil
+        }
+        
+        self.activityType = activityType
+        self.preset = preset
+    }
+    
+    public init?(rawValue: [String : Any]) {
+        guard let activityTypeRawValue = rawValue["activityType"] as? ActivityType.RawValue,
+              let activityType = ActivityType(rawValue: activityTypeRawValue),
+              let presetRawValue = rawValue["preset"] as? TemporaryPreset.RawValue,
+              let preset = TemporaryPreset(rawValue: presetRawValue)
+        else { return nil }
+        
+        self.activityType = activityType
+        self.preset = preset
+    }
+    
+    public var isModifiedFromDefault: Bool {
+        preset != activityType.defaultPreset
+    }
+    
+    public var id: String {
+        activityType.rawValue
+    }
+    
+    public typealias RawValue = [String: Any]
+    
+    public var rawValue: RawValue {
+        [
+            "activityType": activityType.rawValue,
+            "preset": preset.rawValue
+        ]
+    }
+}
+
 public struct TemporaryScheduleOverride: Hashable, Sendable {
     public enum Context: Hashable, Sendable {
         case preMeal
-        case legacyWorkout
         case preset(TemporaryPreset)
+        case activity(ActivityPreset)
         case custom
     }
     
@@ -197,8 +315,13 @@ extension TemporaryScheduleOverride.Context: RawRepresentable {
         switch context {
         case "premeal":
             self = .preMeal
-        case "legacyWorkout":
-            self = .legacyWorkout
+        case "activity":
+            guard let activityRawValue = rawValue["activity"] as? ActivityPreset.RawValue,
+                  let activity = ActivityPreset(rawValue: activityRawValue)
+            else {
+                return nil
+            }
+            self = .activity(activity)
         case "preset":
             guard
                 let presetRawValue = rawValue["preset"] as? TemporaryPreset.RawValue,
@@ -218,12 +341,15 @@ extension TemporaryScheduleOverride.Context: RawRepresentable {
         switch self {
         case .preMeal:
             return ["context": "premeal"]
-        case .legacyWorkout:
-            return ["context": "legacyWorkout"]
         case .preset(let preset):
             return [
                 "context": "preset",
                 "preset": preset.rawValue
+            ]
+        case .activity(let activity):
+            return [
+                "context": "activity",
+                "activity": activity.rawValue
             ]
         case .custom:
             return ["context": "custom"]
@@ -237,8 +363,6 @@ extension TemporaryScheduleOverride.Context: Codable {
             switch string {
             case CodableKeys.preMeal.rawValue:
                 self = .preMeal
-            case CodableKeys.legacyWorkout.rawValue:
-                self = .legacyWorkout
             case CodableKeys.custom.rawValue:
                 self = .custom
             default:
@@ -246,7 +370,9 @@ extension TemporaryScheduleOverride.Context: Codable {
             }
         } else {
             let container = try decoder.container(keyedBy: CodableKeys.self)
-            if let preset = try container.decodeIfPresent(Preset.self, forKey: .preset) {
+            if let activityPreset = try container.decodeIfPresent(ActivityPreset.self, forKey: .activity) {
+                self = .activity(activityPreset)
+            } else if let preset = try container.decodeIfPresent(Preset.self, forKey: .preset) {
                 self = .preset(preset.preset)
             } else {
                 throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "invalid enumeration"))
@@ -259,9 +385,9 @@ extension TemporaryScheduleOverride.Context: Codable {
         case .preMeal:
             var container = encoder.singleValueContainer()
             try container.encode(CodableKeys.preMeal.rawValue)
-        case .legacyWorkout:
-            var container = encoder.singleValueContainer()
-            try container.encode(CodableKeys.legacyWorkout.rawValue)
+        case .activity(let activity):
+            var container = encoder.container(keyedBy: CodableKeys.self)
+            try container.encode(activity, forKey: .activity)
         case .preset(let preset):
             var container = encoder.container(keyedBy: CodableKeys.self)
             try container.encode(Preset(preset: preset), forKey: .preset)
@@ -277,7 +403,7 @@ extension TemporaryScheduleOverride.Context: Codable {
 
     private enum CodableKeys: String, CodingKey {
         case preMeal
-        case legacyWorkout
+        case activity
         case preset
         case custom
     }

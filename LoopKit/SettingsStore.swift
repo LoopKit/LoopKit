@@ -294,8 +294,6 @@ public struct StoredSettings: Equatable {
     public var dosingEnabled: Bool
     public var glucoseTargetRangeSchedule: GlucoseRangeSchedule?
     public var preMealTargetRange: ClosedRange<LoopQuantity>?
-    public var workoutTargetRange: ClosedRange<LoopQuantity>?
-    public var workoutDefaultDuration: TemporaryScheduleOverride.Duration?
     public var overridePresets: [TemporaryPreset]
     public var maximumBasalRatePerHour: Double?
     public var maximumBolus: Double?
@@ -320,8 +318,6 @@ public struct StoredSettings: Equatable {
                 dosingEnabled: Bool = false,
                 glucoseTargetRangeSchedule: GlucoseRangeSchedule? = nil,
                 preMealTargetRange: ClosedRange<LoopQuantity>? = nil,
-                workoutTargetRange: ClosedRange<LoopQuantity>? = nil,
-                workoutDefaultDuration: TemporaryScheduleOverride.Duration? = nil,
                 overridePresets: [TemporaryPreset] = [],
                 maximumBasalRatePerHour: Double? = nil,
                 maximumBolus: Double? = nil,
@@ -344,8 +340,6 @@ public struct StoredSettings: Equatable {
         self.dosingEnabled = dosingEnabled
         self.glucoseTargetRangeSchedule = glucoseTargetRangeSchedule
         self.preMealTargetRange = preMealTargetRange
-        self.workoutTargetRange = workoutTargetRange
-        self.workoutDefaultDuration = workoutDefaultDuration
         self.overridePresets = overridePresets
         self.maximumBasalRatePerHour = maximumBasalRatePerHour
         self.maximumBolus = maximumBolus
@@ -378,8 +372,6 @@ extension StoredSettings: Codable {
                   dosingEnabled: try container.decode(Bool.self, forKey: .dosingEnabled),
                   glucoseTargetRangeSchedule: try container.decodeIfPresent(GlucoseRangeSchedule.self, forKey: .glucoseTargetRangeSchedule),
                   preMealTargetRange: try container.decodeIfPresent(DoubleRange.self, forKey: .preMealTargetRange)?.quantityRange(for: bloodGlucoseUnit),
-                  workoutTargetRange: try container.decodeIfPresent(DoubleRange.self, forKey: .workoutTargetRange)?.quantityRange(for: bloodGlucoseUnit),
-                  workoutDefaultDuration: try container.decodeIfPresent(TemporaryScheduleOverride.Duration.self, forKey: .workoutDefaultDuration),
                   overridePresets: try container.decodeIfPresent([TemporaryPreset].self, forKey: .overridePresets) ?? [],
                   maximumBasalRatePerHour: try container.decodeIfPresent(Double.self, forKey: .maximumBasalRatePerHour),
                   maximumBolus: try container.decodeIfPresent(Double.self, forKey: .maximumBolus),
@@ -407,8 +399,6 @@ extension StoredSettings: Codable {
         try container.encode(dosingEnabled, forKey: .dosingEnabled)
         try container.encodeIfPresent(glucoseTargetRangeSchedule, forKey: .glucoseTargetRangeSchedule)
         try container.encodeIfPresent(preMealTargetRange?.doubleRange(for: bloodGlucoseUnit), forKey: .preMealTargetRange)
-        try container.encodeIfPresent(workoutTargetRange?.doubleRange(for: bloodGlucoseUnit), forKey: .workoutTargetRange)
-        try container.encodeIfPresent(workoutDefaultDuration, forKey: .workoutDefaultDuration)
         try container.encodeIfPresent(overridePresets, forKey: .overridePresets)
         try container.encodeIfPresent(maximumBasalRatePerHour, forKey: .maximumBasalRatePerHour)
         try container.encodeIfPresent(maximumBolus, forKey: .maximumBolus)
@@ -450,8 +440,6 @@ extension StoredSettings: Codable {
         case dosingEnabled
         case glucoseTargetRangeSchedule
         case preMealTargetRange
-        case workoutTargetRange
-        case workoutDefaultDuration
         case overridePresets
         case scheduleOverride
         case preMealOverride

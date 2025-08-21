@@ -26,8 +26,6 @@ extension TherapySetting {
             CorrectionRangeInformationView(onExit: nil, mode: .settings)
         case .preMealCorrectionRangeOverride:
             CorrectionRangeOverrideInformationView(preset: .preMeal, onExit: nil, mode: .settings)
-        case .workoutCorrectionRangeOverride:
-            CorrectionRangeOverrideInformationView(preset: .workout, onExit: nil, mode: .settings)
         case .suspendThreshold:
             SuspendThresholdInformationView(onExit: nil, mode: .settings)
         case .basalRate(let maximumScheduleEntryCount):
