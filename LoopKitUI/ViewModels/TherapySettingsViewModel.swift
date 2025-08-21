@@ -24,19 +24,16 @@ public class TherapySettingsViewModel {
     public var therapySettings: TherapySettings
     
     @ObservationIgnored private let initialTherapySettings: TherapySettings
-    @ObservationIgnored let sensitivityOverridesEnabled: Bool
     @ObservationIgnored public var prescription: Prescription?
 
     @ObservationIgnored private weak var delegate: TherapySettingsViewModelDelegate?
     
     public init(therapySettings: TherapySettings,
                 pumpSupportedIncrements: (() -> PumpSupportedIncrements?)? = nil,
-                sensitivityOverridesEnabled: Bool = false,
                 prescription: Prescription? = nil,
                 delegate: TherapySettingsViewModelDelegate? = nil) {
         self.therapySettings = therapySettings
         self.initialTherapySettings = therapySettings
-        self.sensitivityOverridesEnabled = sensitivityOverridesEnabled
         self.prescription = prescription
         self.delegate = delegate
     }
