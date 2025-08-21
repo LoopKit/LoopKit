@@ -362,6 +362,8 @@ extension TemporaryScheduleOverride.Context: Codable {
                 self = .preMeal
             case CodableKeys.custom.rawValue:
                 self = .custom
+            case "legacyWorkout":
+                self = .custom
             default:
                 throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "invalid enumeration"))
             }
