@@ -148,15 +148,12 @@ public struct PresetSymbol: Hashable, Sendable, Codable, RawRepresentable, Expre
         try container.encode(value, forKey: .value)
     }
     
-    public var textualRepresentation: NSAttributedString? {
-        let attachment = NSTextAttachment()
-        
+    public var textualRepresentation: String? {
         switch symbolType {
         case .emoji:
-            return NSAttributedString(string: value)
+            return value
         case .image, .systemImage:
-            attachment.image = UIImage(systemName: value)
-            return NSAttributedString(attachment: attachment)
+            return nil
         }
     }
 }
