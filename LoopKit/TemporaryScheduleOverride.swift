@@ -64,11 +64,8 @@ public struct ActivityPreset: Hashable, Identifiable, Sendable, RawRepresentable
             }
         }
         
-        private var defaultDuration: TemporaryScheduleOverride.Duration {
-            .finite(.hours(1))
-        }
         
-        public var defaultPreset: TemporaryPreset {
+        public func defaultPreset(duration: TemporaryScheduleOverride.Duration) -> TemporaryPreset {
             TemporaryPreset(
                 id: id,
                 symbol: symbol,
@@ -77,7 +74,7 @@ public struct ActivityPreset: Hashable, Identifiable, Sendable, RawRepresentable
                     targetRange: defaultTargetRange,
                     insulinNeedsScaleFactor: defaultInsulinNeedsScaleFactor
                 ),
-                duration: defaultDuration
+                duration: duration
             )
         }
     }
@@ -111,7 +108,7 @@ public struct ActivityPreset: Hashable, Identifiable, Sendable, RawRepresentable
     }
     
     public var isModifiedFromDefault: Bool {
-        preset != activityType.defaultPreset
+        preset != activityType.defaultPreset(duration: preset.duration)
     }
     
     public var id: String {
@@ -364,6 +361,8 @@ extension TemporaryScheduleOverride.Context: Codable {
             case CodableKeys.preMeal.rawValue:
                 self = .preMeal
             case CodableKeys.custom.rawValue:
+                self = .custom
+            case "legacyWorkout":
                 self = .custom
             default:
                 throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "invalid enumeration"))

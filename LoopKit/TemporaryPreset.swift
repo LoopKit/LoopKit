@@ -115,15 +115,15 @@ public struct PresetSymbol: Hashable, Sendable, Codable, RawRepresentable, Expre
     }
     
     public init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        if let symbolTypeValue = try container.decodeIfPresent(SymbolType.self, forKey: .symbolType) {
-            self.symbolType = symbolTypeValue
+        if let container = try? decoder.container(keyedBy: CodingKeys.self) {
+            self.symbolType = try container.decode(SymbolType.self, forKey: .symbolType)
             self.tint = try container.decodeIfPresent(SymbolTint.self, forKey: .tint)
             self.value = try container.decode(String.self, forKey: .value)
         } else {
+            let container = try decoder.singleValueContainer()
             self.symbolType = .emoji
             self.tint = nil
-            self.value = try container.decode(String.self, forKey: .symbolType)
+            self.value = try container.decode(String.self)
         }
     }
     
@@ -155,6 +155,10 @@ public struct PresetSymbol: Hashable, Sendable, Codable, RawRepresentable, Expre
         case .image, .systemImage:
             return nil
         }
+    }
+    
+    public var isEmpty: Bool {
+        value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 }
 
