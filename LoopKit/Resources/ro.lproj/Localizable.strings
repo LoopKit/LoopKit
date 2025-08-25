@@ -14,7 +14,7 @@
 "A value you have entered is lower than what is typically recommended for most people." = "Valoarea pe care ați introdus-o este mai mica decât cea recomandată de obicei pentru majoritatea oamenilor.";
 
 /* Brand name for afrezza insulin type
-   Title for Afrezza insulin type */
+Title for Afrezza insulin type */
 "Afrezza" = "Afrezza";
 
 /* Description for afrezza insulin type */
@@ -84,7 +84,7 @@
 "Falling very fast" = "În scădere foarte rapidă";
 
 /* Brand name for fiasp insulin type
-   Title for Fiasp insulin type */
+Title for Fiasp insulin type */
 "Fiasp" = "Fiasp";
 
 /* Description for fiasp insulin type */
@@ -127,7 +127,7 @@
 "Invalid Configuration" = "Configurație invalidă";
 
 /* Brand name for lyumjev insulin type
-   Title for Lyumjev insulin type */
+Title for Lyumjev insulin type */
 "Lyumjev" = "Lyumjev";
 
 /* Description for lyumjev insulin type */

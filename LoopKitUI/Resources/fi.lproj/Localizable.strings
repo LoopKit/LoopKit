@@ -45,7 +45,7 @@
 "%1$@ units remaining at %2$@" = "%1$@ yksikköä jäljellä klo %2$@";
 
 /* Description of a basal temp basal dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit)
-   Description of a bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit) */
+Description of a bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit) */
 "%1$@: <b>%2$@</b> %3$@" = "%1$@: <b>%2$@</b> %3$@";
 
 /* String format for value with units (1: value, 2: separator, 3: units) */
@@ -63,26 +63,14 @@
 /* Workout override preset title */
 "🏃‍♂️ Workout" = "🏃‍♂️ Liikunta";
 
-/* No comment provided by engineer. */
-"A card whose text will wrap onto multiple lines if I continue to type for long enough—this length should do" = "Kortti, jonka teksti rivittyy usealle riville, jos jatkan kirjoittamista riittävän kauan – tämän pituuden pitäisi riittää";
-
 /* Information about differences between target range and correction range */
 "A Correction Range is different. This will be a narrower range." = "Korjausalue tarkoittaa eri asiaa. Se on kapeampi alue.";
-
-/* No comment provided by engineer. */
-"A simple card" = "Yksinkertainen kortti";
 
 /* Warning text for basal rate of 0 U/hr */
 "A value of 0 U/hr means you will be scheduled to receive no basal insulin." = "Arvo 0 U/t tarkoittaa, että et saa lainkaan basaali-insuliinia.";
 
-/* No comment provided by engineer. */
-"Above the save button" = "Tallenna-painikkeen yläpuolella";
-
 /* Title of the carb entry absorption time cell */
 "Absorption Time" = "Imeytymisaika";
-
-/* No comment provided by engineer. */
-"Action Button" = "Toimintopainike";
 
 /* The text for the override history duration */
 "Active Duration" = "Aktiivinen kesto";
@@ -123,9 +111,6 @@
 /* Describes a lack of change in overall insulin needs */
 "Basal, bolus, and correction insulin dose amounts are unaffected." = "Basaalin, boluksen ja korjaavan insuliiniannoksen määrät pysyvät ennallaan.";
 
-/* No comment provided by engineer. */
-"Bottom component" = "Alaosan komponentti";
-
 /* The title of the cancel action in an action sheet */
 "Cancel" = "Kumoa";
 
@@ -148,7 +133,7 @@
 "Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Valitse pidempi imeytymisaika isoille tai paljon rasvaa ja proteiineja sisältäville aterioille. Tämä on suuntaa antava ohje, eikä sen tarvitse olla tarkka.";
 
 /* Button text to close a modal
-   Text to close informational page */
+Text to close informational page */
 "Close" = "Sulje";
 
 /* The format string describing the date of a COB value. The first format argument is the localized date. */
@@ -175,9 +160,6 @@
 /* The button text for confirming the setting */
 "Confirm Setting" = "Vahvista asetus";
 
-/* No comment provided by engineer. */
-"content" = "sisältö";
-
 /* Title of the setup button to continue */
 "Continue" = "Jatka";
 
@@ -194,15 +176,15 @@
 "Custom Override" = "Mukautettu tilapäisasetus";
 
 /* The title for the custom preset entry screen
-   The title for the custom preset selection screen */
+The title for the custom preset selection screen */
 "Custom Preset" = "Mukautettu esiasetus";
 
 /* Title of the carb entry date picker cell */
 "Date" = "Aika";
 
 /* Delete values for Pre-Meal, inactivates Pre-Meal icon
-   Test for table cell delete button
-   The title of the button to remove the credentials for a service */
+Test for table cell delete button
+The title of the button to remove the credentials for a service */
 "Delete" = "Poista";
 
 /* The title of the button to remove the credentials for a service */
@@ -221,15 +203,15 @@
 "Disable Preset" = "Poista esiasetus käytöstä";
 
 /* Text for dismiss button
-   Text for done button
-   Video player done button label */
+Text for done button
+Video player done button label */
 "Done" = "Valmis";
 
 /* The text for the override duration setting */
 "Duration" = "Kesto";
 
 /* Text for edit button
-   The title for the enabled custom preset editing screen */
+The title for the enabled custom preset editing screen */
 "Edit" = "Muokkaa";
 
 /* The title of the view controller to edit an existing carb entry */
@@ -268,9 +250,6 @@
 /* Segmented button title for insulin delivery log event history */
 "Event History" = "Tapahtumahistoria";
 
-/* No comment provided by engineer. */
-"Example" = "Esimerkki";
-
 /* Section title for fast absorbing food */
 "Fast" = "Nopea";
 
@@ -287,7 +266,7 @@
 "Get help with Therapy Settings" = "Apua hoitoasetuksiin";
 
 /* Button text to return to editing a schedule after from alert popup when some schedule values are outside the recommended range
-   Text for go back action on confirmation alert */
+Text for go back action on confirmation alert */
 "Go Back" = "Takaisin";
 
 /* Title text for the high basal rate warning */
@@ -382,9 +361,6 @@
 
 /* Placeholder for minimum value in glucose range */
 "min" = "min.";
-
-/* No comment provided by engineer. */
-"more content" = "lisää sisältöä";
 
 /* Alert action title to open error help */
 "More Info" = "Lisätietoa";
@@ -551,7 +527,7 @@
 "Temporary Override" = "Tilapäisasetus";
 
 /* Information about pre-meal range relative to correction range
-   Information about workout range relative to correction range */
+Information about workout range relative to correction range */
 "than your Correction Range." = "kuin korjausalue.";
 
 /* Subtitle description of Walsh insulin model setting */
@@ -576,7 +552,7 @@
 "Therapy Settings" = "Hoitoasetukset";
 
 /* Subtitle of Fiasp preset
-   Subtitle of Lyumjev preset */
+Subtitle of Lyumjev preset */
 "This model assumes peak insulin activity at 55 minutes." = "Tässä mallissa oletetaan, että insuliinin vaikutushuippu on 55 minuutissa.";
 
 /* Subtitle of Rapid-Acting – Children preset */
@@ -586,7 +562,7 @@
 "This model assumes peak insulin activity at 75 minutes." = "Tässä mallissa oletetaan, että insuliinin vaikutushuippu on 75 minuutissa.";
 
 /* Information about pre-meal range relative to correction range
-   Information about workout range relative to correction range */
+Information about workout range relative to correction range */
 "This will typically be" = "Tämä on yleensä";
 
 /* Label for offset from midnight picker */
@@ -597,9 +573,6 @@
 
 /* No comment provided by engineer. */
 "To be implemented" = "Toteutettava";
-
-/* No comment provided by engineer. */
-"Top component" = "Ylin komponentti";
 
 /* The unit string for units per hour */
 "U/hour" = "U/tunti";

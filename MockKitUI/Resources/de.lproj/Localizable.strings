@@ -53,7 +53,7 @@
 "Failed to Suspend Insulin Delivery" = "Anhalten des Insulin fehlgeschlagen";
 
 /* Caption for History
-   History Caption */
+History Caption */
 "History" = "Historie";
 
 /* No comment provided by engineer. */
@@ -84,7 +84,7 @@
 "Notification Settings" = "Benachrichtigungseinstellungen";
 
 /* Button title to acknowledge error
-   Default acknowledgement */
+Default acknowledgement */
 "OK" = "OK";
 
 /* No comment provided by engineer. */

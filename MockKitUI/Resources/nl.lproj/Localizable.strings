@@ -44,7 +44,7 @@
 "Error Suspending" = "Fout Bij Onderbreken";
 
 /* Caption for History
-   History Caption */
+History Caption */
 "History" = "Geschiedenis";
 
 /* No comment provided by engineer. */
@@ -60,7 +60,7 @@
 "Mock Version Check %@" = "Mock Versie Check %@";
 
 /* Button title to acknowledge error
-   Default acknowledgement */
+Default acknowledgement */
 "OK" = "Ok";
 
 /* Button title recovering comms */

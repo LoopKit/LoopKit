@@ -80,7 +80,7 @@
 "Get help with your pump" = "Uzyskaj pomoc dotyczącą pompy";
 
 /* Caption for History
-   History Caption */
+History Caption */
 "History" = "Historia";
 
 /* No comment provided by engineer. */
@@ -91,9 +91,6 @@
 
 /* Controller title for insulin type selection screen */
 "Insulin Type" = "Rodzaj insuliny";
-
-/* Title of insulin delivery section */
-"Insulin(String.nonBreakingSpace)Delivery" = "Insulin(String.nonBreakingSpace)Delivery";
 
 /* No comment provided by engineer. */
 "Insulin%@Remaining" = "Pozostało%@Insuliny";
@@ -114,7 +111,7 @@
 "Notification Settings" = "Ustawienia powiadomień";
 
 /* Button title to acknowledge error
-   Default acknowledgement */
+Default acknowledgement */
 "OK" = "OK";
 
 /* No comment provided by engineer. */

@@ -17,7 +17,7 @@
 "Insulin Type" = "Typ inzulínu";
 
 /* Button title to acknowledge error
-   Default acknowledgement */
+Default acknowledgement */
 "OK" = "OK";
 
 /* Alert content body for first software update alert (1: app name)(2: app name) */

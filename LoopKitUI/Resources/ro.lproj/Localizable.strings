@@ -51,7 +51,7 @@
 "%1$@ units remaining at %2$@" = "%1$@ unități rămase la %2$@";
 
 /* Description of a basal temp basal dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit)
-   Description of a bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit) */
+Description of a bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit) */
 "%1$@: <b>%2$@</b> %3$@" = "%1$@: <b>%2$@</b> %3$@";
 
 /* String format for value with units (1: value, 2: separator, 3: units) */
@@ -78,26 +78,14 @@
 /* Workout override preset title */
 "🏃‍♂️ Workout" = "🏃‍♂️ Activitate sportivă";
 
-/* No comment provided by engineer. */
-"A card whose text will wrap onto multiple lines if I continue to type for long enough—this length should do" = "Un card al cărui text se va întinde pe mai multe linii dacă continui să tastez pentru o perioadă suficient de lungă — această lungime ar trebui să o facă";
-
 /* Information about differences between target range and correction range */
 "A Correction Range is different. This will be a narrower range." = "Un interval de corecție este diferit. Acesta ar trebui sa fie un interval mai îngust.";
-
-/* No comment provided by engineer. */
-"A simple card" = "Un card simplu";
 
 /* Warning text for basal rate of 0 U/hr */
 "A value of 0 U/hr means you will be scheduled to receive no basal insulin." = "O valoare de 0 U/oră înseamnă că nu vei primi insulină bazală.";
 
-/* No comment provided by engineer. */
-"Above the save button" = "Deasupra butonului de salvare";
-
 /* Title of the carb entry absorption time cell */
 "Absorption Time" = "Timp de absorbție";
-
-/* No comment provided by engineer. */
-"Action Button" = "Buton acțiune";
 
 /* The text for the override history duration */
 "Active Duration" = "Durata activă";
@@ -141,9 +129,6 @@
 /* Describes a lack of change in overall insulin needs */
 "Basal, bolus, and correction insulin dose amounts are unaffected." = "Dozele de insulină bazale, de bolus și de corecție sunt neafectate.";
 
-/* No comment provided by engineer. */
-"Bottom component" = "Componenta de jos";
-
 /* The title of the cancel action in an action sheet */
 "Cancel" = "Renunță";
 
@@ -166,7 +151,7 @@
 "Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Alegeți o durată mai lungă de absorbție pentru mese mai mari sau pentru cele care conțin grăsimi și proteine. Nu e necesară o valoare exactă, scopul e să oferim doar o ghidare pentru algoritm.";
 
 /* Button text to close a modal
-   Text to close informational page */
+Text to close informational page */
 "Close" = "Închide";
 
 /* The format string describing the date of a COB value. The first format argument is the localized date. */
@@ -193,9 +178,6 @@
 /* The button text for confirming the setting */
 "Confirm Setting" = "Confirmați setările";
 
-/* No comment provided by engineer. */
-"content" = "conținut";
-
 /* Title of the setup button to continue */
 "Continue" = "Continuă";
 
@@ -212,15 +194,15 @@
 "Custom Override" = "Modificare personalizată";
 
 /* The title for the custom preset entry screen
-   The title for the custom preset selection screen */
+The title for the custom preset selection screen */
 "Custom Preset" = "Presetare particularizată";
 
 /* Title of the carb entry date picker cell */
 "Date" = "Data";
 
 /* Delete values for Pre-Meal, inactivates Pre-Meal icon
-   Test for table cell delete button
-   The title of the button to remove the credentials for a service */
+Test for table cell delete button
+The title of the button to remove the credentials for a service */
 "Delete" = "Șterge";
 
 /* The title of the button to remove the credentials for a service */
@@ -239,18 +221,15 @@
 "Disable Preset" = "Dezactivează presetarea";
 
 /* Text for dismiss button
-   Text for done button
-   Video player done button label */
+Text for done button
+Video player done button label */
 "Done" = "Realizat";
 
 /* The text for the override duration setting */
 "Duration" = "Durată";
 
-/* No comment provided by engineer. */
-"Dynamic component #%lld" = "Componenta dinamică #%lld";
-
 /* Text for edit button
-   The title for the enabled custom preset editing screen */
+The title for the enabled custom preset editing screen */
 "Edit" = "Editare";
 
 /* The title of the view controller to edit an existing carb entry */
@@ -289,9 +268,6 @@
 /* Segmented button title for insulin delivery log event history */
 "Event History" = "Istoric evenimente";
 
-/* No comment provided by engineer. */
-"Example" = "Exemplu";
-
 /* Section title for fast absorbing food */
 "Fast" = "Rapidă";
 
@@ -308,7 +284,7 @@
 "Get help with Therapy Settings" = "Obțineți ajutor cu Setările Terapiei";
 
 /* Button text to return to editing a schedule after from alert popup when some schedule values are outside the recommended range
-   Text for go back action on confirmation alert */
+Text for go back action on confirmation alert */
 "Go Back" = "Inapoi";
 
 /* Title text for the high basal rate warning */
@@ -415,9 +391,6 @@
 
 /* Placeholder for minimum value in glucose range */
 "min" = "min";
-
-/* No comment provided by engineer. */
-"more content" = "mai mult conținut";
 
 /* Alert action title to open error help */
 "More Info" = "Detalii";
@@ -593,7 +566,7 @@
 "Test" = "Test";
 
 /* Information about pre-meal range relative to correction range
-   Information about workout range relative to correction range */
+Information about workout range relative to correction range */
 "than your Correction Range." = "față de intervalul de corecții.";
 
 /* Description for selection when no insulin type is selected. */
@@ -624,7 +597,7 @@
 "This model assumes peak insulin activity at 19 minutes." = "Acest model presupune vârful de acțiune al insulinei la 19 minute.";
 
 /* Subtitle of Fiasp preset
-   Subtitle of Lyumjev preset */
+Subtitle of Lyumjev preset */
 "This model assumes peak insulin activity at 55 minutes." = "Acest model presupune activitatea maximă a insulinei la 55 minute.";
 
 /* Subtitle of Rapid-Acting – Children preset */
@@ -637,7 +610,7 @@
 "This setting will also determine a safety limit for automatic dosing. %1$@ will limit automatic delivery to keep the amount of active insulin below twice your maximum bolus." = "Această setare va determina, de asemenea, o limită de siguranță pentru administrarea automată. %1$@ va limita administrarea automată pentru a menține cantitatea de insulină activă sub dublul bolusului maxim.";
 
 /* Information about pre-meal range relative to correction range
-   Information about workout range relative to correction range */
+Information about workout range relative to correction range */
 "This will typically be" = "Acesta va fi de obicei";
 
 /* Label for offset from midnight picker */
@@ -648,9 +621,6 @@
 
 /* No comment provided by engineer. */
 "To be implemented" = "Va fi implementat";
-
-/* No comment provided by engineer. */
-"Top component" = "Componenta superioara";
 
 /* The text indicating Total for Daily Schedule Basal */
 "Total" = "Total";
