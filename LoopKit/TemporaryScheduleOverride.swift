@@ -12,9 +12,9 @@ import LoopAlgorithm
 
 public struct ActivityPreset: Hashable, Identifiable, Sendable, RawRepresentable, Codable {
     public enum ActivityType: String, Hashable, Identifiable, Sendable, Codable, CaseIterable {
-        case biking
         case jogging
         case walking
+        case biking
         case strengthTraining
         
         public init?(fromId id: String) {
@@ -29,13 +29,21 @@ public struct ActivityPreset: Hashable, Identifiable, Sendable, RawRepresentable
             "activity-\(rawValue)"
         }
         
-        public var symbol: PresetSymbol {
+        public var systemImageName: String {
             switch self {
-            case .biking: .systemImage("figure.outdoor.cycle")
-            case .jogging: .systemImage("figure.run")
-            case .walking: .systemImage("figure.walk")
-            case .strengthTraining: .systemImage("figure.strengthtraining.traditional")
+            case .jogging:
+                "figure.run"
+            case .walking:
+                "figure.walk"
+            case .biking:
+                "figure.outdoor.cycle"
+            case .strengthTraining:
+                "figure.strengthtraining.traditional"
             }
+        }
+        
+        public var symbol: PresetSymbol {
+            .systemImage(systemImageName)
         }
         
         public var name: String {
@@ -51,7 +59,7 @@ public struct ActivityPreset: Hashable, Identifiable, Sendable, RawRepresentable
             LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 150)...LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 170)
         }
         
-        private var defaultInsulinNeedsScaleFactor: Double {
+        public var defaultInsulinNeedsScaleFactor: Double {
             switch self {
             case .biking:
                 0.23
