@@ -80,7 +80,7 @@
 "Get help with your pump" = "Ottieni aiuto per il tuo CGM";
 
 /* Caption for History
-   History Caption */
+History Caption */
 "History" = "Storia";
 
 /* No comment provided by engineer. */
@@ -91,9 +91,6 @@
 
 /* Controller title for insulin type selection screen */
 "Insulin Type" = "Tipo d'insulina";
-
-/* Title of insulin delivery section */
-"Insulin(String.nonBreakingSpace)Delivery" = "Consegna di insulina (String.nonBreakingSpace).";
 
 /* No comment provided by engineer. */
 "Insulin%@Remaining" = "Insulina Rimanente";
@@ -114,7 +111,7 @@
 "Notification Settings" = "impostazioni notifiche ";
 
 /* Button title to acknowledge error
-   Default acknowledgement */
+Default acknowledgement */
 "OK" = "OK";
 
 /* No comment provided by engineer. */
@@ -131,6 +128,9 @@
 
 /* No comment provided by engineer. */
 "Sensor expires in " = "Il sensore scade tra:";
+
+/* No comment provided by engineer. */
+"Simulator Settings" = "Impostazioni del simulatore";
 
 /* Caption for Source */
 "Source" = "Fonte";

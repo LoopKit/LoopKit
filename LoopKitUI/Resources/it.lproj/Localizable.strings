@@ -54,7 +54,7 @@
 "%1$@ units remaining at %2$@" = "%1$@ unità rimanenti alle ore %2$@";
 
 /* Description of a basal temp basal dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit)
-   Description of a bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit) */
+Description of a bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit) */
 "%1$@: <b>%2$@</b> %3$@" = "%1$@ : <b> %2$@ </b> %3$@";
 
 /* Format string describing glucose units per minute (1: glucose unit string) */
@@ -84,26 +84,14 @@
 /* Workout override preset title */
 "🏃‍♂️ Workout" = "🏃‍♂️ Allenamento";
 
-/* No comment provided by engineer. */
-"A card whose text will wrap onto multiple lines if I continue to type for long enough—this length should do" = "Una carta il cui testo andrà a capo su più righe se continuo a digitare abbastanza a lungo: questa lunghezza dovrebbe andare bene";
-
 /* Information about differences between target range and correction range */
 "A Correction Range is different. This will be a narrower range." = "Un intervallo di correzione è diverso. Questo sarà un intervallo più ristretto.";
-
-/* No comment provided by engineer. */
-"A simple card" = "Una carta semplice";
 
 /* Warning text for basal rate of 0 U/hr */
 "A value of 0 U/hr means you will be scheduled to receive no basal insulin." = "Un valore di 0 U/ora significa che il paziente non riceverà insulina basale.";
 
-/* No comment provided by engineer. */
-"Above the save button" = "Sopra il pulsante Salva";
-
 /* Title of the carb entry absorption time cell */
 "Absorption Time" = "Tempo di assorbimento";
-
-/* No comment provided by engineer. */
-"Action Button" = "Pulsante di azione";
 
 /* The text for the override history duration */
 "Active Duration" = "Durata attiva";
@@ -147,9 +135,6 @@
 /* Describes a lack of change in overall insulin needs */
 "Basal, bolus, and correction insulin dose amounts are unaffected." = "Le dosi basali, di bolo e di correzione dell’insulina sono rimaste invariate.";
 
-/* No comment provided by engineer. */
-"Bottom component" = "Componente inferiore";
-
 /* The title of the cancel action in an action sheet */
 "Cancel" = "Annulla";
 
@@ -166,13 +151,13 @@
 "Changes will only apply this time you enable the override. The default settings of %@ will not be affected." = "Le modifiche saranno applicate solo all’attivazione del programma alternativo. Le impostazioni predefinite di %@ rimarranno invariate.";
 
 /* Footer text for customizing from a preset (1: preset name) */
-"Changes will only apply this time you enable the preset. The default settings of %@ will not be affected." = "Le modifiche saranno applicate solo quando si attiva la preimpostazione. Le impostazioni predefinite di %@ non vengono modificate.";
+"Changes will only apply this time you enable the preset. The default settings of %@ will not be affected." = "Le modifiche saranno applicate solo quando si attiva il preset. Le impostazioni predefinite di %@ non vengono modificate.";
 
 /* Carb entry section footer text explaining absorption time */
 "Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Scegli un tempo di assorbimento piu lungo per i pasti piu grandi o quelli contenenti grassi e proteine. Questa e solo una guida all’algoritmo e non e necessario che sia esatta.";
 
 /* Button text to close a modal
-   Text to close informational page */
+Text to close informational page */
 "Close" = "Chiudi";
 
 /* The format string describing the date of a COB value. The first format argument is the localized date. */
@@ -199,9 +184,6 @@
 /* The button text for confirming the setting */
 "Confirm Setting" = "Conferma impostazione";
 
-/* No comment provided by engineer. */
-"content" = "contenuto";
-
 /* Title of the setup button to continue */
 "Continue" = "Continua";
 
@@ -221,15 +203,15 @@
 "Custom Override" = "Progr. Alternativo";
 
 /* The title for the custom preset entry screen
-   The title for the custom preset selection screen */
+The title for the custom preset selection screen */
 "Custom Preset" = "Programmazione";
 
 /* Title of the carb entry date picker cell */
 "Date" = "Data";
 
 /* Delete values for Pre-Meal, inactivates Pre-Meal icon
-   Test for table cell delete button
-   The title of the button to remove the credentials for a service */
+Test for table cell delete button
+The title of the button to remove the credentials for a service */
 "Delete" = "Cancella";
 
 /* The title of the button to remove the credentials for a service */
@@ -245,21 +227,18 @@
 "Delivery Limits are safety guardrails for your insulin delivery." = "I limiti di consegna sono barriere di sicurezza per la somministrazione di insulina.";
 
 /* The text for the custom preset disable button */
-"Disable Preset" = "Disabilita preimpostazione";
+"Disable Preset" = "Disabilita preset";
 
 /* Text for dismiss button
-   Text for done button
-   Video player done button label */
+Text for done button
+Video player done button label */
 "Done" = "Fine";
 
 /* The text for the override duration setting */
 "Duration" = "Durata";
 
-/* No comment provided by engineer. */
-"Dynamic component #%lld" = "Componente dinamico #%lld";
-
 /* Text for edit button
-   The title for the enabled custom preset editing screen */
+The title for the enabled custom preset editing screen */
 "Edit" = "Modifica";
 
 /* The title of the view controller to edit an existing carb entry */
@@ -272,7 +251,7 @@
 "Editing affects only the active override. The default settings of %@ will not be affected." = "La modifica riguarda solo il programma alternativo attivo.  Le impostazioni predefinite di %@ resteranno invariate.";
 
 /* Footer text for editing an enabled custom preset (1: preset name) */
-"Edits persist only until the preset is disabled. The default settings of %@ will not be affected." = "Le modifiche persistono solo finché la preimpostazione non viene disattivata. Le impostazioni predefinite di %@ non vengono modificate.";
+"Edits persist only until the preset is disabled. The default settings of %@ will not be affected." = "Le modifiche persistono solo finché il preset non viene disattivato. Le impostazioni predefinite di %@ non vengono modificate.";
 
 /* The button text for enabling a temporary override */
 "Enable" = "Abilita";
@@ -298,9 +277,6 @@
 /* Segmented button title for insulin delivery log event history */
 "Event History" = "Storia degli Eventi";
 
-/* No comment provided by engineer. */
-"Example" = "Esempio";
-
 /* Section title for fast absorbing food */
 "Fast" = "Veloce";
 
@@ -320,7 +296,7 @@
 "Get help with Therapy Settings" = "Ottieni assistenza per le impostazioni della terapia";
 
 /* Button text to return to editing a schedule after from alert popup when some schedule values are outside the recommended range
-   Text for go back action on confirmation alert */
+Text for go back action on confirmation alert */
 "Go Back" = "Torna indietro";
 
 /* Title text for the high basal rate warning */
@@ -428,9 +404,6 @@
 /* Placeholder for minimum value in glucose range */
 "min" = "min";
 
-/* No comment provided by engineer. */
-"more content" = "più contenuti";
-
 /* Alert action title to open error help */
 "More Info" = "Piu info";
 
@@ -487,7 +460,7 @@
 "Pump Event" = "Evento Microinfusore";
 
 /* Title text for suspend resume button when the basal delivery state is not set */
-"Pump Inoperable" = "Pompa non funzionante";
+"Pump Inoperable" = "microinfusore non funzionante";
 
 /* Title of insulin model preset - rapid acting adult */
 "Rapid-Acting – Adults" = "Insulina ultrarapida – Adulti";
@@ -611,7 +584,7 @@
 "Test" = "Test";
 
 /* Information about pre-meal range relative to correction range
-   Information about workout range relative to correction range */
+Information about workout range relative to correction range */
 "than your Correction Range." = "Il tuo intervallo di correzione";
 
 /* Description for selection when no insulin type is selected. */
@@ -642,7 +615,7 @@
 "This model assumes peak insulin activity at 19 minutes." = "Questo modello presuppone il picco di attività insulinica a 19 minuti.";
 
 /* Subtitle of Fiasp preset
-   Subtitle of Lyumjev preset */
+Subtitle of Lyumjev preset */
 "This model assumes peak insulin activity at 55 minutes." = "Questo modello presuppone il picco di attività insulinica a 55 minuti.";
 
 /* Subtitle of Rapid-Acting – Children preset */
@@ -658,7 +631,7 @@
 "This setting will also determine a safety limit for automatic dosing. %1$@ will limit automatic delivery to keep the amount of active insulin below twice your maximum bolus." = "Questa impostazione determinerà anche un limite di sicurezza per il dosaggio automatico. %1$@ limiterà l'erogazione automatica per mantenere la quantità di insulina attiva al di sotto del doppio del bolo massimo.";
 
 /* Information about pre-meal range relative to correction range
-   Information about workout range relative to correction range */
+Information about workout range relative to correction range */
 "This will typically be" = "Questo in genere sara'";
 
 /* Label for offset from midnight picker */
@@ -669,9 +642,6 @@
 
 /* No comment provided by engineer. */
 "To be implemented" = "Da implementare";
-
-/* No comment provided by engineer. */
-"Top component" = "Componente Principale";
 
 /* The text indicating Total for Daily Schedule Basal */
 "Total" = "Totale";
@@ -723,7 +693,7 @@
 "Workout" = "Allenarsi";
 
 /* Information about workout range format (1: app name) */
-"Workout Range is the glucose value or range of values you want %1$@ to target during activity. This range will be in effect when you activate the Workout Preset button." = "L'intervallo di allenamento è il valore glicemico o l'intervallo di valori che vuoi che %1$@ abbia come target durante l'attività. Questo intervallo sarà effettivo quando si attiva il pulsante Preimpostazione allenamento.";
+"Workout Range is the glucose value or range of values you want %1$@ to target during activity. This range will be in effect when you activate the Workout Preset button." = "L'intervallo di allenamento è il valore glicemico o l'intervallo di valori che vuoi che %1$@ abbia come target durante l'attività. Questo intervallo sarà effettivo quando si attiva il pulsante preset allenamento.";
 
 /* Title text for multi-value workout value warning */
 "Workout Values" = "Valori Allenamento";

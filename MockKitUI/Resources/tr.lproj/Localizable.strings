@@ -38,7 +38,7 @@
 "Error Suspending" = "Askıya Alma Hatası";
 
 /* Caption for History
-   History Caption */
+History Caption */
 "History" = "Geçmiş";
 
 /* No comment provided by engineer. */
@@ -51,7 +51,7 @@
 "Mock Version Check %@" = "Sahte Sürüm Kontrolü %@";
 
 /* Button title to acknowledge error
-   Default acknowledgement */
+Default acknowledgement */
 "OK" = "Tamam";
 
 /* Button title recovering comms */

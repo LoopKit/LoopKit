@@ -45,7 +45,7 @@
 "%1$@ units remaining at %2$@" = "%1$@ enheter återstår kl. %2$@";
 
 /* Description of a basal temp basal dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit)
-   Description of a bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit) */
+Description of a bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit) */
 "%1$@: <b>%2$@</b> %3$@" = "%1$@: <b>%2$@</b> %3$@";
 
 /* String format for value with units (1: value, 2: separator, 3: units) */
@@ -63,26 +63,14 @@
 /* Workout override preset title */
 "🏃‍♂️ Workout" = "🏃‍♂️ Träning";
 
-/* No comment provided by engineer. */
-"A card whose text will wrap onto multiple lines if I continue to type for long enough—this length should do" = "Ett kort vars text kommer att hamna på flera rader om jag fortsätter att skriva tillräckligt länge - denna längd bör räcka";
-
 /* Information about differences between target range and correction range */
 "A Correction Range is different. This will be a narrower range." = "Detta målvärde är annorlunda än det du är van vid. Detta är ett snävare intervall.";
-
-/* No comment provided by engineer. */
-"A simple card" = "Ett enkelt kort";
 
 /* Warning text for basal rate of 0 U/hr */
 "A value of 0 U/hr means you will be scheduled to receive no basal insulin." = "Ett värde på 0 / h innebär att du inte kommer få någon basal insulintillförsel.";
 
-/* No comment provided by engineer. */
-"Above the save button" = "Ovanför spara-knappen";
-
 /* Title of the carb entry absorption time cell */
 "Absorption Time" = "Absorptionstid";
-
-/* No comment provided by engineer. */
-"Action Button" = "Åtgärdsknapp";
 
 /* The text for the override history duration */
 "Active Duration" = "Aktiv varaktighet";
@@ -123,9 +111,6 @@
 /* Describes a lack of change in overall insulin needs */
 "Basal, bolus, and correction insulin dose amounts are unaffected." = "Basal, bolus, och korrigeringsdoser är oförändrade.";
 
-/* No comment provided by engineer. */
-"Bottom component" = "Nedre komponent";
-
 /* The title of the cancel action in an action sheet */
 "Cancel" = "Avbryt";
 
@@ -148,7 +133,7 @@
 "Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Välj en längre absorptionstid för måltid med mycket fett eller protein. Ofta är det bäst att dela upp måltiden i snabba och långsamma kolhydrater och mata in dessa var för sig.";
 
 /* Button text to close a modal
-   Text to close informational page */
+Text to close informational page */
 "Close" = "Stäng";
 
 /* The format string describing the date of a COB value. The first format argument is the localized date. */
@@ -175,9 +160,6 @@
 /* The button text for confirming the setting */
 "Confirm Setting" = "Bekräfta inställning";
 
-/* No comment provided by engineer. */
-"content" = "innehåll";
-
 /* Title of the setup button to continue */
 "Continue" = "Fortsätt";
 
@@ -194,15 +176,15 @@
 "Custom Override" = "Anpassad Override";
 
 /* The title for the custom preset entry screen
-   The title for the custom preset selection screen */
+The title for the custom preset selection screen */
 "Custom Preset" = "Anpassad förinställning";
 
 /* Title of the carb entry date picker cell */
 "Date" = "Tid";
 
 /* Delete values for Pre-Meal, inactivates Pre-Meal icon
-   Test for table cell delete button
-   The title of the button to remove the credentials for a service */
+Test for table cell delete button
+The title of the button to remove the credentials for a service */
 "Delete" = "Ta bort";
 
 /* The title of the button to remove the credentials for a service */
@@ -221,15 +203,15 @@
 "Disable Preset" = "Inaktivera förval";
 
 /* Text for dismiss button
-   Text for done button
-   Video player done button label */
+Text for done button
+Video player done button label */
 "Done" = "Färdig";
 
 /* The text for the override duration setting */
 "Duration" = "Duration";
 
 /* Text for edit button
-   The title for the enabled custom preset editing screen */
+The title for the enabled custom preset editing screen */
 "Edit" = "Ändra";
 
 /* The title of the view controller to edit an existing carb entry */
@@ -268,9 +250,6 @@
 /* Segmented button title for insulin delivery log event history */
 "Event History" = "Händelsehistorik";
 
-/* No comment provided by engineer. */
-"Example" = "Exempel";
-
 /* Section title for fast absorbing food */
 "Fast" = "Snabb";
 
@@ -287,7 +266,7 @@
 "Get help with Therapy Settings" = "Få hjälp med behandlingsinställningar";
 
 /* Button text to return to editing a schedule after from alert popup when some schedule values are outside the recommended range
-   Text for go back action on confirmation alert */
+Text for go back action on confirmation alert */
 "Go Back" = "Gå tillbaka";
 
 /* Title text for the high basal rate warning */
@@ -382,9 +361,6 @@
 
 /* Placeholder for minimum value in glucose range */
 "min" = "min";
-
-/* No comment provided by engineer. */
-"more content" = "mer innehåll";
 
 /* Alert action title to open error help */
 "More Info" = "Mer info";
@@ -551,7 +527,7 @@
 "Temporary Override" = "Temporär Override";
 
 /* Information about pre-meal range relative to correction range
-   Information about workout range relative to correction range */
+Information about workout range relative to correction range */
 "than your Correction Range." = "än ditt målvärde.";
 
 /* Subtitle description of Walsh insulin model setting */
@@ -576,7 +552,7 @@
 "Therapy Settings" = "Behandlingsinställningar";
 
 /* Subtitle of Fiasp preset
-   Subtitle of Lyumjev preset */
+Subtitle of Lyumjev preset */
 "This model assumes peak insulin activity at 55 minutes." = "Denna modell antar en maximal aktivitet vid 55 minuter.";
 
 /* Subtitle of Rapid-Acting – Children preset */
@@ -586,7 +562,7 @@
 "This model assumes peak insulin activity at 75 minutes." = "Denna modell antar en maximal aktivitet vid 75 minuter.";
 
 /* Information about pre-meal range relative to correction range
-   Information about workout range relative to correction range */
+Information about workout range relative to correction range */
 "This will typically be" = "Detta kommer vanligtvis att vara";
 
 /* Label for offset from midnight picker */
@@ -597,9 +573,6 @@
 
 /* No comment provided by engineer. */
 "To be implemented" = "Att bli implementerat";
-
-/* No comment provided by engineer. */
-"Top component" = "Översta komponenten";
 
 /* The unit string for units per hour */
 "U/hour" = "E/timme";

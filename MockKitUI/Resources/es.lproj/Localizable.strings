@@ -35,7 +35,7 @@
 "Error Suspending" = "Error Suspendiendo";
 
 /* Caption for History
-   History Caption */
+History Caption */
 "History" = "Historial";
 
 /* No comment provided by engineer. */
@@ -45,7 +45,7 @@
 "Insulin Type" = "Tipo de Insulina";
 
 /* Button title to acknowledge error
-   Default acknowledgement */
+Default acknowledgement */
 "OK" = "OK";
 
 /* Button title recovering comms */

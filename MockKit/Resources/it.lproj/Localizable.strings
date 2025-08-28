@@ -26,5 +26,5 @@
 "Suspend" = "Sospeso";
 
 /* Pump Event title for UnfinalizedDose with doseType of .tempBasal */
-"Temp Basal" = "Basale Temporanea";
+"Temp Basal" = "Basale temporanea";
 

@@ -114,8 +114,8 @@
 "Date" = "Date";
 
 /* Delete values for Pre-Meal, inactivates Pre-Meal icon
-   Test for table cell delete button
-   The title of the button to remove the credentials for a service */
+Test for table cell delete button
+The title of the button to remove the credentials for a service */
 "Delete" = "מחק";
 
 /* The title of the button to remove the credentials for a service */

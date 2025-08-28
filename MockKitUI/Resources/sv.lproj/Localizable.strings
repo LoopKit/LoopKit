@@ -29,14 +29,14 @@
 "Error Suspending" = "Fel vid försök till paus";
 
 /* Caption for History
-   History Caption */
+History Caption */
 "History" = "Historik";
 
 /* Controller title for insulin type selection screen */
 "Insulin Type" = "Insulintyp";
 
 /* Button title to acknowledge error
-   Default acknowledgement */
+Default acknowledgement */
 "OK" = "OK";
 
 /* Button title recovering comms */

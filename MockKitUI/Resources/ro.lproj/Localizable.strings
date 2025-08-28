@@ -38,7 +38,7 @@
 "Error Suspending" = "Eroare în timpul suspendării";
 
 /* Caption for History
-   History Caption */
+History Caption */
 "History" = "Istoric";
 
 /* No comment provided by engineer. */
@@ -51,7 +51,7 @@
 "Mock Version Check %@" = "Verificare versiune simulată %@";
 
 /* Button title to acknowledge error
-   Default acknowledgement */
+Default acknowledgement */
 "OK" = "OK";
 
 /* Button title recovering comms */

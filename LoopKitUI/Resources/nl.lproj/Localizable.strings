@@ -51,7 +51,7 @@
 "%1$@ units remaining at %2$@" = "%1$@ eenheden over om %2$@";
 
 /* Description of a basal temp basal dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit)
-   Description of a bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit) */
+Description of a bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit) */
 "%1$@: <b>%2$@</b> %3$@" = "%1$@: <b>%2$@</b> %3$@";
 
 /* String format for value with units (1: value, 2: separator, 3: units) */
@@ -78,26 +78,14 @@
 /* Workout override preset title */
 "🏃‍♂️ Workout" = "🏃‍♂️ Training";
 
-/* No comment provided by engineer. */
-"A card whose text will wrap onto multiple lines if I continue to type for long enough—this length should do" = "Een kaart waarvan de tekst op meerdere regels wordt teruggedrongen als ik lang genoeg blijf typen- Dit zou voldoende moeten zijn";
-
 /* Information about differences between target range and correction range */
 "A Correction Range is different. This will be a narrower range." = "Een Correctiebereik is anders. Dit zal een kleiner bereik zijn.";
-
-/* No comment provided by engineer. */
-"A simple card" = "Een eenvoudige kaart";
 
 /* Warning text for basal rate of 0 U/hr */
 "A value of 0 U/hr means you will be scheduled to receive no basal insulin." = "Een waarde van 0 E/uur betekent dat u geen basale insuline ontvangt.";
 
-/* No comment provided by engineer. */
-"Above the save button" = "Boven de knop Opslaan";
-
 /* Title of the carb entry absorption time cell */
 "Absorption Time" = "Opnametijd";
-
-/* No comment provided by engineer. */
-"Action Button" = "Actieknop";
 
 /* The text for the override history duration */
 "Active Duration" = "Actieduur";
@@ -141,9 +129,6 @@
 /* Describes a lack of change in overall insulin needs */
 "Basal, bolus, and correction insulin dose amounts are unaffected." = "Basaal-, bolus- en insulinecorrectiehoeveelheden zijn onveranderd.";
 
-/* No comment provided by engineer. */
-"Bottom component" = "Onderste component";
-
 /* The title of the cancel action in an action sheet */
 "Cancel" = "Annuleer";
 
@@ -166,7 +151,7 @@
 "Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Kies een langere opnametijd voor grotere maaltijden of voor maaltijden die vetten en eiwitten bevatten. Dit is alleen een leidraad voor het algoritme en hoeft niet exact te zijn.";
 
 /* Button text to close a modal
-   Text to close informational page */
+Text to close informational page */
 "Close" = "Sluiten";
 
 /* The format string describing the date of a COB value. The first format argument is the localized date. */
@@ -193,9 +178,6 @@
 /* The button text for confirming the setting */
 "Confirm Setting" = "Bevestig instelling";
 
-/* No comment provided by engineer. */
-"content" = "inhoud";
-
 /* Title of the setup button to continue */
 "Continue" = "Ga Verder";
 
@@ -212,15 +194,15 @@
 "Custom Override" = "Aangepaste Override";
 
 /* The title for the custom preset entry screen
-   The title for the custom preset selection screen */
+The title for the custom preset selection screen */
 "Custom Preset" = "Aangepast Programma";
 
 /* Title of the carb entry date picker cell */
 "Date" = "Datum";
 
 /* Delete values for Pre-Meal, inactivates Pre-Meal icon
-   Test for table cell delete button
-   The title of the button to remove the credentials for a service */
+Test for table cell delete button
+The title of the button to remove the credentials for a service */
 "Delete" = "Verwijderen";
 
 /* The title of the button to remove the credentials for a service */
@@ -239,18 +221,15 @@
 "Disable Preset" = "Programma Uitschakelen";
 
 /* Text for dismiss button
-   Text for done button
-   Video player done button label */
+Text for done button
+Video player done button label */
 "Done" = "Gereed";
 
 /* The text for the override duration setting */
 "Duration" = "Duur";
 
-/* No comment provided by engineer. */
-"Dynamic component #%lld" = "Dynamische component #%lld";
-
 /* Text for edit button
-   The title for the enabled custom preset editing screen */
+The title for the enabled custom preset editing screen */
 "Edit" = "Bewerken";
 
 /* The title of the view controller to edit an existing carb entry */
@@ -289,9 +268,6 @@
 /* Segmented button title for insulin delivery log event history */
 "Event History" = "Logboek";
 
-/* No comment provided by engineer. */
-"Example" = "Voorbeeld";
-
 /* Section title for fast absorbing food */
 "Fast" = "Snel";
 
@@ -308,7 +284,7 @@
 "Get help with Therapy Settings" = "Krijg hulp bij Therapieinstellingen";
 
 /* Button text to return to editing a schedule after from alert popup when some schedule values are outside the recommended range
-   Text for go back action on confirmation alert */
+Text for go back action on confirmation alert */
 "Go Back" = "Ga Terug";
 
 /* Title text for the high basal rate warning */
@@ -415,9 +391,6 @@
 
 /* Placeholder for minimum value in glucose range */
 "min" = "min";
-
-/* No comment provided by engineer. */
-"more content" = "meer inhoud";
 
 /* Alert action title to open error help */
 "More Info" = "Meer Informatie";
@@ -593,7 +566,7 @@
 "Test" = "Test";
 
 /* Information about pre-meal range relative to correction range
-   Information about workout range relative to correction range */
+Information about workout range relative to correction range */
 "than your Correction Range." = "zijn dan je Correctiebereik.";
 
 /* Description for selection when no insulin type is selected. */
@@ -624,7 +597,7 @@
 "This model assumes peak insulin activity at 19 minutes." = "Dit model gaat uit van een piek in de insulineactiviteit op 19 minuten.";
 
 /* Subtitle of Fiasp preset
-   Subtitle of Lyumjev preset */
+Subtitle of Lyumjev preset */
 "This model assumes peak insulin activity at 55 minutes." = "Dit model gaat uit van een piek in de insulineactiviteit op 55 minuten.";
 
 /* Subtitle of Rapid-Acting – Children preset */
@@ -637,7 +610,7 @@
 "This setting will also determine a safety limit for automatic dosing. %1$@ will limit automatic delivery to keep the amount of active insulin below twice your maximum bolus." = "Deze instelling bepaalt ook een veiligheidslimiet voor automatische dosering. %1$@ beperkt de automatische toediening om de hoeveelheid actieve insuline onder tweemaal uw maximale bolus te houden.";
 
 /* Information about pre-meal range relative to correction range
-   Information about workout range relative to correction range */
+Information about workout range relative to correction range */
 "This will typically be" = "Over het algemeen is dit";
 
 /* Label for offset from midnight picker */
@@ -648,9 +621,6 @@
 
 /* No comment provided by engineer. */
 "To be implemented" = "Te implementeren";
-
-/* No comment provided by engineer. */
-"Top component" = "Bovenste component";
 
 /* The text indicating Total for Daily Schedule Basal */
 "Total" = "Totaal";

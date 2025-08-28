@@ -54,7 +54,7 @@
 "%1$@ units remaining at %2$@" = "%1$@ jednostek pozostaje w %2$@";
 
 /* Description of a basal temp basal dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit)
-   Description of a bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit) */
+Description of a bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit) */
 "%1$@: <b>%2$@</b> %3$@" = "%1$@: <b>%2$@</b> %3$@";
 
 /* Format string describing glucose units per minute (1: glucose unit string) */
@@ -84,26 +84,14 @@
 /* Workout override preset title */
 "🏃‍♂️ Workout" = "🏃‍♂️ Trening";
 
-/* No comment provided by engineer. */
-"A card whose text will wrap onto multiple lines if I continue to type for long enough—this length should do" = "Karta, której tekst zawija się w wiele wierszy, jeśli będę pisać wystarczająco długo — ta długość powinna wystarczyć";
-
 /* Information about differences between target range and correction range */
 "A Correction Range is different. This will be a narrower range." = "Obecna skala została ograniczona bezpieczniejszą wartością.";
-
-/* No comment provided by engineer. */
-"A simple card" = "Prosta karta";
 
 /* Warning text for basal rate of 0 U/hr */
 "A value of 0 U/hr means you will be scheduled to receive no basal insulin." = "Wartość 0 jedn./godz. oznacza, że nie zaplanowano podawania insuliny bazowej.";
 
-/* No comment provided by engineer. */
-"Above the save button" = "Nad przyciskiem zapisz";
-
 /* Title of the carb entry absorption time cell */
 "Absorption Time" = "Czas absorpcji";
-
-/* No comment provided by engineer. */
-"Action Button" = "Przycisk akcji";
 
 /* The text for the override history duration */
 "Active Duration" = "Aktywny czas trwania";
@@ -147,9 +135,6 @@
 /* Describes a lack of change in overall insulin needs */
 "Basal, bolus, and correction insulin dose amounts are unaffected." = "Dawka podstawowa, bolus i korygująca dawka insuliny bez zmian.";
 
-/* No comment provided by engineer. */
-"Bottom component" = "Dolny element";
-
 /* The title of the cancel action in an action sheet */
 "Cancel" = "Anuluj";
 
@@ -172,7 +157,7 @@
 "Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Wybierz dłuższy czas absorpcji dla większych, bogatobiałkowych lub wysokotłuszczowych posiłków. To tylko wskazówka dla algorytmu i nie musi być bardzo dokładna.";
 
 /* Button text to close a modal
-   Text to close informational page */
+Text to close informational page */
 "Close" = "Zamknij";
 
 /* The format string describing the date of a COB value. The first format argument is the localized date. */
@@ -199,9 +184,6 @@
 /* The button text for confirming the setting */
 "Confirm Setting" = "Potwierdź ustawienia";
 
-/* No comment provided by engineer. */
-"content" = "treść";
-
 /* Title of the setup button to continue */
 "Continue" = "Kontynuuj";
 
@@ -221,15 +203,15 @@
 "Custom Override" = "Custom Override";
 
 /* The title for the custom preset entry screen
-   The title for the custom preset selection screen */
+The title for the custom preset selection screen */
 "Custom Preset" = "Cel Tymczasowy";
 
 /* Title of the carb entry date picker cell */
 "Date" = "Data";
 
 /* Delete values for Pre-Meal, inactivates Pre-Meal icon
-   Test for table cell delete button
-   The title of the button to remove the credentials for a service */
+Test for table cell delete button
+The title of the button to remove the credentials for a service */
 "Delete" = "Usunąć";
 
 /* The title of the button to remove the credentials for a service */
@@ -248,18 +230,15 @@
 "Disable Preset" = "Wyłącz ustawienie wstępne";
 
 /* Text for dismiss button
-   Text for done button
-   Video player done button label */
+Text for done button
+Video player done button label */
 "Done" = "Gotowe";
 
 /* The text for the override duration setting */
 "Duration" = "Czas trwania";
 
-/* No comment provided by engineer. */
-"Dynamic component #%lld" = "Składnik dynamiczny #%lld";
-
 /* Text for edit button
-   The title for the enabled custom preset editing screen */
+The title for the enabled custom preset editing screen */
 "Edit" = "Edytuj";
 
 /* The title of the view controller to edit an existing carb entry */
@@ -298,9 +277,6 @@
 /* Segmented button title for insulin delivery log event history */
 "Event History" = "Historia zdarzeń";
 
-/* No comment provided by engineer. */
-"Example" = "Przykład";
-
 /* Section title for fast absorbing food */
 "Fast" = "Szybko";
 
@@ -320,7 +296,7 @@
 "Get help with Therapy Settings" = "Uzyskaj pomoc dotyczącą ustawień terapii";
 
 /* Button text to return to editing a schedule after from alert popup when some schedule values are outside the recommended range
-   Text for go back action on confirmation alert */
+Text for go back action on confirmation alert */
 "Go Back" = "Wróć";
 
 /* Title text for the high basal rate warning */
@@ -427,9 +403,6 @@
 
 /* Placeholder for minimum value in glucose range */
 "min" = "min.";
-
-/* No comment provided by engineer. */
-"more content" = "więcej treści";
 
 /* Alert action title to open error help */
 "More Info" = "Więcej informacji";
@@ -611,7 +584,7 @@
 "Test" = "Test";
 
 /* Information about pre-meal range relative to correction range
-   Information about workout range relative to correction range */
+Information about workout range relative to correction range */
 "than your Correction Range." = "niż twój zakres docelowy.";
 
 /* Description for selection when no insulin type is selected. */
@@ -642,7 +615,7 @@
 "This model assumes peak insulin activity at 19 minutes." = "Model ten zakłada szczytową aktywność insuliny po 19 minutach.";
 
 /* Subtitle of Fiasp preset
-   Subtitle of Lyumjev preset */
+Subtitle of Lyumjev preset */
 "This model assumes peak insulin activity at 55 minutes." = "Model ten zakłada szczytową aktywność insuliny po 55 minutach.";
 
 /* Subtitle of Rapid-Acting – Children preset */
@@ -658,7 +631,7 @@
 "This setting will also determine a safety limit for automatic dosing. %1$@ will limit automatic delivery to keep the amount of active insulin below twice your maximum bolus." = "Te ustawienia będą dodatkowo określać bezpieczny limit automatycznych dawek. %1$@ ograniczy automatyczne podawanie, do dwukrotności Twojego maksymalnego bolusa.";
 
 /* Information about pre-meal range relative to correction range
-   Information about workout range relative to correction range */
+Information about workout range relative to correction range */
 "This will typically be" = "Zazwyczaj będzie to ";
 
 /* Label for offset from midnight picker */
@@ -669,9 +642,6 @@
 
 /* No comment provided by engineer. */
 "To be implemented" = "Być realizowane";
-
-/* No comment provided by engineer. */
-"Top component" = "Górny składnik";
 
 /* The text indicating Total for Daily Schedule Basal */
 "Total" = "Łącznie";

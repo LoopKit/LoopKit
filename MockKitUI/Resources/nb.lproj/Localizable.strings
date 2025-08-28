@@ -80,7 +80,7 @@
 "Get help with your pump" = "Få hjelp med pumpen din";
 
 /* Caption for History
-   History Caption */
+History Caption */
 "History" = "Historie";
 
 /* No comment provided by engineer. */
@@ -91,9 +91,6 @@
 
 /* Controller title for insulin type selection screen */
 "Insulin Type" = "Insulintype";
-
-/* Title of insulin delivery section */
-"Insulin(String.nonBreakingSpace)Delivery" = "Insulin(String.nonBreakingSpace)Levering";
 
 /* No comment provided by engineer. */
 "Insulin%@Remaining" = "Insulin %@ gjenstår";
@@ -114,7 +111,7 @@
 "Notification Settings" = "Innstillinger for varsling";
 
 /* Button title to acknowledge error
-   Default acknowledgement */
+Default acknowledgement */
 "OK" = "OK";
 
 /* No comment provided by engineer. */
@@ -131,6 +128,9 @@
 
 /* No comment provided by engineer. */
 "Sensor expires in " = "Sensoren utløper om";
+
+/* No comment provided by engineer. */
+"Simulator Settings" = "Simulatorinnstillinger";
 
 /* Caption for Source */
 "Source" = "Kilde";

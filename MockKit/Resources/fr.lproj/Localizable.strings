@@ -2,7 +2,7 @@
 "Bolus" = "Bolus";
 
 /* Status highlight that delivery is uncertain. */
-"Comms Issue" = "Problème de com.";
+"Comms Issue" = "Problème de communication";
 
 /* Status highlight that insulin delivery was suspended. */
 "Insulin Suspended" = "Insuline suspendue";
@@ -11,13 +11,13 @@
 "No Insulin" = "Pas d'insuline";
 
 /* Status highlight that pump has a dead battery. */
-"Pump Battery Dead" = "Batterie HS";
+"Pump Battery Dead" = "Batterie de la pompe déchargée";
 
 /* Status highlight that a pump error occurred. */
-"Pump Error" = "Erreur détectée";
+"Pump Error" = "Erreur de la pompe";
 
 /* Status highlight that an occlusion was detected. */
-"Pump Occlusion" = "Occlusion détectée";
+"Pump Occlusion" = "Occlusion de la pompe";
 
 /* Pump Event title for UnfinalizedDose with doseType of .resume */
 "Resume" = "Reprendre";

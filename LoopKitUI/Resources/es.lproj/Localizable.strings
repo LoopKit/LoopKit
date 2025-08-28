@@ -48,7 +48,7 @@
 "%1$@ units remaining at %2$@" = "quedan %1$@ unidades a las %2$@";
 
 /* Description of a basal temp basal dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit)
-   Description of a bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit) */
+Description of a bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit) */
 "%1$@: <b>%2$@</b> %3$@" = "%1$@: <b>%2$@</b> %3$@";
 
 /* String format for value with units (1: value, 2: separator, 3: units) */
@@ -74,9 +74,6 @@
 
 /* Title of the carb entry absorption time cell */
 "Absorption Time" = "Tiempo de Absorción";
-
-/* No comment provided by engineer. */
-"Action Button" = "Botón de acción";
 
 /* The text for the override history duration */
 "Active Duration" = "Duración activa";
@@ -142,7 +139,7 @@
 "Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Elija un tiempo de absorción más largo para comidas más grandes, o aquellas que contienen grasas y proteínas. Esta es solo una guía para el algoritmo y no necesita ser exacta.";
 
 /* Button text to close a modal
-   Text to close informational page */
+Text to close informational page */
 "Close" = "Cerrar";
 
 /* The format string describing the date of a COB value. The first format argument is the localized date. */
@@ -169,9 +166,6 @@
 /* The button text for confirming the setting */
 "Confirm Setting" = "Confirmar ajuste";
 
-/* No comment provided by engineer. */
-"content" = "contenido";
-
 /* Title of the setup button to continue */
 "Continue" = "Continuar";
 
@@ -188,15 +182,15 @@
 "Custom Override" = "Sobreescritura personalizada";
 
 /* The title for the custom preset entry screen
-   The title for the custom preset selection screen */
+The title for the custom preset selection screen */
 "Custom Preset" = "Ajuste Preestablecido personalizado";
 
 /* Title of the carb entry date picker cell */
 "Date" = "Fecha";
 
 /* Delete values for Pre-Meal, inactivates Pre-Meal icon
-   Test for table cell delete button
-   The title of the button to remove the credentials for a service */
+Test for table cell delete button
+The title of the button to remove the credentials for a service */
 "Delete" = "Eliminar";
 
 /* The title of the button to remove the credentials for a service */
@@ -215,15 +209,15 @@
 "Disable Preset" = "Desactivar preselección";
 
 /* Text for dismiss button
-   Text for done button
-   Video player done button label */
+Text for done button
+Video player done button label */
 "Done" = "Completado";
 
 /* The text for the override duration setting */
 "Duration" = "Duración";
 
 /* Text for edit button
-   The title for the enabled custom preset editing screen */
+The title for the enabled custom preset editing screen */
 "Edit" = "Editar";
 
 /* The title of the view controller to edit an existing carb entry */
@@ -262,9 +256,6 @@
 /* Segmented button title for insulin delivery log event history */
 "Event History" = "Historial de Eventos";
 
-/* No comment provided by engineer. */
-"Example" = "Ejemplo";
-
 /* Section title for fast absorbing food */
 "Fast" = "Rápido";
 
@@ -281,7 +272,7 @@
 "Get help with Therapy Settings" = "Obtener ayuda con la Configuración de la Terapia";
 
 /* Button text to return to editing a schedule after from alert popup when some schedule values are outside the recommended range
-   Text for go back action on confirmation alert */
+Text for go back action on confirmation alert */
 "Go Back" = "Volver atrás";
 
 /* Title text for the high basal rate warning */
@@ -385,9 +376,6 @@
 
 /* Placeholder for minimum value in glucose range */
 "min" = "min";
-
-/* No comment provided by engineer. */
-"more content" = "más contenido";
 
 /* Alert action title to open error help */
 "More Info" = "Más Info";
@@ -557,7 +545,7 @@
 "Temporary Override" = "Sobreescritura temporal";
 
 /* Information about pre-meal range relative to correction range
-   Information about workout range relative to correction range */
+Information about workout range relative to correction range */
 "than your Correction Range." = "que su Rango de Corrección.";
 
 /* Description for selection when no insulin type is selected. */
@@ -588,7 +576,7 @@
 "This model assumes peak insulin activity at 19 minutes." = "Este modelo asume la actividad máxima de la insulina a los 19 minutos.";
 
 /* Subtitle of Fiasp preset
-   Subtitle of Lyumjev preset */
+Subtitle of Lyumjev preset */
 "This model assumes peak insulin activity at 55 minutes." = "Este modelo asume la actividad máxima de la insulina a los 55 minutos.";
 
 /* Subtitle of Rapid-Acting – Children preset */
@@ -598,7 +586,7 @@
 "This model assumes peak insulin activity at 75 minutes." = "Este modelo asume como pico de la insulina a los 75 minutos.";
 
 /* Information about pre-meal range relative to correction range
-   Information about workout range relative to correction range */
+Information about workout range relative to correction range */
 "This will typically be" = "Esto será típicamente";
 
 /* Label for offset from midnight picker */
@@ -609,9 +597,6 @@
 
 /* No comment provided by engineer. */
 "To be implemented" = "Por desarrollarse";
-
-/* No comment provided by engineer. */
-"Top component" = "Componente superior";
 
 /* The text indicating Total for Daily Schedule Basal */
 "Total" = "Total";

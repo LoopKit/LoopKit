@@ -32,8 +32,8 @@
 "Delivery Limits" = "Limity podávání";
 
 /* Text for dismiss button
-   Text for done button
-   Video player done button label */
+Text for done button
+Video player done button label */
 "Done" = "Hotovo";
 
 /* Information about maximum basal rate (1: app name) */
