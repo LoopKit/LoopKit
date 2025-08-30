@@ -1,8 +1,8 @@
 /* Format for correction range override therapy setting card */
-"%@ Range" = "%@ Intervallo";
+"%@ Range" = "Intervallo %@";
 
 /* Describes a certain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus failed" = " Bolo %1$@ U fallito";
+"%1$@ U bolus failed" = "Bolo %1$@ U fallito";
 
 /* Describes an uncertain bolus failure (1: size of the bolus in units) */
 "%1$@ U bolus may not have succeeded" = "Il bolo %1$@ U potrebbe non essere riuscito";
@@ -11,7 +11,7 @@
 "%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours." = "%1$@ erogherà l'insulina basale e consiglierà il bolo solo se si prevede che la tua glicemia sarà superiore a questo limite per le prossime tre ore.";
 
 /* String format for value with units (1: value, 2: separator, 3: units) */
-"%1$@%2$@%3$@" = "%1$@ %2$@ %3$@";
+"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
 
 /* Descriptive text for guardrail high value warning for schedule interface */
 "A value you have entered is higher than what is typically recommended for most people." = "Il valore inserito è superiore a quello tipicamente consigliato per la maggior parte delle persone.";
@@ -24,7 +24,7 @@ Title for Afrezza insulin type */
 "Afrezza" = "Afrezza";
 
 /* Description for afrezza insulin type */
-"Afrezza is an ultra rapid-acting mealtime insulin that is breathed in through your lungs using an oral inhaler and made by MannKind" = "Afrezza è un'insulina prandiale ad azione ultra rapida che viene inalata attraverso i polmoni utilizzando un inalatore orale e prodotta da MannKind";
+"Afrezza is an ultra rapid-acting mealtime insulin that is breathed in through your lungs using an oral inhaler and made by MannKind" = "Afrezza è un'insulina ad azione ultra rapida somministrata durante i pasti, che viene inalata attraverso i polmoni tramite un inalatore orale ed è prodotta da MannKind";
 
 /* Brand name for apidra insulin type */
 "Apidra" = "Apidra";
@@ -51,7 +51,7 @@ Title for Afrezza insulin type */
 "Carb Ratios" = "Rapporti carboidrati";
 
 /* Recovery instruction for an uncertain bolus failure */
-"Check your pump before retrying" = "Controlla il microinfusore prima di riprovare";
+"Check your pump before retrying" = "Controlla la pompa prima di riprovare";
 
 /* The description of an error returned when attempting to delete a sample not shared by the current app */
 "com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Autorizzazione negata";
@@ -109,7 +109,7 @@ Title for Fiasp insulin type */
 "Fiasp" = "Fiasp";
 
 /* Description for fiasp insulin type */
-"Fiasp is a mealtime insulin aspart formulation with the addition of nicotinamide (vitamin B3) made by Novo Nordisk" = "Fiasp è una formulazione d'insulina ad azione rapida con un l'aggiunta di Nicotinamide (vitamina B3) prodotta da Novo Nordisk. ";
+"Fiasp is a mealtime insulin aspart formulation with the addition of nicotinamide (vitamin B3) made by Novo Nordisk" = "Fiasp è una formulazione d'insulina ad azione rapida con un l'aggiunta di Nicotinamide (vitamina B3) prodotta da Novo Nordisk.";
 
 /* Glucose trend flat */
 "Flat" = "Piatto";
@@ -142,7 +142,7 @@ Title for Fiasp insulin type */
 "Insulin Model" = "Modello di azione dell'Insulina";
 
 /* Title text for insulin sensitivity */
-"Insulin Sensitivities" = "Sensibilità Insulinica";
+"Insulin Sensitivities" = "Sensibilità insulinica";
 
 /* Generic pump error description */
 "Invalid Configuration" = "Configurazione non valida";
@@ -155,22 +155,22 @@ Title for Lyumjev insulin type */
 "Lyumjev" = "Lyumjev";
 
 /* Description for lyumjev insulin type */
-"Lyumjev is a mealtime insulin lispro formulation with the addition of citrate and treprostinil made by Eli Lilly" = "Lyumjev e' una formulazione veloce di insulina lispro (humalog) con due additivi: un citrato e Treprostinil, prodotta dalla compagnia Eli Lilly ";
+"Lyumjev is a mealtime insulin lispro formulation with the addition of citrate and treprostinil made by Eli Lilly" = "Lyumjev è una formulazione di insulina lispro da assumere durante i pasti con aggiunta di citrato e treprostinil prodotta da Eli Lilly";
 
 /* Recovery suggestion for uncertain delivery */
-"Make sure your pump is within communication range of your phone." = "Assicurati che il microinfusore si trovi nel raggio di comunicazione del tuo telefono.";
+"Make sure your pump is within communication range of your phone." = "Assicurati che la pompa si trovi nel raggio di comunicazione del tuo telefono.";
 
 /* Title text for maximum basal rate configuration */
-"Maximum Basal Rate" = "Profilo Basale Massimo";
+"Maximum Basal Rate" = "Velocità basale massima";
 
 /* Descriptive text for maximum basal rate (1: app name) */
 "Maximum Basal Rate is the highest temporary basal rate %1$@ is allowed to set." = "La velocità basale massima è la velocità basale temporanea più alta che %1$@ può impostare.";
 
 /* Title text for maximum bolus configuration */
-"Maximum Bolus" = "Bolo Massimo";
+"Maximum Bolus" = "Bolo massimo";
 
 /* Descriptive text for maximum bolus */
-"Maximum Bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose." = "Il bolo massimo è la quantità di bolo più alta che puoi somministrare in una volta per coprire i carboidrati o ridurre la glicemia alta.";
+"Maximum Bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose." = "Il bolo massimo è la quantità di bolo più alta che puoi erogare in una singola volta per coprire i carboidrati o ridurre la glicemia alta.";
 
 /* The short unit display string for milligrams per liter per minute */
 "mg/dL/min" = "mg/dl/min";
@@ -215,7 +215,7 @@ Title for Lyumjev insulin type */
 "Please re-enable sharing in Health" = "Per favore, riattiva la condivisione in Salute";
 
 /* Title for pre-meal mode */
-"Pre-Meal" = "Pre-Pasto";
+"Pre-Meal" = "Pre-pasto";
 
 /* Description of supported software update needed */
 "Recommended Update" = "Aggiornamento consigliato";
@@ -245,7 +245,7 @@ Title for Lyumjev insulin type */
 "Temporarily lower your glucose target before a meal to impact post-meal glucose spikes." = "Abbassa temporaneamente il tuo target glicemico prima di un pasto per influenzare i picchi glicemici postprandiali.";
 
 /* Descriptive text for workout correction range override */
-"Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events." = "Aumentare temporaneamente il target glicemico prima, durante o dopo l'attività fisica per ridurre il rischio di eventi ipoglicemici.";
+"Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events." = "Aumenta temporaneamente il target glicemico prima, durante o dopo l'attività fisica per ridurre il rischio di eventi ipoglicemici.";
 
 /* Descriptive text for guardrail high value warning */
 "The value you have entered is higher than what is typically recommended for most people." = "Il valore inserito è superiore a quello generalmente consigliato per la maggior parte delle persone.";
@@ -281,7 +281,7 @@ Title for Lyumjev insulin type */
 "Update Available" = "Aggiornamento disponibile";
 
 /* Title for workout mode */
-"Workout" = "Allenarsi";
+"Workout" = "Allenamento";
 
 /* Descriptive text for basal rate */
 "Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "La velocità basale d'insulina è il numero di unità all'ora che si desidera utilizzare per coprire il tuo fabbisogno d'insulina basale.";
@@ -290,5 +290,5 @@ Title for Lyumjev insulin type */
 "Your Carb Ratio is the number of grams of carbohydrates covered by one unit of insulin." = "Il tuo rapporto carboidrati è il numero di grammi di carboidrati coperti da un'unità d'insulina.";
 
 /* Descriptive text for insulin sensitivity */
-"Your Insulin Sensitivities refer to the drop in glucose expected from one unit of insulin." = "La tua sensibilità all'insulina si riferisce al calo di glucosio previsto da un'unità d'insulina.";
+"Your Insulin Sensitivities refer to the drop in glucose expected from one unit of insulin." = "La tua sensibilità insulinica si riferisce al calo di glicemia previsto da un'unità d'insulina.";
 
