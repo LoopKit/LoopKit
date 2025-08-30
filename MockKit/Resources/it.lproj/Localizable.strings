@@ -2,28 +2,28 @@
 "Bolus" = "Bolo";
 
 /* Status highlight that delivery is uncertain. */
-"Comms Issue" = "Problema di Comunicazione";
+"Comms Issue" = "Problema di comunicazione";
 
 /* Status highlight that insulin delivery was suspended. */
 "Insulin Suspended" = "Erogazione Insulina sospesa";
 
 /* Status highlight that a pump is out of insulin. */
-"No Insulin" = "Insulina Terminata";
+"No Insulin" = "Insulina esaurita";
 
 /* Status highlight that pump has a dead battery. */
-"Pump Battery Dead" = "Batteria Microinfusore esaurita";
+"Pump Battery Dead" = "Batteria pompa esaurita";
 
 /* Status highlight that a pump error occurred. */
-"Pump Error" = "Errore Mincroinfusore";
+"Pump Error" = "Errore della pompa";
 
 /* Status highlight that an occlusion was detected. */
-"Pump Occlusion" = "Occlusione microinfusore";
+"Pump Occlusion" = "Occlusione pompa";
 
 /* Pump Event title for UnfinalizedDose with doseType of .resume */
 "Resume" = "Riprendi";
 
 /* Pump Event title for UnfinalizedDose with doseType of .suspend */
-"Suspend" = "Sospeso";
+"Suspend" = "Sospendi";
 
 /* Pump Event title for UnfinalizedDose with doseType of .tempBasal */
 "Temp Basal" = "Basale temporanea";

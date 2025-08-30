@@ -488,28 +488,28 @@ Text for go back action on confirmation alert */
 "Save" = "Sauvegarder";
 
 /* Alert title for confirming basal rates outside the recommended range */
-"Save Basal Rates?" = "Enregistrer les débits basaux ?";
+"Save Basal Rates?" = "Enregistrer les débits basaux?";
 
 /* Alert title for confirming carb ratios outside the recommended range */
-"Save Carb Ratios?" = "Enregistrer les Ratios ?";
+"Save Carb Ratios?" = "Enregistrer les Ratios?";
 
 /* Alert title for confirming correction ranges outside the recommended range */
 "Save Correction Range(s)?" = "Enregistrer les plages de correction?";
 
 /* Alert title for confirming delivery limits outside the recommended range */
-"Save Delivery Limits?" = "Enregistrer les limites d'injection ?";
+"Save Delivery Limits?" = "Enregistrer les limites d'injection?";
 
 /* Alert title for confirming a glucose safety limit outside the recommended range */
-"Save Glucose Safety Limit?" = "Enregistrer la limite de sécurité de la glycémie ?";
+"Save Glucose Safety Limit?" = "Enregistrer la limite de sécurité de la glycémie?";
 
 /* Alert title for confirming insulin sensitivities outside the recommended range */
-"Save Insulin Sensitivities?" = "Enregistrer les paramètres de sensibilité à l'insuline ?";
+"Save Insulin Sensitivities?" = "Enregistrer les paramètres de sensibilité à l'insuline?";
 
 /* Alert title for confirming pre-meal range overrides outside the recommended range */
 "Save Pre-Meal Range?" = "Enregistrer la zone de pré-repas?";
 
 /* Alert title for confirming workout range overrides outside the recommended range */
-"Save Workout Range?" = "Enregistrer la fourchette exercice ?";
+"Save Workout Range?" = "Enregistrer la fourchette exercice?";
 
 /* The button text during saving on a configuration page */
 "Saving..." = "Sauvegarde en cours...";
