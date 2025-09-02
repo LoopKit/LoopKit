@@ -281,6 +281,67 @@ class TemporaryScheduleOverrideTests: XCTestCase {
         XCTAssertEqual(rangeSchedule.value(at: overrideStart + overrideDuration + .hours(2)), overrideRange)
     }
 
+    func testTimelineCarbRatioApplication() {
+        let timeline: [AbsoluteScheduleValue<Double>] = [
+            AbsoluteScheduleValue(startDate: .t(1) , endDate: .t(2), value: 10),
+            AbsoluteScheduleValue(startDate: .t(2) , endDate: .t(3), value: 12),
+            AbsoluteScheduleValue(startDate: .t(3) , endDate: .t(4), value: 15),
+            AbsoluteScheduleValue(startDate: .t(4) , endDate: .t(5), value: 10),
+        ]
+
+        let overrides: [TemporaryScheduleOverride] = [
+            .custom(scale: 0.5, start: .t(2.5), end: .t(3.5)),
+            .custom(scale: 0.2, start: .t(4.5), end: .t(5))
+        ]
+
+        let applied = overrides.applyCarbRatio(over: timeline)
+
+        let times = applied.map { $0.startDate }
+        let expectedTimes: [Date] = [.t(1), .t(2), .t(2.5), .t(3), .t(3.5), .t(4), .t(4.5)]
+        XCTAssertEqual(expectedTimes, times)
+
+        let values = applied.map { $0.value }
+        let expectedValues: [Double] = [10, 12, 24, 30, 15, 10, 50]
+        XCTAssertEqual(expectedValues, values)
+    }
+
+    func testDeletedOverridesShouldBeIgnored() {
+        let timeline = [
+            AbsoluteScheduleValue(startDate: .t(0) , endDate: .t(24), value: 50.0),
+        ]
+
+        let overrides: [TemporaryScheduleOverride] = [
+            TemporaryScheduleOverride(
+                context: .custom,
+                settings: TemporaryPresetSettings(targetRange: nil, insulinNeedsScaleFactor: 0.5),
+                startDate: .t(-200),
+                duration: .indefinite,
+                enactTrigger: .local,
+                syncIdentifier: UUID(),
+                actualEnd: .deleted
+            ),
+            TemporaryScheduleOverride(
+                context: .custom,
+                settings: TemporaryPresetSettings(targetRange: nil, insulinNeedsScaleFactor: 0.5),
+                startDate: .t(-100),
+                duration: .indefinite,
+                enactTrigger: .local,
+                syncIdentifier: UUID(),
+                actualEnd: .deleted
+            ),
+        ]
+
+        let applied = overrides.applySensitivity(over: timeline)
+
+        let times = applied.map { $0.startDate }
+        let expectedTimes: [Date] = [.t(0)]
+        XCTAssertEqual(expectedTimes, times)
+
+        let values = applied.map { $0.value }
+        let expectedValues: [Double] = [50]
+        XCTAssertEqual(expectedValues, values)
+    }
+
     func testTimelineSensitivityApplication() {
         let timeline = [
             AbsoluteScheduleValue(startDate: .t(1) , endDate: .t(2), value: 50.0),
