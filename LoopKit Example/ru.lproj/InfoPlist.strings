@@ -1,9 +1,0 @@
-/* Bundle name */
-"CFBundleName" = "Пример LoopKit";
-
-/* Privacy - Health Share Usage Description */
-"NSHealthShareUsageDescription" = "Данные о приеме пищи из базы данных Health используются для определения влияния глюкозы. Данные о глюкозе из базы данных Health используются для построения графиков и расчетов.";
-
-/* Privacy - Health Update Usage Description */
-"NSHealthUpdateUsageDescription" = "Данные об углеводах, введенные в приложение, сохраняются в базе данных Health. Данные о глюкозе надежно хранятся в HealthKit.";
-

@@ -1,9 +1,0 @@
-/* Bundle name */
-"CFBundleName" = "LoopKit Voorbeeld";
-
-/* Privacy - Health Share Usage Description */
-"NSHealthShareUsageDescription" = "Maaltijdgegevens uit de database Gezondheid worden gebruikt om glucoseëffecten te bepalen. Glucosegegevens uit de database Gezondheid worden gebruikt voor grafieken en het berekenen van trendlijnen.";
-
-/* Privacy - Health Update Usage Description */
-"NSHealthUpdateUsageDescription" = "Maaltijdkoolhydraten die worden ingevoerd in de app worden opgeslagen in de database Gezondheid. Glucosegegevens worden veilig opgeslagen in HealthKit.";
-

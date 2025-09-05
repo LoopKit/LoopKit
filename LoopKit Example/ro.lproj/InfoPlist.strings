@@ -1,9 +1,0 @@
-/* Bundle name */
-"CFBundleName" = "Exemplu de LoopKit";
-
-/* Privacy - Health Share Usage Description */
-"NSHealthShareUsageDescription" = "Datele mesei din baza de date Health sunt folosite pentru a determina efectele glicemiei. Datele despre glicemie din baza de date Health sunt folosite pentru grafice și calcularea impulsului.";
-
-/* Privacy - Health Update Usage Description */
-"NSHealthUpdateUsageDescription" = "Carbohidrații introduși în aplicație sunt stocați în baza de date Health. Glicemiile sunt stocate în mod confidențial în HealthKit.";
-

@@ -1,9 +1,0 @@
-/* Bundle name */
-"CFBundleName" = "LoopKit Example";
-
-/* Privacy - Health Share Usage Description */
-"NSHealthShareUsageDescription" = "Dane o posiłkach z bazy danych aplikacji Zdrowie są używane do ustalania wpływu na poziom glukozy. Dane o poziomie glukozy z bazy danych aplikacji Apple Zdrowie są używane do tworzenia wykresu i obliczania momentum.";
-
-/* Privacy - Health Update Usage Description */
-"NSHealthUpdateUsageDescription" = "Dane dotyczące posiłków zawierających węglowodany wprowadzone w aplikacji są przechowywane w bazie danych aplikacji Zdrowie. Dane dotyczące glukozy są bezpiecznie przechowywane w Zdrowie Kit.";
-
