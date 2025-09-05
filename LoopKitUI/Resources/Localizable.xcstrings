@@ -20160,7 +20160,7 @@
     },
     "U/hour" : {
       "comment" : "The unit string for units per hour",
-      "extractionState" : "migrated",
+      "extractionState" : "manual",
       "localizations" : {
         "da" : {
           "stringUnit" : {

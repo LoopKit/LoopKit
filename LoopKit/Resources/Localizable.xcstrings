@@ -869,7 +869,7 @@
     },
     "Authorization Denied" : {
       "comment" : "The error description describing when Health sharing was denied",
-      "extractionState" : "migrated",
+      "extractionState" : "manual",
       "localizations" : {
         "it" : {
           "stringUnit" : {

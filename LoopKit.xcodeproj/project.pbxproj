@@ -4702,6 +4702,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopKitHostedTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LoopKit Example.app/LoopKit Example";
 			};
 			name = Debug;
@@ -4718,6 +4719,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopKitHostedTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LoopKit Example.app/LoopKit Example";
 			};
 			name = Release;
@@ -4740,7 +4742,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.LoopKitExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
 			};
 			name = Debug;
 		};
@@ -4762,7 +4764,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.LoopKitExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
 			};
 			name = Release;
 		};
@@ -5053,6 +5055,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
 			};
 			name = Debug;
 		};
@@ -5068,6 +5071,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
 			};
 			name = Release;
 		};
@@ -5198,11 +5202,12 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				LOCALIZATION_EXPORT_SUPPORTED = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopTestingKit;
 				PRODUCT_NAME = LoopTestingKit;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -5224,10 +5229,11 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				LOCALIZATION_EXPORT_SUPPORTED = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopTestingKit;
 				PRODUCT_NAME = LoopTestingKit;
 				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -5307,6 +5313,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INFOPLIST_FILE = MockKitTests/Info.plist;
 				PRODUCT_NAME = MockKitTests;
+				SWIFT_EMIT_LOC_STRINGS = NO;
 			};
 			name = Debug;
 		};
@@ -5317,6 +5324,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				INFOPLIST_FILE = MockKitTests/Info.plist;
 				PRODUCT_NAME = MockKitTests;
+				SWIFT_EMIT_LOC_STRINGS = NO;
 			};
 			name = Release;
 		};
