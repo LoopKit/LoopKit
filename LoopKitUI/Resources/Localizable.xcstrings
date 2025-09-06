@@ -469,6 +469,12 @@
             "state" : "translated",
             "value" : "—"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "—"
+          }
         }
       }
     },
@@ -1031,6 +1037,12 @@
     "%1$@ – %2$@ %3$@" : {
       "comment" : "The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit)",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ – %2$@ %3$@"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1110,6 +1122,12 @@
           }
         },
         "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ – %2$@ %3$@"
+          }
+        },
+        "sk" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ – %2$@ %3$@"
@@ -1132,12 +1150,24 @@
             "state" : "translated",
             "value" : "%1$@ – %2$@ %3$@"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ – %2$@ %3$@"
+          }
         }
       }
     },
     "%1$@ %2$@" : {
       "comment" : "The format for a preset symbol and name (1: symbol)(2: name)\nThe format for an override symbol and name (1: symbol)(2: name)",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1217,6 +1247,12 @@
           }
         },
         "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@"
+          }
+        },
+        "sk" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ %2$@"
@@ -1500,6 +1536,12 @@
             "value" : "%1$@ U"
           }
         },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "U %1$@"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1534,6 +1576,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ U"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ j"
           }
         },
         "sv" : {
@@ -4692,6 +4740,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Carb Ratios"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "碳水化合物吸收率"
           }
         }
       }
@@ -9146,6 +9200,12 @@
             "state" : "translated",
             "value" : "Fiasp"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fiasp"
+          }
         }
       }
     },
@@ -10715,6 +10775,12 @@
             "state" : "translated",
             "value" : "Chủng loại Insulin"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "胰岛素模型"
+          }
         }
       }
     },
@@ -10827,6 +10893,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Độ nhạy của Insulin"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "胰岛素敏感系数"
           }
         }
       }

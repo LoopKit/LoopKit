@@ -1334,6 +1334,12 @@
             "state" : "translated",
             "value" : "Carb Ratios"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "碳水化合物吸收率"
+          }
         }
       }
     },
@@ -2013,6 +2019,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Phạm vi liều Bổ sung"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "修正范围"
           }
         }
       }
@@ -3082,6 +3094,12 @@
             "state" : "translated",
             "value" : "Fiasp"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fiasp"
+          }
         }
       }
     },
@@ -4055,6 +4073,12 @@
             "state" : "translated",
             "value" : "Chủng loại Insulin"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "胰岛素模型"
+          }
         }
       }
     },
@@ -4167,6 +4191,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Độ nhạy của Insulin"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "胰岛素敏感系数"
           }
         }
       }
@@ -8341,6 +8371,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Workout"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "运动"
           }
         }
       }
