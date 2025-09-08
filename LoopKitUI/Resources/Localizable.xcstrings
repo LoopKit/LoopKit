@@ -1803,7 +1803,31 @@
     "%1$@/min" : {
       "comment" : "Format string describing glucose units per minute (1: glucose unit string)",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@/min"
+          }
+        },
         "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@/min"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@/min"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@/min"
+          }
+        },
+        "fi" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@/min"
@@ -1815,13 +1839,31 @@
             "value" : "%1$@/min"
           }
         },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@/min"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@/min"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@/分"
+          }
+        },
         "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@/min"
+          }
+        },
+        "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@/min"
@@ -1833,10 +1875,46 @@
             "value" : "%1$@/min"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@/min"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@/min"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@/мин"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@/min"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@/dk"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@/phút"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@/分钟"
           }
         }
       }
@@ -14739,6 +14817,12 @@
             "state" : "translated",
             "value" : "Thuốc tác động nhanh cho người lớn"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "速效胰岛素 - 成人模型"
+          }
         }
       }
     },
@@ -14851,6 +14935,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Thuốc tác động nhanh cho trẻ em"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "速效胰岛素 - 儿童模型"
           }
         }
       }
@@ -17293,6 +17383,12 @@
             "value" : "Support"
           }
         },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "תמיכה"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18727,6 +18823,12 @@
             "state" : "translated",
             "value" : "Mô hình cũ được Loop sử dụng, cho phép tùy chỉnh thời lượng hành động."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loop使用的默认模型参数，您可以自行修改胰岛素代谢时间。"
+          }
         }
       }
     },
@@ -19238,6 +19340,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Réglages Thérapeutique"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "תכנית טיפול"
           }
         },
         "it" : {
@@ -21232,6 +21340,12 @@
           }
         },
         "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Walsh"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Walsh"
