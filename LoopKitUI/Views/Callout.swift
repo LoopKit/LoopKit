@@ -21,11 +21,11 @@ public struct Callout<Content: View>: View {
         var prefix: Text {
             switch self {
             case .note:
-                return Text("Note: ")
+                return Text("Note")
             case .caution:
-                return Text("Caution: ")
+                return Text("Caution")
             case .warning:
-                return Text("Warning: ")
+                return Text("Warning")
             }
         }
         
@@ -56,19 +56,19 @@ public struct Callout<Content: View>: View {
     private let content: Content?
     private let severity: Severity
     
-    public init(_ severity: Severity, title: Text, @ViewBuilder content: () -> Content) {
+    public init(_ severity: Severity, title: Text = Text(""), @ViewBuilder content: () -> Content) {
         self.severity = severity
         self.title = title
         self.content = content()
     }
     
-    public init(_ severity: Severity, title: Text) where Content == EmptyView {
+    public init(_ severity: Severity, title: Text = Text("")) where Content == EmptyView {
         self.severity = severity
         self.title = title
         self.content = nil
     }
 
-    public init(_ severity: Severity, title: Text, message: Text) where Content == Text {
+    public init(_ severity: Severity, title: Text = Text(""), message: Text) where Content == Text {
         self.title = title
         self.content = message
         self.severity = severity
@@ -86,7 +86,11 @@ public struct Callout<Content: View>: View {
             
             VStack(alignment: .leading, spacing: 4) {
                 Group {
-                    severity.prefix + title
+                    if title != Text("") {
+                        severity.prefix + Text(": ") + title
+                    } else {
+                        severity.prefix
+                    }
                 }
                 .font(.body.weight(.semibold))
                 .foregroundColor(.primary)

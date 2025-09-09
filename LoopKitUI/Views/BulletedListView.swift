@@ -21,12 +21,18 @@ public struct BulletedListBuilder {
 
 public struct BulletedListView: View {
     private let bulletedList: [Text]
+    private let bulletColor: Color
+    private let bulletOpacity: Double
     
-    public init(@BulletedListBuilder _ bulletedList: () -> [Text]) {
+    public init(bulletColor: Color = .accentColor, bulletOpacity: Double = 0.5, @BulletedListBuilder _ bulletedList: () -> [Text]) {
+        self.bulletColor = bulletColor
+        self.bulletOpacity = bulletOpacity
         self.bulletedList = bulletedList()
     }
     
-    public init(_ bulletedList: [String]) {
+    public init(bulletColor: Color = .accentColor, bulletOpacity: Double = 0.5, _ bulletedList: [String]) {
+        self.bulletColor = bulletColor
+        self.bulletOpacity = bulletOpacity
         self.bulletedList = bulletedList.map({ Text($0) })
     }
 
@@ -34,7 +40,7 @@ public struct BulletedListView: View {
         VStack(alignment: .leading) {
             ForEach(Array(bulletedList.enumerated()), id: \.offset) { bullet in
                 HStack(spacing: 16) {
-                    Bullet()
+                    Bullet(color: bulletColor, opacity: bulletOpacity)
                     bullet.element
                         .fixedSize(horizontal: false, vertical: true)
                 }
@@ -43,14 +49,21 @@ public struct BulletedListView: View {
     }
 }
 
-private struct Bullet: View {
+public struct Bullet: View {
     @ScaledMetric var size: CGFloat = 8
+    let color: Color
+    let opacity: Double
+    
+    public init(color: Color = .accentColor, opacity: Double = 0.5) {
+        self.color = color
+        self.opacity = opacity
+    }
 
-    var body: some View {
+    public var body: some View {
         Circle()
             .frame(width: size, height: size)
-            .opacity(0.5)
-            .foregroundColor(.accentColor)
+            .opacity(opacity)
+            .foregroundColor(color)
     }
 }
 
