@@ -7,6 +7,7 @@
 //
 
 import LoopAlgorithm
+import Foundation
 
 public struct NewFavoriteFood: FavoriteFood {
     public var name: String

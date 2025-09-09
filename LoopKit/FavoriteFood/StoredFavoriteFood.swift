@@ -7,6 +7,7 @@
 //
 
 import LoopAlgorithm
+import Foundation
 
 public struct StoredFavoriteFood: FavoriteFood, Identifiable {
     public var id: String

@@ -7,6 +7,7 @@
 //
 
 import LoopAlgorithm
+import Foundation
 
 public protocol FavoriteFood {
     var name: String { get }

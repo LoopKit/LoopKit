@@ -222,8 +222,10 @@ extension CachedCarbObject {
         metadata[MetadataKeyAbsorptionTime] = absorptionTime
         metadata[MetadataKeyFavoriteFoodID] = favoriteFoodID
 
-        metadata[HKMetadataKeySyncIdentifier] = syncIdentifier
-        metadata[HKMetadataKeySyncVersion] = syncVersion
+        if let syncIdentifier {
+            metadata[HKMetadataKeySyncIdentifier] = syncIdentifier
+            metadata[HKMetadataKeySyncVersion] = syncVersion ?? 0
+        }
 
         metadata[MetadataKeyUserCreatedDate] = userCreatedDate
         metadata[MetadataKeyUserUpdatedDate] = userUpdatedDate
