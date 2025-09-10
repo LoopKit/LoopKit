@@ -1,0 +1,276 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "CFBundleName" : {
+      "comment" : "Bundle name",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eksempel på LoopKit"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LoopKit-Beispiel"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "LoopKit Example"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ejemplo de LoopKit"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LoopKit-esimerkki"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exemple de LoopKit"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esempio di LoopKit"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LoopKit-eksempel"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LoopKit Voorbeeld"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LoopKit Example"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exemplu de LoopKit"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пример LoopKit"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LoopKit Example"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LoopKit Örneği"
+          }
+        }
+      }
+    },
+    "NSHealthShareUsageDescription" : {
+      "comment" : "Privacy - Health Share Usage Description",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Måltidsdata fra Apple Health-databasen bruges til at bestemme effekten på blodsukkeret. Blodsukkerdata fra Apple Health-databasen bruges til graftegning og momentum beregnings"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mahlzeitendaten aus HealthKit werden verwendet, um Blutzuckereffekte zu bestimmen. Blutzuckerdaten aus HealthKit werden für die grafische Darstellung und Momentum-Berechnung verwendet."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Meal data from the Health database is used to determine glucose effects. Glucose data from the Health database is used for graphing and momentum calculation."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datos de alimentos de Salud se utiliza para determinar los efectos en el nivel de glucosa. Datos de glucosa de Salud se utilizan para graficar y determinar cálculos de momento."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terveys-sovelluksen ateriatietoja käytetään glukoosivaikutusten määrittämiseen. Terveys-sovelluksen glukoositietoja käytetään graafeissa ja laskelmissa."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les données sur les repas provenant de la base de données Santé sont utilisées pour déterminer les effets sur la glycémie . Les données sur la glycémie de la base de données Health sont utilisées pour le calcul graphique et le calcul du momentum."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I dati sui pasti contenuti nel  database della app  Apple Salute vengono utilizzati per determinare gli effetti sulla glicemia. Inoltre i dati del glucosio contenuti  nel database di Apple Salute vengono utilizzati per il calcolo del grafico  e le variazioni glicemiche."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Måltidsdata fra helsedatabasen brukes til å bestemme glukoseeffekter. Glukosedata fra helsedatabasen brukes til grafer og momentumberegning."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maaltijdgegevens uit de database Gezondheid worden gebruikt om glucoseëffecten te bepalen. Glucosegegevens uit de database Gezondheid worden gebruikt voor grafieken en het berekenen van trendlijnen."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dane o posiłkach z bazy danych aplikacji Zdrowie są używane do ustalania wpływu na poziom glukozy. Dane o poziomie glukozy z bazy danych aplikacji Apple Zdrowie są używane do tworzenia wykresu i obliczania momentum."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datele mesei din baza de date Health sunt folosite pentru a determina efectele glicemiei. Datele despre glicemie din baza de date Health sunt folosite pentru grafice și calcularea impulsului."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Данные о приеме пищи из базы данных Health используются для определения влияния глюкозы. Данные о глюкозе из базы данных Health используются для построения графиков и расчетов."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kolhydratdata från Apple Health-databasen används för att avgöra glukoseffekt. Blodglukosvärden från Apple Health-databasen används i diagram och för beräkning av förändring."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sağlık veri tabanından alınan yemek verileri, KŞ etkilerini belirlemek için kullanılır. Sağlık veri tabanından alınan KŞ verileri, grafik ve momentum hesaplaması için kullanılır."
+          }
+        }
+      }
+    },
+    "NSHealthUpdateUsageDescription" : {
+      "comment" : "Privacy - Health Update Usage Description",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kulhydrater indtastet i Loop gemmes i Health databasen. Blodsukker lagres sikkert i HealthKit."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In die App eingegebene Daten zu Mahlzeiten werden in HealthKit gespeichert. Blutzuckerwerte werden sicher in HealthKit gespeichert."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Carbohydrate meal data entered in the app is stored in the Health database. Glucose data is stored securely in HealthKit."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datos de alimentos ingresados en la aplicación son almacenados en la base de datos de Salud. Los datos de glucosa se almacenan de manera segura en Kit de Salud."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sovelluksen kautta tallennetut hiilihydraattitiedot tallennetaan Terveys-tietokantaan. Glukoositieto  tallennetaan turvallisesti HealthKitiin."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les données sur les apports de repas glucidiques saisies dans l'application sont stockées dans la base de données Santé d'Apple. Les données de glycémie extraites du CGM sont stockées de manière sécurisée dans HealthKit."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I dati dei carboidrati relativi ai pasti inseriti nell'app vengono archiviati nel database Salute. I dati delle glicemie vengono archiviati in modo sicuro in Salute."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Karbohydratmåltidsdata som legges inn i appen, lagres i Helsedatabasen. Glukosedata lagres sikkert i HealthKit."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maaltijdkoolhydraten die worden ingevoerd in de app worden opgeslagen in de database Gezondheid. Glucosegegevens worden veilig opgeslagen in HealthKit."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dane dotyczące posiłków zawierających węglowodany wprowadzone w aplikacji są przechowywane w bazie danych aplikacji Zdrowie. Dane dotyczące glukozy są bezpiecznie przechowywane w Zdrowie Kit."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Carbohidrații introduși în aplicație sunt stocați în baza de date Health. Glicemiile sunt stocate în mod confidențial în HealthKit."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Данные об углеводах, введенные в приложение, сохраняются в базе данных Health. Данные о глюкозе надежно хранятся в HealthKit."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kolhydratvärden inmatade i appen lagras i Apple Health-databasen. Blodglukosvärden lagras säkert i HealthKit."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uygulamaya girilen karbonhidrat yemek verileri Sağlık veritabanında saklanır. KŞ verileri HealthKit'te güvenli bir şekilde saklanır."
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

@@ -1,9 +1,0 @@
-/* The title text for the basal rate schedule */
-"Basal Rates" = "Úrovně bazálu";
-
-/* The placeholder text instructing users how to enter a pump ID */
-"Enter the 6-digit pump ID" = "Zadejte 6místné ID pumpy";
-
-/* The title text for the pump ID */
-"Pump ID" = "ID pumpy";
-

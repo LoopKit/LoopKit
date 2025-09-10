@@ -1,9 +1,0 @@
-/* Bundle name */
-"CFBundleName" = "LoopKit-esimerkki";
-
-/* Privacy - Health Share Usage Description */
-"NSHealthShareUsageDescription" = "Terveys-sovelluksen ateriatietoja käytetään glukoosivaikutusten määrittämiseen. Terveys-sovelluksen glukoositietoja käytetään graafeissa ja laskelmissa.";
-
-/* Privacy - Health Update Usage Description */
-"NSHealthUpdateUsageDescription" = "Sovelluksen kautta tallennetut hiilihydraattitiedot tallennetaan Terveys-tietokantaan. Glukoositieto  tallennetaan turvallisesti HealthKitiin.";
-

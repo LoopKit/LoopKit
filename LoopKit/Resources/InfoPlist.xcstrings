@@ -1,0 +1,121 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "CFBundleName" : {
+      "comment" : "Bundle name",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "LoopKit"
+          }
+        }
+      },
+      "shouldTranslate" : false
+    },
+    "NSHealthShareUsageDescription" : {
+      "comment" : "Privacy - Health Share Usage Description",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Meal data from the Health database is used to determine glucose effects. Glucose data is retrieved from HealthKit for graphing and analysis."
+          }
+        }
+      }
+    },
+    "NSHealthUpdateUsageDescription" : {
+      "comment" : "Privacy - Health Update Usage Description",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kulhydrater indtastet i Loop gemmes i Health databasen. Blodsukker lagres sikkert i HealthKit."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In die App eingegebene Daten zu Mahlzeiten werden in HealthKit gespeichert. Blutzuckerwerte werden sicher in HealthKit gespeichert."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Carbohydrate meal data entered in the app is stored in the Health database. Glucose data is stored securely in HealthKit."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datos de alimentos ingresados en la aplicación son almacenados en la base de datos de Salud. Los datos de glucosa se almacenan de manera segura en Kit de Salud."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sovelluksen kautta tallennetut hiilihydraattitiedot tallennetaan Terveys-tietokantaan. Glukoositieto  tallennetaan turvallisesti HealthKitiin."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les données sur les apports de repas glucidiques saisies dans l'application sont stockées dans la base de données Santé d'Apple. Les données de glycémie extraites du CGM sont stockées de manière sécurisée dans HealthKit."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I dati dei carboidrati relativi ai pasti inseriti nell'app vengono archiviati nel database Salute. I dati delle glicemie vengono archiviati in modo sicuro in Salute."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Karbohydratmåltidsdata som legges inn i appen, lagres i Helsedatabasen. Glukosedata lagres sikkert i HealthKit."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maaltijdkoolhydraten die worden ingevoerd in de app worden opgeslagen in de database Gezondheid. Glucosegegevens worden veilig opgeslagen in HealthKit."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dane dotyczące posiłków zawierających węglowodany wprowadzone w aplikacji są przechowywane w bazie danych aplikacji Zdrowie. Dane dotyczące glukozy są bezpiecznie przechowywane w Zdrowie Kit."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Carbohidrații introduși în aplicație sunt stocați în baza de date Health. Glicemiile sunt stocate în mod confidențial în HealthKit."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Данные об углеводах, введенные в приложение, сохраняются в базе данных Health. Данные о глюкозе надежно хранятся в HealthKit."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kolhydratvärden inmatade i appen lagras i Apple Health-databasen. Blodglukosvärden lagras säkert i HealthKit."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uygulamaya girilen karbonhidrat yemek verileri Sağlık veritabanında saklanır. KŞ verileri HealthKit'te güvenli bir şekilde saklanır."
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}
