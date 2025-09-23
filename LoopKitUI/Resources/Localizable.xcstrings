@@ -2659,6 +2659,12 @@
             "state" : "translated",
             "value" : "Düzeltme Aralığı farklıdır. Bu daha dar bir aralık olacaktır."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "修正范围有所不同，它通常是一个更窄的血糖值区间。"
+          }
         }
       }
     },
@@ -3139,6 +3145,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ekle"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "添加"
           }
         }
       }
@@ -5819,6 +5831,12 @@
             "state" : "translated",
             "value" : "OK"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "好的"
+          }
         }
       }
     },
@@ -6097,6 +6115,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ayarı Onaylayın"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "确认设置"
           }
         }
       }
@@ -9330,6 +9354,12 @@
             "state" : "translated",
             "value" : "Тип еды"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "食物类型"
+          }
         }
       }
     },
@@ -9496,6 +9526,12 @@
             "state" : "translated",
             "value" : "Bu aralık için, %1$@ bazal insülininizi ayarlarken hedeflemesini istediğiniz belirli KŞ değerini (veya değer aralığını) seçin."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "对于此范围，请选择您希望 %1$@ 在调整基础胰岛素时所瞄准的具体血糖值（或血糖值范围）。"
+          }
         }
       }
     },
@@ -9661,6 +9697,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Geri dön"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "返回"
           }
         }
       }
@@ -10000,6 +10042,12 @@
             "state" : "translated",
             "value" : "Yüksek KŞ Güvenlik Limiti"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "高血糖安全上限"
+          }
         }
       }
     },
@@ -10248,6 +10296,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Yüksek Maksimum Bolus"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最大追加胰岛素设定过高"
           }
         }
       }
@@ -10498,6 +10552,12 @@
             "state" : "translated",
             "value" : "Geçmiş"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "历史"
+          }
         }
       }
     },
@@ -10669,6 +10729,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Daha önce bir CGM kullandıysanız, KŞ bildirim uyarılarınız için 70-180 mg/dL veya 90-200 mg/dL gibi geniş bir hedef aralığına aşinasınızdır."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "如果您曾使用过连续血糖监测仪（CGM），您可能已经熟悉“目标范围”这一概念，即您希望接收血糖通知提醒的一段理想血糖值区间，例如 70–180 mg/dL 或 90–200 mg/dL。"
           }
         }
       }
@@ -11257,6 +11323,12 @@
             "state" : "translated",
             "value" : "%1$@ kadar düşük bir değere ayarlanabilir. %2$@ kadar yükseğe ayarlanabilir."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最低可设置为%1$@ ，最高可设置为%2$@ 。"
+          }
         }
       }
     },
@@ -11595,6 +11667,12 @@
             "state" : "translated",
             "value" : "Düşük KŞ Güvenlik Limiti"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "低血糖安全下限"
+          }
         }
       }
     },
@@ -11843,6 +11921,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Düşük Maksimum Bolus"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最大追加胰岛素设定过低"
           }
         }
       }
@@ -12576,6 +12660,12 @@
             "state" : "translated",
             "value" : "Maksimum Bolus, karbonhidratları karşılamak veya yüksek kan şekerini düşürmek için %1$@ tarafından tek seferde önermesine izin vereceğiniz en yüksek bolus miktarıdır."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最大追加胰岛素是您允许 %1$@ 在单次建议中用于覆盖碳水摄入或降低高血糖的最高剂量。"
+          }
         }
       }
     },
@@ -13128,6 +13218,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Yeni giriş"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新条目"
           }
         }
       }
@@ -19814,6 +19910,12 @@
             "state" : "translated",
             "value" : "Bu ayar aynı zamanda otomatik dozlama için bir güvenlik limiti belirleyecektir. %1$@ aktif insülin miktarını maksimum bolusunuzun iki katının altında tutmak için otomatik iletimi sınırlayacaktır."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此设置还将用于设定自动给药的安全上限。%1$@ 将限制自动注射，使活性胰岛素总量不超过您设定的最大追加胰岛素的两倍。"
+          }
         }
       }
     },
@@ -19997,6 +20099,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zaman"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "时间"
           }
         }
       }
@@ -21915,6 +22023,12 @@
             "state" : "translated",
             "value" : "➕ butonunu kullanarak günün farklı saatleri için farklı karbonhidrat oranları ekleyebilirsiniz."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您可以点击 ➕ 添加不同时间段的碳水化合物换算比例。"
+          }
         }
       }
     },
@@ -21998,6 +22112,12 @@
             "state" : "translated",
             "value" : "➕ butonunu kullanarak günün farklı saatleri için farklı insülin duyarlılıkları ekleyebilirsiniz."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您可以点击 ➕ 添加不同时间段的胰岛素敏感系数。"
+          }
         }
       }
     },
@@ -22080,6 +22200,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "➕ butonunu kullanarak günün farklı saatleri için farklı aralıklar ekleyebilirsiniz."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您可以使用➕为一天中的不同时间添加不同的范围。"
           }
         }
       }
@@ -22324,6 +22450,12 @@
             "state" : "translated",
             "value" : "Herhangi bir satır öğesine dokunarak bir ayarı düzenleyebilirsiniz."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您可以通过点击任意项目来编辑设置。"
+          }
         }
       }
     },
@@ -22406,6 +22538,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Satır öğesine dokunarak ayarı düzenleyebilirsiniz."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您可以通过点击项目来编辑设置。"
           }
         }
       }
@@ -22655,6 +22793,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sağlık uzmanınız sizin için doğru olan Düzeltme Aralığını seçmenize yardımcı olabilir."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您的医护人员可以协助您选择适合您的修正范围。"
           }
         }
       }
