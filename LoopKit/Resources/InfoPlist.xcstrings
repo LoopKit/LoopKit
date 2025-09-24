@@ -23,6 +23,12 @@
             "state" : "new",
             "value" : "Meal data from the Health database is used to determine glucose effects. Glucose data is retrieved from HealthKit for graphing and analysis."
           }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Måltidsdata fra helsedatabasen brukes til å bestemme glukoseeffekter. Glukosedata hentes fra HealthKit for grafisk fremstilling og analyse."
+          }
         }
       }
     },

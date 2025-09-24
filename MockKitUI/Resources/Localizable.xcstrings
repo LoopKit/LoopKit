@@ -870,6 +870,12 @@
             "state" : "translated",
             "value" : "Bu servisi silmek istediğinizden emin misiniz?"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您确定要删除此服务吗？"
+          }
         }
       }
     },
@@ -1464,6 +1470,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "gün"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "天"
           }
         }
       }
@@ -2252,6 +2264,12 @@
             "state" : "translated",
             "value" : "Geçmiş"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "历史"
+          }
         }
       }
     },
@@ -2977,6 +2995,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "OK"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "好的"
           }
         }
       }

@@ -200,6 +200,12 @@
             "state" : "translated",
             "value" : "%1$@ bazal insülin verecek ve yalnızca KŞ'nizin önümüzdeki üç saat boyunca bu sınırın üzerinde olacağı tahmin ediliyorsa bolus insülin önerecektir."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "仅当预测血糖在未来三小时内高于该上限时，%1$@ 才会输注基础胰岛素并推荐追加胰岛素。"
+          }
         }
       }
     },
@@ -2109,6 +2115,12 @@
             "state" : "translated",
             "value" : "Düzeltme Aralığı, bazal insülininizi ayarlamak ve boluslarınızı hesaplamanıza yardımcı olmak için %1$@ 'ın hedeflemesini istediğiniz KŞ değeridir (veya değer aralığıdır)."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "矫正范围是您希望 %1$@ 在调整基础胰岛素及协助计算追加胰岛素剂量时所瞄准的血糖值（或血糖值范围）。"
+          }
         }
       }
     },
@@ -3574,6 +3586,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "KŞ Güvenlik Limiti"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "血糖安全上限"
           }
         }
       }
@@ -5989,6 +6007,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "OK"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "好的"
           }
         }
       }
