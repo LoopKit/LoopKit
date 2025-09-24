@@ -305,6 +305,50 @@ class TemporaryScheduleOverrideTests: XCTestCase {
         XCTAssertEqual(expectedValues, values)
     }
 
+    func testTimelineSensitivityApplicationOverrideCoveringEntireFirstSegment() {
+        let testingDateFormatter = DateFormatter.descriptionFormatter
+
+        func d(_ input: String) -> Date {
+            return testingDateFormatter.date(from: input)!
+        }
+
+        let timeline: [AbsoluteScheduleValue<Double>] = [
+            AbsoluteScheduleValue(startDate: d("2025-09-10 00:05:00 +0000") , endDate: d("2025-09-10 05:00:00 +0000"), value: 55),
+            AbsoluteScheduleValue(startDate: d("2025-09-10 05:00:00 +0000") , endDate: d("2025-09-10 14:00:00 +0000"), value: 45),
+            AbsoluteScheduleValue(startDate: d("2025-09-10 14:00:00 +0000") , endDate: d("2025-09-11 02:10:00 +0000"), value: 45),
+        ]
+
+        let overrides: [TemporaryScheduleOverride] = [
+            .custom(scale: 0.1, start: d("2025-07-22 21:35:24 +0000"), end: d("2025-09-10 18:59:54 +0000")),
+            .custom(scale: 0.2, start: d("2025-09-10 18:59:54 +0000"), end: d("2025-09-10 19:00:39 +0000"))
+        ]
+
+        let applied = overrides.applySensitivity(over: timeline)
+
+        XCTAssertEqual(5, applied.count)
+
+        XCTAssertEqual(d("2025-09-10 00:05:00 +0000"), applied[0].startDate)
+        XCTAssertEqual(d("2025-09-10 05:00:00 +0000"), applied[0].endDate)
+        XCTAssertEqual(550, applied[0].value)
+
+        XCTAssertEqual(d("2025-09-10 05:00:00 +0000"), applied[1].startDate)
+        XCTAssertEqual(d("2025-09-10 14:00:00 +0000"), applied[1].endDate)
+        XCTAssertEqual(450, applied[1].value)
+
+        XCTAssertEqual(d("2025-09-10 14:00:00 +0000"), applied[2].startDate)
+        XCTAssertEqual(d("2025-09-10 18:59:54 +0000"), applied[2].endDate)
+        XCTAssertEqual(450, applied[2].value)
+
+        XCTAssertEqual(d("2025-09-10 18:59:54 +0000"), applied[3].startDate)
+        XCTAssertEqual(d("2025-09-10 19:00:39 +0000"), applied[3].endDate)
+        XCTAssertEqual(225, applied[3].value)
+
+        XCTAssertEqual(d("2025-09-10 19:00:39 +0000"), applied[4].startDate)
+        XCTAssertEqual(d("2025-09-11 02:10:00 +0000"), applied[4].endDate)
+        XCTAssertEqual(45, applied[4].value)
+    }
+
+
     func testDeletedOverridesShouldBeIgnored() {
         let timeline = [
             AbsoluteScheduleValue(startDate: .t(0) , endDate: .t(24), value: 50.0),

@@ -223,9 +223,9 @@ public struct TemporaryPreset: Hashable, Sendable {
         return nil
     }
 
-    public func createOverride(enactTrigger: TemporaryScheduleOverride.EnactTrigger, beginningAt date: Date = Date()) -> TemporaryScheduleOverride {
+    public func createOverride(enactTrigger: TemporaryScheduleOverride.EnactTrigger, beginningAt date: Date = Date(), isCustom: Bool = false) -> TemporaryScheduleOverride {
         return TemporaryScheduleOverride(
-            context: .preset(self),
+            context: isCustom ? .custom : .preset(self),
             settings: settings,
             startDate: date,
             duration: duration,
