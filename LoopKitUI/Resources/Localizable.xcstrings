@@ -476,7 +476,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "-"
           }
         },
@@ -612,7 +612,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "－"
           }
         },
@@ -749,7 +749,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "–"
           }
         },
@@ -885,7 +885,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "···"
           }
         },
@@ -1021,7 +1021,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%@"
           }
         },
@@ -1157,8 +1157,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%@ carbs, %@ absorption"
+            "state" : "translated",
+            "value" : "%@ koolhydraten, %@ absorptie"
           }
         },
         "pl" : {
@@ -1187,8 +1187,8 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%@ carbs, %@ absorption"
+            "state" : "translated",
+            "value" : "%@ sacharidov, %@ absorpcia"
           }
         },
         "sv" : {
@@ -1706,7 +1706,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ – %2$@ %3$@"
           }
         },
@@ -1843,7 +1843,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ %2$@"
           }
         },
@@ -2665,7 +2665,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@: <b>%2$@</b> %3$@"
           }
         },
@@ -2802,7 +2802,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@/min"
           }
         },
@@ -3212,7 +3212,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%lld"
           }
         },
@@ -3266,7 +3266,7 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%lld"
           }
         },
@@ -3348,7 +3348,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%lld, "
           }
         },
@@ -3402,7 +3402,7 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%lld, "
           }
         },
@@ -3484,7 +3484,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "🍽"
           }
         },
@@ -3514,7 +3514,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "🍽"
           }
         },
@@ -3538,7 +3538,7 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "🍽"
           }
         },
@@ -3621,8 +3621,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "🍽 Pre-Meal"
+            "state" : "translated",
+            "value" : "🍽 Voor de maaltijd"
           }
         },
         "pl" : {
@@ -3651,8 +3651,8 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "🍽 Pre-Meal"
+            "state" : "translated",
+            "value" : "🍽 Pred jedlom"
           }
         },
         "sv" : {
@@ -3675,8 +3675,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "🍽 Pre-Meal"
+            "state" : "translated",
+            "value" : "🍽 Trước bữa ăn"
           }
         },
         "yy-YY" : {
@@ -3757,7 +3757,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "🏃‍♂️"
           }
         },
@@ -3787,7 +3787,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "🏃‍♂️"
           }
         },
@@ -3811,7 +3811,7 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "🏃‍♂️"
           }
         },
@@ -3924,8 +3924,8 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "🏃‍♂️ Workout"
+            "state" : "translated",
+            "value" : "🏃‍♂️ Cvičenie"
           }
         },
         "sv" : {
@@ -3948,8 +3948,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "🏃‍♂️ Workout"
+            "state" : "translated",
+            "value" : "🏃‍♂️ Tập luyện"
           }
         },
         "yy-YY" : {
@@ -4085,8 +4085,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "A Correction Range is different. This will be a narrower range."
+            "state" : "translated",
+            "value" : "Phạm vi hiệu chỉnh khác với trước. Đây sẽ là một phạm vi hẹp hơn."
           }
         },
         "yy-YY" : {
@@ -4198,8 +4198,8 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "A value of 0 U/hr means you will be scheduled to receive no basal insulin."
+            "state" : "translated",
+            "value" : "Hodnota 0 J/h znamená, že nebudeš mať naplánované žiadne podávanie bazálneho inzulínu."
           }
         },
         "sv" : {
@@ -4222,8 +4222,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "A value of 0 U/hr means you will be scheduled to receive no basal insulin."
+            "state" : "translated",
+            "value" : "Giá trị 0 U/giờ có nghĩa là bạn sẽ được thiết lập để không nhận insulin nền."
           }
         },
         "yy-YY" : {
@@ -4472,8 +4472,8 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Active Duration"
+            "state" : "translated",
+            "value" : "Aktívne trvanie"
           }
         },
         "sv" : {
@@ -4496,8 +4496,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Active Duration"
+            "state" : "translated",
+            "value" : "Thời gian hoạt động"
           }
         },
         "yy-YY" : {
@@ -5128,7 +5128,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Afrezza"
           }
         },
@@ -5176,7 +5176,7 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Afrezza"
           }
         },
@@ -5569,8 +5569,8 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Authenticate to save therapy setting"
+            "state" : "translated",
+            "value" : "Autentifikuj sa na uloženie nastavenia terapie"
           }
         },
         "sv" : {
@@ -5593,8 +5593,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Authenticate to save therapy setting"
+            "state" : "translated",
+            "value" : "Xác thực để lưu cài đặt điều trị"
           }
         },
         "yy-YY" : {
@@ -5980,8 +5980,8 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Basal, bolus, and correction insulin dose amounts are decreased by %@%%."
+            "state" : "translated",
+            "value" : "Množstvá bazálneho, bolusového a korekčného inzulínu sú znížené o %@%%."
           }
         },
         "sv" : {
@@ -6117,8 +6117,8 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Basal, bolus, and correction insulin dose amounts are increased by %@%%."
+            "state" : "translated",
+            "value" : "Množstvá bazálneho, bolusového a korekčného inzulínu sú zvýšené o %@%%."
           }
         },
         "sv" : {
@@ -6254,8 +6254,8 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Basal, bolus, and correction insulin dose amounts are unaffected."
+            "state" : "translated",
+            "value" : "Množstvá bazálneho, bolusového a korekčného inzulínu nie sú ovplyvnené."
           }
         },
         "sv" : {
@@ -6941,8 +6941,8 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Changes will only apply this time you enable the override. The default settings of %@ will not be affected."
+            "state" : "translated",
+            "value" : "Zmeny sa použijú iba tentokrát, keď zapneš prepísanie. Predvolené nastavenia %@ nebudú ovplyvnené."
           }
         },
         "sv" : {
@@ -7102,8 +7102,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Changes will only apply this time you enable the preset. The default settings of %@ will not be affected."
+            "state" : "translated",
+            "value" : "Các thay đổi chỉ áp dụng cho lần này khi bạn bật cấu hình sẵn. Các cài đặt mặc định của %@ sẽ không bị ảnh hưởng."
           }
         },
         "yy-YY" : {
@@ -8222,8 +8222,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Completed."
+            "state" : "translated",
+            "value" : "Đã hoàn thành."
           }
         },
         "yy-YY" : {
@@ -8496,8 +8496,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Confirm Setting"
+            "state" : "translated",
+            "value" : "Xác nhận Cài đặt"
           }
         },
         "yy-YY" : {
@@ -8716,8 +8716,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Correct the highlighted unsupported value(s)."
+            "state" : "translated",
+            "value" : "Corrigeer de gemarkeerde niet-ondersteunde waarde(s)."
           }
         },
         "pl" : {
@@ -8770,8 +8770,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Correct the highlighted unsupported value(s)."
+            "state" : "translated",
+            "value" : "Hãy sửa các giá trị không được hỗ trợ đã được đánh dấu."
           }
         },
         "yy-YY" : {
@@ -9044,8 +9044,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Correction Values"
+            "state" : "translated",
+            "value" : "Các giá trị hiệu chỉnh"
           }
         },
         "yy-YY" : {
@@ -9455,8 +9455,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Custom Preset"
+            "state" : "translated",
+            "value" : "Cấu hình sẵn tùy chỉnh"
           }
         },
         "yy-YY" : {
@@ -10279,8 +10279,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Delivery Limits are safety guardrails for your insulin delivery."
+            "state" : "translated",
+            "value" : "Giới hạn tiêm insulin là hàng rào an toàn cho việc tiêm insulin của bạn."
           }
         },
         "yy-YY" : {
@@ -10416,8 +10416,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Disable Preset"
+            "state" : "translated",
+            "value" : "Tắt cấu hình sẵn"
           }
         },
         "yy-YY" : {
@@ -10827,8 +10827,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Edit"
+            "state" : "translated",
+            "value" : "Sửa"
           }
         },
         "yy-YY" : {
@@ -11378,8 +11378,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Edits persist only until the preset is disabled. The default settings of %@ will not be affected."
+            "state" : "translated",
+            "value" : "Các chỉnh sửa chỉ duy trì cho đến khi cấu hình sẵn bị tắt. Các cài đặt mặc định của %@ sẽ không bị ảnh hưởng."
           }
         },
         "yy-YY" : {
@@ -11926,8 +11926,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "End Time"
+            "state" : "translated",
+            "value" : "Kết thúc"
           }
         },
         "yy-YY" : {
@@ -12063,8 +12063,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enter %1$@ value"
+            "state" : "translated",
+            "value" : "Nhập giá trị %1$@"
           }
         },
         "yy-YY" : {
@@ -12696,7 +12696,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Fiasp"
           }
         },
@@ -12744,7 +12744,7 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Fiasp"
           }
         },
@@ -12832,8 +12832,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Food Type"
+            "state" : "translated",
+            "value" : "Type voeding"
           }
         },
         "pl" : {
@@ -12886,8 +12886,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Food Type"
+            "state" : "translated",
+            "value" : "Loại thực phẩm"
           }
         },
         "yy-YY" : {
@@ -13023,8 +13023,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from %2$@ different models for how the app measures the insulin’s peak activity."
+            "state" : "translated",
+            "value" : "Với insulin tác dụng nhanh, %1$@ giả định rằng nó hoạt động trong 6 giờ. Bạn có thể chọn từ %2$@ mô hình khác nhau để ứng dụng tính toán hoạt động đỉnh của insulin."
           }
         },
         "yy-YY" : {
@@ -13160,8 +13160,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "For this range, choose the specific glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin."
+            "state" : "translated",
+            "value" : "Với phạm vi này, hãy chọn giá trị đường huyết cụ thể (hoặc khoảng giá trị) mà bạn muốn %1$@ hướng tới khi điều chỉnh insulin nền."
           }
         },
         "yy-YY" : {
@@ -13297,8 +13297,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Get help with Therapy Settings"
+            "state" : "translated",
+            "value" : "Nhận trợ giúp về Cài đặt điều trị"
           }
         },
         "yy-YY" : {
@@ -13434,8 +13434,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Go Back"
+            "state" : "translated",
+            "value" : "Quay lại"
           }
         },
         "yy-YY" : {
@@ -13571,8 +13571,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "High Basal Rate"
+            "state" : "translated",
+            "value" : "Tỷ lệ liều basal Cao"
           }
         },
         "yy-YY" : {
@@ -13708,8 +13708,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "High Carb Ratio"
+            "state" : "translated",
+            "value" : "Tỷ lệ Carb Cao"
           }
         },
         "yy-YY" : {
@@ -13845,8 +13845,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "High Correction Value"
+            "state" : "translated",
+            "value" : "Giá trị Hiệu chỉnh Cao"
           }
         },
         "yy-YY" : {
@@ -13982,8 +13982,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "High Glucose Safety Limit"
+            "state" : "translated",
+            "value" : "Giới hạn an toàn đường huyết Cao"
           }
         },
         "yy-YY" : {
@@ -14119,8 +14119,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "High Insulin Sensitivity"
+            "state" : "translated",
+            "value" : "Độ nhạy Insulin Cao"
           }
         },
         "yy-YY" : {
@@ -14256,8 +14256,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "High Maximum Basal Rate"
+            "state" : "translated",
+            "value" : "Tỷ lệ liều Basal Tối đa Cao"
           }
         },
         "yy-YY" : {
@@ -14393,8 +14393,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "High Maximum Bolus"
+            "state" : "translated",
+            "value" : "Liều Bolus tối đa Cao"
           }
         },
         "yy-YY" : {
@@ -14530,8 +14530,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "High Pre-Meal Value"
+            "state" : "translated",
+            "value" : "Giá trị trước bữa ăn Cao"
           }
         },
         "yy-YY" : {
@@ -14667,8 +14667,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "High Workout Value"
+            "state" : "translated",
+            "value" : "Giá trị khi tập luyện Cao"
           }
         },
         "yy-YY" : {
@@ -14941,8 +14941,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "If these settings look good to you, tap Save Settings to continue."
+            "state" : "translated",
+            "value" : "Nếu các cài đặt này phù hợp, hãy nhấn Lưu cài đặt để tiếp tục."
           }
         },
         "yy-YY" : {
@@ -15078,8 +15078,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "If you've used a CGM before, you're likely familiar with target range as a wide range of values you'd like for your glucose notification alerts, such as 70-180 mg/dL or 90-200 mg/dL."
+            "state" : "translated",
+            "value" : "Nếu bạn đã từng sử dụng CGM, bạn có thể đã quen với phạm vi mục tiêu là một phạm vi giá trị rộng mà bạn muốn dùng cho cảnh báo đường huyết, chẳng hạn 70–180 mg/dL hoặc 90–200 mg/dL."
           }
         },
         "yy-YY" : {
@@ -15214,8 +15214,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "info"
+            "state" : "translated",
+            "value" : "thông tin"
           }
         },
         "yy-YY" : {
@@ -15345,8 +15345,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Insulin Model"
+            "state" : "translated",
+            "value" : "Модель інсуліну"
           }
         },
         "vi" : {
@@ -15762,8 +15762,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Interrupted %1$@: <b>%2$@</b> of %3$@ %4$@"
+            "state" : "translated",
+            "value" : "Đã gián đoạn %1$@: <b>%2$@</b> trên %3$@ %4$@"
           }
         },
         "yy-YY" : {
@@ -15899,8 +15899,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "It can be set as low as %1$@. It can be set as high as %2$@."
+            "state" : "translated",
+            "value" : "Có thể đặt thấp nhất là %1$@. Có thể đặt cao nhất là %2$@."
           }
         },
         "yy-YY" : {
@@ -16036,8 +16036,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Low Basal Rate"
+            "state" : "translated",
+            "value" : "Tỷ lệ liều basal Thấp"
           }
         },
         "yy-YY" : {
@@ -16173,8 +16173,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Low Carb Ratio"
+            "state" : "translated",
+            "value" : "Tỷ lệ Carb Thấp"
           }
         },
         "yy-YY" : {
@@ -16310,8 +16310,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Low Correction Value"
+            "state" : "translated",
+            "value" : "Giá trị Hiệu chỉnh Thấp"
           }
         },
         "yy-YY" : {
@@ -16447,8 +16447,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Low Glucose Safety Limit"
+            "state" : "translated",
+            "value" : "Giới hạn an toàn đường huyết Thấp"
           }
         },
         "yy-YY" : {
@@ -16584,8 +16584,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Low Insulin Sensitivity"
+            "state" : "translated",
+            "value" : "Độ nhạy Insulin Thấp"
           }
         },
         "yy-YY" : {
@@ -16721,8 +16721,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Low Maximum Basal Rate"
+            "state" : "translated",
+            "value" : "Tỷ lệ liều Basal Tối đa Thấp"
           }
         },
         "yy-YY" : {
@@ -16858,8 +16858,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Low Maximum Bolus"
+            "state" : "translated",
+            "value" : "Liều Bolus tối đa Thấp"
           }
         },
         "yy-YY" : {
@@ -16995,8 +16995,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Low Pre-Meal Value"
+            "state" : "translated",
+            "value" : "Giá trị trước bữa ăn Thấp"
           }
         },
         "yy-YY" : {
@@ -17132,8 +17132,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Low Workout Value"
+            "state" : "translated",
+            "value" : "Giá trị khi tập luyện Thấp"
           }
         },
         "yy-YY" : {
@@ -17215,7 +17215,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Lyumjev"
           }
         },
@@ -17263,7 +17263,7 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Lyumjev"
           }
         },
@@ -17352,7 +17352,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "max"
           }
         },
@@ -17538,8 +17538,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Maximum Basal Rate"
+            "state" : "translated",
+            "value" : "Максимальна швидкість базалу"
           }
         },
         "vi" : {
@@ -17681,8 +17681,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Maximum Basal Rate is the maximum automatically adjusted basal rate that %1$@ is allowed to enact to help reach your correction range."
+            "state" : "translated",
+            "value" : "Tỷ lệ tiêm insulin nền tối đa là tỷ lệ tiêm nền được điều chỉnh tự động cao nhất mà %1$@ được phép thực hiện để giúp đạt phạm vi hiệu chỉnh của bạn."
           }
         },
         "yy-YY" : {
@@ -17813,8 +17813,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Maximum Bolus"
+            "state" : "translated",
+            "value" : "Максимум Болюса"
           }
         },
         "vi" : {
@@ -17956,8 +17956,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Maximum Bolus is the highest bolus amount that you will allow %1$@ to recommend at one time to cover carbs or bring down high glucose."
+            "state" : "translated",
+            "value" : "Bolus tối đa là lượng bolus cao nhất mà bạn cho phép %1$@ đề xuất tại một thời điểm để bù carbohydrate hoặc hạ đường huyết cao."
           }
         },
         "yy-YY" : {
@@ -18641,8 +18641,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "New Entry"
+            "state" : "translated",
+            "value" : "Mục nhập mới"
           }
         },
         "yy-YY" : {
@@ -18915,8 +18915,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No Basal Insulin"
+            "state" : "translated",
+            "value" : "Không có insulin nền(basal)"
           }
         },
         "yy-YY" : {
@@ -18997,8 +18997,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Nothing to See Here!"
+            "state" : "translated",
+            "value" : "Hier is niets te zien!"
           }
         },
         "pl" : {
@@ -19051,8 +19051,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Nothing to See Here!"
+            "state" : "translated",
+            "value" : "Không có gì để xem ở đây cả!"
           }
         },
         "yy-YY" : {
@@ -19462,8 +19462,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Override History"
+            "state" : "translated",
+            "value" : "Lịch sử ghi đè"
           }
         },
         "yy-YY" : {
@@ -19958,8 +19958,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pre-Meal"
+            "state" : "translated",
+            "value" : "Voor de maaltijd"
           }
         },
         "pl" : {
@@ -19988,8 +19988,8 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pre-Meal"
+            "state" : "translated",
+            "value" : "Pred jedlom"
           }
         },
         "sv" : {
@@ -20149,8 +20149,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pre-Meal Values"
+            "state" : "translated",
+            "value" : "Giá trị trước bữa ăn"
           }
         },
         "yy-YY" : {
@@ -20286,8 +20286,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Prescription"
+            "state" : "translated",
+            "value" : "Đơn thuốc"
           }
         },
         "yy-YY" : {
@@ -20560,8 +20560,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Progressing."
+            "state" : "translated",
+            "value" : "Đang tiến hành."
           }
         },
         "yy-YY" : {
@@ -20697,8 +20697,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pump Event"
+            "state" : "translated",
+            "value" : "Sự kiện Pump"
           }
         },
         "yy-YY" : {
@@ -20834,8 +20834,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pump Inoperable"
+            "state" : "translated",
+            "value" : "Pump không hoạt động"
           }
         },
         "yy-YY" : {
@@ -21793,8 +21793,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Review and Save Settings"
+            "state" : "translated",
+            "value" : "Xem lại và Lưu cài đặt"
           }
         },
         "yy-YY" : {
@@ -21930,8 +21930,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Review your therapy settings below. If you’d like to edit any of these settings, tap Back to go back to that screen."
+            "state" : "translated",
+            "value" : "Xem lại các cài đặt điều trị của bạn bên dưới. Nếu bạn muốn chỉnh sửa bất kỳ cài đặt nào, hãy nhấn Quay lại để trở về màn hình đó."
           }
         },
         "yy-YY" : {
@@ -22341,8 +22341,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Save Basal Rates?"
+            "state" : "translated",
+            "value" : "Lưu các tỷ lệ tiêm insulin nền?"
           }
         },
         "yy-YY" : {
@@ -22478,8 +22478,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Save Carb Ratios?"
+            "state" : "translated",
+            "value" : "Lưu các tỷ lệ carb?"
           }
         },
         "yy-YY" : {
@@ -22615,8 +22615,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Save Correction Range(s)?"
+            "state" : "translated",
+            "value" : "Lưu (các) phạm vi hiệu chỉnh?"
           }
         },
         "yy-YY" : {
@@ -22752,8 +22752,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Save Delivery Limits?"
+            "state" : "translated",
+            "value" : "Lưu các giới hạn tiêm insulin?"
           }
         },
         "yy-YY" : {
@@ -22889,8 +22889,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Save Glucose Safety Limit?"
+            "state" : "translated",
+            "value" : "Lưu giới hạn an toàn đường huyết?"
           }
         },
         "yy-YY" : {
@@ -23026,8 +23026,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Save Insulin Sensitivities?"
+            "state" : "translated",
+            "value" : "Lưu độ nhạy Insulin?"
           }
         },
         "yy-YY" : {
@@ -23163,8 +23163,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Save Pre-Meal Range?"
+            "state" : "translated",
+            "value" : "Lưu phạm vi mục tiêu trước bữa ăn?"
           }
         },
         "yy-YY" : {
@@ -23300,8 +23300,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Save Workout Range?"
+            "state" : "translated",
+            "value" : "Lưu phạm vi mục tiêu tập luyện?"
           }
         },
         "yy-YY" : {
@@ -23575,8 +23575,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "SCHEDULED OVERRIDE"
+            "state" : "translated",
+            "value" : "LỊCH TRÌNH GHI ĐÈ"
           }
         },
         "yy-YY" : {
@@ -23712,8 +23712,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "SCHEDULED PRESET"
+            "state" : "translated",
+            "value" : "LỊCH TRÌNH CẤU HÌNH SẴN"
           }
         },
         "yy-YY" : {
@@ -23848,8 +23848,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Selected"
+            "state" : "translated",
+            "value" : "Đã chọn"
           }
         },
         "yy-YY" : {
@@ -24122,8 +24122,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Some users choose a value 2, 3, or 4 times their highest scheduled basal rate."
+            "state" : "translated",
+            "value" : "Một số người dùng chọn giá trị gấp 2, 3 hoặc 4 lần tỷ lệ tiêm insulin nền đã lập lịch cao nhất của họ."
           }
         },
         "yy-YY" : {
@@ -24533,8 +24533,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Submitted by %1$@, %2$@"
+            "state" : "translated",
+            "value" : "Được gửi bởi %1$@, %2$@"
           }
         },
         "yy-YY" : {
@@ -24670,8 +24670,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Support"
+            "state" : "translated",
+            "value" : "Hỗ trợ"
           }
         },
         "yy-YY" : {
@@ -25080,8 +25080,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Switch Preview State"
+            "state" : "translated",
+            "value" : "Chuyển trạng thái xem trước"
           }
         },
         "yy-YY" : {
@@ -25217,8 +25217,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Symbol"
+            "state" : "translated",
+            "value" : "Ký hiệu"
           }
         },
         "yy-YY" : {
@@ -25354,8 +25354,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Tap '+' to create a new custom preset."
+            "state" : "translated",
+            "value" : "Nhấn '+' để tạo mới Cấu hình sẵn tùy chỉnh."
           }
         },
         "yy-YY" : {
@@ -25436,8 +25436,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Tap back to continue exploring the rest of the %@ interface."
+            "state" : "translated",
+            "value" : "Tik terug om de rest van de %@ interface te blijven verkennen."
           }
         },
         "pl" : {
@@ -25490,8 +25490,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Tap back to continue exploring the rest of the %@ interface."
+            "state" : "translated",
+            "value" : "Nhấn Quay lại để tiếp tục khám phá phần còn lại của giao diện %@."
           }
         },
         "yy-YY" : {
@@ -26258,7 +26258,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Test"
           }
         },
@@ -26312,8 +26312,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Test"
+            "state" : "translated",
+            "value" : "Thử nghiệm"
           }
         },
         "yy-YY" : {
@@ -26449,8 +26449,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "than your Correction Range."
+            "state" : "translated",
+            "value" : "so với phạm vi hiệu chỉnh của bạn."
           }
         },
         "yy-YY" : {
@@ -27136,8 +27136,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The rapid-acting adult model assumes peak activity at 75 minutes."
+            "state" : "translated",
+            "value" : "Rapid-acting adult giả định có thời điểm hoạt động đỉnh là 75 phút."
           }
         },
         "yy-YY" : {
@@ -27273,8 +27273,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The rapid-acting child model assumes peak activity at 65 minutes."
+            "state" : "translated",
+            "value" : "Rapid-acting child giả định có thời điểm hoạt động đỉnh là 65 phút."
           }
         },
         "yy-YY" : {
@@ -27410,8 +27410,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The schedule starts at midnight and cannot contain a rate of 0 U/hr."
+            "state" : "translated",
+            "value" : "Lịch trình bắt đầu từ nửa đêm và không được chứa tỷ lệ 0 U/giờ."
           }
         },
         "yy-YY" : {
@@ -27547,8 +27547,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Therapy Settings"
+            "state" : "translated",
+            "value" : "Cài đặt điều trị"
           }
         },
         "yy-YY" : {
@@ -27684,8 +27684,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This model assumes peak insulin activity at 19 minutes."
+            "state" : "translated",
+            "value" : "Mô hình này giả định thời điểm hoạt động đỉnh của insulin là 19 phút."
           }
         },
         "yy-YY" : {
@@ -27821,8 +27821,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This model assumes peak insulin activity at 55 minutes."
+            "state" : "translated",
+            "value" : "Mô hình này giả định thời điểm hoạt động đỉnh của insulin là 55 phút."
           }
         },
         "yy-YY" : {
@@ -27958,8 +27958,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This model assumes peak insulin activity at 65 minutes."
+            "state" : "translated",
+            "value" : "Mô hình này giả định thời điểm hoạt động đỉnh của insulin là 65 phút."
           }
         },
         "yy-YY" : {
@@ -28095,8 +28095,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This model assumes peak insulin activity at 75 minutes."
+            "state" : "translated",
+            "value" : "Mô hình này giả định thời điểm hoạt động đỉnh của insulin là 75 phút."
           }
         },
         "yy-YY" : {
@@ -28177,8 +28177,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This section of the %@ app is unavailable in this simulator."
+            "state" : "translated",
+            "value" : "Deze sectie van de %@ app is niet beschikbaar in deze simulator."
           }
         },
         "pl" : {
@@ -28231,8 +28231,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This section of the %@ app is unavailable in this simulator."
+            "state" : "translated",
+            "value" : "Phần này của ứng dụng %@ không khả dụng trong trình mô phỏng này."
           }
         },
         "yy-YY" : {
@@ -28368,8 +28368,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This setting will also determine a safety limit for automatic dosing. %1$@ will limit automatic delivery to keep the amount of active insulin below twice your maximum bolus."
+            "state" : "translated",
+            "value" : "Cài đặt này cũng sẽ xác định một giới hạn an toàn cho việc tiêm tự động. %1$@ sẽ giới hạn việc tiêm tự động để giữ lượng insulin đang hoạt động dưới gấp đôi bolus tối đa của bạn."
           }
         },
         "yy-YY" : {
@@ -28505,8 +28505,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This will typically be"
+            "state" : "translated",
+            "value" : "Thông thường, điều này sẽ là"
           }
         },
         "yy-YY" : {
@@ -28915,8 +28915,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "To be implemented"
+            "state" : "translated",
+            "value" : "Sẽ được triển khai"
           }
         },
         "yy-YY" : {
@@ -29464,8 +29464,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Unable to Save"
+            "state" : "translated",
+            "value" : "Không thể lưu"
           }
         },
         "yy-YY" : {
@@ -29875,8 +29875,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Unselected"
+            "state" : "translated",
+            "value" : "Chưa chọn"
           }
         },
         "yy-YY" : {
@@ -30094,8 +30094,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Unsupported %@"
+            "state" : "translated",
+            "value" : "Niet ondersteund %@"
           }
         },
         "pl" : {
@@ -30148,8 +30148,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Unsupported %@"
+            "state" : "translated",
+            "value" : "%@ không được hỗ trợ"
           }
         },
         "yy-YY" : {
@@ -30559,8 +30559,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "View Override"
+            "state" : "translated",
+            "value" : "Xem ghi đè"
           }
         },
         "yy-YY" : {
@@ -30642,7 +30642,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Walsh"
           }
         },
@@ -30696,8 +30696,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Walsh"
+            "state" : "translated",
+            "value" : "Mô hình Walsh"
           }
         },
         "yy-YY" : {
@@ -30971,8 +30971,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Work with your healthcare provider to choose a value that is higher than your highest scheduled basal rate, but as conservative or aggressive as you feel comfortable."
+            "state" : "translated",
+            "value" : "Hãy làm việc với nhà cung cấp dịch vụ y tế của bạn để chọn một giá trị cao hơn tỷ lệ tiêm insulin nền đã lập lịch cao nhất, nhưng mức độ thận trọng hoặc quyết liệt tùy theo bạn cảm thấy phù hợp."
           }
         },
         "yy-YY" : {
@@ -31245,8 +31245,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Workout Range is the glucose value or range of values you want %1$@ to target during activity. This range will be in effect when you activate the Workout Preset button."
+            "state" : "translated",
+            "value" : "Phạm vi khi tập luyện là giá trị đường huyết hoặc phạm vi giá trị mà bạn muốn %1$@ hướng tới trong quá trình hoạt động. Phạm vi này sẽ có hiệu lực khi bạn kích hoạt nút Cấu hình sẵn Tập luyện."
           }
         },
         "yy-YY" : {
@@ -31382,8 +31382,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Workout Values"
+            "state" : "translated",
+            "value" : "Giá trị khi tập luyện"
           }
         },
         "yy-YY" : {
@@ -31519,8 +31519,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "You can add different carb ratios for different times of day by using the ➕."
+            "state" : "translated",
+            "value" : "Bạn có thể thêm các tỷ lệ carb khác nhau cho các thời điểm trong ngày bằng cách sử dụng nút ➕."
           }
         },
         "yy-YY" : {
@@ -31656,8 +31656,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "You can add different insulin sensitivities for different times of day by using the ➕."
+            "state" : "translated",
+            "value" : "Bạn có thể thêm các độ nhạy insulin khác nhau cho các thời điểm trong ngày bằng cách sử dụng nút ➕."
           }
         },
         "yy-YY" : {
@@ -31793,8 +31793,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "You can add different ranges for different times of day by using the ➕."
+            "state" : "translated",
+            "value" : "Bạn có thể thêm các phạm vi khác nhau cho các thời điểm trong ngày bằng cách sử dụng nút ➕."
           }
         },
         "yy-YY" : {
@@ -31930,8 +31930,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "You can add entries for different times of day by using the ➕."
+            "state" : "translated",
+            "value" : "Bạn có thể thêm các mục cho các thời điểm khác nhau trong ngày bằng cách sử dụng nút ➕."
           }
         },
         "yy-YY" : {
@@ -32067,8 +32067,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "You can choose how %1$@ measures rapid acting insulin's peak activity according to one of these two insulin models."
+            "state" : "translated",
+            "value" : "Bạn có thể chọn cách %1$@ tính thời điểm hoạt động đỉnh của insulin tác dụng nhanh theo một trong hai mô hình insulin này."
           }
         },
         "yy-YY" : {
@@ -32204,8 +32204,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "You can edit a setting by tapping into any line item."
+            "state" : "translated",
+            "value" : "Bạn có thể chỉnh sửa một cài đặt bằng cách nhấn vào bất kỳ mục nào trong danh sách."
           }
         },
         "yy-YY" : {
@@ -32341,8 +32341,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "You can edit the setting by tapping into the line item."
+            "state" : "translated",
+            "value" : "Bạn có thể chỉnh sửa cài đặt bằng cách nhấn vào mục trong danh sách."
           }
         },
         "yy-YY" : {
@@ -32615,8 +32615,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "your Glucose Safety Limit"
+            "state" : "translated",
+            "value" : "giới hạn an toàn đường huyết của bạn"
           }
         },
         "yy-YY" : {
@@ -32752,8 +32752,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your healthcare provider can help you choose a Correction Range that's right for you."
+            "state" : "translated",
+            "value" : "Nhà cung cấp dịch vụ y tế của bạn có thể giúp bạn chọn một phạm vi hiệu chỉnh phù hợp với bạn."
           }
         },
         "yy-YY" : {
@@ -32889,8 +32889,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your Insulin Sensitivity Factor (ISF) is the drop in glucose expected from one unit of insulin."
+            "state" : "translated",
+            "value" : "Độ nhạy insulin (ISF) của bạn là mức giảm đường huyết dự kiến từ một đơn vị insulin."
           }
         },
         "yy-YY" : {
@@ -33026,8 +33026,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your Pre-Meal Range should be the glucose value (or range of values) you want %1$@ to target by the time you take your first bite of your meal. This range will be in effect when you activate the Pre-Meal Preset button."
+            "state" : "translated",
+            "value" : "Phạm vi trước bữa ăn của bạn nên là giá trị đường huyết (hoặc khoảng giá trị) mà bạn muốn %1$@ hướng tới vào lúc bạn ăn miếng đầu tiên. Phạm vi này sẽ có hiệu lực khi bạn kích hoạt nút Cấu hình sẵn Trước bữa ăn."
           }
         },
         "yy-YY" : {

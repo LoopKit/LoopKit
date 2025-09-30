@@ -96,8 +96,8 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%@ Range"
+            "state" : "translated",
+            "value" : "%@ rozsah"
           }
         },
         "sv" : {
@@ -114,8 +114,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%@ Range"
+            "state" : "translated",
+            "value" : "%@ Діапазон"
           }
         },
         "vi" : {
@@ -204,8 +204,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ U bolus failed"
+            "state" : "translated",
+            "value" : "%1$@ E bolus mislukt"
           }
         },
         "pl" : {
@@ -234,8 +234,8 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ U bolus failed"
+            "state" : "translated",
+            "value" : "%1$@ U bolus zlyhal"
           }
         },
         "sv" : {
@@ -252,8 +252,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ U bolus failed"
+            "state" : "translated",
+            "value" : "%1$@ U Болюс не відбувся"
           }
         },
         "vi" : {
@@ -342,8 +342,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ U bolus may not have succeeded"
+            "state" : "translated",
+            "value" : "%1$@ U bolus is mogelijk niet gelukt"
           }
         },
         "pl" : {
@@ -390,8 +390,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ U bolus may not have succeeded"
+            "state" : "translated",
+            "value" : "%1$@ U можлива невдача подачі болюса"
           }
         },
         "vi" : {
@@ -527,8 +527,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours."
+            "state" : "translated",
+            "value" : "%1$@ вводитиме базальний інсулін та рекомендуватиме болюсний інсулін лише тоді, коли прогнозується, що рівень глюкози перевищуватиме цю межу протягом наступних трьох годин."
           }
         },
         "vi" : {
@@ -801,8 +801,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "A value you have entered is higher than what is typically recommended for most people."
+            "state" : "translated",
+            "value" : "Введене вами значення вище, ніж те, що зазвичай рекомендується для більшості людей."
           }
         },
         "vi" : {
@@ -938,8 +938,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "A value you have entered is lower than what is typically recommended for most people."
+            "state" : "translated",
+            "value" : "Введене вами значення нижче за те, що зазвичай рекомендується для більшості людей."
           }
         },
         "vi" : {
@@ -1027,7 +1027,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Afrezza"
           }
         },
@@ -1075,7 +1075,7 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Afrezza"
           }
         },
@@ -1301,7 +1301,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Apidra"
           }
         },
@@ -1349,7 +1349,7 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Apidra"
           }
         },
@@ -1486,8 +1486,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Apidra (insulin glulisine)"
+            "state" : "translated",
+            "value" : "Apidra (інсулін glulisine)"
           }
         },
         "vi" : {
@@ -1623,8 +1623,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Apidra (insulin glulisine) is a rapid-acting insulin made by Sanofi-aventis "
+            "state" : "translated",
+            "value" : "Apidra (інсулін glulisine) це інсулін швидкої дії, вироблений компанією Sanofi-aventis"
           }
         },
         "vi" : {
@@ -1713,8 +1713,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Authorization Denied"
+            "state" : "translated",
+            "value" : "Autorisatie geweigerd"
           }
         },
         "pl" : {
@@ -1761,8 +1761,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Authorization Denied"
+            "state" : "translated",
+            "value" : "Авторизацію відхилено"
           }
         },
         "vi" : {
@@ -2399,8 +2399,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check your pump before retrying"
+            "state" : "translated",
+            "value" : "Controleer je pomp voordat je het nogmaals probeert"
           }
         },
         "pl" : {
@@ -2447,8 +2447,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check your pump before retrying"
+            "state" : "translated",
+            "value" : "Перевірте помпу перед повторною спробою"
           }
         },
         "vi" : {
@@ -2543,8 +2543,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Authorization Denied"
+            "state" : "translated",
+            "value" : "Autorisatie geweigerd"
           }
         },
         "pl" : {
@@ -2591,8 +2591,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Authorization Denied"
+            "state" : "translated",
+            "value" : "Авторизацію відхилено"
           }
         },
         "vi" : {
@@ -2735,8 +2735,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This sample can be deleted from the Health app"
+            "state" : "translated",
+            "value" : "Цей зразок можна видалити з програми «Здоров'я»"
           }
         },
         "vi" : {
@@ -2872,8 +2872,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Communication Failure"
+            "state" : "translated",
+            "value" : "Помилка з’єднання"
           }
         },
         "vi" : {
@@ -3009,8 +3009,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Communications interrupted during insulin delivery command."
+            "state" : "translated",
+            "value" : "Зв'язок перервано під час команди подачі інсуліну."
           }
         },
         "vi" : {
@@ -3146,8 +3146,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Connection Failure"
+            "state" : "translated",
+            "value" : "Помилка підключення"
           }
         },
         "vi" : {
@@ -3283,8 +3283,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Correction Range"
+            "state" : "translated",
+            "value" : "Діапазон корекції"
           }
         },
         "vi" : {
@@ -3420,8 +3420,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Correction Range is the glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin and helping you calculate your boluses."
+            "state" : "translated",
+            "value" : "Діапазон корекції – це значення глюкози (або діапазон значень), до якого ви хочете %1$@ прагнути під час коригування базального інсуліну та розрахунку болюсів."
           }
         },
         "vi" : {
@@ -3557,8 +3557,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Critical Update"
+            "state" : "translated",
+            "value" : "Критичне оновлення"
           }
         },
         "vi" : {
@@ -3831,8 +3831,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Device Refused"
+            "state" : "translated",
+            "value" : "Пристрій відхилено"
           }
         },
         "vi" : {
@@ -3920,8 +3920,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Device Status Critical"
+            "state" : "translated",
+            "value" : "Apparaat status kritiek"
           }
         },
         "pl" : {
@@ -3968,8 +3968,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Device Status Critical"
+            "state" : "translated",
+            "value" : "Стан пристрою Критичний"
           }
         },
         "vi" : {
@@ -4057,8 +4057,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Device Status Normal"
+            "state" : "translated",
+            "value" : "Apparaat status normaal"
           }
         },
         "pl" : {
@@ -4105,8 +4105,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Device Status Normal"
+            "state" : "translated",
+            "value" : "Стан пристрою Нормальний"
           }
         },
         "vi" : {
@@ -4194,8 +4194,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Device Status Warning"
+            "state" : "translated",
+            "value" : "Apparaat status waarschuwing"
           }
         },
         "pl" : {
@@ -4242,8 +4242,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Device Status Warning"
+            "state" : "translated",
+            "value" : "Попередження про стан пристрою"
           }
         },
         "vi" : {
@@ -4379,8 +4379,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Ensure carb data exists for the specified date"
+            "state" : "translated",
+            "value" : "Переконайтеся, що дані про вуглеводи існують для вказаної дати"
           }
         },
         "vi" : {
@@ -4516,8 +4516,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Falling"
+            "state" : "translated",
+            "value" : "Падіння"
           }
         },
         "vi" : {
@@ -4653,8 +4653,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Falling fast"
+            "state" : "translated",
+            "value" : "Швидке падіння"
           }
         },
         "vi" : {
@@ -4790,8 +4790,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Falling very fast"
+            "state" : "translated",
+            "value" : "Дуже швидке падіння"
           }
         },
         "vi" : {
@@ -4879,7 +4879,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Fiasp"
           }
         },
@@ -4927,7 +4927,7 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Fiasp"
           }
         },
@@ -5201,8 +5201,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Flat"
+            "state" : "translated",
+            "value" : "Стабільний"
           }
         },
         "vi" : {
@@ -5338,8 +5338,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from different models for the peak activity."
+            "state" : "translated",
+            "value" : "Для швидкодіючого інсуліну %1$@ припускається, що він активно працює протягом 6 годин. Ви можете вибрати одну з різних моделей для досягнення пікової активності."
           }
         },
         "vi" : {
@@ -5612,8 +5612,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Glucose Safety Limit"
+            "state" : "translated",
+            "value" : "Безпечний ліміт BG"
           }
         },
         "vi" : {
@@ -5749,8 +5749,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hour"
+            "state" : "translated",
+            "value" : "Година"
           }
         },
         "vi" : {
@@ -5886,8 +5886,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hours"
+            "state" : "translated",
+            "value" : "Годин"
           }
         },
         "vi" : {
@@ -5975,7 +5975,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Humalog"
           }
         },
@@ -6023,7 +6023,7 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Humalog"
           }
         },
@@ -6112,8 +6112,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Humalog (insulin lispro)"
+            "state" : "translated",
+            "value" : "Humalog (insuline lispro)"
           }
         },
         "pl" : {
@@ -6160,8 +6160,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Humalog (insulin lispro)"
+            "state" : "translated",
+            "value" : "Humalog (шнсулін lispro)"
           }
         },
         "vi" : {
@@ -6434,8 +6434,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Insulin Model"
+            "state" : "translated",
+            "value" : "Модель інсуліну"
           }
         },
         "vi" : {
@@ -6708,8 +6708,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Invalid Configuration"
+            "state" : "translated",
+            "value" : "Недопустима конфігурація"
           }
         },
         "vi" : {
@@ -6798,8 +6798,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "It is safe to retry"
+            "state" : "translated",
+            "value" : "Het is veilig om opnieuw te proberen"
           }
         },
         "pl" : {
@@ -6846,8 +6846,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "It is safe to retry"
+            "state" : "translated",
+            "value" : "Можна безпечно повторити спробу"
           }
         },
         "vi" : {
@@ -6935,7 +6935,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Lyumjev"
           }
         },
@@ -6983,7 +6983,7 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Lyumjev"
           }
         },
@@ -7257,8 +7257,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Make sure your pump is within communication range of your phone."
+            "state" : "translated",
+            "value" : "Переконайтеся, що помпа знаходиться в зоні зв'язку вашого телефону."
           }
         },
         "vi" : {
@@ -7394,8 +7394,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Maximum Basal Rate"
+            "state" : "translated",
+            "value" : "Максимальна швидкість базалу"
           }
         },
         "vi" : {
@@ -7531,8 +7531,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Maximum Basal Rate is the highest temporary basal rate %1$@ is allowed to set."
+            "state" : "translated",
+            "value" : "Максимальна базальна доза – це найвища тимчасова базальна доза, яку можна встановити %1$@."
           }
         },
         "vi" : {
@@ -7668,8 +7668,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Maximum Bolus"
+            "state" : "translated",
+            "value" : "Максимум Болюса"
           }
         },
         "vi" : {
@@ -7805,8 +7805,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Maximum Bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose."
+            "state" : "translated",
+            "value" : "Максимальний болюс – це найбільша кількість болюсного введення, яку можна ввести за один раз, щоб покрити вуглеводи або знизити високий рівень BG."
           }
         },
         "vi" : {
@@ -7894,7 +7894,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "mg/dL/min"
           }
         },
@@ -7942,7 +7942,7 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "mg/dL/min"
           }
         },
@@ -8079,7 +8079,7 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "mg/dL/U"
           }
         },
@@ -8305,8 +8305,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "mmol/L/min"
+            "state" : "translated",
+            "value" : "mmol/L/E"
           }
         },
         "pl" : {
@@ -8353,7 +8353,7 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "mmol/L/min"
           }
         },
@@ -8490,7 +8490,7 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "mmol/L/U"
           }
         },
@@ -8627,8 +8627,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Needs Attention"
+            "state" : "translated",
+            "value" : "Потребує уваги"
           }
         },
         "vi" : {
@@ -8764,8 +8764,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No Update"
+            "state" : "translated",
+            "value" : "Без оновлення"
           }
         },
         "vi" : {
@@ -8990,7 +8990,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Novolog"
           }
         },
@@ -9127,8 +9127,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Novolog (insulin aspart)"
+            "state" : "translated",
+            "value" : "Novolog (insuline aspart)"
           }
         },
         "pl" : {
@@ -9676,8 +9676,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please re-enable sharing in Health"
+            "state" : "translated",
+            "value" : "Activeer het delen in gezondheid opnieuw"
           }
         },
         "pl" : {
@@ -9813,8 +9813,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pre-Meal"
+            "state" : "translated",
+            "value" : "Voor de maaltijd"
           }
         },
         "pl" : {
@@ -9843,8 +9843,8 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pre-Meal"
+            "state" : "translated",
+            "value" : "Pred jedlom"
           }
         },
         "sv" : {
@@ -12172,8 +12172,8 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Unit"
+            "state" : "translated",
+            "value" : "Jednotka"
           }
         },
         "sv" : {
@@ -12309,8 +12309,8 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Unit/hour"
+            "state" : "translated",
+            "value" : "Jednotka/hodina"
           }
         },
         "sv" : {
@@ -12583,8 +12583,8 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Units/hour"
+            "state" : "translated",
+            "value" : "Jednotky/hodina"
           }
         },
         "sv" : {
@@ -12720,8 +12720,8 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update Available"
+            "state" : "translated",
+            "value" : "Dostupná aktualizácia"
           }
         },
         "sv" : {
