@@ -662,8 +662,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pump Battery Dead"
+            "state" : "translated",
+            "value" : "Розряджена батарея помпи"
           }
         },
         "vi" : {
@@ -936,8 +936,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pump Occlusion"
+            "state" : "translated",
+            "value" : "Помпа забита"
           }
         },
         "vi" : {

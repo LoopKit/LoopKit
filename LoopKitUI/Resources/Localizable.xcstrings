@@ -12862,8 +12862,8 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Food Type"
+            "state" : "translated",
+            "value" : "Typ jedla"
           }
         },
         "sv" : {
@@ -13410,8 +13410,8 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Go Back"
+            "state" : "translated",
+            "value" : "Naspäť"
           }
         },
         "sv" : {
@@ -20006,8 +20006,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pre-Meal"
+            "state" : "translated",
+            "value" : "Перед їжою"
           }
         },
         "vi" : {
@@ -25895,8 +25895,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Temporarily lower your glucose target before a meal to impact post-meal glucose spikes."
+            "state" : "translated",
+            "value" : "Тимчасово знизьте цільовий рівень глюкози перед їжею, щоб вплинути на піки BG після їжі."
           }
         },
         "vi" : {
@@ -26032,8 +26032,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events."
+            "state" : "translated",
+            "value" : "Тимчасово підвищуйте цільовий рівень глюкози до, під час або після фізичної активності, щоб зменшити ризик виникнення ситуацій, пов’язаних з низьким рівнем BG."
           }
         },
         "vi" : {
@@ -29596,8 +29596,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Units"
+            "state" : "translated",
+            "value" : "Одиниці"
           }
         },
         "vi" : {
@@ -31102,8 +31102,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Workout"
+            "state" : "translated",
+            "value" : "Тренування"
           }
         },
         "vi" : {
@@ -32472,8 +32472,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs."
+            "state" : "translated",
+            "value" : "Ваша базальна доза (ТБШ) інсуліну – це кількість одиниць інсуліну на годину, яку ви хочете використовувати для покриття фонових потреб в інсуліні."
           }
         },
         "vi" : {
