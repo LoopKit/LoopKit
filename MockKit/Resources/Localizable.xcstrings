@@ -7,7 +7,7 @@
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bolus"
+            "value" : "الجرعة"
           }
         },
         "da" : {
@@ -31,7 +31,7 @@
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bolus"
+            "value" : "Lisäannos"
           }
         },
         "fr" : {
@@ -42,8 +42,14 @@
         },
         "he" : {
           "stringUnit" : {
+            "state" : "new",
+            "value" : "Bolus"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
             "state" : "translated",
-            "value" : "בולוס"
+            "value" : "Bólus"
           }
         },
         "it" : {
@@ -52,13 +58,7 @@
             "value" : "Bolo"
           }
         },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ボーラス"
-          }
-        },
-        "nb" : {
+        "nb-NO" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bolus"
@@ -72,19 +72,19 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "new",
+            "value" : "Bolus"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "new",
             "value" : "Bolus"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bolus"
-          }
-        },
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
+            "state" : "new",
             "value" : "Bolus"
           }
         },
@@ -108,14 +108,32 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "new",
             "value" : "Bolus"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Болюс"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bolus"
+            "value" : "Liều bolus"
+          }
+        },
+        "yy-YY" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bolus Value"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "大剂量"
           }
         }
       }
@@ -123,6 +141,12 @@
     "Comms Issue" : {
       "comment" : "Status highlight that delivery is uncertain.",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مشكلة في الاتصالات"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -132,7 +156,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kommunikationsproblem"
+            "value" : "Kommunikationsfehler"
           }
         },
         "es" : {
@@ -143,56 +167,80 @@
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Yhteysongelma"
+            "state" : "new",
+            "value" : "Comms Issue"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Problème de communication"
+            "value" : "Problème de com."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Comms Issue"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Comms Issue"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Problema di comunicazione"
+            "value" : "Problema Comms"
           }
         },
-        "nb" : {
+        "nb-NO" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kommunikasjonsutgave"
+            "value" : "Kommunikasjons-problem"
           }
         },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Communicatieprobleem"
+            "value" : "Opdrachtenprobleem"
           }
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Problem z komunikacją"
+            "state" : "new",
+            "value" : "Comms Issue"
           }
         },
-        "ro" : {
+        "pt" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Problemă de comunicații"
+            "state" : "new",
+            "value" : "Comms Issue"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Comms Issue"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Проблемы со связью"
+            "value" : "Проблемы с сообщением"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Problém s komunikáciou"
           }
         },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kommandoproblem"
+            "value" : "Kommunikationsproblem"
           }
         },
         "tr" : {
@@ -200,12 +248,42 @@
             "state" : "translated",
             "value" : "İletişim Sorunu"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Проблеми з повідомленням"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Câu lệnh có vấn đề"
+          }
+        },
+        "yy-YY" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Comms Issue"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Comms Issue"
+          }
         }
       }
     },
     "Insulin Suspended" : {
       "comment" : "Status highlight that insulin delivery was suspended.",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Insulin Suspended"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -215,19 +293,19 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Insulinabgabe unterbrochen"
+            "value" : "Insulin ausgesetzt"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Insulina Suspendida"
+            "value" : "Insulina suspendida"
           }
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Insuliini pysäytetty"
+            "state" : "new",
+            "value" : "Insulin Suspended"
           }
         },
         "fr" : {
@@ -236,52 +314,100 @@
             "value" : "Insuline suspendue"
           }
         },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Insulin Suspended"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Insulin Suspended"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Erogazione Insulina sospesa"
+            "value" : "Insulina Sospesa"
           }
         },
-        "nb" : {
+        "nb-NO" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Insulin suspendert"
+            "value" : "Insulintilførsel pauset"
           }
         },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Insuline Onderbroken"
+            "value" : "Insuline tijdelijk uitgeschakeld"
           }
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Podawanie Zawieszone"
+            "state" : "new",
+            "value" : "Insulin Suspended"
           }
         },
-        "ro" : {
+        "pt" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Administrarea insulinei suspendată"
+            "state" : "new",
+            "value" : "Insulin Suspended"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Insulin Suspended"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Подача инсулина приостановлена"
+            "value" : "Подача приостановлена"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inzulín Suspendovaný"
           }
         },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Insulintillförsel pausad"
+            "value" : "Pump pausad"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "İnsülin Askıya Alındı"
+            "value" : "İnsülin Durduldu"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Подання Припинено"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đã tạm dừng cấp liều Insulin"
+          }
+        },
+        "yy-YY" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Insulin Suspended"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Insulin Suspended"
           }
         }
       }
@@ -289,10 +415,10 @@
     "No Insulin" : {
       "comment" : "Status highlight that a pump is out of insulin.",
       "localizations" : {
-        "cs" : {
+        "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Žádný inzulín"
+            "value" : "لا يوجد إنسولين"
           }
         },
         "da" : {
@@ -315,8 +441,8 @@
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ei insuliinia"
+            "state" : "new",
+            "value" : "No Insulin"
           }
         },
         "fr" : {
@@ -325,34 +451,52 @@
             "value" : "Pas d'insuline"
           }
         },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No Insulin"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No Insulin"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Insulina esaurita"
+            "value" : "Nessuna Insulina"
           }
         },
-        "nb" : {
+        "nb-NO" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ingen insulin"
+            "value" : "Tom for insulin"
           }
         },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Geen Insuline"
+            "value" : "Geen insuline"
           }
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Brak insuliny"
+            "state" : "new",
+            "value" : "No Insulin"
           }
         },
-        "ro" : {
+        "pt" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fără insulină"
+            "state" : "new",
+            "value" : "No Insulin"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No Insulin"
           }
         },
         "ru" : {
@@ -376,7 +520,31 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "İnsülin yok"
+            "value" : "İnsülin Yok"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нема Інсуліну"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hết Insulin"
+          }
+        },
+        "yy-YY" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No Insulin"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No Insulin"
           }
         }
       }
@@ -384,6 +552,12 @@
     "Pump Battery Dead" : {
       "comment" : "Status highlight that pump has a dead battery.",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Pump Battery Dead"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -414,13 +588,25 @@
             "value" : "Batterie de la pompe déchargée"
           }
         },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Pump Battery Dead"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Pump Battery Dead"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Batteria pompa esaurita"
           }
         },
-        "nb" : {
+        "nb-NO" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pumpebatteri er dødt"
@@ -438,16 +624,28 @@
             "value" : "Rozładowana bateria pompy"
           }
         },
-        "ro" : {
+        "pt" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Baterie epuizata pompa"
+            "state" : "new",
+            "value" : "Pump Battery Dead"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Pump Battery Dead"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Батарея помпы неисправна"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Batéria pumpy je vybitá"
           }
         },
         "sv" : {
@@ -461,12 +659,42 @@
             "state" : "translated",
             "value" : "Pompa Pili Bitti"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Розряджена батарея помпи"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pin bơm đã cạn"
+          }
+        },
+        "yy-YY" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Pump Battery Dead"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Pump Battery Dead"
+          }
         }
       }
     },
     "Pump Error" : {
       "comment" : "Status highlight that a pump error occurred.",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "خطأ في المضخة"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -494,28 +722,28 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Erreur de la pompe"
+            "value" : "Erreur détectée"
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "new",
+            "value" : "Pump Error"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
             "value" : "Pump Error"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Errore della pompa"
+            "value" : "Errore microinfusore"
           }
         },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ポンプエラー"
-          }
-        },
-        "nb" : {
+        "nb-NO" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pumpefeil"
@@ -524,7 +752,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pomp Foutmelding"
+            "value" : "Pomp foutmelding"
           }
         },
         "pl" : {
@@ -533,22 +761,28 @@
             "value" : "Błąd pompy"
           }
         },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Pump Error"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Erro na Bomba"
           }
         },
-        "ro" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Eroare pompă"
-          }
-        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ошибка помпы"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chyba pumpy"
           }
         },
         "sv" : {
@@ -563,10 +797,22 @@
             "value" : "Pompa Hatası"
           }
         },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Помилка помпи"
+          }
+        },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bơm lỗi"
+          }
+        },
+        "yy-YY" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Pump Error"
           }
         },
         "zh-Hans" : {
@@ -580,6 +826,12 @@
     "Pump Occlusion" : {
       "comment" : "Status highlight that an occlusion was detected.",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Pump Occlusion"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -610,13 +862,25 @@
             "value" : "Occlusion de la pompe"
           }
         },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Pump Occlusion"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Pump Occlusion"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Occlusione pompa"
           }
         },
-        "nb" : {
+        "nb-NO" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pumpeokklusjon"
@@ -634,16 +898,28 @@
             "value" : "Niedrożność pompy"
           }
         },
-        "ro" : {
+        "pt" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ocluzie pompă"
+            "state" : "new",
+            "value" : "Pump Occlusion"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Pump Occlusion"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Закупорка помпы"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oklúzia pumpy"
           }
         },
         "sv" : {
@@ -657,12 +933,42 @@
             "state" : "translated",
             "value" : "Pompa Tıkanıklığı"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Помпа забита"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bơm bị tắc nghẽn"
+          }
+        },
+        "yy-YY" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Pump Occlusion"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Pump Occlusion"
+          }
         }
       }
     },
     "Resume" : {
       "comment" : "Pump Event title for UnfinalizedDose with doseType of .resume",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Resume"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -681,10 +987,28 @@
             "value" : "Reanudar"
           }
         },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Resume"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Reprendre"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Resume"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Visszatérés"
           }
         },
         "it" : {
@@ -693,28 +1017,34 @@
             "value" : "Riprendi"
           }
         },
-        "nb" : {
+        "nb-NO" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gjenoppta"
+            "value" : "Gjenoppta leveranse"
           }
         },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hervatten"
+            "value" : "Hervat"
           }
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wznowiono"
+            "state" : "new",
+            "value" : "Resume"
           }
         },
-        "ro" : {
+        "pt" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Reluați"
+            "state" : "new",
+            "value" : "Resume"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Resume"
           }
         },
         "ru" : {
@@ -723,10 +1053,46 @@
             "value" : "Возобновление"
           }
         },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pokračovať"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Återuppta"
+          }
+        },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Devam et"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Відновити"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tiếp tục"
+          }
+        },
+        "yy-YY" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Resume"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "恢复"
           }
         }
       }
@@ -734,6 +1100,12 @@
     "Suspend" : {
       "comment" : "Pump Event title for UnfinalizedDose with doseType of .suspend",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Suspend"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -752,10 +1124,28 @@
             "value" : "Suspender"
           }
         },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Suspend"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Suspendre"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Suspend"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Felfüggesztés"
           }
         },
         "it" : {
@@ -764,10 +1154,10 @@
             "value" : "Sospendi"
           }
         },
-        "nb" : {
+        "nb-NO" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Suspendere"
+            "value" : "Pause leveranse"
           }
         },
         "nl" : {
@@ -778,20 +1168,26 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wstrzymano"
+            "state" : "new",
+            "value" : "Suspend"
           }
         },
-        "ro" : {
+        "pt" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Suspendați"
+            "state" : "new",
+            "value" : "Suspend"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Suspend"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Приостановка"
+            "value" : "Остановка"
           }
         },
         "sk" : {
@@ -800,10 +1196,40 @@
             "value" : "Pozastavenie"
           }
         },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pausa"
+          }
+        },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Askıya al"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Призупинити"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đã tạm dừng"
+          }
+        },
+        "yy-YY" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Suspend"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "暂停"
           }
         }
       }
@@ -811,10 +1237,16 @@
     "Temp Basal" : {
       "comment" : "Pump Event title for UnfinalizedDose with doseType of .tempBasal",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Temp Basal"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Midlertidig basal"
+            "value" : "Midlertidig Basal"
           }
         },
         "de" : {
@@ -831,14 +1263,26 @@
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tilapäinen basaali"
+            "state" : "new",
+            "value" : "Temp Basal"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Débit basal temporaire"
+            "value" : "Basal Temp."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Temp Basal"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Temp Basal"
           }
         },
         "it" : {
@@ -847,7 +1291,7 @@
             "value" : "Basale temporanea"
           }
         },
-        "nb" : {
+        "nb-NO" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Midlertidig basal"
@@ -856,25 +1300,31 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tijdelijk Basaal"
+            "value" : "Tijdelijk basaal"
           }
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tymczasowa dawka podst."
+            "state" : "new",
+            "value" : "Temp Basal"
           }
         },
-        "ro" : {
+        "pt" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bazală temporară"
+            "state" : "new",
+            "value" : "Temp Basal"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Temp Basal"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ВБС"
+            "value" : "Врем. базал"
           }
         },
         "sk" : {
@@ -892,7 +1342,31 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Geçici Bazal"
+            "value" : "Geçici Bazal Oranı"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Тимчасовий  Базал"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Temp Basal"
+          }
+        },
+        "yy-YY" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Temp Basal"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "临时基础率"
           }
         }
       }

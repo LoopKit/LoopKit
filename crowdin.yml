@@ -1,0 +1,10 @@
+files:
+  - source: /LoopKit/Resources/Localizable.xcstrings
+    translation: /LoopKit/Resources/Localizable.xcstrings
+    multilingual: 1
+  - source: /MockKit/Resources/Localizable.xcstrings
+    translation: /MockKit/Resources/Localizable.xcstrings
+    multilingual: 1
+  - source: /LoopKitUI/Resources/Localizable.xcstrings
+    translation: /LoopKitUI/Resources/Localizable.xcstrings
+    multilingual: 1
