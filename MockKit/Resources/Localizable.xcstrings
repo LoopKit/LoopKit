@@ -156,7 +156,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kommunikationsfehler"
+            "value" : "Kommunikationsproblem"
           }
         },
         "es" : {
@@ -167,14 +167,14 @@
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Comms Issue"
+            "state" : "translated",
+            "value" : "Yhteysongelma"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Problème de com."
+            "value" : "Problème de communication"
           }
         },
         "he" : {
@@ -192,7 +192,13 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Problema Comms"
+            "value" : "Problema di comunicazione"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kommunikasjonsutgave"
           }
         },
         "nb-NO" : {
@@ -204,13 +210,13 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Opdrachtenprobleem"
+            "value" : "Communicatieprobleem"
           }
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Comms Issue"
+            "state" : "translated",
+            "value" : "Problem z komunikacją"
           }
         },
         "pt" : {
@@ -225,10 +231,16 @@
             "value" : "Comms Issue"
           }
         },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Problemă de comunicații"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Проблемы с сообщением"
+            "value" : "Проблемы со связью"
           }
         },
         "sk" : {
@@ -240,7 +252,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kommunikationsproblem"
+            "value" : "Kommandoproblem"
           }
         },
         "tr" : {
@@ -421,6 +433,12 @@
             "value" : "لا يوجد إنسولين"
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Žádný inzulín"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -441,8 +459,8 @@
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No Insulin"
+            "state" : "translated",
+            "value" : "Ei insuliinia"
           }
         },
         "fr" : {
@@ -466,7 +484,13 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nessuna Insulina"
+            "value" : "Insulina esaurita"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ingen insulin"
           }
         },
         "nb-NO" : {
@@ -478,13 +502,13 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Geen insuline"
+            "value" : "Geen Insuline"
           }
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No Insulin"
+            "state" : "translated",
+            "value" : "Brak insuliny"
           }
         },
         "pt" : {
@@ -497,6 +521,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "No Insulin"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fără insulină"
           }
         },
         "ru" : {
@@ -520,7 +550,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "İnsülin Yok"
+            "value" : "İnsülin yok"
           }
         },
         "uk" : {
@@ -606,6 +636,12 @@
             "value" : "Batteria pompa esaurita"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pumpebatteri er dødt"
+          }
+        },
         "nb-NO" : {
           "stringUnit" : {
             "state" : "translated",
@@ -634,6 +670,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Pump Battery Dead"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Baterie epuizata pompa"
           }
         },
         "ru" : {
@@ -680,8 +722,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pump Battery Dead"
+            "state" : "translated",
+            "value" : "胰岛素泵电量耗尽"
           }
         }
       }
@@ -722,12 +764,12 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Erreur détectée"
+            "value" : "Erreur de la pompe"
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Pump Error"
           }
         },
@@ -740,7 +782,19 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Errore microinfusore"
+            "value" : "Errore della pompa"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ポンプエラー"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pumpefeil"
           }
         },
         "nb-NO" : {
@@ -752,7 +806,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pomp foutmelding"
+            "value" : "Pomp Foutmelding"
           }
         },
         "pl" : {
@@ -771,6 +825,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Erro na Bomba"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eroare pompă"
           }
         },
         "ru" : {
@@ -880,6 +940,12 @@
             "value" : "Occlusione pompa"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pumpeokklusjon"
+          }
+        },
         "nb-NO" : {
           "stringUnit" : {
             "state" : "translated",
@@ -908,6 +974,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Pump Occlusion"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ocluzie pompă"
           }
         },
         "ru" : {
@@ -1017,6 +1089,12 @@
             "value" : "Riprendi"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gjenoppta"
+          }
+        },
         "nb-NO" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1026,13 +1104,13 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hervat"
+            "value" : "Hervatten"
           }
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Resume"
+            "state" : "translated",
+            "value" : "Wznowiono"
           }
         },
         "pt" : {
@@ -1045,6 +1123,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Resume"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reluați"
           }
         },
         "ru" : {
@@ -1154,6 +1238,12 @@
             "value" : "Sospendi"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suspendere"
+          }
+        },
         "nb-NO" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1168,8 +1258,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Suspend"
+            "state" : "translated",
+            "value" : "Wstrzymano"
           }
         },
         "pt" : {
@@ -1184,10 +1274,16 @@
             "value" : "Suspend"
           }
         },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suspendați"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Остановка"
+            "value" : "Приостановка"
           }
         },
         "sk" : {

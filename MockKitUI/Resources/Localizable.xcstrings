@@ -1197,6 +1197,12 @@
             "state" : "translated",
             "value" : "CGM Ayarları"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CGM 设置"
+          }
         }
       }
     },
@@ -1236,6 +1242,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Симулятор CGM"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CGM 模拟器"
           }
         }
       }
@@ -1635,6 +1647,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Сведения об устройстве"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设备详细信息"
           }
         }
       }
@@ -2141,6 +2159,12 @@
             "state" : "translated",
             "value" : "Получите помощь по работе с CGM"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "获取有关 CGM 的帮助"
+          }
         }
       }
     },
@@ -2609,6 +2633,12 @@
             "state" : "translated",
             "value" : "Son Okuma"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最近一次读数"
+          }
         }
       }
     },
@@ -2870,6 +2900,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Настройки уведомлений"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通知设置"
           }
         }
       }
@@ -3281,6 +3317,12 @@
             "state" : "translated",
             "value" : "Сенсор заканчивается в"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "传感器到期时间 "
+          }
         }
       }
     },
@@ -3589,6 +3631,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Güncelleme Hatırlatıcısı"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新提醒"
           }
         }
       }
