@@ -123,12 +123,6 @@
             "value" : ""
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -272,12 +266,6 @@
             "value" : " cao hơn "
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : " higher "
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -419,12 +407,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : " thấp hơn "
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : " lower "
           }
         },
         "zh-Hans" : {
@@ -582,12 +564,6 @@
             "value" : "-"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "-"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -728,12 +704,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "–"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "－"
           }
         },
         "zh-Hans" : {
@@ -885,12 +855,6 @@
             "value" : "—"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "–"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1031,12 +995,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "---"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "···"
           }
         },
         "zh-Hans" : {
@@ -1181,12 +1139,6 @@
             "value" : "%@"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%@"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -1321,12 +1273,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ carbs, %@ hấp thụ"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%@ carbs, %@ absorption"
           }
         },
         "zh-Hans" : {
@@ -1475,12 +1421,6 @@
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@."
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
             "value" : "%@."
           }
         },
@@ -1634,12 +1574,6 @@
             "value" : "%@%% của insulin bình thường"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%@%% of normal insulin"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1768,12 +1702,6 @@
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@U"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
             "value" : "%@U"
           }
         },
@@ -1926,12 +1854,6 @@
             "value" : "%1$@ – %2$@ %3$@"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ – %2$@ %3$@"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2078,12 +2000,6 @@
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@ %2$@"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
             "value" : "%1$@ %2$@"
           }
         },
@@ -2236,12 +2152,6 @@
             "value" : "%1$@ giả định rằng insulin đã bơm sẽ còn tác dụng hạ đường huyết trong 6 giờ. Cài đặt này không thể thay đổi."
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ assumes that the insulin it has delivered is actively working to lower your glucose for 6 hours. This setting cannot be changed."
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -2383,12 +2293,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ hoặc Giới hạn an toàn đường huyết của bạn, tùy theo giá trị nào cao hơn"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ or your Glucose Safety Limit, whichever is higher"
           }
         },
         "zh-Hans" : {
@@ -2534,12 +2438,6 @@
             "value" : "%1$@ hỗ trợ từ 1 đến %2$@ mức trong một ngày."
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ supports 1 to %2$@ rates per day."
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2683,12 +2581,6 @@
             "value" : "%1$@ U"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ U"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -2818,12 +2710,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ units vẫn đang còn lúc %2$@"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ units remaining at %2$@"
           }
         },
         "zh-Hans" : {
@@ -2966,12 +2852,6 @@
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@: <b>%2$@</b> %3$@"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
             "value" : "%1$@: <b>%2$@</b> %3$@"
           }
         },
@@ -3124,12 +3004,6 @@
             "value" : "%1$@/phút"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@/min"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3276,12 +3150,6 @@
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@%2$@%3$@"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
             "value" : "%1$@%2$@%3$@"
           }
         },
@@ -3434,12 +3302,6 @@
             "value" : "%1$d phần trăm đã hoàn thành."
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$d percent complete."
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -3579,12 +3441,6 @@
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lld"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
             "value" : "%lld"
           }
         },
@@ -3730,12 +3586,6 @@
             "value" : "%lld, "
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%lld, "
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -3875,12 +3725,6 @@
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "🍽"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
             "value" : "🍽"
           }
         },
@@ -4027,12 +3871,6 @@
             "value" : "🍽 Trước bữa ăn"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "🍽 Pre-Meal"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4172,12 +4010,6 @@
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "🏃‍♂️"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
             "value" : "🏃‍♂️"
           }
         },
@@ -4324,12 +4156,6 @@
             "value" : "🏃‍♂️ Tập luyện"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "🏃‍♂️ Workout"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -4473,12 +4299,6 @@
             "value" : "Phạm vi hiệu chỉnh khác với trước. Đây sẽ là một phạm vi hẹp hơn."
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "A Correction Range is different. This will be a narrower range."
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4620,12 +4440,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Giá trị 0 U/giờ có nghĩa là bạn sẽ được thiết lập để không nhận insulin nền."
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "A value of 0 U/hr means you will be scheduled to receive no basal insulin."
           }
         },
         "zh-Hans" : {
@@ -4777,12 +4591,6 @@
             "value" : "Thời gian Hấp thụ"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Absorption Time"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4924,12 +4732,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Thời gian hoạt động"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Active Duration"
           }
         },
         "zh-Hans" : {
@@ -5081,12 +4883,6 @@
             "value" : "Hoạt động"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Activity"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5228,12 +5024,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Thêm"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Add"
           }
         },
         "zh-Hans" : {
@@ -5391,12 +5181,6 @@
             "value" : "Thêm Tài khoản"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Add Account"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5547,12 +5331,6 @@
             "value" : "Khai báo Carb"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Add Carb Entry"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5693,12 +5471,6 @@
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Afrezza"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
             "value" : "Afrezza"
           }
         },
@@ -5851,12 +5623,6 @@
             "value" : "Bạn có chắc muốn xóa hết các dữ liệu cũ?"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Are you sure you want to delete all history entries?"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6006,12 +5772,6 @@
             "value" : "Bạn có chắc muốn xóa hết mọi giá trị của ngăn chứa insulin?"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Are you sure you want to delete all reservoir values?"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6153,12 +5913,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Xác thực để lưu cài đặt điều trị"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Authenticate to save therapy setting"
           }
         },
         "zh-Hans" : {
@@ -6308,12 +6062,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Quay Lại"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Back"
           }
         },
         "zh-Hans" : {
@@ -6471,12 +6219,6 @@
             "value" : "Lịch biểu tiêm liều nền"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Basal Rates"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6624,12 +6366,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Liều Basal, bolus, và liều bổ sung đang giảm bằng %@%%."
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Basal, bolus, and correction insulin dose amounts are decreased by %@%%."
           }
         },
         "zh-Hans" : {
@@ -6781,12 +6517,6 @@
             "value" : "Liều Basal, bolus, và liều bổ sung đang tăng bằng %@%%."
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Basal, bolus, and correction insulin dose amounts are increased by %@%%."
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6934,12 +6664,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Liều Basal, bolus, và liều bổ sung không bị thay đổi."
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Basal, bolus, and correction insulin dose amounts are unaffected."
           }
         },
         "zh-Hans" : {
@@ -7103,12 +6827,6 @@
             "value" : "Hủy bỏ"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Cancel"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7257,12 +6975,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hủy Chồng liều"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Cancel Override"
           }
         },
         "zh-Hans" : {
@@ -7414,12 +7126,6 @@
             "value" : "Đang hủy liều Basal tạm thời"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Canceling Temp Basal"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7566,12 +7272,6 @@
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Carb Ratios"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
             "value" : "Carb Ratios"
           }
         },
@@ -7725,12 +7425,6 @@
             "value" : "Các thay đổi sẽ chỉ áp dụng thời điểm này khi bạn cho phép chồng liều. Các cài đặt gốc %@ sẽ không bị ảnh hưởng."
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Changes will only apply this time you enable the override. The default settings of %@ will not be affected."
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7872,12 +7566,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Các thay đổi chỉ áp dụng cho lần này khi bạn bật cấu hình sẵn. Các cài đặt mặc định của %@ sẽ không bị ảnh hưởng."
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Changes will only apply this time you enable the preset. The default settings of %@ will not be affected."
           }
         },
         "zh-Hans" : {
@@ -8030,12 +7718,6 @@
             "value" : "Lựa chọn khoảng thời gian tiêu hóa dài hơn cho các bữa ăn no, hoặc những bữa ăn nhiều chất béo và protein. Đây chỉ là hướng dẫn cho thuật toán Algorithm và không cần phải chính xác."
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact."
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8177,12 +7859,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Đóng"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Close"
           }
         },
         "zh-Hans" : {
@@ -8335,12 +8011,6 @@
             "value" : "lúc %1$@"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "com.loudnate.CarbKit.COBDateLabel"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8489,12 +8159,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "từ lúc %1$@"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "com.loudnate.CarbKit.totalDateLabel"
           }
         },
         "zh-Hans" : {
@@ -8653,12 +8317,6 @@
             "value" : "lúc %1$@"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "at %1$@"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8813,12 +8471,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "từ lúc %1$@"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "since %1$@"
           }
         },
         "zh-Hans" : {
@@ -8983,12 +8635,6 @@
             "value" : "OK"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "OK"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9130,12 +8776,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Đã hoàn thành."
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Completed."
           }
         },
         "zh-Hans" : {
@@ -9287,12 +8927,6 @@
             "value" : "Điều kiện"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Condition"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9436,12 +9070,6 @@
             "value" : "Xác nhận Cài đặt"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Confirm Setting"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9571,12 +9199,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tiếp tục"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Continue"
           }
         },
         "zh-Hans" : {
@@ -9714,12 +9336,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hãy sửa các giá trị không được hỗ trợ đã được đánh dấu."
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Correct the highlighted unsupported value(s)."
           }
         },
         "zh-Hans" : {
@@ -9871,12 +9487,6 @@
             "value" : "Phạm vi điều chỉnh là phạm vi của đường huyết mà bạn muốn Loop hướng đến."
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Correction range is the blood glucose range that you would like Loop to correct to."
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10018,12 +9628,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Các giá trị hiệu chỉnh"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Correction Values"
           }
         },
         "zh-Hans" : {
@@ -10175,12 +9779,6 @@
             "value" : "Thói quen"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Custom"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10330,12 +9928,6 @@
             "value" : "Thói quen Chồng liều"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Custom Override"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10477,12 +10069,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cấu hình sẵn tùy chỉnh"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Custom Preset"
           }
         },
         "zh-Hans" : {
@@ -10635,12 +10221,6 @@
             "value" : "Ngày"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Date"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10782,12 +10362,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Xóa"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Delete"
           }
         },
         "zh-Hans" : {
@@ -10946,12 +10520,6 @@
             "value" : "Xóa Tài khoản"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Delete Account"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11099,12 +10667,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Xóa hết"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Delete All"
           }
         },
         "zh-Hans" : {
@@ -11262,12 +10824,6 @@
             "value" : "Giới hạn liều tiêm"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Delivery Limits"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11409,12 +10965,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Giới hạn tiêm insulin là hàng rào an toàn cho việc tiêm insulin của bạn."
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Delivery Limits are safety guardrails for your insulin delivery."
           }
         },
         "zh-Hans" : {
@@ -11560,12 +11110,6 @@
             "value" : "Tắt cấu hình sẵn"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Disable Preset"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -11695,12 +11239,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Xong"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Done"
           }
         },
         "zh-Hans" : {
@@ -11852,12 +11390,6 @@
             "value" : "Khoảng thời gian"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Duration"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11999,12 +11531,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sửa"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Edit"
           }
         },
         "zh-Hans" : {
@@ -12157,12 +11683,6 @@
             "value" : "Chỉnh sửa Carb"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Edit Carb Entry"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12311,12 +11831,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hiệu chỉnh chồng liều"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Edit Override"
           }
         },
         "zh-Hans" : {
@@ -12469,12 +11983,6 @@
             "value" : "Việc hiệu chỉnh chỉ ảnh hưởng đến chồng liều đang hoạt động. Các cài đặt gốc của %@ sẽ không bị ảnh hưởng."
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Editing affects only the active override. The default settings of %@ will not be affected."
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12618,12 +12126,6 @@
             "value" : "Các chỉnh sửa chỉ duy trì cho đến khi cấu hình sẵn bị tắt. Các cài đặt mặc định của %@ sẽ không bị ảnh hưởng."
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Edits persist only until the preset is disabled. The default settings of %@ will not be affected."
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12765,12 +12267,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cho phép"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable"
           }
         },
         "zh-Hans" : {
@@ -12922,12 +12418,6 @@
             "value" : "Cấp phép không giới hạn"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Indefinitely"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13077,12 +12567,6 @@
             "value" : "Được cấp quyền"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Enabled"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13226,12 +12710,6 @@
             "value" : "Kết thúc"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "End Time"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -13373,12 +12851,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nhập giá trị %1$@"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Enter %1$@ value"
           }
         },
         "zh-Hans" : {
@@ -13531,12 +13003,6 @@
             "value" : "Nhập số lượng của đơn vị/units"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Enter a number of units"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13687,12 +13153,6 @@
             "value" : "Nhập tỉ lệ của đơn vị/units trên giờ"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Enter a rate in units per hour"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13839,12 +13299,6 @@
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Event History"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
             "value" : "Event History"
           }
         },
@@ -13997,12 +13451,6 @@
             "value" : "Nhanh"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Fast"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14152,12 +13600,6 @@
             "value" : "Fiasp"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Fiasp"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14292,12 +13734,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Loại thực phẩm"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Food Type"
           }
         },
         "zh-Hans" : {
@@ -14443,12 +13879,6 @@
             "value" : "Với insulin tác dụng nhanh, %1$@ giả định rằng nó hoạt động trong 6 giờ. Bạn có thể chọn từ %2$@ mô hình khác nhau để ứng dụng tính toán hoạt động đỉnh của insulin."
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from %2$@ different models for how the app measures the insulin’s peak activity."
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -14590,12 +14020,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Với phạm vi này, hãy chọn giá trị đường huyết cụ thể (hoặc khoảng giá trị) mà bạn muốn %1$@ hướng tới khi điều chỉnh insulin nền."
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "For this range, choose the specific glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin."
           }
         },
         "zh-Hans" : {
@@ -14741,12 +14165,6 @@
             "value" : "Nhận trợ giúp về Cài đặt điều trị"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Get help with Therapy Settings"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -14888,12 +14306,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Quay lại"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Go Back"
           }
         },
         "zh-Hans" : {
@@ -15039,12 +14451,6 @@
             "value" : "Tỷ lệ liều basal Cao"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "High Basal Rate"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -15186,12 +14592,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tỷ lệ Carb Cao"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "High Carb Ratio"
           }
         },
         "zh-Hans" : {
@@ -15337,12 +14737,6 @@
             "value" : "Giá trị Hiệu chỉnh Cao"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "High Correction Value"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -15484,12 +14878,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Giới hạn an toàn đường huyết Cao"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "High Glucose Safety Limit"
           }
         },
         "zh-Hans" : {
@@ -15635,12 +15023,6 @@
             "value" : "Độ nhạy Insulin Cao"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "High Insulin Sensitivity"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -15782,12 +15164,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tỷ lệ liều Basal Tối đa Cao"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "High Maximum Basal Rate"
           }
         },
         "zh-Hans" : {
@@ -15933,12 +15309,6 @@
             "value" : "Liều Bolus tối đa Cao"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "High Maximum Bolus"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16080,12 +15450,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Giá trị trước bữa ăn Cao"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "High Pre-Meal Value"
           }
         },
         "zh-Hans" : {
@@ -16231,12 +15595,6 @@
             "value" : "Giá trị khi tập luyện Cao"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "High Workout Value"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -16378,12 +15736,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Lịch sử"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "History"
           }
         },
         "zh-Hans" : {
@@ -16529,12 +15881,6 @@
             "value" : "Nếu các cài đặt này phù hợp, hãy nhấn Lưu cài đặt để tiếp tục."
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "If these settings look good to you, tap Save Settings to continue."
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16678,12 +16024,6 @@
             "value" : "Nếu bạn đã từng sử dụng CGM, bạn có thể đã quen với phạm vi mục tiêu là một phạm vi giá trị rộng mà bạn muốn dùng cho cảnh báo đường huyết, chẳng hạn 70–180 mg/dL hoặc 90–200 mg/dL."
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "If you've used a CGM before, you're likely familiar with target range as a wide range of values you'd like for your glucose notification alerts, such as 70-180 mg/dL or 90-200 mg/dL."
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16824,12 +16164,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "thông tin"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "info"
           }
         },
         "zh-Hans" : {
@@ -16981,12 +16315,6 @@
             "value" : "Chủng loại Insulin"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Insulin Model"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17134,12 +16462,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Độ nhạy của Insulin"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Insulin Sensitivities"
           }
         },
         "zh-Hans" : {
@@ -17291,12 +16613,6 @@
             "value" : "Độ nhạy của Insulin biểu thị đường huyết của bạn phản ứng với 1 unit insulin. Giá trị phản ứng nhỏ hơn nghĩa là bạn cần thêm insulin để đạt mục tiêu ở trên. Các giá trị quá nhỏ có thể dẫn đến tình trạng hạ đường huyết nghiêm trọng."
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Insulin sensitivity describes how your blood glucose should respond to a 1 Unit dose of insulin. Smaller values mean more insulin will be given when above target. Values that are too small can cause dangerously low blood glucose."
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17438,12 +16754,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Đã gián đoạn %1$@: <b>%2$@</b> trên %3$@ %4$@"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Interrupted %1$@: <b>%2$@</b> of %3$@ %4$@"
           }
         },
         "zh-Hans" : {
@@ -17589,12 +16899,6 @@
             "value" : "Có thể đặt thấp nhất là %1$@. Có thể đặt cao nhất là %2$@."
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "It can be set as low as %1$@. It can be set as high as %2$@."
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17736,12 +17040,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tỷ lệ liều basal Thấp"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Low Basal Rate"
           }
         },
         "zh-Hans" : {
@@ -17887,12 +17185,6 @@
             "value" : "Tỷ lệ Carb Thấp"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Low Carb Ratio"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -18034,12 +17326,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Giá trị Hiệu chỉnh Thấp"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Low Correction Value"
           }
         },
         "zh-Hans" : {
@@ -18185,12 +17471,6 @@
             "value" : "Giới hạn an toàn đường huyết Thấp"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Low Glucose Safety Limit"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18332,12 +17612,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Độ nhạy Insulin Thấp"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Low Insulin Sensitivity"
           }
         },
         "zh-Hans" : {
@@ -18483,12 +17757,6 @@
             "value" : "Tỷ lệ liều Basal Tối đa Thấp"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Low Maximum Basal Rate"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18630,12 +17898,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Liều Bolus tối đa Thấp"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Low Maximum Bolus"
           }
         },
         "zh-Hans" : {
@@ -18781,12 +18043,6 @@
             "value" : "Giá trị trước bữa ăn Thấp"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Low Pre-Meal Value"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -18930,12 +18186,6 @@
             "value" : "Giá trị khi tập luyện Thấp"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Low Workout Value"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -19076,12 +18326,6 @@
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Lyumjev"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
             "value" : "Lyumjev"
           }
         },
@@ -19234,12 +18478,6 @@
             "value" : "tối đa"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "max"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -19390,12 +18628,6 @@
             "value" : "Lượng Basal tối đa"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Maximum Basal Rate"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -19543,12 +18775,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tỷ lệ tiêm insulin nền tối đa là tỷ lệ tiêm nền được điều chỉnh tự động cao nhất mà %1$@ được phép thực hiện để giúp đạt phạm vi hiệu chỉnh của bạn."
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Maximum Basal Rate is the maximum automatically adjusted basal rate that %1$@ is allowed to enact to help reach your correction range."
           }
         },
         "zh-Hans" : {
@@ -19701,12 +18927,6 @@
             "value" : "Liều Bolus tối đa"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Maximum Bolus"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -19854,12 +19074,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bolus tối đa là lượng bolus cao nhất mà bạn cho phép %1$@ đề xuất tại một thời điểm để bù carbohydrate hoặc hạ đường huyết cao."
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Maximum Bolus is the highest bolus amount that you will allow %1$@ to recommend at one time to cover carbs or bring down high glucose."
           }
         },
         "zh-Hans" : {
@@ -20011,12 +19225,6 @@
             "value" : "Trung bình"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Medium"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20166,12 +19374,6 @@
             "value" : "tối thiểu"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "min"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20319,12 +19521,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Thêm thông tin"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "More Info"
           }
         },
         "zh-Hans" : {
@@ -20488,12 +19684,6 @@
             "value" : "Tên"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Name"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20635,12 +19825,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mục nhập mới"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "New Entry"
           }
         },
         "zh-Hans" : {
@@ -20792,12 +19976,6 @@
             "value" : "Cài đặt mới"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "New Preset"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20941,12 +20119,6 @@
             "value" : "Không có insulin nền(basal)"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "No Basal Insulin"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -21081,12 +20253,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Không có gì để xem ở đây cả!"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Nothing to See Here!"
           }
         },
         "zh-Hans" : {
@@ -21238,12 +20404,6 @@
             "value" : "Khác"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Other"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -21393,12 +20553,6 @@
             "value" : "Nhu cầu Insulin tổng thể"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Overall Insulin Needs"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -21540,12 +20694,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Lịch sử ghi đè"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Override History"
           }
         },
         "zh-Hans" : {
@@ -21698,12 +20846,6 @@
             "value" : "Cài đặt chồng liều"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Override Presets"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -21852,12 +20994,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cài đặt chồng liều có thể được khai báo dưới mục 'Configuration' của phần cấu hình."
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Override presets can be set up under the 'Configuration' section of the settings screen."
           }
         },
         "zh-Hans" : {
@@ -22009,12 +21145,6 @@
             "value" : "Chồng liều"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Overrides"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -22164,12 +21294,6 @@
             "value" : "Trước bữa ăn"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Pre-Meal"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -22313,12 +21437,6 @@
             "value" : "Giá trị trước bữa ăn"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Pre-Meal Values"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -22460,12 +21578,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Đơn thuốc"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Prescription"
           }
         },
         "zh-Hans" : {
@@ -22617,12 +21729,6 @@
             "value" : "CÀI ĐẶT SĂN"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "PRESETS"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -22764,12 +21870,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Đang tiến hành."
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Progressing."
           }
         },
         "zh-Hans" : {
@@ -22921,12 +22021,6 @@
             "value" : "Pump Event"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Pump Event"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -23068,12 +22162,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pump không hoạt động"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Pump Inoperable"
           }
         },
         "zh-Hans" : {
@@ -23225,12 +22313,6 @@
             "value" : "Thuốc tác động nhanh cho người lớn"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Rapid-Acting – Adults"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -23378,12 +22460,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Thuốc tác động nhanh cho trẻ em"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Rapid-Acting – Children"
           }
         },
         "zh-Hans" : {
@@ -23541,12 +22617,6 @@
             "value" : "Bắt buộc"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Required"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -23693,12 +22763,6 @@
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Reservoir"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
             "value" : "Reservoir"
           }
         },
@@ -23851,12 +22915,6 @@
             "value" : "Tiếp tục lại việc tiêm insulin"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Resume Delivery"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -24006,12 +23064,6 @@
             "value" : "Đang tiếp tục lại"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Resuming"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -24155,12 +23207,6 @@
             "value" : "Xem lại và Lưu cài đặt"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Review and Save Settings"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -24302,12 +23348,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Xem lại các cài đặt điều trị của bạn bên dưới. Nếu bạn muốn chỉnh sửa bất kỳ cài đặt nào, hãy nhấn Quay lại để trở về màn hình đó."
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Review your therapy settings below. If you’d like to edit any of these settings, tap Back to go back to that screen."
           }
         },
         "zh-Hans" : {
@@ -24459,12 +23499,6 @@
             "value" : "Đang chạy"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Running"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -24594,12 +23628,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Lưu"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Save"
           }
         },
         "zh-Hans" : {
@@ -24745,12 +23773,6 @@
             "value" : "Lưu các tỷ lệ tiêm insulin nền?"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Save Basal Rates?"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -24892,12 +23914,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Lưu các tỷ lệ carb?"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Save Carb Ratios?"
           }
         },
         "zh-Hans" : {
@@ -25043,12 +24059,6 @@
             "value" : "Lưu (các) phạm vi hiệu chỉnh?"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Save Correction Range(s)?"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -25190,12 +24200,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Lưu các giới hạn tiêm insulin?"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Save Delivery Limits?"
           }
         },
         "zh-Hans" : {
@@ -25341,12 +24345,6 @@
             "value" : "Lưu giới hạn an toàn đường huyết?"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Save Glucose Safety Limit?"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -25488,12 +24486,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Lưu độ nhạy Insulin?"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Save Insulin Sensitivities?"
           }
         },
         "zh-Hans" : {
@@ -25639,12 +24631,6 @@
             "value" : "Lưu phạm vi mục tiêu trước bữa ăn?"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Save Pre-Meal Range?"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -25786,12 +24772,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Lưu phạm vi mục tiêu tập luyện?"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Save Workout Range?"
           }
         },
         "zh-Hans" : {
@@ -25941,12 +24921,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Đang lưu..."
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Saving..."
           }
         },
         "zh-Hans" : {
@@ -26099,12 +25073,6 @@
             "value" : "SCHEDULED OVERRIDE"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "SCHEDULED OVERRIDE"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -26248,12 +25216,6 @@
             "value" : "LỊCH TRÌNH CẤU HÌNH SẴN"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "SCHEDULED PRESET"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -26394,12 +25356,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Đã chọn"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Selected"
           }
         },
         "zh-Hans" : {
@@ -26551,12 +25507,6 @@
             "value" : "chậm"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Slow"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -26698,12 +25648,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Một số người dùng chọn giá trị gấp 2, 3 hoặc 4 lần tỷ lệ tiêm insulin nền đã lập lịch cao nhất của họ."
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Some users choose a value 2, 3, or 4 times their highest scheduled basal rate."
           }
         },
         "zh-Hans" : {
@@ -26855,12 +25799,6 @@
             "value" : "Giờ bắt đầu"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Start Time"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -27010,12 +25948,6 @@
             "value" : "Đang bắt đầu liều Basal tạm thời"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Starting Temp Basal"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -27159,12 +26091,6 @@
             "value" : "Được gửi bởi %1$@, %2$@"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Submitted by %1$@, %2$@"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -27306,12 +26232,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hỗ trợ"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Support"
           }
         },
         "zh-Hans" : {
@@ -27463,12 +26383,6 @@
             "value" : "Tạm ngưng liều insulin"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Suspend Delivery"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -27618,12 +26532,6 @@
             "value" : "Đang tạm ngưng"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Suspending"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -27764,12 +26672,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Chuyển trạng thái xem trước"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Switch Preview State"
           }
         },
         "zh-Hans" : {
@@ -27921,12 +26823,6 @@
             "value" : "Symbol"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Symbol"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -28070,12 +26966,6 @@
             "value" : "Nhấn '+' để tạo mới Cấu hình sẵn tùy chỉnh."
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Tap '+' to create a new custom preset."
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -28210,12 +27100,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nhấn Quay lại để tiếp tục khám phá phần còn lại của giao diện %@."
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Tap back to continue exploring the rest of the %@ interface."
           }
         },
         "zh-Hans" : {
@@ -28373,12 +27257,6 @@
             "value" : "Chạm để cài đặt"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Tap to set"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -28528,12 +27406,6 @@
             "value" : "Phạm vi Mục tiêu"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Target Range"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -28677,12 +27549,6 @@
             "value" : "Tạm thời hạ mục tiêu đường huyết trước bữa ăn để giảm mức tăng đường huyết sau ăn."
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Temporarily lower your glucose target before a meal to impact post-meal glucose spikes."
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -28824,12 +27690,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tạm thời nâng mục tiêu đường huyết trước, trong hoặc sau khi hoạt động thể chất để giảm nguy cơ hạ đường huyết."
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events."
           }
         },
         "zh-Hans" : {
@@ -28982,12 +27842,6 @@
             "value" : "Chồng liều tạm thời"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Temporary Override"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -29128,12 +27982,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Thử nghiệm"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Test"
           }
         },
         "zh-Hans" : {
@@ -29279,12 +28127,6 @@
             "value" : "so với phạm vi hiệu chỉnh của bạn."
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "than your Correction Range."
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -29426,12 +28268,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mô hình insulin tác dụng nhanh hiện đang được chọn sẽ được sử dụng làm mặc định."
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "The currently selected fast acting insulin model will be used as a default."
           }
         },
         "zh-Hans" : {
@@ -29581,12 +28417,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mô hình cũ được Loop sử dụng, cho phép tùy chỉnh thời lượng hành động."
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "The legacy model used by Loop, allowing customization of action duration."
           }
         },
         "zh-Hans" : {
@@ -29739,12 +28569,6 @@
             "value" : "Thời gian tiêu hóa tối đa là  %@"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "The maximum absorption time is %@"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -29895,12 +28719,6 @@
             "value" : "Khối lượng cho phép tối đa là %@ grams"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "The maximum allowed amount is %@ grams"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -30042,12 +28860,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rapid-acting adult giả định có thời điểm hoạt động đỉnh là 75 phút."
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "The rapid-acting adult model assumes peak activity at 75 minutes."
           }
         },
         "zh-Hans" : {
@@ -30193,12 +29005,6 @@
             "value" : "Rapid-acting child giả định có thời điểm hoạt động đỉnh là 65 phút."
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "The rapid-acting child model assumes peak activity at 65 minutes."
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -30340,12 +29146,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Lịch trình bắt đầu từ nửa đêm và không được chứa tỷ lệ 0 U/giờ."
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "The schedule starts at midnight and cannot contain a rate of 0 U/hr."
           }
         },
         "zh-Hans" : {
@@ -30491,12 +29291,6 @@
             "value" : "Cài đặt điều trị"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Therapy Settings"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -30638,12 +29432,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mô hình này giả định thời điểm hoạt động đỉnh của insulin là 19 phút."
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "This model assumes peak insulin activity at 19 minutes."
           }
         },
         "zh-Hans" : {
@@ -30789,12 +29577,6 @@
             "value" : "Mô hình này giả định thời điểm hoạt động đỉnh của insulin là 55 phút."
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "This model assumes peak insulin activity at 55 minutes."
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -30936,12 +29718,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mô hình này giả định thời điểm hoạt động đỉnh của insulin là 65 phút."
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "This model assumes peak insulin activity at 65 minutes."
           }
         },
         "zh-Hans" : {
@@ -31087,12 +29863,6 @@
             "value" : "Mô hình này giả định thời điểm hoạt động đỉnh của insulin là 75 phút."
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "This model assumes peak insulin activity at 75 minutes."
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -31227,12 +29997,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Phần này của ứng dụng %@ không khả dụng trong trình mô phỏng này."
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "This section of the %@ app is unavailable in this simulator."
           }
         },
         "zh-Hans" : {
@@ -31378,12 +30142,6 @@
             "value" : "Cài đặt này cũng sẽ xác định một giới hạn an toàn cho việc tiêm tự động. %1$@ sẽ giới hạn việc tiêm tự động để giữ lượng insulin đang hoạt động dưới gấp đôi bolus tối đa của bạn."
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "This setting will also determine a safety limit for automatic dosing. %1$@ will limit automatic delivery to keep the amount of active insulin below twice your maximum bolus."
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -31525,12 +30283,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Thông thường, điều này sẽ là"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "This will typically be"
           }
         },
         "zh-Hans" : {
@@ -31682,12 +30434,6 @@
             "value" : "Thời gian"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Time"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -31837,12 +30583,6 @@
             "value" : "Thời gian trong %1$@%2$@%3$@"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Times in %1$@%2$@%3$@"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -31983,12 +30723,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sẽ được triển khai"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "To be implemented"
           }
         },
         "zh-Hans" : {
@@ -32134,12 +30868,6 @@
             "value" : "Total"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Total"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -32280,12 +31008,6 @@
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "U/day"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
             "value" : "U/day"
           }
         },
@@ -32439,12 +31161,6 @@
             "value" : "U/giờ"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "U/hour"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -32586,12 +31302,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Không thể lưu"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Unable to Save"
           }
         },
         "zh-Hans" : {
@@ -32744,12 +31454,6 @@
             "value" : "Units"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Units"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -32879,12 +31583,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Không xác định"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Unknown"
           }
         },
         "zh-Hans" : {
@@ -33027,12 +31725,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Chưa chọn"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Unselected"
           }
         },
         "zh-Hans" : {
@@ -33178,12 +31870,6 @@
             "value" : "Chưa được đặt"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Unset"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -33318,12 +32004,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ không được hỗ trợ"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Unsupported %@"
           }
         },
         "zh-Hans" : {
@@ -33467,12 +32147,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Giá trị"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Value"
           }
         },
         "zh-Hans" : {
@@ -33624,12 +32298,6 @@
             "value" : "Đang kiểm tra"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Verifying"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -33771,12 +32439,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Xem ghi đè"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "View Override"
           }
         },
         "zh-Hans" : {
@@ -33925,12 +32587,6 @@
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Walsh"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
             "value" : "Walsh"
           }
         },
@@ -34084,12 +32740,6 @@
             "value" : "Cảnh báo"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Warning"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -34231,12 +32881,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hãy làm việc với nhà cung cấp dịch vụ y tế của bạn để chọn một giá trị cao hơn tỷ lệ tiêm insulin nền đã lập lịch cao nhất, nhưng mức độ thận trọng hoặc quyết liệt tùy theo bạn cảm thấy phù hợp."
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Work with your healthcare provider to choose a value that is higher than your highest scheduled basal rate, but as conservative or aggressive as you feel comfortable."
           }
         },
         "zh-Hans" : {
@@ -34388,12 +33032,6 @@
             "value" : "Workout"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Workout"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -34535,12 +33173,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Phạm vi khi tập luyện là giá trị đường huyết hoặc phạm vi giá trị mà bạn muốn %1$@ hướng tới trong quá trình hoạt động. Phạm vi này sẽ có hiệu lực khi bạn kích hoạt nút Cấu hình sẵn Tập luyện."
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Workout Range is the glucose value or range of values you want %1$@ to target during activity. This range will be in effect when you activate the Workout Preset button."
           }
         },
         "zh-Hans" : {
@@ -34686,12 +33318,6 @@
             "value" : "Giá trị khi tập luyện"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Workout Values"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -34833,12 +33459,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bạn có thể thêm các tỷ lệ carb khác nhau cho các thời điểm trong ngày bằng cách sử dụng nút ➕."
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "You can add different carb ratios for different times of day by using the ➕."
           }
         },
         "zh-Hans" : {
@@ -34984,12 +33604,6 @@
             "value" : "Bạn có thể thêm các độ nhạy insulin khác nhau cho các thời điểm trong ngày bằng cách sử dụng nút ➕."
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "You can add different insulin sensitivities for different times of day by using the ➕."
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -35133,12 +33747,6 @@
             "value" : "Bạn có thể thêm các phạm vi khác nhau cho các thời điểm trong ngày bằng cách sử dụng nút ➕."
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "You can add different ranges for different times of day by using the ➕."
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -35280,12 +33888,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bạn có thể thêm các mục cho các thời điểm khác nhau trong ngày bằng cách sử dụng nút ➕."
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "You can add entries for different times of day by using the ➕."
           }
         },
         "zh-Hans" : {
@@ -35437,12 +34039,6 @@
             "value" : "Bạn có thể chọn cách %1$@ tính thời điểm hoạt động đỉnh của insulin tác dụng nhanh theo một trong hai mô hình insulin này."
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "You can choose how %1$@ measures rapid acting insulin's peak activity according to one of these two insulin models."
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -35584,12 +34180,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bạn có thể chỉnh sửa một cài đặt bằng cách nhấn vào bất kỳ mục nào trong danh sách."
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "You can edit a setting by tapping into any line item."
           }
         },
         "zh-Hans" : {
@@ -35735,12 +34325,6 @@
             "value" : "Bạn có thể chỉnh sửa cài đặt bằng cách nhấn vào mục trong danh sách."
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "You can edit the setting by tapping into the line item."
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -35882,12 +34466,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tốc độ insulin nền của bạn là số đơn vị mỗi giờ được dùng để đáp ứng nhu cầu insulin nền của cơ thể."
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs."
           }
         },
         "zh-Hans" : {
@@ -36033,12 +34611,6 @@
             "value" : "giới hạn an toàn đường huyết của bạn"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "your Glucose Safety Limit"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -36180,12 +34752,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nhà cung cấp dịch vụ y tế của bạn có thể giúp bạn chọn một phạm vi hiệu chỉnh phù hợp với bạn."
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Your healthcare provider can help you choose a Correction Range that's right for you."
           }
         },
         "zh-Hans" : {
@@ -36331,12 +34897,6 @@
             "value" : "Độ nhạy insulin (ISF) của bạn là mức giảm đường huyết dự kiến từ một đơn vị insulin."
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Your Insulin Sensitivity Factor (ISF) is the drop in glucose expected from one unit of insulin."
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -36478,12 +35038,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Phạm vi trước bữa ăn của bạn nên là giá trị đường huyết (hoặc khoảng giá trị) mà bạn muốn %1$@ hướng tới vào lúc bạn ăn miếng đầu tiên. Phạm vi này sẽ có hiệu lực khi bạn kích hoạt nút Cấu hình sẵn Trước bữa ăn."
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Your Pre-Meal Range should be the glucose value (or range of values) you want %1$@ to target by the time you take your first bite of your meal. This range will be in effect when you activate the Pre-Meal Preset button."
           }
         },
         "zh-Hans" : {

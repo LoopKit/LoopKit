@@ -124,12 +124,6 @@
             "value" : "Liều bolus"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bolus Value"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -273,12 +267,6 @@
             "value" : "Câu lệnh có vấn đề"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Comms Issue"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -408,12 +396,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Đã tạm dừng cấp liều Insulin"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Insulin Suspended"
           }
         },
         "zh-Hans" : {
@@ -565,12 +547,6 @@
             "value" : "Hết Insulin"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "No Insulin"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -712,12 +688,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pin bơm đã cạn"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Pump Battery Dead"
           }
         },
         "zh-Hans" : {
@@ -869,12 +839,6 @@
             "value" : "Bơm lỗi"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Pump Error"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1016,12 +980,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bơm bị tắc nghẽn"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Pump Occlusion"
           }
         },
         "zh-Hans" : {
@@ -1167,12 +1125,6 @@
             "value" : "Tiếp tục"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Resume"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1316,12 +1268,6 @@
             "value" : "Đã tạm dừng"
           }
         },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Suspend"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1450,12 +1396,6 @@
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Temp Basal"
-          }
-        },
-        "yy-YY" : {
-          "stringUnit" : {
-            "state" : "new",
             "value" : "Temp Basal"
           }
         },
