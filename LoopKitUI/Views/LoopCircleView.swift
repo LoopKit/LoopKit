@@ -51,9 +51,9 @@ public struct LoopCircleView: View {
             case .fresh:
                 return Color(uiColor: loopStatusColors.normal)
             case .aging:
-                return Color(uiColor: loopStatusColors.warning)
+                return Color(uiColor: loopStatusColors.unknown)
             case .stale:
-                return Color(uiColor: loopStatusColors.error)
+                return Color(uiColor: loopStatusColors.unknown)
             }
         }
     }
