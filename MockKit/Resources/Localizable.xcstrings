@@ -173,13 +173,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Comms Issue"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Comms Issue"
           }
         },
@@ -221,7 +221,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Comms Issue"
           }
         },
@@ -269,7 +269,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Comms Issue"
           }
         }
@@ -453,13 +453,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "No Insulin"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "No Insulin"
           }
         },
@@ -501,7 +501,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "No Insulin"
           }
         },
@@ -549,7 +549,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "No Insulin"
           }
         }
@@ -560,7 +560,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Pump Battery Dead"
           }
         },
@@ -596,13 +596,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Pump Battery Dead"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Pump Battery Dead"
           }
         },
@@ -644,7 +644,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Pump Battery Dead"
           }
         },
@@ -745,7 +745,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Pump Error"
           }
         },
@@ -852,7 +852,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Pump Occlusion"
           }
         },
@@ -888,13 +888,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Pump Occlusion"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Pump Occlusion"
           }
         },
@@ -936,7 +936,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Pump Occlusion"
           }
         },
@@ -984,7 +984,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Pump Occlusion"
           }
         }
@@ -995,7 +995,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Resume"
           }
         },
@@ -1019,7 +1019,7 @@
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Resume"
           }
         },
@@ -1031,7 +1031,7 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Resume"
           }
         },
@@ -1079,7 +1079,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Resume"
           }
         },
@@ -1138,7 +1138,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Suspend"
           }
         },
@@ -1162,7 +1162,7 @@
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Suspend"
           }
         },
@@ -1174,7 +1174,7 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Suspend"
           }
         },
@@ -1222,7 +1222,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Suspend"
           }
         },

@@ -6,7 +6,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%@ Range"
           }
         },
@@ -42,13 +42,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%@ Range"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%@ Range"
           }
         },
@@ -90,7 +90,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%@ Range"
           }
         },
@@ -138,7 +138,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%@ Range"
           }
         }
@@ -150,49 +150,49 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ U bolus failed"
           }
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ U bolus failed"
           }
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ U bolus failed"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ U bolus failed"
           }
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ U bolus failed"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ U bolus failed"
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ U bolus failed"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ U bolus failed"
           }
         },
@@ -222,7 +222,7 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ U bolus failed"
           }
         },
@@ -234,13 +234,19 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ U bolus failed"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bolusul %1$@ U a eșuat"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ U bolus failed"
           }
         },
@@ -258,7 +264,7 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ U bolus failed"
           }
         },
@@ -288,49 +294,49 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ U bolus may not have succeeded"
           }
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ U bolus may not have succeeded"
           }
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ U bolus may not have succeeded"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ U bolus may not have succeeded"
           }
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ U bolus may not have succeeded"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ U bolus may not have succeeded"
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ U bolus may not have succeeded"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ U bolus may not have succeeded"
           }
         },
@@ -360,7 +366,7 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ U bolus may not have succeeded"
           }
         },
@@ -372,19 +378,25 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ U bolus may not have succeeded"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este posibil ca bolusul %1$@ U să nu fi reușit"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ U bolus may not have succeeded"
           }
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ U bolus may not have succeeded"
           }
         },
@@ -396,7 +408,7 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ U bolus may not have succeeded"
           }
         },
@@ -425,7 +437,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours."
           }
         },
@@ -461,13 +473,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours."
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours."
           }
         },
@@ -509,7 +521,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours."
           }
         },
@@ -527,7 +539,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours."
           }
         },
@@ -568,7 +580,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@%2$@%3$@"
           }
         },
@@ -610,7 +622,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@%2$@%3$@"
           }
         },
@@ -694,7 +706,7 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@%2$@%3$@"
           }
         },
@@ -717,7 +729,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "A value you have entered is higher than what is typically recommended for most people."
           }
         },
@@ -753,13 +765,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "A value you have entered is higher than what is typically recommended for most people."
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "A value you have entered is higher than what is typically recommended for most people."
           }
         },
@@ -801,14 +813,14 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "A value you have entered is higher than what is typically recommended for most people."
           }
         },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Valoarea pe care ați introdus-o este mai mare decât cea recomandată de obicei pentru majoritatea oamenilor."
+            "value" : "O valoare introdusă este mai mare decât cea recomandată în mod obișnuit pentru majoritatea oamenilor."
           }
         },
         "ru" : {
@@ -819,7 +831,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "A value you have entered is higher than what is typically recommended for most people."
           }
         },
@@ -860,7 +872,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "A value you have entered is lower than what is typically recommended for most people."
           }
         },
@@ -896,13 +908,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "A value you have entered is lower than what is typically recommended for most people."
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "A value you have entered is lower than what is typically recommended for most people."
           }
         },
@@ -944,14 +956,14 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "A value you have entered is lower than what is typically recommended for most people."
           }
         },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Valoarea pe care ați introdus-o este mai mica decât cea recomandată de obicei pentru majoritatea oamenilor."
+            "value" : "O valoare introdusă este mai mică decât cea recomandată în mod obișnuit pentru majoritatea oamenilor."
           }
         },
         "ru" : {
@@ -962,7 +974,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "A value you have entered is lower than what is typically recommended for most people."
           }
         },
@@ -992,7 +1004,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "A value you have entered is lower than what is typically recommended for most people."
           }
         }
@@ -1003,7 +1015,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Afrezza"
           }
         },
@@ -1027,7 +1039,7 @@
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Afrezza"
           }
         },
@@ -1039,13 +1051,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Afrezza"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Afrezza"
           }
         },
@@ -1087,7 +1099,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Afrezza"
           }
         },
@@ -1135,7 +1147,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Afrezza"
           }
         }
@@ -1170,7 +1182,7 @@
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Afrezza is an ultra rapid-acting mealtime insulin that is breathed in through your lungs using an oral inhaler and made by MannKind"
           }
         },
@@ -1182,13 +1194,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Afrezza is an ultra rapid-acting mealtime insulin that is breathed in through your lungs using an oral inhaler and made by MannKind"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Afrezza is an ultra rapid-acting mealtime insulin that is breathed in through your lungs using an oral inhaler and made by MannKind"
           }
         },
@@ -1230,7 +1242,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Afrezza is an ultra rapid-acting mealtime insulin that is breathed in through your lungs using an oral inhaler and made by MannKind"
           }
         },
@@ -1278,7 +1290,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Afrezza is an ultra rapid-acting mealtime insulin that is breathed in through your lungs using an oral inhaler and made by MannKind"
           }
         }
@@ -1289,7 +1301,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Apidra"
           }
         },
@@ -1325,13 +1337,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Apidra"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Apidra"
           }
         },
@@ -1373,7 +1385,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Apidra"
           }
         },
@@ -1432,7 +1444,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Apidra (insulin glulisine)"
           }
         },
@@ -1468,13 +1480,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Apidra (insulin glulisine)"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Apidra (insulin glulisine)"
           }
         },
@@ -1516,7 +1528,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Apidra (insulin glulisine)"
           }
         },
@@ -1575,7 +1587,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Apidra (insulin glulisine) is a rapid-acting insulin made by Sanofi-aventis "
           }
         },
@@ -1599,7 +1611,7 @@
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Apidra (insulin glulisine) is a rapid-acting insulin made by Sanofi-aventis "
           }
         },
@@ -1611,13 +1623,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Apidra (insulin glulisine) is a rapid-acting insulin made by Sanofi-aventis "
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Apidra (insulin glulisine) is a rapid-acting insulin made by Sanofi-aventis "
           }
         },
@@ -1659,7 +1671,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Apidra (insulin glulisine) is a rapid-acting insulin made by Sanofi-aventis "
           }
         },
@@ -1719,49 +1731,49 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Authorization Denied"
           }
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Authorization Denied"
           }
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Authorization Denied"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Authorization Denied"
           }
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Authorization Denied"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Authorization Denied"
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Authorization Denied"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Authorization Denied"
           }
         },
@@ -1791,7 +1803,7 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Authorization Denied"
           }
         },
@@ -1803,19 +1815,25 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Authorization Denied"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autorizare refuzată"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Authorization Denied"
           }
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Authorization Denied"
           }
         },
@@ -1827,7 +1845,7 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Authorization Denied"
           }
         },
@@ -1845,7 +1863,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Authorization Denied"
           }
         }
@@ -2035,7 +2053,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Basal Rates"
           }
         },
@@ -2423,49 +2441,49 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Check your pump before retrying"
           }
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Check your pump before retrying"
           }
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Check your pump before retrying"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Check your pump before retrying"
           }
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Check your pump before retrying"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Check your pump before retrying"
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Check your pump before retrying"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Check your pump before retrying"
           }
         },
@@ -2495,7 +2513,7 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Check your pump before retrying"
           }
         },
@@ -2507,19 +2525,25 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Check your pump before retrying"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verificați pompa înainte de a încerca din nou"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Check your pump before retrying"
           }
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Check your pump before retrying"
           }
         },
@@ -2531,7 +2555,7 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Check your pump before retrying"
           }
         },
@@ -2549,7 +2573,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Check your pump before retrying"
           }
         }
@@ -2561,7 +2585,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Authorization Denied"
           }
         },
@@ -2609,7 +2633,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Authorization Denied"
           }
         },
@@ -2675,7 +2699,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Authorization Denied"
           }
         },
@@ -2717,7 +2741,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "This sample can be deleted from the Health app"
           }
         },
@@ -2765,7 +2789,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "This sample can be deleted from the Health app"
           }
         },
@@ -2831,7 +2855,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "This sample can be deleted from the Health app"
           }
         },
@@ -2872,7 +2896,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Communication Failure"
           }
         },
@@ -2914,7 +2938,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Communication Failure"
           }
         },
@@ -2980,7 +3004,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Communication Failure"
           }
         },
@@ -3021,7 +3045,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Communications interrupted during insulin delivery command."
           }
         },
@@ -3057,13 +3081,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Communications interrupted during insulin delivery command."
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Communications interrupted during insulin delivery command."
           }
         },
@@ -3105,7 +3129,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Communications interrupted during insulin delivery command."
           }
         },
@@ -3123,7 +3147,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Communications interrupted during insulin delivery command."
           }
         },
@@ -3153,7 +3177,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Communications interrupted during insulin delivery command."
           }
         }
@@ -3164,7 +3188,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Connection Failure"
           }
         },
@@ -3206,7 +3230,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Connection Failure"
           }
         },
@@ -3272,7 +3296,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Connection Failure"
           }
         },
@@ -3355,7 +3379,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Correction Range"
           }
         },
@@ -3462,7 +3486,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Correction Range is the glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin and helping you calculate your boluses."
           }
         },
@@ -3498,13 +3522,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Correction Range is the glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin and helping you calculate your boluses."
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Correction Range is the glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin and helping you calculate your boluses."
           }
         },
@@ -3546,7 +3570,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Correction Range is the glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin and helping you calculate your boluses."
           }
         },
@@ -3564,7 +3588,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Correction Range is the glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin and helping you calculate your boluses."
           }
         },
@@ -3605,7 +3629,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Critical Update"
           }
         },
@@ -3629,7 +3653,7 @@
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Critical Update"
           }
         },
@@ -3641,13 +3665,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Critical Update"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Critical Update"
           }
         },
@@ -3689,7 +3713,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Critical Update"
           }
         },
@@ -3707,7 +3731,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Critical Update"
           }
         },
@@ -3737,7 +3761,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Critical Update"
           }
         }
@@ -3796,7 +3820,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Delivery Limits"
           }
         },
@@ -3903,7 +3927,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Device Refused"
           }
         },
@@ -3945,7 +3969,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Device Refused"
           }
         },
@@ -4011,7 +4035,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Device Refused"
           }
         },
@@ -4052,13 +4076,13 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Device Status Critical"
           }
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Device Status Critical"
           }
         },
@@ -4070,31 +4094,31 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Device Status Critical"
           }
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Device Status Critical"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Device Status Critical"
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Device Status Critical"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Device Status Critical"
           }
         },
@@ -4136,8 +4160,14 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Device Status Critical"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starea dispozitivului este critică"
           }
         },
         "ru" : {
@@ -4148,7 +4178,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Device Status Critical"
           }
         },
@@ -4160,7 +4190,7 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Device Status Critical"
           }
         },
@@ -4178,7 +4208,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Device Status Critical"
           }
         }
@@ -4189,13 +4219,13 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Device Status Normal"
           }
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Device Status Normal"
           }
         },
@@ -4207,31 +4237,31 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Device Status Normal"
           }
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Device Status Normal"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Device Status Normal"
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Device Status Normal"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Device Status Normal"
           }
         },
@@ -4273,8 +4303,14 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Device Status Normal"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stare dispozitiv normală"
           }
         },
         "ru" : {
@@ -4285,7 +4321,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Device Status Normal"
           }
         },
@@ -4297,7 +4333,7 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Device Status Normal"
           }
         },
@@ -4315,7 +4351,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Device Status Normal"
           }
         }
@@ -4326,13 +4362,13 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Device Status Warning"
           }
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Device Status Warning"
           }
         },
@@ -4344,31 +4380,31 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Device Status Warning"
           }
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Device Status Warning"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Device Status Warning"
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Device Status Warning"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Device Status Warning"
           }
         },
@@ -4410,8 +4446,14 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Device Status Warning"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avertisment privind starea dispozitivului"
           }
         },
         "ru" : {
@@ -4422,7 +4464,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Device Status Warning"
           }
         },
@@ -4434,7 +4476,7 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Device Status Warning"
           }
         },
@@ -4452,7 +4494,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Device Status Warning"
           }
         }
@@ -4463,7 +4505,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Ensure carb data exists for the specified date"
           }
         },
@@ -4505,7 +4547,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Ensure carb data exists for the specified date"
           }
         },
@@ -4571,7 +4613,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Ensure carb data exists for the specified date"
           }
         },
@@ -4612,7 +4654,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Falling"
           }
         },
@@ -4654,7 +4696,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Falling"
           }
         },
@@ -4720,7 +4762,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Falling"
           }
         },
@@ -4761,7 +4803,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Falling fast"
           }
         },
@@ -4803,7 +4845,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Falling fast"
           }
         },
@@ -4869,7 +4911,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Falling fast"
           }
         },
@@ -4910,7 +4952,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Falling very fast"
           }
         },
@@ -4952,7 +4994,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Falling very fast"
           }
         },
@@ -5018,7 +5060,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Falling very fast"
           }
         },
@@ -5101,7 +5143,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Fiasp"
           }
         },
@@ -5244,13 +5286,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Fiasp is a mealtime insulin aspart formulation with the addition of nicotinamide (vitamin B3) made by Novo Nordisk"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Fiasp is a mealtime insulin aspart formulation with the addition of nicotinamide (vitamin B3) made by Novo Nordisk"
           }
         },
@@ -5292,7 +5334,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Fiasp is a mealtime insulin aspart formulation with the addition of nicotinamide (vitamin B3) made by Novo Nordisk"
           }
         },
@@ -5351,7 +5393,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Flat"
           }
         },
@@ -5393,7 +5435,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Flat"
           }
         },
@@ -5459,7 +5501,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Flat"
           }
         },
@@ -5500,7 +5542,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from different models for the peak activity."
           }
         },
@@ -5536,13 +5578,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from different models for the peak activity."
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from different models for the peak activity."
           }
         },
@@ -5584,7 +5626,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from different models for the peak activity."
           }
         },
@@ -5602,7 +5644,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from different models for the peak activity."
           }
         },
@@ -5632,7 +5674,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from different models for the peak activity."
           }
         }
@@ -5792,7 +5834,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Glucose Safety Limit"
           }
         },
@@ -5828,13 +5870,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Glucose Safety Limit"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Glucose Safety Limit"
           }
         },
@@ -5876,7 +5918,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Glucose Safety Limit"
           }
         },
@@ -5935,7 +5977,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Hour"
           }
         },
@@ -5959,7 +6001,7 @@
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Hour"
           }
         },
@@ -5971,13 +6013,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Hour"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Hour"
           }
         },
@@ -6019,7 +6061,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Hour"
           }
         },
@@ -6067,7 +6109,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Hour"
           }
         }
@@ -6078,7 +6120,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Hours"
           }
         },
@@ -6102,7 +6144,7 @@
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Hours"
           }
         },
@@ -6114,13 +6156,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Hours"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Hours"
           }
         },
@@ -6162,7 +6204,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Hours"
           }
         },
@@ -6210,7 +6252,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Hours"
           }
         }
@@ -6221,7 +6263,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Humalog"
           }
         },
@@ -6257,13 +6299,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Humalog"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Humalog"
           }
         },
@@ -6305,7 +6347,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Humalog"
           }
         },
@@ -6364,7 +6406,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Humalog (insulin lispro)"
           }
         },
@@ -6400,13 +6442,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Humalog (insulin lispro)"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Humalog (insulin lispro)"
           }
         },
@@ -6448,7 +6490,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Humalog (insulin lispro)"
           }
         },
@@ -6531,7 +6573,7 @@
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Humalog (insulin lispro) is a rapid-acting insulin made by Eli Lilly"
           }
         },
@@ -6543,13 +6585,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Humalog (insulin lispro) is a rapid-acting insulin made by Eli Lilly"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Humalog (insulin lispro) is a rapid-acting insulin made by Eli Lilly"
           }
         },
@@ -6591,7 +6633,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Humalog (insulin lispro) is a rapid-acting insulin made by Eli Lilly"
           }
         },
@@ -6692,7 +6734,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Insulin Model"
           }
         },
@@ -6948,7 +6990,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Invalid Configuration"
           }
         },
@@ -6990,7 +7032,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Invalid Configuration"
           }
         },
@@ -7056,7 +7098,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Invalid Configuration"
           }
         },
@@ -7098,49 +7140,49 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "It is safe to retry"
           }
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "It is safe to retry"
           }
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "It is safe to retry"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "It is safe to retry"
           }
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "It is safe to retry"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "It is safe to retry"
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "It is safe to retry"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "It is safe to retry"
           }
         },
@@ -7170,7 +7212,7 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "It is safe to retry"
           }
         },
@@ -7182,19 +7224,25 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "It is safe to retry"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este sigur să încercați din nou"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "It is safe to retry"
           }
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "It is safe to retry"
           }
         },
@@ -7206,7 +7254,7 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "It is safe to retry"
           }
         },
@@ -7224,7 +7272,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "It is safe to retry"
           }
         }
@@ -7235,7 +7283,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Lyumjev"
           }
         },
@@ -7259,7 +7307,7 @@
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Lyumjev"
           }
         },
@@ -7271,13 +7319,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Lyumjev"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Lyumjev"
           }
         },
@@ -7319,7 +7367,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Lyumjev"
           }
         },
@@ -7402,7 +7450,7 @@
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Lyumjev is a mealtime insulin lispro formulation with the addition of citrate and treprostinil made by Eli Lilly"
           }
         },
@@ -7414,13 +7462,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Lyumjev is a mealtime insulin lispro formulation with the addition of citrate and treprostinil made by Eli Lilly"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Lyumjev is a mealtime insulin lispro formulation with the addition of citrate and treprostinil made by Eli Lilly"
           }
         },
@@ -7462,7 +7510,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Lyumjev is a mealtime insulin lispro formulation with the addition of citrate and treprostinil made by Eli Lilly"
           }
         },
@@ -7521,7 +7569,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Make sure your pump is within communication range of your phone."
           }
         },
@@ -7557,13 +7605,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Make sure your pump is within communication range of your phone."
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Make sure your pump is within communication range of your phone."
           }
         },
@@ -7605,7 +7653,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Make sure your pump is within communication range of your phone."
           }
         },
@@ -7653,7 +7701,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Make sure your pump is within communication range of your phone."
           }
         }
@@ -7664,7 +7712,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Maximum Basal Rate"
           }
         },
@@ -7706,7 +7754,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Maximum Basal Rate"
           }
         },
@@ -7813,7 +7861,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Maximum Basal Rate is the highest temporary basal rate %1$@ is allowed to set."
           }
         },
@@ -7837,7 +7885,7 @@
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Maximum Basal Rate is the highest temporary basal rate %1$@ is allowed to set."
           }
         },
@@ -7849,13 +7897,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Maximum Basal Rate is the highest temporary basal rate %1$@ is allowed to set."
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Maximum Basal Rate is the highest temporary basal rate %1$@ is allowed to set."
           }
         },
@@ -7897,7 +7945,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Maximum Basal Rate is the highest temporary basal rate %1$@ is allowed to set."
           }
         },
@@ -7998,7 +8046,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Maximum Bolus"
           }
         },
@@ -8105,7 +8153,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Maximum Bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose."
           }
         },
@@ -8141,13 +8189,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Maximum Bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose."
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Maximum Bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose."
           }
         },
@@ -8189,7 +8237,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Maximum Bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose."
           }
         },
@@ -8248,49 +8296,49 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "mg/dL/min"
           }
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "mg/dL/min"
           }
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "mg/dL/min"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "mg/dL/min"
           }
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "mg/dL/min"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "mg/dL/min"
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "mg/dL/min"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "mg/dL/min"
           }
         },
@@ -8332,8 +8380,14 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "mg/dL/min"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "mg/dl/min"
           }
         },
         "ru" : {
@@ -8356,7 +8410,7 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "mg/dL/min"
           }
         },
@@ -8374,7 +8428,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "mg/dL/min"
           }
         }
@@ -8385,7 +8439,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "mg/dL/U"
           }
         },
@@ -8427,7 +8481,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "mg/dL/U"
           }
         },
@@ -8683,49 +8737,49 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "mmol/L/min"
           }
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "mmol/L/min"
           }
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "mmol/L/min"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "mmol/L/min"
           }
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "mmol/L/min"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "mmol/L/min"
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "mmol/L/min"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "mmol/L/min"
           }
         },
@@ -8767,7 +8821,13 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
+            "value" : "mmol/L/min"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "mmol/L/min"
           }
         },
@@ -8791,7 +8851,7 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "mmol/L/min"
           }
         },
@@ -8809,7 +8869,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "mmol/L/min"
           }
         }
@@ -8820,7 +8880,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "mmol/L/U"
           }
         },
@@ -8862,7 +8922,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "mmol/L/U"
           }
         },
@@ -9011,7 +9071,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Needs Attention"
           }
         },
@@ -9118,7 +9178,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "No Update"
           }
         },
@@ -9142,7 +9202,7 @@
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "No Update"
           }
         },
@@ -9154,13 +9214,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "No Update"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "No Update"
           }
         },
@@ -9202,7 +9262,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "No Update"
           }
         },
@@ -9250,7 +9310,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "No Update"
           }
         }
@@ -9261,7 +9321,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "No values found"
           }
         },
@@ -9303,7 +9363,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "No values found"
           }
         },
@@ -9410,7 +9470,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Novolog"
           }
         },
@@ -9446,13 +9506,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Novolog"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Novolog"
           }
         },
@@ -9494,7 +9554,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Novolog"
           }
         },
@@ -9553,7 +9613,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Novolog (insulin aspart)"
           }
         },
@@ -9589,13 +9649,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Novolog (insulin aspart)"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Novolog (insulin aspart)"
           }
         },
@@ -9637,7 +9697,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Novolog (insulin aspart)"
           }
         },
@@ -9720,7 +9780,7 @@
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "NovoLog (insulin aspart) is a rapid-acting insulin made by Novo Nordisk"
           }
         },
@@ -9732,13 +9792,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "NovoLog (insulin aspart) is a rapid-acting insulin made by Novo Nordisk"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "NovoLog (insulin aspart) is a rapid-acting insulin made by Novo Nordisk"
           }
         },
@@ -9780,7 +9840,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "NovoLog (insulin aspart) is a rapid-acting insulin made by Novo Nordisk"
           }
         },
@@ -9887,7 +9947,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "OK"
           }
         },
@@ -9994,7 +10054,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "One or more of the values you have entered is outside of what is typically recommended for most people."
           }
         },
@@ -10030,13 +10090,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "One or more of the values you have entered is outside of what is typically recommended for most people."
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "One or more of the values you have entered is outside of what is typically recommended for most people."
           }
         },
@@ -10078,7 +10138,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "One or more of the values you have entered is outside of what is typically recommended for most people."
           }
         },
@@ -10096,7 +10156,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "One or more of the values you have entered is outside of what is typically recommended for most people."
           }
         },
@@ -10126,7 +10186,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "One or more of the values you have entered is outside of what is typically recommended for most people."
           }
         }
@@ -10138,49 +10198,49 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Please re-enable sharing in Health"
           }
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Please re-enable sharing in Health"
           }
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Please re-enable sharing in Health"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Please re-enable sharing in Health"
           }
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Please re-enable sharing in Health"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Please re-enable sharing in Health"
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Please re-enable sharing in Health"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Please re-enable sharing in Health"
           }
         },
@@ -10210,7 +10270,7 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Please re-enable sharing in Health"
           }
         },
@@ -10222,19 +10282,25 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Please re-enable sharing in Health"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vă rugăm să reactivați partajarea datelor în Sănătate"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Please re-enable sharing in Health"
           }
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Please re-enable sharing in Health"
           }
         },
@@ -10246,7 +10312,7 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Please re-enable sharing in Health"
           }
         },
@@ -10264,7 +10330,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Please re-enable sharing in Health"
           }
         }
@@ -10317,7 +10383,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Pre-Meal"
           }
         },
@@ -10424,7 +10490,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Recommended Update"
           }
         },
@@ -10448,7 +10514,7 @@
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Recommended Update"
           }
         },
@@ -10460,13 +10526,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Recommended Update"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Recommended Update"
           }
         },
@@ -10508,7 +10574,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Recommended Update"
           }
         },
@@ -10526,7 +10592,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Recommended Update"
           }
         },
@@ -10556,7 +10622,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Recommended Update"
           }
         }
@@ -10567,7 +10633,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Resumed"
           }
         },
@@ -10603,13 +10669,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Resumed"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Resumed"
           }
         },
@@ -10651,7 +10717,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Resumed"
           }
         },
@@ -10669,7 +10735,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Resumed"
           }
         },
@@ -10699,7 +10765,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Resumed"
           }
         }
@@ -10710,7 +10776,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Rising"
           }
         },
@@ -10752,7 +10818,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Rising"
           }
         },
@@ -10818,7 +10884,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Rising"
           }
         },
@@ -10859,7 +10925,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Rising fast"
           }
         },
@@ -10901,7 +10967,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Rising fast"
           }
         },
@@ -10967,7 +11033,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Rising fast"
           }
         },
@@ -11008,7 +11074,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Rising very fast"
           }
         },
@@ -11050,7 +11116,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Rising very fast"
           }
         },
@@ -11116,7 +11182,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Rising very fast"
           }
         },
@@ -11157,7 +11223,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Some of the values you have entered are outside of what is typically recommended for most people."
           }
         },
@@ -11193,13 +11259,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Some of the values you have entered are outside of what is typically recommended for most people."
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Some of the values you have entered are outside of what is typically recommended for most people."
           }
         },
@@ -11241,7 +11307,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Some of the values you have entered are outside of what is typically recommended for most people."
           }
         },
@@ -11259,7 +11325,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Some of the values you have entered are outside of what is typically recommended for most people."
           }
         },
@@ -11289,7 +11355,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Some of the values you have entered are outside of what is typically recommended for most people."
           }
         }
@@ -11300,7 +11366,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Suspended"
           }
         },
@@ -11348,7 +11414,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Suspended"
           }
         },
@@ -11586,7 +11652,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Temporarily lower your glucose target before a meal to impact post-meal glucose spikes."
           }
         },
@@ -11622,13 +11688,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Temporarily lower your glucose target before a meal to impact post-meal glucose spikes."
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Temporarily lower your glucose target before a meal to impact post-meal glucose spikes."
           }
         },
@@ -11670,7 +11736,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Temporarily lower your glucose target before a meal to impact post-meal glucose spikes."
           }
         },
@@ -11688,7 +11754,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Temporarily lower your glucose target before a meal to impact post-meal glucose spikes."
           }
         },
@@ -11729,7 +11795,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events."
           }
         },
@@ -11765,13 +11831,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events."
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events."
           }
         },
@@ -11813,7 +11879,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events."
           }
         },
@@ -11831,7 +11897,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events."
           }
         },
@@ -11872,7 +11938,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "The value you have entered is higher than what is typically recommended for most people."
           }
         },
@@ -11908,13 +11974,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "The value you have entered is higher than what is typically recommended for most people."
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "The value you have entered is higher than what is typically recommended for most people."
           }
         },
@@ -11956,7 +12022,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "The value you have entered is higher than what is typically recommended for most people."
           }
         },
@@ -11974,7 +12040,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "The value you have entered is higher than what is typically recommended for most people."
           }
         },
@@ -12015,7 +12081,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "The value you have entered is lower than what is typically recommended for most people."
           }
         },
@@ -12051,13 +12117,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "The value you have entered is lower than what is typically recommended for most people."
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "The value you have entered is lower than what is typically recommended for most people."
           }
         },
@@ -12099,7 +12165,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "The value you have entered is lower than what is typically recommended for most people."
           }
         },
@@ -12117,7 +12183,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "The value you have entered is lower than what is typically recommended for most people."
           }
         },
@@ -12147,7 +12213,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "The value you have entered is lower than what is typically recommended for most people."
           }
         }
@@ -12158,7 +12224,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "The values you have entered are outside of what is typically recommended for most people."
           }
         },
@@ -12194,13 +12260,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "The values you have entered are outside of what is typically recommended for most people."
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "The values you have entered are outside of what is typically recommended for most people."
           }
         },
@@ -12242,7 +12308,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "The values you have entered are outside of what is typically recommended for most people."
           }
         },
@@ -12260,7 +12326,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "The values you have entered are outside of what is typically recommended for most people."
           }
         },
@@ -12290,7 +12356,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "The values you have entered are outside of what is typically recommended for most people."
           }
         }
@@ -12563,7 +12629,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Uncertain Delivery"
           }
         },
@@ -12599,13 +12665,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Uncertain Delivery"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Uncertain Delivery"
           }
         },
@@ -12647,7 +12713,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Uncertain Delivery"
           }
         },
@@ -12695,7 +12761,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Uncertain Delivery"
           }
         }
@@ -12706,7 +12772,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Unit"
           }
         },
@@ -12748,7 +12814,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Unit"
           }
         },
@@ -12855,7 +12921,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Unit/hour"
           }
         },
@@ -12897,7 +12963,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Unit/hour"
           }
         },
@@ -13004,7 +13070,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Units"
           }
         },
@@ -13046,7 +13112,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Units"
           }
         },
@@ -13153,7 +13219,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Units/hour"
           }
         },
@@ -13195,7 +13261,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Units/hour"
           }
         },
@@ -13302,7 +13368,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Update Available"
           }
         },
@@ -13326,7 +13392,7 @@
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Update Available"
           }
         },
@@ -13338,13 +13404,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Update Available"
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Update Available"
           }
         },
@@ -13386,7 +13452,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Update Available"
           }
         },
@@ -13434,7 +13500,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Update Available"
           }
         }
@@ -13487,7 +13553,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Workout"
           }
         },
@@ -13594,7 +13660,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs."
           }
         },
@@ -13630,13 +13696,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs."
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs."
           }
         },
@@ -13678,7 +13744,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs."
           }
         },
@@ -13737,7 +13803,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Your Carb Ratio is the number of grams of carbohydrates covered by one unit of insulin."
           }
         },
@@ -13773,13 +13839,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Your Carb Ratio is the number of grams of carbohydrates covered by one unit of insulin."
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Your Carb Ratio is the number of grams of carbohydrates covered by one unit of insulin."
           }
         },
@@ -13821,7 +13887,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Your Carb Ratio is the number of grams of carbohydrates covered by one unit of insulin."
           }
         },
@@ -13880,7 +13946,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Your Insulin Sensitivities refer to the drop in glucose expected from one unit of insulin."
           }
         },
@@ -13916,13 +13982,13 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Your Insulin Sensitivities refer to the drop in glucose expected from one unit of insulin."
           }
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Your Insulin Sensitivities refer to the drop in glucose expected from one unit of insulin."
           }
         },
@@ -13964,7 +14030,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Your Insulin Sensitivities refer to the drop in glucose expected from one unit of insulin."
           }
         },
