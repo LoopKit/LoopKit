@@ -18,6 +18,12 @@
       "comment" : "Privacy - Health Share Usage Description",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zur Bestimmung der Glukosewirkung werden Mahlzeitendaten aus der Health-Datenbank verwendet. Die Glukosedaten werden zur grafischen Darstellung und Analyse aus HealthKit abgerufen."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -28,6 +34,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Måltidsdata fra helsedatabasen brukes til å bestemme glukoseeffekter. Glukosedata hentes fra HealthKit for grafisk fremstilling og analyse."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datele despre mese din baza de date Health sunt utilizate pentru a determina efectele glucozei. Datele despre glucoză sunt preluate din HealthKit pentru reprezentare grafică și analiză."
           }
         }
       }

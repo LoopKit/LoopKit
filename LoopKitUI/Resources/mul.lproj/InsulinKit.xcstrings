@@ -338,7 +338,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Detail"
+            "value" : "Detaliu"
           }
         },
         "ru" : {
@@ -614,7 +614,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "没有泵配置"
+            "value" : "未配置泵"
           }
         }
       }

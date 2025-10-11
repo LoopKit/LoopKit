@@ -276,6 +276,12 @@
     "%1$@%2$@%3$@" : {
       "comment" : "String format for value with units (1: value, 2: separator, 3: units)",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@%2$@%3$@"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -394,6 +400,12 @@
     },
     "%lld" : {
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -406,7 +418,25 @@
             "value" : "%lld"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
+          }
+        },
         "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
+          }
+        },
+        "he" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld"
@@ -436,6 +466,12 @@
             "value" : "%lld"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
+          }
+        },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
@@ -448,7 +484,31 @@
             "value" : "%lld"
           }
         },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
+          }
+        },
         "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld"
@@ -459,6 +519,12 @@
     "2" : {
       "localizations" : {
         "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2"
+          }
+        },
+        "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "2"
@@ -483,6 +549,12 @@
           }
         },
         "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2"
+          }
+        },
+        "ro" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "2"
@@ -504,6 +576,12 @@
             "value" : "5"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -523,6 +601,12 @@
           }
         },
         "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5"
+          }
+        },
+        "ro" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "5"
@@ -544,6 +628,12 @@
             "value" : "50+"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "50+"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -563,6 +653,12 @@
           }
         },
         "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "50+"
+          }
+        },
+        "ro" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "50+"
@@ -656,6 +752,12 @@
     "Activity" : {
       "comment" : "Section header for the activity section",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "النشاط"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -882,6 +984,12 @@
     "Back" : {
       "comment" : "Back button text on DeliveryUncertaintyRecoveryView",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "رجوع"
+          }
+        },
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
@@ -918,6 +1026,12 @@
             "value" : "Retour"
           }
         },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Back"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -940,6 +1054,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Powrót"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Back"
           }
         },
         "ro" : {
@@ -970,6 +1090,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Geri"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quay Lại"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Back"
           }
         }
       }
@@ -1197,6 +1329,12 @@
             "state" : "translated",
             "value" : "CGM Ayarları"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CGM 设置"
+          }
         }
       }
     },
@@ -1206,6 +1344,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "CGM-simulator"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CGM-Simulator"
           }
         },
         "fr" : {
@@ -1232,10 +1376,22 @@
             "value" : "Symulator CGM"
           }
         },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simulator de senzor de glicemie (CGM)"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Симулятор CGM"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CGM 模拟器"
           }
         }
       }
@@ -1394,6 +1550,12 @@
     },
     "days" : {
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "days"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1410,6 +1572,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "días"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "days"
           }
         },
         "fr" : {
@@ -1448,6 +1616,12 @@
             "value" : "dni"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "days"
+          }
+        },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1466,10 +1640,22 @@
             "value" : "dni"
           }
         },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "dagar"
+          }
+        },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "gün"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "days"
           }
         },
         "zh-Hans" : {
@@ -1613,6 +1799,12 @@
             "value" : "Enhedsdetaljer"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gerätedetails"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1631,10 +1823,22 @@
             "value" : "Szczegóły urządzenia"
           }
         },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detalii dispozitiv"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Сведения об устройстве"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设备详细信息"
           }
         }
       }
@@ -1962,6 +2166,12 @@
             "value" : "Szacowany odczyt"
           }
         },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Citire estimată"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2096,6 +2306,12 @@
             "value" : "Nie udało się wstrzymać podawania insuliny"
           }
         },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nu s-a reușit suspendarea livrării de insulină"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2110,6 +2326,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Få hjælp til din CGM"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hole Dir Hilfe zu Deinem CGM"
           }
         },
         "fr" : {
@@ -2136,10 +2358,22 @@
             "value" : "Uzyskaj pomoc dotyczącą CGM"
           }
         },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obțineți ajutor cu CGM-ul dumneavoastră"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Получите помощь по работе с CGM"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "获取有关 CGM 的帮助"
           }
         }
       }
@@ -2150,6 +2384,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Få hjælp til din pumpe"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Holen Dir Hilfe zu Deiner Pumpe"
           }
         },
         "fr" : {
@@ -2176,6 +2416,12 @@
             "value" : "Uzyskaj pomoc dotyczącą pompy"
           }
         },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obțineți ajutor cu pompa dumneavoastră"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2187,6 +2433,12 @@
     "History" : {
       "comment" : "Caption for History\nHistory Caption",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "السّجل"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2217,6 +2469,12 @@
             "value" : "Historique"
           }
         },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "History"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2241,6 +2499,12 @@
             "value" : "Historia"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Histórico"
+          }
+        },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2253,6 +2517,12 @@
             "value" : "История"
           }
         },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "História"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2263,6 +2533,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Geçmiş"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lịch sử"
           }
         },
         "zh-Hans" : {
@@ -2379,6 +2655,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Podawanie\nzawieszone"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Insulină \nSuspendată"
           }
         },
         "ru" : {
@@ -2522,6 +2804,12 @@
             "value" : "Pozostało%@Insuliny"
           }
         },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Insulină %@ rămasă"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2532,6 +2820,12 @@
     },
     "Last Reading" : {
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "آخر قراءة"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2548,6 +2842,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Último dato"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last Reading"
           }
         },
         "fr" : {
@@ -2586,6 +2886,12 @@
             "value" : "Ostatni odczyt"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last Reading"
+          }
+        },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2604,16 +2910,40 @@
             "value" : "Posledné čítanie"
           }
         },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Senaste avläsning"
+          }
+        },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Son Okuma"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kết quả đọc gần nhất"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最近一次读数"
           }
         }
       }
     },
     "min" : {
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "د"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2696,6 +3026,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "мин"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "min"
           }
         },
         "sv" : {
@@ -2820,6 +3156,12 @@
             "value" : "Brak\npodawania"
           }
         },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nicio\nLivrare"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2866,10 +3208,22 @@
             "value" : "Ustawienia powiadomień"
           }
         },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Setări notificări"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Настройки уведомлений"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通知设置"
           }
         }
       }
@@ -3043,6 +3397,12 @@
             "value" : "Pompa wygasa za "
           }
         },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pompa expiră în "
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3178,6 +3538,12 @@
             "value" : "Zmień pompę"
           }
         },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Înlocuiți pompa"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3224,6 +3590,12 @@
             "value" : "Zaplanowana%@Baza"
           }
         },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bazală programată%@"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3234,6 +3606,12 @@
     },
     "Sensor expires in " : {
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sensor expires in "
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3246,10 +3624,28 @@
             "value" : "Sensor läuft ab in "
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sensor expires in "
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sensor expires in "
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Le capteur expire dans "
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sensor expires in "
           }
         },
         "it" : {
@@ -3276,16 +3672,64 @@
             "value" : "Sensor wygasa za "
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sensor expires in "
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Senzorul expiră în "
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Сенсор заканчивается в"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sensor expires in "
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sensorn upphör om "
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sensor expires in "
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sensor expires in "
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "传感器到期时间 "
           }
         }
       }
     },
     "Simulator Settings" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simulatoreinstellungen"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3296,6 +3740,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Simulatorinnstillinger"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Setări simulator"
           }
         }
       }
@@ -3415,6 +3865,12 @@
             "value" : "Zatrzymaj sensor"
           }
         },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oprește senzor"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3468,6 +3924,12 @@
             "value" : "Zawieszony o godz."
           }
         },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suspendat la"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3512,6 +3974,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Baza%@Tymczasowa"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@Bazală temporară"
           }
         },
         "ru" : {
@@ -3590,6 +4058,12 @@
             "state" : "translated",
             "value" : "Güncelleme Hatırlatıcısı"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新提醒"
+          }
         }
       }
     },
@@ -3665,10 +4139,28 @@
     },
     "versionUpdate: %@\n\nbundleIdentifier: %@\n\ncurrentVersion: %@" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "versionUpdate: %1$@\n\nbundle-Kennung: %2$@\n\naktuelle Version: %3$@\n"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "versionUpdate: %1$@\n\nbundleIdentifier: %2$@\n\ncurrentVersion: %3$@"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "versionUpdate: %1$@\n\nbundleIdentifier: %2$@\n\ncurrentVersion: %3$@"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "actualizareVersiune: %1$@\n\nidentificatorPachet: %2$@\n\nversiuneaCurentă: %3$@"
           }
         }
       }
