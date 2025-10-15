@@ -145,7 +145,7 @@ public final class MockPumpManager: TestingPumpManager {
             return .suspended(date)
         }
         if state.occlusionDetected || state.pumpErrorDetected || state.pumpBatteryChargeRemaining == 0 || state.reservoirUnitsRemaining == 0 {
-            return nil
+            return .pumpInoperable
         }
         if let temp = state.unfinalizedTempBasal, !temp.finished {
             return .tempBasal(DoseEntry(temp))
