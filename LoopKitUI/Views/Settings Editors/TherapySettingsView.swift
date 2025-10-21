@@ -42,19 +42,12 @@ public struct TherapySettingsView: View {
     }
         
     public var body: some View {
-        switch mode {
-        case .acceptanceFlow:
-            content
-        case .settings:
-            navigationViewWrappedContent
-        }
+        content
     }
     
     private var content: some View {
-        CardList(title: cardListTitle, style: .sectioned(cardListSections), trailer: cardListTrailer)
+        CardList(title: Text(therapySettingsTitle), style: .sectioned(cardListSections), trailer: cardListTrailer)
     }
-
-    private var cardListTitle: Text? { mode == .acceptanceFlow ? Text(therapySettingsTitle) : nil }
 
     private var therapySettingsTitle: String {
         return LocalizedString("Therapy Settings", comment: "Therapy Settings screen title")
@@ -107,22 +100,6 @@ public struct TherapySettingsView: View {
         }
     }
 
-    private var navigationViewWrappedContent: some View {
-        NavigationView {
-            ZStack {
-                Color(.systemGroupedBackground)
-                    .edgesIgnoringSafeArea(.all)
-                content
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            dismissButton
-                        }
-                    }
-                    .navigationBarTitle(therapySettingsTitle, displayMode: .large)
-            }
-        }
-    }
-    
     private var dismissButton: some View {
         Button(action: dismissAction) {
             Text(LocalizedString("Done", comment: "Text for dismiss button"))
