@@ -22,6 +22,8 @@ public struct ActionButtonStyle: ButtonStyle {
     private let cornerRadius: CGFloat = 10
     private let squidge: CGFloat = 1
 
+    @Environment(\.isEnabled) private var isEnabled: Bool
+
     public init(_ style: ButtonType = .primary) {
         switch style {
         case .primary:
@@ -46,7 +48,7 @@ public struct ActionButtonStyle: ButtonStyle {
             .foregroundColor(fontColor)
             .font(.headline)
             .frame(maxWidth: .infinity)
-            .background(backgroundColor)
+            .background(isEnabled ? backgroundColor : Color(UIColor.lightGray))
             .overlay(Color(.secondarySystemBackground).opacity(configuration.isPressed ? 0.35 : 0))
             .cornerRadius(cornerRadius)
             .padding(configuration.isPressed ? squidge : 0)
