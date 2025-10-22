@@ -1567,7 +1567,6 @@ class DoseStoreEffectTests: PersistenceControllerTestCase {
 
         let updateGroup = DispatchGroup()
         updateGroup.enter()
-        //let lastReconciliation = events.compactMap { $0.dose?.endDate }.max()!
         doseStore.addPumpEvents(events, lastReconciliation: nil) { error in
             if error != nil {
                 XCTFail("Doses should be added successfully to dose store")
