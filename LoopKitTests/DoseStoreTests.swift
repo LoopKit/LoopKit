@@ -195,7 +195,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
 
         let tempBasalStart = testingDate("2023-01-08 17:02:35 +0000")
         let tempBasalEnd = testingDate("2023-01-08 17:32:35 +0000")
-        let tempBasal = DoseEntry(type: .tempBasal, startDate: tempBasalStart, endDate: tempBasalEnd, value:0.575, unit: .unitsPerHour, isMutable: false)
+        let tempBasal = DoseEntry(type: .tempBasal, startDate: tempBasalStart, endDate: tempBasalEnd, value:0.575, unit: .unitsPerHour, isMutable: true)
 
         let pumpEvents: [NewPumpEvent] = [
             NewPumpEvent(date: bolus.startDate, dose: bolus, raw: Data(hexadecimalString: "0000")!, title: "Bolus 5.15U"),
@@ -1567,6 +1567,7 @@ class DoseStoreEffectTests: PersistenceControllerTestCase {
 
         let updateGroup = DispatchGroup()
         updateGroup.enter()
+        //let lastReconciliation = events.compactMap { $0.dose?.endDate }.max()!
         doseStore.addPumpEvents(events, lastReconciliation: nil) { error in
             if error != nil {
                 XCTFail("Doses should be added successfully to dose store")
