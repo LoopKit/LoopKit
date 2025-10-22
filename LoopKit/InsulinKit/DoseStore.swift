@@ -689,6 +689,8 @@ extension DoseStore {
                 self.log.debug("Add %@, isMutable=%@", String(describing: dose), String(describing: event.dose?.isMutable))
             }
         }
+        
+        let maxDoseEndDate = lastPumpEventsReconciliation ?? currentDate()
 
         persistenceController.managedObjectContext.perform {
             var lastFinalDate: Date?
@@ -712,8 +714,7 @@ extension DoseStore {
             })
 
             // There is no guarantee of event ordering, so we must search the entire array to find key date boundaries.
-
-            for event in events {
+            for var event in events {
                 if case .prime? = event.type {
                     primeValueAdded = true
                 }
@@ -727,6 +728,11 @@ extension DoseStore {
                 }
 
                 let object = PumpEvent(context: self.persistenceController.managedObjectContext)
+
+                if let dose = event.dose, !dose.isMutable && dose.endDate > maxDoseEndDate {
+                    self.log.error("FIXME! PumpManager submitted immutable dose with future end date: %{public}@", String(describing: dose))
+                    event.dose?.endDate = maxDoseEndDate
+                }
 
                 object.date = event.date
                 object.raw = event.raw
