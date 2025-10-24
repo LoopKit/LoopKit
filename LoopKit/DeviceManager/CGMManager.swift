@@ -23,13 +23,25 @@ public enum CGMReadingResult {
 public struct CGMManagerStatus: Equatable {
     // Return false if no sensor active, or in a state where no future data is expected without user intervention
     public var hasValidSensorSession: Bool
+    
+    /// Return true if the sensor is warming up, otherwise false
+    public var inSensorWarmup: Bool
+    
+    /// Return true if the cgm is inoperable (e.g., failure state, expired, etc.), otherwise false
+    public var isInoperable: Bool
 
     public var lastCommunicationDate: Date?
 
     public var device: HKDevice?
     
-    public init(hasValidSensorSession: Bool, lastCommunicationDate: Date? = nil, device: HKDevice?) {
+    public init(hasValidSensorSession: Bool,
+                inSensorWarmup: Bool = false,
+                isInoperable: Bool = false,
+                lastCommunicationDate: Date? = nil,
+                device: HKDevice?) {
         self.hasValidSensorSession = hasValidSensorSession
+        self.inSensorWarmup = inSensorWarmup
+        self.isInoperable = isInoperable
         self.lastCommunicationDate = lastCommunicationDate
         self.device = device
     }
@@ -39,6 +51,8 @@ extension CGMManagerStatus: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.hasValidSensorSession = try container.decode(Bool.self, forKey: .hasValidSensorSession)
+        self.inSensorWarmup = try container.decode(Bool.self, forKey: .inSensorWarmup)
+        self.isInoperable = try container.decode(Bool.self, forKey: .isInoperable)
         self.lastCommunicationDate = try container.decodeIfPresent(Date.self, forKey: .lastCommunicationDate)
         self.device = try container.decodeIfPresent(CodableDevice.self, forKey: .device)?.device
     }
@@ -46,12 +60,16 @@ extension CGMManagerStatus: Codable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(hasValidSensorSession, forKey: .hasValidSensorSession)
+        try container.encode(inSensorWarmup, forKey: .inSensorWarmup)
+        try container.encode(isInoperable, forKey: .isInoperable)
         try container.encodeIfPresent(lastCommunicationDate, forKey: .lastCommunicationDate)
         try container.encodeIfPresent(device.map { CodableDevice($0) }, forKey: .device)
     }
 
     private enum CodingKeys: String, CodingKey {
         case hasValidSensorSession
+        case inSensorWarmup
+        case isInoperable
         case lastCommunicationDate
         case device
     }
@@ -115,7 +133,7 @@ public protocol CGMManager: DeviceManager {
 
     /// The length of time to keep samples in HealthKit before removal. Return nil to never remove samples.
     var managedDataInterval: TimeInterval? { get }
-    
+
     /// The length of time to delay until storing samples into HealthKit.  Return 0 for no delay.
     static var healthKitStorageDelay: TimeInterval { get }
 

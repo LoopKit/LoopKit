@@ -111,6 +111,8 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
     private enum CGMStatusRow: Int, CaseIterable {
         case batteryRemaining = 0
         case requestCalibration
+        case warmup
+        case inoperable
     }
 
     private enum HistoryRow: Int, CaseIterable {
@@ -367,6 +369,24 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
                 if cgmManager.isCalibrationRequested {
                     cell.accessoryType = .checkmark
                 }
+            case .warmup:
+                let cell = tableView.dequeueReusableCell(withIdentifier: BoundSwitchTableViewCell.className, for: indexPath) as! BoundSwitchTableViewCell
+                cell.textLabel?.text = "Sensor Warmup"
+                cell.switch?.isOn = cgmManager.mockSensorState.inSensorWarmup
+                cell.onToggle = { [weak self] isOn in
+                    self?.cgmManager.mockSensorState.inSensorWarmup = isOn
+                }
+                cell.selectionStyle = .none
+                return cell
+            case .inoperable:
+                let cell = tableView.dequeueReusableCell(withIdentifier: BoundSwitchTableViewCell.className, for: indexPath) as! BoundSwitchTableViewCell
+                cell.textLabel?.text = "Sensor Failure"
+                cell.switch?.isOn = cgmManager.mockSensorState.isInoperable
+                cell.onToggle = { [weak self] isOn in
+                    self?.cgmManager.mockSensorState.isInoperable = isOn
+                }
+                cell.selectionStyle = .none
+                return cell
             }
             return cell
         case .history:
@@ -586,6 +606,8 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             case .requestCalibration:
                 cgmManager.requestCalibration(!cgmManager.isCalibrationRequested)
                 tableView.reloadRows(at: [indexPath], with: .automatic)
+            default:
+                break
             }
         case .history:
             switch HistoryRow(rawValue: indexPath.row)! {
