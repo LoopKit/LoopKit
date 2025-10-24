@@ -946,7 +946,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ești sigur că vrei să ștergi acest serviciu?"
+            "value" : "Sunteți sigur că vreți să ștergeți acest serviciu?"
           }
         },
         "ru" : {
@@ -2316,6 +2316,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Не удалось приостановить подачу инсулина"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "暂停胰岛素推注失败"
           }
         }
       }

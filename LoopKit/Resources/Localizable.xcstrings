@@ -139,7 +139,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ Range"
+            "value" : "%@ 目标范围"
           }
         }
       }
@@ -528,7 +528,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@ va livra bazala şi bolusul recomandat numai dacă glucoza este estimată a fi peste această limită pentru următoarele trei ore."
+            "value" : "%1$@ va livra bazala și bolusul recomandat numai dacă glucoza este estimată a fi peste această limită pentru următoarele trei ore."
           }
         },
         "ru" : {
@@ -570,7 +570,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "仅当预测血糖在未来三小时内高于该上限时，%1$@ 才会输注基础胰岛素并推荐追加胰岛素。"
+            "value" : "当预测血糖在未来三小时内都高于此下限时，%1$@ 才会输注基础胰岛素并推荐推注胰岛素。"
           }
         }
       }
@@ -2388,7 +2388,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Raport carbohidrați/insulină"
+            "value" : "Raport carbohidrați insulină"
           }
         },
         "ru" : {
@@ -3476,7 +3476,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "修正范围"
+            "value" : "校正范围"
           }
         }
       }
@@ -3619,7 +3619,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "矫正范围是您希望 %1$@ 在调整基础胰岛素及协助计算追加胰岛素剂量时所瞄准的血糖值（或血糖值范围）。"
+            "value" : "校正范围是您希望 %1$@ 在调整基础率胰岛素及计算大剂量时所瞄准的血糖值（或血糖值范围）。"
           }
         }
       }
@@ -6539,7 +6539,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "优泌乐（赖脯胰岛素注射液）Humalog"
+            "value" : "优泌乐（赖脯胰岛素）Humalog"
           }
         }
       }
@@ -11022,7 +11022,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "În creștere rapidă"
+            "value" : "Creștere rapidă"
           }
         },
         "ru" : {
@@ -11171,7 +11171,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "În creștere foarte rapidă"
+            "value" : "Creștere foarte rapidă"
           }
         },
         "ru" : {
@@ -11314,7 +11314,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Câteva dintre valorile introduse sunt în afara a ceea ce este recomandat de obicei pentru majoritatea oamenilor."
+            "value" : "Unele dintre valorile pe care le-ați introdus sunt în afara celor recomandate de obicei pentru majoritatea oamenilor."
           }
         },
         "ru" : {
@@ -11743,7 +11743,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Reduceți temporar glicemia țintă înainte de masă pentru a avea un impact asupra vârfurilor postprandiale."
+            "value" : "Reduceți temporar intervalul țintă de glicemie înainte de masă pentru a evita vârfurile postprandiale."
           }
         },
         "ru" : {
@@ -11886,7 +11886,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Creșteți temporar valoarea ținta a glicemiei înainte, în timpul sau după activitatea fizică pentru a reduce riscul de apariție a hipoglicemiei."
+            "value" : "Creșteți temporar intervalul țintă de glicemie înainte, în timpul sau după activitatea fizică pentru a reduce riscul de apariție al hipoglicemiei."
           }
         },
         "ru" : {
@@ -12172,7 +12172,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Valoarea pe care ați introdus-o este mai mica decât cea recomandată de obicei pentru majoritatea oamenilor."
+            "value" : "Valoarea pe care ați introdus-o este mai mică decât cea recomandată de obicei pentru majoritatea oamenilor."
           }
         },
         "ru" : {
@@ -12214,7 +12214,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The value you have entered is lower than what is typically recommended for most people."
+            "value" : "你输入的数值低于大多数人通常建议的范围。"
           }
         }
       }
@@ -13751,7 +13751,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Rata bazală de insulină este numărul de unități pe oră pe care doriți să le utilizați pentru a acoperi necesarul bazal de insulina al organismului."
+            "value" : "Rata bazală de insulină este numărul de unități pe oră pe care doriți să le utilizați pentru a acoperi necesarul bazal de insulină al organismului."
           }
         },
         "ru" : {
@@ -13894,7 +13894,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Raportul carbohidrați/insulina este numărul de grame de carbohidrați acoperiți de o unitate de insulină."
+            "value" : "Raportul carbohidrați insulină este numărul de grame de carbohidrați acoperiți de o unitate de insulină."
           }
         },
         "ru" : {
@@ -14037,7 +14037,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Factorul de sensibilitate la insulină se referă la scăderea glicemiei determinata de o unitate de insulină."
+            "value" : "Factorul de sensibilitate la insulină indică scăderea glicemiei determinată de o unitate de insulină."
           }
         },
         "ru" : {

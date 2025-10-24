@@ -216,7 +216,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Raport carbohidrați/insulină"
+            "value" : "Raport carbohidrați insulină"
           }
         },
         "ru" : {
@@ -490,7 +490,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "修正范围"
+            "value" : "校正范围"
           }
         }
       }

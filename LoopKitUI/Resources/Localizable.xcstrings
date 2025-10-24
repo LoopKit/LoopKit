@@ -2262,7 +2262,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@ sau limita dvs. de siguranță, oricare dintre acestea este mai mare"
+            "value" : "%1$@ sau limita dumneavoastră de siguranță a glicemiei, oricare dintre acestea este mai mare"
           }
         },
         "ru" : {
@@ -2589,7 +2589,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ U"
           }
         }
@@ -4308,7 +4308,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "修正范围有所不同，它通常是一个更窄的血糖值区间。"
+            "value" : "校正范围有所不同，它通常是一个更窄的血糖值区间。"
           }
         }
       }
@@ -6377,7 +6377,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "基础率，大剂量，矫正胰岛素剂量将减少%@%%"
+            "value" : "基础率，大剂量，校正胰岛素剂量将减少%@%%"
           }
         }
       }
@@ -6526,7 +6526,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "基础率，大剂量，矫正胰岛素剂量将增加%@%%"
+            "value" : "基础率，大剂量，校正胰岛素剂量将增加%@%%"
           }
         }
       }
@@ -6675,7 +6675,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "基础率，大剂量，矫正胰岛素剂量将不受影响"
+            "value" : "基础率，大剂量，校正胰岛素剂量将不受影响"
           }
         }
       }
@@ -7242,7 +7242,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Raport carbohidrați/insulină"
+            "value" : "Raport carbohidrați insulină"
           }
         },
         "ru" : {
@@ -14901,7 +14901,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "高于血糖安全上限"
+            "value" : "下限过高"
           }
         }
       }
@@ -17492,7 +17492,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "低于血糖安全下限"
+            "value" : "下限过低"
           }
         }
       }
@@ -18165,7 +18165,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Valoare mica antrenament"
+            "value" : "Valoare mică antrenament"
           }
         },
         "ru" : {
@@ -18798,7 +18798,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "最大基础速率是 %1$@ 为帮助你达到校正范围所允许自动调整的最大基础胰岛素速率。"
+            "value" : "最大基础率是 %1$@ 为了让血糖达到校正范围，所允许调整到的最大基础速率。"
           }
         }
       }
@@ -24086,7 +24086,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Save Correction Range(s)?"
+            "value" : "保存校正范围？"
           }
         }
       }
@@ -25826,7 +25826,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "启动时间"
+            "value" : "开始时间"
           }
         }
       }
@@ -29282,7 +29282,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Setări Terapie"
+            "value" : "Setări terapie"
           }
         },
         "ru" : {
@@ -34471,7 +34471,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Rata bazală de insulină este numărul de unități pe oră pe care doriți să le utilizați pentru a acoperi necesarul bazal de insulina al organismului."
+            "value" : "Rata bazală de insulină este numărul de unități pe oră pe care doriți să le utilizați pentru a acoperi necesarul bazal de insulină al organismului."
           }
         },
         "ru" : {
