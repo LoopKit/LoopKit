@@ -344,7 +344,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Detail"
+            "value" : "Detaliu"
           }
         },
         "ru" : {
@@ -590,7 +590,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No pump configured"
+            "value" : "Nicio pompă configurată"
           }
         },
         "ru" : {

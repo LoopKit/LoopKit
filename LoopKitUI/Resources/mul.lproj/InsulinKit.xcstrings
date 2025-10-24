@@ -584,7 +584,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No pump configured"
+            "value" : "Nicio pompă configurată"
           }
         },
         "ru" : {
@@ -1190,7 +1190,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Non-Pump Insulin"
+            "value" : "Insulină din afara pompei"
           }
         },
         "ru" : {
@@ -1215,6 +1215,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Non-Pump Insulin"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "非泵胰岛素"
           }
         }
       }
