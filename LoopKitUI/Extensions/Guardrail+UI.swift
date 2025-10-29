@@ -20,6 +20,8 @@ extension Guardrail where Value == LoopQuantity {
             switch threshold {
             case .minimum, .maximum:
                 return guidanceColors.critical
+            case .belowWarning, .aboveWarning:
+                return guidanceColors.critical
             case .belowRecommended, .aboveRecommended:
                 return guidanceColors.warning
             }

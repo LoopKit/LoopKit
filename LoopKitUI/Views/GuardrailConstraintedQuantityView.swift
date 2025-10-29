@@ -106,6 +106,8 @@ public struct GuardrailConstrainedQuantityView: View {
             switch threshold {
             case .minimum, .maximum:
                 return guidanceColors.critical
+            case .belowWarning, .aboveWarning:
+                return guidanceColors.critical
             case .belowRecommended, .aboveRecommended:
                 return guidanceColors.warning
             }
@@ -124,6 +126,8 @@ public struct GuardrailConstrainedQuantityView: View {
         case .outsideRecommendedRange(let threshold):
             switch threshold {
             case .minimum, .maximum:
+                return "imageNextToText_warningTriangleRed"
+            case .belowWarning, .aboveWarning:
                 return "imageNextToText_warningTriangleRed"
             case .belowRecommended, .aboveRecommended:
                 return "imageNextToText_warningTriangleOrange"

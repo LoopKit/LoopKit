@@ -97,9 +97,9 @@ private struct InsulinSensitivityGuardrailWarning: View {
 
     private func singularWarningTitle(for threshold: SafetyClassification.Threshold) -> Text {
         switch threshold {
-        case .minimum, .belowRecommended:
+        case .minimum, .belowWarning, .belowRecommended:
             return Text(LocalizedString("Low Insulin Sensitivity", comment: "Title text for the low insulin sensitivity warning"))
-        case .aboveRecommended, .maximum:
+        case .aboveRecommended, .aboveWarning, .maximum:
             return Text(LocalizedString("High Insulin Sensitivity", comment: "Title text for the high insulin sensitivity warning"))
         }
     }

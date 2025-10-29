@@ -64,6 +64,8 @@ extension SafetyClassification.Threshold {
         switch self {
         case .belowRecommended, .aboveRecommended:
             return .default
+        case .belowWarning, .aboveWarning:
+            return .critical
         case .minimum, .maximum:
             return .critical
         }

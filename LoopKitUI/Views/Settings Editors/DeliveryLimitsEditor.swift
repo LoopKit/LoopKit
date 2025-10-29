@@ -431,16 +431,16 @@ struct DeliveryLimitsGuardrailWarning: View {
             switch setting {
             case .maximumBasalRate:
                 switch threshold {
-                case .minimum, .belowRecommended:
+                case .minimum, .belowWarning, .belowRecommended:
                     title = Text(LocalizedString("Low Maximum Basal Rate", comment: "Title text for low maximum basal rate warning"))
-                case .aboveRecommended, .maximum:
+                case .aboveRecommended, .aboveWarning, .maximum:
                     title = Text(LocalizedString("High Maximum Basal Rate", comment: "Title text for high maximum basal rate warning"))
                 }
             case .maximumBolus:
                 switch threshold {
-                case .minimum, .belowRecommended:
+                case .minimum, .belowWarning, .belowRecommended:
                     title = Text(LocalizedString("Low Maximum Bolus", comment: "Title text for low maximum bolus warning"))
-                case .aboveRecommended, .maximum:
+                case .aboveRecommended, .aboveWarning, .maximum:
                     title = Text(LocalizedString("High Maximum Bolus", comment: "Title text for high maximum bolus warning"))
                 }
             }

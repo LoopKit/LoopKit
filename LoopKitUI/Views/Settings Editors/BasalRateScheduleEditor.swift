@@ -165,9 +165,9 @@ private struct BasalRateGuardrailWarning: View {
         switch threshold {
         case .minimum where isZeroUnitRateSelectable:
             return Text(LocalizedString("No Basal Insulin", comment: "Title text for the zero basal rate warning"))
-        case .minimum, .belowRecommended:
+        case .minimum, .belowWarning, .belowRecommended:
             return Text(LocalizedString("Low Basal Rate", comment: "Title text for the low basal rate warning"))
-        case .aboveRecommended, .maximum:
+        case .aboveRecommended, .aboveWarning, .maximum:
             return Text(LocalizedString("High Basal Rate", comment: "Title text for the high basal rate warning"))
         }
     }
