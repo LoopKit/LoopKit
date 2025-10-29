@@ -99,7 +99,7 @@ class MockCGMManagerSettingsViewModel: ObservableObject {
 
         self.fobId = cgmManager.mockSensorState.heartbeatFobId
 
-        lastGlucoseDate = cgmManager.cgmManagerStatus.lastCommunicationDate
+        lastGlucoseDate = cgmManager.mockSensorState.lastGlucoseDate
         lastGlucoseTrend = cgmManager.mockSensorState.trendType
         setLastGlucoseTrend(cgmManager.mockSensorState.trendRate)
         setLastGlucoseValue()
@@ -135,7 +135,6 @@ class MockCGMManagerSettingsViewModel: ObservableObject {
             lastGlucoseValueWithUnitFormatted = displayGlucosePreference.format(lastGlucose)
             lastGlucoseValueFormatted = displayGlucosePreference.format(lastGlucose, includeUnit: false)
         }
-
     }
 }
 
@@ -150,5 +149,20 @@ extension MockCGMManagerSettingsViewModel: CGMManagerStatusObserver {
         fobId = cgmManager.mockSensorState.heartbeatFobId
 
         setLastGlucoseValue()
+    }
+}
+
+// MARK: Detail text
+extension MockCGMManagerSettingsViewModel {
+    var inSignalLoss: Bool {
+        cgmManager.inSignalLoss
+    }
+    
+    func detailText(now: Date = Date()) -> String? {
+        if cgmManager.inSignalLoss {
+            return LocalizedString("Temporary issue with CGM. Wait up to 30 minutes. Automation is temporarily off. You will not receive alerts, alarms, or sensor glucose readings. You will receive scheduled basal insulin.", comment: "Device card detail message for signal loss.")
+        }
+        
+        return nil
     }
 }

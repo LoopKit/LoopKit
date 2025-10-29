@@ -17,6 +17,7 @@ public struct MockCGMState: GlucoseDisplayable {
     public var isStateValid: Bool
 
     public var currentGlucose: LoopQuantity?
+    public var lastGlucoseDate: Date?
 
     public var trendType: GlucoseTrend?
 
@@ -561,6 +562,7 @@ public final class MockCGMManager: TestingCGMManager {
         if case .newData(let samples) = result {
             if let currentValue = samples.first {
                 mockSensorState.currentGlucose = currentValue.quantity
+                mockSensorState.lastGlucoseDate = Date()
                 mockSensorState.trendType = currentValue.trend
                 mockSensorState.trendRate = currentValue.trendRate
                 mockSensorState.glucoseRangeCategory = glucoseRangeCategory(for: LoopQuantitySample(with: currentValue.quantitySample))
@@ -949,6 +951,8 @@ extension MockCGMState: RawRepresentable {
             self.currentGlucose = LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: currentGlucoseValue)
         }
         
+        self.lastGlucoseDate = rawValue["lastGlucoseDate"] as? Date
+        
         setProgressColor()
     }
 
@@ -1006,6 +1010,7 @@ extension MockCGMState: RawRepresentable {
         rawValue["trendRateValue"] = trendRate?.doubleValue(for: .milligramsPerDeciliterPerMinute)
         rawValue["trendType"] = trendType?.rawValue
         rawValue["currentGlucoseValue"] = currentGlucose?.doubleValue(for: .milligramsPerDeciliter)
+        rawValue["lastGlucoseDate"] = lastGlucoseDate
         
         return rawValue
     }
