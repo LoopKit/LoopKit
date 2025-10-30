@@ -684,6 +684,12 @@ extension DoseStore {
             return
         }
 
+        for event in events {
+            if let dose = event.dose {
+                self.log.debug("Add %@, isMutable=%@", String(describing: dose), String(describing: event.dose?.isMutable))
+            }
+        }
+
         persistenceController.managedObjectContext.perform {
             var lastFinalDate: Date?
             var firstMutableDate: Date?
