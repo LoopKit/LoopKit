@@ -684,9 +684,15 @@ extension DoseStore {
             return
         }
 
+
         for event in events {
             if let dose = event.dose {
-                self.log.debug("Add %@, isMutable=%@", String(describing: dose), String(describing: event.dose?.isMutable))
+                if let lastReconciliation, !dose.isMutable, dose.endDate > lastReconciliation {
+                    // Doses with an endDate after lastReconciliation should still be considered ongoing/mutable, as
+                    // a future history read could show that they were interrupted.
+                    fatalError("Pump event dose marked as not mutable, with endDate after lastReconciliation!")
+                }
+                self.log.debug("Add %@, isMutable=%@", String(describing: dose), String(describing: dose.isMutable))
             }
         }
 
