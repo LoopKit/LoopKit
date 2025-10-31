@@ -41,7 +41,7 @@ public enum MockPumpManagerError: LocalizedError {
     }
 }
 
-public final class MockPumpManager: TestingPumpManager {
+public final class MockPumpManager: TestingPumpManager {    
     public static let managerIdentifier = "MockPumpManager"
     
     public var pluginIdentifier: String { Self.managerIdentifier }
@@ -168,29 +168,32 @@ public final class MockPumpManager: TestingPumpManager {
     public func buildPumpStatusHighlight(for state: MockPumpManagerState) -> PumpStatusHighlight? {
         if state.deliveryIsUncertain {
             return PumpStatusHighlight(localizedMessage: LocalizedString("Comms Issue", comment: "Status highlight that delivery is uncertain."),
-                                                         imageName: "exclamationmark.circle.fill",
-                                                         state: .critical)
-        }
-        else if state.reservoirUnitsRemaining == 0 {
+                                       imageName: "exclamationmark.circle.fill",
+                                       state: .critical)
+        } else if state.reservoirUnitsRemaining == 0 {
             return PumpStatusHighlight(localizedMessage: LocalizedString("No Insulin", comment: "Status highlight that a pump is out of insulin."),
-                                                         imageName: "exclamationmark.circle.fill",
-                                                         state: .critical)
+                                       imageName: "exclamationmark.circle.fill",
+                                       state: .critical)
         } else if state.occlusionDetected {
             return PumpStatusHighlight(localizedMessage: LocalizedString("Pump Occlusion", comment: "Status highlight that an occlusion was detected."),
-                                                         imageName: "exclamationmark.circle.fill",
-                                                         state: .critical)
+                                       imageName: "exclamationmark.circle.fill",
+                                       state: .critical)
         } else if state.pumpErrorDetected {
             return PumpStatusHighlight(localizedMessage: LocalizedString("Pump Error", comment: "Status highlight that a pump error occurred."),
-                                                         imageName: "exclamationmark.circle.fill",
-                                                         state: .critical)
+                                       imageName: "exclamationmark.circle.fill",
+                                       state: .critical)
         } else if pumpBatteryChargeRemaining == 0 {
             return PumpStatusHighlight(localizedMessage: LocalizedString("Pump Battery Dead", comment: "Status highlight that pump has a dead battery."),
-                                                         imageName: "exclamationmark.circle.fill",
-                                                         state: .critical)
+                                       imageName: "exclamationmark.circle.fill",
+                                       state: .critical)
         } else if case .suspended = state.suspendState {
             return PumpStatusHighlight(localizedMessage: LocalizedString("Insulin Suspended", comment: "Status highlight that insulin delivery was suspended."),
-                                                         imageName: "pause.circle.fill",
-                                                         state: .warning)
+                                       imageName: "pause.circle.fill",
+                                       state: .warning)
+        } else if state.inSignalLoss {
+            return PumpStatusHighlight(localizedMessage: LocalizedString("Signal Loss", comment: "Status highlight that signal is lost."),
+                                       imageName: "exclamationmark.circle.fill",
+                                       state: .critical)
         }
         
         return nil
@@ -275,10 +278,15 @@ public final class MockPumpManager: TestingPumpManager {
             let oldStatus = status(for: oldValue)
             let newStatus = status(for: newValue)
 
-            if oldStatus != newStatus {
+            let oldStatusHighlight = buildPumpStatusHighlight(for: oldValue)
+            let newStatusHighlight = buildPumpStatusHighlight(for: newValue)
+
+            if oldStatus != newStatus ||
+                oldStatusHighlight != newStatusHighlight
+            {
                 notifyStatusObservers(oldStatus: oldStatus)
             }
-            
+
             // stop insulin delivery as pump state requires
             if (newValue.occlusionDetected != oldValue.occlusionDetected && newValue.occlusionDetected) ||
                 (newValue.pumpErrorDetected != oldValue.pumpErrorDetected && newValue.pumpErrorDetected) ||
@@ -348,6 +356,14 @@ public final class MockPumpManager: TestingPumpManager {
     
     public let isOnboarded = true   // No distinction between created and onboarded
 
+    public var inSignalLoss: Bool {
+        state.inSignalLoss
+    }
+    
+    public var isInoperable: Bool {
+        basalDeliveryState(for: state) == .pumpInoperable
+    }
+    
     private func logDeviceCommunication(_ message: String, type: DeviceLogEntryType = .send) {
         self.delegate.delegate?.deviceManager(self, logEventForDeviceIdentifier: "MockId", type: type, message: message, completion: nil)
     }
@@ -444,6 +460,10 @@ public final class MockPumpManager: TestingPumpManager {
             let error = PumpManagerError.deviceState(MockPumpManagerError.pumpSuspended)
             logDeviceComms(.error, message: "Temp Basal failed because there is no insulin in the reservoir")
             completion(error)
+        } else if state.inSignalLoss {
+            let error = PumpManagerError.deviceState(MockPumpManagerError.communicationFailure)
+            logDeviceComms(.error, message: "Temp Basal failed because pump is in signal loss")
+            completion(error)
         } else {
             let now = Date()
             if let temp = state.unfinalizedTempBasal, temp.finishTime.compare(now) == .orderedDescending {
@@ -497,6 +517,10 @@ public final class MockPumpManager: TestingPumpManager {
             let error = PumpManagerError.deviceState(MockPumpManagerError.pumpSuspended)
             logDeviceComms(.error, message: "Bolus failed because there is no insulin in the reservoir")
             completion(error)
+        } else if state.inSignalLoss {
+            let error = PumpManagerError.deviceState(MockPumpManagerError.communicationFailure)
+            logDeviceComms(.error, message: "Bolus failed because pump is in signal loss")
+            completion(error)
         } else {
             state.finalizeFinishedDoses()
 
@@ -532,6 +556,10 @@ public final class MockPumpManager: TestingPumpManager {
             let error = PumpManagerError.communication(MockPumpManagerError.communicationFailure)
             logDeviceComms(.error, message: "Cancel failed with error: \(error)")
             completion(.failure(error))
+        } else if state.inSignalLoss {
+            let error = PumpManagerError.deviceState(MockPumpManagerError.communicationFailure)
+            logDeviceComms(.error, message: "Cancel failed because pump is in signal loss")
+            completion(.failure(error))
         } else {
             state.unfinalizedBolus?.cancel(at: Date())
             
@@ -562,6 +590,10 @@ public final class MockPumpManager: TestingPumpManager {
             let error = PumpManagerError.communication(MockPumpManagerError.communicationFailure)
             logDeviceComms(.error, message: "Suspend failed with error: \(error)")
             completion(error)
+        } else if state.inSignalLoss {
+            let error = PumpManagerError.deviceState(MockPumpManagerError.communicationFailure)
+            logDeviceComms(.error, message: "Suspend failed because pump is in signal loss")
+            completion(error)
         } else {
             let now = Date()
             state.unfinalizedTempBasal?.cancel(at: now)
@@ -587,6 +619,10 @@ public final class MockPumpManager: TestingPumpManager {
         if self.state.deliveryResumptionShouldError {
             let error = PumpManagerError.communication(MockPumpManagerError.communicationFailure)
             logDeviceComms(.error, message: "Resume failed with error: \(error)")
+            completion(error)
+        } else if state.inSignalLoss {
+            let error = PumpManagerError.deviceState(MockPumpManagerError.communicationFailure)
+            logDeviceComms(.error, message: "Resume failed because pump is in signal loss")
             completion(error)
         } else {
             let resumeDate = Date()

@@ -68,6 +68,7 @@ struct MockCGMManagerSettingsView: View {
                 Divider()
                 lastReadingInfo
             }
+            details
         }
     }
         
@@ -139,6 +140,17 @@ struct MockCGMManagerSettingsView: View {
     }
     
     @ViewBuilder
+    private var details: some View {
+        if let detailText = viewModel.detailText() {
+            VStack(alignment: .leading) {
+                Text(detailText)
+                    .font(.footnote.weight(.semibold))
+                    .padding(.vertical, 8.0)
+            }
+        }
+    }
+    
+    @ViewBuilder
     private var lastGlucoseReading: some View {
         VStack(alignment: .leading, spacing: 5) {
             Text("Last Reading")
@@ -164,15 +176,24 @@ struct MockCGMManagerSettingsView: View {
     @ViewBuilder
     private var lastReadingTime: some View {
         HStack(alignment: .center, spacing: 16) {
-            Image(systemName: "arrow.triangle.2.circlepath.circle.fill")
-                .scaleEffect(1.7, anchor: .leading)
-                .foregroundColor(glucoseTintColor)
-            HStack(alignment: .firstTextBaseline, spacing: 4) {
-                Text("\(viewModel.lastReadingMinutesFromNow)")
-                    .font(.title)
-                    .fontWeight(.heavy)
-                Text("min")
-                    .foregroundColor(.secondary)
+            if viewModel.inSignalLoss {
+                Image(systemName: "exclamationmark.circle.fill")
+                    .scaleEffect(1.7, anchor: .leading)
+                    .foregroundColor(guidanceColors.critical)
+                Text("Signal Loss")
+                    .font(.title2)
+                    .fontWeight(.semibold)
+            } else {
+                Image(systemName: "arrow.triangle.2.circlepath.circle.fill")
+                    .scaleEffect(1.7, anchor: .leading)
+                    .foregroundColor(glucoseTintColor)
+                HStack(alignment: .firstTextBaseline, spacing: 4) {
+                    Text("\(viewModel.lastReadingMinutesFromNow)")
+                        .font(.title)
+                        .fontWeight(.heavy)
+                    Text("min")
+                        .foregroundColor(.secondary)
+                }
             }
         }
         .frame(height: 40.0)

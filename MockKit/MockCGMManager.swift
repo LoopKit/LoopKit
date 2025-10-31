@@ -17,6 +17,7 @@ public struct MockCGMState: GlucoseDisplayable {
     public var isStateValid: Bool
 
     public var currentGlucose: LoopQuantity?
+    public var lastGlucoseDate: Date?
 
     public var trendType: GlucoseTrend?
 
@@ -173,7 +174,29 @@ public struct MockCGMState: GlucoseDisplayable {
         self.cgmLifecycleProgress = cgmLifecycleProgress
     }
     
+    public var inSensorWarmup: Bool = false {
+        didSet {
+            if inSensorWarmup {
+                cgmStatusHighlight = MockCGMStatusHighlight(localizedMessage: "Sensor\nWarmup", alertIdentifier: "warmup")
+            } else if cgmStatusHighlight?.alertIdentifier == "warmup" {
+                cgmStatusHighlight = nil
+            }
+        }
+    }
+    
+    public var isInoperable: Bool = false {
+        didSet {
+            if isInoperable {
+                cgmStatusHighlight = MockCGMStatusHighlight(localizedMessage: "Sensor\nFailure", alertIdentifier: "inoperable")
+            } else if cgmStatusHighlight?.alertIdentifier == "inoperable" {
+                cgmStatusHighlight = nil
+            }
+        }
+    }
+    
     public init(isStateValid: Bool = true,
+                inSensorWarmup: Bool = false,
+                isInoperable: Bool = false,
                 glucoseRangeCategory: GlucoseRangeCategory? = nil,
                 glucoseAlertingEnabled: Bool = false,
                 samplesShouldBeUploaded: Bool = false,
@@ -188,6 +211,8 @@ public struct MockCGMState: GlucoseDisplayable {
                 progressCriticalThresholdPercentValue: Double? = nil)
     {
         self.isStateValid = isStateValid
+        self.inSensorWarmup = inSensorWarmup
+        self.isInoperable = isInoperable
         self.glucoseRangeCategory = glucoseRangeCategory
         self.glucoseAlertingEnabled = glucoseAlertingEnabled
         self.samplesShouldBeUploaded = samplesShouldBeUploaded
@@ -211,7 +236,7 @@ public struct MockCGMStatusHighlight: DeviceStatusHighlight {
         switch alertIdentifier {
         case MockCGMManager.submarine.identifier:
             return "dot.radiowaves.left.and.right"
-        case MockCGMManager.buzz.identifier:
+        case MockCGMManager.buzz.identifier, "warmup":
             return "clock"
         default:
             return "exclamationmark.circle.fill"
@@ -220,7 +245,7 @@ public struct MockCGMStatusHighlight: DeviceStatusHighlight {
     
     public var state: DeviceStatusHighlightState{
         switch alertIdentifier {
-        case MockCGMManager.submarine.identifier:
+        case MockCGMManager.submarine.identifier, "warmup":
             return .normalCGM
         case MockCGMManager.buzz.identifier:
             return .warning
@@ -365,7 +390,12 @@ public final class MockCGMManager: TestingCGMManager {
     }
     
     public var cgmManagerStatus: CGMManagerStatus {
-        return CGMManagerStatus(hasValidSensorSession: dataSource.isValidSession, lastCommunicationDate: lastCommunicationDate, device: device)
+        return CGMManagerStatus(
+            hasValidSensorSession: dataSource.isValidSession,
+            inSensorWarmup: mockSensorState.inSensorWarmup,
+            isInoperable: mockSensorState.isInoperable,
+            lastCommunicationDate: lastCommunicationDate,
+            device: device)
     }
 
     private var lastCommunicationDate: Date? = nil
@@ -489,6 +519,18 @@ public final class MockCGMManager: TestingCGMManager {
 
     public let isOnboarded = true   // No distinction between created and onboarded
 
+    public var inSignalLoss: Bool {
+        guard case .signalLoss = dataSource.model else {
+            return false
+        }
+        
+        return true
+    }
+    
+    public var isInoperable: Bool {
+        cgmManagerStatus.isInoperable
+    }
+    
     public let appURL: URL? = nil
 
     public let providesBLEHeartbeat = false
@@ -520,6 +562,7 @@ public final class MockCGMManager: TestingCGMManager {
         if case .newData(let samples) = result {
             if let currentValue = samples.first {
                 mockSensorState.currentGlucose = currentValue.quantity
+                mockSensorState.lastGlucoseDate = Date()
                 mockSensorState.trendType = currentValue.trend
                 mockSensorState.trendRate = currentValue.trendRate
                 mockSensorState.glucoseRangeCategory = glucoseRangeCategory(for: LoopQuantitySample(with: currentValue.quantitySample))
@@ -843,17 +886,21 @@ extension MockCGMState: RawRepresentable {
 
     public init?(rawValue: RawValue) {
         guard let isStateValid = rawValue["isStateValid"] as? Bool,
-            let glucoseAlertingEnabled = rawValue["glucoseAlertingEnabled"] as? Bool,
-            let urgentLowGlucoseThresholdValue = rawValue["urgentLowGlucoseThresholdValue"] as? Double,
-            let lowGlucoseThresholdValue = rawValue["lowGlucoseThresholdValue"] as? Double,
-            let highGlucoseThresholdValue = rawValue["highGlucoseThresholdValue"] as? Double,
-            let cgmLowerLimitValue = rawValue["cgmLowerLimitValue"] as? Double,
-            let cgmUpperLimitValue = rawValue["cgmUpperLimitValue"] as? Double else
+              let inSensorWarmup = rawValue["inSensorWarmup"] as? Bool,
+              let isInoperable = rawValue["isInoperable"] as? Bool,
+              let glucoseAlertingEnabled = rawValue["glucoseAlertingEnabled"] as? Bool,
+              let urgentLowGlucoseThresholdValue = rawValue["urgentLowGlucoseThresholdValue"] as? Double,
+              let lowGlucoseThresholdValue = rawValue["lowGlucoseThresholdValue"] as? Double,
+              let highGlucoseThresholdValue = rawValue["highGlucoseThresholdValue"] as? Double,
+              let cgmLowerLimitValue = rawValue["cgmLowerLimitValue"] as? Double,
+              let cgmUpperLimitValue = rawValue["cgmUpperLimitValue"] as? Double else
         {
             return nil
         }
 
         self.isStateValid = isStateValid
+        self.inSensorWarmup = inSensorWarmup
+        self.isInoperable = isInoperable
         self.glucoseAlertingEnabled = glucoseAlertingEnabled
         self.samplesShouldBeUploaded = rawValue["samplesShouldBeUploaded"] as? Bool ?? false
         self.urgentLowGlucoseThresholdValue = urgentLowGlucoseThresholdValue
@@ -904,12 +951,16 @@ extension MockCGMState: RawRepresentable {
             self.currentGlucose = LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: currentGlucoseValue)
         }
         
+        self.lastGlucoseDate = rawValue["lastGlucoseDate"] as? Date
+        
         setProgressColor()
     }
 
     public var rawValue: RawValue {
         var rawValue: RawValue = [
             "isStateValid": isStateValid,
+            "inSensorWarmup": inSensorWarmup,
+            "isInoperable": isInoperable,
             "glucoseAlertingEnabled": glucoseAlertingEnabled,
             "samplesShouldBeUploaded": samplesShouldBeUploaded,
             "urgentLowGlucoseThresholdValue": urgentLowGlucoseThresholdValue,
@@ -959,6 +1010,7 @@ extension MockCGMState: RawRepresentable {
         rawValue["trendRateValue"] = trendRate?.doubleValue(for: .milligramsPerDeciliterPerMinute)
         rawValue["trendType"] = trendType?.rawValue
         rawValue["currentGlucoseValue"] = currentGlucose?.doubleValue(for: .milligramsPerDeciliter)
+        rawValue["lastGlucoseDate"] = lastGlucoseDate
         
         return rawValue
     }
@@ -969,6 +1021,8 @@ extension MockCGMState: CustomDebugStringConvertible {
         return """
         ## MockCGMState
         * isStateValid: \(isStateValid)
+        * inSensorWarmup: \(inSensorWarmup)
+        * isInoperable: \(isInoperable)
         * glucoseAlertingEnabled: \(glucoseAlertingEnabled)
         * samplesShouldBeUploaded: \(samplesShouldBeUploaded)
         * urgentLowGlucoseThresholdValue: \(urgentLowGlucoseThresholdValue)

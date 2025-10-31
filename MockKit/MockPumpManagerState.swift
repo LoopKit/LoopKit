@@ -154,6 +154,7 @@ public struct MockPumpManagerState: Equatable {
     public var occlusionDetected: Bool = false
     public var pumpErrorDetected: Bool = false
     public var deliveryIsUncertain: Bool = false
+    public var inSignalLoss: Bool = false
 
     public var unfinalizedBolus: UnfinalizedDose?
     public var unfinalizedTempBasal: UnfinalizedDose?
@@ -266,7 +267,8 @@ extension MockPumpManagerState: RawRepresentable {
         self.occlusionDetected = rawValue["occlusionDetected"] as? Bool ?? false
         self.pumpErrorDetected = rawValue["pumpErrorDetected"] as? Bool ?? false
         self.deliveryIsUncertain = rawValue["deliveryIsUncertain"] as? Bool ?? false
-
+        self.inSignalLoss = rawValue["inSignalLoss"] as? Bool ?? false
+        
         self.progressPercentComplete = rawValue["progressPercentComplete"] as? Double
         self.progressWarningThresholdPercentValue = rawValue["progressWarningThresholdPercentValue"] as? Double
         self.progressCriticalThresholdPercentValue = rawValue["progressCriticalThresholdPercentValue"] as? Double
@@ -374,6 +376,7 @@ extension MockPumpManagerState: RawRepresentable {
         
         raw["occlusionDetected"] = occlusionDetected
         raw["pumpErrorDetected"] = pumpErrorDetected
+        raw["inSignalLoss"] = inSignalLoss
         
         raw["progressPercentComplete"] = progressPercentComplete
         raw["progressWarningThresholdPercentValue"] = progressWarningThresholdPercentValue
@@ -407,6 +410,7 @@ extension MockPumpManagerState: CustomDebugStringConvertible {
         * additionalPumpEvents: \(additionalPumpEvents)
         * occlusionDetected: \(occlusionDetected)
         * pumpErrorDetected: \(pumpErrorDetected)
+        * inSignalLoss: \(inSignalLoss)
         * progressPercentComplete: \(progressPercentComplete as Any)
         * progressWarningThresholdPercentValue: \(progressWarningThresholdPercentValue as Any)
         * progressCriticalThresholdPercentValue: \(progressCriticalThresholdPercentValue as Any)

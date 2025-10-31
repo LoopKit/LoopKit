@@ -301,12 +301,12 @@ private struct CorrectionRangeOverridesGuardrailWarning: View {
 
     private func singularWarningTitle(for threshold: SafetyClassification.Threshold) -> Text {
         switch threshold {
-        case .minimum, .belowRecommended:
+        case .minimum, .belowWarning, .belowRecommended:
             switch preset {
             case .preMeal:
                 return Text(LocalizedString("Low Pre-Meal Value", comment: "Title text for the low pre-meal value warning"))
             }
-        case .aboveRecommended, .maximum:
+        case .aboveRecommended, .aboveWarning, .maximum:
             switch preset {
             case .preMeal:
                 return Text(LocalizedString("High Pre-Meal Value", comment: "Title text for the low pre-meal value warning"))

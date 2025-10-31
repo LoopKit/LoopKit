@@ -31,4 +31,10 @@ public protocol DeviceManager: CustomDebugStringConvertible, AlertResponder, Ale
 
     /// Is the device manager onboarded and ready for use?
     var isOnboarded: Bool { get }
+    
+    /// Is the device in a state of signal loss (prolonged communication loss)
+    var inSignalLoss: Bool { get }
+    
+    /// Is the device inoperable (e.g., in a failure state, expired, etc.)
+    var isInoperable: Bool { get }
 }

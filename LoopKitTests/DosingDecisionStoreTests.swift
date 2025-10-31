@@ -136,6 +136,8 @@ class DosingDecisionStorePersistenceTests: PersistenceControllerTestCase, Dosing
         "udiDeviceIdentifier" : "CGM UDI Device Identifier"
       },
       "hasValidSensorSession" : true,
+      "inSensorWarmup" : false,
+      "isInoperable" : false,
       "lastCommunicationDate" : "2020-05-14T22:07:01Z"
     },
     "controllerStatus" : {
@@ -746,6 +748,8 @@ class StoredDosingDecisionCodableTests: XCTestCase {
       "udiDeviceIdentifier" : "CGM UDI Device Identifier"
     },
     "hasValidSensorSession" : true,
+    "inSensorWarmup" : false,
+    "isInoperable" : false,
     "lastCommunicationDate" : "2020-05-14T22:07:01Z"
   },
   "controllerStatus" : {

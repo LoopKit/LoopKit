@@ -81,6 +81,7 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
         case occlusion
         case pumpError
         case pumpComponentReplacement
+        case signalLoss
     }
 
     private enum SettingsRow: Int, CaseIterable {
@@ -185,6 +186,8 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                     cell.textLabel?.text = "Replace Pump Component"
                 }
                 return cell
+            case .signalLoss:
+                return switchTableViewCell(for: indexPath, titled: "Signal Loss", boundTo: \.inSignalLoss)
             }
         case .settings:
             switch SettingsRow(rawValue: indexPath.row)! {
@@ -355,6 +358,8 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                 pumpManager.state.replacePumpComponent = !pumpManager.state.replacePumpComponent
                 tableView.deselectRow(at: indexPath, animated: true)
                 tableView.reloadRows(at: [indexPath], with: .automatic)
+            default:
+                break
             }
         case .settings:
             tableView.deselectRow(at: indexPath, animated: true)

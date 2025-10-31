@@ -102,9 +102,9 @@ private struct CarbRatioGuardrailWarning: View {
 
     private func singularWarningTitle(for threshold: SafetyClassification.Threshold) -> Text {
         switch threshold {
-        case .minimum, .belowRecommended:
+        case .minimum, .belowWarning, .belowRecommended:
             return Text(LocalizedString("Low Carb Ratio", comment: "Title text for the low carb ratio warning"))
-        case .aboveRecommended, .maximum:
+        case .aboveRecommended, .aboveWarning, .maximum:
             return Text(LocalizedString("High Carb Ratio", comment: "Title text for the high carb ratio warning"))
         }
     }

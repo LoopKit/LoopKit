@@ -189,9 +189,9 @@ private struct CorrectionRangeGuardrailWarning: View {
 
     private func singularWarningTitle(for threshold: SafetyClassification.Threshold) -> Text {
         switch threshold {
-        case .minimum, .belowRecommended:
+        case .minimum, .belowWarning, .belowRecommended:
             return Text(LocalizedString("Low Correction Value", comment: "Title text for the low correction value warning"))
-        case .aboveRecommended, .maximum:
+        case .aboveRecommended, .aboveWarning, .maximum:
             return Text(LocalizedString("High Correction Value", comment: "Title text for the high correction value warning"))
         }
     }
