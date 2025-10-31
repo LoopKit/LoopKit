@@ -13,7 +13,7 @@ public struct NewPumpEvent: Equatable {
     /// The date of the event
     public let date: Date
     /// The insulin dose described by the event, if applicable
-    public var dose: DoseEntry?
+    public let dose: DoseEntry?
     /// The opaque raw data representing the event
     public let raw: Data
     /// The type of pump event
