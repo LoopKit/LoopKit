@@ -684,6 +684,18 @@ extension DoseStore {
             return
         }
 
+
+        for event in events {
+            if let dose = event.dose {
+//                if let lastReconciliation, !dose.isMutable, dose.endDate > lastReconciliation {
+//                    // Doses with an endDate after lastReconciliation should still be considered ongoing/mutable, as
+//                    // a future history read could show that they were interrupted.
+//                    fatalError("Pump event dose marked as not mutable, with endDate after lastReconciliation!")
+//                }
+                self.log.debug("Add %@, isMutable=%@", String(describing: dose), String(describing: dose.isMutable))
+            }
+        }
+
         persistenceController.managedObjectContext.perform {
             var lastFinalDate: Date?
             var firstMutableDate: Date?
@@ -706,7 +718,8 @@ extension DoseStore {
             })
 
             // There is no guarantee of event ordering, so we must search the entire array to find key date boundaries.
-            for var event in events {
+
+            for event in events {
                 if case .prime? = event.type {
                     primeValueAdded = true
                 }
@@ -720,11 +733,6 @@ extension DoseStore {
                 }
 
                 let object = PumpEvent(context: self.persistenceController.managedObjectContext)
-
-                if let dose = event.dose, let lastPumpEventsReconciliation = self.lastPumpEventsReconciliation, !dose.isMutable && dose.endDate > lastPumpEventsReconciliation {
-                    self.log.error("FIXME! PumpManager submitted immutable dose with future end date: %{public}@", String(describing: dose))
-                    event.dose?.endDate = lastPumpEventsReconciliation
-                }
 
                 object.date = event.date
                 object.raw = event.raw

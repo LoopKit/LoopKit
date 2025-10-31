@@ -113,64 +113,6 @@ class DoseStoreTests: PersistenceControllerTestCase {
         waitForExpectations(timeout: 3)
     }
 
-    func testFutureEndDateBolus() {
-        // This test simulates a pump submitting a non-mutable pump event with a future end time.
-        // Pumps should not do this (if the dose has not ended, it should still be mutable).
-        // As a fail-safe, Loop will hackishly update the end time to now if it gets a mutable
-        // dose with an end time in the future, but any PumpManagers that aren't currently
-        // following this rule should be fixed.
-
-        var now = testingDate("2023-01-08 17:00:00 +0000")
-        let doseStore = defaultStore(testingDate: now)
-
-        let bolusStart = now.addingTimeInterval(.minutes(-2))
-        let bolusEnd = now.addingTimeInterval(10) // ends 10s in future
-
-        let pumpEvents: [NewPumpEvent] = [
-            NewPumpEvent(
-                date: bolusStart,
-                dose: DoseEntry(
-                    type: .bolus,
-                    startDate: bolusStart,
-                    endDate: bolusEnd,
-                    value: 6.1,
-                    unit: .units
-                ),
-                raw: Data(String("TestBolus").utf8),
-                title: "TestBolus"
-            )]
-
-        var storageExpectations = expectation(description: "add new doses finished")
-
-        doseStore.addPumpEvents(pumpEvents, lastReconciliation: now.addingTimeInterval(-5)) { error in
-            storageExpectations.fulfill()
-        }
-
-        waitForExpectations(timeout: 2)
-
-        now.addTimeInterval(20) // 20 seconds later, we do another report, to update lastReconciliation
-
-        doseStore.insulinDeliveryStore.test_currentDate = now
-
-        storageExpectations = expectation(description: "add new doses finished")
-
-        doseStore.addPumpEvents(pumpEvents, lastReconciliation: now) { error in
-            storageExpectations.fulfill()
-        }
-
-        let queryFinishedExpectation = expectation(description: "query finished")
-        doseStore.insulinOnBoard(at: now) { (result) in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected error: \(error)")
-            case .success(let value):
-                XCTAssertEqual(6.1, value.value, accuracy: 0.01)
-            }
-            queryFinishedExpectation.fulfill()
-        }
-        waitForExpectations(timeout: 3)
-    }
-
     func testMutableDosesIncludedInIOB() {
         let now = testingDate("2023-01-08 17:11:14 +0000")
         let doseStore = defaultStore(testingDate: now)
@@ -195,7 +137,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
 
         let tempBasalStart = testingDate("2023-01-08 17:02:35 +0000")
         let tempBasalEnd = testingDate("2023-01-08 17:32:35 +0000")
-        let tempBasal = DoseEntry(type: .tempBasal, startDate: tempBasalStart, endDate: tempBasalEnd, value:0.575, unit: .unitsPerHour, isMutable: true)
+        let tempBasal = DoseEntry(type: .tempBasal, startDate: tempBasalStart, endDate: tempBasalEnd, value:0.575, unit: .unitsPerHour, isMutable: false)
 
         let pumpEvents: [NewPumpEvent] = [
             NewPumpEvent(date: bolus.startDate, dose: bolus, raw: Data(hexadecimalString: "0000")!, title: "Bolus 5.15U"),
