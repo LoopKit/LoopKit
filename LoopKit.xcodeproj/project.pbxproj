@@ -692,6 +692,13 @@
 		C14A7E7E295F43AB00CD87B4 /* ConfigurationPageScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14A7E7D295F43AB00CD87B4 /* ConfigurationPageScrollView.swift */; };
 		C15E994429C67866004AB926 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4B67E2CC289B4EDB002D92AF /* Localizable.strings */; };
 		C15E994629C6790A004AB926 /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15E994529C6790A004AB926 /* LocalizedString.swift */; };
+		C15F9A492EB55E9A0082BDF4 /* Guardrail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F6E30E244A1A5D00CB9E15 /* Guardrail.swift */; };
+		C15F9A4A2EB55EC40082BDF4 /* Guardrail+Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C187338529B9486200519CDF /* Guardrail+Settings.swift */; };
+		C15F9A4B2EB55ED80082BDF4 /* FloatingPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898C896C24D4BF75002FA994 /* FloatingPoint.swift */; };
+		C15F9A4C2EB55EED0082BDF4 /* CorrectionRangeOverrides.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1FCE2624BE4DE2000300A8 /* CorrectionRangeOverrides.swift */; };
+		C15F9A4D2EB55F040082BDF4 /* Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C187338029B9486100519CDF /* Comparable.swift */; };
+		C15F9A582EB65D4C0082BDF4 /* TestingDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15F9A572EB65D3B0082BDF4 /* TestingDate.swift */; };
+		C15F9A592EB65D4C0082BDF4 /* TestingDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15F9A572EB65D3B0082BDF4 /* TestingDate.swift */; };
 		C1614F052AAFC34800F636E5 /* PersistedCgmEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1893D3B2AACBF14001947A2 /* PersistedCgmEvent.swift */; };
 		C1614F062AAFC36200F636E5 /* CgmEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1893D3D2AACD640001947A2 /* CgmEvent.swift */; };
 		C164A56022F14C73000E3FA5 /* UnfinalizedDose.swift in Sources */ = {isa = PBXBuildFile; fileRef = C164A55F22F14C73000E3FA5 /* UnfinalizedDose.swift */; };
@@ -1654,6 +1661,7 @@
 		C15A582B29C7866600D3A5A1 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C15C115029C814F300EBAC55 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		C15E994529C6790A004AB926 /* LocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedString.swift; sourceTree = "<group>"; };
+		C15F9A572EB65D3B0082BDF4 /* TestingDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingDate.swift; sourceTree = "<group>"; };
 		C161742B297E494D007C2E5F /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C161742C297E494D007C2E5F /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C161742D297E494D007C2E5F /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -2457,6 +2465,7 @@
 		43D8FDCD1C728FDF0073BE78 /* LoopKit */ = {
 			isa = PBXGroup;
 			children = (
+				C15F9A572EB65D3B0082BDF4 /* TestingDate.swift */,
 				1DA649AA2445174400F61E75 /* Alert.swift */,
 				A96E6C3627B35BC600F81A5B /* AnyCodableEquatable.swift */,
 				C109240E286A4AD500FAD2B8 /* AutomaticDosingStrategy.swift */,
@@ -4097,6 +4106,7 @@
 				432CF87320D774220066B889 /* PumpManager.swift in Sources */,
 				840A2F112C0F9882003D5E90 /* LoopCompletionFreshness.swift in Sources */,
 				43D8FE021C7290350073BE78 /* SampleValue.swift in Sources */,
+				C15F9A582EB65D4C0082BDF4 /* TestingDate.swift in Sources */,
 				A967D94924F99B6A00CDDF8A /* DataOutputStream.swift in Sources */,
 				43D8FDF41C7290350073BE78 /* BasalRateSchedule.swift in Sources */,
 				4322B788202FA2B30002837D /* DoseStore.swift in Sources */,
@@ -4415,6 +4425,7 @@
 				A9E6759B22713F4700E25293 /* PersistenceController.swift in Sources */,
 				B4B85FD024A2318A00A296A3 /* GlucoseRangeCategory.swift in Sources */,
 				A9E6759C22713F4700E25293 /* InsulinDeliveryStore.swift in Sources */,
+				C15F9A4B2EB55ED80082BDF4 /* FloatingPoint.swift in Sources */,
 				A9E6759D22713F4700E25293 /* DeviceManager.swift in Sources */,
 				B4A2ABEB2AA9F210007E3EC1 /* BolusActivationType.swift in Sources */,
 				B4A2ABF02AAB5160007E3EC1 /* Pluggable.swift in Sources */,
@@ -4427,6 +4438,7 @@
 				C1CEBFD829BA9D7A007FD8A3 /* Sequence.swift in Sources */,
 				A9E675A622713F4700E25293 /* BasalRateSchedule.swift in Sources */,
 				A9E675A722713F4700E25293 /* DoseStore.swift in Sources */,
+				C15F9A592EB65D4C0082BDF4 /* TestingDate.swift in Sources */,
 				A9E675A922713F4700E25293 /* PumpEvent+CoreDataProperties.swift in Sources */,
 				A9E675AA22713F4700E25293 /* ReservoirValue.swift in Sources */,
 				A93761C225ED670200F6BE43 /* BluetoothProvider.swift in Sources */,
@@ -4460,11 +4472,14 @@
 				A9E675C322713F4700E25293 /* UnfairLock.swift in Sources */,
 				1DD3DEB624451C3300BD8E40 /* Alert.swift in Sources */,
 				C1614F052AAFC34800F636E5 /* PersistedCgmEvent.swift in Sources */,
+				C15F9A4C2EB55EED0082BDF4 /* CorrectionRangeOverrides.swift in Sources */,
 				A9E675C422713F4700E25293 /* HealthStoreUnitCache.swift in Sources */,
+				C15F9A4A2EB55EC40082BDF4 /* Guardrail+Settings.swift in Sources */,
 				B42C951B24A63B8100857C73 /* DeviceStatusHighlight.swift in Sources */,
 				A932803C2798D63B0091D0A1 /* SyncAlertObject.swift in Sources */,
 				A9E675C722713F4700E25293 /* DoseEntry.swift in Sources */,
 				A9E675C822713F4700E25293 /* NSUserActivity+CarbKit.swift in Sources */,
+				C15F9A4D2EB55F040082BDF4 /* Comparable.swift in Sources */,
 				C1CEBFD229BA9D43007FD8A3 /* TimeInterval.swift in Sources */,
 				A9E675C922713F4700E25293 /* CachedInsulinDeliveryObject+CoreDataProperties.swift in Sources */,
 				C1CEBFD529BA9D62007FD8A3 /* LocalizedString.swift in Sources */,
@@ -4486,6 +4501,7 @@
 				A9E675D722713F4700E25293 /* PumpEvent+CoreDataClass.swift in Sources */,
 				A9E675D922713F4700E25293 /* Reservoir+CoreDataProperties.swift in Sources */,
 				E9F54FBA258052130034795E /* InsulinType.swift in Sources */,
+				C15F9A492EB55E9A0082BDF4 /* Guardrail.swift in Sources */,
 				A96E6C3827B35BC600F81A5B /* AnyCodableEquatable.swift in Sources */,
 				A9E675DA22713F4700E25293 /* HKQuantitySample+CarbKit.swift in Sources */,
 				A9E675DB22713F4700E25293 /* HKQuantitySample+GlucoseKit.swift in Sources */,

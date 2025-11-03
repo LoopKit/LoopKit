@@ -104,3 +104,19 @@ public extension TherapySetting {
     }
 }
 
+public extension CorrectionRangeOverrides.Preset {
+    var title: String {
+        switch self {
+        case .preMeal:
+            return LocalizedString("Pre-Meal", comment: "Title for pre-meal mode")
+        }
+    }
+
+    var therapySetting: TherapySetting {
+        switch self {
+        case .preMeal: return .preMealCorrectionRangeOverride
+        }
+    }
+}
+
+

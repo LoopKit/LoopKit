@@ -38,21 +38,6 @@ public struct CorrectionRangeOverrides: Equatable {
     public var preMeal: ClosedRange<LoopQuantity>? { ranges[.preMeal] }
 }
 
-public extension CorrectionRangeOverrides.Preset {
-    var title: String {
-        switch self {
-        case .preMeal:
-            return LocalizedString("Pre-Meal", comment: "Title for pre-meal mode")
-        }
-    }
-    
-    var therapySetting: TherapySetting {
-        switch self {
-        case .preMeal: return .preMealCorrectionRangeOverride
-        }
-    }
-}
-
 extension CorrectionRangeOverrides: Codable {
     fileprivate var codingGlucoseUnit: LoopUnit {
         return .milligramsPerDeciliter

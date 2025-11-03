@@ -47,7 +47,7 @@ extension ChartPoint {
                (override.startDate...override.scheduledEndDate).overlaps(startDate.date...endDate.date)
             {
                 result.append(createBar(value: range.value, unit: unit, startDate: startDate, endDate: ChartAxisValueDate(date: override.startDate, formatter: dateFormatter), isOverride: false))
-                let targetDuringOverride = override.settings.targetRange ?? range.value
+                let targetDuringOverride = override.effectiveCorrectionRangeDuring(scheduledRange: range.value)
                 result.append(createBar(
                     value: targetDuringOverride,
                     unit: unit,

@@ -39,23 +39,11 @@ public class PredictedGlucoseChart: GlucoseChart, ChartProviding {
         }
     }
 
-    public var preMealOverride: TemporaryScheduleOverride? {
-        didSet {
-            preMealOverrideDurationPoints = []
-        }
-    }
+    public var preMealOverride: TemporaryScheduleOverride?
 
-    public var scheduleOverride: TemporaryScheduleOverride? {
-        didSet {
-            targetOverrideDurationPoints = []
-        }
-    }
+    public var scheduleOverride: TemporaryScheduleOverride?
 
     private var targetGlucosePoints = [TargetChartBar]()
-
-    private var preMealOverrideDurationPoints: [ChartPoint] = []
-
-    private var targetOverrideDurationPoints: [ChartPoint] = []
 
     private var glucoseChartCache: ChartPointsTouchHighlightLayerViewCache?
 
@@ -90,7 +78,6 @@ extension PredictedGlucoseChart {
         predictedGlucosePoints = []
         alternatePredictedGlucosePoints = nil
         targetGlucosePoints = [TargetChartBar]()
-        targetOverrideDurationPoints = []
 
         glucoseChartCache = nil
     }
@@ -102,28 +89,6 @@ extension PredictedGlucoseChart {
             // TODO: This only considers one override: pre-meal or an active override. ChartPoint.barsForGlucoseRangeSchedule needs to accept list of overridden ranges.
             let potentialOverride = (preMealOverride?.isActive() ?? false) ? preMealOverride : (scheduleOverride?.isActive() ?? false) ? scheduleOverride : nil
             targetGlucosePoints = ChartPoint.barsForGlucoseRangeSchedule(schedule, unit: glucoseUnit, xAxisValues: xAxisValues, considering: potentialOverride)
-
-            var displayedScheduleOverride = scheduleOverride
-            if let preMealOverride = preMealOverride, preMealOverride.isActive() {
-                preMealOverrideDurationPoints = ChartPoint.pointsForGlucoseRangeScheduleOverride(preMealOverride, unit: glucoseUnit, xAxisValues: xAxisValues)
-
-                if displayedScheduleOverride != nil {
-                    if displayedScheduleOverride!.scheduledEndDate > preMealOverride.scheduledEndDate {
-                        let start = max(displayedScheduleOverride!.startDate, preMealOverride.scheduledEndDate)
-                        displayedScheduleOverride!.scheduledInterval = DateInterval(start: start, end: displayedScheduleOverride!.scheduledEndDate)
-                    } else {
-                        displayedScheduleOverride = nil
-                    }
-                }
-            } else {
-                preMealOverrideDurationPoints = []
-            }
-
-            if let override = displayedScheduleOverride, override.isActive() || override.startDate > Date() {
-                targetOverrideDurationPoints = ChartPoint.pointsForGlucoseRangeScheduleOverride(override, unit: glucoseUnit, xAxisValues: xAxisValues)
-            } else {
-                targetOverrideDurationPoints = []
-            }
         }
         
         let yAxisValues = determineYAxisValues(axisLabelSettings: axisLabelSettings)
@@ -149,17 +114,7 @@ extension PredictedGlucoseChart {
                         fillColor: targetFill,
                         createContainerPoints: false)
                 }
-            } + [
-                ChartPointsFill(
-                    chartPoints: preMealOverrideDurationPoints,
-                    fillColor: overrideFill,
-                    createContainerPoints: false
-                ),
-                ChartPointsFill(
-                    chartPoints: targetOverrideDurationPoints,
-                    fillColor: overrideFill,
-                    createContainerPoints: false
-                )]
+            }
         
         let targetsLayer = ChartPointsFillsLayer(
             xAxis: xAxisLayer.axis,
@@ -229,7 +184,6 @@ extension PredictedGlucoseChart {
     private func determineYAxisValues(axisLabelSettings: ChartLabelSettings? = nil) -> [ChartAxisValue] {
         let points = [
             glucosePoints, predictedGlucosePoints,
-            preMealOverrideDurationPoints, targetOverrideDurationPoints,
             targetGlucosePoints.flatMap { $0.points },
             glucoseDisplayRangePoints
         ].flatMap { $0 }

@@ -330,5 +330,5 @@ public extension CorrectionRangeOverrides.Preset {
             return LocalizedString("Temporarily lower your glucose target before a meal to impact post-meal glucose spikes.", comment: "Description of pre-meal mode")
         }
     }
-
 }
+
