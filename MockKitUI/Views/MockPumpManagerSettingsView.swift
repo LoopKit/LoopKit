@@ -129,22 +129,39 @@ struct MockPumpManagerSettingsView: View {
     private var activitySection: some View {
         suspendResumeInsulinSubSection
 
-        deviceDetailsSubSection
-
-        replaceSystemComponentsSubSection
+        replacePumpSection
+        
+        notificationSection
     }
     
     private var suspendResumeInsulinSubSection: some View {
         Section(header: SectionHeader(label: LocalizedString("Activity", comment: "Section header for the activity section"))) {
             Button(action: suspendResumeTapped) {
-                HStack {
-                    Image(systemName: "pause.circle.fill")
-                        .foregroundColor(viewModel.isDeliverySuspended ? guidanceColors.warning : .accentColor)
-                    Text(viewModel.suspendResumeInsulinDeliveryLabel)
+                HStack(spacing: 8) {
+                    Text("").frame(maxWidth: 0)
+                        .accessibilityHidden(true)
+                    
                     Spacer()
-                    if viewModel.transitioningSuspendResumeInsulinDelivery {
-                        ActivityIndicator(isAnimating: .constant(true), style: .medium)
+                    
+                    HStack(spacing: 4) {
+                        if viewModel.suspendResumeInsulinDeliveryStatus.showPauseIcon {
+                            Image(systemName: "pause.circle.fill")
+                                .foregroundColor(viewModel.suspendResumeInsulinDeliveryStatus != .suspended ? nil : guidanceColors.warning)
+                        }
+                        
+                        Text(viewModel.suspendResumeInsulinDeliveryStatus.localizedLabel)
+                            .fontWeight(.semibold)
                     }
+                       
+                    if viewModel.transitioningSuspendResumeInsulinDelivery {
+                        ProgressView()
+                    }
+                    
+                    Spacer()
+                }
+                .padding(.vertical, 8)
+                .actionSheet(isPresented: $showSuspendOptions) {
+                   suspendOptionsActionSheet
                 }
             }
             .disabled(viewModel.transitioningSuspendResumeInsulinDelivery)
@@ -155,19 +172,34 @@ struct MockPumpManagerSettingsView: View {
         }
     }
     
+    private var suspendOptionsActionSheet: ActionSheet {
+        let completion: (Error?) -> Void = { (error) in
+            if let error = error {
+                self.presentedAlert = .suspendInsulinDeliveryError(error)
+            }
+        }
+
+        var suspendReminderDelayOptions: [SwiftUI.Alert.Button] = viewModel.suspendReminderDelayOptions.map { suspendReminderDelay in
+            .default(Text(viewModel.suspendReminderTimeFormatter.string(from: suspendReminderDelay)!),
+                     action: { viewModel.suspendInsulinDelivery(reminderDelay: suspendReminderDelay, completion: completion) })
+        }
+        suspendReminderDelayOptions.append(.cancel())
+
+        return ActionSheet(
+            title: FrameworkLocalizedText("Delivery Suspension Reminder", comment: "Title for suspend duration selection action sheet"),
+            message: FrameworkLocalizedText("How long would you like to suspend insulin delivery for?", comment: "Message for suspend duration selection action sheet"),
+            buttons: suspendReminderDelayOptions)
+    }
+    
     private func suspendResumeTapped() {
         if viewModel.isDeliverySuspended {
-            viewModel.resumeDelivery() { error in
+            viewModel.resumeInsulinDelivery { error in
                 if let error = error {
                     self.presentedAlert = .resumeInsulinDeliveryError(error)
                 }
             }
         } else {
-            viewModel.suspendDelivery() { error in
-                if let error = error {
-                    self.presentedAlert = .suspendInsulinDeliveryError(error)
-                }
-            }
+            showSuspendOptions = true
         }
     }
     
@@ -186,27 +218,27 @@ struct MockPumpManagerSettingsView: View {
         }
     }
     
-    private var replaceSystemComponentsSubSection: some View {
+    private var replacePumpSection: some View {
         Section {
             NavigationLink(destination: DemoPlaceHolderView(appName: appName)) {
                 Text("Replace Pump")
-                    .foregroundColor(.accentColor)
+                    .foregroundColor(guidanceColors.critical)
             }
         }
     }
 
     @ViewBuilder
     private var configurationSection: some View {
-        notificationSubSection
+        Section(header: SectionHeader(label: "Configuration")) {
+            deviceDetailsSubSection
+        }
         
         pumpTimeSubSection
     }
     
-    private var notificationSubSection: some View {
-        Section(header: SectionHeader(label: "Configuration")) {
-            NavigationLink(destination: DemoPlaceHolderView(appName: appName)) {
-                Text("Notification Settings")
-            }
+    private var notificationSection: some View {
+        NavigationLink(destination: DemoPlaceHolderView(appName: appName)) {
+            Text("Notification Settings")
         }
     }
     

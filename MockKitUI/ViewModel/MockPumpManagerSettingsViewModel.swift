@@ -15,16 +15,26 @@ import MockKit
 class MockPumpManagerSettingsViewModel: ObservableObject {
     let pumpManager: MockPumpManager
     
-    @Published private(set) var isDeliverySuspended: Bool {
-        didSet {
-            transitioningSuspendResumeInsulinDelivery = false
-            basalDeliveryState = pumpManager.status.basalDeliveryState
-        }
+    var isDeliverySuspended: Bool {
+        suspendedAt != nil
     }
     
     @Published private(set) var transitioningSuspendResumeInsulinDelivery = false
     
-    @Published private(set) var suspendedAtString: String? = nil
+    @Published var suspendedAt: Date?
+    
+    var suspendedAtString: String? {
+        guard let suspendedAt = suspendedAt else { return nil }
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .short
+        formatter.doesRelativeDateFormatting = true
+        return formatter.string(from: suspendedAt)
+    }
+    
+    var suspendReminderDelayOptions: [TimeInterval] {
+        [.minutes(30), .hours(1), .hours(1.5), .hours(2)]
+    }
     
     var suspendResumeInsulinDeliveryLabel: String {
         if isDeliverySuspended {
@@ -33,6 +43,13 @@ class MockPumpManagerSettingsViewModel: ObservableObject {
             return "Suspend Insulin Delivery"
         }
     }
+    
+    lazy var suspendReminderTimeFormatter: DateComponentsFormatter = {
+        let formatter = DateComponentsFormatter()
+        formatter.unitsStyle = .full
+        formatter.allowedUnits = [.hour, .minute]
+        return formatter
+    }()
     
     static private let dateTimeFormatter: DateFormatter = {
         let timeFormatter = DateFormatter()
@@ -132,7 +149,7 @@ class MockPumpManagerSettingsViewModel: ObservableObject {
         self.pumpManager = pumpManager
         
         let now = Date()
-        isDeliverySuspended = pumpManager.status.basalDeliveryState?.isSuspended == true
+        suspendedAt = pumpManager.state.suspendedAt
         basalDeliveryState = pumpManager.status.basalDeliveryState
         basalDeliveryRate = pumpManager.state.basalDeliveryRate(at: now)
         basalDeliveryRateDate = now
@@ -145,36 +162,78 @@ class MockPumpManagerSettingsViewModel: ObservableObject {
     private func setSuspenededAtString() {
         switch basalDeliveryState {
         case .suspended(let suspendedAt):
-            let formatter = DateFormatter()
-            formatter.dateStyle = .medium
-            formatter.timeStyle = .short
-            formatter.doesRelativeDateFormatting = true
-            suspendedAtString = formatter.string(from: suspendedAt)
+            self.suspendedAt = suspendedAt
         default:
-            suspendedAtString = nil
+            self.suspendedAt = nil
         }
     }
     
-    func resumeDelivery(completion: @escaping (Error?) -> Void) {
-        transitioningSuspendResumeInsulinDelivery = true
-        pumpManager.resumeDelivery() { [weak self] error in
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                if error == nil {
-                    self?.isDeliverySuspended = false
+    func resumeInsulinDelivery(completion: @escaping (Error?) -> Void) {
+        DispatchQueue.main.async { [weak self] in
+            self?.transitioningSuspendResumeInsulinDelivery = true
+            self?.pumpManager.resumeDelivery() { [weak self] error in
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    if error == nil {
+                        self?.suspendedAt = nil
+                    }
+                    self?.transitioningSuspendResumeInsulinDelivery = false
+                    completion(error)
                 }
-                completion(error)
             }
         }
     }
     
-    func suspendDelivery(completion: @escaping (Error?) -> Void) {
-        transitioningSuspendResumeInsulinDelivery = true
-        pumpManager.suspendDelivery() { [weak self] error in
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                if error == nil {
-                    self?.isDeliverySuspended = true
+    enum SuspendResumeInsulinDeliveryStatus {
+        case suspended
+        case suspending
+        case resumed
+        case resuming
+        
+        var localizedLabel: String {
+            switch self {
+            case .suspended:
+                return LocalizedString("Tap to Resume Insulin Delivery", comment: "Label when the user can resume insulin delivery")
+            case .suspending:
+                return LocalizedString("Suspending Insulin Delivery", comment: "Label when suspending insulin delivery")
+            case .resumed:
+                return LocalizedString("Suspend Insulin Delivery", comment: "Label when the user can suspend insulin delivery")
+            case .resuming:
+                return LocalizedString("Resuming Insulin Delivery", comment: "Label when resuming insulin delivery")
+            }
+        }
+        
+        var showPauseIcon: Bool {
+            self == .suspended || self == .resuming
+        }
+    }
+
+    var suspendResumeInsulinDeliveryStatus: SuspendResumeInsulinDeliveryStatus {
+        if isDeliverySuspended {
+            if transitioningSuspendResumeInsulinDelivery {
+                return .resuming
+            } else {
+                return .suspended
+            }
+        } else {
+            if transitioningSuspendResumeInsulinDelivery {
+                return .suspending
+            } else {
+                return .resumed
+            }
+        }
+    }
+    
+    func suspendInsulinDelivery(reminderDelay: TimeInterval, completion: @escaping (Error?) -> Void) {
+        DispatchQueue.main.async { [weak self] in
+            self?.transitioningSuspendResumeInsulinDelivery = true
+            self?.pumpManager.suspendDelivery(reminderDelay: reminderDelay) { error in
+                DispatchQueue.main.async {
+                    if error == nil {
+                        self?.suspendedAt = Date()
+                    }
+                    self?.transitioningSuspendResumeInsulinDelivery = false
+                    completion(error)
                 }
-                completion(error)
             }
         }
     }

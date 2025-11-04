@@ -27,3 +27,13 @@ func LocalizedString(_ key: String, tableName: String? = nil, value: String? = n
         return NSLocalizedString(key, tableName: tableName, bundle: LocalBundle.main, comment: comment)
     }
 }
+
+import SwiftUI
+
+fileprivate class FrameworkReferenceClass {
+    static let bundle = Bundle(for: FrameworkReferenceClass.self)
+}
+
+func FrameworkLocalizedText(_ key: LocalizedStringKey, comment: StaticString) -> Text {
+    return Text(key, bundle: FrameworkReferenceClass.bundle, comment: comment)
+}

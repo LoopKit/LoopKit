@@ -176,6 +176,16 @@ public struct MockPumpManagerState: Equatable {
     public var pumpEventsToStore: [NewPumpEvent] {
         return dosesToStore.map { NewPumpEvent($0) } + additionalPumpEvents
     }
+    
+    public var isSuspended: Bool {
+        guard case .resumed = suspendState else { return true }
+        return false
+    }
+
+    public var suspendedAt: Date? {
+        guard case .suspended(let suspendedAt) = suspendState else { return nil }
+        return suspendedAt
+    }
 
     public init(deliverableIncrements: DeliverableIncrements = .medtronicX22,
                 reservoirUnitsRemaining: Double = 200.0,

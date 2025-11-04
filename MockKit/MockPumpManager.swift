@@ -582,6 +582,47 @@ public final class MockPumpManager: TestingPumpManager {
         state.unfinalizedBolus?.cancel(at: now)
         storePumpEvents { _ in }
     }
+    
+    func issueInsulinSuspensionReminderAlert(reminderDelay: TimeInterval?) {
+        guard let reminderDelay = reminderDelay else { return }
+        Task {
+            await issueAlert(insulinSuspensionReminderAlert(reminderDelay: reminderDelay))
+        }
+    }
+    
+    private func retractInsulinSuspensionReminderAlert() {
+        Task {
+            await retractAlert(identifier: insulinSuspensionReminderAlertIdentifier)
+        }
+    }
+
+    var insulinSuspensionReminderAlertIdentifier: Alert.Identifier {
+        Alert.Identifier(managerIdentifier: pluginIdentifier, alertIdentifier: "insulinSuspensionReminder")
+    }
+
+    private func insulinSuspensionReminderAlert(reminderDelay: TimeInterval) -> Alert {
+        let identifier = insulinSuspensionReminderAlertIdentifier
+        let alertContentForeground = Alert.Content(title: LocalizedString("Delivery Suspension Reminder", comment: "Title of insulin suspension reminder alert"),
+                                                   body: LocalizedString("The insulin suspension period has ended. You can resume delivery from the banner on the home screen or from your pump settings screen.", comment: "The body of the insulin suspension reminder alert (in app)"),
+                                                   acknowledgeActionButtonLabel: LocalizedString("OK", comment: "Acknowledgement button title for insulin suspension reminder  alert"))
+        let alertContentBackground = Alert.Content(title: LocalizedString("Delivery Suspension Reminder", comment: "Title of insulin suspension reminder alert"),
+                                                   body: LocalizedString("The insulin suspension period has ended. Return to App and resume.", comment: "The body of the insulin suspension reminder alert (notification)"),
+                                                   acknowledgeActionButtonLabel: LocalizedString("OK", comment: "Acknowledgement button title for insulin suspension reminder  alert"))
+        return Alert(identifier: identifier,
+                     foregroundContent: alertContentForeground,
+                     backgroundContent: alertContentBackground,
+                     trigger: .delayed(interval: reminderDelay),
+                     interruptionLevel: .timeSensitive)
+    }
+    
+    public func suspendDelivery(reminderDelay: TimeInterval, completion: @escaping (Error?) -> Void) {
+        suspendDelivery { [weak self] error in
+            if error == nil {
+                self?.issueInsulinSuspensionReminderAlert(reminderDelay: reminderDelay)
+            }
+            completion(error)
+        }
+    }
 
     public func suspendDelivery(completion: @escaping (Error?) -> Void) {
         logDeviceComms(.send, message: "Suspend")
@@ -610,6 +651,9 @@ public final class MockPumpManager: TestingPumpManager {
                 completion(error)
             }
             logDeviceCommunication("suspendDelivery succeeded", type: .receive)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                completion(nil)
+            }
         }
     }
 
@@ -633,6 +677,9 @@ public final class MockPumpManager: TestingPumpManager {
                 completion(error)
             }
             logDeviceCommunication("resumeDelivery succeeded", type: .receive)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                completion(nil)
+            }
         }
     }
     
@@ -670,8 +717,38 @@ extension MockPumpManager {
 }
 
 // MARK: - AlertResponder implementation
-extension MockPumpManager {
+extension MockPumpManager: AlertIssuer {
+    public func issueAlert(_ alert: Alert) {
+        logDeviceComms(.delegate, message: "issuing \(alert.identifier) \(alert.backgroundContent.title) with trigger \(alert.trigger)")
+        delegate.notify { delegate in
+            guard let delegate else { return }
+            Task {
+                await delegate.issueAlert(alert)
+            }
+        }
+    }
+    
+    public func retractAlert(identifier: Alert.Identifier) {
+        logDeviceComms(.delegate, message: "retracting \(identifier)")
+        delegate.notify { delegate in
+            guard let delegate else { return }
+            Task {
+                await delegate.retractAlert(identifier: identifier)
+            }
+        }
+    }
+    
     public func acknowledgeAlert(alertIdentifier: Alert.AlertIdentifier) async throws {
+        logDeviceComms(.delegate, message: "acknowledging \(alertIdentifier)")
+
+        if alertIdentifier == insulinSuspensionReminderAlertIdentifier.alertIdentifier {
+            if case .suspended = state.suspendState {
+                // subsequent reminder are delayed 15 mins
+                issueInsulinSuspensionReminderAlert(reminderDelay: .minutes(15))
+            }
+            return
+        }
+        
     }
 
     public func handleAlertAction(actionIdentifier: String, from alert: Alert) async throws {
