@@ -221,6 +221,14 @@ public final class MockPumpManager: TestingPumpManager {
                                                        progressState: progressState)
     }
     
+    public var canSynchronizePumpTime: Bool {
+        detectedSystemTimeOffset == 0
+    }
+    
+    public var detectedSystemTimeOffset: TimeInterval {
+        pumpManagerDelegate?.detectedSystemTimeOffset ?? 0
+    }
+    
     public var isClockOffset: Bool {
         let now = Date()
         return TimeZone.current.secondsFromGMT(for: now) != state.timeZone.secondsFromGMT(for: now)
@@ -684,6 +692,22 @@ public final class MockPumpManager: TestingPumpManager {
     }
     
     public func trigger(action: DeviceAction) {}
+    
+    public var pumpTimeZone: TimeZone {
+        state.timeZone
+    }
+    
+    public func setPumpTime(_ newPumpTime: Date = Date(), using timeZone: TimeZone, completion: @escaping (Error?) -> Void) {
+        logDeviceCommunication("set pump time success", type: .receive)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.recordPumpTime(newPumpTime, in: timeZone)
+            completion(nil)
+        }
+    }
+        
+    private func recordPumpTime(_ pumpTime: Date, in timeZone: TimeZone) {
+        state.timeZone = timeZone
+    }
 
     public func injectPumpEvents(_ pumpEvents: [NewPumpEvent]) {
         // directly report these pump events

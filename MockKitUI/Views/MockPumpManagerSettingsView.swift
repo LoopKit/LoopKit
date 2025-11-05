@@ -16,6 +16,7 @@ struct MockPumpManagerSettingsView: View {
     fileprivate enum PresentedAlert {
         case resumeInsulinDeliveryError(Error)
         case suspendInsulinDeliveryError(Error)
+        case syncTimeError(Error)
     }
     
     @Environment(\.dismissAction) private var dismiss
@@ -25,6 +26,7 @@ struct MockPumpManagerSettingsView: View {
     
     @State private var showSuspendOptions = false
     @State private var presentedAlert: PresentedAlert?
+    @State private var showSyncTimeOptions = false
 
     private var supportedInsulinTypes: [InsulinType]
     private var appName: String
@@ -243,8 +245,57 @@ struct MockPumpManagerSettingsView: View {
     }
     
     private var pumpTimeSubSection: some View {
-        Section {
-            TimeView(label: "Pump Time")
+        Section(footer: pumpTimeSubSectionFooter) {
+            HStack {
+                FrameworkLocalizedText("Pump Time", comment: "The title of the command to change pump time zone")
+                    .foregroundColor(viewModel.canSynchronizePumpTime ? .primary : guidanceColors.critical)
+                Spacer()
+                if viewModel.isClockOffset {
+                    Image(systemName: "clock.fill")
+                        .foregroundColor(guidanceColors.warning)
+                }
+                TimeView(timeOffset: viewModel.detectedSystemTimeOffset, timeZone: viewModel.timeZone)
+                    .foregroundColor(viewModel.isClockOffset ? guidanceColors.warning : nil)
+            }
+            if viewModel.synchronizingTime {
+                HStack {
+                    FrameworkLocalizedText("Adjusting Pump Time...", comment: "Text indicating ongoing pump time synchronization")
+                        .foregroundColor(.secondary)
+                    Spacer()
+                    ActivityIndicator(isAnimating: .constant(true), style: .medium)
+                }
+            } else if self.viewModel.timeZone != TimeZone.currentFixed,
+                      viewModel.canSynchronizePumpTime
+            {
+                Button(action: {
+                    showSyncTimeOptions = true
+                }) {
+                    FrameworkLocalizedText("Sync to Current Time", comment: "The title of the command to change pump time zone")
+                }
+                .actionSheet(isPresented: $showSyncTimeOptions) {
+                    syncPumpTimeActionSheet
+                }
+            }
+        }
+    }
+    
+    var syncPumpTimeActionSheet: ActionSheet {
+       ActionSheet(title: FrameworkLocalizedText("Time Change Detected", comment: "Title for pump sync time action sheet."), message: FrameworkLocalizedText("The time on your pump is different from the current time. Do you want to update the time on your pump to the current time?", comment: "Message for pump sync time action sheet"), buttons: [
+          .default(FrameworkLocalizedText("Yes, Sync to Current Time", comment: "Button text to confirm pump time sync")) {
+              self.viewModel.changeTimeZoneTapped() { error in
+                  if let error = error {
+                      self.presentedAlert = .syncTimeError(error)
+                  }
+              }
+          },
+          .cancel(FrameworkLocalizedText("No, Keep Pump As Is", comment: "Button text to cancel pump time sync"))
+       ])
+    }
+        
+    @ViewBuilder
+    private var pumpTimeSubSectionFooter: some View {
+        if !viewModel.canSynchronizePumpTime {
+            FrameworkLocalizedText("When the device time is manually set, Tidepool Loop will not synchronize the pump time to the device time.", comment: "Description for why the pump time is not synchronized")
         }
     }
     
@@ -272,6 +323,11 @@ struct MockPumpManagerSettingsView: View {
                 title: Text("Failed to Resume Insulin Delivery"),
                 message: Text(error.localizedDescription)
             )
+        case .syncTimeError(let error):
+            return SwiftUI.Alert(
+               title: FrameworkLocalizedText("Failed to Set Pump Time", comment: "Alert title for time sync error"),
+               message: Text(error.localizedDescription)
+            )
         }
     }
 }
@@ -283,6 +339,8 @@ extension MockPumpManagerSettingsView.PresentedAlert: Identifiable {
             return 0
         case .suspendInsulinDeliveryError:
             return 1
+        case .syncTimeError:
+            return 2
         }
     }
 }

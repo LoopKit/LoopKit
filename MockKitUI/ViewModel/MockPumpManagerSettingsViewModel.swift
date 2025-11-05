@@ -147,6 +147,8 @@ class MockPumpManagerSettingsViewModel: ObservableObject {
     
     init(pumpManager: MockPumpManager) {
         self.pumpManager = pumpManager
+        self.canSynchronizePumpTime = pumpManager.canSynchronizePumpTime
+        self.detectedSystemTimeOffset = pumpManager.detectedSystemTimeOffset
         
         let now = Date()
         suspendedAt = pumpManager.state.suspendedAt
@@ -157,6 +159,16 @@ class MockPumpManagerSettingsViewModel: ObservableObject {
         setSuspenededAtString()
         
         pumpManager.addStateObserver(self, queue: .main)
+        
+        NotificationCenter.default.addObserver(
+            forName: UIApplication.significantTimeChangeNotification,
+            object: nil,
+            queue: nil
+        ) { [weak self] _ in
+            Task { @MainActor in
+                self?.updateDisplayOfPumpTime()
+            }
+        }
     }
     
     private func setSuspenededAtString() {
@@ -235,6 +247,36 @@ class MockPumpManagerSettingsViewModel: ObservableObject {
                     completion(error)
                 }
             }
+        }
+    }
+    
+    var isClockOffset: Bool {
+        pumpManager.isClockOffset
+    }
+    
+    var timeZone: TimeZone {
+        pumpManager.status.timeZone
+    }
+    
+    @Published var synchronizingTime: Bool = false
+    
+    @Published var detectedSystemTimeOffset: TimeInterval
+    
+    @Published var canSynchronizePumpTime: Bool
+    
+    func changeTimeZoneTapped(completion: @escaping (Error?) -> Void) {
+        synchronizingTime = true
+        pumpManager.setPumpTime(using: TimeZone.currentFixed) { [weak self] error in
+            self?.synchronizingTime = false
+            completion(error)
+        }
+    }
+    
+    private func updateDisplayOfPumpTime() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            guard let self = self else { return }
+            self.detectedSystemTimeOffset = self.pumpManager.detectedSystemTimeOffset
+            self.canSynchronizePumpTime = self.pumpManager.canSynchronizePumpTime
         }
     }
 }
