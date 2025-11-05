@@ -155,18 +155,26 @@ struct MockCGMManagerSettingsView: View {
         VStack(alignment: .leading, spacing: 5) {
             Text("Last Reading")
                 .foregroundColor(.secondary)
-            
             HStack(alignment: .center, spacing: 16) {
-                viewModel.lastGlucoseTrend?.filledImage
-                    .scaleEffect(1.7, anchor: .leading)
-                    .foregroundColor(glucoseTintColor)
-                HStack(alignment: .firstTextBaseline, spacing: 4) {
-                    Text(viewModel.lastGlucoseValueFormatted)
-                        .font(.title)
-                        .fontWeight(.heavy)
-                    if viewModel.shouldDisplayUnitsForCurrentGlucose {
-                        Text(viewModel.glucoseUnitString)
-                            .foregroundColor(.secondary)
+                if viewModel.inSignalLoss {
+                    Image(systemName: "exclamationmark.circle.fill")
+                        .scaleEffect(1.7, anchor: .leading)
+                        .foregroundColor(guidanceColors.critical)
+                    Text("Signal Loss")
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                } else {
+                    viewModel.lastGlucoseTrend?.filledImage
+                        .scaleEffect(1.7, anchor: .leading)
+                        .foregroundColor(glucoseTintColor)
+                    HStack(alignment: .firstTextBaseline, spacing: 4) {
+                        Text(viewModel.lastGlucoseValueFormatted)
+                            .font(.title)
+                            .fontWeight(.heavy)
+                        if viewModel.shouldDisplayUnitsForCurrentGlucose {
+                            Text(viewModel.glucoseUnitString)
+                                .foregroundColor(.secondary)
+                        }
                     }
                 }
             }
@@ -176,24 +184,15 @@ struct MockCGMManagerSettingsView: View {
     @ViewBuilder
     private var lastReadingTime: some View {
         HStack(alignment: .center, spacing: 16) {
-            if viewModel.inSignalLoss {
-                Image(systemName: "exclamationmark.circle.fill")
-                    .scaleEffect(1.7, anchor: .leading)
-                    .foregroundColor(guidanceColors.critical)
-                Text("Signal Loss")
-                    .font(.title2)
-                    .fontWeight(.semibold)
-            } else {
-                Image(systemName: "arrow.triangle.2.circlepath.circle.fill")
-                    .scaleEffect(1.7, anchor: .leading)
-                    .foregroundColor(glucoseTintColor)
-                HStack(alignment: .firstTextBaseline, spacing: 4) {
-                    Text("\(viewModel.lastReadingMinutesFromNow)")
-                        .font(.title)
-                        .fontWeight(.heavy)
-                    Text("min")
-                        .foregroundColor(.secondary)
-                }
+            Image(systemName: "arrow.triangle.2.circlepath.circle.fill")
+                .scaleEffect(1.7, anchor: .leading)
+                .foregroundColor(glucoseTintColor)
+            HStack(alignment: .firstTextBaseline, spacing: 4) {
+                Text("\(viewModel.lastReadingMinutesFromNow)")
+                    .font(.title)
+                    .fontWeight(.heavy)
+                Text("min")
+                    .foregroundColor(.secondary)
             }
         }
         .frame(height: 40.0)
