@@ -167,7 +167,15 @@ public struct MockPumpManagerState: Equatable {
     public var progressCriticalThresholdPercentValue: Double?
     
     public var insulinType: InsulinType?
-    public var timeZone: TimeZone
+    public var timeZone: TimeZone {
+        get {
+            guard let basalRateSchedule else { return .currentFixed }
+            return basalRateSchedule.timeZone
+        }
+        set {
+            basalRateSchedule?.timeZone = newValue
+        }
+    }
     
     public var dosesToStore: [UnfinalizedDose] {
         return finalizedDoses + [unfinalizedTempBasal, unfinalizedBolus].compactMap {$0}
@@ -232,7 +240,6 @@ public struct MockPumpManagerState: Equatable {
         self.progressWarningThresholdPercentValue = progressWarningThresholdPercentValue
         self.progressCriticalThresholdPercentValue = progressCriticalThresholdPercentValue
         self.insulinType = insulinType
-        self.timeZone = .currentFixed
     }
 
     public mutating func finalizeFinishedDoses() {
