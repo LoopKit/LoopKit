@@ -570,11 +570,11 @@ public final class MockPumpManager: TestingPumpManager {
             completion(.failure(error))
         } else {
             state.unfinalizedBolus?.cancel(at: Date())
-            
+            let bolusCanceled = state.unfinalizedBolus != nil ? DoseEntry(state.unfinalizedBolus!) : nil
             storePumpEvents { (_) in
                 DispatchQueue.main.async {
                     self.state.finalizeFinishedDoses()
-                    completion(.success(nil))
+                    completion(.success(bolusCanceled))
                 }
             }
         }
@@ -679,12 +679,13 @@ public final class MockPumpManager: TestingPumpManager {
         } else {
             let resumeDate = Date()
             let resume = UnfinalizedDose(resumeStartTime: resumeDate, insulinType: state.insulinType, automatic: false)
-            self.state.finalizedDoses.append(resume)
-            self.state.suspendState = .resumed(resumeDate)
+            state.finalizedDoses.append(resume)
+            state.suspendState = .resumed(resumeDate)
             storePumpEvents { (error) in
                 completion(error)
             }
             logDeviceCommunication("resumeDelivery succeeded", type: .receive)
+            retractInsulinSuspensionReminderAlert()
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 completion(nil)
             }
