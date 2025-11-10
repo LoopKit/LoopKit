@@ -72,8 +72,11 @@ public struct ActivityPreset: Hashable, Identifiable, Sendable, RawRepresentable
             }
         }
         
+        public var completeDefaultPreset: TemporaryPreset {
+            defaultPreset(duration: .finite(.minutes(90)), scheduleStartDate: nil, repeatOptions: .none)
+        }
         
-        public func defaultPreset(duration: TemporaryScheduleOverride.Duration) -> TemporaryPreset {
+        public func defaultPreset(duration: TemporaryScheduleOverride.Duration, scheduleStartDate: Date?, repeatOptions: PresetScheduleRepeatOptions) -> TemporaryPreset {
             TemporaryPreset(
                 id: id,
                 symbol: symbol,
@@ -82,7 +85,9 @@ public struct ActivityPreset: Hashable, Identifiable, Sendable, RawRepresentable
                     targetRange: defaultTargetRange,
                     insulinNeedsScaleFactor: defaultInsulinNeedsScaleFactor
                 ),
-                duration: duration
+                duration: duration,
+                scheduleStartDate: scheduleStartDate,
+                repeatOptions: repeatOptions
             )
         }
     }
@@ -116,7 +121,11 @@ public struct ActivityPreset: Hashable, Identifiable, Sendable, RawRepresentable
     }
     
     public var isModifiedFromDefault: Bool {
-        preset != activityType.defaultPreset(duration: preset.duration)
+        preset != activityType.defaultPreset(
+            duration: preset.duration,
+            scheduleStartDate: preset.scheduleStartDate,
+            repeatOptions: preset.repeatOptions ?? .none
+        )
     }
     
     public var id: String {
