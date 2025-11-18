@@ -17,7 +17,7 @@ class PersistenceControllerTestCase: XCTestCase {
 
         let dir = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
 
-        cacheStore = PersistenceController(directoryURL: URL(fileURLWithPath: dir.absoluteString, isDirectory: true).appendingPathComponent(UUID().uuidString, isDirectory: true))
+        cacheStore = PersistenceController(directoryURL: dir.appendingPathComponent(UUID().uuidString, isDirectory: true))
 
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) -> Void in
             cacheStore.onReady { error in
