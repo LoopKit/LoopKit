@@ -268,7 +268,7 @@ public struct TemporaryScheduleOverride: Hashable, Sendable {
 
 extension TemporaryScheduleOverride {
     // LOOP-5439 High Insulin Needs Preset Mitigation
-    public static let highInsulinNeedsMitigationCorrrectionRangeLimit = LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 110)
+    public static let highInsulinNeedsMitigationCorrectionRangeLimit = LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 110)
 
     public static func isInMitigationRange(insulinNeedsScaleFactor: Double?) -> Bool {
         guard let insulinNeedsScaleFactor else { return false }
@@ -283,7 +283,7 @@ extension TemporaryScheduleOverride {
     public func effectiveCorrectionRangeDuring(scheduledRange: ClosedRange<LoopQuantity>) -> ClosedRange<LoopQuantity> {
         let range = settings.targetRange ?? scheduledRange
         if veryHighInsulinNeeds {
-            return range.clampedTo(atLeast: Self.highInsulinNeedsMitigationCorrrectionRangeLimit)
+            return range.clampedTo(atLeast: Self.highInsulinNeedsMitigationCorrectionRangeLimit)
         }
         return range
     }
