@@ -494,7 +494,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "单位 活性胰岛素"
+            "value" : "U 活性胰岛素"
           }
         }
       }
@@ -980,7 +980,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "胰岛素容量"
+            "value" : "储药器"
           }
         }
       }
