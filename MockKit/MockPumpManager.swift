@@ -346,8 +346,13 @@ public final class MockPumpManager: TestingPumpManager {
     private var statusObservers = WeakSynchronizedSet<PumpManagerStatusObserver>()
     private var stateObservers = WeakSynchronizedSet<MockPumpManagerStateObserver>()
 
+    private var deliveryTimer: Timer?
+    
     public init() {
         state = MockPumpManagerState(reservoirUnitsRemaining: MockPumpManager.pumpReservoirCapacity)
+        deliveryTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { [weak self] _ in
+            self?.state.finalizeFinishedDoses()
+        })
     }
 
     public init?(rawState: RawStateValue) {
