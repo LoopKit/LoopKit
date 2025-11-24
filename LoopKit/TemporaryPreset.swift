@@ -190,10 +190,12 @@ public struct TemporaryPreset: Hashable, Sendable {
             return scheduleStartDate > date ? scheduleStartDate : nil
         }
 
+        let firstAllowedStart = max(date, scheduleStartDate.addingTimeInterval(-60))
+
         // Get the time components from the original schedule start date
         let timeComponents = calendar.dateComponents([.hour, .minute, .second], from: scheduleStartDate)
 
-        let startDate = calendar.startOfDay(for: date)
+        let startDate = calendar.startOfDay(for: firstAllowedStart)
 
         // Look ahead up to 7 days (including today) to find the next occurrence
         for dayOffset in 0..<8 {
@@ -213,7 +215,8 @@ public struct TemporaryPreset: Hashable, Sendable {
                     fullDateComponents.second = timeComponents.second
 
                     if let scheduledDate = calendar.date(from: fullDateComponents),
-                       scheduledDate > date {
+                       scheduledDate >= firstAllowedStart
+                    {
                         return scheduledDate
                     }
                 }

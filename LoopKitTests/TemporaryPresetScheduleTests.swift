@@ -251,7 +251,7 @@ class TemporaryPresetScheduleTests: XCTestCase {
 
     // MARK: - Boundary Time Tests
 
-    func testNextScheduledStartAfter_ExactTime_ReturnsNextWeek() {
+    func testNextScheduledStartAfter_ExactTime_ReturnsNow() {
         // Schedule start date is a Monday at 9:00 AM
         let scheduleDate = createDate(year: 2024, month: 1, day: 15, hour: 9) // Monday
         let preset = createPreset(scheduleStartDate: scheduleDate, repeatOptions: .monday)
@@ -260,9 +260,8 @@ class TemporaryPresetScheduleTests: XCTestCase {
         let testDate = createDate(year: 2024, month: 1, day: 15, hour: 9) // Same Monday, same time
 
         let result = preset.nextScheduledStartAfter(testDate, calendar: calendar)
-        let expected = createDate(year: 2024, month: 1, day: 22, hour: 9) // Next Monday at 9:00 AM
 
-        XCTAssertEqual(result, expected)
+        XCTAssertEqual(result, scheduleDate)
     }
 
     func testNextScheduledStartAfter_OneSecondBefore_ReturnsSameDay() {
