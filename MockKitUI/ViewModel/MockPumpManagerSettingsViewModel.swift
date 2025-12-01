@@ -10,15 +10,25 @@ import SwiftUI
 import LoopKit
 import LoopKitUI
 import MockKit
+import LoopAlgorithm
 
 @MainActor
 class MockPumpManagerSettingsViewModel: ObservableObject {
     let pumpManager: MockPumpManager
     
     var isDeliverySuspended: Bool {
-        suspendedAt != nil
+        switch pumpManager.status.basalDeliveryState {
+        case .suspended:
+            return true
+        default:
+            return false
+        }
     }
     
+    var insulinDeliveryDisabled: Bool {
+        pumpManager.state.insulinDeliveryDisabled
+    }
+
     @Published private(set) var transitioningSuspendResumeInsulinDelivery = false
     
     @Published var suspendedAt: Date?
@@ -64,6 +74,13 @@ class MockPumpManagerSettingsViewModel: ObservableObject {
         formatter.timeStyle = .short
         return formatter
     }()
+    
+    @Published private var statusHighlight: DeviceStatusHighlight?
+    var pumpStatusHighlight: DeviceStatusHighlight? {
+        let shouldShowStatusHighlight = !(isDeliverySuspended && !insulinDeliveryDisabled) || !(statusHighlight?.localizedMessage.contains("Suspend") == true) // do not show the insulin suspended status highlight
+        
+        return shouldShowStatusHighlight ? statusHighlight : nil
+    }
 
     static private let basalRateFormatter: QuantityFormatter = {
         QuantityFormatter(for: .internationalUnitsPerHour)
@@ -145,10 +162,38 @@ class MockPumpManagerSettingsViewModel: ObservableObject {
         }
     }
     
+    static let reservoirVolumeFormatter: QuantityFormatter = {
+        let formatter = QuantityFormatter(for: .internationalUnit)
+        formatter.numberFormatter.maximumFractionDigits = 2
+        formatter.avoidLineBreaking = true
+        return formatter
+    }()
+    
+    var reservoirLevelString: String {
+        let reservoirUnitsRemaining = pumpManager.state.reservoirUnitsRemaining
+        let formatter = Self.reservoirVolumeFormatter
+        formatter.numberFormatter.maximumFractionDigits = 2
+        formatter.numberFormatter.minimumFractionDigits = 0
+        let quantity = LoopQuantity(unit: .internationalUnit, doubleValue: reservoirUnitsRemaining)
+        
+        switch pumpManager.state.reservoirUnitsRemaining {
+        case let x where x >= 50:
+            // when above the rounding limit, do not display fractions
+            return "50+"
+        default:
+            return formatter.string(from: quantity, includeUnit: false) ?? ""
+        }
+    }
+    
+    var reservoirAccuracyString: String {
+        pumpManager.state.reservoirUnitsRemaining >= 50 ? "Estimated Reading" : "Accurate Reading"
+    }
+    
     init(pumpManager: MockPumpManager) {
         self.pumpManager = pumpManager
         self.canSynchronizePumpTime = pumpManager.canSynchronizePumpTime
         self.detectedSystemTimeOffset = pumpManager.detectedSystemTimeOffset
+        self.statusHighlight = pumpManager.pumpStatusHighlight
         
         let now = Date()
         suspendedAt = pumpManager.state.suspendedAt
@@ -289,12 +334,14 @@ extension MockPumpManagerSettingsViewModel: MockPumpManagerStateObserver {
         basalDeliveryRate = state.basalDeliveryRate(at: now)
         basalDeliveryState = manager.status.basalDeliveryState
         automatedTreatmentState = manager.pumpManagerDelegate?.automatedTreatmentState ?? .neutralNoOverride
+        statusHighlight = manager.pumpStatusHighlight
     }
     
     func mockPumpManager(_ manager: MockKit.MockPumpManager, didUpdate status: LoopKit.PumpManagerStatus, oldStatus: LoopKit.PumpManagerStatus) {
         guard !transitioningSuspendResumeInsulinDelivery else { return }
         basalDeliveryRate = manager.state.basalDeliveryRate(at: Date())
         basalDeliveryState = status.basalDeliveryState
+        statusHighlight = manager.pumpStatusHighlight
     }
 }
  
@@ -307,7 +354,7 @@ extension MockPumpManagerState {
             } else {
                 return basalRateSchedule?.value(at: now)
             }
-        case .suspended:
+        case .suspended, .none:
             return nil
         }
     }
@@ -320,7 +367,7 @@ extension MockPumpManagerState {
             } else {
                 return basalRateSchedule?.startDate(at: now)
             }
-        case .suspended:
+        case .suspended, .none:
             return nil
         }
     }

@@ -166,7 +166,7 @@ struct MockPumpManagerSettingsView: View {
                    suspendOptionsActionSheet
                 }
             }
-            .disabled(viewModel.transitioningSuspendResumeInsulinDelivery)
+            .disabled(viewModel.transitioningSuspendResumeInsulinDelivery || viewModel.insulinDeliveryDisabled)
             if viewModel.isDeliverySuspended {
                 LabeledValueView(label: LocalizedString("Suspended At", comment: "Label for suspended at field"),
                                  value: viewModel.suspendedAtString)

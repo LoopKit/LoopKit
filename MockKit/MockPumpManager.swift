@@ -144,7 +144,7 @@ public final class MockPumpManager: TestingPumpManager {
         if case .suspended(let date) = state.suspendState {
             return .suspended(date)
         }
-        if state.occlusionDetected || state.pumpErrorDetected || state.pumpBatteryChargeRemaining == 0 || state.reservoirUnitsRemaining == 0 {
+        if state.occlusionDetected || state.pumpErrorDetected || state.isPumpExpired || state.pumpBatteryChargeRemaining == 0 || state.reservoirUnitsRemaining == 0 {
             return .pumpInoperable
         }
         if let temp = state.unfinalizedTempBasal, !temp.finished {
@@ -180,6 +180,10 @@ public final class MockPumpManager: TestingPumpManager {
                                        state: .critical)
         } else if state.pumpErrorDetected {
             return PumpStatusHighlight(localizedMessage: LocalizedString("Pump Error", comment: "Status highlight that a pump error occurred."),
+                                       imageName: "exclamationmark.circle.fill",
+                                       state: .critical)
+        } else if state.isPumpExpired {
+            return PumpStatusHighlight(localizedMessage: LocalizedString("Pump\nExpired", comment: "Status highlight that the pump expired."),
                                        imageName: "exclamationmark.circle.fill",
                                        state: .critical)
         } else if pumpBatteryChargeRemaining == 0 {
@@ -298,6 +302,7 @@ public final class MockPumpManager: TestingPumpManager {
             // stop insulin delivery as pump state requires
             if (newValue.occlusionDetected != oldValue.occlusionDetected && newValue.occlusionDetected) ||
                 (newValue.pumpErrorDetected != oldValue.pumpErrorDetected && newValue.pumpErrorDetected) ||
+                (newValue.isPumpExpired != oldValue.isPumpExpired && newValue.isPumpExpired) ||
                 (newValue.pumpBatteryChargeRemaining != oldValue.pumpBatteryChargeRemaining && newValue.pumpBatteryChargeRemaining == 0) ||
                 (newValue.reservoirUnitsRemaining != oldValue.reservoirUnitsRemaining && newValue.reservoirUnitsRemaining == 0)
             {
@@ -411,7 +416,7 @@ public final class MockPumpManager: TestingPumpManager {
             
             self.state.finalizeFinishedDoses()
 
-            if !self.state.pumpErrorDetected && !self.state.occlusionDetected {
+            if !self.state.pumpErrorDetected && !self.state.occlusionDetected && !self.state.isPumpExpired {
                 self.lastSync = Date()
             }
 
@@ -461,7 +466,7 @@ public final class MockPumpManager: TestingPumpManager {
             state.deliveryIsUncertain = true
             logDeviceComms(.error, message: "Uncertain delivery for temp basal")
             completion(.uncertainDelivery)
-        } else if state.occlusionDetected || state.pumpErrorDetected {
+        } else if state.occlusionDetected || state.pumpErrorDetected || state.isPumpExpired {
             let error = PumpManagerError.deviceState(MockPumpManagerError.pumpError)
             logDeviceComms(.error, message: "Temp Basal failed because the pump is in an error state")
             completion(error)
@@ -522,7 +527,7 @@ public final class MockPumpManager: TestingPumpManager {
             state.deliveryIsUncertain = true
             logDeviceComms(.error, message: "Uncertain delivery for bolus")
             completion(PumpManagerError.uncertainDelivery)
-        } else if state.occlusionDetected || state.pumpErrorDetected {
+        } else if state.occlusionDetected || state.pumpErrorDetected || state.isPumpExpired {
             let error = PumpManagerError.deviceState(MockPumpManagerError.pumpError)
             logDeviceComms(.error, message: "Bolus failed because the pump is in an error state")
             completion(error)
@@ -594,6 +599,7 @@ public final class MockPumpManager: TestingPumpManager {
         state.unfinalizedTempBasal?.cancel(at: now)
         state.unfinalizedBolus?.cancel(at: now)
         storePumpEvents { _ in }
+        state.suspendState = nil
     }
     
     func issueInsulinSuspensionReminderAlert(reminderDelay: TimeInterval?) {
@@ -686,13 +692,12 @@ public final class MockPumpManager: TestingPumpManager {
             let resume = UnfinalizedDose(resumeStartTime: resumeDate, insulinType: state.insulinType, automatic: false)
             state.finalizedDoses.append(resume)
             state.suspendState = .resumed(resumeDate)
-            storePumpEvents { (error) in
-                completion(error)
-            }
             logDeviceCommunication("resumeDelivery succeeded", type: .receive)
             retractInsulinSuspensionReminderAlert()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                completion(nil)
+            storePumpEvents { (error) in
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    completion(error)
+                }
             }
         }
     }

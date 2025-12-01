@@ -180,10 +180,10 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                 return cell
             case .pumpComponentReplacement:
                 let cell = tableView.dequeueReusableCell(withIdentifier: TextButtonTableViewCell.className, for: indexPath) as! TextButtonTableViewCell
-                if pumpManager.state.replacePumpComponent {
-                    cell.textLabel?.text = "Resume Therapy"
+                if pumpManager.state.isPumpExpired {
+                    cell.textLabel?.text = "Replace Pump"
                 } else {
-                    cell.textLabel?.text = "Replace Pump Component"
+                    cell.textLabel?.text = "Expire Pump"
                 }
                 return cell
             case .signalLoss:
@@ -354,8 +354,7 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                 tableView.deselectRow(at: indexPath, animated: true)
                 tableView.reloadRows(at: [indexPath], with: .automatic)
             case .pumpComponentReplacement:
-                pumpManager.injectPumpEvents(pumpManager.state.replacePumpComponent ? [NewPumpEvent(type: .replaceComponent(componentType: .pump))] : [NewPumpEvent(type: .replaceComponent(componentType: .pump))])
-                pumpManager.state.replacePumpComponent = !pumpManager.state.replacePumpComponent
+                pumpManager.state.isPumpExpired = !pumpManager.state.isPumpExpired
                 tableView.deselectRow(at: indexPath, animated: true)
                 tableView.reloadRows(at: [indexPath], with: .automatic)
             default:

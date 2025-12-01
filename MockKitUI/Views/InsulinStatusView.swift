@@ -136,9 +136,27 @@ struct InsulinStatusView: View {
                 Text("Insulin\(String.nonBreakingSpace)Remaining")
                     .foregroundColor(Color(UIColor.secondaryLabel))
                 HStack {
-                    reservoirLevelStatus
+                    if let pumpStatusHighlight = viewModel.pumpStatusHighlight {
+                        pumpStatusWarningText(pumpStatusHighlight: pumpStatusHighlight)
+                    } else {
+                        reservoirLevelStatus
+                    }
                 }
             }
+        }
+    }
+    
+    @ViewBuilder
+    func pumpStatusWarningText(pumpStatusHighlight: DeviceStatusHighlight) -> some View {
+        HStack(spacing: 2) {
+            Image(systemName: pumpStatusHighlight.imageName)
+                .font(.system(size: 34))
+                .fixedSize()
+                .foregroundColor(pumpStatusHighlight.state == .critical ? guidanceColors.critical : guidanceColors.warning)
+            
+            Text(pumpStatusHighlight.localizedMessage)
+                .font(.subheadline.weight(.heavy))
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 
@@ -157,7 +175,7 @@ struct InsulinStatusView: View {
                         .frame(width: 23, height: 34, alignment: .bottom)
                 }
                 HStack(alignment: .firstTextBaseline, spacing: 3) {
-                    Text("50+")
+                    Text(viewModel.reservoirLevelString)
                         .font(.system(size: 28))
                         .fontWeight(.heavy)
                         .fixedSize()
@@ -165,7 +183,7 @@ struct InsulinStatusView: View {
                         .foregroundColor(.secondary)
                 }
             }
-            Text("Estimated Reading")
+            Text(viewModel.reservoirAccuracyString)
                 .font(.footnote)
                 .foregroundColor(.accentColor)
         }

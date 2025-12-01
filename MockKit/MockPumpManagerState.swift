@@ -146,13 +146,37 @@ public struct MockPumpManagerState: Equatable {
     public var bolusShouldCrash: Bool
     public var tempBasalShouldCrash: Bool
     public var deliveryCommandsShouldTriggerUncertainDelivery: Bool
-    public var replacePumpComponent: Bool
     public var maximumBolus: Double
     public var maximumBasalRatePerHour: Double
-    public var suspendState: SuspendState
+    public var suspendState: SuspendState?
     public var pumpBatteryChargeRemaining: Double?
-    public var occlusionDetected: Bool = false
-    public var pumpErrorDetected: Bool = false
+    public var occlusionDetected: Bool = false {
+        didSet {
+            if occlusionDetected {
+                suspendState = nil
+            } else {
+                suspendState = .resumed(Date())
+            }
+        }
+    }
+    public var pumpErrorDetected: Bool = false {
+        didSet {
+            if pumpErrorDetected {
+                suspendState = nil
+            } else {
+                suspendState = .resumed(Date())
+            }
+        }
+    }
+    public var isPumpExpired: Bool = false {
+        didSet {
+            if isPumpExpired {
+                suspendState = nil
+            } else {
+                suspendState = .resumed(Date())
+            }
+        }
+    }
     public var deliveryIsUncertain: Bool = false
     public var inSignalLoss: Bool = false
 
@@ -194,6 +218,10 @@ public struct MockPumpManagerState: Equatable {
         guard case .suspended(let suspendedAt) = suspendState else { return nil }
         return suspendedAt
     }
+    
+    public var insulinDeliveryDisabled: Bool {
+        occlusionDetected || pumpErrorDetected || isPumpExpired || pumpBatteryChargeRemaining == 0 || reservoirUnitsRemaining == 0
+    }
 
     public init(deliverableIncrements: DeliverableIncrements = .medtronicX22,
                 reservoirUnitsRemaining: Double = 200.0,
@@ -205,7 +233,7 @@ public struct MockPumpManagerState: Equatable {
                 bolusShouldCrash: Bool = false,
                 tempBasalShouldCrash: Bool = false,
                 deliveryCommandsShouldTriggerUncertainDelivery: Bool = false,
-                replacePumpComponent: Bool = false,
+                isPumpExpired: Bool = false,
                 maximumBolus: Double = 25.0,
                 maximumBasalRatePerHour: Double = 5.0,
                 suspendState: SuspendState = .resumed(Date()),
@@ -230,7 +258,7 @@ public struct MockPumpManagerState: Equatable {
         self.bolusShouldCrash = bolusShouldCrash
         self.tempBasalShouldCrash = tempBasalShouldCrash
         self.deliveryCommandsShouldTriggerUncertainDelivery = deliveryCommandsShouldTriggerUncertainDelivery
-        self.replacePumpComponent = replacePumpComponent
+        self.isPumpExpired = isPumpExpired
         self.maximumBolus = maximumBolus
         self.maximumBasalRatePerHour = maximumBasalRatePerHour
         self.suspendState = suspendState
@@ -277,7 +305,7 @@ extension MockPumpManagerState: RawRepresentable {
         self.bolusShouldCrash = rawValue["bolusShouldCrash"] as? Bool ?? false
         self.tempBasalShouldCrash = rawValue["tempBasalShouldCrash"] as? Bool ?? false
         self.deliveryCommandsShouldTriggerUncertainDelivery = rawValue["deliveryCommandsShouldTriggerUncertainDelivery"] as? Bool ?? false
-        self.replacePumpComponent = rawValue["replacePumpComponent"] as? Bool ?? false
+        self.isPumpExpired = rawValue["isPumpExpired"] as? Bool ?? false
         self.maximumBolus = rawValue["maximumBolus"] as? Double ?? 25.0
         self.maximumBasalRatePerHour = rawValue["maximumBasalRatePerHour"] as? Double ?? 5.0
         self.pumpBatteryChargeRemaining = rawValue["pumpBatteryChargeRemaining"] as? Double ?? nil
@@ -317,7 +345,7 @@ extension MockPumpManagerState: RawRepresentable {
         if let rawSuspendState = rawValue["suspendState"] as? SuspendState.RawValue, let suspendState = SuspendState(rawValue: rawSuspendState) {
             self.suspendState = suspendState
         } else {
-            self.suspendState = .resumed(Date())
+            self.suspendState = nil
         }
         
         if let rawInsulinType = rawValue["insulinType"] as? InsulinType.RawValue, let insulinType = InsulinType(rawValue: rawInsulinType) {
@@ -346,7 +374,7 @@ extension MockPumpManagerState: RawRepresentable {
         ]
 
         raw["basalRateSchedule"] = basalRateSchedule?.rawValue
-        raw["suspendState"] = suspendState.rawValue
+        raw["suspendState"] = suspendState?.rawValue
 
         if tempBasalEnactmentShouldError {
             raw["tempBasalEnactmentShouldError"] = true
@@ -372,8 +400,8 @@ extension MockPumpManagerState: RawRepresentable {
             raw["deliveryCommandsShouldTriggerUncertainDelivery"] = true
         }
         
-        if replacePumpComponent {
-            raw["replacePumpComponent"] = true
+        if isPumpExpired {
+            raw["isPumpExpired"] = true
         }
 
         if deliveryIsUncertain {
@@ -420,7 +448,7 @@ extension MockPumpManagerState: CustomDebugStringConvertible {
         * maximumBolus: \(maximumBolus)
         * maximumBasalRatePerHour: \(maximumBasalRatePerHour)
         * pumpBatteryChargeRemaining: \(String(describing: pumpBatteryChargeRemaining))
-        * suspendState: \(suspendState)
+        * suspendState: \(String(describing: suspendState))
         * unfinalizedBolus: \(String(describing: unfinalizedBolus))
         * unfinalizedTempBasal: \(String(describing: unfinalizedTempBasal))
         * finalizedDoses: \(finalizedDoses)
