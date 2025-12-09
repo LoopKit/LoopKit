@@ -112,17 +112,29 @@ public final class ChartTableViewCell: UITableViewCell {
         self.footerView?.removeFromSuperview()
         self.footerView = nil
     }
+
+    private var footerHostingController: UIHostingController<AnyView>?
     
     public func setFooterView(content: (() -> some View)?) {
-        removeFooterView()
-        
+        if footerHostingController == nil {
+            let controller = UIHostingController(rootView: AnyView(EmptyView()))
+            controller.view.backgroundColor = .clear
+            controller.view.translatesAutoresizingMaskIntoConstraints = false
+
+            self.footerHostingController = controller
+            self.footerView = controller.view
+
+            self.mainStackView.addArrangedSubview(controller.view)
+
+            controller.willMove(toParent: nil)
+        }
+
         if let content = content?() {
-            guard !(content is EmptyView), let rootView = UIHostingController(rootView: content).view else {
-                return
-            }
-            
-            self.footerView = rootView
-            self.mainStackView.addArrangedSubview(rootView)
+            footerHostingController?.rootView = AnyView(content)
+            footerView?.isHidden = false
+        } else {
+            footerHostingController?.rootView = AnyView(EmptyView())
+            footerView?.isHidden = true
         }
     }
 }
