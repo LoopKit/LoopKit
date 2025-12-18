@@ -49,7 +49,6 @@ public final class ChartTableViewCell: UITableViewCell {
         supplementalChartContentView?.isHidden = true
         supplementalChartContentView?.chartGenerator = nil
         chartContentView.chartGenerator = nil
-        removeFooterView()
     }
 
     public func reloadChart() {
@@ -119,12 +118,11 @@ public final class ChartTableViewCell: UITableViewCell {
         if footerHostingController == nil {
             let controller = UIHostingController(rootView: AnyView(EmptyView()))
             controller.view.backgroundColor = .clear
-            controller.view.translatesAutoresizingMaskIntoConstraints = false
 
-            self.footerHostingController = controller
-            self.footerView = controller.view
+            footerHostingController = controller
+            footerView = controller.view
 
-            self.mainStackView.addArrangedSubview(controller.view)
+            mainStackView.addArrangedSubview(controller.view)
 
             controller.willMove(toParent: nil)
         }
@@ -132,6 +130,9 @@ public final class ChartTableViewCell: UITableViewCell {
         if let content = content?() {
             footerHostingController?.rootView = AnyView(content)
             footerView?.isHidden = false
+            footerView?.invalidateIntrinsicContentSize()
+            mainStackView.setNeedsLayout()
+            mainStackView.layoutIfNeeded()
         } else {
             footerHostingController?.rootView = AnyView(EmptyView())
             footerView?.isHidden = true
