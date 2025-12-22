@@ -105,20 +105,17 @@ public class PersistentDeviceLog {
         var totalDeleted = 0
 
         do {
+            let fetchRequest: NSFetchRequest<DeviceLogEntry> = DeviceLogEntry.fetchRequest()
+            fetchRequest.predicate = predicate
+            fetchRequest.fetchLimit = batchSize
             var deletedInBatch = 0
             repeat {
-                let fetchRequest: NSFetchRequest<DeviceLogEntry> = DeviceLogEntry.fetchRequest()
-                fetchRequest.predicate = predicate
-                fetchRequest.fetchLimit = batchSize
-
                 deletedInBatch = try managedObjectContext.deleteObjects(matching: fetchRequest)
-                totalDeleted += deletedInBatch
-
                 if deletedInBatch > 0 {
+                    totalDeleted += deletedInBatch
                     try managedObjectContext.save()
                 }
             } while deletedInBatch >= batchSize // Quit when fewer than requested were deleted
-
             log.info("Deleted %d DeviceLogEntries.", totalDeleted)
         } catch let error {
             log.error("Could not purge expired log entry %{public}@", String(describing: error))
