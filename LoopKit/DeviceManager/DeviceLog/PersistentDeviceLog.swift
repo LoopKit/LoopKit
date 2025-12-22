@@ -101,12 +101,25 @@ public class PersistentDeviceLog {
     // Should only be called from managed object context queue
     private func purgeExpiredLogEntries() {
         let predicate = NSPredicate(format: "timestamp < %@", earliestLogEntryDate as NSDate)
+        let batchSize = 1000 // Process deletions in batches to avoid memory issues
+        var totalDeleted = 0
 
         do {
-            let fetchRequest: NSFetchRequest<DeviceLogEntry> = DeviceLogEntry.fetchRequest()
-            fetchRequest.predicate = predicate
-            let count = try managedObjectContext.deleteObjects(matching: fetchRequest)
-            log.info("Deleted %d DeviceLogEntries", count)
+            var deletedInBatch = 0
+            repeat {
+                let fetchRequest: NSFetchRequest<DeviceLogEntry> = DeviceLogEntry.fetchRequest()
+                fetchRequest.predicate = predicate
+                fetchRequest.fetchLimit = batchSize
+
+                deletedInBatch = try managedObjectContext.deleteObjects(matching: fetchRequest)
+                totalDeleted += deletedInBatch
+
+                if deletedInBatch > 0 {
+                    try managedObjectContext.save()
+                }
+            } while deletedInBatch >= batchSize // Quit when fewer than requested were deleted
+
+            log.info("Deleted %d DeviceLogEntries.", totalDeleted)
         } catch let error {
             log.error("Could not purge expired log entry %{public}@", String(describing: error))
         }
@@ -193,6 +206,13 @@ extension PersistentDeviceLog: CriticalEventLog {
 
         if let closeError = encoder.close(), error == nil {
             error = closeError
+        }
+
+        // Purge expired log entries after successful export
+        if error == nil {
+            self.managedObjectContext.performAndWait {
+                self.purgeExpiredLogEntries()
+            }
         }
 
         return error
