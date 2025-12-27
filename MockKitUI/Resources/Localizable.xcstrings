@@ -2265,6 +2265,12 @@
             "state" : "translated",
             "value" : "İnsülin İletimine Devam Edilemedi"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "恢复胰岛素输注失败"
+          }
         }
       }
     },
