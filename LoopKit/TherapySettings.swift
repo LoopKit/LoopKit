@@ -139,7 +139,7 @@ extension TherapySettings {
     public func impact(for insulinMultiplier: Double) -> InsulinMultiplierImpact {
         var basalRate: LoopQuantity? {
             if let baseValue = basalRateSchedule?.value(at: Date()) {
-                return LoopQuantity(unit: .internationalUnit, doubleValue: baseValue * insulinMultiplier)
+                return LoopQuantity(unit: .internationalUnitsPerHour, doubleValue: baseValue * insulinMultiplier)
             } else {
                 return nil
             }
