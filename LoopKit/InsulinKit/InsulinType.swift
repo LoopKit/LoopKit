@@ -22,7 +22,7 @@ extension InsulinType {
     public var title: String {
         switch self {
         case .novolog:
-            return LocalizedString("Novolog (insulin aspart)", comment: "Title for Novolog insulin type")
+            return LocalizedString("Novolog", comment: "Title for Novolog insulin type")
         case .humalog:
             return LocalizedString("Humalog (insulin lispro)", comment: "Title for Humalog insulin type")
         case .apidra:
@@ -55,18 +55,14 @@ extension InsulinType {
     
     public var description: String {
         switch self {
-        case .novolog:
-            return LocalizedString("NovoLog (insulin aspart) is a rapid-acting insulin made by Novo Nordisk", comment: "Description for novolog insulin type")
-        case .humalog:
-            return LocalizedString("Humalog (insulin lispro) is a rapid-acting insulin made by Eli Lilly", comment: "Description for humalog insulin type")
+        case .novolog, .humalog:
+            return LocalizedString("A rapid-acting insulin", comment: "Description for rapid acting insulin types")
         case .apidra:
             return LocalizedString("Apidra (insulin glulisine) is a rapid-acting insulin made by Sanofi-aventis ", comment: "Description for apidra insulin type")
-        case .fiasp:
-            return LocalizedString("Fiasp is a mealtime insulin aspart formulation with the addition of nicotinamide (vitamin B3) made by Novo Nordisk", comment: "Description for fiasp insulin type")
-        case .lyumjev:
-            return LocalizedString("Lyumjev is a mealtime insulin lispro formulation with the addition of citrate and treprostinil made by Eli Lilly", comment: "Description for lyumjev insulin type")
+        case .fiasp, .lyumjev:
+            return LocalizedString("An ultra-rapid-acting insulin", comment: "Description for ultra rapid acting insulin types")
         case .afrezza:
-            return LocalizedString("Afrezza is an ultra rapid-acting mealtime insulin that is breathed in through your lungs using an oral inhaler and made by MannKind", comment: "Description for afrezza insulin type")
+            return LocalizedString("An ultra-rapid-acting mealtime insulin that is inhaled", comment: "Description for afrezza insulin type")
         }
     }
 
