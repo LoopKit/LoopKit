@@ -56,7 +56,6 @@ public struct InsulinTypeChooser: View {
                         )
                     )
                 }
-                .padding(.vertical, 4)
             } else {
                 HStack {
                     CheckmarkListItem(
@@ -74,7 +73,6 @@ public struct InsulinTypeChooser: View {
                         )
                     )
                 }
-                .padding(.vertical, 4)
             }
         }
     }
