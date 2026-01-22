@@ -70,11 +70,11 @@ public extension TherapySetting {
     func descriptiveText(appName: String, dosingStrategySelectionEnabled: Bool) -> String {
         switch self {
         case .glucoseTargetRange:
-            return String(format: LocalizedString("Correction Range is the glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin and helping you calculate your boluses.", comment: "Descriptive text for glucose target range (1: app name)"), appName)
+            return String(format: LocalizedString("Correction Range is the glucose range (or range of values) that you want %1$@ to aim for in adjusting your insulin delivery and helping you calculate your boluses.", comment: "Descriptive text for glucose target range (1: app name)"), appName)
         case .preMealCorrectionRangeOverride:
             return LocalizedString("Temporarily lower your glucose target before a meal to impact post-meal glucose spikes.", comment: "Descriptive text for pre-meal correction range override")
         case .suspendThreshold:
-            return String(format: LocalizedString("%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours.", comment: "Descriptive format string for glucose safety limit (1: app name)"), appName)
+            return String(format: LocalizedString("%1$@ will only increase your insulin delivery if your glucose is predicted to stay above this limit for the next three hours. If you bolus, the amount it recommends will be lower. ", comment: "Descriptive format string for glucose safety limit (1: app name)"), appName)
         case .basalRate:
             return LocalizedString("Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs.", comment: "Descriptive text for basal rate")
         case .deliveryLimits:
@@ -86,7 +86,7 @@ public extension TherapySetting {
         case .carbRatio:
             return LocalizedString("Your Carb Ratio is the number of grams of carbohydrates covered by one unit of insulin.", comment: "Descriptive text for carb ratio")
         case .insulinSensitivity:
-            return LocalizedString("Your Insulin Sensitivities refer to the drop in glucose expected from one unit of insulin.", comment: "Descriptive text for insulin sensitivity")
+            return LocalizedString("Your Insulin Sensitivity Factor (ISF) is the mg/dL drop in glucose expected from one unit of insulin.", comment: "Descriptive text for insulin sensitivity")
         case .none:
             return ""
         }
