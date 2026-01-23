@@ -164,3 +164,27 @@ extension Color {
         }
     }
 }
+
+public extension PresetCard {
+    @ViewBuilder
+    static func `default`(for activityType: ActivityPreset.ActivityType) -> PresetCard {
+        
+        let defaultDuration = PresetDuration.duration(.minutes(90))
+        let defaultPreset = activityType.defaultPreset(duration: defaultDuration.presetDuration, scheduleStartDate: nil, repeatOptions: .none)
+        
+        PresetCard(
+            presetId: defaultPreset.id,
+            icon: defaultPreset.symbol,
+            presetName: defaultPreset.name,
+            duration: defaultDuration,
+            insulinMultiplier: defaultPreset.settings.effectiveInsulinNeedsScaleFactor,
+            correctionRange: defaultPreset.settings.targetRange,
+            guardrail: nil,
+            expectedEndTime: nil,
+            isScheduled: false,
+            activityPresetIsModified: false,
+            activePresetId: { nil },
+            effectiveCorrectionRange: { nil }
+        )
+    }
+}

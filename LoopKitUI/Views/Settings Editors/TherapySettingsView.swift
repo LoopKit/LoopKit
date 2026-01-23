@@ -356,7 +356,7 @@ extension TherapySettingsView {
         case .glucoseTargetRange:
            CorrectionRangeScheduleEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss)
         case .preMealCorrectionRangeOverride:
-            CorrectionRangeOverridesEditor(mode: mode, therapySettingsViewModel: viewModel, preset: .preMeal, didSave: dismiss)
+            CorrectionRangeOverridesEditor(therapySettingsViewModel: viewModel, preset: .preMeal, didSave: dismiss)
         case .basalRate:
             BasalRateScheduleEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss)
         case .deliveryLimits:
