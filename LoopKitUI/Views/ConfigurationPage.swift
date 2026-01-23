@@ -73,7 +73,7 @@ public struct ConfigurationPage<ActionAreaContent: View>: View {
                             }
                         }
                     )
-                    .buttonStyle(ActionButtonStyle(.tertiary))
+                    .buttonStyle(ActionButtonStyle(.secondary))
                     .disabled(secondaryActionButtonState ?? .enabled != .enabled)
                     .padding([.horizontal, .bottom])
                     .padding(.top, -6)
