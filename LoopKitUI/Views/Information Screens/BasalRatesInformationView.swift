@@ -35,6 +35,7 @@ public struct BasalRatesInformationView: View {
     private var text: some View {
         VStack(alignment: .leading, spacing: 25) {
             Text(LocalizedString("Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs.", comment: "Information about basal rates"))
+            Text(LocalizedString("You can add different Basal Rates for different times of day by using the ➕.", comment: "Information about adding basal rates for different times of day"))
             Text(String(format: LocalizedString("%1$@ supports 1 to %2$@ rates per day.", comment: "Information about max number of basal rates (1: app name) (2: maximum schedule entry count)"), appName, String(describing: maximumScheduleEntryCount)))
             Text(LocalizedString("The schedule starts at midnight and cannot equal 0 U/day.", comment: "Information about basal rate scheduling"))
         }.accessibilityIdentifier("text_BasalRatesInformation")
