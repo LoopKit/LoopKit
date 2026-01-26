@@ -83,9 +83,6 @@ public struct TherapySettingsView: View {
         }
         cards.append(suspendThresholdSection)
         cards.append(correctionRangeSection)
-        if mode == .acceptanceFlow {
-            cards.append(preMealCorrectionRangeSection)
-        }
         cards.append(carbRatioSection)
         cards.append(basalRatesSection)
         cards.append(deliveryLimitsSection)
@@ -208,22 +205,6 @@ extension TherapySettingsView {
                                       guardrail: .correctionRange)
                     .accessibilityIdentifier("correctionRangeValue")
                 }
-            }
-        }
-    }
-    
-    private var preMealCorrectionRangeSection: Card {
-        card(for: .preMealCorrectionRangeOverride) {
-            let correctionRangeOverrides = self.viewModel.correctionRangeOverrides
-            if let schedule = self.viewModel.glucoseTargetRangeSchedule {
-                SectionDivider()
-                CorrectionRangeOverridesRangeItem(
-                    value: correctionRangeOverrides,
-                    displayGlucoseUnit: glucoseUnit,
-                    preset: CorrectionRangeOverrides.Preset.preMeal,
-                    suspendThreshold: viewModel.suspendThreshold,
-                    correctionRangeScheduleRange: schedule.scheduleRange()
-                ).accessibilityIdentifier("preMealPresetValue")
             }
         }
     }
@@ -375,7 +356,7 @@ extension TherapySettingsView {
         case .glucoseTargetRange:
            CorrectionRangeScheduleEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss)
         case .preMealCorrectionRangeOverride:
-            CorrectionRangeOverridesEditor(mode: mode, therapySettingsViewModel: viewModel, preset: .preMeal, didSave: dismiss)
+            CorrectionRangeOverridesEditor(therapySettingsViewModel: viewModel, preset: .preMeal, didSave: dismiss)
         case .basalRate:
             BasalRateScheduleEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss)
         case .deliveryLimits:
