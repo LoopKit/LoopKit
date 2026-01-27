@@ -35,9 +35,9 @@ public struct LoopCircleView: View {
     
     public var body: some View {
         Circle()
-            .trim(from: closedLoop ? 0 : 0.2, to: 1)
+            .trim(from: closedLoop ? 0 : 0.25, to: 1)
             .stroke(loopColor, lineWidth: 8)
-            .rotationEffect(Angle(degrees: closedLoop ? -90 : -126))
+            .rotationEffect(Angle(degrees: closedLoop ? -90 : -135))
             .animation(.none, value: freshness)
             .animation(.none, value: animating)
             .animation(.default, value: closedLoop)
