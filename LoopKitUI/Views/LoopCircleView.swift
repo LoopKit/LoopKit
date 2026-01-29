@@ -13,15 +13,15 @@ public struct LoopCircleView: View {
     @Environment(\.loopStatusColorPalette) private var loopStatusColors
     @Environment(\.isEnabled) private var isEnabled
     
-    private let animating: Bool
+    private let animationAllowed: Bool
     private let closedLoop: Bool
     private let freshness: LoopCompletionFreshness
     private let deviceInoperable: Bool
     
-    public init(closedLoop: Bool, freshness: LoopCompletionFreshness, animating: Bool = false, deviceInoperable: Bool = false) {
+    public init(animationAllowed: Bool = false, closedLoop: Bool, freshness: LoopCompletionFreshness, deviceInoperable: Bool = false) {
+        self.animationAllowed = animationAllowed
         self.closedLoop = closedLoop
         self.freshness = freshness
-        self.animating = animating
         self.deviceInoperable = deviceInoperable
     }
     
@@ -35,14 +35,30 @@ public struct LoopCircleView: View {
     
     public var body: some View {
         Circle()
-            .trim(from: closedLoop ? 0 : 0.2, to: 1)
+            .trim(from: closedLoop ? 0 : 0.25, to: 1)
             .stroke(loopColor, lineWidth: 8)
-            .rotationEffect(Angle(degrees: closedLoop ? -90 : -126))
+            .rotationEffect(Angle(degrees: closedLoop ? -90 : -135))
             .animation(.none, value: freshness)
+            .animation(.none, value: animating)
             .animation(.default, value: closedLoop)
             .scaleEffect(animating && closedLoop ? 0.75 : 1)
             .animation(reversingAnimation, value: UUID())
             .frame(width: 36, height: 36)
+    }
+    
+    private var animating: Bool {
+        if !isEnabled {
+            return false
+        } else if deviceInoperable {
+            return animationAllowed && true
+        } else {
+            switch freshness {
+            case .fresh:
+                return false
+            case .aging, .stale:
+                return animationAllowed && true
+            }
+        }
     }
     
     private var loopColor: Color {
