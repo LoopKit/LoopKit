@@ -8,20 +8,44 @@
 
 import SwiftUI
 
-public struct CheckmarkListItem: View {
+public struct CheckmarkListItem<LeadingView: View>: View {
     
     var title: Text
     var titleFont: Font
     var description: Text
     @Binding var isSelected: Bool
     let isEnabled: Bool
+    let leadingView: LeadingView?
 
-    public init(title: Text, titleFont: Font = .headline, description: Text, isSelected: Binding<Bool>, isEnabled: Bool = true) {
+    public init(
+        title: Text,
+        titleFont: Font = .headline,
+        description: Text,
+        isSelected: Binding<Bool>,
+        isEnabled: Bool = true,
+        @ViewBuilder leadingView: () -> LeadingView
+    ) {
         self.title = title
         self.titleFont = titleFont
         self.description = description
         self._isSelected = isSelected
         self.isEnabled = isEnabled
+        self.leadingView = leadingView()
+    }
+    
+    public init(
+        title: Text,
+        titleFont: Font = .headline,
+        description: Text,
+        isSelected: Binding<Bool>,
+        isEnabled: Bool = true
+    ) where LeadingView == EmptyView {
+        self.title = title
+        self.titleFont = titleFont
+        self.description = description
+        self._isSelected = isSelected
+        self.isEnabled = isEnabled
+        self.leadingView = nil
     }
 
     @ViewBuilder
@@ -37,6 +61,10 @@ public struct CheckmarkListItem: View {
     
     private var content: some View {
         HStack(spacing: 0) {
+            if let leadingView = leadingView {
+                leadingView
+            }
+            
             VStack(alignment: .leading, spacing: 4) {
                 title
                     .font(titleFont)

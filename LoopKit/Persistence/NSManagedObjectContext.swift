@@ -27,7 +27,7 @@ extension NSManagedObjectContext {
 
         let result = try execute(deleteRequest)
         guard let deleteResult = result as? NSBatchDeleteResult,
-            let objectIDs = deleteResult.result as? [NSManagedObjectID]
+              let objectIDs = deleteResult.result as? [NSManagedObjectID]
         else {
             return 0
         }
@@ -48,12 +48,38 @@ extension NSManagedObjectContext {
     /// - Returns: The number of deleted objects
     /// - Throws: Any core data error during fetch or delete
     public func deleteObjects<T>(matching fetchRequest: NSFetchRequest<T>) throws -> Int where T: NSManagedObject {
-        let objects = try fetch(fetchRequest)
-        objects.forEach { delete($0) }
-        if hasChanges {
-            try save()
+        var deletedCount = 0
+        var caughtError: Error?
+
+        performAndWait {
+            do {
+                let idRequest = fetchRequest.copy() as! NSFetchRequest<NSFetchRequestResult>
+                idRequest.resultType = .managedObjectIDResultType
+
+                let objectIDs = try fetch(idRequest) as! [NSManagedObjectID]
+
+                for objectID in objectIDs {
+                    let object = self.object(with: objectID)
+                    delete(object)
+                }
+                
+                processPendingChanges()
+
+                if hasChanges {
+                    try save()
+                }
+
+                deletedCount = objectIDs.count
+            } catch {
+                caughtError = error
+            }
         }
-        return objects.count
+
+        if let error = caughtError {
+            throw error
+        }
+
+        return deletedCount
     }
 }
 
