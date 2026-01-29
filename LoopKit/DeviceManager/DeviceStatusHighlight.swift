@@ -6,7 +6,7 @@
 //  Copyright © 2020 LoopKit Authors. All rights reserved.
 //
 
-public protocol DeviceStatusHighlight: Codable {
+public protocol DeviceStatusHighlight: Codable, Sendable {
     /// a localized message from the device
     var localizedMessage: String { get }
 

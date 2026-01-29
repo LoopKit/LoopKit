@@ -28,7 +28,20 @@ public struct InsulinTypeChooser: View {
     public var body: some View {
         ForEach(supportedInsulinTypes, id: \.self) { insulinType in
             if let insulinType = insulinType {
-                HStack {
+                CheckmarkListItem(
+                    title: Text(insulinType.title),
+                    description: Text(insulinType.description),
+                    isSelected: Binding(
+                        get: { self.insulinType == insulinType },
+                        set: { isSelected in
+                            if isSelected {
+                                withAnimation {
+                                    self.insulinType = insulinType
+                                }
+                            }
+                        }
+                    )
+                ) {
                     ZStack {
                         Image(frameworkImage: "vial_color")
                             .renderingMode(.template)
@@ -41,38 +54,22 @@ public struct InsulinTypeChooser: View {
                     }
                     .padding([.trailing])
                     .frame(height: 70)
-                    CheckmarkListItem(
-                        title: Text(insulinType.title),
-                        description: Text(insulinType.description),
-                        isSelected: Binding(
-                            get: { self.insulinType == insulinType },
-                            set: { isSelected in
-                                if isSelected {
-                                    withAnimation {
-                                        self.insulinType = insulinType
-                                    }
-                                }
-                            }
-                        )
-                    )
                 }
             } else {
-                HStack {
-                    CheckmarkListItem(
-                        title: Text(LocalizedString("Unset", comment: "Title for selection when no insulin type is selected.")),
-                        description: Text(LocalizedString("The currently selected fast acting insulin model will be used as a default.", comment: "Description for selection when no insulin type is selected.")),
-                        isSelected: Binding(
-                            get: { self.insulinType == nil },
-                            set: { isSelected in
-                                if isSelected {
-                                    withAnimation {
-                                        self.insulinType = nil
-                                    }
+                CheckmarkListItem(
+                    title: Text(LocalizedString("Unset", comment: "Title for selection when no insulin type is selected.")),
+                    description: Text(LocalizedString("The currently selected fast acting insulin model will be used as a default.", comment: "Description for selection when no insulin type is selected.")),
+                    isSelected: Binding(
+                        get: { self.insulinType == nil },
+                        set: { isSelected in
+                            if isSelected {
+                                withAnimation {
+                                    self.insulinType = nil
                                 }
                             }
-                        )
+                        }
                     )
-                }
+                )
             }
         }
     }
