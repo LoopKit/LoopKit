@@ -570,7 +570,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "当预测血糖在未来三小时内都高于此下限时，%1$@ 才会输注基础胰岛素并推荐推注胰岛素。"
+            "value" : "未来三小时的预测血糖均高于此下限时，%1$@ 才会开启基础率并推荐大剂量。"
           }
         }
       }
@@ -1956,6 +1956,12 @@
             "value" : "Basal"
           }
         },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bazală"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2237,6 +2243,12 @@
           }
         },
         "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bolus"
+          }
+        },
+        "ro" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bolus"
@@ -10044,7 +10056,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "好的"
+            "value" : "OK"
           }
         }
       }
@@ -11603,6 +11615,12 @@
             "value" : "Temp Basal"
           }
         },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bazală temporară"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12449,6 +12467,12 @@
             "value" : "U"
           }
         },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "U"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12578,6 +12602,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "U/hr"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "U/oră"
           }
         },
         "ru" : {
