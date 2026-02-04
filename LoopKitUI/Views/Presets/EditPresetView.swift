@@ -244,7 +244,7 @@ public struct EditPresetView: View {
                 }
             }
             .onChange(of: preset.scheduleStartDate, { _, newValue in
-                if newValue != nil {
+                if newValue != nil && preset.repeatOptions != .none {
                     assignRepeatDays()
                 }
             })
@@ -381,7 +381,6 @@ public struct EditPresetView: View {
                         selection: Binding(get: {
                             preset.nextScheduledStartAfter(Date()) ?? Date()
                         }, set: { newValue in
-                            preset.repeatOptions = .none
                             preset.scheduleStartDate = newValue
                         }),
                         in: Date().addingTimeInterval(.minutes(1))...,
