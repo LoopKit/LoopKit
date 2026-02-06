@@ -77,7 +77,7 @@ public enum MockPumpStatusBadge: DeviceStatusBadge {
 
 // MARK: - PumpStatusIndicator
 extension MockPumpManager {
-    public var pumpStatusHighlight: DeviceStatusHighlight? {
+    public var pumpStatusHighlight: PumpStatusHighlight? {
         return buildPumpStatusHighlight(for: state)
     }
 

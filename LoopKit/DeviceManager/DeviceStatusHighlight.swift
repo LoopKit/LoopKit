@@ -19,7 +19,7 @@ public protocol DeviceStatusHighlight: Codable, Sendable {
 
 public typealias DeviceStatusHighlightState = DeviceStatusElementState
 
-public enum DeviceStatusElementState: String, Codable {
+public enum DeviceStatusElementState: String, Codable, Sendable {
     case critical
     case normalCGM
     case normalPump

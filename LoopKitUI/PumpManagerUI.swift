@@ -34,7 +34,7 @@ public struct PumpManagerSetupSettings {
 
 public protocol PumpStatusIndicator {
     /// a message from the pump that needs to be brought to the user's attention in the status bar
-    var pumpStatusHighlight: DeviceStatusHighlight? { get }
+    var pumpStatusHighlight: PumpStatusHighlight? { get }
 
     /// the completed percent of the progress bar to display in the status bar
     var pumpLifecycleProgress: DeviceLifecycleProgress? { get }
