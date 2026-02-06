@@ -42,6 +42,8 @@ public struct BasalRateScheduleEditor: View {
             )!
         }
 
+        // filter out 0 U/hr
+        let supportedBasalRates = supportedBasalRates.filter { $0 != 0 }
         if let maxBasal = maximumBasalRate {
             let partitioningIndex = supportedBasalRates.partitioningIndex(where: { $0 > maxBasal })
             self.supportedBasalRates = Array(supportedBasalRates[..<partitioningIndex])
