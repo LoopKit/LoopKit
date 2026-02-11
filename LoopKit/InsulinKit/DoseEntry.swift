@@ -155,16 +155,16 @@ extension DoseEntry {
     public var formatted: String {
         return [
             "type: \(type)",
-            "isMutable: \(isMutable)",
             "automatic: \(optionalString(automatic))",
-            "startDate: \(startDate)",
-            "endDate: \(endDate)",
+            "isMutable: \(isMutable)",
             "deliveredUnits: \(deliveredUnits != nil ? deliveredUnits!.insulinFormatter : "nil")",
             "units: \(value.insulinFormatter)",
-            "description: \(optionalString(description))",
             "insulinType: \(optionalString(insulinType))",
+            "startDate: \(startDate)",
+            "endDate: \(endDate)",
             "manuallyEntered: \(manuallyEntered)",
             "wasProgrammedByPumpUI: \(wasProgrammedByPumpUI)",
+            "description: \(optionalString(description))",
             "scheduledBasalRate: \(optionalString(scheduledBasalRate))",
         ].joined(separator: "\n")
     }
