@@ -166,6 +166,7 @@ extension DoseEntry {
             "wasProgrammedByPumpUI: \(wasProgrammedByPumpUI)",
             "description: \(optionalString(description))",
             "scheduledBasalRate: \(optionalString(scheduledBasalRate))",
+            "syncIdentifier: \(optionalString(syncIdentifier))",
         ].joined(separator: "\n")
     }
 }
