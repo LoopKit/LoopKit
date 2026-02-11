@@ -570,7 +570,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "当预测血糖在未来三小时内都高于此下限时，%1$@ 才会输注基础胰岛素并推荐推注胰岛素。"
+            "value" : "未来三小时的预测血糖均高于此下限时，%1$@ 才会开启基础率并推荐大剂量。"
           }
         }
       }
@@ -1892,7 +1892,7 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Basal"
           }
         },
@@ -1904,13 +1904,13 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Basal"
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Basal"
           }
         },
@@ -1952,8 +1952,14 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Basal"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bazală"
           }
         },
         "ru" : {
@@ -2196,7 +2202,7 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Bolus"
           }
         },
@@ -2226,7 +2232,7 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Bolus"
           }
         },
@@ -2238,7 +2244,13 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
+            "value" : "Bolus"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "Bolus"
           }
         },
@@ -2262,7 +2274,7 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Bolus"
           }
         },
@@ -3445,7 +3457,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Correction Range"
           }
         },
@@ -8004,7 +8016,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Maximum Bolus"
           }
         },
@@ -9029,7 +9041,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Needs Attention"
           }
         },
@@ -10044,7 +10056,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "好的"
+            "value" : "OK"
           }
         }
       }
@@ -11603,6 +11615,12 @@
             "value" : "Temp Basal"
           }
         },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bazală temporară"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12391,7 +12409,7 @@
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "U"
           }
         },
@@ -12403,7 +12421,7 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "U"
           }
         },
@@ -12433,7 +12451,7 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "U"
           }
         },
@@ -12445,7 +12463,13 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
+            "value" : "U"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "U"
           }
         },
@@ -12487,7 +12511,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "U"
           }
         }
@@ -12522,7 +12546,7 @@
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "U/hr"
           }
         },
@@ -12534,7 +12558,7 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "U/hr"
           }
         },
@@ -12564,7 +12588,7 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "U/hr"
           }
         },
@@ -12576,8 +12600,14 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "U/hr"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "U/oră"
           }
         },
         "ru" : {

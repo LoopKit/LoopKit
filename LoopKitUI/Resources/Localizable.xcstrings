@@ -1009,7 +1009,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%@"
           }
         },
@@ -1045,7 +1045,7 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%@"
           }
         },
@@ -1093,7 +1093,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%@"
           }
         },
@@ -1141,7 +1141,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%@"
           }
         }
@@ -1284,7 +1284,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ carbs, %@ absorption"
+            "value" : "%@ 碳水,  %@ 吸收时间"
           }
         }
       }
@@ -1593,7 +1593,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%@U"
           }
         },
@@ -1629,7 +1629,7 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%@U"
           }
         },
@@ -1671,7 +1671,13 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
+            "value" : "%@U"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "%@U"
           }
         },
@@ -1713,7 +1719,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%@U"
           }
         }
@@ -2011,7 +2017,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ %2$@"
           }
         }
@@ -2457,7 +2463,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ U"
           }
         },
@@ -2541,7 +2547,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ U"
           }
         },
@@ -2600,7 +2606,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ units remaining at %2$@"
           }
         },
@@ -2636,7 +2642,7 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ units remaining at %2$@"
           }
         },
@@ -2682,6 +2688,12 @@
             "value" : "%1$@ unidades restantes em %2$@"
           }
         },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ unități rămase la %2$@"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2720,7 +2732,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ units remaining at %2$@"
           }
         }
@@ -2731,7 +2743,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@: <b>%2$@</b> %3$@"
           }
         },
@@ -2767,7 +2779,7 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@: <b>%2$@</b> %3$@"
           }
         },
@@ -2815,7 +2827,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@: <b>%2$@</b> %3$@"
           }
         },
@@ -2833,7 +2845,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@: <b>%2$@</b> %3$@"
           }
         },
@@ -2863,7 +2875,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@: <b>%2$@</b> %3$@"
           }
         }
@@ -2982,7 +2994,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@/min"
           }
         },
@@ -4461,7 +4473,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Absorption Time"
           }
         },
@@ -4569,7 +4581,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Absorption Time"
           }
         },
@@ -5493,7 +5505,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Are you sure you want to delete all history entries?"
           }
         },
@@ -5601,7 +5613,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Are you sure you want to delete all history entries?"
           }
         },
@@ -5642,7 +5654,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Are you sure you want to delete all reservoir values?"
           }
         },
@@ -5750,7 +5762,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Are you sure you want to delete all reservoir values?"
           }
         },
@@ -7588,7 +7600,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact."
           }
         },
@@ -7696,7 +7708,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact."
           }
         },
@@ -8181,7 +8193,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "at %1$@"
           }
         },
@@ -8295,7 +8307,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "at %1$@"
           }
         },
@@ -8337,7 +8349,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "since %1$@"
           }
         },
@@ -8451,7 +8463,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "since %1$@"
           }
         },
@@ -8644,7 +8656,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "好的"
+            "value" : "OK"
           }
         }
       }
@@ -9125,7 +9137,7 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Continue"
           }
         },
@@ -9169,6 +9181,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Continuar"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuați"
           }
         },
         "ru" : {
@@ -9912,7 +9930,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Custom Override"
           }
         },
@@ -9953,7 +9971,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Custom Preset"
           }
         },
@@ -9989,7 +10007,7 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Custom Preset"
           }
         },
@@ -10037,7 +10055,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Custom Preset"
           }
         },
@@ -10055,7 +10073,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Custom Preset"
           }
         },
@@ -10390,7 +10408,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Delete Account"
           }
         },
@@ -10545,7 +10563,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Delete All"
           }
         },
@@ -10653,7 +10671,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Delete All"
           }
         },
@@ -11171,7 +11189,7 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Done"
           }
         },
@@ -11201,7 +11219,7 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Done"
           }
         },
@@ -11215,6 +11233,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "OK"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Realizat"
           }
         },
         "ru" : {
@@ -16644,7 +16668,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Interrupted %1$@: <b>%2$@</b> of %3$@ %4$@"
           }
         },
@@ -16680,7 +16704,7 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Interrupted %1$@: <b>%2$@</b> of %3$@ %4$@"
           }
         },
@@ -16728,7 +16752,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Interrupted %1$@: <b>%2$@</b> of %3$@ %4$@"
           }
         },
@@ -16746,7 +16770,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Interrupted %1$@: <b>%2$@</b> of %3$@ %4$@"
           }
         },
@@ -16776,7 +16800,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Interrupted %1$@: <b>%2$@</b> of %3$@ %4$@"
           }
         }
@@ -18809,7 +18833,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Maximum Bolus"
           }
         },
@@ -19405,7 +19429,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "More Info"
           }
         },
@@ -19513,7 +19537,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "More Info"
           }
         },
@@ -20842,7 +20866,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Override Presets"
           }
         },
@@ -21909,7 +21933,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Pump Event"
           }
         },
@@ -22017,7 +22041,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Pump Event"
           }
         },
@@ -22309,7 +22333,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Rapid-Acting – Adults"
           }
         },
@@ -22458,7 +22482,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Rapid-Acting – Children"
           }
         },
@@ -22499,7 +22523,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Required"
           }
         },
@@ -23572,7 +23596,7 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Save"
           }
         },
@@ -23616,6 +23640,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Salvar"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salvează"
           }
         },
         "ru" : {
@@ -26128,7 +26158,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Support"
           }
         },
@@ -26212,7 +26242,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Support"
           }
         },
@@ -26230,7 +26260,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Support"
           }
         },
@@ -26260,7 +26290,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Support"
           }
         }
@@ -28421,7 +28451,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "The legacy model used by Loop, allowing customization of action duration."
           }
         },
@@ -29191,7 +29221,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Therapy Settings"
           }
         },
@@ -29275,7 +29305,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Therapy Settings"
           }
         },
@@ -29293,7 +29323,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Therapy Settings"
           }
         },
@@ -31503,7 +31533,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Unknown"
           }
         },
@@ -31539,7 +31569,7 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Unknown"
           }
         },
@@ -31583,6 +31613,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Desconhecido"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Necunoscut"
           }
         },
         "ru" : {
@@ -32604,7 +32640,7 @@
         },
         "sk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Walsh"
           }
         },

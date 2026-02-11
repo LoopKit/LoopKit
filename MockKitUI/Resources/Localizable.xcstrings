@@ -1786,7 +1786,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Delete Service"
+            "value" : "删除服务"
           }
         }
       }
@@ -2264,6 +2264,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "İnsülin İletimine Devam Edilemedi"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "恢复胰岛素输注失败"
           }
         }
       }
@@ -3360,7 +3366,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "好的"
+            "value" : "OK"
           }
         }
       }
