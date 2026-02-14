@@ -151,6 +151,24 @@ extension DoseEntry {
 
         return deliveredUnits ?? round(programmedUnits * DoseEntry.minimumMinimedIncrementPerUnit) / DoseEntry.minimumMinimedIncrementPerUnit
     }
+
+    public var formatted: String {
+        return [
+            "type: \(type)",
+            "automatic: \(optionalString(automatic))",
+            "isMutable: \(isMutable)",
+            "deliveredUnits: \(deliveredUnits != nil ? deliveredUnits!.insulinFormatter : "nil")",
+            "units: \(value.insulinFormatter)",
+            "insulinType: \(optionalString(insulinType))",
+            "startDate: \(startDate)",
+            "endDate: \(endDate)",
+            "manuallyEntered: \(manuallyEntered)",
+            "wasProgrammedByPumpUI: \(wasProgrammedByPumpUI)",
+            "description: \(optionalString(description))",
+            "scheduledBasalRate: \(optionalString(scheduledBasalRate))",
+            "syncIdentifier: \(optionalString(syncIdentifier))",
+        ].joined(separator: "\n")
+    }
 }
 
 extension DoseEntry: Codable {
@@ -275,4 +293,26 @@ extension DoseEntry: RawRepresentable {
 
         return rawValue
     }
+}
+
+fileprivate extension Double {
+    var insulinFormatter: String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = 1
+        formatter.maximumFractionDigits = 3
+        formatter.locale = Locale.current
+        if let formattedValue = formatter.string(from: self) {
+            return formattedValue
+        } else {
+            return "nil"
+        }
+    }
+}
+
+fileprivate func optionalString(_ object : Any?) -> String {
+    if object == nil {
+        return "nil"
+    }
+    return String(describing: object!)
 }
