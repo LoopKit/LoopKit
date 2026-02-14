@@ -303,9 +303,9 @@ fileprivate extension Double {
         formatter.maximumFractionDigits = 3
         formatter.locale = Locale.current
         if let formattedValue = formatter.string(from: self) {
-            return(formattedValue)
+            return formattedValue
         } else {
-            return("nil")
+            return "nil"
         }
     }
 }
