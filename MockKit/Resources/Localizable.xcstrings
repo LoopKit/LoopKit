@@ -328,7 +328,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Insulin Suspended"
           }
         },
@@ -366,6 +366,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Insulin Suspended"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Administrarea insulinei suspendată"
           }
         },
         "ru" : {
@@ -1329,7 +1335,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Temp Basal"
           }
         },
@@ -1367,6 +1373,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Temp Basal"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bazală temporară"
           }
         },
         "ru" : {
