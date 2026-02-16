@@ -1805,6 +1805,12 @@
             "value" : "Gerätedetails"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Détails de l'appareil"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1858,6 +1864,12 @@
             "value" : "Fertig"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminé"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1880,6 +1892,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Gotowe"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Realizat"
           }
         },
         "ru" : {
@@ -2146,6 +2164,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Geschätzter Wert"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lecture estimée"
           }
         },
         "it" : {
@@ -3086,6 +3110,12 @@
             "value" : "Mock Versionsprüfung %@"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vérification de la version fictive %@"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3742,6 +3772,12 @@
             "value" : "Simulatoreinstellungen"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paramètres du simulateur"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4161,6 +4197,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "versionUpdate: %1$@\n\nbundleIdentifier: %2$@\n\ncurrentVersion: %3$@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "versionUpdate : %1$@\n\nbundleIdentifier : %2$@\n\ncurrentVersion : %3$@"
           }
         },
         "nb" : {

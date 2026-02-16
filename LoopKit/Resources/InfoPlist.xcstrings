@@ -30,6 +30,12 @@
             "value" : "Meal data from the Health database is used to determine glucose effects. Glucose data is retrieved from HealthKit for graphing and analysis."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les données de repas de la base de données Santé sont utilisées pour déterminer les effets sur la glycémie. Les données sur la glycémie sont récupérées à partir de HealthKit pour la création de graphiques et l'analyse."
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
