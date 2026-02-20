@@ -642,7 +642,7 @@ extension Collection where Element == DoseEntry {
             
             let schedule = insulinSensitivity.quantitiesBetween(start: prevDate, end: date)
             let isf = schedule.reduce(0) { (value, scheduleValue) -> Double in
-                let weight = scheduleValue.endDate.timeIntervalSince(scheduleValue.startDate) / delta
+                let weight = Swift.min(date, scheduleValue.endDate).timeIntervalSince(Swift.max(prevDate, scheduleValue.startDate)) / delta
                 return value + weight * scheduleValue.value.doubleValue(for: unit)
             }
             
@@ -651,6 +651,7 @@ extension Collection where Element == DoseEntry {
 
             values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: unit, doubleValue: prevValue)))
             
+            prevDate = date
             date = date.addingTimeInterval(delta)
         } while date <= end
 
