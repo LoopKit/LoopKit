@@ -628,15 +628,29 @@ extension Collection where Element == DoseEntry {
         var date = start
         var values = [GlucoseEffect]()
         let unit = HKUnit.milligramsPerDeciliter
+        var prevDate = start.addingTimeInterval(-delta)
+        var prevNoIsfValue = 0.0
+        var prevValue = 0.0
 
         repeat {
-            let value = reduce(0) { (value, dose) -> Double in
-                let isf = insulinSensitivity.quantity(at: dose.startDate).doubleValue(for: unit)
-                let doseEffect = dose.glucoseEffect(at: date, model: insulinModelProvider.model(for: dose.insulinType), insulinSensitivity: isf, delta: delta)
+            let noIsfValue = reduce(0) { (value, dose) -> Double in
+                let doseEffect = dose.glucoseEffect(at: date, model: insulinModelProvider.model(for: dose.insulinType), insulinSensitivity: 1.0, delta: delta)
                 return value + doseEffect
             }
+            
+            let noIsfValueDelta = noIsfValue - prevNoIsfValue
+            
+            let schedule = insulinSensitivity.quantitiesBetween(start: prevDate, end: date)
+            let isf = schedule.reduce(0) { (value, scheduleValue) -> Double in
+                let weight = scheduleValue.endDate.timeIntervalSince(scheduleValue.startDate) / delta
+                return value + weight * scheduleValue.value.doubleValue(for: unit)
+            }
+            
+            prevValue = prevValue + isf * noIsfValueDelta
+            prevNoIsfValue = noIsfValue
 
-            values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: unit, doubleValue: value)))
+            values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: unit, doubleValue: prevValue)))
+            
             date = date.addingTimeInterval(delta)
         } while date <= end
 
