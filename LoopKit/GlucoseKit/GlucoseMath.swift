@@ -15,6 +15,62 @@ public struct GlucoseMath {
     public static let defaultDelta: TimeInterval = .minutes(5)
 }
 
+
+extension Collection where Element: SampleValue, Index == Int {
+
+    public func interpolateValue(at date: Date, unit: HKUnit) -> Double? {
+        return interpolateValues(start: date, end: date, unit: unit).1
+    }
+
+    public func interpolateValues(startIndex: Int? = nil, start: Date, end: Date, unit: HKUnit) -> (Int, Double?, Double?) {
+        let startIndex = startIndex ?? self.startIndex
+
+        guard startIndex >= self.startIndex, startIndex < self.endIndex, self[startIndex].startDate <= end, self[self.endIndex - 1].startDate >= start else {
+            return (startIndex, nil, nil)
+        }
+
+        var precedingStartElement = self[startIndex]
+        var precedingEndElement = precedingStartElement
+        var startResult: Double?
+        var endResult: Double?
+
+        var index = startIndex
+
+        for idx in indices[startIndex..<self.endIndex] {
+            let element = self[idx]
+            if element.startDate < start {
+                precedingStartElement = element
+            }
+            if element.startDate < end {
+                precedingEndElement = element
+            }
+
+            if startResult == nil && element.startDate >= start {
+                startResult = Self.interpolate(first: precedingStartElement, second: element, at: start, unit: unit)
+            }
+            if endResult == nil && element.startDate >= end {
+                endResult = Self.interpolate(first: precedingEndElement, second: element, at: end, unit: unit)
+                break
+            }
+
+            index = idx
+        }
+
+        return (index, startResult, endResult)
+    }
+
+    public static func interpolate(first: SampleValue, second: SampleValue, at date: Date, unit: HKUnit) -> Double {
+        let firstValue = first.quantity.doubleValue(for: unit)
+        let secondValue = second.quantity.doubleValue(for: unit)
+
+        guard firstValue != secondValue, first.startDate != second.startDate, date != first.startDate else {
+            return firstValue
+        }
+
+        return firstValue + ((secondValue - firstValue) * (date.timeIntervalSince(first.startDate) / second.startDate.timeIntervalSince(first.startDate)))
+    }
+}
+
 fileprivate extension Collection where Element == (x: Double, y: Double) {
     /**
      Calculates slope and intercept using linear regression
