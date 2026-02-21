@@ -50,7 +50,7 @@ extension DoseEntry {
         }
     }
 
-    private func continuousDeliveryGlucoseEffect(at date: Date, model: InsulinModel, delta: TimeInterval) -> Double {
+    private func continuousDeliveryInsulinUnitsEffect(at date: Date, model: InsulinModel, delta: TimeInterval) -> Double {
         let doseDuration = endDate.timeIntervalSince(startDate)  // t1
         let time = date.timeIntervalSince(startDate)
         var value: Double = 0
@@ -72,7 +72,7 @@ extension DoseEntry {
         return value
     }
 
-    func glucoseEffect(at date: Date, model: InsulinModel, insulinSensitivity: Double, delta: TimeInterval) -> Double {
+    func iobEffect(at date: Date, model: InsulinModel, delta: TimeInterval) -> Double {
         let time = date.timeIntervalSince(startDate)
 
         guard time >= 0 else {
@@ -81,13 +81,13 @@ extension DoseEntry {
 
         // Consider doses within the delta time window as momentary
         if endDate.timeIntervalSince(startDate) <= 1.05 * delta {
-            return netBasalUnits * -insulinSensitivity * (1.0 - model.percentEffectRemaining(at: time))
+            return -netBasalUnits * (1.0 - model.percentEffectRemaining(at: time))
         } else {
-            return netBasalUnits * -insulinSensitivity * continuousDeliveryGlucoseEffect(at: date, model: model, delta: delta)
+            return -netBasalUnits * continuousDeliveryInsulinUnitsEffect(at: date, model: model, delta: delta)
         }
     }
 
-    func glucoseEffect(during interval: DateInterval, model: InsulinModel, insulinSensitivity: Double, delta: TimeInterval) -> Double {
+    func iobEffect(during interval: DateInterval, model: InsulinModel, delta: TimeInterval) -> Double {
         let start = interval.start.timeIntervalSince(startDate)
         let end = interval.end.timeIntervalSince(startDate)
 
@@ -98,9 +98,9 @@ extension DoseEntry {
         // Consider doses within the delta time window as momentary
         if endDate.timeIntervalSince(startDate) <= 1.05 * delta {
             let effect = model.percentEffectRemaining(at: start) - model.percentEffectRemaining(at: end)
-            return netBasalUnits * -insulinSensitivity * effect
+            return -netBasalUnits * effect
         } else {
-            return netBasalUnits * -insulinSensitivity * continuousDeliveryGlucoseEffect(at: interval.end, model: model, delta: delta)
+            return -netBasalUnits * continuousDeliveryInsulinUnitsEffect(at: interval.end, model: model, delta: delta)
         }
     }
 
@@ -601,7 +601,7 @@ extension Collection where Element == DoseEntry {
         return values
     }
 
-    /// Calculates the timeline of glucose effects for a collection of doses. The ISF used for a given dose is based on the ISF in effect at the dose start time.
+    /// Calculates the timeline of glucose effects for a collection of doses.
     ///
     /// - Parameters:
     ///   - insulinModelProvider: A factory that can provide an insulin model given an insulin type
@@ -629,16 +629,16 @@ extension Collection where Element == DoseEntry {
         var values = [GlucoseEffect]()
         let unit = HKUnit.milligramsPerDeciliter
         var prevDate = start.addingTimeInterval(-delta)
-        var prevNoIsfValue = 0.0
+        var prevIobEffect = 0.0
         var prevValue = 0.0
 
         repeat {
-            let noIsfValue = reduce(0) { (value, dose) -> Double in
-                let doseEffect = dose.glucoseEffect(at: date, model: insulinModelProvider.model(for: dose.insulinType), insulinSensitivity: 1.0, delta: delta)
+            let iobEffect = reduce(0) { (value, dose) -> Double in
+                let doseEffect = dose.iobEffect(at: date, model: insulinModelProvider.model(for: dose.insulinType), delta: delta)
                 return value + doseEffect
             }
             
-            let noIsfValueDelta = noIsfValue - prevNoIsfValue
+            let iobDelta = iobEffect - prevIobEffect
             
             let schedule = insulinSensitivity.quantitiesBetween(start: prevDate, end: date)
             let isf = schedule.reduce(0) { (value, scheduleValue) -> Double in
@@ -646,8 +646,8 @@ extension Collection where Element == DoseEntry {
                 return value + weight * scheduleValue.value.doubleValue(for: unit)
             }
             
-            prevValue = prevValue + isf * noIsfValueDelta
-            prevNoIsfValue = noIsfValue
+            prevValue = prevValue + isf * iobDelta
+            prevIobEffect = iobEffect
 
             values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: unit, doubleValue: prevValue)))
             
@@ -658,7 +658,7 @@ extension Collection where Element == DoseEntry {
         return values
     }
 
-    /// Calculates the timeline of glucose effects for a collection of doses. The ISF used for a given dose is based on the ISF in effect at the dose start time.
+    /// Calculates the timeline of glucose effects for a collection of doses.
     ///
     /// - Parameters:
     ///   - insulinModelProvider: A factory that can provide an insulin model given an insulin type
@@ -688,26 +688,40 @@ extension Collection where Element == DoseEntry {
         var date = start
         var values = [GlucoseEffect]()
         let unit = HKUnit.milligramsPerDeciliter
+        var prevDate = start.addingTimeInterval(-delta)
+        var prevIobEffect = 0.0
+        var prevValue = 0.0
 
         repeat {
-            let value = reduce(0) { (value, dose) -> Double in
-
-                guard let isfScheduleValue = insulinSensitivityHistory.closestPrior(to: dose.startDate), isfScheduleValue.endDate >= dose.startDate else {
-                    preconditionFailure("ISF History must cover dose startDates")
-                }
-                let isf = isfScheduleValue.value.doubleValue(for: unit)
-                let doseEffect = dose.glucoseEffect(at: date, model: insulinModelProvider.model(for: dose.insulinType), insulinSensitivity: isf, delta: delta)
+            let iobEffect = reduce(0) { (value, dose) -> Double in
+                let doseEffect = dose.iobEffect(at: date, model: insulinModelProvider.model(for: dose.insulinType), delta: delta)
                 return value + doseEffect
             }
+            
+            let iobDelta = iobEffect - prevIobEffect
+            
+            let schedule = insulinSensitivityHistory.filterDateRange(prevDate, date)
+            guard !schedule.isEmpty, schedule.first!.startDate <= prevDate, schedule.last!.endDate >= date else {
+                preconditionFailure("ISF History must cover data range: \(prevDate) - \(date)")
+            }
+            let isf = schedule.reduce(0) { (value, scheduleValue) -> Double in
+                let weight = Swift.min(date, scheduleValue.endDate).timeIntervalSince(Swift.max(prevDate, scheduleValue.startDate)) / delta
+                return value + weight * scheduleValue.value.doubleValue(for: unit)
+            }
+            
+            prevValue = prevValue + isf * iobDelta
+            prevIobEffect = iobEffect
 
-            values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: unit, doubleValue: value)))
+            values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: unit, doubleValue: prevValue)))
+            
+            prevDate = date
             date = date.addingTimeInterval(delta)
         } while date <= end
 
         return values
     }
 
-
+/*
     /// Calculates the timeline of glucose effects for a collection of doses.  Effects for a specific dose will vary over the course
     /// of that dose's absoption interval based on the timeline of insulin sensitivity.
     ///
@@ -764,8 +778,9 @@ extension Collection where Element == DoseEntry {
         } while date <= end
 
         return values
-    }
+    }*/
 
+    /*
     /// Calculates the timeline of glucose effects for a collection of doses at specified points in time. Effects for a specific dose will vary over the course
     /// of that dose's absoption interval based on the timeline of insulin sensitivity.
     ///
@@ -813,6 +828,7 @@ extension Collection where Element == DoseEntry {
 
         return values
     }
+     */
 
     /// Fills any missing gaps in basal delivery with new doses based on the supplied basal history. Compared to `overlayBasalSchedule`, this uses a history of
     /// of basal rates, rather than a daily schedule, so it can work across multiple schedule changes.  This method is suitable for generating a display of basal delivery
