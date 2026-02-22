@@ -630,26 +630,23 @@ extension Collection where Element == DoseEntry {
         let unit = HKUnit.milligramsPerDeciliter
         var prevDate = start.addingTimeInterval(-delta)
         var prevIobEffect = 0.0
-        var prevValue = 0.0
+        var glucoseEffectValue = 0.0
 
         repeat {
-            let iobEffect = reduce(0) { (value, dose) -> Double in
-                let doseEffect = dose.iobEffect(at: date, model: insulinModelProvider.model(for: dose.insulinType), delta: delta)
-                return value + doseEffect
-            }
-            
-            let iobDelta = iobEffect - prevIobEffect
-            
             let schedule = insulinSensitivity.quantitiesBetween(start: prevDate, end: date)
-            let isf = schedule.reduce(0) { (value, scheduleValue) -> Double in
-                let weight = Swift.min(date, scheduleValue.endDate).timeIntervalSince(Swift.max(prevDate, scheduleValue.startDate)) / delta
-                return value + weight * scheduleValue.value.doubleValue(for: unit)
+
+            for scheduleValue in schedule {
+                let effectiveDate = Swift.min(date, scheduleValue.endDate)
+                let iobEffect = reduce(0) { (value, dose) -> Double in
+                    let doseEffect = dose.iobEffect(at: effectiveDate, model: insulinModelProvider.model(for: dose.insulinType), delta: delta)
+                    return value + doseEffect
+                }
+                let iobDelta = iobEffect - prevIobEffect
+                glucoseEffectValue += iobDelta * scheduleValue.value.doubleValue(for: unit)
+                prevIobEffect = iobEffect
             }
             
-            prevValue = prevValue + isf * iobDelta
-            prevIobEffect = iobEffect
-
-            values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: unit, doubleValue: prevValue)))
+            values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: unit, doubleValue: glucoseEffectValue)))
             
             prevDate = date
             date = date.addingTimeInterval(delta)
@@ -690,29 +687,26 @@ extension Collection where Element == DoseEntry {
         let unit = HKUnit.milligramsPerDeciliter
         var prevDate = start.addingTimeInterval(-delta)
         var prevIobEffect = 0.0
-        var prevValue = 0.0
+        var glucoseEffectValue = 0.0
 
         repeat {
-            let iobEffect = reduce(0) { (value, dose) -> Double in
-                let doseEffect = dose.iobEffect(at: date, model: insulinModelProvider.model(for: dose.insulinType), delta: delta)
-                return value + doseEffect
-            }
-            
-            let iobDelta = iobEffect - prevIobEffect
-            
             let schedule = insulinSensitivityHistory.filterDateRange(prevDate, date)
             guard !schedule.isEmpty, schedule.first!.startDate <= prevDate, schedule.last!.endDate >= date else {
                 preconditionFailure("ISF History must cover data range: \(prevDate) - \(date)")
             }
-            let isf = schedule.reduce(0) { (value, scheduleValue) -> Double in
-                let weight = Swift.min(date, scheduleValue.endDate).timeIntervalSince(Swift.max(prevDate, scheduleValue.startDate)) / delta
-                return value + weight * scheduleValue.value.doubleValue(for: unit)
+            
+            for scheduleValue in schedule {
+                let effectiveDate = Swift.min(date, scheduleValue.endDate)
+                let iobEffect = reduce(0) { (value, dose) -> Double in
+                    let doseEffect = dose.iobEffect(at: effectiveDate, model: insulinModelProvider.model(for: dose.insulinType), delta: delta)
+                    return value + doseEffect
+                }
+                let iobDelta = iobEffect - prevIobEffect
+                glucoseEffectValue += iobDelta * scheduleValue.value.doubleValue(for: unit)
+                prevIobEffect = iobEffect
             }
             
-            prevValue = prevValue + isf * iobDelta
-            prevIobEffect = iobEffect
-
-            values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: unit, doubleValue: prevValue)))
+            values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: unit, doubleValue: glucoseEffectValue)))
             
             prevDate = date
             date = date.addingTimeInterval(delta)

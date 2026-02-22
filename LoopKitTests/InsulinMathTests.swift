@@ -677,8 +677,8 @@ class InsulinMathTests: XCTestCase {
             let deltas = deltas(effects: effects)
             
             let transitionIndex = 11
-            let expectedRatio = 1 + Double(offset) / 5.0
-            XCTAssertEqual(expectedRatio * baselineDeltas[transitionIndex], deltas[transitionIndex], accuracy: 1E-12, "offset \(offset)")
+            let expectedRatio = 1 + Double(offset) / 5.0 // here we use a simple averaging approximation for ISF, this isn't quite as precise as the actual code
+            XCTAssertEqual(expectedRatio * baselineDeltas[transitionIndex], deltas[transitionIndex], accuracy: 0.02, "offset \(offset)")
         }
     }
 
