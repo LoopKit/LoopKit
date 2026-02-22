@@ -173,21 +173,21 @@ extension TempBasalRecommendation {
     }
 }
 
-/// Computes a total insulin amount necessary to correct a glucose differential at a given sensitivity
+/// Computes a total insulin amount necessary to correct a glucose differential relative to the glucose effect at that time from 1 unit of insulin
 ///
 /// - Parameters:
 ///   - fromValue: The starting glucose value
 ///   - toValue: The desired glucose value
-///   - effectedSensitivity: The sensitivity, in glucose-per-insulin-unit
+///   - unitGlucoseEffect: The change in glucose due to 1 unit of insulin at the time in question
 /// - Returns: The insulin correction in units
-private func insulinCorrectionUnits(fromValue: Double, toValue: Double, effectedSensitivity: Double) -> Double? {
-    guard effectedSensitivity > 0 else {
+private func insulinCorrectionUnits(fromValue: Double, toValue: Double, unitGlucoseEffect: Double) -> Double? {
+    guard unitGlucoseEffect < 0 else {
         return nil
     }
 
-    let glucoseCorrection = fromValue - toValue
+    let glucoseDelta = toValue - fromValue
 
-    return glucoseCorrection / effectedSensitivity
+    return glucoseDelta / unitGlucoseEffect
 }
 
 /// Computes a target glucose value for a correction, at a given time during the insulin effect duration
@@ -289,8 +289,11 @@ extension Collection where Element: GlucoseValue {
 
 
             // Compute the dose required to bring this prediction to target:
-            let correctionUnits = (targetValue - predictedGlucoseValue) / Swift.min(-.ulpOfOne, unitGlucoseEffect)
-            guard correctionUnits > 0 else {
+            guard let correctionUnits = insulinCorrectionUnits(
+                fromValue: predictedGlucoseValue,
+                toValue: targetValue,
+                unitGlucoseEffect: Swift.min(-.ulpOfOne, unitGlucoseEffect)
+            ), correctionUnits > 0 else {
                 continue
             }
 
@@ -315,10 +318,14 @@ extension Collection where Element: GlucoseValue {
         if minGlucose.quantity < minGlucoseTargets.lowerBound &&
             eventualGlucose.quantity < eventualGlucoseTargets.lowerBound
         {
-            guard let unitGlucoseEffectAtMinGlucose = unitGlucoseEffectAtMinGlucose else {
+            guard let unitGlucoseEffectAtMinGlucose = unitGlucoseEffectAtMinGlucose,
+                  let units = insulinCorrectionUnits(
+                           fromValue: minGlucose.quantity.doubleValue(for: unit),
+                           toValue: minGlucoseTargets.averageValue(for: unit),
+                           unitGlucoseEffect: Swift.min(-.ulpOfOne, unitGlucoseEffectAtMinGlucose)
+                  ) else {
                 return nil
             }
-            let units = (minGlucoseTargets.averageValue(for: unit) - minGlucose.quantity.doubleValue(for: unit)) / Swift.min(-.ulpOfOne, unitGlucoseEffectAtMinGlucose)
 
             return .entirelyBelowRange(
                 min: minGlucose,
