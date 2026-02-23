@@ -275,7 +275,7 @@ extension Collection where Element: GlucoseValue {
             )
 
             var unitGlucoseEffect: Double?
-            (unitEffectsIndex, unitGlucoseEffect, _) = unitEffects.interpolateValues(startIndex: unitEffectsIndex, start: prediction.startDate, end: prediction.startDate, unit: .milligramsPerDeciliter)
+            (unitEffectsIndex, unitGlucoseEffect) = unitEffects.interpolateValue(startIndex: unitEffectsIndex, at: prediction.startDate, unit: .milligramsPerDeciliter)
             
             guard let unitGlucoseEffect = unitGlucoseEffect else {
                 preconditionFailure("Unable to locate unitEffect starting from date \(date) aligned with prediction startDate \(prediction.startDate)")

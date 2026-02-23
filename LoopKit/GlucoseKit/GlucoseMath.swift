@@ -19,44 +19,34 @@ public struct GlucoseMath {
 extension Collection where Element: SampleValue, Index == Int {
 
     public func interpolateValue(at date: Date, unit: HKUnit) -> Double? {
-        return interpolateValues(start: date, end: date, unit: unit).1
+        return interpolateValue(at: date, unit: unit).1
     }
 
-    public func interpolateValues(startIndex: Int? = nil, start: Date, end: Date, unit: HKUnit) -> (Int, Double?, Double?) {
+    public func interpolateValue(startIndex: Int? = nil, at date: Date, unit: HKUnit) -> (Int, Double?) {
         let startIndex = startIndex ?? self.startIndex
 
-        guard startIndex >= self.startIndex, startIndex < self.endIndex, self[startIndex].startDate <= end, self[self.endIndex - 1].startDate >= start else {
-            return (startIndex, nil, nil)
+        guard startIndex >= self.startIndex, startIndex < self.endIndex, self[self.endIndex - 1].startDate >= date else {
+            return (startIndex, nil)
         }
 
         var precedingStartElement = self[startIndex]
-        var precedingEndElement = precedingStartElement
-        var startResult: Double?
-        var endResult: Double?
+        var result: Double?
 
         var index = startIndex
 
         for idx in indices[startIndex..<self.endIndex] {
             let element = self[idx]
-            if element.startDate < start {
+            if element.startDate < date {
                 precedingStartElement = element
-            }
-            if element.startDate < end {
-                precedingEndElement = element
-            }
-
-            if startResult == nil && element.startDate >= start {
-                startResult = Self.interpolate(first: precedingStartElement, second: element, at: start, unit: unit)
-            }
-            if endResult == nil && element.startDate >= end {
-                endResult = Self.interpolate(first: precedingEndElement, second: element, at: end, unit: unit)
+            } else {
+                result = Self.interpolate(first: precedingStartElement, second: element, at: date, unit: unit)
                 break
             }
 
             index = idx
         }
 
-        return (index, startResult, endResult)
+        return (index, result)
     }
 
     public static func interpolate(first: SampleValue, second: SampleValue, at date: Date, unit: HKUnit) -> Double {
