@@ -56,7 +56,7 @@ public struct DurationSheet: View {
                         .padding(.horizontal)
                         
                         Callout(
-                            .caution,
+                            .warning,
                             title: Text("Critical alerts will be muted"),
                             message: Text("All app sounds, including sounds for all critical alerts such as Urgent Low, Sensor Fail, Pump Expiration, and others will NOT sound for your selected time duration.")
                         )
@@ -131,7 +131,7 @@ public struct ConfirmationSheet: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(height: 41)
-                .foregroundStyle(guidanceColors.warning)
+                .foregroundStyle(guidanceColors.critical)
             
             VStack(spacing: 4) {
                 Text("All App Sounds Muted")
