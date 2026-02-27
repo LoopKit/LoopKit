@@ -70,7 +70,7 @@ public struct BasalRateScheduleEditor: View {
         self.init(
             schedule: therapySettingsViewModel.therapySettings.basalRateSchedule,
             supportedBasalRates: therapySettingsViewModel.pumpSupportedIncrements()?.basalRates ?? [],
-            maximumBasalRate: therapySettingsViewModel.therapySettings.maximumBasalRatePerHour,
+            maximumBasalRate: nil,
             maximumScheduleEntryCount: therapySettingsViewModel.pumpSupportedIncrements()?.maximumBasalScheduleEntryCount ?? 0,
             syncBasalRateSchedule: therapySettingsViewModel.syncBasalRateSchedule,
             onSave: { [weak therapySettingsViewModel] newBasalRates in
