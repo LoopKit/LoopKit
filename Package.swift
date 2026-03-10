@@ -11,7 +11,7 @@ import PackageDescription
 let package = Package(
     name: "LoopKit",
     defaultLocalization: "en",
-    platforms: [.iOS("15.0")],
+    platforms: [.iOS("17.0")],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
@@ -25,6 +25,10 @@ let package = Package(
         .package(
             url: "https://github.com/ivanschuetz/SwiftCharts",
             branch: "master"
+        ),
+        .package(
+            url: "https://github.com/LoopKit/LoopAlgorithm",
+            branch: "main"
         )
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
@@ -34,7 +38,7 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "LoopKit",
-            dependencies: [],
+            dependencies: ["LoopAlgorithm"],
             path: "LoopKit"),
         .testTarget(
             name: "LoopKitTests",

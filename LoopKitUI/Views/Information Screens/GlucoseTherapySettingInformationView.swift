@@ -6,23 +6,24 @@
 //  Copyright © 2020 LoopKit Authors. All rights reserved.
 //
 
-import HealthKit
-import SwiftUI
+import LoopAlgorithm
 import LoopKit
+import SwiftUI
 
 public struct GlucoseTherapySettingInformationView<Content: View>: View {
     var text: Content?
     let onExit: (() -> Void)?
     let mode: SettingsPresentationMode
     let therapySetting: TherapySetting
-    let preferredUnit: HKUnit
+    let preferredUnit: LoopUnit
     let appName: String
     
     @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dosingStrategySelectionEnabled) var dosingStrategySelectionEnabled
 
     public init(
         therapySetting: TherapySetting,
-        preferredUnit: HKUnit? = nil,
+        preferredUnit: LoopUnit? = nil,
         onExit: (() -> Void)?,
         mode: SettingsPresentationMode = .acceptanceFlow,
         appName: String,
@@ -38,7 +39,7 @@ public struct GlucoseTherapySettingInformationView<Content: View>: View {
     
     public init(
         therapySetting: TherapySetting,
-        preferredUnit: HKUnit? = nil,
+        preferredUnit: LoopUnit? = nil,
         onExit: (() -> Void)?,
         mode: SettingsPresentationMode = .acceptanceFlow,
         appName: String,
@@ -76,16 +77,19 @@ public struct GlucoseTherapySettingInformationView<Content: View>: View {
             if let text {
                 text
             } else {
-                Text(therapySetting.descriptiveText(appName: appName))
+                Text(therapySetting.descriptiveText(appName: appName, dosingStrategySelectionEnabled: dosingStrategySelectionEnabled))
             }
             
             Text(therapySetting.guardrailInformationText)
         }
         .fixedSize(horizontal: false, vertical: true)
+        .accessibilityIdentifier(
+            "text_\(self.therapySetting.title.replacing(" ", with: ""))Information"
+        )
     }
     
     private var illustrationImageName: String {
-        return "\(therapySetting) \(preferredUnit.description.replacingOccurrences(of: "/", with: ""))"
+        return "\(therapySetting) \(preferredUnit.hkUnit.description.replacingOccurrences(of: "/", with: ""))"
     }
 }
 
@@ -114,68 +118,23 @@ fileprivate extension TherapySetting {
                 mmolValue: HKQuantity(unit: .millimolesPerLiter, doubleValue: mmolMax)
             )
             return lowHighText(lowerBoundString: LocalizedString("your Glucose Safety Limit", comment: "Lower bound pre-meal information text"),
-                               upperBoundString: upperBoundString)
+                               upperBoundString: Guardrail.premealCorrectionRangeMaximum.bothUnitsString)
         case .workoutCorrectionRangeOverride:
-            let mgdlMin = Guardrail.unconstrainedWorkoutCorrectionRange.absoluteBounds.lowerBound.doubleValue(
-                for: .milligramsPerDeciliter,
-                withRounding: true,
-                rule: .down
-            )
-            let mmolMin = Guardrail.unconstrainedWorkoutCorrectionRange.absoluteBounds.lowerBound.doubleValue(
-                for: .millimolesPerLiter,
-                withRounding: true,
-                rule: .down
-            )
-            let lowerBoundString = bothUnitsString(
-                mgdlValue: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: mgdlMin),
-                mmolValue: HKQuantity(unit: .millimolesPerLiter, doubleValue: mmolMin)
-            )
-            let mgdlMax = Guardrail.unconstrainedWorkoutCorrectionRange.absoluteBounds.upperBound.doubleValue(
-                for: .milligramsPerDeciliter,
-                withRounding: true,
-                rule: .down
-            )
-            let mmolMax = Guardrail.unconstrainedWorkoutCorrectionRange.absoluteBounds.upperBound.doubleValue(
-                for: .millimolesPerLiter,
-                withRounding: true,
-                rule: .down
-            )
-            let upperBoundString = bothUnitsString(
-                mgdlValue: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: mgdlMax),
-                mmolValue: HKQuantity(unit: .millimolesPerLiter, doubleValue: mmolMax)
-            )
+            let lowerBoundString = Guardrail.unconstrainedWorkoutCorrectionRange.absoluteBounds.lowerBound.bothUnitsString
+            let upperBoundString = Guardrail.unconstrainedWorkoutCorrectionRange.absoluteBounds.upperBound.bothUnitsString
             return lowHighText(
                 lowerBoundString: String(format: LocalizedString("%1$@ or your Glucose Safety Limit, whichever is higher", comment: "Lower bound workout information text format (1: app name)"), lowerBoundString),
                 upperBoundString: upperBoundString)
         case .suspendThreshold:
             return lowHighText(for: Guardrail.suspendThreshold)
-        case .basalRate, .deliveryLimits, .insulinModel, .carbRatio, .insulinSensitivity, .none:
+        case .basalRate, .deliveryLimits, .carbRatio, .insulinSensitivity, .none:
             fatalError("Unexpected")
         }
     }
-
-    func bothUnitsString(mgdlValue: HKQuantity, mmolValue: HKQuantity) -> String {
-        String(format: "%1$@ (%2$@)",
-               mgdLFormatter.string(from: mgdlValue)!,
-               mmolLFormatter.string(from: mmolValue)!)
-    }
-
-
-    func lowHighText(for guardrail: Guardrail<HKQuantity>) -> String {
-        let mgdlValues = guardrail.absoluteBounds.roundedDisplayValues(for: .milligramsPerDeciliter)
-        let mmolValues = guardrail.absoluteBounds.roundedDisplayValues(for: .millimolesPerLiter)
-
-        let lowerBoundString = bothUnitsString(
-            mgdlValue: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: mgdlValues.first!),
-            mmolValue: HKQuantity(unit: .millimolesPerLiter, doubleValue: mmolValues.first!)
-        )
-
-        let upperBoundString = bothUnitsString(
-            mgdlValue: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: mgdlValues.last!),
-            mmolValue: HKQuantity(unit: .millimolesPerLiter, doubleValue: mmolValues.last!)
-        )
-
-        return lowHighText(lowerBoundString: lowerBoundString, upperBoundString: upperBoundString)
+   
+    func lowHighText(for guardrail: Guardrail<LoopQuantity>) -> String {
+        return lowHighText(lowerBoundString: guardrail.absoluteBounds.lowerBound.bothUnitsString,
+                           upperBoundString: guardrail.absoluteBounds.upperBound.bothUnitsString)
     }
 
     func lowHighText(lowerBoundString: String, upperBoundString: String) -> String {

@@ -8,6 +8,7 @@
 
 import SwiftUI
 import HealthKit
+import LoopAlgorithm
 import LoopKit
 
 public typealias SyncBasalRateSchedule = (_ items: [RepeatingScheduleValue<Double>], _ completion: @escaping (Result<BasalRateSchedule, Error>) -> Void) -> Void
@@ -15,12 +16,14 @@ public typealias SyncBasalRateSchedule = (_ items: [RepeatingScheduleValue<Doubl
 public struct BasalRateScheduleEditor: View {
     var schedule: DailyQuantitySchedule<Double>?
     var supportedBasalRates: [Double]
-    var guardrail: Guardrail<HKQuantity>
+    var guardrail: Guardrail<LoopQuantity>
     var maximumScheduleEntryCount: Int
     var syncBasalRateSchedule: SyncBasalRateSchedule?
     var save: (BasalRateSchedule) -> Void
     let mode: SettingsPresentationMode
     @Environment(\.appName) private var appName
+    @Environment(\.dosingStrategySelectionEnabled) private var dosingStrategySelectionEnabled
+
 
     /// - Precondition: `supportedBasalRates` is nonempty and sorted in ascending order.
     public init(
@@ -39,6 +42,8 @@ public struct BasalRateScheduleEditor: View {
             )!
         }
 
+        // filter out 0 U/hr
+        let supportedBasalRates = supportedBasalRates.filter { $0 != 0 }
         if let maxBasal = maximumBasalRate {
             let partitioningIndex = supportedBasalRates.partitioningIndex(where: { $0 > maxBasal })
             self.supportedBasalRates = Array(supportedBasalRates[..<partitioningIndex])
@@ -53,7 +58,7 @@ public struct BasalRateScheduleEditor: View {
         self.mode = mode
         
         self.supportedBasalRates.removeAll(where: {
-            !self.guardrail.absoluteBounds.contains(HKQuantity(unit: .internationalUnitsPerHour, doubleValue: $0))
+            !self.guardrail.absoluteBounds.contains(LoopQuantity(unit: .internationalUnitsPerHour, doubleValue: $0))
         })
     }
     
@@ -65,7 +70,7 @@ public struct BasalRateScheduleEditor: View {
         self.init(
             schedule: therapySettingsViewModel.therapySettings.basalRateSchedule,
             supportedBasalRates: therapySettingsViewModel.pumpSupportedIncrements()?.basalRates ?? [],
-            maximumBasalRate: therapySettingsViewModel.therapySettings.maximumBasalRatePerHour,
+            maximumBasalRate: nil,
             maximumScheduleEntryCount: therapySettingsViewModel.pumpSupportedIncrements()?.maximumBasalScheduleEntryCount ?? 0,
             syncBasalRateSchedule: therapySettingsViewModel.syncBasalRateSchedule,
             onSave: { [weak therapySettingsViewModel] newBasalRates in
@@ -96,12 +101,13 @@ public struct BasalRateScheduleEditor: View {
             },
             onSave: savingMechanism,
             mode: mode,
-            settingType: .basalRate(maximumScheduleEntryCount)
+            settingType: .basalRate(maximumScheduleEntryCount),
+            shouldBlockZeroSchedule: true
         )
     }
     
     private var description: Text {
-        Text(TherapySetting.basalRate.descriptiveText(appName: appName))
+        Text(TherapySetting.basalRate.descriptiveText(appName: appName, dosingStrategySelectionEnabled: dosingStrategySelectionEnabled))
     }
 
     private var confirmationAlertContent: AlertContent {
@@ -161,9 +167,9 @@ private struct BasalRateGuardrailWarning: View {
         switch threshold {
         case .minimum where isZeroUnitRateSelectable:
             return Text(LocalizedString("No Basal Insulin", comment: "Title text for the zero basal rate warning"))
-        case .minimum, .belowRecommended:
+        case .minimum, .belowWarning, .belowRecommended:
             return Text(LocalizedString("Low Basal Rate", comment: "Title text for the low basal rate warning"))
-        case .aboveRecommended, .maximum:
+        case .aboveRecommended, .aboveWarning, .maximum:
             return Text(LocalizedString("High Basal Rate", comment: "Title text for the high basal rate warning"))
         }
     }

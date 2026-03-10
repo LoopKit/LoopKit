@@ -10,18 +10,8 @@ import Foundation
 import CoreData
 import HealthKit
 import os.log
+import LoopAlgorithm
 
-
-public enum CarbStoreResult<T> {
-    case success(T)
-    case failure(CarbStore.CarbStoreError)
-}
-
-public enum CarbAbsorptionModel {
-    case linear
-    case nonlinear
-    case adaptiveRateNonlinear
-}
 
 public protocol CarbStoreDelegate: AnyObject {
 
@@ -64,8 +54,6 @@ public final class CarbStore {
     /// Notification posted when carb entries were changed, either via add/replace/delete methods or from HealthKit
     public static let carbEntriesDidChange = NSNotification.Name(rawValue: "com.loopkit.CarbStore.carbEntriesDidChange")
 
-    public typealias DefaultAbsorptionTimes = (fast: TimeInterval, medium: TimeInterval, slow: TimeInterval)
-
     public enum CarbStoreError: Error {
         // The store isn't correctly configured for the requested operation
         case notConfigured
@@ -101,75 +89,9 @@ public final class CarbStore {
     public let hkSampleStore: HealthKitSampleStore?
 
     /// The preferred unit. iOS currently only supports grams for dietary carbohydrates.
-    public var preferredUnit: HKUnit! {
-        return .gram()
+    public var preferredUnit: LoopUnit! {
+        return .gram
     }
-
-    /// A history of recently applied schedule overrides.
-    private let overrideHistory: TemporaryScheduleOverrideHistory?
-
-    /// Carbohydrate-to-insulin ratio
-    public var carbRatioSchedule: CarbRatioSchedule? {
-        get {
-            return lockedCarbRatioSchedule.value
-        }
-        set {
-            lockedCarbRatioSchedule.value = newValue
-        }
-    }
-    private let lockedCarbRatioSchedule: Locked<CarbRatioSchedule?>
-
-    /// The carb ratio schedule, applying recent overrides relative to the current moment in time.
-    public var carbRatioScheduleApplyingOverrideHistory: CarbRatioSchedule? {
-        if let carbRatioSchedule = carbRatioSchedule {
-            return overrideHistory?.resolvingRecentCarbRatioSchedule(carbRatioSchedule)
-        } else {
-            return nil
-        }
-    }
-
-    /// A trio of default carbohydrate absorption times. Defaults to 2, 3, and 4 hours.
-    public let defaultAbsorptionTimes: DefaultAbsorptionTimes
-
-    /// Insulin-to-glucose sensitivity
-    public var insulinSensitivitySchedule: InsulinSensitivitySchedule? {
-        get {
-            return lockedInsulinSensitivitySchedule.value
-        }
-        set {
-            lockedInsulinSensitivitySchedule.value = newValue
-        }
-    }
-    private let lockedInsulinSensitivitySchedule:  Locked<InsulinSensitivitySchedule?>
-
-    /// The insulin sensitivity schedule, applying recent overrides relative to the current moment in time.
-    public var insulinSensitivityScheduleApplyingOverrideHistory: InsulinSensitivitySchedule? {
-        if let insulinSensitivitySchedule = insulinSensitivitySchedule {
-            return overrideHistory?.resolvingRecentInsulinSensitivitySchedule(insulinSensitivitySchedule)
-        } else {
-            return nil
-        }
-    }
-
-    /// The computed carbohydrate sensitivity schedule based on the insulin sensitivity and carb ratio schedules.
-    public var carbSensitivitySchedule: CarbSensitivitySchedule? {
-        guard let insulinSensitivitySchedule = insulinSensitivitySchedule, let carbRatioSchedule = carbRatioSchedule else {
-            return nil
-        }
-        return .carbSensitivitySchedule(insulinSensitivitySchedule: insulinSensitivitySchedule, carbRatioSchedule: carbRatioSchedule)
-    }
-
-    /// The expected delay in the appearance of glucose effects, accounting for both digestion and sensor lag
-    public let delay: TimeInterval
-
-    /// The interval between effect values to use for the calculated timelines.
-    public let delta: TimeInterval
-
-    /// The factor by which the entered absorption time can be extended to accomodate slower-than-expected absorption
-    public let absorptionTimeOverrun: Double
-    
-    /// Carb absorption model
-    public let carbAbsorptionModel: CarbAbsorptionModel
 
     /// The interval of carb data to keep in cache
     public let cacheLength: TimeInterval
@@ -188,8 +110,6 @@ public final class CarbStore {
     
     static let healthKitQueryAnchorMetadataKey = "com.loopkit.CarbStore.hkQueryAnchor"
     
-    var settings = CarbModelSettings(absorptionModel: PiecewiseLinearAbsorption(), initialAbsorptionTimeOverrun: 1.5, adaptiveAbsorptionRateEnabled: false)
-
     private let provenanceIdentifier: String
 
     /**
@@ -201,44 +121,18 @@ public final class CarbStore {
         healthKitSampleStore: HealthKitSampleStore? = nil,
         cacheStore: PersistenceController,
         cacheLength: TimeInterval,
-        defaultAbsorptionTimes: DefaultAbsorptionTimes,
-        carbRatioSchedule: CarbRatioSchedule? = nil,
-        insulinSensitivitySchedule: InsulinSensitivitySchedule? = nil,
-        overrideHistory: TemporaryScheduleOverrideHistory? = nil,
         syncVersion: Int = 1,
-        absorptionTimeOverrun: Double = CarbMath.defaultAbsorptionTimeOverrun,
-        calculationDelta: TimeInterval = GlucoseMath.defaultDelta,
-        effectDelay: TimeInterval = CarbMath.defaultEffectDelay,
-        carbAbsorptionModel: CarbAbsorptionModel = .nonlinear,
-        provenanceIdentifier: String,
+        provenanceIdentifier: String = HKSource.default().bundleIdentifier,
         test_currentDate: Date? = nil
     ) {
         self.hkSampleStore = healthKitSampleStore
         self.cacheStore = cacheStore
-        self.defaultAbsorptionTimes = defaultAbsorptionTimes
-        self.lockedCarbRatioSchedule = Locked(carbRatioSchedule)
-        self.lockedInsulinSensitivitySchedule = Locked(insulinSensitivitySchedule)
-        self.overrideHistory = overrideHistory
         self.syncVersion = syncVersion
-        self.absorptionTimeOverrun = absorptionTimeOverrun
-        self.delta = calculationDelta
-        self.delay = effectDelay
         self.cacheLength = cacheLength
-        self.carbAbsorptionModel = carbAbsorptionModel
         self.provenanceIdentifier = provenanceIdentifier
         self.test_currentDate = test_currentDate
 
         healthKitSampleStore?.delegate = self
-        
-        // Carb model settings based on the selected absorption model
-        switch self.carbAbsorptionModel {
-        case .linear:
-            self.settings = CarbModelSettings(absorptionModel: LinearAbsorption(), initialAbsorptionTimeOverrun: absorptionTimeOverrun, adaptiveAbsorptionRateEnabled: false)
-        case .nonlinear:
-            self.settings = CarbModelSettings(absorptionModel: PiecewiseLinearAbsorption(), initialAbsorptionTimeOverrun: absorptionTimeOverrun, adaptiveAbsorptionRateEnabled: false)
-        case .adaptiveRateNonlinear:
-            self.settings = CarbModelSettings(absorptionModel: PiecewiseLinearAbsorption(), initialAbsorptionTimeOverrun: 1.0, adaptiveAbsorptionRateEnabled: true, adaptiveRateStandbyIntervalFraction: 0.2)
-        }
 
         cacheStore.onReady { (error) in
             guard error == nil else {
@@ -346,15 +240,18 @@ extension CarbStore: HealthKitSampleStoreDelegate {
 
 extension CarbStore {
 
-    /// Retrieves carb entries that have a `startDate` within the specified date range
+    /// Retrieves carb entries that have a `startDate` within the specified date range and optionally match a specific favorite food
     ///
     /// - Parameters:
     ///   - start: The earliest date of values to retrieve
     ///   - end: The latest date of values to retrieve, if provided
-    ///   - result: An array of carb entries, in chronological order by startDate, or error
-    public func getCarbEntries(start: Date? = nil, end: Date? = nil) async throws -> [StoredCarbEntry] {
+    ///   - dateAscending: Indicates how the result will be sorted. If true, function returns `[oldestEntry, ..., newestEntry]`. If false, function returns`[newestEntry, ..., oldestEntry]`
+    ///   - fetchLimit: Limit on the maximum number of entries to be retrieved
+    ///   - with: The favorite food identifier to match
+    ///   - result: An array of carb entries, sorted by startDate, or error
+    public func getCarbEntries(start: Date? = nil, end: Date? = nil, dateAscending: Bool = true, fetchLimit: Int? = nil, with favoriteFoodID: String? = nil) async throws -> [StoredCarbEntry] {
         try await withCheckedThrowingContinuation { continuation in
-            getCarbEntries(start: start, end: end) { result in
+            getCarbEntries(start: start, end: end, dateAscending: dateAscending, fetchLimit: fetchLimit, with: favoriteFoodID) { result in
                 switch result {
                 case .failure(let error):
                     continuation.resume(throwing: error)
@@ -365,34 +262,44 @@ extension CarbStore {
         }
     }
 
-    /// Retrieves carb entries within the specified date range
+    /// Retrieves carb entries that have a `startDate` within the specified date range and optionally match a specific favorite food
     ///
     /// - Parameters:
     ///   - start: The earliest date of values to retrieve
-    ///   - end: The latest date of values to retrieve, if provided
+    ///   - end: The latest date of values to retrieve, if provided'
+    ///   - dateAscending: Indicates how the result will be sorted. If true, function returns `[oldestEntry, ..., newestEntry]`. If false, function returns`[newestEntry, ...,
+    ///   - fetchLimit: Limit on the maximum number of entries to be retrieved
+    ///   - with: The favorite food identifier to match
     ///   - completion: A closure called once the values have been retrieved
-    ///   - result: An array of carb entries, in chronological order by startDate, or error
-    public func getCarbEntries(start: Date? = nil, end: Date? = nil, completion: @escaping (_ result: CarbStoreResult<[StoredCarbEntry]>) -> Void) {
+    ///   - result: An array of carb entries, sorted by startDate, or error
+    public func getCarbEntries(start: Date? = nil, end: Date? = nil, dateAscending: Bool = true, fetchLimit: Int? = nil, with favoriteFoodID: String? = nil, completion: @escaping (_ result: Result<[StoredCarbEntry], Error>) -> Void) {
         queue.async {
-            completion(self.getCarbEntries(start: start, end: end))
+            completion(self.getCarbEntries(start: start, end: end, dateAscending: dateAscending, fetchLimit: fetchLimit, with: favoriteFoodID))
         }
     }
 
-    /// Retrieves carb entries that have a `startDate` within the specified date range
+    /// Retrieves carb entries that have a `startDate` within the specified date range and optionally match a specific favorite food
     ///
     /// - Parameters:
     ///   - start: The earliest date of values to retrieve
     ///   - end: The latest date of values to retrieve, if provided
-    /// - Returns: An array of carb entries, in chronological order by startDate, or error
-    private func getCarbEntries(start: Date? = nil, end: Date? = nil) -> CarbStoreResult<[StoredCarbEntry]> {
+    ///   - dateAscending: Indicates how the result will be sorted. If true, function returns `[oldestEntry, ..., newestEntry]`. If false, function returns`[newestEntry, ..., oldestEntry]`
+    ///   - fetchLimit: Limit on the maximum number of entries to be retrieved
+    ///   - with: The favorite food identifier to match
+    /// - Returns: An array of carb entries, sorted by startDate, or error
+    private func getCarbEntries(start: Date? = nil, end: Date? = nil, dateAscending: Bool = true, fetchLimit: Int? = nil, with favoriteFoodID: String? = nil) -> Result<[StoredCarbEntry], Error> {
         dispatchPrecondition(condition: .onQueue(queue))
 
         var entries: [StoredCarbEntry] = []
         var error: CarbStoreError?
-
+        
+        var additionalPredicates = [NSPredicate]()
+        if let favoriteFoodID = favoriteFoodID {
+            additionalPredicates.append(NSPredicate(format: "favoriteFoodID == %@", favoriteFoodID))
+        }
         cacheStore.managedObjectContext.performAndWait {
             do {
-                entries = try self.getActiveCachedCarbObjects(start: start, end: end).map { StoredCarbEntry(managedObject: $0) }
+                entries = try self.getActiveCachedCarbObjects(start: start, end: end, dateAscending: dateAscending, fetchLimit: fetchLimit, additionalPredicates: additionalPredicates).map { StoredCarbEntry(managedObject: $0) }
             } catch let coreDataError {
                 error = .coreDataError(coreDataError)
             }
@@ -405,14 +312,16 @@ extension CarbStore {
         return .success(entries)
     }
 
-    /// Retrieves active (not superceded, non-delete operation) cached carb objects that have a `startDate` within the specified date range
+    /// Retrieves active (not superceded, non-delete operation) cached carb objects that have a `startDate` within the specified date range and match additional predicates
     ///
     /// - Parameters:
     ///   - start: The earliest date of values to retrieve
     ///   - end: The latest date of values to retrieve, if provided
+    ///   - dateAscending: Indicates how the result will be sorted. If true, function returns `[oldestEntry, ..., newestEntry]`. If false, function returns`[newestEntry, ..., oldestEntry]`
+    ///   - fetchLimit: Limit on the maximum number of entries to be retrieved
+    ///   - additionalPredicates: Optionally add additional predicates to the fetch
     /// - Returns: An array of cached carb objects
-    private func getActiveCachedCarbObjects(start: Date? = nil, end: Date? = nil) throws -> [CachedCarbObject] {
-        dispatchPrecondition(condition: .onQueue(queue))
+    private func getActiveCachedCarbObjects(start: Date? = nil, end: Date? = nil, dateAscending: Bool = true, fetchLimit: Int? = nil, additionalPredicates: [NSPredicate] = []) throws -> [CachedCarbObject] {
 
         var predicates = [NSPredicate(format: "operation != %d", Operation.delete.rawValue),
                           NSPredicate(format: "supercededDate == NIL")]
@@ -422,65 +331,35 @@ extension CarbStore {
         if let end = end {
             predicates.append(NSPredicate(format: "startDate < %@", end as NSDate))
         }
+        if !additionalPredicates.isEmpty {
+            predicates.append(contentsOf: additionalPredicates)
+        }
 
         let request: NSFetchRequest<CachedCarbObject> = CachedCarbObject.fetchRequest()
         request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
-        request.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: true)]
+        request.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: dateAscending)]
+        if let fetchLimit {
+            request.fetchLimit = fetchLimit
+        }
 
         return try self.cacheStore.managedObjectContext.fetch(request)
     }
 
-    /// Retrieves carb entries from HealthKit within the specified date range and interprets their
-    /// absorption status based on the provided glucose effect
-    ///
-    /// - Parameters:
-    ///   - start: The earliest date of values to retrieve
-    ///   - end: The latest date of values to retrieve, if provided
-    ///   - effectVelocities: A timeline of glucose effect velocities, ordered by start date
-    ///   - completion: A closure calld once the values have been retrieved
-    ///   - result: An array of carb entries, in chronological order by startDate
-    public func getCarbStatus(
-        start: Date,
-        end: Date? = nil,
-        effectVelocities: [GlucoseEffectVelocity]? = nil,
-        completion: @escaping (_ result: CarbStoreResult<[CarbStatus<StoredCarbEntry>]>) -> Void
-    ) {
-        let now = Date()
-        guard let carbRatio = self.carbRatioScheduleApplyingOverrideHistory?.between(start: start, end: end ?? now),
-              let insulinSensitivity = self.insulinSensitivityScheduleApplyingOverrideHistory?.quantitiesBetween(start: start, end: end ?? now) else
-        {
-            completion(.failure(.notConfigured))
-            return
-        }
-
-        getCarbEntries(start: start, end: end) { (result) in
-            switch result {
-            case .success(let entries):
-                let status = entries.map(
-                    to: effectVelocities ?? [],
-                    carbRatio: carbRatio,
-                    insulinSensitivity: insulinSensitivity,
-                    absorptionTimeOverrun: self.absorptionTimeOverrun,
-                    defaultAbsorptionTime: self.defaultAbsorptionTimes.medium,
-                    delay: self.delay,
-                    initialAbsorptionTimeOverrun: self.settings.initialAbsorptionTimeOverrun,
-                    absorptionModel: self.settings.absorptionModel,
-                    adaptiveAbsorptionRateEnabled: self.settings.adaptiveAbsorptionRateEnabled,
-                    adaptiveRateStandbyIntervalFraction: self.settings.adaptiveRateStandbyIntervalFraction
-                )
-
-                completion(.success(status))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
 }
 
 // MARK: - Modification
 
 extension CarbStore {
-    public func addCarbEntry(_ entry: NewCarbEntry, completion: @escaping (_ result: CarbStoreResult<StoredCarbEntry>) -> Void) {
+
+    public func addCarbEntry(_ entry: NewCarbEntry) async throws -> StoredCarbEntry {
+        try await withCheckedThrowingContinuation { continuation in
+            addCarbEntry(entry) { result in
+                continuation.resume(with: result)
+            }
+        }
+    }
+
+    public func addCarbEntry(_ entry: NewCarbEntry, completion: @escaping (_ result: Result<StoredCarbEntry,Error>) -> Void) {
         queue.async {
             var storedEntry: StoredCarbEntry?
             var error: CarbStoreError?
@@ -519,9 +398,17 @@ extension CarbStore {
         }
     }
 
-    public func replaceCarbEntry(_ oldEntry: StoredCarbEntry, withEntry newEntry: NewCarbEntry, completion: @escaping (_ result: CarbStoreResult<StoredCarbEntry>) -> Void) {
+    public func replaceCarbEntry(_ oldEntry: StoredCarbEntry, withEntry newEntry: NewCarbEntry) async throws -> StoredCarbEntry {
+        try await withCheckedThrowingContinuation { continuation in
+            replaceCarbEntry(oldEntry, withEntry: newEntry) { result in
+                continuation.resume(with: result)
+            }
+        }
+    }
+
+    public func replaceCarbEntry(_ oldEntry: StoredCarbEntry, withEntry newEntry: NewCarbEntry, completion: @escaping (_ result: Result<StoredCarbEntry,Error>) -> Void) {
         guard oldEntry.createdByCurrentApp else {
-            completion(.failure(.unauthorized))
+            completion(.failure(CarbStoreError.unauthorized))
             return
         }
 
@@ -601,9 +488,17 @@ extension CarbStore {
         }
     }
 
-    public func deleteCarbEntry(_ oldEntry: StoredCarbEntry, completion: @escaping (_ result: CarbStoreResult<Bool>) -> Void) {
+    public func deleteCarbEntry(_ oldEntry: StoredCarbEntry) async throws -> Bool {
+        try await withCheckedThrowingContinuation { continuation in
+            deleteCarbEntry(oldEntry) { result in
+                continuation.resume(with: result)
+            }
+        }
+    }
+
+    public func deleteCarbEntry(_ oldEntry: StoredCarbEntry, completion: @escaping (_ result: Result<Bool,Error>) -> Void) {
         guard oldEntry.createdByCurrentApp else {
-            completion(.failure(.unauthorized))
+            completion(.failure(CarbStoreError.unauthorized))
             return
         }
 
@@ -757,21 +652,10 @@ extension CarbStore {
 
     // Fetch latest carb entry, based on startDate
     public func fetchLatestCarbEntry() async throws -> StoredCarbEntry? {
-        return try await withCheckedThrowingContinuation({ continuation in
-            queue.async {
-
-                let request: NSFetchRequest<CachedCarbObject> = CachedCarbObject.fetchRequest()
-                request.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: false)]
-                request.fetchLimit = 1
-
-                do {
-                    let entries = try self.cacheStore.managedObjectContext.fetch(request).compactMap { StoredCarbEntry(managedObject: $0) }
-                    continuation.resume(returning: entries.first)
-                } catch {
-                    continuation.resume(throwing: error)
-                }
-            }
-        })
+        let request: NSFetchRequest<CachedCarbObject> = CachedCarbObject.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: false)]
+        request.fetchLimit = 1
+        return try self.cacheStore.managedObjectContext.fetch(request).compactMap { StoredCarbEntry(managedObject: $0) }.first
     }
 
 }
@@ -781,25 +665,9 @@ extension CarbStore {
 extension CarbStore {
 
     /// Get carb objects in main app for syncing to another store
-    public func getSyncCarbObjects(start: Date? = nil, end: Date? = nil, completion: @escaping (_ result: CarbStoreResult<[SyncCarbObject]>) -> Void) {
-        queue.async {
-            var objects: [SyncCarbObject] = []
-            var error: CarbStoreError?
-
-            self.cacheStore.managedObjectContext.performAndWait {
-                do {
-                    objects = try self.getActiveCachedCarbObjects(start: start, end: end).map { SyncCarbObject(managedObject: $0) }
-                } catch let coreDataError {
-                    error = .coreDataError(coreDataError)
-                }
-            }
-
-            if let error = error {
-                completion(.failure(error))
-                return
-            }
-
-            completion(.success(objects))
+    public func getSyncCarbObjects(start: Date? = nil, end: Date? = nil) async throws -> [SyncCarbObject] {
+        try await self.cacheStore.managedObjectContext.perform {
+            try self.getActiveCachedCarbObjects(start: start, end: end).map { SyncCarbObject(managedObject: $0) }
         }
     }
 
@@ -995,225 +863,6 @@ extension CarbStore {
 // MARK: - Math
 
 extension CarbStore {
-    /// The longest expected absorption time interval for carbohydrates. Defaults to 8 hours.
-    public var maximumAbsorptionTimeInterval: TimeInterval {
-        return defaultAbsorptionTimes.slow * 2
-    }
-
-    /// Retrieves the single carbs on-board value occuring just prior or equal to the specified date
-    ///
-    /// This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
-    ///
-    /// - Parameters:
-    ///   - date: The date of the value to retrieve
-    ///   - effectVelocities: A timeline of glucose effect velocities, ordered by start date
-    ///   - completion: A closure called once the value has been retrieved
-    ///   - result: The carbs on-board value
-    public func carbsOnBoard(at date: Date, effectVelocities: [GlucoseEffectVelocity]? = nil, completion: @escaping (_ result: CarbStoreResult<CarbValue>) -> Void) {
-        getCarbsOnBoardValues(start: date.addingTimeInterval(-delta), end: date, effectVelocities: effectVelocities) { (result) in
-            switch result {
-            case .failure(let error):
-                completion(.failure(error))
-            case .success(let values):
-                guard let value = values.closestPrior(to: date) else {
-                    // If we have no cob values in the store, and did not encounter an error, return 0
-                    completion(.success(CarbValue(startDate: date, value: 0)))
-                    return
-                }
-                completion(.success(value))
-            }
-        }
-    }
-
-    /// Retrieves a timeline of unabsorbed carbohydrates
-    ///
-    /// This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
-    ///
-    /// - Parameters:
-    ///   - start: The earliest date of values to retrieve
-    ///   - end: The latest date of values to retrieve, if provided
-    ///   - effectVelocities: A timeline of glucose effect velocities, ordered by start date
-    ///   - completion: A closure called once the values have been retrieved
-    ///   - values: A timeline of carb values, in chronological order
-    public func getCarbsOnBoardValues(start: Date, end: Date? = nil, effectVelocities: [GlucoseEffectVelocity]? = nil, completion: @escaping (_ result: CarbStoreResult<[CarbValue]>) -> Void) {
-        // To know COB at the requested start date, we need to fetch samples that might still be absorbing
-        let foodStart = start.addingTimeInterval(-maximumAbsorptionTimeInterval)
-        getCarbEntries(start: foodStart, end: end) { (result) in
-            switch result {
-            case .failure(let error):
-                completion(.failure(error))
-            case .success(let entries):
-                let carbsOnBoard = self.carbsOnBoard(from: entries, startingAt: start, endingAt: end, effectVelocities: effectVelocities)
-                completion(.success(carbsOnBoard))
-            }
-        }
-    }
-
-    /// Computes a timeline of unabsorbed carbohydrates
-    /// - Parameters:
-    ///   - start: The earliest date of values to retrieve
-    ///   - end: The latest date of values to retrieve, if provided
-    ///   - effectVelocities: A timeline of glucose effect velocities, ordered by start date
-    /// - Returns: A timeline of unabsorbed carbohydrates
-    public func carbsOnBoard<Sample: CarbEntry>(
-        from samples: [Sample],
-        startingAt start: Date,
-        endingAt end: Date? = nil,
-        effectVelocities: [GlucoseEffectVelocity]? = nil
-    ) -> [CarbValue] {
-        if  let velocities = effectVelocities
-        {
-            guard samples.count > 0 else {
-                return []
-            }
-
-            let carbDates = samples.map { $0.startDate }
-            let maxCarbDate = carbDates.max()!
-            let minCarbDate = carbDates.min()!
-
-            guard let carbRatio = self.carbRatioScheduleApplyingOverrideHistory?.between(start: minCarbDate, end: maxCarbDate),
-                  let insulinSensitivity = self.insulinSensitivityScheduleApplyingOverrideHistory?.quantitiesBetween(start: minCarbDate, end: maxCarbDate) else
-            {
-                return []
-            }
-
-            return samples.map(
-                to: velocities,
-                carbRatio: carbRatio,
-                insulinSensitivity: insulinSensitivity,
-                absorptionTimeOverrun: absorptionTimeOverrun,
-                defaultAbsorptionTime: defaultAbsorptionTimes.medium,
-                delay: delay,
-                initialAbsorptionTimeOverrun: settings.initialAbsorptionTimeOverrun,
-                absorptionModel: settings.absorptionModel,
-                adaptiveAbsorptionRateEnabled: settings.adaptiveAbsorptionRateEnabled,
-                adaptiveRateStandbyIntervalFraction: settings.adaptiveRateStandbyIntervalFraction
-            ).dynamicCarbsOnBoard(
-                from: start,
-                to: end,
-                defaultAbsorptionTime: defaultAbsorptionTimes.medium,
-                absorptionModel: settings.absorptionModel,
-                delay: delay,
-                delta: delta
-            )
-        } else {
-            return samples.carbsOnBoard(
-                from: start,
-                to: end,
-                defaultAbsorptionTime: defaultAbsorptionTimes.medium,
-                absorptionModel: settings.absorptionModel,
-                delay: delay,
-                delta: delta
-            )
-        }
-    }
-
-    /// Computes the single carbs on-board value occuring just prior or equal to the specified date
-    /// - Parameters:
-    ///   - date: The date of the value to retrieve
-    ///   - effectVelocities: A timeline of glucose effect velocities, ordered by start date
-    /// - Returns: The carbs on-board value
-    public func carbsOnBoard<Sample: CarbEntry>(
-        from samples: [Sample],
-        at date: Date,
-        effectVelocities: [GlucoseEffectVelocity]? = nil
-    ) throws -> CarbValue {
-        let values = carbsOnBoard(from: samples, startingAt: date.addingTimeInterval(-delta), endingAt: date, effectVelocities: effectVelocities)
-
-        guard let value = values.closestPrior(to: date) else {
-            throw CarbStoreError.noData
-        }
-
-        return value
-    }
-
-
-    /// Retrieves a timeline of effect on blood glucose from carbohydrates
-    ///
-    /// This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
-    ///
-    /// - Parameters:
-    ///   - start: The earliest date of effects to retrieve
-    ///   - end: The latest date of effects to retrieve, if provided
-    ///   - effectVelocities: A timeline of glucose effect velocities, ordered by start date
-    ///   - completion: A closure called once the effects have been retrieved
-    ///   - result: An array of effects, in chronological order
-    public func getGlucoseEffects(start: Date, end: Date? = nil, effectVelocities: [GlucoseEffectVelocity], completion: @escaping(_ result: CarbStoreResult<(entries: [StoredCarbEntry], effects: [GlucoseEffect])>) -> Void) {
-        queue.async {
-            guard self.carbRatioSchedule != nil, self.insulinSensitivitySchedule != nil else {
-                completion(.failure(.notConfigured))
-                return
-            }
-
-            // To know glucose effects at the requested start date, we need to fetch samples that might still be absorbing
-            let foodStart = start.addingTimeInterval(-self.maximumAbsorptionTimeInterval)
-            
-            self.getCarbEntries(start: foodStart, end: end) { (result) in
-                switch result {
-                case .failure(let error):
-                    completion(.failure(error))
-                case .success(let entries):
-                    do {
-                        let effects = try self.glucoseEffects(of: entries, startingAt: start, endingAt: end, effectVelocities: effectVelocities)
-                        completion(.success((entries: entries, effects: effects)))
-                    } catch let error as CarbStoreError {
-                        completion(.failure(error))
-                    } catch {
-                        fatalError()
-                    }
-                }
-            }
-        }
-    }
-
-    /// Computes a timeline of effects on blood glucose from carbohydrates
-    /// - Parameters:
-    ///   - start: The earliest date of effects to retrieve
-    ///   - end: The latest date of effects to retrieve, if provided
-    ///   - effectVelocities: A timeline of glucose effect velocities, ordered by start date
-    public func glucoseEffects<Sample: CarbEntry>(
-        of samples: [Sample],
-        startingAt start: Date,
-        endingAt end: Date? = nil,
-        effectVelocities: [GlucoseEffectVelocity]
-    ) throws -> [GlucoseEffect] {
-
-        guard samples.count > 0 else {
-            return []
-        }
-
-        let carbDates = samples.map { $0.startDate }
-        let maxCarbDate = carbDates.max()!
-        let minCarbDate = carbDates.min()!
-
-        guard let carbRatio = self.carbRatioScheduleApplyingOverrideHistory?.between(start: minCarbDate, end: maxCarbDate),
-              let insulinSensitivity = self.insulinSensitivityScheduleApplyingOverrideHistory?.quantitiesBetween(start: minCarbDate, end: maxCarbDate) else
-        {
-            throw CarbStoreError.notConfigured
-        }
-
-        return samples.map(
-            to: effectVelocities,
-            carbRatio: carbRatio,
-            insulinSensitivity: insulinSensitivity,
-            absorptionTimeOverrun: absorptionTimeOverrun,
-            defaultAbsorptionTime: defaultAbsorptionTimes.medium,
-            delay: delay,
-            initialAbsorptionTimeOverrun: settings.initialAbsorptionTimeOverrun,
-            absorptionModel: settings.absorptionModel,
-            adaptiveAbsorptionRateEnabled: settings.adaptiveAbsorptionRateEnabled,
-            adaptiveRateStandbyIntervalFraction: settings.adaptiveRateStandbyIntervalFraction
-        ).dynamicGlucoseEffects(
-            from: start,
-            to: end,
-            carbRatios: carbRatio,
-            insulinSensitivities: insulinSensitivity,
-            defaultAbsorptionTime: defaultAbsorptionTimes.medium,
-            absorptionModel: settings.absorptionModel,
-            delay: delay,
-            delta: delta
-        )
-    }
 
     /// Retrieves the total number of recorded carbohydrates for the specified period.
     ///
@@ -1223,7 +872,7 @@ extension CarbStore {
     ///   - start: The earliest date of samples to include.
     ///   - completion: A closure called once the value has been retrieved.
     ///   - result: The total carbs recorded and the date of the first sample
-    public func getTotalCarbs(since start: Date, completion: @escaping (_ result: CarbStoreResult<CarbValue>) -> Void) {
+    public func getTotalCarbs(since start: Date, completion: @escaping (_ result: Result<CarbValue,Error>) -> Void) {
         getCarbEntries(start: start) { (result) in
             switch result {
             case .success(let samples):
@@ -1235,6 +884,14 @@ extension CarbStore {
                 completion(.success(total))
             case .failure(let error):
                 completion(.failure(error))
+            }
+        }
+    }
+
+    public func getTotalCarbs(since start: Date) async throws -> CarbValue {
+        try await withCheckedThrowingContinuation { continuation in
+            getTotalCarbs(since: start) { result in
+                continuation.resume(with: result)
             }
         }
     }
@@ -1451,67 +1108,46 @@ extension CarbStore {
     /// This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
     ///
     /// - parameter completionHandler: A closure called once the report has been generated. The closure takes a single argument of the report string.
-    public func generateDiagnosticReport(_ completionHandler: @escaping (_ report: String) -> Void) {
-        queue.async {
+    public func generateDiagnosticReport() async -> String {
+        await withCheckedContinuation { continuation in
+            queue.async {
 
-            var carbAbsorptionModel: String
-            switch self.carbAbsorptionModel {
-            case .linear:
-                carbAbsorptionModel = "Linear"
-            case .nonlinear:
-                carbAbsorptionModel = "Nonlinear"
-            case .adaptiveRateNonlinear:
-                carbAbsorptionModel = "Nonlinear with Adaptive Rate for Remaining Carbs"
+                var report: [String] = [
+                    "## CarbStore",
+                    "",
+                    "* cacheLength: \(self.cacheLength)",
+                    "* HealthKit Sample Store: \(self.hkSampleStore?.debugDescription ?? "nil")",
+                    "",
+                    "cachedCarbEntries:"
+                ]
+
+                switch self.getCarbEntries() {
+                case .failure(let error):
+                    report.append("Error: \(error)")
+                case .success(let entries):
+                    report.append("[")
+                    report.append("\tStoredCarbEntry(uuid, provenanceIdentifier, syncIdentifier, syncVersion, startDate, quantity, foodType, absorptionTime, favoriteFoodID, createdByCurrentApp, userCreatedDate, userUpdatedDate)")
+                    report.append(entries.map({ (entry) -> String in
+                        return [
+                            "\t",
+                            entry.uuid?.uuidString ?? "",
+                            entry.provenanceIdentifier,
+                            entry.syncIdentifier ?? "",
+                            entry.syncVersion != nil ? String(describing: entry.syncVersion) : "",
+                            String(describing: entry.startDate),
+                            String(describing: entry.quantity),
+                            entry.foodType ?? "",
+                            entry.favoriteFoodID ?? "",
+                            String(describing: entry.createdByCurrentApp),
+                            entry.userCreatedDate != nil ? String(describing: entry.userCreatedDate) : "",
+                            entry.userUpdatedDate != nil ? String(describing: entry.userUpdatedDate) : "",
+                        ].joined(separator: ", ")
+                    }).joined(separator: "\n"))
+                    report.append("]")
+                    report.append("")
+                }
+                continuation.resume(returning: report.joined(separator: "\n"))
             }
-
-            var report: [String] = [
-                "## CarbStore",
-                "",
-                "* carbRatioSchedule: \(self.carbRatioSchedule?.debugDescription ?? "")",
-                "* carbRatioScheduleApplyingOverrideHistory: \(self.carbRatioScheduleApplyingOverrideHistory?.debugDescription ?? "nil")",
-                "* cacheLength: \(self.cacheLength)",
-                "* defaultAbsorptionTimes: \(self.defaultAbsorptionTimes)",
-                "* insulinSensitivitySchedule: \(self.insulinSensitivitySchedule?.debugDescription ?? "")",
-                "* insulinSensitivityScheduleApplyingOverrideHistory: \(self.insulinSensitivityScheduleApplyingOverrideHistory?.debugDescription ?? "nil")",
-                "* overrideHistory: \(self.overrideHistory.map(String.init(describing:)) ?? "nil")",
-                "* carbSensitivitySchedule: \(self.carbSensitivitySchedule?.debugDescription ?? "nil")",
-                "* delay: \(self.delay)",
-                "* delta: \(self.delta)",
-                "* absorptionTimeOverrun: \(self.absorptionTimeOverrun)",
-                "* carbAbsorptionModel: \(carbAbsorptionModel)",
-                "* Carb absorption model settings: \(self.settings)",
-                "* HealthKit Sample Store: \(self.hkSampleStore?.debugDescription ?? "nil")",
-                "",
-                "cachedCarbEntries:"
-            ]
-
-            switch self.getCarbEntries() {
-            case .failure(let error):
-                report.append("Error: \(error)")
-            case .success(let entries):
-                report.append("[")
-                report.append("\tStoredCarbEntry(uuid, provenanceIdentifier, syncIdentifier, syncVersion, startDate, quantity, foodType, absorptionTime, createdByCurrentApp, userCreatedDate, userUpdatedDate)")
-                report.append(entries.map({ (entry) -> String in
-                    return [
-                        "\t",
-                        entry.uuid?.uuidString ?? "",
-                        entry.provenanceIdentifier,
-                        entry.syncIdentifier ?? "",
-                        entry.syncVersion != nil ? String(describing: entry.syncVersion) : "",
-                        String(describing: entry.startDate),
-                        String(describing: entry.quantity),
-                        entry.foodType ?? "",
-                        String(describing: entry.absorptionTime ?? self.defaultAbsorptionTimes.medium),
-                        String(describing: entry.createdByCurrentApp),
-                        entry.userCreatedDate != nil ? String(describing: entry.userCreatedDate) : "",
-                        entry.userUpdatedDate != nil ? String(describing: entry.userUpdatedDate) : "",
-                    ].joined(separator: ", ")
-                }).joined(separator: "\n"))
-                report.append("]")
-                report.append("")
-            }
-
-            completionHandler(report.joined(separator: "\n"))
         }
     }
 }

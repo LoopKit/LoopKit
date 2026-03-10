@@ -7,14 +7,15 @@
 //
 
 import HealthKit
+import LoopAlgorithm
 import LoopKit
 import LoopTestingKit
 
 public struct MockCGMDataSource {
     public enum Model {
-        public typealias SineCurveParameters = (baseGlucose: HKQuantity, amplitude: HKQuantity, period: TimeInterval, referenceDate: Date)
+        public typealias SineCurveParameters = (baseGlucose: LoopQuantity, amplitude: LoopQuantity, period: TimeInterval, referenceDate: Date)
 
-        case constant(_ glucose: HKQuantity)
+        case constant(_ glucose: LoopQuantity)
         case sineCurve(parameters: SineCurveParameters)
         case scenario(pastSamples: [NewGlucoseSample], futureSamples: [NewGlucoseSample])
         case noData
@@ -32,15 +33,15 @@ public struct MockCGMDataSource {
     }
 
     public struct Effects {
-        public typealias RandomOutlier = (chance: Double, delta: HKQuantity)
+        public typealias RandomOutlier = (chance: Double, delta: LoopQuantity)
 
-        public var glucoseNoise: HKQuantity?
+        public var glucoseNoise: LoopQuantity?
         public var randomLowOutlier: RandomOutlier?
         public var randomHighOutlier: RandomOutlier?
         public var randomErrorChance: Double?
 
         public init(
-            glucoseNoise: HKQuantity? = nil,
+            glucoseNoise: LoopQuantity? = nil,
             randomLowOutlier: RandomOutlier? = nil,
             randomHighOutlier: RandomOutlier? = nil,
             randomErrorChance: Double? = nil
@@ -152,7 +153,7 @@ extension MockCGMDataSource.Model: RawRepresentable {
         case unreliableData
     }
 
-    private static let unit = HKUnit.milligramsPerDeciliter
+    private static let unit = LoopUnit.milligramsPerDeciliter
 
     public init?(rawValue: RawValue) {
         guard
@@ -163,11 +164,11 @@ extension MockCGMDataSource.Model: RawRepresentable {
         }
 
         let unit = MockCGMDataSource.Model.unit
-        func glucose(forKey key: String) -> HKQuantity? {
+        func glucose(forKey key: String) -> LoopQuantity? {
             guard let doubleValue = rawValue[key] as? Double else {
                 return nil
             }
-            return HKQuantity(unit: unit, doubleValue: doubleValue)
+            return LoopQuantity(unit: unit, doubleValue: doubleValue)
         }
 
         switch kind {
@@ -245,7 +246,7 @@ extension MockCGMDataSource.Model: RawRepresentable {
 extension MockCGMDataSource.Effects: RawRepresentable {
     public typealias RawValue = [String: Any]
 
-    private static let unit = HKUnit.milligramsPerDeciliter
+    private static let unit = LoopUnit.milligramsPerDeciliter
 
     public init?(rawValue: RawValue) {
         self.init()
@@ -260,11 +261,11 @@ extension MockCGMDataSource.Effects: RawRepresentable {
                 return nil
             }
 
-            return (chance: chance, delta: HKQuantity(unit: unit, doubleValue: delta))
+            return (chance: chance, delta: LoopQuantity(unit: unit, doubleValue: delta))
         }
 
         if let glucoseNoise = rawValue["glucoseNoise"] as? Double {
-            self.glucoseNoise = HKQuantity(unit: unit, doubleValue: glucoseNoise)
+            self.glucoseNoise = LoopQuantity(unit: unit, doubleValue: glucoseNoise)
         }
 
         self.randomLowOutlier = randomOutlier(forKey: "randomLowOutlier")

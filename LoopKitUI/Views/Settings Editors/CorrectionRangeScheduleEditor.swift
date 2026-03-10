@@ -7,22 +7,22 @@
 //
 
 import SwiftUI
-import HealthKit
 import LoopKit
-
+import LoopAlgorithm
 
 public struct CorrectionRangeScheduleEditor: View {
     @EnvironmentObject private var displayGlucosePreference: DisplayGlucosePreference
     @Environment(\.appName) private var appName
+    @Environment(\.dosingStrategySelectionEnabled) private var dosingStrategySelectionEnabled
 
     let mode: SettingsPresentationMode
     let viewModel: CorrectionRangeScheduleEditorViewModel
 
-    @State var scheduleItems: [RepeatingScheduleValue<ClosedRange<HKQuantity>>]
+    @State var scheduleItems: [RepeatingScheduleValue<ClosedRange<LoopQuantity>>]
 
     @State private var userDidTap: Bool = false
 
-    var displayGlucoseUnit: HKUnit {
+    var displayGlucoseUnit: LoopUnit {
         displayGlucosePreference.unit
     }
 
@@ -104,7 +104,7 @@ public struct CorrectionRangeScheduleEditor: View {
         })
     }
 
-    var defaultFirstScheduleItemValue: ClosedRange<HKQuantity> {
+    var defaultFirstScheduleItemValue: ClosedRange<LoopQuantity> {
         switch displayGlucoseUnit {
         case .milligramsPerDeciliter:
             return DoubleRange(minValue: 100, maxValue: 115).quantityRange(for: displayGlucoseUnit)
@@ -116,7 +116,7 @@ public struct CorrectionRangeScheduleEditor: View {
     }
 
     var description: Text {
-        Text(TherapySetting.glucoseTargetRange.descriptiveText(appName: appName))
+        Text(TherapySetting.glucoseTargetRange.descriptiveText(appName: appName, dosingStrategySelectionEnabled: dosingStrategySelectionEnabled))
     }
 
     var saveConfirmation: SaveConfirmation {
@@ -189,9 +189,9 @@ private struct CorrectionRangeGuardrailWarning: View {
 
     private func singularWarningTitle(for threshold: SafetyClassification.Threshold) -> Text {
         switch threshold {
-        case .minimum, .belowRecommended:
+        case .minimum, .belowWarning, .belowRecommended:
             return Text(LocalizedString("Low Correction Value", comment: "Title text for the low correction value warning"))
-        case .aboveRecommended, .maximum:
+        case .aboveRecommended, .aboveWarning, .maximum:
             return Text(LocalizedString("High Correction Value", comment: "Title text for the high correction value warning"))
         }
     }

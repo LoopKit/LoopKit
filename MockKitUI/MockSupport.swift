@@ -12,7 +12,9 @@ import LoopKitUI
 import SwiftUI
 
 public class MockSupport: SupportUI {
-    public static let pluginIdentifier = "MockSupport"
+    public static let supportIdentifier = "MockSupport"
+    
+    public var pluginIdentifier: String { Self.supportIdentifier }
     
     var versionUpdate: VersionUpdate?
     var alertIssuer: AlertIssuer? {
@@ -81,7 +83,7 @@ extension MockSupport {
             return
         }
         
-        let alertIdentifier = Alert.Identifier(managerIdentifier: MockSupport.pluginIdentifier, alertIdentifier: versionUpdate.rawValue)
+        let alertIdentifier = Alert.Identifier(managerIdentifier: MockSupport.supportIdentifier, alertIdentifier: versionUpdate.rawValue)
         let alertContent: LoopKit.Alert.Content
         if firstAlert {
             alertContent = Alert.Content(title: versionUpdate.localizedDescription,
@@ -104,8 +106,10 @@ extension MockSupport {
             return
         }
         let interruptionLevel: LoopKit.Alert.InterruptionLevel = versionUpdate == .required ? .critical : .active
-        alertIssuer?.issueAlert(Alert(identifier: alertIdentifier, foregroundContent: alertContent, backgroundContent: alertContent, trigger: .immediate, interruptionLevel: interruptionLevel))
-        recordLastAlertDate()
+        Task {
+            await alertIssuer?.issueAlert(Alert(identifier: alertIdentifier, foregroundContent: alertContent, backgroundContent: alertContent, trigger: .immediate, interruptionLevel: interruptionLevel))
+            recordLastAlertDate()
+        }
     }
     
     private func noAlertNecessary() {

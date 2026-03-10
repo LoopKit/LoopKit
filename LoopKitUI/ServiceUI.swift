@@ -31,14 +31,14 @@ public protocol ServiceUI: Service {
     ///     - colorPalette: Color palette to use for any UI.
     ///     - pluginHost: Object that provides namd and version  information about host to the service plugin.
     /// - Returns: Either a conforming view controller to create and onboard the service or a newly created and onboarded service.
-    static func setupViewController(colorPalette: LoopUIColorPalette, pluginHost: PluginHost) -> SetupUIResult<ServiceViewController, ServiceUI>
+    static func setupViewController(colorPalette: LoopUIColorPalette, pluginHost: PluginHost, allowDebugFeatures: Bool) -> SetupUIResult<ServiceViewController, ServiceUI>
 
     /// Configure settings for an existing service.
     ///
     /// - Parameters:
     ///     - colorPalette: Color palette to use for any UI.
     /// - Returns: A view controller to configure an existing service.
-    func settingsViewController(colorPalette: LoopUIColorPalette) -> ServiceViewController
+    func settingsViewController(colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool) -> ServiceViewController
 }
 
 public extension ServiceUI {
@@ -50,15 +50,18 @@ public protocol ServiceOnboardingDelegate: AnyObject {
     ///
     /// - Parameters:
     ///     - service: The service created.
+    @MainActor
     func serviceOnboarding(didCreateService service: Service)
 
     /// Informs the delegate that the specified service was onboarded.
     ///
     /// - Parameters:
     ///     - service: The service onboarded.
+    @MainActor
     func serviceOnboarding(didOnboardService service: Service)
 }
 
+@MainActor
 public protocol ServiceOnboarding {
     /// Delegate to notify about service onboarding.
     var serviceOnboardingDelegate: ServiceOnboardingDelegate? { get set }

@@ -6,14 +6,16 @@ version: 2.1
 
 jobs:
   test:
+    working_directory: *project_directory
+    resource_class: m4pro.medium
     macos:
-      xcode: 16.4
+      xcode: "26.1.1"
     steps:
       - checkout
       - run:
           name: Test
           command: |
-            set -o pipefail && xcodebuild -project LoopKit.xcodeproj -scheme Shared build -destination 'OS=18.5,name=iPhone 16' test | xcpretty
+            set -o pipefail && xcodebuild -project LoopKit.xcodeproj -scheme Shared build -destination 'name=iPhone 17' test | xcpretty
       - store_test_results:
           path: test_output
   package:

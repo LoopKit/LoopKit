@@ -12,6 +12,7 @@ import LoopKit
 import LoopKitUI
 import MockKit
 import SwiftUI
+import LoopAlgorithm
 
 
 final class MockPumpManagerSettingsViewController: UITableViewController {
@@ -30,8 +31,8 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private let reservoirFormatter = QuantityFormatter(for: .internationalUnit())
-    private let rateFormatter = QuantityFormatter(for: .internationalUnit().unitDivided(by: .hour()))
+    private let reservoirFormatter = QuantityFormatter(for: .internationalUnit)
+    private let rateFormatter = QuantityFormatter(for: .internationalUnitsPerHour)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,6 +81,7 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
         case occlusion
         case pumpError
         case pumpComponentReplacement
+        case signalLoss
     }
 
     private enum SettingsRow: Int, CaseIterable {
@@ -178,12 +180,14 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                 return cell
             case .pumpComponentReplacement:
                 let cell = tableView.dequeueReusableCell(withIdentifier: TextButtonTableViewCell.className, for: indexPath) as! TextButtonTableViewCell
-                if pumpManager.state.replacePumpComponent {
-                    cell.textLabel?.text = "Resume Therapy"
+                if pumpManager.state.isPumpExpired {
+                    cell.textLabel?.text = "Replace Pump"
                 } else {
-                    cell.textLabel?.text = "Replace Pump Component"
+                    cell.textLabel?.text = "Expire Pump"
                 }
                 return cell
+            case .signalLoss:
+                return switchTableViewCell(for: indexPath, titled: "Signal Loss", boundTo: \.inSignalLoss)
             }
         case .settings:
             switch SettingsRow(rawValue: indexPath.row)! {
@@ -235,8 +239,9 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
             case .reservoirRemaining:
                 let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
                 cell.textLabel?.text = "Reservoir Remaining"
-                cell.detailTextLabel?.text = reservoirFormatter.string(from: HKQuantity(unit: .internationalUnit(), doubleValue: pumpManager.state.reservoirUnitsRemaining))
+                cell.detailTextLabel?.text = reservoirFormatter.string(from: LoopQuantity(unit: .internationalUnit, doubleValue: pumpManager.state.reservoirUnitsRemaining))
                 cell.accessoryType = .disclosureIndicator
+                cell.accessibilityIdentifier = "mockPumpSettingsReservoirRemaining"
                 return cell
             case .batteryRemaining:
                 let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
@@ -349,10 +354,11 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                 tableView.deselectRow(at: indexPath, animated: true)
                 tableView.reloadRows(at: [indexPath], with: .automatic)
             case .pumpComponentReplacement:
-                pumpManager.injectPumpEvents(pumpManager.state.replacePumpComponent ? [NewPumpEvent(type: .replaceComponent(componentType: .pump))] : [NewPumpEvent(type: .replaceComponent(componentType: .pump))])
-                pumpManager.state.replacePumpComponent = !pumpManager.state.replacePumpComponent
+                pumpManager.state.isPumpExpired = !pumpManager.state.isPumpExpired
                 tableView.deselectRow(at: indexPath, animated: true)
                 tableView.reloadRows(at: [indexPath], with: .automatic)
+            default:
+                break
             }
         case .settings:
             tableView.deselectRow(at: indexPath, animated: true)
@@ -471,7 +477,7 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
             case .lastReconciliationDate:
                 
                 let resetAction = UIContextualAction(style: .normal, title:  "Reset") {[weak self] _,_,_ in
-                    self?.pumpManager.testLastReconciliation = nil
+                    self?.pumpManager.lastSync = nil
                     tableView.reloadRows(at: [indexPath], with: .automatic)
                 }
                 resetAction.backgroundColor = .systemRed
@@ -493,7 +499,7 @@ extension MockPumpManagerSettingsViewController: DatePickerTableViewCellDelegate
 
         switch SettingsRow(rawValue: row) {
         case .lastReconciliationDate?:
-            pumpManager.testLastReconciliation = cell.date
+            pumpManager.lastSync = cell.date
         default:
             break
         }

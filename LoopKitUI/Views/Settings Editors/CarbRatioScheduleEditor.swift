@@ -7,13 +7,13 @@
 //
 
 import SwiftUI
-import HealthKit
+import LoopAlgorithm
 import LoopKit
 
 
-fileprivate extension HKUnit {
-    static let storedCarbRatioScheduleUnit = HKUnit.gram()
-    static let realCarbRatioScheduleUnit = HKUnit.gramsPerUnit
+fileprivate extension LoopUnit {
+    static let storedCarbRatioScheduleUnit = LoopUnit.gram
+    static let realCarbRatioScheduleUnit = LoopUnit.gramsPerUnit
 }
 
 public struct CarbRatioScheduleEditor: View {
@@ -21,6 +21,8 @@ public struct CarbRatioScheduleEditor: View {
     private var mode: SettingsPresentationMode
     private var save: (CarbRatioSchedule) -> Void
     @Environment(\.appName) private var appName
+    @Environment(\.dosingStrategySelectionEnabled) private var dosingStrategySelectionEnabled
+
 
     public init(
         schedule: CarbRatioSchedule?,
@@ -75,7 +77,7 @@ public struct CarbRatioScheduleEditor: View {
     }
 
     private var description: Text {
-        Text(TherapySetting.carbRatio.descriptiveText(appName: appName))
+        Text(TherapySetting.carbRatio.descriptiveText(appName: appName, dosingStrategySelectionEnabled: dosingStrategySelectionEnabled))
     }
 
     private var confirmationAlertContent: AlertContent {
@@ -100,9 +102,9 @@ private struct CarbRatioGuardrailWarning: View {
 
     private func singularWarningTitle(for threshold: SafetyClassification.Threshold) -> Text {
         switch threshold {
-        case .minimum, .belowRecommended:
+        case .minimum, .belowWarning, .belowRecommended:
             return Text(LocalizedString("Low Carb Ratio", comment: "Title text for the low carb ratio warning"))
-        case .aboveRecommended, .maximum:
+        case .aboveRecommended, .aboveWarning, .maximum:
             return Text(LocalizedString("High Carb Ratio", comment: "Title text for the high carb ratio warning"))
         }
     }

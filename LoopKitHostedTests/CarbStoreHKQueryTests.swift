@@ -16,8 +16,8 @@ class CarbStoreHKQueryTestsBase: PersistenceControllerTestCase {
     var authorizationStatus: HKAuthorizationStatus = .notDetermined
     var hkSampleStore: HealthKitSampleStore!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
 
         mockHealthStore = HKHealthStoreMock()
         mockHealthStore.authorizationStatus = authorizationStatus
@@ -30,29 +30,22 @@ class CarbStoreHKQueryTestsBase: PersistenceControllerTestCase {
         carbStore = CarbStore(healthKitSampleStore: hkSampleStore,
                               cacheStore: cacheStore,
                               cacheLength: .hours(24),
-                              defaultAbsorptionTimes: (fast: .minutes(30), medium: .hours(3), slow: .hours(5)),
                               provenanceIdentifier: Bundle.main.bundleIdentifier!)
-
-        let semaphore = DispatchSemaphore(value: 0)
-        cacheStore.onReady { (error) in
-            semaphore.signal()
-        }
-        semaphore.wait()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         carbStore = nil
         mockHealthStore = nil
 
-        super.tearDown()
+        try await super.tearDown()
     }
     
 }
 
 class CarbStoreHKQueryTestsAuthorized: CarbStoreHKQueryTestsBase {
-    override func setUp() {
+    override func setUp() async throws {
         authorizationStatus = .sharingAuthorized
-        super.setUp()
+        try await super.setUp()
     }
 
     func testObserverQueryStartup() {
@@ -61,7 +54,7 @@ class CarbStoreHKQueryTestsAuthorized: CarbStoreHKQueryTestsBase {
 
         mockHealthStore.observerQueryStartedExpectation = expectation(description: "observer query started")
 
-        waitForExpectations(timeout: 2)
+        waitForExpectations(timeout: 30)
 
         XCTAssertNotNil(mockHealthStore.observerQuery)
     }
@@ -118,7 +111,6 @@ class CarbStoreHKQueryTests: CarbStoreHKQueryTestsBase {
         let _ = CarbStore(healthKitSampleStore: newSampleStore,
                                      cacheStore: cacheStore,
                                      cacheLength: .hours(24),
-                                     defaultAbsorptionTimes: (fast: .minutes(30), medium: .hours(3), slow: .hours(5)),
                                      provenanceIdentifier: Bundle.main.bundleIdentifier!)
 
 

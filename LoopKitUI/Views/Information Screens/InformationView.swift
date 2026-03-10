@@ -93,16 +93,18 @@ struct InformationView<InformationalContent: View> : View {
             .font(.largeTitle)
             .bold()
             .fixedSize(horizontal: false, vertical: true)
+            .accessibilityIdentifier("titleText_therapySettingsEducationTitle")
     }
     
     private var cancelButton: some View {
         Button(action: onExit, label: { Text(LocalizedString("Close", comment: "Text to close informational page")) })
+            .accessibilityIdentifier("button_close")
     }
     
     private var nextPageButton: some View {
         Button(action: onExit) {
             buttonText
             .actionButtonStyle(.primary)
-        }
+        }.accessibilityIdentifier("button_continue")
     }
 }

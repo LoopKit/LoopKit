@@ -8,8 +8,9 @@
 
 import HealthKit
 import CoreData
+import LoopAlgorithm
 
-public struct StoredCarbEntry: CarbEntry, Equatable {
+public struct StoredCarbEntry: CarbEntry, Equatable, Hashable {
 
     public let uuid: UUID?
 
@@ -24,12 +25,13 @@ public struct StoredCarbEntry: CarbEntry, Equatable {
     // MARK: - SampleValue
 
     public let startDate: Date
-    public let quantity: HKQuantity
+    public let quantity: LoopQuantity
 
     // MARK: - CarbEntry
 
     public let foodType: String?
     public let absorptionTime: TimeInterval?
+    public let favoriteFoodID: String?
     public let createdByCurrentApp: Bool
 
     // MARK: - User dates
@@ -39,13 +41,14 @@ public struct StoredCarbEntry: CarbEntry, Equatable {
 
     public init(
         startDate: Date,
-        quantity: HKQuantity,
+        quantity: LoopQuantity,
         uuid: UUID? = nil,
         provenanceIdentifier: String = Self.defaultProvenanceIdentifier,
         syncIdentifier: String? = nil,
         syncVersion: Int? = nil,
         foodType: String? = nil,
         absorptionTime: TimeInterval? = nil,
+        favoriteFoodID: String? = nil,
         createdByCurrentApp: Bool = true,
         userCreatedDate: Date? = nil,
         userUpdatedDate: Date? = nil
@@ -58,9 +61,14 @@ public struct StoredCarbEntry: CarbEntry, Equatable {
         self.quantity = quantity
         self.foodType = foodType
         self.absorptionTime = absorptionTime
+        self.favoriteFoodID = favoriteFoodID
         self.createdByCurrentApp = createdByCurrentApp
         self.userCreatedDate = userCreatedDate
         self.userUpdatedDate = userUpdatedDate
+    }
+
+    public var amount: Double {
+        quantity.doubleValue(for: .gram)
     }
 }
 
@@ -75,6 +83,7 @@ extension StoredCarbEntry {
             syncVersion: managedObject.syncVersion,
             foodType: managedObject.foodType,
             absorptionTime: managedObject.absorptionTime,
+            favoriteFoodID: managedObject.quantitySample.favoriteFoodID,
             createdByCurrentApp: managedObject.createdByCurrentApp,
             userCreatedDate: managedObject.userCreatedDate,
             userUpdatedDate: managedObject.userUpdatedDate
@@ -87,7 +96,7 @@ extension StoredCarbEntry: Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.init(
             startDate: try container.decode(Date.self, forKey: .startDate),
-            quantity: HKQuantity(unit: .gram(), doubleValue: try container.decode(Double.self, forKey: .quantity)),
+            quantity: LoopQuantity(unit: .gram, doubleValue: try container.decode(Double.self, forKey: .quantity)),
             uuid: try container.decodeIfPresent(UUID.self, forKey: .uuid),
             provenanceIdentifier: (try container.decodeIfPresent(String.self, forKey: .provenanceIdentifier)) ?? Self.defaultProvenanceIdentifier,
             syncIdentifier: try container.decodeIfPresent(String.self, forKey: .syncIdentifier),
@@ -109,7 +118,7 @@ extension StoredCarbEntry: Codable {
         try container.encodeIfPresent(syncIdentifier, forKey: .syncIdentifier)
         try container.encodeIfPresent(syncVersion, forKey: .syncVersion)
         try container.encode(startDate, forKey: .startDate)
-        try container.encode(quantity.doubleValue(for: .gram()), forKey: .quantity)
+        try container.encode(quantity.doubleValue(for: .gram), forKey: .quantity)
         try container.encodeIfPresent(foodType, forKey: .foodType)
         try container.encodeIfPresent(absorptionTime, forKey: .absorptionTime)
         if !createdByCurrentApp {
@@ -161,7 +170,7 @@ extension StoredCarbEntry {
 
         self.init(
             startDate: startDate,
-            quantity: HKQuantity(unit: HKUnit(from: unitString), doubleValue: value),
+            quantity: LoopQuantity(unit: LoopUnit(from: unitString), doubleValue: value),
             uuid: uuid,
             provenanceIdentifier: createdByCurrentApp ? HKSource.default().bundleIdentifier : "",
             syncIdentifier: syncIdentifier,

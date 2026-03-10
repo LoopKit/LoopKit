@@ -9,20 +9,32 @@ import XCTest
 @testable import LoopKit
 
 class PersistenceControllerTestCase: XCTestCase {
-
+ 
     var cacheStore: PersistenceController!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
 
-        cacheStore = PersistenceController(directoryURL: URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true).appendingPathComponent(UUID().uuidString, isDirectory: true))
+        let dir = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+
+        cacheStore = PersistenceController(directoryURL: dir.appendingPathComponent(UUID().uuidString, isDirectory: true))
+
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) -> Void in
+            cacheStore.onReady { error in
+                if let error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume()
+                }
+            }
+        }
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         cacheStore.tearDown()
         cacheStore = nil
 
-        super.tearDown()
+        try await super.tearDown()
     }
 
     deinit {

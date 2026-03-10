@@ -14,6 +14,7 @@ extension DosingDecisionObject {
         return NSFetchRequest<DosingDecisionObject>(entityName: "DosingDecisionObject")
     }
 
+    @NSManaged public var id: UUID?
     @NSManaged public var data: Data
     @NSManaged public var date: Date
     @NSManaged public var modificationCounter: Int64
@@ -26,12 +27,14 @@ extension DosingDecisionObject: Encodable {
 }
 
 fileprivate struct EncodableDosingDecisionObject: Encodable {
+    var id: UUID
     var data: StoredDosingDecision
     var date: Date
     var modificationCounter: Int64
 
     init(_ object: DosingDecisionObject) throws {
         self.data = try PropertyListDecoder().decode(StoredDosingDecision.self, from: object.data)
+        self.id = object.id ?? data.id
         self.date = object.date
         self.modificationCounter = object.modificationCounter
     }

@@ -41,12 +41,12 @@ struct NewScheduleItemEditor<Value, ValuePicker: View>: View {
     var body: some View {
         VStack(spacing: 0) {
             ModalHeaderButtonBar(
-                leading: { cancelButton },
+                leading: { cancelButton.accessibilityIdentifier("button_cancelNewEntry") },
                 center: {
                     Text(LocalizedString("New Entry", comment: "Title for mini-modal to add a new schedule entry"))
                         .font(.headline)
                 },
-                trailing: { addButton }
+                trailing: { addButton.accessibilityIdentifier("button_addNewEntry") }
             )
 
             ScheduleItemPicker(

@@ -12,7 +12,7 @@ import os.log
 
 
 // Using a framework specific class will search the framework's bundle for model files.
-class PersistentContainer: NSPersistentContainer { }
+class PersistentContainer: NSPersistentContainer, @unchecked Sendable { }
 
 public class PersistentDeviceLog {
 
@@ -75,25 +75,28 @@ public class PersistentDeviceLog {
         }
     }
     
-    public func getLogEntries(startDate: Date, endDate: Date? = nil, completion: @escaping (_ result: Result<[StoredDeviceLogEntry], Error>) -> Void) {
-        
-        managedObjectContext.perform {
-            var predicate: NSPredicate = NSPredicate(format: "timestamp >= %@", startDate as NSDate)
-            if let endDate = endDate {
-                let endFilter = NSPredicate(format: "timestamp < %@", endDate as NSDate)
-                predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, endFilter])
-            }
-            
-            let request: NSFetchRequest<DeviceLogEntry> = DeviceLogEntry.fetchRequest()
-            request.predicate = predicate
-            request.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
-            
-            do {
-                let entries = try self.managedObjectContext.fetch(request)
-                completion(.success(entries.map { StoredDeviceLogEntry(managedObject: $0) } ))
-                self.purgeExpiredLogEntries()
-            } catch let error {
-                completion(.failure(error))
+    public func generateDiagnosticReport() async -> String {
+        await withCheckedContinuation { continuation in
+            let startDate = Date() - .hours(3.5 * 24) // Report the last 3 and half days of device logs
+            let header = "## Device Communication Log\n"
+
+            managedObjectContext.perform {
+                let predicate: NSPredicate = NSPredicate(format: "timestamp >= %@", startDate as NSDate)
+                let request: NSFetchRequest<DeviceLogEntry> = DeviceLogEntry.fetchRequest()
+                request.predicate = predicate
+                request.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
+
+                do {
+                    let entries = try self.managedObjectContext.fetch(request)
+                    let deviceLogReport = header + entries
+                        .map { StoredDeviceLogEntry(managedObject: $0) }
+                        .map { "* \($0.timestamp) \($0.managerIdentifier) \($0.deviceIdentifier ?? "") \($0.type) \($0.message)" }
+                        .joined(separator: "\n")
+                    continuation.resume(returning: deviceLogReport)
+                    self.purgeExpiredLogEntries()
+                } catch {
+                    continuation.resume(returning: header)
+                }
             }
         }
     }
@@ -163,6 +166,21 @@ extension PersistentDeviceLog: CriticalEventLog {
         }
 
         return result!
+    }
+
+    public func fetch(startDate: Date, endDate: Date) async throws -> [StoredDeviceLogEntry] {
+        return try await self.managedObjectContext.perform {
+            let request: NSFetchRequest<DeviceLogEntry> = DeviceLogEntry.fetchRequest()
+            request.predicate = self.exportDatePredicate(startDate: startDate, endDate: endDate)
+            request.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
+
+            let objects = try self.managedObjectContext.fetch(request)
+            if objects.isEmpty {
+                return []
+            }
+
+            return objects.map { StoredDeviceLogEntry(managedObject: $0) }
+        }
     }
 
     public func export(startDate: Date, endDate: Date, to stream: DataOutputStream, progress: Progress) -> Error? {
@@ -252,5 +270,16 @@ extension PersistentDeviceLog {
 
         self.log.info("Added %d StoredDeviceLogEntries", entries.count)
         return nil
+    }
+
+    public func addStoredDeviceLogEntries(entries: [StoredDeviceLogEntry]) async throws {
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            let error = self.addStoredDeviceLogEntries(entries: entries)
+            if let error = error {
+                continuation.resume(throwing: error)
+            } else {
+                continuation.resume()
+            }
+        }
     }
 }

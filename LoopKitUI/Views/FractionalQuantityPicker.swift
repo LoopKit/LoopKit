@@ -7,8 +7,8 @@
 //
 
 import SwiftUI
-import HealthKit
 import LoopKit
+import LoopAlgorithm
 
 
 /// Enables selecting the whole and fractional parts of an HKQuantity value in independent pickers.
@@ -24,8 +24,8 @@ public struct FractionalQuantityPicker: View {
     @Environment(\.guidanceColors) var guidanceColors
     @Binding var whole: Double
     @Binding var fraction: Double
-    var unit: HKUnit
-    var guardrail: Guardrail<HKQuantity>
+    var unit: LoopUnit
+    var guardrail: Guardrail<LoopQuantity>
     var selectableWholeValues: [Double]
     var fractionalValuesByWhole: [Double: [Double]]
     var usageContext: UsageContext
@@ -48,9 +48,9 @@ public struct FractionalQuantityPicker: View {
     }()
 
     public init(
-        value: Binding<HKQuantity>,
-        unit: HKUnit,
-        guardrail: Guardrail<HKQuantity>,
+        value: Binding<LoopQuantity>,
+        unit: LoopUnit,
+        guardrail: Guardrail<LoopQuantity>,
         selectableValues: [Double],
         usageContext: UsageContext = .independent
     ) {
@@ -69,7 +69,7 @@ public struct FractionalQuantityPicker: View {
                 let newFractionValue = Self.matchingFraction(for: doubleValue.wrappedValue.fraction, from: fractionalValuesByWhole[newWholeValue] ?? [0.0])
                 let newDoubleValue = newWholeValue + newFractionValue
                 let maxValue = guardrail.absoluteBounds.upperBound.doubleValue(for: unit)
-                doubleValue.wrappedValue = min(newDoubleValue, maxValue)
+                doubleValue.wrappedValue = unit.roundForPicker(value: min(newDoubleValue, maxValue))
             }
         )
         self._fraction = Binding(
@@ -77,7 +77,7 @@ public struct FractionalQuantityPicker: View {
             set: { newFractionValue in
                 let newDoubleValue = doubleValue.wrappedValue.whole + newFractionValue
                 let minValue = guardrail.absoluteBounds.lowerBound.doubleValue(for: unit)
-                doubleValue.wrappedValue = max(newDoubleValue, minValue)
+                doubleValue.wrappedValue = unit.roundForPicker(value: max(newDoubleValue, minValue))
             }
         )
         self.unit = unit
@@ -123,6 +123,7 @@ public struct FractionalQuantityPicker: View {
             .frame(width: availableWidth / 3)
             .overlay(
                 Text(separator)
+                    .font(.title)
                     .foregroundColor(Color(.secondaryLabel))
                     .offset(x: spacing + separatorWidth),
                 alignment: .trailing
@@ -151,7 +152,7 @@ public struct FractionalQuantityPicker: View {
 
         let fractionIfWholeSelected = Self.matchingFraction(for: fraction, from: fractionalValuesByWhole[whole] ?? [0.0])
         let valueIfWholeSelected = whole + fractionIfWholeSelected
-        let quantityIfWholeSelected = HKQuantity(unit: unit, doubleValue: valueIfWholeSelected)
+        let quantityIfWholeSelected = LoopQuantity(unit: unit, doubleValue: valueIfWholeSelected)
         return guardrail.color(for: quantityIfWholeSelected, guidanceColors: guidanceColors)
     }
 
@@ -159,7 +160,7 @@ public struct FractionalQuantityPicker: View {
         assert(fraction.fraction == fraction)
 
         let valueIfFractionSelected = whole + fraction
-        let quantityIfFractionSelected = HKQuantity(unit: unit, doubleValue: valueIfFractionSelected)
+        let quantityIfFractionSelected = LoopQuantity(unit: unit, doubleValue: valueIfFractionSelected)
         return guardrail.color(for: quantityIfFractionSelected, guidanceColors: guidanceColors)
     }
 
@@ -177,7 +178,7 @@ public struct FractionalQuantityPicker: View {
     var separatorWidth: CGFloat {
         let attributedSeparator = NSAttributedString(
             string: separator,
-            attributes: [.font: UIFont.preferredFont(forTextStyle: .body)]
+            attributes: [.font: UIFont.preferredFont(forTextStyle: .title1)]
         )
 
         return attributedSeparator.size().width

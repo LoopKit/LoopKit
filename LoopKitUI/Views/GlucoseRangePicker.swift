@@ -9,7 +9,7 @@
 import SwiftUI
 import HealthKit
 import LoopKit
-
+import LoopAlgorithm
 
 public struct GlucoseRangePicker: View {
     public enum UsageContext: Equatable {
@@ -20,21 +20,21 @@ public struct GlucoseRangePicker: View {
         case independent
     }
 
-    @Binding var lowerBound: HKQuantity
-    @Binding var upperBound: HKQuantity
-    var unit: HKUnit
-    var minValue: HKQuantity?
-    var maxValue: HKQuantity?
-    var guardrail: Guardrail<HKQuantity>
+    @Binding var lowerBound: LoopQuantity
+    @Binding var upperBound: LoopQuantity
+    var unit: LoopUnit
+    var minValue: LoopQuantity?
+    var maxValue: LoopQuantity?
+    var guardrail: Guardrail<LoopQuantity>
     var formatter: NumberFormatter
     var usageContext: UsageContext
 
     public init(
-        range: Binding<ClosedRange<HKQuantity>>,
-        unit: HKUnit,
-        minValue: HKQuantity?,
-        maxValue: HKQuantity? = nil,
-        guardrail: Guardrail<HKQuantity>,
+        range: Binding<ClosedRange<LoopQuantity>>,
+        unit: LoopUnit,
+        minValue: LoopQuantity?,
+        maxValue: LoopQuantity? = nil,
+        guardrail: Guardrail<LoopQuantity>,
         usageContext: UsageContext = .independent
     ) {
         self._lowerBound = Binding(
@@ -75,52 +75,87 @@ public struct GlucoseRangePicker: View {
         switch usageContext {
         case .component(availableWidth: let availableWidth):
             body(availableWidth: availableWidth)
+                .frame(height: 216)
         case .independent:
-            GeometryReader { geometry in
+            centeredBody
+                .frame(height: 216)
+        }
+    }
+
+    private var centeredBody: some View {
+        GeometryReader { geometry in
+            HStack(spacing: 0) {
+                Spacer()
                 HStack(spacing: 0) {
-                    Spacer()
-                    self.body(availableWidth: geometry.size.width)
-                    Spacer()
+                    lowerBoundPicker
+                        .frame(width: geometry.size.width / 3)
+
+                    Text(separator)
+                        .foregroundColor(Color(.secondaryLabel))
+
+                    upperBoundPicker
+                        .frame(width: geometry.size.width / 3)
                 }
+                Spacer()
             }
-            .frame(height: 216)
         }
     }
 
     private func body(availableWidth: CGFloat) -> some View {
         HStack(spacing: 0) {
-            GlucoseValuePicker(
-                value: $lowerBound,
-                unit: unit,
-                guardrail: guardrail,
-                bounds: lowerBoundRange,
-                isUnitLabelVisible: false
-            )
-            .frame(width: availableWidth / 3)
-            .overlay(
-                Text(separator)
-                    .foregroundColor(Color(.secondaryLabel))
-                    .offset(x: spacing + separatorWidth),
-                alignment: .trailing
-            )
-            .padding(.leading, usageContext == .independent ? unitLabelWidth : 0)
-            .padding(.trailing, spacing + separatorWidth + spacing)
-            .clipped()
-            .compositingGroup()
-            .accessibility(identifier: "min_glucose_picker")
+            lowerBoundPicker
+                .frame(width: availableWidth / 3)
+                .overlay(
+                    Text(separator)
+                        .foregroundColor(Color(.secondaryLabel))
+                        .offset(x: spacing + separatorWidth),
+                    alignment: .trailing
+                )
+                .padding(.leading, usageContext == .independent ? unitLabelWidth : 0)
+                .padding(.trailing, spacing + separatorWidth + spacing)
+                .clipped()
+                .compositingGroup()
+                .accessibility(identifier: "min_glucose_picker")
 
-            GlucoseValuePicker(
-                value: $upperBound,
-                unit: unit,
-                guardrail: guardrail,
-                bounds: upperBoundRange
-            )
-            .frame(width: availableWidth / 3)
-            .padding(.trailing, unitLabelWidth)
-            .clipped()
-            .compositingGroup()
-            .accessibility(identifier: "max_glucose_picker")
+            upperBoundPicker
+                .frame(width: availableWidth / 3)
+                .padding(.trailing, unitLabelWidth)
+                .clipped()
+                .compositingGroup()
+                .accessibility(identifier: "max_glucose_picker")
         }
+    }
+
+    private var stride: Double {
+        switch unit {
+        case .milligramsPerDeciliter:
+            return 5
+        case .millimolesPerLiter:
+            return 0.1
+        default:
+            fatalError("Unsupported glucose unit \(unit)")
+        }
+    }
+
+    private var lowerBoundPicker: some View {
+        GlucoseValuePicker(
+            value: $lowerBound,
+            unit: unit,
+            guardrail: guardrail,
+            selectableValues: lowerBoundRange.selectableValues(unit: unit, stride: stride),
+            isUnitLabelVisible: false
+        )
+        .accessibility(identifier: "min_glucose_picker")
+    }
+
+    private var upperBoundPicker: some View {
+        GlucoseValuePicker(
+            value: $upperBound,
+            unit: unit,
+            guardrail: guardrail,
+            selectableValues: upperBoundRange.selectableValues(unit: unit, stride: stride)
+        )
+        .accessibility(identifier: "max_glucose_picker")
     }
 
     var separator: String { "–" }
@@ -145,14 +180,14 @@ public struct GlucoseRangePicker: View {
         return attributedUnitString.size().width
     }
 
-    var lowerBoundRange: ClosedRange<HKQuantity> {
+    var lowerBoundRange: ClosedRange<LoopQuantity> {
         let min = minValue.map { Swift.max(guardrail.absoluteBounds.lowerBound, $0) }
             ?? guardrail.absoluteBounds.lowerBound
         let max = Swift.min(guardrail.absoluteBounds.upperBound, upperBound)
         return min...max
     }
 
-    var upperBoundRange: ClosedRange<HKQuantity> {
+    var upperBoundRange: ClosedRange<LoopQuantity> {
         let min = max(guardrail.absoluteBounds.lowerBound, lowerBound)
         let max = maxValue.map { Swift.min(guardrail.absoluteBounds.upperBound, $0) }
             ?? guardrail.absoluteBounds.upperBound

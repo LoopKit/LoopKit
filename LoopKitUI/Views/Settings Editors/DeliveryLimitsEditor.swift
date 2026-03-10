@@ -7,10 +7,8 @@
 //
 
 import SwiftUI
-import HealthKit
+import LoopAlgorithm
 import LoopKit
-
-public typealias SyncDeliveryLimits = (_ deliveryLimits: DeliveryLimits, _ completion: @escaping (Swift.Result<DeliveryLimits, Error>) -> Void) -> Void
 
 public struct DeliveryLimitsEditor: View {
     fileprivate enum PresentedAlert: Error {
@@ -24,7 +22,7 @@ public struct DeliveryLimitsEditor: View {
     let scheduledBasalRange: ClosedRange<Double>?
     let supportedMaximumBolusVolumes: [Double]
     let selectableMaximumBolusVolumes: [Double]
-    let syncDeliveryLimits: SyncDeliveryLimits?
+    let syncDeliveryLimits: ((_ deliveryLimits: DeliveryLimits) async throws -> DeliveryLimits)?
     let save: (_ deliveryLimits: DeliveryLimits) -> Void
     let mode: SettingsPresentationMode
 
@@ -37,6 +35,7 @@ public struct DeliveryLimitsEditor: View {
     @Environment(\.dismissAction) var dismiss
     @Environment(\.authenticate) var authenticate
     @Environment(\.appName) var appName
+    @Environment(\.dosingStrategySelectionEnabled) var dosingStrategySelectionEnabled
 
     private let lowestCarbRatio: Double?
 
@@ -46,7 +45,7 @@ public struct DeliveryLimitsEditor: View {
         scheduledBasalRange: ClosedRange<Double>?,
         supportedMaximumBolusVolumes: [Double],
         lowestCarbRatio: Double?,
-        syncDeliveryLimits: @escaping SyncDeliveryLimits,
+        syncDeliveryLimits: @escaping (_ deliveryLimits: DeliveryLimits) async throws -> DeliveryLimits,
         onSave save: @escaping (_ deliveryLimits: DeliveryLimits) -> Void,
         mode: SettingsPresentationMode = .settings
     ) {
@@ -71,11 +70,11 @@ public struct DeliveryLimitsEditor: View {
         precondition(therapySettingsViewModel.pumpSupportedIncrements() != nil)
         
         let maxBasal = therapySettingsViewModel.therapySettings.maximumBasalRatePerHour.map {
-            HKQuantity(unit: .internationalUnitsPerHour, doubleValue: $0)
+            LoopQuantity(unit: .internationalUnitsPerHour, doubleValue: $0)
         }
 
         let maxBolus = therapySettingsViewModel.therapySettings.maximumBolus.map {
-            HKQuantity(unit: .internationalUnit(), doubleValue: $0)
+            LoopQuantity(unit: .internationalUnit, doubleValue: $0)
         }
         
         self.init(
@@ -134,7 +133,9 @@ public struct DeliveryLimitsEditor: View {
             actionButtonTitle: Text(mode.buttonText(isSaving: isSyncing)),
             actionButtonState: saveButtonState,
             cards: {
-                maximumBasalRateCard
+                if dosingStrategySelectionEnabled {
+                    maximumBasalRateCard
+                }
                 maximumBolusCard
             },
             actionAreaContent: {
@@ -173,7 +174,7 @@ public struct DeliveryLimitsEditor: View {
         return value == initialValue && mode != .acceptanceFlow ? .disabled : .enabled
     }
 
-    var maximumBasalRateGuardrail: Guardrail<HKQuantity> {
+    var maximumBasalRateGuardrail: Guardrail<LoopQuantity> {
         return Guardrail.maximumBasalRate(supportedBasalRates: supportedBasalRates, scheduledBasalRange: scheduledBasalRange, lowestCarbRatio: lowestCarbRatio)
     }
 
@@ -191,7 +192,7 @@ public struct DeliveryLimitsEditor: View {
                     }
                 ),
                 leadingValueContent: {
-                    Text(DeliveryLimits.Setting.maximumBasalRate.title)
+                    Text(DeliveryLimits.Setting.maximumBasalRate.title).accessibilityIdentifier("text_MaximumBasalRateLimit")
                 },
                 trailingValueContent: {
                     GuardrailConstrainedQuantityView(
@@ -223,7 +224,7 @@ public struct DeliveryLimitsEditor: View {
         }
     }
 
-    var maximumBolusGuardrail: Guardrail<HKQuantity> {
+    var maximumBolusGuardrail: Guardrail<LoopQuantity> {
         return Guardrail.maximumBolus(supportedBolusVolumes: supportedMaximumBolusVolumes)
     }
 
@@ -241,12 +242,12 @@ public struct DeliveryLimitsEditor: View {
                     }
                 ),
                 leadingValueContent: {
-                    Text(DeliveryLimits.Setting.maximumBolus.title)
+                    Text(DeliveryLimits.Setting.maximumBolus.title).accessibilityIdentifier("text_MaximumBolusLimit")
                 },
                 trailingValueContent: {
                     GuardrailConstrainedQuantityView(
                         value: value.maximumBolus,
-                        unit: .internationalUnit(),
+                        unit: .internationalUnit,
                         guardrail: maximumBolusGuardrail,
                         isEditing: settingBeingEdited == .maximumBolus,
                         forceDisableAnimations: true
@@ -262,7 +263,7 @@ public struct DeliveryLimitsEditor: View {
                                 }
                             }
                         ),
-                        unit: .internationalUnit(),
+                        unit: .internationalUnit,
                         guardrail: self.maximumBolusGuardrail,
                         selectableValues: self.selectableMaximumBolusVolumes,
                         usageContext: .independent
@@ -342,13 +343,14 @@ public struct DeliveryLimitsEditor: View {
             actuallySave(deliveryLimits)
             return
         }
-        syncDeliveryLimits(deliveryLimits) { result in
-            switch result {
-            case .success(let deliveryLimits):
-                actuallySave(deliveryLimits)
-                completion(nil)
-            case .failure(let error):
-                completion(PresentedAlert.saveError(error))
+        Task {
+            do {
+                let result = try await syncDeliveryLimits(deliveryLimits)
+                actuallySave(result)
+            } catch {
+                Task { @MainActor in
+                    completion(PresentedAlert.saveError(error))
+                }
             }
         }
     }
@@ -429,16 +431,16 @@ struct DeliveryLimitsGuardrailWarning: View {
             switch setting {
             case .maximumBasalRate:
                 switch threshold {
-                case .minimum, .belowRecommended:
+                case .minimum, .belowWarning, .belowRecommended:
                     title = Text(LocalizedString("Low Maximum Basal Rate", comment: "Title text for low maximum basal rate warning"))
-                case .aboveRecommended, .maximum:
+                case .aboveRecommended, .aboveWarning, .maximum:
                     title = Text(LocalizedString("High Maximum Basal Rate", comment: "Title text for high maximum basal rate warning"))
                 }
             case .maximumBolus:
                 switch threshold {
-                case .minimum, .belowRecommended:
+                case .minimum, .belowWarning, .belowRecommended:
                     title = Text(LocalizedString("Low Maximum Bolus", comment: "Title text for low maximum bolus warning"))
-                case .aboveRecommended, .maximum:
+                case .aboveRecommended, .aboveWarning, .maximum:
                     title = Text(LocalizedString("High Maximum Bolus", comment: "Title text for high maximum bolus warning"))
                 }
             }

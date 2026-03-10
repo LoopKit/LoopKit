@@ -8,7 +8,7 @@
 
 import Foundation
 import CoreData
-
+import LoopAlgorithm
 
 class PumpEvent: NSManagedObject {
 
@@ -200,6 +200,7 @@ extension PumpEvent {
                 endDate: endDate,
                 value: value,
                 unit: unit,
+                decisionId: decisionId,
                 deliveredUnits: deliveredUnits,
                 syncIdentifier: syncIdentifier,
                 insulinType: insulinType,
@@ -218,6 +219,7 @@ extension PumpEvent {
             endDate = entry.endDate
             value = entry.value
             unit = entry.unit
+            decisionId = entry.decisionId
             deliveredUnits = entry.deliveredUnits
             insulinType = entry.insulinType
             automatic = entry.automatic

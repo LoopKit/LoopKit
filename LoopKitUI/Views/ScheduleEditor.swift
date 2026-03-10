@@ -51,6 +51,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
     var mode: SettingsPresentationMode
     var therapySettingType: TherapySetting
     var hasUnsupportedValue: ([RepeatingScheduleValue<Value>]) -> Bool
+    var shouldBlockZeroSchedule: ([RepeatingScheduleValue<Value>]) -> Bool
     
     @State var editingIndex: Int?
 
@@ -92,7 +93,8 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
         savingMechanism: SavingMechanism<[RepeatingScheduleValue<Value>]>,
         mode: SettingsPresentationMode = .settings,
         therapySettingType: TherapySetting = .none,
-        hasUnsupportedValue:  @escaping ([RepeatingScheduleValue<Value>]) -> Bool = { _ in false }
+        hasUnsupportedValue:  @escaping ([RepeatingScheduleValue<Value>]) -> Bool = { _ in false },
+        shouldBlockZeroSchedule: @escaping ([RepeatingScheduleValue<Value>]) -> Bool = { _ in false }
     ) {
         self.title = title
         self.description = description
@@ -108,6 +110,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
         self.mode = mode
         self.therapySettingType = therapySettingType
         self.hasUnsupportedValue = hasUnsupportedValue
+        self.shouldBlockZeroSchedule = shouldBlockZeroSchedule
     }
 
     var body: some View {
@@ -203,7 +206,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
                 }
             },
             actionAreaContent: {
-                unsupportedValueWarningIfNecessary
+                warningIfNecessary
                 actionAreaContent
             },
             action: {
@@ -227,14 +230,17 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
             && (scheduleItems != initialScheduleItems || mode == .acceptanceFlow)
             && tableDeletionState == .disabled
             && !hasUnsupportedValue(scheduleItems)
+            && !shouldBlockZeroSchedule(scheduleItems)
 
         return isEnabled ? .enabled : .disabled
     }
     
-    private var unsupportedValueWarningIfNecessary: some View {
+    private var warningIfNecessary: some View {
         return Group {
             if hasUnsupportedValue(scheduleItems) {
                 unsupportedValueWarning
+            } else if shouldBlockZeroSchedule(scheduleItems) {
+                blockZeroScheduleWarning
             }
         }
     }
@@ -242,6 +248,11 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
     private var unsupportedValueWarning: some View {
         WarningView(title: Text("Unsupported \(title)"),
                     caption: Text(LocalizedString("Correct the highlighted unsupported value(s).", comment: "Instruction to correct unsupported value")))
+    }
+    
+    private var blockZeroScheduleWarning: some View {
+        WarningView(title: Text("Unsupported \(title)"),
+                    caption: Text(LocalizedString("The sum of your basal rates cannot equal 0 U/day. Please adjust your schedule to a value above zero.", comment: "Instruction to correct zero schedule")))
     }
 
 
@@ -274,8 +285,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
                     )
                 }
             )
-        }
-        .accessibility(identifier: "schedule_item_\(index)")
+        }.accessibility(identifier: "schedule_item_\(index)")
     }
 
     private func isEditing(_ index: Int) -> Binding<Bool> {
@@ -354,7 +364,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
                     .fontWeight(.regular)
             }
             .offset(x: -6, y: 0)
-        }
+        }.accessibilityIdentifier("button_back")
     }
 
     private var backButtonTitle: String { LocalizedString("Back", comment: "Back navigation button title") }
@@ -375,6 +385,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
             }
         )
         .disabled(scheduleItems.count == 1)
+        .accessibilityIdentifier("button_edit")
     }
 
     var doneButton: some View {
@@ -387,7 +398,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
             label: {
                 Text(LocalizedString("Done", comment: "Text for done button")).bold()
             }
-        )
+        ).accessibilityIdentifier("button_done")
     }
 
     var addButton: some View {
@@ -404,6 +415,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
             }
         )
         .disabled(tableDeletionState != .disabled || scheduleItems.count >= scheduleItemLimit)
+        .accessibilityIdentifier("button_add")
     }
 
     private func startSaving() {

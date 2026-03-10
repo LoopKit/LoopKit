@@ -13,6 +13,8 @@ public protocol StatefulPlugin {
     var pluginType: StatefulPluggable.Type? { get }
 }
 
+
+@MainActor
 public protocol StatefulPluggableProvider {
     /// The stateful plugin with the specified identifier.
     ///

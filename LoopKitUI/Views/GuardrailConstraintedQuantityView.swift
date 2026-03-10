@@ -7,15 +7,15 @@
 //
 
 import SwiftUI
-import HealthKit
 import LoopKit
+import LoopAlgorithm
 
 
 public struct GuardrailConstrainedQuantityView: View {
     @Environment(\.guidanceColors) var guidanceColors
-    var value: HKQuantity?
-    var unit: HKUnit
-    var guardrail: Guardrail<HKQuantity>
+    var value: LoopQuantity?
+    var unit: LoopUnit
+    var guardrail: Guardrail<LoopQuantity>
     var isEditing: Bool
     var isSupportedValue: Bool
     var formatter: NumberFormatter
@@ -26,9 +26,9 @@ public struct GuardrailConstrainedQuantityView: View {
     @State private var hasAppeared = false
 
     public init(
-        value: HKQuantity?,
-        unit: HKUnit,
-        guardrail: Guardrail<HKQuantity>,
+        value: LoopQuantity?,
+        unit: LoopUnit,
+        guardrail: Guardrail<LoopQuantity>,
         isEditing: Bool,
         isSupportedValue: Bool = true,
         iconSpacing: CGFloat = 8,
@@ -57,11 +57,13 @@ public struct GuardrailConstrainedQuantityView: View {
                         Image(systemName: "exclamationmark.triangle.fill")
                             .foregroundColor(warningColor)
                             .transition(.springInDisappear)
+                            .accessibilityIdentifier(accessibilityIdentifier)
                     }
 
                     Text(formatter.string(from: value!.doubleValue(for: unit)) ?? "\(value!.doubleValue(for: unit))")
                         .foregroundColor(warningColor)
                         .fixedSize(horizontal: true, vertical: false)
+                        .accessibilityIdentifier("text_setGlucoseValue")
                 } else {
                     Text("–")
                         .foregroundColor(.secondary)
@@ -104,8 +106,31 @@ public struct GuardrailConstrainedQuantityView: View {
             switch threshold {
             case .minimum, .maximum:
                 return guidanceColors.critical
+            case .belowWarning, .aboveWarning:
+                return guidanceColors.critical
             case .belowRecommended, .aboveRecommended:
                 return guidanceColors.warning
+            }
+        }
+    }
+    
+    private var accessibilityIdentifier: String {
+        guard let value = value else {
+            return "noWarningImage"
+        }
+        
+
+        switch guardrail.classification(for: value) {
+        case .withinRecommendedRange:
+            return "noWarningImage"
+        case .outsideRecommendedRange(let threshold):
+            switch threshold {
+            case .minimum, .maximum:
+                return "imageNextToText_warningTriangleRed"
+            case .belowWarning, .aboveWarning:
+                return "imageNextToText_warningTriangleRed"
+            case .belowRecommended, .aboveRecommended:
+                return "imageNextToText_warningTriangleOrange"
             }
         }
     }

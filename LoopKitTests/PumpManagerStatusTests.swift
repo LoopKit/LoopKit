@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import LoopAlgorithm
 import HealthKit
 
 @testable import LoopKit
@@ -140,10 +141,11 @@ class PumpManagerStatusBasalDeliveryStateCodableTests: XCTestCase {
                              endDate: dateFormatter.date(from: "2020-05-14T13:43:14Z")!,
                              value: 1.25,
                              unit: .unitsPerHour,
+                             decisionId: nil,
                              deliveredUnits: 0.5,
                              description: "Temporary Basal",
                              syncIdentifier: "238E41EA-9576-4981-A1A4-51E10228584F",
-                             scheduledBasalRate: HKQuantity(unit: DoseEntry.unitsPerHour, doubleValue: 1.0))
+                             scheduledBasalRate: LoopQuantity(unit: DoseEntry.unitsPerHour, doubleValue: 1.0))
         try assertPumpManagerStatusBasalDeliveryStateCodable(.tempBasal(dose), encodesJSON: """
 {
   "basalDeliveryState" : {
@@ -258,6 +260,7 @@ class PumpManagerStatusBolusStateCodableTests: XCTestCase {
                              startDate: dateFormatter.date(from: "2020-05-14T22:38:16Z")!,
                              value: 2.5,
                              unit: .units,
+                             decisionId: nil,
                              deliveredUnits: 1.0,
                              description: "Bolus",
                              syncIdentifier: "2A67A303-5203-4CB8-8123-79498265368E",

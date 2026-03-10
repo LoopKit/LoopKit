@@ -6,7 +6,11 @@
 //
 
 import HealthKit
+import LoopAlgorithm
 
+
+/// Defines the id of the dosing decision associated with the dose
+let MetadataKeyDecisionId = "com.loopkit.InsulinKit.MetadataKeyDecisionId"
 
 /// Defines the scheduled basal insulin rate during the time of the basal delivery sample
 let MetadataKeyScheduledBasalRate = "com.loopkit.InsulinKit.MetadataKeyScheduledBasalRate"
@@ -43,13 +47,13 @@ extension HKQuantitySample {
             MetadataKeyHasLoopKitOrigin: true,
             MetadataKeyManuallyEntered: dose.manuallyEntered
         ]
-        
+
         switch dose.type {
         case .suspend:
             metadata[HKMetadataKeyInsulinDeliveryReason] = HKInsulinDeliveryReason.basal.rawValue
 
             if let basalRate = dose.scheduledBasalRate {
-                metadata[MetadataKeyScheduledBasalRate] = basalRate
+                metadata[MetadataKeyScheduledBasalRate] = basalRate.hkQuantity
             }
             metadata[MetadataKeyIsSuspend] = true
 
@@ -62,7 +66,7 @@ extension HKQuantitySample {
             metadata[HKMetadataKeyInsulinDeliveryReason] = HKInsulinDeliveryReason.basal.rawValue
 
             if let basalRate = dose.scheduledBasalRate {
-                metadata[MetadataKeyScheduledBasalRate] = basalRate
+                metadata[MetadataKeyScheduledBasalRate] = basalRate.hkQuantity
             }
 
             if dose.type == .tempBasal {
@@ -80,13 +84,17 @@ extension HKQuantitySample {
         case .resume:
             return nil
         }
-        
+
         if let insulinType = dose.insulinType {
             metadata[MetadataKeyInsulinType] = insulinType.healthKitRepresentation
         }
-        
+
         if let automatic = dose.automatic {
             metadata[MetadataKeyAutomaticallyIssued] = automatic
+        }
+        
+        if let decisionId = dose.decisionId {
+            metadata[MetadataKeyDecisionId] = decisionId.uuidString
         }
 
         self.init(
@@ -115,12 +123,19 @@ extension HKQuantitySample {
         return HKInsulinDeliveryReason(rawValue: reason)
     }
 
-    var scheduledBasalRate: HKQuantity? {
-        return metadata?[MetadataKeyScheduledBasalRate] as? HKQuantity
+    var scheduledBasalRate: LoopQuantity? {
+        guard let hkQuantity = metadata?[MetadataKeyScheduledBasalRate] as? HKQuantity, let unit = LoopUnit.firstCompatible(with: hkQuantity) else {
+            return nil
+        }
+        return LoopQuantity(unit: unit, doubleValue: hkQuantity.doubleValue(for: unit.hkUnit))
     }
 
-    var programmedTempBasalRate: HKQuantity? {
-        return metadata?[MetadataKeyProgrammedTempBasalRate] as? HKQuantity
+    var programmedTempBasalRate: LoopQuantity? {
+        guard let hkQuantity = metadata?[MetadataKeyProgrammedTempBasalRate] as? HKQuantity, let unit = LoopUnit.firstCompatible(with: hkQuantity) else {
+            return nil
+        }
+        
+        return LoopQuantity(unit: unit, doubleValue: hkQuantity.doubleValue(for: unit.hkUnit))
     }
 
     var isSuspend: Bool {
@@ -130,17 +145,21 @@ extension HKQuantitySample {
     var manuallyEntered: Bool {
         return metadata?[MetadataKeyManuallyEntered] as? Bool ?? false
     }
-    
+
     var automaticallyIssued: Bool? {
         return metadata?[MetadataKeyAutomaticallyIssued] as? Bool
     }
-    
+
     var insulinType: InsulinType? {
         guard let rawType = metadata?[MetadataKeyInsulinType] as? String else {
             return nil
         }
-        
+
         return InsulinType(healthKitRepresentation: rawType)
+    }
+    
+    var decisionId: UUID? {
+        UUID(uuidString: [MetadataKeyDecisionId] as? String ?? "")
     }
 
     /// Returns a DoseEntry representation of the sample.
@@ -172,16 +191,28 @@ extension HKQuantitySample {
             return nil
         }
 
-        let value: Double
+        let programmedValue: Double
         let unit: DoseUnit
         let deliveredUnits: Double?
-        
-        if let programmedRate = programmedTempBasalRate {
-            value = programmedRate.doubleValue(for: .internationalUnitsPerHour)
+
+        if type == .tempBasal,
+           let programmedRate = programmedTempBasalRate
+        {
+            programmedValue = programmedRate.doubleValue(for: .internationalUnitsPerHour)
             unit = .unitsPerHour
             deliveredUnits = quantity.doubleValue(for: .internationalUnit())
+        } else if type == .basal,
+                  let programmedRate = scheduledBasalRate
+        {
+            programmedValue = programmedRate.doubleValue(for: .internationalUnitsPerHour)
+            unit = .unitsPerHour
+            deliveredUnits = quantity.doubleValue(for: .internationalUnit())
+        } else if type == .suspend {
+            deliveredUnits = 0
+            programmedValue = 0
+            unit = .units
         } else {
-            value = quantity.doubleValue(for: .internationalUnit())
+            programmedValue = quantity.doubleValue(for: .internationalUnit())
             unit = .units
             deliveredUnits = nil
         }
@@ -190,8 +221,9 @@ extension HKQuantitySample {
             type: type,
             startDate: startDate,
             endDate: endDate,
-            value: value,
+            value: programmedValue,
             unit: unit,
+            decisionId: decisionId,
             deliveredUnits: deliveredUnits,
             description: nil,
             syncIdentifier: syncIdentifier,
@@ -229,7 +261,7 @@ extension InsulinType {
             return InsulinTypeHealthKitRepresentation.afrezza.rawValue
         }
     }
-    
+
     init?(healthKitRepresentation: String) {
         switch healthKitRepresentation {
         case InsulinTypeHealthKitRepresentation.novolog.rawValue:

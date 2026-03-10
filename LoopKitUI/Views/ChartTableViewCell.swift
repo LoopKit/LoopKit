@@ -6,21 +6,35 @@
 //  Copyright © 2016 Nathan Racklyeft. All rights reserved.
 //
 
+import SwiftUI
 import UIKit
 
 
 public final class ChartTableViewCell: UITableViewCell {
 
+    @IBOutlet public weak var supplementalChartContentView: ChartContainerView?
+    
     @IBOutlet weak var chartContentView: ChartContainerView!
 
+    @IBOutlet weak var mainStackView: UIStackView!
+    
+    @IBOutlet weak var titleStackView: UIStackView?
+    
     @IBOutlet weak var titleLabel: UILabel?
 
     @IBOutlet weak var subtitleLabel: UILabel?
+    
+    var footerView: UIView?
    
     @IBOutlet weak var rightArrowHint: UIImageView? {
         didSet {
             rightArrowHint?.isHidden = !doesNavigate
         }
+    }
+    
+    public override func awakeFromNib() {
+        titleStackView?.layoutMargins = UIEdgeInsets(top: 11, left: 16, bottom: 0, right: 16)
+        titleStackView?.isLayoutMarginsRelativeArrangement = true
     }
 
     public var doesNavigate: Bool = true {
@@ -32,10 +46,13 @@ public final class ChartTableViewCell: UITableViewCell {
     public override func prepareForReuse() {
         super.prepareForReuse()
         doesNavigate = true
+        supplementalChartContentView?.isHidden = true
+        supplementalChartContentView?.chartGenerator = nil
         chartContentView.chartGenerator = nil
     }
 
     public func reloadChart() {
+        supplementalChartContentView?.reloadChart()
         chartContentView.reloadChart()
     }
     
@@ -43,20 +60,37 @@ public final class ChartTableViewCell: UITableViewCell {
         chartContentView.chartGenerator = generator
     }
     
+    public func setSupplementalChartGenerator(generator: ((CGRect) -> UIView?)?) {
+        supplementalChartContentView?.chartGenerator = generator
+        supplementalChartContentView?.isHidden = generator == nil
+    }
+    
     public func setTitleLabelText(label: String?) {
         titleLabel?.text = label
+        titleLabel?.font = .systemFont(ofSize: 17, weight: .semibold)
+    }
+    
+    public func setTitleLabelAccessibilityIdentifier(_ value: String) {
+        titleLabel?.accessibilityIdentifier = 
+            "chartTitleText_\(value)_\(ChartsManager.xAxisAccessibilityIDs?.count ?? -1)"
+    }
+    
+    public func setTitleLabelText(label: NSAttributedString?) {
+        titleLabel?.attributedText = label
     }
     
     public func removeTitleLabelText() {
         titleLabel?.text?.removeAll()
+        titleLabel?.attributedText = NSAttributedString(string: "")
     }
     
-    public func setSubtitleLabel(label: String?) {
-        subtitleLabel?.text = label
+    public func setSubtitleLabel(label: NSAttributedString?) {
+        subtitleLabel?.attributedText = label
     }
     
     public func removeSubtitleLabelText() {
         subtitleLabel?.text?.removeAll()
+        subtitleLabel?.attributedText = NSAttributedString(string: "")
     }
     
     public func setTitleTextColor(color: UIColor) {
@@ -70,5 +104,38 @@ public final class ChartTableViewCell: UITableViewCell {
     public func setAlpha(alpha: CGFloat) {
         titleLabel?.alpha = alpha
         subtitleLabel?.alpha = alpha
+        footerView?.alpha = alpha
+    }
+    
+    public func removeFooterView() {
+        self.footerView?.removeFromSuperview()
+        self.footerView = nil
+    }
+
+    private var footerHostingController: UIHostingController<AnyView>?
+    
+    public func setFooterView(content: (() -> some View)?) {
+        if footerHostingController == nil {
+            let controller = UIHostingController(rootView: AnyView(EmptyView()))
+            controller.view.backgroundColor = .clear
+
+            footerHostingController = controller
+            footerView = controller.view
+
+            mainStackView.addArrangedSubview(controller.view)
+
+            controller.willMove(toParent: nil)
+        }
+
+        if let content = content?() {
+            footerHostingController?.rootView = AnyView(content)
+            footerView?.isHidden = false
+            footerView?.invalidateIntrinsicContentSize()
+            mainStackView.setNeedsLayout()
+            mainStackView.layoutIfNeeded()
+        } else {
+            footerHostingController?.rootView = AnyView(EmptyView())
+            footerView?.isHidden = true
+        }
     }
 }

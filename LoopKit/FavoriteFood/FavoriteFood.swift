@@ -6,11 +6,12 @@
 //  Copyright © 2023 LoopKit Authors. All rights reserved.
 //
 
-import HealthKit
+import LoopAlgorithm
+import Foundation
 
 public protocol FavoriteFood {
     var name: String { get }
-    var carbsQuantity: HKQuantity { get }
+    var carbsQuantity: LoopQuantity { get }
     var foodType: String { get }
     var absorptionTime: TimeInterval { get }
 }

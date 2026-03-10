@@ -41,36 +41,62 @@ import SwiftUI
 /// }
 /// ```
 public struct Card: View {
+    var hero: AnyView?
     var parts: [AnyView?]
-    var backgroundColor: Color = Color(.secondarySystemGroupedBackground)
+    var backgroundColor: Color
+    
+    init<Hero: View>(hero: Hero? = nil, parts: [AnyView?], backgroundColor: Color = Color(.secondarySystemGroupedBackground)) {
+        if let hero, !(hero is EmptyView) {
+            self.hero = AnyView(hero)
+        }
+        
+        self.parts = parts
+        self.backgroundColor = backgroundColor
+    }
+    
+    init(hero: EmptyView? = nil, parts: [AnyView?], backgroundColor: Color = Color(.secondarySystemGroupedBackground)) {
+        self.hero = nil
+        self.parts = parts
+        self.backgroundColor = backgroundColor
+    }
 
     public var body: some View {
         VStack {
-            ForEach(parts.indices, id: \.self) { index in
-                Group {
-                    if self.parts[index] != nil {
-                        VStack {
-                            self.parts[index]!
-                                .padding(.top, 4)
-
-                            if index != self.parts.indices.last! {
-                                CardSectionDivider()
+            if let hero {
+                hero
+                    .frame(height: 200)
+                    .frame(maxWidth: .infinity)
+            }
+            
+            VStack {
+                ForEach(parts.indices, id: \.self) { index in
+                    Group {
+                        if self.parts[index] != nil {
+                            VStack {
+                                self.parts[index]!
+                                    .padding(.top, index == 0 || hero != nil ? 0 : 4)
+                                
+                                if index != self.parts.indices.last! {
+                                    CardSectionDivider()
+                                }
                             }
+                            .transition(AnyTransition.move(edge: .top).combined(with: .opacity))
                         }
-                        .transition(AnyTransition.move(edge: .top).combined(with: .opacity))
                     }
                 }
             }
+            .padding()
         }
-        .frame(maxWidth: .infinity)
-        .padding()
+        .frame(maxWidth: .infinity, alignment: .leading)
         .background(CardBackground(color: backgroundColor))
+        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
         .padding(.horizontal)
     }
 }
 
 extension Card {
     init(_ other: Self, backgroundColor: Color? = nil) {
+        self.hero = other.hero
         self.parts = other.parts
         self.backgroundColor = backgroundColor ?? other.backgroundColor
     }
@@ -84,8 +110,23 @@ extension Card {
         case dynamic([(view: AnyView, id: AnyHashable)])
     }
 
-    public init(@CardBuilder card: () -> Card) {
-        self = card()
+    public init<Hero: View>(hero: Hero? = nil, @CardBuilder card: () -> Card) {
+        let card = card()
+        
+        if let hero, !(hero is EmptyView) {
+            self.hero = AnyView(hero)
+        }
+
+        self.parts = card.parts
+        self.backgroundColor = card.backgroundColor
+    }
+    
+    public init(hero: EmptyView? = nil, @CardBuilder card: () -> Card) {
+        let card = card()
+        
+        self.hero = nil
+        self.parts = card.parts
+        self.backgroundColor = card.backgroundColor
     }
 
     public init<Data: RandomAccessCollection, ID: Hashable, Content: View>(
@@ -103,12 +144,26 @@ extension Card {
         self.init(of: data, id: \.id, rowContent: rowContent)
     }
 
-    init(reducing cards: [Card]) {
+    init<Hero: View>(hero: Hero? = nil, reducing cards: [Card], backgroundColor: Color = Color(.secondarySystemGroupedBackground)) {
+        if let hero, !(hero is EmptyView) {
+            self.hero = AnyView(hero)
+        }
         self.parts = cards.flatMap { $0.parts }
+        self.backgroundColor = backgroundColor
     }
-
+    
+    init(hero: EmptyView? = nil, reducing cards: [Card], backgroundColor: Color = Color(.secondarySystemGroupedBackground)) {
+        self.hero = nil
+        self.parts = cards.flatMap { $0.parts }
+        self.backgroundColor = backgroundColor
+    }
+    
     /// `nil` values denote placeholder positions where a view may become visible upon state change.
-    init(components: [Component?]) {
+    init<Hero: View>(hero: Hero? = nil, components: [Component?], backgroundColor: Color = Color(.secondarySystemGroupedBackground)) {
+        if let hero, !(hero is EmptyView) {
+            self.hero = AnyView(hero)
+        }
+        
         self.parts = components.map { component in
             switch component {
             case .static(let view):
@@ -128,6 +183,32 @@ extension Card {
                 return nil
             }
         }
+        self.backgroundColor = backgroundColor
+    }
+    
+    init(hero: EmptyView? = nil, components: [Component?], backgroundColor: Color = Color(.secondarySystemGroupedBackground)) {
+        self.hero = nil
+        
+        self.parts = components.map { component in
+            switch component {
+            case .static(let view):
+                return view
+            case .dynamic(let identifiedViews):
+                return AnyView(
+                    ForEach(identifiedViews, id: \.id) { view, id in
+                        VStack {
+                            view
+                            if id != identifiedViews.last?.id {
+                                CardSectionDivider()
+                            }
+                        }
+                    }
+                )
+            case nil:
+                return nil
+            }
+        }
+        self.backgroundColor = backgroundColor
     }
 }
 

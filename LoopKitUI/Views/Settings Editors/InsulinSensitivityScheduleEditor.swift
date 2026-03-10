@@ -8,17 +8,20 @@
 
 import SwiftUI
 import HealthKit
+import LoopAlgorithm
 import LoopKit
 
 
 public struct InsulinSensitivityScheduleEditor: View {
     @EnvironmentObject private var displayGlucosePreference: DisplayGlucosePreference
     @Environment(\.appName) private var appName
+    @Environment(\.dosingStrategySelectionEnabled) private var dosingStrategySelectionEnabled
+
 
     let mode: SettingsPresentationMode
     let viewModel: InsulinSensitivityScheduleEditorViewModel
 
-    var displayGlucoseUnit: HKUnit {
+    var displayGlucoseUnit: LoopUnit {
         displayGlucosePreference.unit
     }
 
@@ -58,11 +61,18 @@ public struct InsulinSensitivityScheduleEditor: View {
     }
 
     private var description: Text {
-        Text(TherapySetting.insulinSensitivity.descriptiveText(appName: appName))
+        Text(TherapySetting.insulinSensitivity.descriptiveText(appName: appName, dosingStrategySelectionEnabled: dosingStrategySelectionEnabled))
     }
 
-    private var sensitivityUnit: HKUnit {
-        displayGlucoseUnit.unitDivided(by: .internationalUnit())
+    private var sensitivityUnit: LoopUnit {
+        switch displayGlucoseUnit {
+        case .milligramsPerDeciliter:
+            return .milligramsPerDeciliterPerInternationalUnit
+        case .millimolesPerLiter:
+            return .millimolesPerLiterPerInternationalUnit
+        default:
+            fatalError()
+        }
     }
 
     private var confirmationAlertContent: AlertContent {
@@ -87,9 +97,9 @@ private struct InsulinSensitivityGuardrailWarning: View {
 
     private func singularWarningTitle(for threshold: SafetyClassification.Threshold) -> Text {
         switch threshold {
-        case .minimum, .belowRecommended:
+        case .minimum, .belowWarning, .belowRecommended:
             return Text(LocalizedString("Low Insulin Sensitivity", comment: "Title text for the low insulin sensitivity warning"))
-        case .aboveRecommended, .maximum:
+        case .aboveRecommended, .aboveWarning, .maximum:
             return Text(LocalizedString("High Insulin Sensitivity", comment: "Title text for the high insulin sensitivity warning"))
         }
     }

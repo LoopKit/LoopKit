@@ -10,6 +10,7 @@ import Foundation
 import HealthKit
 import LoopKit
 import SwiftCharts
+import LoopAlgorithm
 
 struct TargetChartBar {
     let points: [ChartPoint]
@@ -17,7 +18,7 @@ struct TargetChartBar {
 }
 
 extension ChartPoint {
-    static func barsForGlucoseRangeSchedule(_ glucoseRangeSchedule: GlucoseRangeSchedule, unit: HKUnit, xAxisValues: [ChartAxisValue], considering potentialOverride: TemporaryScheduleOverride? = nil) -> [TargetChartBar] {
+    static func barsForGlucoseRangeSchedule(_ glucoseRangeSchedule: GlucoseRangeSchedule, unit: LoopUnit, xAxisValues: [ChartAxisValue], considering potentialOverride: TemporaryScheduleOverride? = nil) -> [TargetChartBar] {
         let targetRanges = glucoseRangeSchedule.quantityBetween(
             start: ChartAxisValueDate.dateFromScalar(xAxisValues.first!.scalar),
             end: ChartAxisValueDate.dateFromScalar(xAxisValues.last!.scalar)
@@ -46,7 +47,7 @@ extension ChartPoint {
                (override.startDate...override.scheduledEndDate).overlaps(startDate.date...endDate.date)
             {
                 result.append(createBar(value: range.value, unit: unit, startDate: startDate, endDate: ChartAxisValueDate(date: override.startDate, formatter: dateFormatter), isOverride: false))
-                let targetDuringOverride = override.settings.targetRange ?? range.value
+                let targetDuringOverride = override.effectiveCorrectionRangeDuring(scheduledRange: range.value)
                 result.append(createBar(
                     value: targetDuringOverride,
                     unit: unit,
@@ -62,7 +63,7 @@ extension ChartPoint {
         return result.compactMap { $0 }
     }
     
-    static fileprivate func createBar(value: ClosedRange<HKQuantity>, unit: HKUnit, startDate: ChartAxisValueDate, endDate: ChartAxisValueDate, isOverride: Bool) -> TargetChartBar? {
+    static fileprivate func createBar(value: ClosedRange<LoopQuantity>, unit: LoopUnit, startDate: ChartAxisValueDate, endDate: ChartAxisValueDate, isOverride: Bool) -> TargetChartBar? {
         guard startDate.date < endDate.date else { return nil }
         
         let value = value.doubleRangeWithMinimumIncrement(in: unit)
@@ -79,7 +80,7 @@ extension ChartPoint {
             isOverride: isOverride)
     }
 
-    static func pointsForGlucoseRangeScheduleOverride(_ override: TemporaryScheduleOverride, unit: HKUnit, xAxisValues: [ChartAxisValue], extendEndDateToChart: Bool = false) -> [ChartPoint] {
+    static func pointsForGlucoseRangeScheduleOverride(_ override: TemporaryScheduleOverride, unit: LoopUnit, xAxisValues: [ChartAxisValue], extendEndDateToChart: Bool = false) -> [ChartPoint] {
         guard let targetRange = override.settings.targetRange else {
             return []
         }
@@ -93,7 +94,7 @@ extension ChartPoint {
         )
     }
 
-    private static func pointsForGlucoseRangeScheduleOverride(range: DoubleRange, activeInterval: DateInterval, unit: HKUnit, xAxisValues: [ChartAxisValue], extendEndDateToChart: Bool) -> [ChartPoint] {
+    private static func pointsForGlucoseRangeScheduleOverride(range: DoubleRange, activeInterval: DateInterval, unit: LoopUnit, xAxisValues: [ChartAxisValue], extendEndDateToChart: Bool) -> [ChartPoint] {
         guard let lastXAxisValue = xAxisValues.last as? ChartAxisValueDate else {
             return []
         }
@@ -126,10 +127,59 @@ extension ChartPoint: TimelineValue {
     }
 }
 
+extension Array where Element: ChartPoint {
+    /// Merges the current array (must already sorted by `startDate`) with another array (also sorted by `startDate`) into a single sorted array.
+    /// The merging process maintains the sorted order of the elements.
+    ///
+    /// - Precondition: Both arrays are sorted in ascending order of `startDate`
+    ///
+    /// - Parameter other: The sorted array to be merged with the current array.
+    /// - Returns: A new sorted array containing all the elements from the current array and `other`.
+    ///
+    /// Example usage (with integers instead of chart points):
+    /// ```
+    /// let sortedArray1 = [1, 2, 5, 8]
+    /// let sortedArray2 = [3, 4, 6, 7]
+    /// let mergedArray = sortedArray1.mergeWithSortedArray(sortedArray2)
+    /// print(mergedArray) // Output: [1, 2, 3, 4, 5, 6, 7, 8]
+    /// ```
+    func mergeWithSortedArray(_ other: [ChartPoint]) -> [ChartPoint] {
+        var mergedArray = [ChartPoint]()
+        mergedArray.reserveCapacity(self.count + other.count)
+        
+        var i = 0
+        var j = 0
+        
+        // Merge both arrays while maintaining sorted order
+        while i < self.count && j < other.count {
+            if self[i].startDate < other[j].startDate {
+                mergedArray.append(self[i])
+                i += 1
+            } else {
+                mergedArray.append(other[j])
+                j += 1
+            }
+        }
+        
+        // Append remaining elements from self
+        while i < self.count {
+            mergedArray.append(self[i])
+            i += 1
+        }
+        
+        // Append remaining elements from other
+        while j < other.count {
+            mergedArray.append(other[j])
+            j += 1
+        }
+        
+        return mergedArray
+    }
+}
 
-private extension ClosedRange where Bound == HKQuantity {
-    func doubleRangeWithMinimumIncrement(in unit: HKUnit) -> DoubleRange {
-        let increment = unit.chartableIncrement
+private extension ClosedRange where Bound == LoopQuantity {
+    func doubleRangeWithMinimumIncrement(in unit: LoopUnit) -> DoubleRange {
+        let increment = unit.hkUnit.chartableIncrement
 
         var minValue = self.lowerBound.doubleValue(for: unit)
         var maxValue = self.upperBound.doubleValue(for: unit)

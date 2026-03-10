@@ -6,7 +6,7 @@
 //  Copyright © 2020 LoopKit Authors. All rights reserved.
 //
 
-public protocol DeviceStatusHighlight: Codable {
+public protocol DeviceStatusHighlight: Codable, Sendable {
     /// a localized message from the device
     var localizedMessage: String { get }
 
@@ -19,7 +19,7 @@ public protocol DeviceStatusHighlight: Codable {
 
 public typealias DeviceStatusHighlightState = DeviceStatusElementState
 
-public enum DeviceStatusElementState: String, Codable {
+public enum DeviceStatusElementState: String, Codable, Sendable {
     case critical
     case normalCGM
     case normalPump

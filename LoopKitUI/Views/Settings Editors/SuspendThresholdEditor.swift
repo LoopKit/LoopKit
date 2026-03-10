@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-import HealthKit
+import LoopAlgorithm
 import LoopKit
 
 // Also known as "Glucose Safety Limit"
@@ -17,16 +17,17 @@ public struct SuspendThresholdEditor: View {
     @Environment(\.dismissAction) var dismiss
     @Environment(\.authenticate) var authenticate
     @Environment(\.appName) private var appName
+    @Environment(\.dosingStrategySelectionEnabled) private var dosingStrategySelectionEnabled
 
     let mode: SettingsPresentationMode
     let viewModel: SuspendThresholdEditorViewModel
 
     @State private var userDidTap: Bool = false
-    @State var value: HKQuantity
+    @State var value: LoopQuantity
     @State var isEditing = false
     @State var showingConfirmationAlert = false
 
-    private var initialValue: HKQuantity? {
+    private var initialValue: LoopQuantity? {
         viewModel.suspendThreshold
     }
 
@@ -43,12 +44,12 @@ public struct SuspendThresholdEditor: View {
         self.viewModel = viewModel
     }
 
-    private static func defaultValue(for unit: HKUnit) -> HKQuantity {
+    private static func defaultValue(for unit: LoopUnit) -> LoopQuantity {
         switch unit {
         case .milligramsPerDeciliter:
-            return HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 80)
+            return LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 80)
         case .millimolesPerLiter:
-            return HKQuantity(unit: .millimolesPerLiter, doubleValue: 4.5)
+            return LoopQuantity(unit: .millimolesPerLiter, doubleValue: 4.5)
         default:
             fatalError("Unsupported glucose unit \(unit)")
         }
@@ -87,12 +88,25 @@ public struct SuspendThresholdEditor: View {
         Button(action: { self.dismiss() } ) { Text(LocalizedString("Cancel", comment: "Cancel editing settings button title")) }
     }
 
+    private var stride: Double {
+        switch displayGlucosePreference.unit {
+        case .milligramsPerDeciliter:
+            return 1
+        case .millimolesPerLiter:
+            return 0.1
+        default:
+            fatalError("Unsupported glucose unit \(displayGlucosePreference.unit)")
+        }
+    }
+
     private var picker: GlucoseValuePicker {
-        GlucoseValuePicker(
+        let bounds = viewModel.guardrail.absoluteBounds.lowerBound...viewModel.maxSuspendThresholdValue
+        let selectableValues = bounds.selectableValues(unit: displayGlucosePreference.unit, stride: stride)
+        return GlucoseValuePicker(
             value: self.$value.animation(),
             unit: displayGlucosePreference.unit,
             guardrail: viewModel.guardrail,
-            bounds: viewModel.guardrail.absoluteBounds.lowerBound...viewModel.maxSuspendThresholdValue
+            selectableValues: selectableValues
         )
     }
     
@@ -146,7 +160,7 @@ public struct SuspendThresholdEditor: View {
     }
 
     var description: Text {
-        Text(TherapySetting.suspendThreshold.descriptiveText(appName: appName))
+        Text(TherapySetting.suspendThreshold.descriptiveText(appName: appName, dosingStrategySelectionEnabled: dosingStrategySelectionEnabled))
     }
     
     private var instructionalContentIfNecessary: some View {
@@ -223,9 +237,9 @@ struct SuspendThresholdGuardrailWarning: View {
 
     private var title: Text {
         switch safetyClassificationThreshold {
-        case .minimum, .belowRecommended:
+        case .minimum, .belowWarning, .belowRecommended:
             return Text(LocalizedString("Low Glucose Safety Limit", comment: "Title text for the low glucose safety limit warning"))
-        case .aboveRecommended, .maximum:
+        case .aboveRecommended, .aboveWarning, .maximum:
             return Text(LocalizedString("High Glucose Safety Limit", comment: "Title text for the high glucose safety limit warning"))
         }
     }

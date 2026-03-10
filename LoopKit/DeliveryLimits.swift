@@ -6,7 +6,7 @@
 //  Copyright © 2020 LoopKit Authors. All rights reserved.
 //
 
-import HealthKit
+import LoopAlgorithm
 
 public struct DeliveryLimits: Equatable {
     public enum Setting: Equatable {
@@ -14,20 +14,20 @@ public struct DeliveryLimits: Equatable {
         case maximumBolus
     }
 
-    private var settings: [Setting: HKQuantity]
+    private var settings: [Setting: LoopQuantity]
 
-    public init(maximumBasalRate: HKQuantity?, maximumBolus: HKQuantity?) {
+    public init(maximumBasalRate: LoopQuantity?, maximumBolus: LoopQuantity?) {
         settings = [:]
         settings[.maximumBasalRate] = maximumBasalRate
         settings[.maximumBolus] = maximumBolus
     }
 
-    public var maximumBasalRate: HKQuantity? {
+    public var maximumBasalRate: LoopQuantity? {
         get { settings[.maximumBasalRate] }
         set { settings[.maximumBasalRate] = newValue }
     }
 
-    public var maximumBolus: HKQuantity? {
+    public var maximumBolus: LoopQuantity? {
         get { settings[.maximumBolus] }
         set { settings[.maximumBolus] = newValue }
     }
@@ -47,9 +47,9 @@ public extension DeliveryLimits.Setting {
     func localizedDescriptiveText(appName: String) -> String {
         switch self {
         case .maximumBasalRate:
-            return String(format: LocalizedString("Maximum Basal Rate is the highest temporary basal rate %1$@ is allowed to set.", comment: "Descriptive text for maximum basal rate (1: app name)"), appName)
+            return String(format: LocalizedString("Maximum Basal Rate is the automatically adjusted basal rate that %1$@ is allowed to enact to help reach your Correction Range.", comment: "Descriptive text for maximum basal rate (1: app name)"), appName)
         case .maximumBolus:
-            return LocalizedString("Maximum Bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose.", comment: "Descriptive text for maximum bolus")
+            return String(format: LocalizedString("Maximum Bolus is the highest bolus amount that you will allow %1$@ to recommend at one time to cover carbs or bring down high glucose.", comment: "Descriptive text for maximum bolus (1: app name)"), appName)
         }
     }
 }

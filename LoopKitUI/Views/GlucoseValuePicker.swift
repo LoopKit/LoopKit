@@ -9,37 +9,28 @@
 import SwiftUI
 import HealthKit
 import LoopKit
-
+import LoopAlgorithm
 
 public struct GlucoseValuePicker: View {
     @Environment(\.guidanceColors) var guidanceColors
-    @Binding var value: HKQuantity
-    var unit: HKUnit
-    var guardrail: Guardrail<HKQuantity>
-    var bounds: ClosedRange<HKQuantity>
+    @Binding var value: LoopQuantity
+    var unit: LoopUnit
+    var guardrail: Guardrail<LoopQuantity>
     var isUnitLabelVisible: Bool
+    let selectableValues: [Double]
 
     public init(
-        value: Binding<HKQuantity>,
-        unit: HKUnit,
-        guardrail: Guardrail<HKQuantity>,
-        bounds: ClosedRange<HKQuantity>,
+        value: Binding<LoopQuantity>,
+        unit: LoopUnit,
+        guardrail: Guardrail<LoopQuantity>,
+        selectableValues: [Double],
         isUnitLabelVisible: Bool = true
     ) {
         self._value = value
         self.unit = unit
         self.guardrail = guardrail
-        self.bounds = bounds
+        self.selectableValues = selectableValues
         self.isUnitLabelVisible = isUnitLabelVisible
-    }
-
-    public init(
-        value: Binding<HKQuantity>,
-        unit: HKUnit,
-        guardrail: Guardrail<HKQuantity>,
-        isUnitLabelVisible: Bool = true
-    ) {
-        self.init(value: value, unit: unit, guardrail: guardrail, bounds: guardrail.absoluteBounds, isUnitLabelVisible: isUnitLabelVisible)
     }
 
     public var body: some View {
@@ -51,26 +42,23 @@ public struct GlucoseValuePicker: View {
                        guidanceColors: guidanceColors)
     }
 
-    var selectableValues: [Double] {
-        return bounds.roundedDisplayValues(for: unit)
-    }
 }
 
 private struct GlucoseValuePickerTester: View {
-    @State var value = HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 80)
+    @State var value = LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 80)
 
     private let guardrail = Guardrail(absoluteBounds: 54...180, recommendedBounds: 71...120, unit: .milligramsPerDeciliter, startingSuggestion: 80)
 
-    var unit: HKUnit
+    var unit: LoopUnit
 
     var body: some View {
-        GlucoseValuePicker(value: $value, unit: unit, guardrail: guardrail)
+        GlucoseValuePicker(value: $value, unit: unit, guardrail: guardrail, selectableValues: [100, 105, 110])
     }
 }
 
 struct GlucoseValuePicker_Previews: PreviewProvider {
     static var previews: some View {
-        ForEach([HKUnit.milligramsPerDeciliter, .millimolesPerLiter], id: \.self) { unit in
+        ForEach([LoopUnit.milligramsPerDeciliter, .millimolesPerLiter], id: \.self) { unit in
             GlucoseValuePickerTester(unit: unit)
         }
     }

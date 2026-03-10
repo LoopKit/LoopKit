@@ -9,6 +9,7 @@ import Foundation
 import LoopKit
 import SwiftCharts
 import UIKit
+import LoopAlgorithm
 
 public class CarbEffectChart: GlucoseChart, ChartProviding {
     /// The chart points for expected carb effect velocity
@@ -48,7 +49,7 @@ extension CarbEffectChart {
         carbEffectChartCache = nil
     }
 
-    public func generate(withFrame frame: CGRect, xAxisModel: ChartAxisModel, xAxisValues: [ChartAxisValue], axisLabelSettings: ChartLabelSettings, guideLinesLayerSettings: ChartGuideLinesLayerSettings, colors: ChartColorPalette, chartSettings: ChartSettings, labelsWidthY: CGFloat, gestureRecognizer: UIGestureRecognizer?, traitCollection: UITraitCollection) -> Chart
+    public func generate(withFrame frame: CGRect, xAxisModel: ChartAxisModel, xAxisValues: [ChartAxisValue], axisLabelSettings: ChartLabelSettings, guideLinesLayerSettings: ChartGuideLinesLayerSettings, colors: ChartColorPalette, chartSettings: ChartSettings, labelsWidthY: CGFloat, gestureRecognizer: UIGestureRecognizer?, traitCollection: UITraitCollection, highlightLabelOffsetY: CGFloat) -> Chart
     {
         /// The minimum range to display for carb effect values.
         let carbEffectDisplayRangePoints: [ChartPoint] = [0, glucoseUnit.chartableIncrement].map {
@@ -122,6 +123,7 @@ extension CarbEffectChart {
                 axisLabelSettings: axisLabelSettings,
                 chartPoints: allCarbEffectPoints,
                 tintColor: colors.carbTint,
+                highlightLabelOffsetY: highlightLabelOffsetY,
                 gestureRecognizer: gestureRecognizer
             )
         }
@@ -149,7 +151,7 @@ extension CarbEffectChart {
     ///
     /// - Parameter effects: A timeline of glucose values representing glucose change
     public func setCarbEffects(_ effects: [GlucoseEffect]) {
-        let unit = glucoseUnit.unitDivided(by: .minute())
+        let unit = glucoseUnit.unitDivided(by: .minute)
         let unitString = unit.unitString
 
         var lastDate = effects.first?.endDate
@@ -186,7 +188,7 @@ extension CarbEffectChart {
     ///
     /// - Parameter effects: A timeline of glucose velocity values
     public func setInsulinCounteractionEffects(_ effects: [GlucoseEffectVelocity]) {
-        let unit = glucoseUnit.unitDivided(by: .minute())
+        let unit = glucoseUnit.unitDivided(by: .minute)
         let unitString = String(format: NSLocalizedString("%1$@/min", comment: "Format string describing glucose units per minute (1: glucose unit string)"), glucoseUnit.shortLocalizedUnitString())
 
         var insulinCounteractionEffectPoints: [ChartPoint] = []

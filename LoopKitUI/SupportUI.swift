@@ -10,11 +10,12 @@ import SwiftUI
 import HealthKit
 import LoopKit
 
+@MainActor
 public protocol SupportInfoProvider {
     var pumpStatus: PumpManagerStatus? { get }
     var cgmStatus: CGMManagerStatus? { get }
     var localizedAppNameAndVersion: String { get }
-    func generateIssueReport(completion: @escaping (String) -> Void)
+    func generateIssueReport() async -> String
 }
 
 public struct LoopScenario: Hashable {
@@ -53,6 +54,7 @@ public struct CustomMenuItem {
 }
 
 public protocol SupportUIDelegate: AlertIssuer, SupportInfoProvider  {
+    @MainActor
     func openURL(url: URL)
 }
 
@@ -66,6 +68,7 @@ public struct DeviceWhitelist: Hashable {
     }
 }
 
+@MainActor
 public protocol SupportUI: Pluggable {
 
     typealias RawStateValue = [String: Any]

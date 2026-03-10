@@ -8,6 +8,7 @@
 
 import Foundation
 import LoopKit
+import LoopAlgorithm
 
 public struct MockPumpManagerState: Equatable {
     public enum DeliverableIncrements: String, CaseIterable {
@@ -145,14 +146,39 @@ public struct MockPumpManagerState: Equatable {
     public var bolusShouldCrash: Bool
     public var tempBasalShouldCrash: Bool
     public var deliveryCommandsShouldTriggerUncertainDelivery: Bool
-    public var replacePumpComponent: Bool
     public var maximumBolus: Double
     public var maximumBasalRatePerHour: Double
-    public var suspendState: SuspendState
+    public var suspendState: SuspendState?
     public var pumpBatteryChargeRemaining: Double?
-    public var occlusionDetected: Bool = false
-    public var pumpErrorDetected: Bool = false
+    public var occlusionDetected: Bool = false {
+        didSet {
+            if occlusionDetected {
+                suspendState = nil
+            } else {
+                suspendState = .resumed(Date())
+            }
+        }
+    }
+    public var pumpErrorDetected: Bool = false {
+        didSet {
+            if pumpErrorDetected {
+                suspendState = nil
+            } else {
+                suspendState = .resumed(Date())
+            }
+        }
+    }
+    public var isPumpExpired: Bool = false {
+        didSet {
+            if isPumpExpired {
+                suspendState = nil
+            } else {
+                suspendState = .resumed(Date())
+            }
+        }
+    }
     public var deliveryIsUncertain: Bool = false
+    public var inSignalLoss: Bool = false
 
     public var unfinalizedBolus: UnfinalizedDose?
     public var unfinalizedTempBasal: UnfinalizedDose?
@@ -165,7 +191,15 @@ public struct MockPumpManagerState: Equatable {
     public var progressCriticalThresholdPercentValue: Double?
     
     public var insulinType: InsulinType?
-    public var timeZone: TimeZone
+    public var timeZone: TimeZone {
+        get {
+            guard let basalRateSchedule else { return .currentFixed }
+            return basalRateSchedule.timeZone
+        }
+        set {
+            basalRateSchedule?.timeZone = newValue
+        }
+    }
     
     public var dosesToStore: [UnfinalizedDose] {
         return finalizedDoses + [unfinalizedTempBasal, unfinalizedBolus].compactMap {$0}
@@ -173,6 +207,20 @@ public struct MockPumpManagerState: Equatable {
 
     public var pumpEventsToStore: [NewPumpEvent] {
         return dosesToStore.map { NewPumpEvent($0) } + additionalPumpEvents
+    }
+    
+    public var isSuspended: Bool {
+        guard case .resumed = suspendState else { return true }
+        return false
+    }
+
+    public var suspendedAt: Date? {
+        guard case .suspended(let suspendedAt) = suspendState else { return nil }
+        return suspendedAt
+    }
+    
+    public var insulinDeliveryDisabled: Bool {
+        occlusionDetected || pumpErrorDetected || isPumpExpired || pumpBatteryChargeRemaining == 0 || reservoirUnitsRemaining == 0
     }
 
     public init(deliverableIncrements: DeliverableIncrements = .medtronicX22,
@@ -185,7 +233,7 @@ public struct MockPumpManagerState: Equatable {
                 bolusShouldCrash: Bool = false,
                 tempBasalShouldCrash: Bool = false,
                 deliveryCommandsShouldTriggerUncertainDelivery: Bool = false,
-                replacePumpComponent: Bool = false,
+                isPumpExpired: Bool = false,
                 maximumBolus: Double = 25.0,
                 maximumBasalRatePerHour: Double = 5.0,
                 suspendState: SuspendState = .resumed(Date()),
@@ -210,7 +258,7 @@ public struct MockPumpManagerState: Equatable {
         self.bolusShouldCrash = bolusShouldCrash
         self.tempBasalShouldCrash = tempBasalShouldCrash
         self.deliveryCommandsShouldTriggerUncertainDelivery = deliveryCommandsShouldTriggerUncertainDelivery
-        self.replacePumpComponent = replacePumpComponent
+        self.isPumpExpired = isPumpExpired
         self.maximumBolus = maximumBolus
         self.maximumBasalRatePerHour = maximumBasalRatePerHour
         self.suspendState = suspendState
@@ -220,7 +268,6 @@ public struct MockPumpManagerState: Equatable {
         self.progressWarningThresholdPercentValue = progressWarningThresholdPercentValue
         self.progressCriticalThresholdPercentValue = progressCriticalThresholdPercentValue
         self.insulinType = insulinType
-        self.timeZone = .currentFixed
     }
 
     public mutating func finalizeFinishedDoses() {
@@ -258,14 +305,15 @@ extension MockPumpManagerState: RawRepresentable {
         self.bolusShouldCrash = rawValue["bolusShouldCrash"] as? Bool ?? false
         self.tempBasalShouldCrash = rawValue["tempBasalShouldCrash"] as? Bool ?? false
         self.deliveryCommandsShouldTriggerUncertainDelivery = rawValue["deliveryCommandsShouldTriggerUncertainDelivery"] as? Bool ?? false
-        self.replacePumpComponent = rawValue["replacePumpComponent"] as? Bool ?? false
+        self.isPumpExpired = rawValue["isPumpExpired"] as? Bool ?? false
         self.maximumBolus = rawValue["maximumBolus"] as? Double ?? 25.0
         self.maximumBasalRatePerHour = rawValue["maximumBasalRatePerHour"] as? Double ?? 5.0
         self.pumpBatteryChargeRemaining = rawValue["pumpBatteryChargeRemaining"] as? Double ?? nil
         self.occlusionDetected = rawValue["occlusionDetected"] as? Bool ?? false
         self.pumpErrorDetected = rawValue["pumpErrorDetected"] as? Bool ?? false
         self.deliveryIsUncertain = rawValue["deliveryIsUncertain"] as? Bool ?? false
-
+        self.inSignalLoss = rawValue["inSignalLoss"] as? Bool ?? false
+        
         self.progressPercentComplete = rawValue["progressPercentComplete"] as? Double
         self.progressWarningThresholdPercentValue = rawValue["progressWarningThresholdPercentValue"] as? Double
         self.progressCriticalThresholdPercentValue = rawValue["progressCriticalThresholdPercentValue"] as? Double
@@ -297,7 +345,7 @@ extension MockPumpManagerState: RawRepresentable {
         if let rawSuspendState = rawValue["suspendState"] as? SuspendState.RawValue, let suspendState = SuspendState(rawValue: rawSuspendState) {
             self.suspendState = suspendState
         } else {
-            self.suspendState = .resumed(Date())
+            self.suspendState = nil
         }
         
         if let rawInsulinType = rawValue["insulinType"] as? InsulinType.RawValue, let insulinType = InsulinType(rawValue: rawInsulinType) {
@@ -326,7 +374,7 @@ extension MockPumpManagerState: RawRepresentable {
         ]
 
         raw["basalRateSchedule"] = basalRateSchedule?.rawValue
-        raw["suspendState"] = suspendState.rawValue
+        raw["suspendState"] = suspendState?.rawValue
 
         if tempBasalEnactmentShouldError {
             raw["tempBasalEnactmentShouldError"] = true
@@ -352,8 +400,8 @@ extension MockPumpManagerState: RawRepresentable {
             raw["deliveryCommandsShouldTriggerUncertainDelivery"] = true
         }
         
-        if replacePumpComponent {
-            raw["replacePumpComponent"] = true
+        if isPumpExpired {
+            raw["isPumpExpired"] = true
         }
 
         if deliveryIsUncertain {
@@ -373,6 +421,7 @@ extension MockPumpManagerState: RawRepresentable {
         
         raw["occlusionDetected"] = occlusionDetected
         raw["pumpErrorDetected"] = pumpErrorDetected
+        raw["inSignalLoss"] = inSignalLoss
         
         raw["progressPercentComplete"] = progressPercentComplete
         raw["progressWarningThresholdPercentValue"] = progressWarningThresholdPercentValue
@@ -399,13 +448,14 @@ extension MockPumpManagerState: CustomDebugStringConvertible {
         * maximumBolus: \(maximumBolus)
         * maximumBasalRatePerHour: \(maximumBasalRatePerHour)
         * pumpBatteryChargeRemaining: \(String(describing: pumpBatteryChargeRemaining))
-        * suspendState: \(suspendState)
+        * suspendState: \(String(describing: suspendState))
         * unfinalizedBolus: \(String(describing: unfinalizedBolus))
         * unfinalizedTempBasal: \(String(describing: unfinalizedTempBasal))
         * finalizedDoses: \(finalizedDoses)
         * additionalPumpEvents: \(additionalPumpEvents)
         * occlusionDetected: \(occlusionDetected)
         * pumpErrorDetected: \(pumpErrorDetected)
+        * inSignalLoss: \(inSignalLoss)
         * progressPercentComplete: \(progressPercentComplete as Any)
         * progressWarningThresholdPercentValue: \(progressWarningThresholdPercentValue as Any)
         * progressCriticalThresholdPercentValue: \(progressCriticalThresholdPercentValue as Any)

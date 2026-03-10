@@ -9,7 +9,7 @@
 import SwiftUI
 import UIKit
 
-public struct ResizeablePicker<SelectionValue>: UIViewRepresentable where SelectionValue: CustomStringConvertible & Hashable {
+struct ResizeablePicker<SelectionValue>: UIViewRepresentable where SelectionValue: CustomStringConvertible & Hashable {
     private let selection: Binding<SelectionValue>
     private var selectedRow: Int = 0
     // TODO: Would be nice if we could just use `ForEach` and Content, but for now, this'll do
@@ -17,7 +17,7 @@ public struct ResizeablePicker<SelectionValue>: UIViewRepresentable where Select
     private let formatter: (SelectionValue) -> String
     private let colorer: (SelectionValue) -> Color
 
-    public init(selection: Binding<SelectionValue>,
+    init(selection: Binding<SelectionValue>,
                 data: [SelectionValue],
                 formatter: @escaping (SelectionValue) -> String = { $0.description },
                 colorer: @escaping (SelectionValue) -> Color = { _ in .primary }
@@ -29,11 +29,11 @@ public struct ResizeablePicker<SelectionValue>: UIViewRepresentable where Select
         self.colorer = colorer
     }
 
-    public func makeCoordinator() -> ResizeablePicker.Coordinator {
+    func makeCoordinator() -> ResizeablePicker.Coordinator {
         Coordinator(self)
     }
 
-    public func makeUIView(context: UIViewRepresentableContext<ResizeablePicker>) -> UIPickerView {
+    func makeUIView(context: UIViewRepresentableContext<ResizeablePicker>) -> UIPickerView {
         let picker = UIPickerViewResizeable(frame: .zero)
         
         picker.dataSource = context.coordinator
@@ -42,7 +42,7 @@ public struct ResizeablePicker<SelectionValue>: UIViewRepresentable where Select
         return picker
     }
 
-    public func updateUIView(_ view: UIPickerView, context: UIViewRepresentableContext<ResizeablePicker>) {
+    func updateUIView(_ view: UIPickerView, context: UIViewRepresentableContext<ResizeablePicker>) {
         context.coordinator.updateData(newData: data)
         view.reloadAllComponents()
         if view.selectedRow(inComponent: 0) != selectedRow {
@@ -50,7 +50,7 @@ public struct ResizeablePicker<SelectionValue>: UIViewRepresentable where Select
         }
     }
 
-    public class Coordinator: NSObject, UIPickerViewDataSource, UIPickerViewDelegate {
+    class Coordinator: NSObject, UIPickerViewDataSource, UIPickerViewDelegate {
         private var picker: ResizeablePicker
         private var data: [SelectionValue]
 
@@ -63,15 +63,15 @@ public struct ResizeablePicker<SelectionValue>: UIViewRepresentable where Select
             self.data = newData
         }
 
-        public func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        func numberOfComponents(in pickerView: UIPickerView) -> Int {
             1
         }
 
-        public func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
             data.count
         }
 
-        public func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+        func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
             let text = self.picker.formatter(data[row])
             let result = view as? UILabel ?? UILabel()
             result.text = text
@@ -84,7 +84,7 @@ public struct ResizeablePicker<SelectionValue>: UIViewRepresentable where Select
             return result
         }
         
-        public func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
             picker.selectedRow = row
             picker.selection.wrappedValue = data[row]
         }
@@ -97,3 +97,4 @@ class UIPickerViewResizeable: UIPickerView {
         return CGSize(width: UIView.noIntrinsicMetric, height: super.intrinsicContentSize.height)
     }
 }
+

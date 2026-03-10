@@ -9,7 +9,7 @@
 import Foundation
 
 
-public struct PersistedPumpEvent {
+public struct PersistedPumpEvent: Hashable {
     /// The date of the event
     public let date: Date
     /// The date the event was persisted

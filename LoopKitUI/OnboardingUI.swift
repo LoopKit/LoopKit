@@ -119,16 +119,9 @@ public protocol ServiceProvider: AnyObject {
 
     /// The descriptor list of available services.
     var availableServices: [ServiceDescriptor] { get }
-
-    /// Onboard the service with the specified identifier.
-    ///
-    /// - Parameters:
-    ///     - identifier: The identifier of the service to onboard.
-    /// - Returns: Either a conforming view controller to onboard the service, a newly onboarded service, or an error.
-    func onboardService(withIdentifier identifier: String) -> Result<OnboardingResult<ServiceViewController, Service>, Error>
 }
 
-public protocol TherapySettingsProvider {
+public protocol OnboardingTherapySettingsProvider {
     var onboardingTherapySettings: TherapySettings { get }
 }
 
@@ -136,7 +129,7 @@ public protocol SupportProvider: AnyObject {
     var availableSupports: [SupportUI] { get }
 }
 
-public protocol OnboardingProvider: NotificationAuthorizationProvider, HealthStoreAuthorizationProvider, BluetoothProvider, CGMManagerProvider, PumpManagerProvider, StatefulPluggableProvider, ServiceProvider, TherapySettingsProvider, SupportProvider {
+public protocol OnboardingProvider: NotificationAuthorizationProvider, HealthStoreAuthorizationProvider, BluetoothProvider, CGMManagerProvider, PumpManagerProvider, StatefulPluggableProvider, ServiceProvider, OnboardingTherapySettingsProvider, SupportProvider, PluginHost {
     var allowDebugFeatures: Bool { get }   // NOTE: DEBUG FEATURES - DEBUG AND TEST ONLY
 }
 
@@ -201,5 +194,5 @@ public protocol OnboardingUI: Pluggable {
     ///   - displayGlucosePreference: The glucose unit to use for display.
     ///   - colorPalette: The colors to use in any UI,
     /// - Returns: A view controller to create and configure a new onboarding.
-    func onboardingViewController(onboardingProvider: OnboardingProvider, displayGlucosePreference: DisplayGlucosePreference, colorPalette: LoopUIColorPalette) -> OnboardingViewController
+    func onboardingViewController(onboardingProvider: OnboardingProvider, displayGlucosePreference: DisplayGlucosePreference, colorPalette: LoopUIColorPalette, dosingStrategySelectionEnabled: Bool) -> OnboardingViewController
 }

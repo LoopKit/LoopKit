@@ -7,6 +7,7 @@
 //
 
 import HealthKit
+import LoopAlgorithm
 
 public struct TherapySettings: Equatable {
 
@@ -14,7 +15,7 @@ public struct TherapySettings: Equatable {
 
     public var correctionRangeOverrides: CorrectionRangeOverrides?
 
-    public var overridePresets: [TemporaryScheduleOverridePreset]?
+    public var overridePresets: [TemporaryPreset]?
 
     public var maximumBasalRatePerHour: Double?
 
@@ -42,11 +43,24 @@ public struct TherapySettings: Equatable {
             carbRatioSchedule != nil &&
             basalRateSchedule != nil
     }
-    
+
+    public var minimumConfiguredTargetLowerBound: LoopQuantity? {
+        var lowerBounds = [
+            glucoseTargetRangeSchedule?.minLowerBound(),
+            correctionRangeOverrides?.preMeal?.lowerBound
+        ]
+
+        if let overridePresets {
+            lowerBounds.append(contentsOf: overridePresets.map { $0.settings.targetRange?.lowerBound } )
+        }
+
+        return lowerBounds.compactMap { $0 }.min()
+    }
+
     public init(
         glucoseTargetRangeSchedule: GlucoseRangeSchedule? = nil,
         correctionRangeOverrides: CorrectionRangeOverrides? = nil,
-        overridePresets: [TemporaryScheduleOverridePreset]? = nil,
+        overridePresets: [TemporaryPreset]? = nil,
         maximumBasalRatePerHour: Double? = nil,
         maximumBolus: Double? = nil,
         suspendThreshold: GlucoseThreshold? = nil,
@@ -120,6 +134,39 @@ extension TherapySettings: Codable {
 }
 
 extension TherapySettings {
+    public typealias InsulinMultiplierImpact = (basalRate: LoopQuantity?, carbRatio: LoopQuantity?, isf: LoopQuantity?)
+    
+    public func impact(for insulinMultiplier: Double) -> InsulinMultiplierImpact {
+        var basalRate: LoopQuantity? {
+            if let baseValue = basalRateSchedule?.value(at: Date()) {
+                return LoopQuantity(unit: .internationalUnitsPerHour, doubleValue: baseValue * insulinMultiplier)
+            } else {
+                return nil
+            }
+        }
+        var carbRatio: LoopQuantity? {
+            if let baseValue = carbRatioSchedule?.value(at: Date()) {
+                return LoopQuantity(unit: .gram, doubleValue: baseValue / insulinMultiplier)
+            } else {
+                return nil
+            }
+        }
+        var isf: LoopQuantity? {
+            if let baseQuantity = insulinSensitivitySchedule?.quantity(at: Date()) {
+                let value = baseQuantity.doubleValue(for: .milligramsPerDeciliter)
+                let adjustedValue = value / insulinMultiplier
+                return LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: adjustedValue)
+            } else {
+                return nil
+            }
+        }
+
+        return (basalRate, carbRatio, isf)
+    }
+
+}
+
+extension TherapySettings {
     // Mock therapy settings for QA and mock prescriptions
     public static var mockTherapySettings: TherapySettings {
         let timeZone = TimeZone(identifier: "America/Los_Angeles")!
@@ -133,9 +180,7 @@ extension TherapySettings {
                                                     start: Date().addingTimeInterval(.minutes(-30)),
                                                     end: Date().addingTimeInterval(.minutes(30)))
         )
-        let correctionRangeOverrides = CorrectionRangeOverrides(preMeal: DoubleRange(minValue: 80.0, maxValue: 90.0),
-                                                                workout: DoubleRange(minValue: 140.0, maxValue: 160.0),
-                                                                unit: .milligramsPerDeciliter)
+        let correctionRangeOverrides = CorrectionRangeOverrides(preMeal: DoubleRange(minValue: 80.0, maxValue: 90.0), unit: .milligramsPerDeciliter)
         let basalRateSchedule = BasalRateSchedule(
             dailyItems: [RepeatingScheduleValue(startTime: .hours(0), value: 1),
                          RepeatingScheduleValue(startTime: .hours(15), value: 0.85)],
@@ -146,7 +191,7 @@ extension TherapySettings {
                          RepeatingScheduleValue(startTime: .hours(9), value: 55.0)],
             timeZone: timeZone)!
         let carbRatioSchedule = CarbRatioSchedule(
-            unit: .gram(),
+            unit: .gram,
             dailyItems: [RepeatingScheduleValue(startTime: .hours(0), value: 10.0)],
             timeZone: timeZone)!
         return TherapySettings(

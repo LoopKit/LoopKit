@@ -23,5 +23,6 @@ public protocol OnboardingUIPlugin {
 }
 
 public protocol SupportUIPlugin {
+    @MainActor
     var support: SupportUI { get }
 }

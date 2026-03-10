@@ -11,6 +11,7 @@ import SwiftUI
 import LoopKit
 import LoopKitUI
 import MockKit
+import LoopAlgorithm
 
 
 extension MockPumpManager: PumpManagerUI {
@@ -76,7 +77,7 @@ public enum MockPumpStatusBadge: DeviceStatusBadge {
 
 // MARK: - PumpStatusIndicator
 extension MockPumpManager {
-    public var pumpStatusHighlight: DeviceStatusHighlight? {
+    public var pumpStatusHighlight: PumpStatusHighlight? {
         return buildPumpStatusHighlight(for: state)
     }
 

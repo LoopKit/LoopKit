@@ -17,7 +17,7 @@ struct DateRelativeBolusEntry: DateRelativeQuantity, Codable {
     func doseEntry(relativeTo referenceDate: Date) -> DoseEntry {
         let startDate = referenceDate.addingTimeInterval(dateOffset)
         let endDate = startDate.addingTimeInterval(deliveryDuration)
-        return DoseEntry(type: .bolus, startDate: startDate, endDate: endDate, value: unitsValue, unit: .units)
+        return DoseEntry(type: .bolus, startDate: startDate, endDate: endDate, value: unitsValue, unit: .units, decisionId: nil)
     }
 
     func newPumpEvent(relativeTo referenceDate: Date) -> NewPumpEvent {

@@ -11,8 +11,18 @@
 */
 
 import Foundation
+import LoopAlgorithm
+
+public protocol RemoteDataServiceDelegate: AnyObject {
+    func fetchDeviceLogs(startDate: Date, endDate: Date) async throws -> [StoredDeviceLogEntry]
+    func getBasalHistory(startDate: Date, endDate: Date) async throws -> [AbsoluteScheduleValue<Double>]
+    func automationHistory(from start: Date, to end: Date) async throws -> [AbsoluteScheduleValue<Bool>]
+}
 
 public protocol RemoteDataService: Service {
+
+    var remoteDataServiceDelegate: RemoteDataServiceDelegate? { get set }
+
 
     /// The maximum number of alert data to upload to the remote data service at one time.
     var alertDataLimit: Int? { get }
@@ -23,7 +33,7 @@ public protocol RemoteDataService: Service {
      - Parameter stored: The stored alert data to upload.
      - Parameter completion: The completion function to call with any success or failure.
      */
-    func uploadAlertData(_ stored: [SyncAlertObject], completion: @escaping (_ result: Result<Bool, Error>) -> Void)
+    func uploadAlertData(_ stored: [SyncAlertObject]) async throws
 
     /// The maximum number of carb data to upload to the remote data service at one time.
     var carbDataLimit: Int? { get }
@@ -36,7 +46,7 @@ public protocol RemoteDataService: Service {
      - Parameter deleted: The deleted carb data to upload.
      - Parameter completion: The completion function to call with any success or failure.
      */
-    func uploadCarbData(created: [SyncCarbObject], updated: [SyncCarbObject], deleted: [SyncCarbObject], completion: @escaping (_ result: Result<Bool, Error>) -> Void)
+    func uploadCarbData(created: [SyncCarbObject], updated: [SyncCarbObject], deleted: [SyncCarbObject]) async throws
 
     /**
      Upload overrides to the remote data service.
@@ -45,7 +55,7 @@ public protocol RemoteDataService: Service {
      - Parameter deleted: The deleted overrides to upload.
      - Parameter completion: The completion function to call with any success or failure.
      */
-    func uploadTemporaryOverrideData(updated: [TemporaryScheduleOverride], deleted: [TemporaryScheduleOverride], completion: @escaping (_ result: Result<Bool, Error>) -> Void)
+    func uploadTemporaryOverrideData(updated: [TemporaryScheduleOverride], deleted: [TemporaryScheduleOverride]) async throws
 
     /// The maximum number of dose data to upload to the remote data service at one time.
     var doseDataLimit: Int? { get }
@@ -57,7 +67,7 @@ public protocol RemoteDataService: Service {
      - Parameter deleted: The deleted dose data to upload.
      - Parameter completion: The completion function to call with any success or failure.
      */
-    func uploadDoseData(created: [DoseEntry], deleted: [DoseEntry], completion: @escaping (_ result: Result<Bool, Error>) -> Void)
+    func uploadDoseData(created: [DoseEntry], deleted: [DoseEntry]) async throws
 
     /// The maximum number of dosing decision data to upload to the remote data service at one time.
     var dosingDecisionDataLimit: Int? { get }
@@ -68,7 +78,7 @@ public protocol RemoteDataService: Service {
      - Parameter stored: The stored dosing decision data to upload.
      - Parameter completion: The completion function to call with any success or failure.
      */
-    func uploadDosingDecisionData(_ stored: [StoredDosingDecision], completion: @escaping (_ result: Result<Bool, Error>) -> Void)
+    func uploadDosingDecisionData(_ stored: [StoredDosingDecision]) async throws
 
     /// The maximum number of glucose data to upload to the remote data service at one time.
     var glucoseDataLimit: Int? { get }
@@ -79,7 +89,7 @@ public protocol RemoteDataService: Service {
      - Parameter stored: The stored glucose data to upload.
      - Parameter completion: The completion function to call with any success or failure.
      */
-    func uploadGlucoseData(_ stored: [StoredGlucoseSample], completion: @escaping (_ result: Result<Bool, Error>) -> Void)
+    func uploadGlucoseData(_ stored: [StoredGlucoseSample]) async throws
 
     /// The maximum number of pump event data to upload to the remote data service at one time.
     var pumpEventDataLimit: Int? { get }
@@ -90,7 +100,7 @@ public protocol RemoteDataService: Service {
      - Parameter stored: The stored pump event data to upload.
      - Parameter completion: The completion function to call with any success or failure.
      */
-    func uploadPumpEventData(_ stored: [PersistedPumpEvent], completion: @escaping (_ result: Result<Bool, Error>) -> Void)
+    func uploadPumpEventData(_ stored: [PersistedPumpEvent]) async throws
 
     /// The maximum number of settings data to upload to the remote data service at one time.
     var settingsDataLimit: Int? { get }
@@ -101,7 +111,7 @@ public protocol RemoteDataService: Service {
      - Parameter stored: The stored settings data to upload.
      - Parameter completion: The completion function to call with any success or failure.
      */
-    func uploadSettingsData(_ stored: [StoredSettings], completion: @escaping (_ result: Result<Bool, Error>) -> Void)
+    func uploadSettingsData(_ stored: [StoredSettings]) async throws
 
     /**
      Upload cgm event data to the remote data service.
@@ -109,14 +119,13 @@ public protocol RemoteDataService: Service {
      - Parameter stored: The stored alert data to upload.
      - Parameter completion: The completion function to call with any success or failure.
      */
-    func uploadCgmEventData(_ stored: [PersistedCgmEvent], completion: @escaping (_ result: Result<Bool, Error>) -> Void)
+    func uploadCgmEventData(_ stored: [PersistedCgmEvent]) async throws
 
     /**
      Handle a push notification
      - Parameter notification: The push notification dictionary
      */
     func remoteNotificationWasReceived(_ notification: [String: AnyObject]) async throws
-
 }
 
 public extension RemoteDataService {

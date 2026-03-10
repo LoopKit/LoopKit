@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import HealthKit
+import LoopAlgorithm
 import LoopKit
 import LoopKitUI
 import MockKit
@@ -19,7 +19,7 @@ protocol SineCurveParametersTableViewControllerDelegate: AnyObject {
 
 final class SineCurveParametersTableViewController: UITableViewController {
 
-    let glucoseUnit: HKUnit
+    let glucoseUnit: LoopUnit
 
     var parameters: MockCGMDataSource.Model.SineCurveParameters? {
         get {
@@ -44,13 +44,13 @@ final class SineCurveParametersTableViewController: UITableViewController {
     var defaultPeriod: TimeInterval = .hours(6)
     var defaultReferenceDate = Date()
 
-    private var baseGlucose: HKQuantity? {
+    private var baseGlucose: LoopQuantity? {
         didSet {
             delegate?.sineCurveParametersTableViewControllerDidUpdateParameters(self)
         }
     }
 
-    private var amplitude: HKQuantity? {
+    private var amplitude: LoopQuantity? {
         didSet {
             delegate?.sineCurveParametersTableViewControllerDidUpdateParameters(self)
         }
@@ -88,7 +88,7 @@ final class SineCurveParametersTableViewController: UITableViewController {
         return formatter
     }()
 
-    init(glucoseUnit: HKUnit) {
+    init(glucoseUnit: LoopUnit) {
         self.glucoseUnit = glucoseUnit
         self.glucoseFormatter = QuantityFormatter(for: glucoseUnit)
         super.init(style: .grouped)
@@ -130,15 +130,19 @@ final class SineCurveParametersTableViewController: UITableViewController {
         switch Row(rawValue: indexPath.row)! {
         case .baseGlucose:
             cell.textLabel?.text = "Base Glucose"
+            cell.accessibilityIdentifier = "cell_BaseGlucose"
             cell.detailTextLabel?.text = baseGlucose.map(formatGlucose) ?? SettingsTableViewCell.NoValueString
         case .amplitude:
             cell.textLabel?.text = "Amplitude"
+            cell.accessibilityIdentifier = "cell_Amplitude"
             cell.detailTextLabel?.text = amplitude.map(formatGlucose) ?? SettingsTableViewCell.NoValueString
         case .period:
             cell.textLabel?.text = "Period"
+            cell.accessibilityIdentifier = "cell_Period"
             cell.detailTextLabel?.text = period.flatMap(durationFormatter.string(from:)) ?? SettingsTableViewCell.NoValueString
         case .referenceDate:
             cell.textLabel?.text = "Reference Date"
+            cell.accessibilityIdentifier = "cell_ReferenceDate"
             cell.detailTextLabel?.text = referenceDate.map(dateFormatter.string(from:)) ?? SettingsTableViewCell.NoValueString
         }
 
@@ -152,7 +156,7 @@ final class SineCurveParametersTableViewController: UITableViewController {
         let sender = tableView.cellForRow(at: indexPath)
         let title = sender?.textLabel?.text
 
-        func presentGlucoseEntryViewController(for glucose: HKQuantity?, contextHelp: String?) {
+        func presentGlucoseEntryViewController(for glucose: LoopQuantity?, contextHelp: String?) {
             let vc = GlucoseEntryTableViewController(glucoseUnit: glucoseUnit)
             vc.glucose = glucose
             vc.title = title

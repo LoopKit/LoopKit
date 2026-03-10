@@ -7,6 +7,7 @@
 
 import Foundation
 import HealthKit
+import LoopAlgorithm
 
 public struct PumpStatusHighlight: DeviceStatusHighlight, Equatable {
     public var localizedMessage: String
@@ -19,6 +20,25 @@ public struct PumpStatusHighlight: DeviceStatusHighlight, Equatable {
         self.localizedMessage = localizedMessage
         self.imageName = imageName
         self.state = state
+    }
+}
+
+extension PumpStatusHighlight {
+    public func isEqual(to other: PumpStatusHighlight) -> Bool {
+        return self.localizedMessage == other.localizedMessage &&
+            self.imageName == other.imageName &&
+            self.state == other.state
+    }
+}
+
+extension Optional where Wrapped == PumpStatusHighlight {
+    public func isEqual(to other: Wrapped?) -> Bool {
+        switch (self, other) {
+        case (.none, .none): return true
+        case (.none, .some): return false
+        case (.some, .none): return false
+        case (.some(let self), .some(let other)): return self.isEqual(to: other)
+        }
     }
 }
 
@@ -43,6 +63,7 @@ public struct PumpManagerStatus: Equatable {
         case suspending
         case suspended(_ at: Date)
         case resuming
+        case pumpInoperable
 
         public var isSuspended: Bool {
             if case .suspended = self {
@@ -175,6 +196,9 @@ extension PumpManagerStatus.BasalDeliveryState: Codable {
         case .resuming:
             var container = encoder.singleValueContainer()
             try container.encode(CodableKeys.resuming.rawValue)
+        case .pumpInoperable:
+            var container = encoder.singleValueContainer()
+            try container.encode(CodableKeys.pumpInoperable.rawValue)
         }
     }
 
@@ -198,6 +222,7 @@ extension PumpManagerStatus.BasalDeliveryState: Codable {
         case suspending
         case suspended
         case resuming
+        case pumpInoperable
     }
 }
 

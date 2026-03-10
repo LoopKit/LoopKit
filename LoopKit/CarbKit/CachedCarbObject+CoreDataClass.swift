@@ -9,6 +9,7 @@
 import Foundation
 import CoreData
 import HealthKit
+import LoopAlgorithm
 
 class CachedCarbObject: NSManagedObject {
     var absorptionTime: TimeInterval? {
@@ -59,7 +60,7 @@ class CachedCarbObject: NSManagedObject {
 // MARK: - Helpers
 
 extension CachedCarbObject {
-    var quantity: HKQuantity { HKQuantity(unit: .gram(), doubleValue: grams) }
+    var quantity: LoopQuantity { LoopQuantity(unit: .gram, doubleValue: grams) }
 }
 
 // MARK: - Operations
@@ -71,9 +72,10 @@ extension CachedCarbObject {
         self.absorptionTime = entry.absorptionTime
         self.createdByCurrentApp = true
         self.foodType = entry.foodType
-        self.grams = entry.quantity.doubleValue(for: .gram())
+        self.grams = entry.quantity.doubleValue(for: .gram)
         self.startDate = entry.startDate
         self.uuid = nil
+        self.favoriteFoodID = entry.favoriteFoodID
 
         self.provenanceIdentifier = provenanceIdentifier
         self.syncIdentifier = syncIdentifier
@@ -96,6 +98,7 @@ extension CachedCarbObject {
         self.grams = sample.quantity.doubleValue(for: .gram())
         self.startDate = sample.startDate
         self.uuid = sample.uuid
+        self.favoriteFoodID = sample.favoriteFoodID
 
         self.provenanceIdentifier = sample.provenanceIdentifier
         self.syncIdentifier = sample.syncIdentifier
@@ -119,9 +122,10 @@ extension CachedCarbObject {
         self.absorptionTime = entry.absorptionTime
         self.createdByCurrentApp = object.createdByCurrentApp
         self.foodType = entry.foodType
-        self.grams = entry.quantity.doubleValue(for: .gram())
+        self.grams = entry.quantity.doubleValue(for: .gram)
         self.startDate = entry.startDate
         self.uuid = nil
+        self.favoriteFoodID = entry.favoriteFoodID
 
         self.provenanceIdentifier = object.provenanceIdentifier
         self.syncIdentifier = object.syncIdentifier
@@ -144,7 +148,8 @@ extension CachedCarbObject {
         self.grams = sample.quantity.doubleValue(for: .gram())
         self.startDate = sample.startDate
         self.uuid = sample.uuid
-
+        self.favoriteFoodID = sample.favoriteFoodID
+        
         self.provenanceIdentifier = sample.provenanceIdentifier
         self.syncIdentifier = sample.syncIdentifier
         self.syncVersion = sample.syncVersion
@@ -166,6 +171,7 @@ extension CachedCarbObject {
         self.grams = object.grams
         self.startDate = object.startDate
         self.uuid = object.uuid
+        self.favoriteFoodID = object.favoriteFoodID
 
         self.provenanceIdentifier = object.provenanceIdentifier
         self.syncIdentifier = object.syncIdentifier
@@ -214,16 +220,19 @@ extension CachedCarbObject {
 
         metadata[HKMetadataKeyFoodType] = foodType
         metadata[MetadataKeyAbsorptionTime] = absorptionTime
+        metadata[MetadataKeyFavoriteFoodID] = favoriteFoodID
 
-        metadata[HKMetadataKeySyncIdentifier] = syncIdentifier
-        metadata[HKMetadataKeySyncVersion] = syncVersion
+        if let syncIdentifier {
+            metadata[HKMetadataKeySyncIdentifier] = syncIdentifier
+            metadata[HKMetadataKeySyncVersion] = syncVersion ?? 0
+        }
 
         metadata[MetadataKeyUserCreatedDate] = userCreatedDate
         metadata[MetadataKeyUserUpdatedDate] = userUpdatedDate
 
         return HKQuantitySample(
             type: HealthKitSampleStore.carbType,
-            quantity: quantity,
+            quantity: quantity.hkQuantity,
             start: startDate,
             end: startDate,
             metadata: metadata
@@ -238,9 +247,10 @@ extension CachedCarbObject {
         self.absorptionTime = entry.absorptionTime
         self.createdByCurrentApp = entry.createdByCurrentApp
         self.foodType = entry.foodType
-        self.grams = entry.quantity.doubleValue(for: .gram())
+        self.grams = entry.quantity.doubleValue(for: .gram)
         self.startDate = entry.startDate
         self.uuid = entry.uuid
+        self.favoriteFoodID = entry.favoriteFoodID
 
         self.provenanceIdentifier = entry.provenanceIdentifier
         self.syncIdentifier = entry.syncIdentifier

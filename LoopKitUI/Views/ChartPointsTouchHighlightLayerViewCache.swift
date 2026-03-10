@@ -11,11 +11,13 @@ import SwiftCharts
 import UIKit
 
 final class ChartPointsTouchHighlightLayerViewCache {
+    static let defaultPointSize: CGFloat = 16
+    
     private lazy var containerView = UIView(frame: .zero)
 
     private lazy var xAxisOverlayView = UIView()
 
-    private lazy var point = ChartPointEllipseView(center: .zero, diameter: 16)
+    private lazy var point = ChartPointEllipseView(center: .zero, diameter: ChartPointsTouchHighlightLayerViewCache.defaultPointSize)
 
     private lazy var labelY: UILabel = {
         let label = UILabel()
@@ -36,7 +38,7 @@ final class ChartPointsTouchHighlightLayerViewCache {
 
     private(set) var highlightLayer: ChartPointsTouchHighlightLayer<ChartPoint, UIView>!
 
-    init(xAxisLayer: ChartAxisLayer, yAxisLayer: ChartAxisLayer, axisLabelSettings: ChartLabelSettings, chartPoints: [ChartPoint], tintColor: UIColor, gestureRecognizer: UIGestureRecognizer? = nil, onCompleteHighlight: (() -> Void)? = nil) {
+    init(xAxisLayer: ChartAxisLayer, yAxisLayer: ChartAxisLayer, axisLabelSettings: ChartLabelSettings, chartPoints: [ChartPoint], tintColor: UIColor, allowOverridingTintColor: Bool = false, allowOverridingHighlightPointSize: Bool = false, highlightPointOffsetY: CGFloat = 0, highlightLabelOffsetY: CGFloat = 0, gestureRecognizer: UIGestureRecognizer? = nil, onCompleteHighlight: (() -> Void)? = nil) {
 
         self.axisLabelSettings = axisLabelSettings
 
@@ -73,29 +75,52 @@ final class ChartPointsTouchHighlightLayerViewCache {
                     xAxisOverlayView.isOpaque = true
                     containerView.addSubview(xAxisOverlayView)
                 }
-
+                
+                // For charts with overridden tint colors or highlight point sizes, calculate new values
+                // If old values don't match new values, refresh the view
+                let newColor = chartPointModel.chartPoint.overrideColor ?? tintColor
+                let newPointSize = chartPointModel.chartPoint.overrideHighlightPointSize ?? ChartPointsTouchHighlightLayerViewCache.defaultPointSize
+                
                 let point = strongSelf.point
-                point.center = chartPointModel.screenLoc
+                point.center = CGPoint(x: chartPointModel.screenLoc.x, y: chartPointModel.screenLoc.y + highlightPointOffsetY)
+                if point.superview == nil || (allowOverridingTintColor && point.fillColor != newColor) {
+                    // Color the point when view is initialized and every time overridden tint color does not match previous value
+                    point.fillColor = newColor
+                    point.setNeedsDisplay()
+                }
+                if allowOverridingHighlightPointSize && point.frame.width != newPointSize {
+                    // Change the points's frame each time the overridden point size changes and correct it's location
+                    point.frame.size = CGSize(width: newPointSize, height: newPointSize)
+                    point.center = CGPoint(x: chartPointModel.screenLoc.x, y: chartPointModel.screenLoc.y + highlightPointOffsetY)
+                }
                 if point.superview == nil {
-                    point.fillColor = tintColor.withAlphaComponent(0.5)
+                    point.alpha = 0.5
                     containerView.addSubview(point)
                 }
 
-                if let text = chartPointModel.chartPoint.y.labels.first?.text {
-                    let label = strongSelf.labelY
+                let text = chartPointModel.chartPoint.y
+                let label = strongSelf.labelY
 
-                    label.text = text
-                    label.sizeToFit()
-                    label.center.y = containerView.frame.minY - 21
-                    label.center.x = chartPointModel.screenLoc.x
-                    label.frame.origin.x = min(max(label.frame.origin.x, containerView.bounds.minX), containerView.bounds.maxX - label.frame.size.width)
-                    label.frame.origin.makeIntegralInPlaceWithDisplayScale(chart.view.traitCollection.displayScale)
+                let valueAttributedString = NSMutableAttributedString(string: String(describing: text.copy), attributes: [.font: UIFont.systemFont(ofSize: 20, weight: .semibold), .foregroundColor: newColor])
+                let spacer = NSAttributedString(string: "\u{00a0}")
+                let unitAttributedString =  NSAttributedString(string: String(describing: text).replacingOccurrences(of: String(describing: text.copy), with: "").trimmingCharacters(in: .whitespacesAndNewlines), attributes: [.font: UIFont.systemFont(ofSize: 15, weight: .regular), .foregroundColor: newColor])
+                
+                valueAttributedString.append(spacer)
+                valueAttributedString.append(unitAttributedString)
+                
+                label.attributedText = valueAttributedString
+                label.sizeToFit()
+                label.center.y = containerView.frame.minY - 21 - highlightLabelOffsetY
+                label.center.x = chartPointModel.screenLoc.x
+                label.frame.origin.x = min(max(label.frame.origin.x, containerView.bounds.minX), containerView.bounds.maxX - label.frame.size.width)
+                label.frame.origin.makeIntegralInPlaceWithDisplayScale(chart.view.traitCollection.displayScale)
 
-                    if label.superview == nil {
-                        label.textColor = tintColor
-
-                        containerView.addSubview(label)
-                    }
+                if label.superview == nil || (allowOverridingTintColor && label.textColor != newColor) {
+                    // Color the label when view is initialized and every time overridden tint color does not match previous value
+                    label.textColor = newColor
+                }
+                if label.superview == nil {
+                    containerView.addSubview(label)
                 }
 
                 if let text = chartPointModel.chartPoint.x.labels.first?.text {

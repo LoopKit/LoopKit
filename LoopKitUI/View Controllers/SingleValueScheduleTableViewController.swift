@@ -8,6 +8,7 @@
 
 import UIKit
 import LoopKit
+import LoopAlgorithm
 
 
 public enum RepeatingScheduleValueResult<T: RawRepresentable> {

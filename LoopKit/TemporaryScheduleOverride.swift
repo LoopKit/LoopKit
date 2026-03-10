@@ -8,22 +8,154 @@
 
 import Foundation
 import HealthKit
+import LoopAlgorithm
 
+public struct ActivityPreset: Hashable, Identifiable, Sendable, RawRepresentable, Codable {
+    public enum ActivityType: String, Hashable, Identifiable, Sendable, Codable, CaseIterable {
+        case jogging
+        case walking
+        case biking
+        case strengthTraining
+        
+        public init?(fromId id: String) {
+            guard let typeString = id.split(separator: "activity-").last, let activityType = ActivityType(rawValue: String(typeString)) else {
+                return nil
+            }
+            
+            self = activityType
+        }
+        
+        public var id: String {
+            "activity-\(rawValue)"
+        }
+        
+        public var systemImageName: String {
+            switch self {
+            case .jogging:
+                "figure.run"
+            case .walking:
+                "figure.walk"
+            case .biking:
+                "figure.outdoor.cycle"
+            case .strengthTraining:
+                "figure.strengthtraining.traditional"
+            }
+        }
+        
+        public var symbol: PresetSymbol {
+            .systemImage(systemImageName)
+        }
+        
+        public var name: String {
+            switch self {
+            case .biking: NSLocalizedString("Biking", comment: "biking activity preset name")
+            case .jogging: NSLocalizedString("Jogging", comment: "jogging activity preset name")
+            case .walking: NSLocalizedString("Walking", comment: "walking activity preset name")
+            case .strengthTraining: NSLocalizedString("Strength Training", comment: "strength training activity preset name")
+            }
+        }
+        
+        private var defaultTargetRange: ClosedRange<LoopQuantity> {
+            LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 150)...LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 170)
+        }
+        
+        public var defaultInsulinNeedsScaleFactor: Double {
+            switch self {
+            case .biking:
+                0.23
+            case .jogging:
+                0.21
+            case .walking:
+                0.23
+            case .strengthTraining:
+                0.37
+            }
+        }
+        
+        public var completeDefaultPreset: TemporaryPreset {
+            defaultPreset(duration: .finite(.minutes(90)), scheduleStartDate: nil, repeatOptions: .none)
+        }
+        
+        public func defaultPreset(duration: TemporaryScheduleOverride.Duration, scheduleStartDate: Date?, repeatOptions: PresetScheduleRepeatOptions) -> TemporaryPreset {
+            TemporaryPreset(
+                id: id,
+                symbol: symbol,
+                name: name,
+                settings: TemporaryPresetSettings(
+                    targetRange: defaultTargetRange,
+                    insulinNeedsScaleFactor: defaultInsulinNeedsScaleFactor
+                ),
+                duration: duration,
+                scheduleStartDate: scheduleStartDate,
+                repeatOptions: repeatOptions
+            )
+        }
+    }
+    
+    public let activityType: ActivityType
+    public var preset: TemporaryPreset
+    
+    public init(activityType: ActivityType, preset: TemporaryPreset) {
+        self.activityType = activityType
+        self.preset = preset
+    }
+    
+    public init?(preset: TemporaryPreset) {
+        guard let activityType = ActivityType(fromId: preset.id) else {
+            return nil
+        }
+        
+        self.activityType = activityType
+        self.preset = preset
+    }
+    
+    public init?(rawValue: [String : Any]) {
+        guard let activityTypeRawValue = rawValue["activityType"] as? ActivityType.RawValue,
+              let activityType = ActivityType(rawValue: activityTypeRawValue),
+              let presetRawValue = rawValue["preset"] as? TemporaryPreset.RawValue,
+              let preset = TemporaryPreset(rawValue: presetRawValue)
+        else { return nil }
+        
+        self.activityType = activityType
+        self.preset = preset
+    }
+    
+    public var isModifiedFromDefault: Bool {
+        preset != activityType.defaultPreset(
+            duration: preset.duration,
+            scheduleStartDate: preset.scheduleStartDate,
+            repeatOptions: preset.repeatOptions ?? .none
+        )
+    }
+    
+    public var id: String {
+        activityType.rawValue
+    }
+    
+    public typealias RawValue = [String: Any]
+    
+    public var rawValue: RawValue {
+        [
+            "activityType": activityType.rawValue,
+            "preset": preset.rawValue
+        ]
+    }
+}
 
-public struct TemporaryScheduleOverride: Hashable {
-    public enum Context: Hashable {
+public struct TemporaryScheduleOverride: Hashable, Sendable {
+    public enum Context: Hashable, Sendable {
         case preMeal
-        case legacyWorkout
-        case preset(TemporaryScheduleOverridePreset)
+        case preset(TemporaryPreset)
+        case activity(ActivityPreset)
         case custom
     }
     
-    public enum EnactTrigger: Hashable {
+    public enum EnactTrigger: Hashable, Sendable {
         case local
         case remote(String)
     }
 
-    public enum Duration: Hashable, Comparable {
+    public enum Duration: Hashable, Comparable, Sendable {
         case finite(TimeInterval)
         case indefinite
 
@@ -50,7 +182,7 @@ public struct TemporaryScheduleOverride: Hashable {
     }
 
     public var context: Context
-    public var settings: TemporaryScheduleOverrideSettings
+    public var settings: TemporaryPresetSettings
     public var startDate: Date
     public let enactTrigger: EnactTrigger
     public let syncIdentifier: UUID
@@ -64,7 +196,7 @@ public struct TemporaryScheduleOverride: Hashable {
         case .early(let endDate):
             return endDate
         case .deleted:
-            return scheduledEndDate
+            return startDate
         }
     }
 
@@ -72,6 +204,10 @@ public struct TemporaryScheduleOverride: Hashable {
         didSet {
             precondition(duration.timeInterval > 0)
         }
+    }
+    
+    public var actualDuration: Duration {
+        Duration.finite(actualEndDate.timeIntervalSince(startDate))
     }
 
     public var scheduledEndDate: Date {
@@ -106,7 +242,15 @@ public struct TemporaryScheduleOverride: Hashable {
         return date > actualEndDate
     }
 
-    public init(context: Context, settings: TemporaryScheduleOverrideSettings, startDate: Date, duration: Duration, enactTrigger: EnactTrigger, syncIdentifier: UUID, actualEnd: End = .natural) {
+    public init(
+        context: Context,
+        settings: TemporaryPresetSettings,
+        startDate: Date,
+        duration: Duration,
+        enactTrigger: EnactTrigger,
+        syncIdentifier: UUID,
+        actualEnd: End = .natural
+    ) {
         precondition(duration.timeInterval > 0)
         self.context = context
         self.settings = settings
@@ -122,6 +266,36 @@ public struct TemporaryScheduleOverride: Hashable {
     }
 }
 
+extension TemporaryScheduleOverride {
+    // LOOP-5439 High Insulin Needs Preset Mitigation
+    public static let highInsulinNeedsMitigationCorrectionRangeLimit = LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 110)
+
+    public static func isInMitigationRange(insulinNeedsScaleFactor: Double?) -> Bool {
+        guard let insulinNeedsScaleFactor else { return false }
+        return insulinNeedsScaleFactor * 100 > Guardrail.presetInsulinNeeds.recommendedBounds.upperBound.doubleValue(for: .percent)
+    }
+
+    public var veryHighInsulinNeeds: Bool {
+        return Self.isInMitigationRange(insulinNeedsScaleFactor: settings.insulinNeedsScaleFactor)
+    }
+
+    // Calculates the correction used when this override is active, including high insulin needs preset mitigation
+    public func effectiveCorrectionRangeDuring(scheduledRange: ClosedRange<LoopQuantity>) -> ClosedRange<LoopQuantity> {
+        let range = settings.targetRange ?? scheduledRange
+        if veryHighInsulinNeeds {
+            return range.clampedTo(atLeast: Self.highInsulinNeedsMitigationCorrectionRangeLimit)
+        }
+        return range
+    }
+}
+
+extension ClosedRange<LoopQuantity> {
+    public func clampedTo(atLeast limit: LoopQuantity) -> ClosedRange<LoopQuantity> {
+        return Swift.max(lowerBound, limit)...Swift.max(upperBound, limit)
+    }
+}
+
+
 extension TemporaryScheduleOverride: RawRepresentable {
     public typealias RawValue = [String: Any]
 
@@ -129,8 +303,8 @@ extension TemporaryScheduleOverride: RawRepresentable {
         guard
             let contextRawValue = rawValue["context"] as? Context.RawValue,
             let context = Context(rawValue: contextRawValue),
-            let settingsRawValue = rawValue["settings"] as? TemporaryScheduleOverrideSettings.RawValue,
-            let settings = TemporaryScheduleOverrideSettings(rawValue: settingsRawValue),
+            let settingsRawValue = rawValue["settings"] as? TemporaryPresetSettings.RawValue,
+            let settings = TemporaryPresetSettings(rawValue: settingsRawValue),
             let startDateSeconds = rawValue["startDate"] as? TimeInterval,
             let durationRawValue = rawValue["duration"] as? Duration.RawValue,
             let duration = Duration(rawValue: durationRawValue)
@@ -185,12 +359,17 @@ extension TemporaryScheduleOverride.Context: RawRepresentable {
         switch context {
         case "premeal":
             self = .preMeal
-        case "legacyWorkout":
-            self = .legacyWorkout
+        case "activity":
+            guard let activityRawValue = rawValue["activity"] as? ActivityPreset.RawValue,
+                  let activity = ActivityPreset(rawValue: activityRawValue)
+            else {
+                return nil
+            }
+            self = .activity(activity)
         case "preset":
             guard
-                let presetRawValue = rawValue["preset"] as? TemporaryScheduleOverridePreset.RawValue,
-                let preset = TemporaryScheduleOverridePreset(rawValue: presetRawValue)
+                let presetRawValue = rawValue["preset"] as? TemporaryPreset.RawValue,
+                let preset = TemporaryPreset(rawValue: presetRawValue)
             else {
                 return nil
             }
@@ -206,12 +385,15 @@ extension TemporaryScheduleOverride.Context: RawRepresentable {
         switch self {
         case .preMeal:
             return ["context": "premeal"]
-        case .legacyWorkout:
-            return ["context": "legacyWorkout"]
         case .preset(let preset):
             return [
                 "context": "preset",
                 "preset": preset.rawValue
+            ]
+        case .activity(let activity):
+            return [
+                "context": "activity",
+                "activity": activity.rawValue
             ]
         case .custom:
             return ["context": "custom"]
@@ -225,16 +407,18 @@ extension TemporaryScheduleOverride.Context: Codable {
             switch string {
             case CodableKeys.preMeal.rawValue:
                 self = .preMeal
-            case CodableKeys.legacyWorkout.rawValue:
-                self = .legacyWorkout
             case CodableKeys.custom.rawValue:
+                self = .custom
+            case "legacyWorkout":
                 self = .custom
             default:
                 throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "invalid enumeration"))
             }
         } else {
             let container = try decoder.container(keyedBy: CodableKeys.self)
-            if let preset = try container.decodeIfPresent(Preset.self, forKey: .preset) {
+            if let activityPreset = try container.decodeIfPresent(ActivityPreset.self, forKey: .activity) {
+                self = .activity(activityPreset)
+            } else if let preset = try container.decodeIfPresent(Preset.self, forKey: .preset) {
                 self = .preset(preset.preset)
             } else {
                 throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "invalid enumeration"))
@@ -247,9 +431,9 @@ extension TemporaryScheduleOverride.Context: Codable {
         case .preMeal:
             var container = encoder.singleValueContainer()
             try container.encode(CodableKeys.preMeal.rawValue)
-        case .legacyWorkout:
-            var container = encoder.singleValueContainer()
-            try container.encode(CodableKeys.legacyWorkout.rawValue)
+        case .activity(let activity):
+            var container = encoder.container(keyedBy: CodableKeys.self)
+            try container.encode(activity, forKey: .activity)
         case .preset(let preset):
             var container = encoder.container(keyedBy: CodableKeys.self)
             try container.encode(Preset(preset: preset), forKey: .preset)
@@ -260,12 +444,12 @@ extension TemporaryScheduleOverride.Context: Codable {
     }
 
     private struct Preset: Codable {
-        let preset: TemporaryScheduleOverridePreset
+        let preset: TemporaryPreset
     }
 
     private enum CodableKeys: String, CodingKey {
         case preMeal
-        case legacyWorkout
+        case activity
         case preset
         case custom
     }
@@ -416,5 +600,172 @@ extension TemporaryScheduleOverride.EnactTrigger: Codable {
     private enum CodableKeys: String, CodingKey {
         case local
         case remote
+    }
+}
+
+extension Array where Element == TemporaryScheduleOverride {
+
+    public func applySensitivity(over timeline: [AbsoluteScheduleValue<Double>]) -> [AbsoluteScheduleValue<Double>] {
+        apply(over: timeline) { value, override in
+            value / override.settings.effectiveInsulinNeedsScaleFactor
+        }
+    }
+
+    public func applySensitivity(over timeline: [AbsoluteScheduleValue<LoopQuantity>]) -> [AbsoluteScheduleValue<LoopQuantity>] {
+        apply(over: timeline) { quantity, override in
+            let value = quantity.doubleValue(for: .milligramsPerDeciliter)
+            return LoopQuantity(
+                unit: .milligramsPerDeciliter,
+                doubleValue: value / override.settings.effectiveInsulinNeedsScaleFactor
+            )
+        }
+    }
+
+    public func applyBasal(over timeline: [AbsoluteScheduleValue<Double>]) -> [AbsoluteScheduleValue<Double>] {
+        apply(over: timeline) { value, override in
+            value * override.settings.effectiveInsulinNeedsScaleFactor
+        }
+    }
+
+    public func applyCarbRatio(over timeline: [AbsoluteScheduleValue<Double>]) -> [AbsoluteScheduleValue<Double>] {
+        apply(over: timeline) { value, override in
+            value * (override.settings.carbRatioMultiplier ?? 1)
+        }
+    }
+
+    /// Takes a history of scheduled targets and applies this set of overrides to it, returning a new timeline adjusted for
+    /// the current or next future override, based on date.
+    ///
+    /// - Parameters:
+    ///   - timeline: A timeline of scheduled targets.
+    ///   - date: The date indicating the current time for use in a forecast creation
+    ///
+    /// - returns: A new timeline with an override applied, if one is applicable.
+    public func applyTarget(over timeline: [AbsoluteScheduleValue<ClosedRange<LoopQuantity>>], at date: Date) -> [AbsoluteScheduleValue<ClosedRange<LoopQuantity>>] {
+
+        guard timeline.count > 0 else {
+            return []
+        }
+
+        var applicableOverride: TemporaryScheduleOverride? = nil
+        let scheduleEndDate = timeline.last!.endDate
+
+        // Look for active or future override
+        for override in self {
+            if override.actualEndDate > date && override.startDate < scheduleEndDate {
+                // override is active or future
+                applicableOverride = override
+                break
+            }
+        }
+
+        if let applicableOverride, let overrideTarget = applicableOverride.settings.targetRange {
+            var result: [AbsoluteScheduleValue<ClosedRange<LoopQuantity>>] = []
+
+            let overrideStart = applicableOverride.startDate
+
+            for entry in timeline {
+                if entry.startDate < overrideStart {
+                    if entry.endDate > overrideStart {
+                        result.append(
+                            AbsoluteScheduleValue(
+                                startDate: entry.startDate,
+                                endDate: overrideStart,
+                                value: entry.value
+                            )
+                        )
+                    } else {
+                        result.append(entry)
+                    }
+                }
+
+            }
+
+            result.append(
+                AbsoluteScheduleValue(
+                    startDate: applicableOverride.startDate,
+                    endDate: scheduleEndDate,
+                    value: overrideTarget
+                )
+            )
+            return result
+        } else {
+            return timeline
+        }
+    }
+
+    fileprivate func apply<T>(
+        over timeline: [AbsoluteScheduleValue<T>],
+        transform: (T, TemporaryScheduleOverride) -> T
+    ) -> [AbsoluteScheduleValue<T>]
+    {
+        guard timeline.count > 0 else {
+            return []
+        }
+
+        var result: [AbsoluteScheduleValue<T>] = []
+        var presetIndex = 0
+
+        for entry in timeline {
+            var start = entry.startDate
+
+            while presetIndex < self.count {
+                let preset = self[presetIndex]
+
+                // Skip presets that end before this sensitivity period
+                if preset.actualEndDate < start {
+                    presetIndex += 1
+                    continue
+                }
+
+                if preset.isActive(at: start) {
+                    let newValue = transform(entry.value, preset)
+                    let end = Swift.min(entry.endDate, preset.actualEndDate)
+                    result.append(AbsoluteScheduleValue(
+                        startDate: start,
+                        endDate: end,
+                        value: newValue
+                    ))
+                    if entry.endDate > end {
+                        presetIndex += 1
+                    }
+
+                    start = end
+
+                    if preset.actualEndDate > entry.endDate {
+                        break
+                    }
+                } else if preset.startDate < entry.endDate {
+                    result.append(AbsoluteScheduleValue(
+                        startDate: start,
+                        endDate: preset.startDate,
+                        value: entry.value
+                    ))
+                    let newValue = transform(entry.value, preset)
+                    let endDate = Swift.min(entry.endDate, preset.actualEndDate)
+                    result.append(AbsoluteScheduleValue(
+                        startDate: preset.startDate,
+                        endDate: endDate,
+                        value: newValue
+                    ))
+                    start = endDate
+                    if preset.actualEndDate > entry.endDate {
+                        break
+                    }
+                    presetIndex += 1
+                } else {
+                    break
+                }
+            }
+            if start < entry.endDate {
+                result.append(AbsoluteScheduleValue(
+                    startDate: start,
+                    endDate: entry.endDate,
+                    value: entry.value
+                ))
+                start = entry.endDate
+            }
+        }
+        return result
     }
 }

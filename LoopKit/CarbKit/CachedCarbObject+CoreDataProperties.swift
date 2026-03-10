@@ -18,6 +18,7 @@ extension CachedCarbObject {
 
     @NSManaged public var primitiveAbsorptionTime: NSNumber?
     @NSManaged public var createdByCurrentApp: Bool
+    @NSManaged public var favoriteFoodID: String?
     @NSManaged public var foodType: String?
     @NSManaged public var grams: Double
     @NSManaged public var startDate: Date
@@ -40,6 +41,7 @@ extension CachedCarbObject: Encodable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(absorptionTime, forKey: .absorptionTime)
         try container.encode(createdByCurrentApp, forKey: .createdByCurrentApp)
+        try container.encodeIfPresent(favoriteFoodID, forKey: .favoriteFoodID)
         try container.encodeIfPresent(foodType, forKey: .foodType)
         try container.encode(grams, forKey: .grams)
         try container.encode(startDate, forKey: .startDate)
@@ -59,6 +61,7 @@ extension CachedCarbObject: Encodable {
     private enum CodingKeys: String, CodingKey {
         case absorptionTime
         case createdByCurrentApp
+        case favoriteFoodID
         case foodType
         case grams
         case startDate

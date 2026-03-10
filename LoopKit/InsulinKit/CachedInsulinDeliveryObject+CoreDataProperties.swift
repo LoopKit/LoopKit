@@ -22,9 +22,10 @@ extension CachedInsulinDeliveryObject {
     @NSManaged public var startDate: Date
     @NSManaged public var endDate: Date
     @NSManaged public var syncIdentifier: String?
-    @NSManaged public var value: Double
+    @NSManaged public var primitiveDeliveredUnits: NSNumber?
     @NSManaged public var primitiveScheduledBasalRate: NSNumber?
     @NSManaged public var primitiveProgrammedTempBasalRate: NSNumber?
+    @NSManaged public var primitiveProgrammedUnits: NSNumber?
     @NSManaged public var primitiveReason: NSNumber?
     @NSManaged public var createdAt: Date
     @NSManaged public var deletedAt: Date?
@@ -35,4 +36,5 @@ extension CachedInsulinDeliveryObject {
     @NSManaged public var isMutable: Bool
     @NSManaged public var modificationCounter: Int64
     @NSManaged public var wasProgrammedByPumpUI: Bool
+    @NSManaged public var decisionId: UUID?
 }

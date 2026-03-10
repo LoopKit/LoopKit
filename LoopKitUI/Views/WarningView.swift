@@ -36,11 +36,13 @@ public struct WarningView: View {
                   HStack(alignment: .center) {
                       Image(systemName: "exclamationmark.triangle.fill")
                           .foregroundColor(warningColor)
+                          .accessibilityIdentifier(accessibilityIdentifier)
 
                       title
                           .font(Font(UIFont.preferredFont(forTextStyle: .title3)))
                           .bold()
                           .fixedSize(horizontal: false, vertical: true)
+                          .accessibilityIdentifier("text_guardrailWarning")
                   }
                   .padding(.bottom, 2)
 
@@ -61,6 +63,15 @@ public struct WarningView: View {
             return guidanceColors.warning
         case .critical:
             return guidanceColors.critical
+        }
+    }
+    
+    private var accessibilityIdentifier: String {
+        switch severity {
+        case .default:
+            return "image_warningTriangleOrange"
+        case .critical:
+            return "image_warningTriangleRed"
         }
     }
 }

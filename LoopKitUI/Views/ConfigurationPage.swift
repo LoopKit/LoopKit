@@ -20,10 +20,13 @@ public struct ConfigurationPage<ActionAreaContent: View>: View {
 
     var title: Text
     var actionButtonTitle: Text
+    var secondaryActionButtonTitle: Text?
     var actionButtonState: ActionButtonState
+    var secondaryActionButtonState: ActionButtonState?
     var cardListStyle: CardListStyle
     var actionAreaContent: ActionAreaContent
     var action: () -> Void
+    var secondaryAction: (() -> Void)?
 
     public var body: some View {
         VStack(spacing: 0) {
@@ -52,6 +55,30 @@ public struct ConfigurationPage<ActionAreaContent: View>: View {
                 .buttonStyle(ActionButtonStyle(.primary))
                 .disabled(actionButtonState != .enabled)
                 .padding()
+                .accessibilityIdentifier("button_confirmSave")
+                
+                if let secondaryActionButtonTitle, let secondaryAction {
+                    Button(
+                        action: secondaryAction,
+                        label: {
+                            HStack(spacing: 12) {
+                                ActivityIndicator(isAnimating: .constant(false), style: .medium)
+                                    .opacity(0) // For layout only, to ensure the button text is centered
+                                
+                                secondaryActionButtonTitle
+                                    .animation(nil)
+                                
+                                ActivityIndicator(isAnimating: .constant(true), style: .medium, color: .white)
+                                    .opacity(secondaryActionButtonState ?? .enabled == .loading ? 1 : 0)
+                            }
+                        }
+                    )
+                    .buttonStyle(ActionButtonStyle(.secondary))
+                    .disabled(secondaryActionButtonState ?? .enabled != .enabled)
+                    .padding([.horizontal, .bottom])
+                    .padding(.top, -6)
+                    .accessibilityIdentifier("button_secondaryAction")
+                }
             }
             .padding(.bottom) // FIXME: unnecessary on iPhone 8 size devices
             .background(Color(.secondarySystemGroupedBackground).shadow(radius: 5))
@@ -64,17 +91,23 @@ extension ConfigurationPage {
     public init(
         title: Text,
         actionButtonTitle: Text,
+        secondaryActionButtonTitle: Text? = nil,
         actionButtonState: ActionButtonState = .enabled,
+        secondaryActionButtonState: ActionButtonState? = nil,
         @CardStackBuilder cards: () -> CardStack,
         @ViewBuilder actionAreaContent: () -> ActionAreaContent,
-        action: @escaping () -> Void
+        action: @escaping () -> Void,
+        secondaryAction: (() -> Void)? = nil
     ) {
         self.title = title
         self.actionButtonTitle = actionButtonTitle
+        self.secondaryActionButtonTitle = secondaryActionButtonTitle
+        self.actionButtonState = actionButtonState
         self.actionButtonState = actionButtonState
         self.cardListStyle = .simple(cards())
         self.actionAreaContent = actionAreaContent()
         self.action = action
+        self.secondaryAction = secondaryAction
     }
 
     /// Convenience initializer for a page whose action is 'Save'

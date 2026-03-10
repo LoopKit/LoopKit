@@ -37,6 +37,8 @@ class CGMManagerStatusCodableTests: XCTestCase {
     "udiDeviceIdentifier" : "U0D1I2"
   },
   "hasValidSensorSession" : true,
+  "inSensorWarmup" : false,
+  "isInoperable" : false,
   "lastCommunicationDate" : "2020-05-14T15:56:09Z"
 }
 """

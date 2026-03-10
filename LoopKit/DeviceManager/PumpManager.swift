@@ -13,6 +13,14 @@ public enum PumpManagerResult<T> {
     case failure(PumpManagerError)
 }
 
+public enum AutomatedTreatmentState: Equatable {
+    case neutralNoOverride
+    case neutralOverride
+    case increasedInsulin
+    case decreasedInsulin
+    case minimumDelivery
+}
+
 public protocol PumpManagerStatusObserver: AnyObject {
     func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus, oldStatus: PumpManagerStatus)
 }
@@ -54,13 +62,18 @@ public protocol PumpManagerDelegate: DeviceManagerDelegate, PumpManagerStatusObs
     
     func pumpManager(_ pumpManager: PumpManager, didRequestBasalRateScheduleChange basalRateSchedule: BasalRateSchedule, completion: @escaping (Error?) -> Void)
 
+    @MainActor
     func startDateToFilterNewPumpEvents(for manager: PumpManager) -> Date
 
     /// Indicates the system time offset from a trusted time source. If the return value is added to the system time, the result is the trusted time source value. If the trusted time source is earlier than the system time, the return value is negative.
     var detectedSystemTimeOffset: TimeInterval { get }
 
     /// Indicates if automatic dosing has been enabled
+    @MainActor
     var automaticDosingEnabled: Bool { get }
+
+    @MainActor
+    var automatedTreatmentState: AutomatedTreatmentState? { get }
 }
 
 
@@ -167,7 +180,7 @@ public protocol PumpManager: DeviceManager {
     ///   - automatic: Whether the dose was triggered automatically as opposed to commanded by user
     ///   - completion: A closure called after the command is complete
     ///   - error: An optional error describing why the command failed
-    func enactBolus(units: Double, activationType: BolusActivationType, completion: @escaping (_ error: PumpManagerError?) -> Void)
+    func enactBolus(decisionId: UUID?, units: Double, activationType: BolusActivationType, completion: @escaping (_ error: PumpManagerError?) -> Void)
 
     /// Cancels the current, in progress, bolus.
     ///
@@ -183,7 +196,7 @@ public protocol PumpManager: DeviceManager {
     ///   - duration: The duration of the temporary basal rate.  If you pass in a duration of 0, that cancels any currently running Temp Basal
     ///   - completion: A closure called after the command is complete
     ///   - error: An optional error describing why the command failed
-    func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (_ error: PumpManagerError?) -> Void)
+    func enactTempBasal(decisionId: UUID?, unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (_ error: PumpManagerError?) -> Void)
 
     /// Send a command to the pump to suspend delivery
     ///
@@ -248,6 +261,66 @@ public extension PumpManager {
         delegateQueue.async {
             self.pumpManagerDelegate?.pumpManagerWillDeactivate(self)
             completion()
+        }
+    }
+}
+
+public extension PumpManager {
+
+    func enactTempBasal(decisionId: UUID?, unitsPerHour: Double, for duration: TimeInterval) async throws
+    {
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            enactTempBasal(decisionId: decisionId, unitsPerHour: unitsPerHour, for: duration, completion: { error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume()
+                }
+            })
+        }
+    }
+
+    func enactBolus(decisionId: UUID?, units: Double, activationType: BolusActivationType) async throws {
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            enactBolus(decisionId: decisionId, units: units, activationType: activationType, completion: { error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume()
+                }
+            })
+        }
+    }
+
+    func cancelBolus() async throws -> DoseEntry? {
+        try await withCheckedThrowingContinuation { continuation in
+            cancelBolus() { result in
+                switch result {
+                case .success(let dose):
+                    continuation.resume(returning: dose)
+                case .failure(let pumpManagerError):
+                    continuation.resume(throwing: pumpManagerError)
+                }
+            }
+        }
+    }
+
+
+    @discardableResult
+    func ensureCurrentPumpData() async -> Date? {
+        await withCheckedContinuation { (continuation) in
+            ensureCurrentPumpData { lastSync in
+                continuation.resume(returning: lastSync)
+            }
+        }
+    }
+
+    func syncDeliveryLimits(limits deliveryLimits: DeliveryLimits) async throws -> DeliveryLimits
+    {
+        return try await withCheckedThrowingContinuation { (continuation) in
+            syncDeliveryLimits(limits: deliveryLimits) { result in
+                continuation.resume(with: result)
+            }
         }
     }
 }

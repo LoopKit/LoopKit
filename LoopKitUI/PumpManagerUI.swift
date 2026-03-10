@@ -8,6 +8,7 @@
 import UIKit
 import SwiftUI
 import LoopKit
+import LoopAlgorithm
 
 public struct PumpManagerDescriptor {
     public let identifier: String
@@ -33,7 +34,7 @@ public struct PumpManagerSetupSettings {
 
 public protocol PumpStatusIndicator {
     /// a message from the pump that needs to be brought to the user's attention in the status bar
-    var pumpStatusHighlight: DeviceStatusHighlight? { get }
+    var pumpStatusHighlight: PumpStatusHighlight? { get }
 
     /// the completed percent of the progress bar to display in the status bar
     var pumpLifecycleProgress: DeviceLifecycleProgress? { get }
@@ -74,6 +75,7 @@ public protocol PumpManagerUI: DeviceManagerUI, PumpStatusIndicator, PumpManager
     static func createHUDView(rawValue: HUDProvider.HUDViewRawState) -> BaseHUDView?
 }
 
+@MainActor
 public protocol PumpManagerOnboardingDelegate: AnyObject {
     /// Informs the delegate that the specified pump manager was created.
     ///
@@ -94,6 +96,7 @@ public protocol PumpManagerOnboardingDelegate: AnyObject {
     func pumpManagerOnboarding(didPauseOnboarding pumpManager: PumpManagerUI)
 }
 
+@MainActor
 public protocol PumpManagerOnboarding {
     /// Delegate to notify about pump manager onboarding.
     var pumpManagerOnboardingDelegate: PumpManagerOnboardingDelegate? { get set }

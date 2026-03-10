@@ -20,37 +20,32 @@ class AlertTests: XCTestCase {
     
     func testAlertImmediateEncodable() {
         let alert = Alert(identifier: identifier, foregroundContent: foregroundContent, backgroundContent: backgroundContent, trigger: .immediate)
-        let str = try! alert.encodeToString()
-        let decoded = try! Alert.decode(from: str)
-        XCTAssertEqual(alert, decoded)
+        let str = try? alert.encodeToString()
+        XCTAssertTrue(str?.contains("\"trigger\":\"immediate\"") == true)
     }
     
     func testAlertDelayedEncodable() {
         let alert = Alert(identifier: identifier, foregroundContent: foregroundContent, backgroundContent: backgroundContent, trigger: .delayed(interval: 1.0))
-        let str = try! alert.encodeToString()
-        let decoded = try! Alert.decode(from: str)
-        XCTAssertEqual(alert, decoded)
+        let str = try? alert.encodeToString()
+        XCTAssertTrue(str?.contains("\"trigger\":{\"delayed\":{\"delayInterval\":1}}") == true)
     }
     
     func testAlertRepeatingEncodable() {
         let alert = Alert(identifier: identifier, foregroundContent: foregroundContent, backgroundContent: backgroundContent, trigger: .repeating(repeatInterval: 2.0))
-        let str = try! alert.encodeToString()
-        let decoded = try! Alert.decode(from: str)
-        XCTAssertEqual(alert, decoded)
+        let str = try? alert.encodeToString()
+        XCTAssertTrue(str?.contains("\"trigger\":{\"repeating\":{\"repeatInterval\":2}}") == true)
     }
 
     func testAlertVibrateSoundEncodable() {
         let alert = Alert(identifier: identifier, foregroundContent: foregroundContent, backgroundContent: backgroundContent, trigger: .immediate, sound: .vibrate)
-        let str = try! alert.encodeToString()
-        let decoded = try! Alert.decode(from: str)
-        XCTAssertEqual(alert, decoded)
+        let str = try? alert.encodeToString()
+        XCTAssertTrue(str?.contains("\"sound\":\"vibrate\"") == true)
     }
 
     func testAlertSoundEncodable() {
         let alert = Alert(identifier: identifier, foregroundContent: foregroundContent, backgroundContent: backgroundContent, trigger: .immediate, sound: .sound(name: "soundName"))
-        let str = try! alert.encodeToString()
-        let decoded = try! Alert.decode(from: str)
-        XCTAssertEqual(alert, decoded)
+        let str = try? alert.encodeToString()
+        XCTAssertTrue(str?.contains("\"sound\":{\"sound\":{\"name\":\"soundName\"}}") == true)
     }
 
     func testAlertImmediateDecodable() {

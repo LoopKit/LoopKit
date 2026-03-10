@@ -6,10 +6,9 @@
 //  Copyright © 2018 LoopKit Authors. All rights reserved.
 //
 
-import HealthKit
 import LoopKit
 import LoopTestingKit
-
+import LoopAlgorithm
 
 /// Returns a value based on the result of a random coin flip.
 /// - Parameter chanceOfHeads: The chance of flipping heads. Must be a value in the range `0...1`. Defaults to `0.5`.
@@ -68,10 +67,11 @@ struct MockGlucoseProvider {
 
 extension MockGlucoseProvider {
     init(model: MockCGMDataSource.Model, effects: MockCGMDataSource.Effects) {
-        self = effects.transformations.reduce(model.glucoseProvider) { model, transform in transform(model) }
+        let provider = model.glucoseProvider
+        self = effects.transformations.reduce(provider) { model, transform in transform(model) }
     }
 
-    private static func glucoseSample(at date: Date, quantity: HKQuantity, condition: GlucoseCondition?, trend: GlucoseTrend?, trendRate: HKQuantity?) -> NewGlucoseSample {
+    private static func glucoseSample(at date: Date, quantity: LoopQuantity, condition: GlucoseCondition?, trend: GlucoseTrend?, trendRate: LoopQuantity?) -> NewGlucoseSample {
         return NewGlucoseSample(
             date: date,
             quantity: quantity,
@@ -89,18 +89,18 @@ extension MockGlucoseProvider {
 // MARK: - Models
 
 extension MockGlucoseProvider {
-    fileprivate static func constant(_ quantity: HKQuantity) -> MockGlucoseProvider {
-        return MockGlucoseProvider { date, completion in
-            let sample = glucoseSample(at: date, quantity: quantity, condition: nil, trend: .flat, trendRate: HKQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: 0))
+    fileprivate static func constant(_ quantity: LoopQuantity) -> MockGlucoseProvider {
+        return MockGlucoseProvider(fetchDataAt: { date, completion in
+            let sample = glucoseSample(at: date, quantity: quantity, condition: nil, trend: .flat, trendRate: LoopQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: 0))
             completion(.newData([sample]))
-        }
+        })
     }
 
     fileprivate static func sineCurve(parameters: MockCGMDataSource.Model.SineCurveParameters) -> MockGlucoseProvider {
         let (baseGlucose, amplitude, period, referenceDate) = parameters
         precondition(period > 0)
-        let unit = HKUnit.milligramsPerDeciliter
-        let trendRateUnit = unit.unitDivided(by: .minute())
+        let unit = LoopUnit.milligramsPerDeciliter
+        let trendRateUnit = LoopUnit.milligramsPerDeciliterPerMinute
         precondition(baseGlucose.is(compatibleWith: unit))
         precondition(amplitude.is(compatibleWith: unit))
         let baseGlucoseValue = baseGlucose.doubleValue(for: unit)
@@ -115,7 +115,7 @@ extension MockGlucoseProvider {
             }
             let glucoseValue = sine(timeOffset)
             var trend: GlucoseTrend?
-            var trendRate: HKQuantity?
+            var trendRate: LoopQuantity?
             if let prevGlucoseValue = prevGlucoseValue,
                let trendRateValue = coinFlip(withChanceOfHeads: chanceOfNilTrendRate, ifHeads: nil, ifTails: glucoseValue - prevGlucoseValue) {
                 let smallDelta = 0.9
@@ -139,9 +139,9 @@ extension MockGlucoseProvider {
                 default:
                     break
                 }
-                trendRate = HKQuantity(unit: trendRateUnit, doubleValue: trendRateValue)
+                trendRate = LoopQuantity(unit: trendRateUnit, doubleValue: trendRateValue)
             }
-            let sample = glucoseSample(at: date, quantity: HKQuantity(unit: unit, doubleValue: glucoseValue), condition: nil, trend: trend, trendRate: trendRate)
+            let sample = glucoseSample(at: date, quantity: LoopQuantity(unit: unit, doubleValue: glucoseValue), condition: nil, trend: trend, trendRate: trendRate)
             // capture semantics lets me "stow" the previous glucose value with this static function.  A little weird, but it seems to work.
             prevGlucoseValue = glucoseValue
             completion(.newData([sample]))
@@ -150,17 +150,25 @@ extension MockGlucoseProvider {
     
     fileprivate static func scenario(pastSamples: [NewGlucoseSample], futureSamples: [NewGlucoseSample]) -> MockGlucoseProvider {
         var localSamples = futureSamples
-        return MockGlucoseProvider { date, completion in
+        return MockGlucoseProvider {
+            date,
+            completion in
             if localSamples.isEmpty {
                 localSamples = pastSamples + futureSamples
             }
             
-            guard let nextValue = localSamples.first?.quantity else {
+            guard let nextSample = localSamples.first else {
                 completion(.noData)
                 return
             }
             
-            let sample = glucoseSample(at: date, quantity: nextValue, condition: nil, trend: .flat, trendRate: HKQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: 0))
+            let sample = glucoseSample(
+                at: date,
+                quantity: nextSample.quantity,
+                condition: nextSample.condition,
+                trend: nextSample.trend,
+                trendRate: nextSample.trendRate
+            )
             localSamples = Array(localSamples.dropFirst())
             completion(.newData([sample]))
         }
@@ -171,7 +179,7 @@ extension MockGlucoseProvider {
     }
     
     fileprivate static var signalLoss: MockGlucoseProvider {
-        return MockGlucoseProvider { _, _ in }
+        return MockGlucoseProvider { _, completion in completion(.noData) }
     }
     
     fileprivate static var unreliableData: MockGlucoseProvider {
@@ -188,37 +196,37 @@ extension MockGlucoseProvider {
 private struct MockGlucoseProviderError: Error { }
 
 extension MockGlucoseProvider {
-    fileprivate func withRandomNoise(upTo magnitude: HKQuantity) -> MockGlucoseProvider {
-        let unit = HKUnit.milligramsPerDeciliter
+    fileprivate func withRandomNoise(upTo magnitude: LoopQuantity) -> MockGlucoseProvider {
+        let unit = LoopUnit.milligramsPerDeciliter
         precondition(magnitude.is(compatibleWith: unit))
         let magnitude = magnitude.doubleValue(for: unit)
 
         return mapGlucoseQuantities { glucose in
             let glucoseValue = (glucose.doubleValue(for: unit) + .random(in: -magnitude...magnitude)).rounded()
-            return HKQuantity(unit: unit, doubleValue: glucoseValue)
+            return LoopQuantity(unit: unit, doubleValue: glucoseValue)
         }
     }
 
-    fileprivate func randomlyProducingLowOutlier(withChance chanceOfOutlier: Double, outlierDelta: HKQuantity) -> MockGlucoseProvider {
+    fileprivate func randomlyProducingLowOutlier(withChance chanceOfOutlier: Double, outlierDelta: LoopQuantity) -> MockGlucoseProvider {
         return randomlyProducingOutlier(withChance: chanceOfOutlier, outlierDeltaMagnitude: outlierDelta, outlierDeltaSign: -)
     }
 
-    fileprivate func randomlyProducingHighOutlier(withChance chanceOfOutlier: Double, outlierDelta: HKQuantity) -> MockGlucoseProvider {
+    fileprivate func randomlyProducingHighOutlier(withChance chanceOfOutlier: Double, outlierDelta: LoopQuantity) -> MockGlucoseProvider {
         return randomlyProducingOutlier(withChance: chanceOfOutlier, outlierDeltaMagnitude: outlierDelta, outlierDeltaSign: +)
     }
 
     private func randomlyProducingOutlier(
         withChance chanceOfOutlier: Double,
-        outlierDeltaMagnitude: HKQuantity,
+        outlierDeltaMagnitude: LoopQuantity,
         outlierDeltaSign: (Double) -> Double
     ) -> MockGlucoseProvider {
-        let unit = HKUnit.milligramsPerDeciliter
+        let unit = LoopUnit.milligramsPerDeciliter
         precondition(outlierDeltaMagnitude.is(compatibleWith: unit))
         let outlierDelta = outlierDeltaSign(outlierDeltaMagnitude.doubleValue(for: unit))
         return mapGlucoseQuantities { glucose in
             return coinFlip(
                 withChanceOfHeads: chanceOfOutlier,
-                ifHeads: HKQuantity(unit: unit, doubleValue: (glucose.doubleValue(for: unit) + outlierDelta).rounded()),
+                ifHeads: LoopQuantity(unit: unit, doubleValue: (glucose.doubleValue(for: unit) + outlierDelta).rounded()),
                 ifTails: glucose
             )
         }
@@ -238,7 +246,7 @@ extension MockGlucoseProvider {
         }
     }
 
-    private func mapGlucoseQuantities(_ transform: @escaping (HKQuantity) -> HKQuantity) -> MockGlucoseProvider {
+    private func mapGlucoseQuantities(_ transform: @escaping (LoopQuantity) -> LoopQuantity) -> MockGlucoseProvider {
         return mapResult { result in
             return result.mapGlucoseQuantities(transform)
         }
@@ -246,7 +254,7 @@ extension MockGlucoseProvider {
 }
 
 private extension CGMReadingResult {
-    func mapGlucoseQuantities(_ transform: (HKQuantity) -> HKQuantity) -> CGMReadingResult {
+    func mapGlucoseQuantities(_ transform: (LoopQuantity) -> LoopQuantity) -> CGMReadingResult {
         guard case .newData(let samples) = self else {
             return self
         }

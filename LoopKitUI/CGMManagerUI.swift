@@ -8,6 +8,7 @@
 import HealthKit
 import SwiftUI
 import LoopKit
+import LoopAlgorithm
 
 public struct CGMManagerDescriptor {
     public let identifier: String
@@ -61,11 +62,12 @@ extension CGMManagerUI {
     }
 
     /// When conformance to the DisplayGlucoseUnitObserver is desired, use this function to be notified when the user display glucose unit changes
-    public func unitDidChange(to displayGlucoseUnit: HKUnit) {
+    public func unitDidChange(to displayGlucoseUnit: LoopUnit) {
         // optional
     }
 }
 
+@MainActor
 public protocol CGMManagerOnboardingDelegate: AnyObject {
     /// Informs the delegate that the specified CGM manager was created.
     ///
@@ -80,6 +82,7 @@ public protocol CGMManagerOnboardingDelegate: AnyObject {
     func cgmManagerOnboarding(didOnboardCGMManager cgmManager: CGMManagerUI)
 }
 
+@MainActor
 public protocol CGMManagerOnboarding {
     /// Delegate to notify about CGM manager onboarding.
     var cgmManagerOnboardingDelegate: CGMManagerOnboardingDelegate? { get set }

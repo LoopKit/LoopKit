@@ -6,11 +6,10 @@
 //
 
 import Foundation
-import HealthKit
 import LoopKit
 import SwiftCharts
 import UIKit
-
+import LoopAlgorithm
 
 public class COBChart: ChartProviding {
     public init() {
@@ -44,7 +43,7 @@ public extension COBChart {
         cobChartCache = nil
     }
 
-    func generate(withFrame frame: CGRect, xAxisModel: ChartAxisModel, xAxisValues: [ChartAxisValue], axisLabelSettings: ChartLabelSettings, guideLinesLayerSettings: ChartGuideLinesLayerSettings, colors: ChartColorPalette, chartSettings: ChartSettings, labelsWidthY: CGFloat, gestureRecognizer: UIGestureRecognizer?, traitCollection: UITraitCollection) -> Chart
+    func generate(withFrame frame: CGRect, xAxisModel: ChartAxisModel, xAxisValues: [ChartAxisValue], axisLabelSettings: ChartLabelSettings, guideLinesLayerSettings: ChartGuideLinesLayerSettings, colors: ChartColorPalette, chartSettings: ChartSettings, labelsWidthY: CGFloat, gestureRecognizer: UIGestureRecognizer?, traitCollection: UITraitCollection, highlightLabelOffsetY: CGFloat = 0) -> Chart
     {
         let yAxisValues = ChartAxisValuesStaticGenerator.generateYAxisValuesWithChartPoints(cobPoints + cobDisplayRangePoints, minSegmentCount: 2, maxSegmentCount: 3, multiple: 10, axisValueGenerator: { ChartAxisValueDouble($0, labelSettings: axisLabelSettings) }, addPaddingSegmentIfEdge: false)
 
@@ -70,6 +69,7 @@ public extension COBChart {
                 axisLabelSettings: axisLabelSettings,
                 chartPoints: cobPoints,
                 tintColor: colors.carbTint,
+                highlightLabelOffsetY: highlightLabelOffsetY,
                 gestureRecognizer: gestureRecognizer
             )
         }
@@ -92,7 +92,7 @@ public extension COBChart {
         let dateFormatter = DateFormatter(timeStyle: .short)
         let integerFormatter = NumberFormatter.integer
 
-        let unit = HKUnit.gram()
+        let unit = LoopUnit.gram
         let unitString = unit.unitString
 
         cobPoints = cobValues.map {

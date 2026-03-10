@@ -9,17 +9,17 @@
 import UIKit
 import HealthKit
 import LoopKit
-
+import LoopAlgorithm
 
 public protocol AddEditOverrideTableViewControllerDelegate: AnyObject {
-    func addEditOverrideTableViewController(_ vc: AddEditOverrideTableViewController, didSavePreset preset: TemporaryScheduleOverridePreset)
+    func addEditOverrideTableViewController(_ vc: AddEditOverrideTableViewController, didSavePreset preset: TemporaryPreset)
     func addEditOverrideTableViewController(_ vc: AddEditOverrideTableViewController, didSaveOverride override: TemporaryScheduleOverride)
     func addEditOverrideTableViewController(_ vc: AddEditOverrideTableViewController, didCancelOverride override: TemporaryScheduleOverride)
 }
 
 // MARK: - Default Implementations
 extension AddEditOverrideTableViewControllerDelegate {
-    public func addEditOverrideTableViewController(_ vc: AddEditOverrideTableViewController, didSavePreset preset: TemporaryScheduleOverridePreset) { }
+    public func addEditOverrideTableViewController(_ vc: AddEditOverrideTableViewController, didSavePreset preset: TemporaryPreset) { }
     public func addEditOverrideTableViewController(_ vc: AddEditOverrideTableViewController, didSaveOverride override: TemporaryScheduleOverride) { }
     public func addEditOverrideTableViewController(_ vc: AddEditOverrideTableViewController, didCancelOverride override: TemporaryScheduleOverride) { }
 }
@@ -35,8 +35,8 @@ public final class AddEditOverrideTableViewController: UITableViewController {
 
     public enum InputMode {
         case newPreset                                                  // Creating a new preset
-        case editPreset(TemporaryScheduleOverridePreset)                // Editing an existing preset
-        case customizePresetOverride(TemporaryScheduleOverridePreset)   // Defining an override relative to an existing preset
+        case editPreset(TemporaryPreset)                // Editing an existing preset
+        case customizePresetOverride(TemporaryPreset)   // Defining an override relative to an existing preset
         case customOverride                                             // Defining a one-off custom override
         case editOverride(TemporaryScheduleOverride)                    // Editing an active override
         case viewOverride(TemporaryScheduleOverride)                    // Viewing an override
@@ -103,9 +103,9 @@ public final class AddEditOverrideTableViewController: UITableViewController {
 
     // MARK: - Override properties
 
-    private let glucoseUnit: HKUnit
+    private let glucoseUnit: LoopUnit
 
-    private var symbol: String? { didSet { updateSaveButtonEnabled() } }
+    private var symbol: PresetSymbol? { didSet { updateSaveButtonEnabled() } }
 
     private var name: String? { didSet { updateSaveButtonEnabled() } }
 
@@ -130,7 +130,7 @@ public final class AddEditOverrideTableViewController: UITableViewController {
         }
     }
 
-    private func configure(with settings: TemporaryScheduleOverrideSettings) {
+    private func configure(with settings: TemporaryPresetSettings) {
         if let targetRange = settings.targetRange {
             self.targetRange = DoubleRange(minValue: targetRange.lowerBound.doubleValue(for: glucoseUnit), maxValue: targetRange.upperBound.doubleValue(for: glucoseUnit))
         } else {
@@ -141,7 +141,7 @@ public final class AddEditOverrideTableViewController: UITableViewController {
 
     // MARK: - Initialization & view life cycle
 
-    public init(glucoseUnit: HKUnit) {
+    public init(glucoseUnit: LoopUnit) {
         self.glucoseUnit = glucoseUnit
         super.init(style: .grouped)
     }
@@ -249,7 +249,7 @@ public final class AddEditOverrideTableViewController: UITableViewController {
             case .symbol:
                 let cell = tableView.dequeueReusableCell(withIdentifier: LabeledTextFieldTableViewCell.className, for: indexPath) as! LabeledTextFieldTableViewCell
                 cell.titleLabel.text = LocalizedString("Symbol", comment: "The text for the custom preset symbol setting")
-                cell.textField.text = symbol
+                cell.textField.text = symbol?.textualRepresentation
                 cell.textField.placeholder = SettingsTableViewCell.NoValueString
                 cell.maximumTextLength = 2
                 cell.customInput = overrideSymbolKeyboard
@@ -449,8 +449,8 @@ public final class AddEditOverrideTableViewController: UITableViewController {
 extension AddEditOverrideTableViewController {
     private func setupTitle() {
         if let symbol = symbol, let name = name {
-            let format = LocalizedString("%1$@ %2$@", comment: "The format for a preset symbol and name (1: symbol)(2: name)")
-            title = String(format: format, symbol, name)
+            let format = LocalizedString("%1$@%2$@", comment: "The format for a preset symbol and name (1: symbol)(2: name)")
+            title = String(format: format, "\(symbol.textualRepresentation ?? "") ", name)
         } else {
             switch inputMode {
             case .newPreset:
@@ -486,7 +486,7 @@ extension AddEditOverrideTableViewController {
         }
     }
 
-    private var configuredSettings: TemporaryScheduleOverrideSettings? {
+    private var configuredSettings: TemporaryPresetSettings? {
         if let targetRange = targetRange {
             guard targetRange.maxValue >= targetRange.minValue else {
                 return nil
@@ -497,30 +497,30 @@ extension AddEditOverrideTableViewController {
             }
         }
 
-        return TemporaryScheduleOverrideSettings(
+        return TemporaryPresetSettings(
             unit: glucoseUnit,
             targetRange: targetRange,
             insulinNeedsScaleFactor: insulinNeedsScaleFactor == 1.0 ? nil : insulinNeedsScaleFactor
         )
     }
 
-    private var configuredPreset: TemporaryScheduleOverridePreset? {
+    private var configuredPreset: TemporaryPreset? {
         guard
-            let symbol = symbol, !symbol.isEmpty,
+            let symbol = symbol,
             let name = name, !name.isEmpty,
             let settings = configuredSettings
         else {
             return nil
         }
 
-        let id: UUID
+        let id: String
         if case .editPreset(let preset) = inputMode {
             id = preset.id
         } else {
-            id = UUID()
+            id = UUID().uuidString
         }
 
-        return TemporaryScheduleOverridePreset(id: id, symbol: symbol, name: name, settings: settings, duration: duration)
+        return TemporaryPreset(id: id, symbol: symbol, name: name, settings: settings, duration: duration)
     }
 
     private var configuredOverride: TemporaryScheduleOverride? {
@@ -531,7 +531,7 @@ extension AddEditOverrideTableViewController {
         let context: TemporaryScheduleOverride.Context
         switch inputMode {
         case .customizePresetOverride(let preset):
-            let customizedPreset = TemporaryScheduleOverridePreset(
+            let customizedPreset = TemporaryPreset(
                 symbol: preset.symbol,
                 name: preset.name,
                 settings: settings,
@@ -632,7 +632,9 @@ extension AddEditOverrideTableViewController: TextFieldTableViewCellDelegate {
 
         switch propertyRow(for: indexPath) {
         case .symbol:
-            symbol = cell.textField.text
+            if let text = cell.textField.text {
+                symbol = .emoji(text)
+            }
         case .name:
             name = cell.textField.text
         default:

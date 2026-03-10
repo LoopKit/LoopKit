@@ -41,6 +41,8 @@ class MockHKAnchoredObjectQuery: HKAnchoredObjectQuery {
 
 
 class HKHealthStoreMock: HKHealthStoreProtocol {
+
+
     func stop(_ query: HKQuery) {
     }
 
@@ -102,6 +104,16 @@ class HKHealthStoreMock: HKHealthStoreProtocol {
         }
     }
 
+    func save(_ objects: [HKObject]) async throws {
+        try queue.sync {
+            self.saveHandler?(objects, self.saveError == nil, self.saveError)
+            if let error = self.saveError {
+                throw error
+            }
+        }
+    }
+
+
     func delete(_ objects: [HKObject], withCompletion completion: @escaping (Bool, Error?) -> Void) {
         queue.async {
             completion(self.deleteError == nil, self.deleteError)
@@ -114,6 +126,15 @@ class HKHealthStoreMock: HKHealthStoreProtocol {
             completion(self.deleteError == nil, 0, self.deleteError)
         }
     }
+
+    func deleteObjects(of objectType: HKObjectType, predicate: NSPredicate) async throws -> Int {
+        self.deleteObjectsHandler?(objectType, predicate, self.deleteError == nil, 0, self.deleteError)
+        if let deleteError {
+            throw deleteError
+        }
+        return 0
+    }
+
 
     func setSaveHandler(_ saveHandler: ((_ objects: [HKObject], _ success: Bool, _ error: Error?) -> Void)?) {
         queue.sync {

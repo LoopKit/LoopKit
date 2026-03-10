@@ -63,6 +63,7 @@ public struct CardList<Trailer: View>: View {
             VStack(spacing: 4) {
                 titleText
                     .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityIdentifier("titleText_TherapySettings")
 
                 cards
                 if let trailer = trailer {

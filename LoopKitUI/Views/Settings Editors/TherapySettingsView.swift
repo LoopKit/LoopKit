@@ -7,15 +7,16 @@
 //
 
 import AVFoundation
-import HealthKit
 import LoopKit
 import SwiftUI
+import LoopAlgorithm
 
 public struct TherapySettingsView: View {
     @EnvironmentObject private var displayGlucosePreference: DisplayGlucosePreference
     @Environment(\.chartColorPalette) var chartColorPalette
     @Environment(\.dismissAction) var dismissAction
     @Environment(\.appName) private var appName
+    @Environment(\.dosingStrategySelectionEnabled) var dosingStrategySelectionEnabled
 
     public struct ActionButton {
         public init(localizedString: String, action: @escaping () -> Void) {
@@ -28,7 +29,7 @@ public struct TherapySettingsView: View {
 
     private let mode: SettingsPresentationMode
 
-    @ObservedObject var viewModel: TherapySettingsViewModel
+    @State var viewModel: TherapySettingsViewModel
         
     private let actionButton: ActionButton?
 
@@ -82,16 +83,9 @@ public struct TherapySettingsView: View {
         }
         cards.append(suspendThresholdSection)
         cards.append(correctionRangeSection)
-        cards.append(preMealCorrectionRangeSection)
-        if !viewModel.sensitivityOverridesEnabled {
-            cards.append(workoutCorrectionRangeSection)
-        }
         cards.append(carbRatioSection)
         cards.append(basalRatesSection)
         cards.append(deliveryLimitsSection)
-        if viewModel.adultChildInsulinModelSelectionEnabled {
-            cards.append(insulinModelSection)
-        }
         cards.append(insulinSensitivitiesSection)
 
         return CardStack(cards: cards)
@@ -107,7 +101,7 @@ public struct TherapySettingsView: View {
         Button(action: dismissAction) {
             Text(LocalizedString("Done", comment: "Text for dismiss button"))
                 .bold()
-        }
+        }.accessibilityIdentifier("button_done")
     }
     
     @ViewBuilder
@@ -119,6 +113,7 @@ public struct TherapySettingsView: View {
                 }
                 .buttonStyle(ActionButtonStyle(.primary))
                 .padding()
+                .accessibilityIdentifier("button_\(actionButton.localizedString.lowercased())")
             }
         }
     }
@@ -133,8 +128,10 @@ extension TherapySettingsView {
                 VStack(alignment: .leading) {
                     Text(LocalizedString("Prescription", comment: "title for prescription section"))
                         .bold()
+                        .accessibilityIdentifier("titleText_Prescription")
                     Spacer()
                     DescriptiveText(label: prescriptionDescriptiveText)
+                        .accessibilityIdentifier("descriptiveText_Prescription")
                 }
                 Spacer()
             }
@@ -188,7 +185,7 @@ extension TherapySettingsView {
                     isEditing: false,
                     // Workaround for strange animation behavior on appearance
                     forceDisableAnimations: true
-                )
+                ).accessibilityIdentifier("glucoseSafetyLimitValue")
             }
         }
     }
@@ -206,39 +203,8 @@ extension TherapySettingsView {
                                       range: items[index].value,
                                       unit: glucoseUnit,
                                       guardrail: .correctionRange)
+                    .accessibilityIdentifier("correctionRangeValue")
                 }
-            }
-        }
-    }
-    
-    private var preMealCorrectionRangeSection: Card {
-        card(for: .preMealCorrectionRangeOverride) {
-            let correctionRangeOverrides = self.viewModel.correctionRangeOverrides
-            if let schedule = self.viewModel.glucoseTargetRangeSchedule {
-                SectionDivider()
-                CorrectionRangeOverridesRangeItem(
-                    value: correctionRangeOverrides,
-                    displayGlucoseUnit: glucoseUnit,
-                    preset: CorrectionRangeOverrides.Preset.preMeal,
-                    suspendThreshold: viewModel.suspendThreshold,
-                    correctionRangeScheduleRange: schedule.scheduleRange()
-                )
-            }
-        }
-    }
-    
-    private var workoutCorrectionRangeSection: Card {
-        card(for: .workoutCorrectionRangeOverride) {
-            let correctionRangeOverrides = self.viewModel.correctionRangeOverrides
-            if let schedule = self.viewModel.glucoseTargetRangeSchedule {
-                SectionDivider()
-                CorrectionRangeOverridesRangeItem(
-                    value: correctionRangeOverrides,
-                    displayGlucoseUnit: glucoseUnit,
-                    preset: CorrectionRangeOverrides.Preset.workout,
-                    suspendThreshold: self.viewModel.suspendThreshold,
-                    correctionRangeScheduleRange: schedule.scheduleRange()
-                )
             }
         }
     }
@@ -259,6 +225,7 @@ extension TherapySettingsView {
                                       value:  items[index].value,
                                       unit: .internationalUnitsPerHour,
                                       guardrail: .basalRate(supportedBasalRates: supportedBasalRates))
+                    .accessibilityIdentifier("basalRateValue")
                 }
                 SectionDivider()
                 HStack {
@@ -266,10 +233,11 @@ extension TherapySettingsView {
                         .bold()
                         .foregroundColor(.primary)
                     Spacer()
-                    Text(String(format: "%.2f ",total))
+                    (Text(String(format: "%.2f ",total))
                         .foregroundColor(.primary) +
                     Text(NSLocalizedString("U/day", comment: "The text indicating U/day for Daily Schedule Basal"))
-                        .foregroundColor(.secondary)
+                        .foregroundColor(.secondary))
+                    .accessibilityIdentifier("basalRateTotalValue")
                 }
             }
         }
@@ -277,8 +245,10 @@ extension TherapySettingsView {
     
     private var deliveryLimitsSection: Card {
         card(for: .deliveryLimits) {
-            SectionDivider()
-            self.maxBasalRateItem
+            if dosingStrategySelectionEnabled {
+                SectionDivider()
+                self.maxBasalRateItem
+            }
             SettingsDivider()
             self.maxBolusItem
         }
@@ -290,7 +260,7 @@ extension TherapySettingsView {
             Spacer()
             if let basalRates = self.viewModel.pumpSupportedIncrements()?.basalRates {
                 GuardrailConstrainedQuantityView(
-                    value: self.viewModel.therapySettings.maximumBasalRatePerHour.map { HKQuantity(unit: .internationalUnitsPerHour, doubleValue: $0) },
+                    value: self.viewModel.therapySettings.maximumBasalRatePerHour.map { LoopQuantity(unit: .internationalUnitsPerHour, doubleValue: $0) },
                     unit: .internationalUnitsPerHour,
                     guardrail: .maximumBasalRate(
                         supportedBasalRates: basalRates,
@@ -299,7 +269,7 @@ extension TherapySettingsView {
                     isEditing: false,
                     // Workaround for strange animation behavior on appearance
                     forceDisableAnimations: true
-                )
+                ).accessibilityIdentifier("maxBasalRateValue")
             }
         }
         .accessibilityElement(children: .combine)
@@ -311,45 +281,18 @@ extension TherapySettingsView {
             Spacer()
             if let maximumBolusVolumes = self.viewModel.pumpSupportedIncrements()?.maximumBolusVolumes {
                 GuardrailConstrainedQuantityView(
-                    value: self.viewModel.therapySettings.maximumBolus.map { HKQuantity(unit: .internationalUnit(), doubleValue: $0) },
-                    unit: .internationalUnit(),
+                    value: self.viewModel.therapySettings.maximumBolus.map { LoopQuantity(unit: .internationalUnit, doubleValue: $0) },
+                    unit: .internationalUnit,
                     guardrail: .maximumBolus(supportedBolusVolumes: maximumBolusVolumes),
                     isEditing: false,
                     // Workaround for strange animation behavior on appearance
                     forceDisableAnimations: true
-                )
+                ).accessibilityIdentifier("maxBolusValue")
             }
         }
         .accessibilityElement(children: .combine)
     }
         
-    private var insulinModelSection: Card {
-        card(for: .insulinModel) {
-            if let insulinModelPreset = self.viewModel.therapySettings.defaultRapidActingModel {
-                SectionDivider()
-                HStack {
-                    // Spacing and paddings here is my best guess based on the design...
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(insulinModelPreset.title)
-                            .font(.body)
-                            .padding(.top, 5)
-                            .fixedSize(horizontal: false, vertical: true)
-                        Text(insulinModelPreset.subtitle)
-                            .font(.footnote)
-                            .foregroundColor(.secondary)
-                            .padding(.bottom, 8)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                    Spacer()
-                    Image(systemName: "checkmark")
-                        .font(Font.system(.title2).weight(.semibold))
-                        .foregroundColor(.accentColor)
-                }
-                .accessibilityElement(children: .combine)
-            }
-        }
-    }
-
     private var carbRatioSection: Card {
         card(for: .carbRatio) {
             if let items = viewModel.therapySettings.carbRatioSchedule?.items {
@@ -362,6 +305,7 @@ extension TherapySettingsView {
                                       value: items[index].value,
                                       unit: .gramsPerUnit,
                                       guardrail: .carbRatio)
+                    .accessibilityIdentifier("carbRatioValue")
                 }
             }
         }
@@ -379,6 +323,7 @@ extension TherapySettingsView {
                                       value: items[index].value,
                                       unit: sensitivityUnit,
                                       guardrail: .insulinSensitivity)
+                    .accessibilityIdentifier("insulinSensitivityValue")
                 }
             }
         }
@@ -411,15 +356,11 @@ extension TherapySettingsView {
         case .glucoseTargetRange:
            CorrectionRangeScheduleEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss)
         case .preMealCorrectionRangeOverride:
-            CorrectionRangeOverridesEditor(mode: mode, therapySettingsViewModel: viewModel, preset: .preMeal, didSave: dismiss)
-        case .workoutCorrectionRangeOverride:
-           CorrectionRangeOverridesEditor(mode: mode, therapySettingsViewModel: viewModel, preset: .workout, didSave: dismiss)
+            CorrectionRangeOverridesEditor(therapySettingsViewModel: viewModel, preset: .preMeal, didSave: dismiss)
         case .basalRate:
             BasalRateScheduleEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss)
         case .deliveryLimits:
             DeliveryLimitsEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss)
-        case .insulinModel:
-            InsulinModelSelection(mode: mode, therapySettingsViewModel: viewModel, chartColors: chartColorPalette, didSave: dismiss)
         case .carbRatio:
             CarbRatioScheduleEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss)
         case .insulinSensitivity:
@@ -433,12 +374,19 @@ extension TherapySettingsView {
 // MARK: Utilities
 extension TherapySettingsView {
     
-    private var glucoseUnit: HKUnit {
+    private var glucoseUnit: LoopUnit {
         displayGlucosePreference.unit
     }
     
-    private var sensitivityUnit: HKUnit {
-        glucoseUnit.unitDivided(by: .internationalUnit())
+    private var sensitivityUnit: LoopUnit {
+        switch glucoseUnit {
+        case .milligramsPerDeciliter:
+            return .milligramsPerDeciliterPerInternationalUnit
+        case .millimolesPerLiter:
+            return .millimolesPerLiterPerInternationalUnit
+        default:
+            fatalError()
+        }
     }
     
     private func card<Content>(for therapySetting: TherapySetting, @ViewBuilder content: @escaping () -> Content) -> Card where Content: View {
@@ -446,7 +394,7 @@ extension TherapySettingsView {
             SectionWithTapToEdit(
                 isEnabled: mode != .acceptanceFlow,
                 title: therapySetting.title,
-                descriptiveText: therapySetting.descriptiveText(appName: appName),
+                descriptiveText: therapySetting.descriptiveText(appName: appName, dosingStrategySelectionEnabled: dosingStrategySelectionEnabled),
                 destination: { dismiss in
                     screen(for: therapySetting, dismiss: dismiss)
                         .environment(\.dismissAction, dismiss)
@@ -457,13 +405,13 @@ extension TherapySettingsView {
     }
 }
 
-typealias HKQuantityGuardrail = Guardrail<HKQuantity>
+typealias LoopQuantityGuardrail = Guardrail<LoopQuantity>
 
 struct ScheduleRangeItem: View {
     let time: TimeInterval
     let range: DoubleRange
-    let unit: HKUnit
-    let guardrail: HKQuantityGuardrail
+    let unit: LoopUnit
+    let guardrail: LoopQuantityGuardrail
     
     public var body: some View {
         ScheduleItemView(time: time,
@@ -479,14 +427,14 @@ struct ScheduleRangeItem: View {
 struct ScheduleValueItem: View {
     let time: TimeInterval
     let value: Double
-    let unit: HKUnit
-    let guardrail: HKQuantityGuardrail
+    let unit: LoopUnit
+    let guardrail: LoopQuantityGuardrail
     
     public var body: some View {
         ScheduleItemView(time: time,
                          isEditing: .constant(false),
                          valueContent: {
-                            GuardrailConstrainedQuantityView(value: HKQuantity(unit: unit, doubleValue: value), unit: unit, guardrail: guardrail, isEditing: false)
+                            GuardrailConstrainedQuantityView(value: LoopQuantity(unit: unit, doubleValue: value), unit: unit, guardrail: guardrail, isEditing: false)
                                 .padding(.leading, 10)
                          },
                          expandedContent: { EmptyView() })
@@ -495,10 +443,10 @@ struct ScheduleValueItem: View {
 
 struct CorrectionRangeOverridesRangeItem: View {
     let value: CorrectionRangeOverrides
-    let displayGlucoseUnit: HKUnit
+    let displayGlucoseUnit: LoopUnit
     let preset: CorrectionRangeOverrides.Preset
     let suspendThreshold: GlucoseThreshold?
-    let correctionRangeScheduleRange: ClosedRange<HKQuantity>
+    let correctionRangeScheduleRange: ClosedRange<LoopQuantity>
     
     public var body: some View {
         CorrectionRangeOverridesExpandableSetting(
@@ -547,10 +495,12 @@ struct SectionWithTapToEdit<Content, NavigationDestination>: View where Content:
             VStack(alignment: .leading) {
                 Text(title)
                     .bold()
+                    .accessibilityIdentifier("titleText_\(title.replacingOccurrences(of: " ", with: ""))")
                 Spacer()
                 HStack {
                     DescriptiveText(label: descriptiveText)
                         .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityIdentifier("descriptiveText_\(title.replacingOccurrences(of: " ", with: ""))")
                     Spacer()
                     if isEnabled {
                         NavigationLink(destination: destination(onFinish), isActive: $isActive) {
@@ -584,12 +534,10 @@ public struct TherapySettingsView_Previews: PreviewProvider {
 
     static let preview_therapySettings = TherapySettings(
         glucoseTargetRangeSchedule: GlucoseRangeSchedule(unit: .milligramsPerDeciliter, dailyItems: preview_glucoseScheduleItems),
-        correctionRangeOverrides: CorrectionRangeOverrides(preMeal: DoubleRange(88...99),
-                                                           workout: DoubleRange(99...111),
-                                                           unit: .milligramsPerDeciliter),
+        correctionRangeOverrides: CorrectionRangeOverrides(preMeal: DoubleRange(88...99), unit: .milligramsPerDeciliter),
         maximumBolus: 4,
         suspendThreshold: GlucoseThreshold.init(unit: .milligramsPerDeciliter, value: 60),
-        insulinSensitivitySchedule: InsulinSensitivitySchedule(unit: HKUnit.milligramsPerDeciliter.unitDivided(by: HKUnit.internationalUnit()), dailyItems: []),
+        insulinSensitivitySchedule: InsulinSensitivitySchedule(unit: .milligramsPerDeciliterPerInternationalUnit, dailyItems: []),
         carbRatioSchedule: nil,
         basalRateSchedule: BasalRateSchedule(dailyItems: [RepeatingScheduleValue(startTime: 0, value: 0.2), RepeatingScheduleValue(startTime: 1800, value: 0.75)]))
 

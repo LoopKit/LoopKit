@@ -8,9 +8,10 @@
 
 import Foundation
 import HealthKit
+import LoopAlgorithm
 
 extension GlucoseRangeSchedule {
-    public func safeSchedule(with suspendThreshold: HKQuantity?) -> GlucoseRangeSchedule? {
+    public func safeSchedule(with suspendThreshold: LoopQuantity?) -> GlucoseRangeSchedule? {
         let minGlucoseValue = [
             suspendThreshold?.doubleValue(for: self.unit),
             Guardrail.correctionRange.absoluteBounds.lowerBound.doubleValue(for: self.unit)

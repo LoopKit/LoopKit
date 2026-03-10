@@ -9,7 +9,7 @@
 import UIKit
 import LoopKit
 import LoopKitUI
-import HealthKit
+import LoopAlgorithm
 
 
 class MasterViewController: UITableViewController {
@@ -19,8 +19,10 @@ class MasterViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil {
-            dataManager = DeviceDataManager()
+        Task {
+            if ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil {
+                dataManager = await DeviceDataManager()
+            }
         }
     }
 
@@ -164,7 +166,7 @@ class MasterViewController: UITableViewController {
 
                 scheduleVC.delegate = self
                 scheduleVC.title = NSLocalizedString("Carb Ratios", comment: "The title of the carb ratios schedule screen")
-                scheduleVC.unit = .gram()
+                scheduleVC.unit = .gram
 
                 if let schedule = dataManager?.carbRatioSchedule {
                     scheduleVC.timeZone = schedule.timeZone
@@ -187,7 +189,7 @@ class MasterViewController: UITableViewController {
                 let scheduleVC = DismissibleHostingController(content: view, dismissalMode: .pop(to:  type(of: self)), isModalInPresentation: false)
                 show(scheduleVC, sender: sender)
             case .insulinSensitivity:
-                let unit = dataManager?.insulinSensitivitySchedule?.unit ?? HKUnit.milligramsPerDeciliter
+                let unit = dataManager?.insulinSensitivitySchedule?.unit ?? LoopUnit.milligramsPerDeciliter
                 let scheduleVC = InsulinSensitivityScheduleViewController(allowedValues: unit.allowedSensitivityValues, unit: unit)
 
                 scheduleVC.unit = unit
@@ -214,63 +216,17 @@ class MasterViewController: UITableViewController {
         case .data:
             switch DataRow(rawValue: indexPath.row)! {
             case .carbs:
-                //performSegue(withIdentifier: CarbEntryTableViewController.className, sender: sender)
                 break
             case .reservoir:
-                performSegue(withIdentifier: LegacyInsulinDeliveryTableViewController.className, sender: sender)
+                break
             case .diagnostic:
-                let vc = CommandResponseViewController(command: { [weak self] (completionHandler) -> String in
-                    let group = DispatchGroup()
-
-                    guard let dataManager = self?.dataManager else {
-                        completionHandler("")
-                        return "nil"
-                    }
-
-                    var doseStoreResponse = ""
-                    group.enter()
-                    dataManager.doseStore.generateDiagnosticReport { (report) in
-                        doseStoreResponse = report
-                        group.leave()
-                    }
-
-                    var carbStoreResponse = ""
-                    if let carbStore = dataManager.carbStore {
-                        group.enter()
-                        carbStore.generateDiagnosticReport { (report) in
-                            carbStoreResponse = report
-                            group.leave()
-                        }
-                    }
-
-                    var glucoseStoreResponse = ""
-                    group.enter()
-                    dataManager.glucoseStore.generateDiagnosticReport { (report) in
-                        glucoseStoreResponse = report
-                        group.leave()
-                    }
-
-                    group.notify(queue: DispatchQueue.main) {
-                        completionHandler([
-                            doseStoreResponse,
-                            carbStoreResponse,
-                            glucoseStoreResponse
-                        ].joined(separator: "\n\n"))
-                    }
-
-                    return "…"
-                })
-                vc.title = "Diagnostic"
-
-                show(vc, sender: sender)
+                break
             case .generate:
                 let vc = CommandResponseViewController(command: { [weak self] (completionHandler) -> String in
                     guard let dataManager = self?.dataManager else {
                         completionHandler("")
                         return "dataManager is nil"
                     }
-
-                    let group = DispatchGroup()
 
                     var unitVolume = 150.0
 
@@ -280,20 +236,6 @@ class MasterViewController: UITableViewController {
                         }
 
                         unitVolume -= (drand48() * 2.0)
-
-                        group.enter()
-                        dataManager.doseStore.addReservoirValue(unitVolume, at: Date(timeIntervalSinceNow: index)) { (_, _, _, error) in
-                            group.leave()
-                        }
-                    }
-
-                    group.enter()
-                    dataManager.glucoseStore.addGlucoseSamples([NewGlucoseSample(date: Date(), quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 101), condition: nil, trend: nil, trendRate: nil, isDisplayOnly: false, wasUserEntered: false, syncIdentifier: UUID().uuidString)], completion: { (result) in
-                        group.leave()
-                    })
-
-                    group.notify(queue: .main) {
-                        completionHandler("Completed")
                     }
 
                     return "Generating…"
@@ -317,13 +259,6 @@ class MasterViewController: UITableViewController {
 
         if let navVC = targetViewController as? UINavigationController, let topViewController = navVC.topViewController {
             targetViewController = topViewController
-        }
-
-        switch targetViewController {
-        case let vc as LegacyInsulinDeliveryTableViewController:
-            vc.doseStore = dataManager?.doseStore
-        default:
-            break
         }
     }
 }
@@ -359,13 +294,13 @@ extension MasterViewController: InsulinSensitivityScheduleStorageDelegate {
     }
 }
 
-private extension HKUnit {
+private extension LoopUnit {
     var allowedSensitivityValues: [Double] {
-        if self == HKUnit.milligramsPerDeciliter {
+        if self == LoopUnit.milligramsPerDeciliter {
             return (10...500).map { Double($0) }
         }
 
-        if self == HKUnit.millimolesPerLiter {
+        if self == LoopUnit.millimolesPerLiter {
             return (6...270).map { Double($0) / 10.0 }
         }
 
@@ -373,11 +308,11 @@ private extension HKUnit {
     }
 
     var allowedCorrectionRangeValues: [Double] {
-        if self == HKUnit.milligramsPerDeciliter {
+        if self == LoopUnit.milligramsPerDeciliter {
             return (60...180).map { Double($0) }
         }
 
-        if self == HKUnit.millimolesPerLiter {
+        if self == LoopUnit.millimolesPerLiter {
             return (33...100).map { Double($0) / 10.0 }
         }
 

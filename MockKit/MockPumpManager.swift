@@ -9,7 +9,9 @@
 import HealthKit
 import LoopKit
 import LoopTestingKit
+import LoopAlgorithm
 
+@MainActor
 public protocol MockPumpManagerStateObserver {
     func mockPumpManager(_ manager: MockPumpManager, didUpdate state: MockPumpManagerState)
     func mockPumpManager(_ manager: MockPumpManager, didUpdate status: PumpManagerStatus, oldStatus: PumpManagerStatus)
@@ -39,11 +41,13 @@ public enum MockPumpManagerError: LocalizedError {
     }
 }
 
-public final class MockPumpManager: TestingPumpManager {
-    public static let pluginIdentifier = "MockPumpManager"
+public final class MockPumpManager: TestingPumpManager {    
+    public static let managerIdentifier = "MockPumpManager"
+    
+    public var pluginIdentifier: String { Self.managerIdentifier }
     
     public static let localizedTitle = "Pump Simulator"
-    
+
     public var localizedTitle: String {
         return MockPumpManager.localizedTitle
     }
@@ -65,7 +69,7 @@ public final class MockPumpManager: TestingPumpManager {
     }
 
     private static let device = HKDevice(
-        name: MockPumpManager.pluginIdentifier,
+        name: MockPumpManager.managerIdentifier,
         manufacturer: nil,
         model: nil,
         hardwareVersion: nil,
@@ -91,18 +95,18 @@ public final class MockPumpManager: TestingPumpManager {
         }
     }
 
-    public var currentBasalRate: HKQuantity? {
+    public var currentBasalRate: LoopQuantity? {
         switch status.basalDeliveryState {
         case .suspending, .suspended(_):
-            return HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 0)
+            return LoopQuantity(unit: .internationalUnitsPerHour, doubleValue: 0)
         case .tempBasal(let dose):
-            return HKQuantity(unit: .internationalUnitsPerHour, doubleValue: dose.unitsPerHour)
+            return LoopQuantity(unit: .internationalUnitsPerHour, doubleValue: dose.unitsPerHour)
         case .none:
             return nil
         default:
             guard let scheduledBasalRate = state.basalRateSchedule?.value(at: Date()) else { return nil }
 
-            return HKQuantity(unit: .internationalUnitsPerHour, doubleValue: scheduledBasalRate)
+            return LoopQuantity(unit: .internationalUnitsPerHour, doubleValue: scheduledBasalRate)
         }
     }
 
@@ -130,11 +134,7 @@ public final class MockPumpManager: TestingPumpManager {
         return type(of: self).device
     }
 
-    public var testLastReconciliation: Date? = nil
-    
-    public var lastSync: Date? {
-        return testLastReconciliation ?? Date()
-    }
+    public var lastSync: Date?
     
     public var insulinType: InsulinType? {
         return state.insulinType
@@ -144,8 +144,8 @@ public final class MockPumpManager: TestingPumpManager {
         if case .suspended(let date) = state.suspendState {
             return .suspended(date)
         }
-        if state.occlusionDetected || state.pumpErrorDetected || state.pumpBatteryChargeRemaining == 0 || state.reservoirUnitsRemaining == 0 {
-            return nil
+        if state.occlusionDetected || state.pumpErrorDetected || state.isPumpExpired || state.pumpBatteryChargeRemaining == 0 || state.reservoirUnitsRemaining == 0 {
+            return .pumpInoperable
         }
         if let temp = state.unfinalizedTempBasal, !temp.finished {
             return .tempBasal(DoseEntry(temp))
@@ -168,29 +168,36 @@ public final class MockPumpManager: TestingPumpManager {
     public func buildPumpStatusHighlight(for state: MockPumpManagerState) -> PumpStatusHighlight? {
         if state.deliveryIsUncertain {
             return PumpStatusHighlight(localizedMessage: LocalizedString("Comms Issue", comment: "Status highlight that delivery is uncertain."),
-                                                         imageName: "exclamationmark.circle.fill",
-                                                         state: .critical)
-        }
-        else if state.reservoirUnitsRemaining == 0 {
+                                       imageName: "exclamationmark.circle.fill",
+                                       state: .critical)
+        } else if state.reservoirUnitsRemaining == 0 {
             return PumpStatusHighlight(localizedMessage: LocalizedString("No Insulin", comment: "Status highlight that a pump is out of insulin."),
-                                                         imageName: "exclamationmark.circle.fill",
-                                                         state: .critical)
+                                       imageName: "exclamationmark.circle.fill",
+                                       state: .critical)
         } else if state.occlusionDetected {
             return PumpStatusHighlight(localizedMessage: LocalizedString("Pump Occlusion", comment: "Status highlight that an occlusion was detected."),
-                                                         imageName: "exclamationmark.circle.fill",
-                                                         state: .critical)
+                                       imageName: "exclamationmark.circle.fill",
+                                       state: .critical)
         } else if state.pumpErrorDetected {
             return PumpStatusHighlight(localizedMessage: LocalizedString("Pump Error", comment: "Status highlight that a pump error occurred."),
-                                                         imageName: "exclamationmark.circle.fill",
-                                                         state: .critical)
+                                       imageName: "exclamationmark.circle.fill",
+                                       state: .critical)
+        } else if state.isPumpExpired {
+            return PumpStatusHighlight(localizedMessage: LocalizedString("Pump\nExpired", comment: "Status highlight that the pump expired."),
+                                       imageName: "exclamationmark.circle.fill",
+                                       state: .critical)
         } else if pumpBatteryChargeRemaining == 0 {
             return PumpStatusHighlight(localizedMessage: LocalizedString("Pump Battery Dead", comment: "Status highlight that pump has a dead battery."),
-                                                         imageName: "exclamationmark.circle.fill",
-                                                         state: .critical)
+                                       imageName: "exclamationmark.circle.fill",
+                                       state: .critical)
         } else if case .suspended = state.suspendState {
             return PumpStatusHighlight(localizedMessage: LocalizedString("Insulin Suspended", comment: "Status highlight that insulin delivery was suspended."),
-                                                         imageName: "pause.circle.fill",
-                                                         state: .warning)
+                                       imageName: "pause.circle.fill",
+                                       state: .warning)
+        } else if state.inSignalLoss {
+            return PumpStatusHighlight(localizedMessage: LocalizedString("Signal Loss", comment: "Status highlight that signal is lost."),
+                                       imageName: "exclamationmark.circle.fill",
+                                       state: .critical)
         }
         
         return nil
@@ -216,6 +223,14 @@ public final class MockPumpManager: TestingPumpManager {
         
         return PumpLifecycleProgress(percentComplete: progressPercentComplete,
                                                        progressState: progressState)
+    }
+    
+    public var canSynchronizePumpTime: Bool {
+        detectedSystemTimeOffset == 0
+    }
+    
+    public var detectedSystemTimeOffset: TimeInterval {
+        pumpManagerDelegate?.detectedSystemTimeOffset ?? 0
     }
     
     public var isClockOffset: Bool {
@@ -275,20 +290,30 @@ public final class MockPumpManager: TestingPumpManager {
             let oldStatus = status(for: oldValue)
             let newStatus = status(for: newValue)
 
-            if oldStatus != newStatus {
+            let oldStatusHighlight = buildPumpStatusHighlight(for: oldValue)
+            let newStatusHighlight = buildPumpStatusHighlight(for: newValue)
+
+            if oldStatus != newStatus ||
+                oldStatusHighlight != newStatusHighlight
+            {
                 notifyStatusObservers(oldStatus: oldStatus)
             }
-            
+
             // stop insulin delivery as pump state requires
             if (newValue.occlusionDetected != oldValue.occlusionDetected && newValue.occlusionDetected) ||
                 (newValue.pumpErrorDetected != oldValue.pumpErrorDetected && newValue.pumpErrorDetected) ||
+                (newValue.isPumpExpired != oldValue.isPumpExpired && newValue.isPumpExpired) ||
                 (newValue.pumpBatteryChargeRemaining != oldValue.pumpBatteryChargeRemaining && newValue.pumpBatteryChargeRemaining == 0) ||
                 (newValue.reservoirUnitsRemaining != oldValue.reservoirUnitsRemaining && newValue.reservoirUnitsRemaining == 0)
             {
                 stopInsulinDelivery()
             }
             
-            stateObservers.forEach { $0.mockPumpManager(self, didUpdate: self.state) }
+            stateObservers.forEach {observer in
+                Task { @MainActor in
+                    observer.mockPumpManager(self, didUpdate: self.state)
+                }
+            }
 
             delegate.notify { (delegate) in
                 if newValue.reservoirUnitsRemaining != oldValue.reservoirUnitsRemaining {
@@ -326,8 +351,13 @@ public final class MockPumpManager: TestingPumpManager {
     private var statusObservers = WeakSynchronizedSet<PumpManagerStatusObserver>()
     private var stateObservers = WeakSynchronizedSet<MockPumpManagerStateObserver>()
 
+    private var deliveryTimer: Timer?
+    
     public init() {
         state = MockPumpManagerState(reservoirUnitsRemaining: MockPumpManager.pumpReservoirCapacity)
+        deliveryTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { [weak self] _ in
+            self?.state.finalizeFinishedDoses()
+        })
     }
 
     public init?(rawState: RawStateValue) {
@@ -344,6 +374,14 @@ public final class MockPumpManager: TestingPumpManager {
     
     public let isOnboarded = true   // No distinction between created and onboarded
 
+    public var inSignalLoss: Bool {
+        state.inSignalLoss
+    }
+    
+    public var isInoperable: Bool {
+        basalDeliveryState(for: state) == .pumpInoperable
+    }
+    
     private func logDeviceCommunication(_ message: String, type: DeviceLogEntryType = .send) {
         self.delegate.delegate?.deviceManager(self, logEventForDeviceIdentifier: "MockId", type: type, message: message, completion: nil)
     }
@@ -377,7 +415,11 @@ public final class MockPumpManager: TestingPumpManager {
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(fetchDelay)) {
             
             self.state.finalizeFinishedDoses()
-            
+
+            if !self.state.pumpErrorDetected && !self.state.occlusionDetected && !self.state.isPumpExpired {
+                self.lastSync = Date()
+            }
+
             self.storePumpEvents { (error) in
                 guard error == nil else {
                     completion?(self.lastSync)
@@ -409,7 +451,7 @@ public final class MockPumpManager: TestingPumpManager {
         }
     }
 
-    public func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (PumpManagerError?) -> Void) {
+    public func enactTempBasal(decisionId: UUID?, unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (PumpManagerError?) -> Void) {
         logDeviceComms(.send, message: "Temp Basal \(unitsPerHour) U/hr Duration:\(duration.hours)")
 
         if state.tempBasalShouldCrash {
@@ -424,7 +466,7 @@ public final class MockPumpManager: TestingPumpManager {
             state.deliveryIsUncertain = true
             logDeviceComms(.error, message: "Uncertain delivery for temp basal")
             completion(.uncertainDelivery)
-        } else if state.occlusionDetected || state.pumpErrorDetected {
+        } else if state.occlusionDetected || state.pumpErrorDetected || state.isPumpExpired {
             let error = PumpManagerError.deviceState(MockPumpManagerError.pumpError)
             logDeviceComms(.error, message: "Temp Basal failed because the pump is in an error state")
             completion(error)
@@ -435,6 +477,10 @@ public final class MockPumpManager: TestingPumpManager {
         } else if state.reservoirUnitsRemaining == 0 {
             let error = PumpManagerError.deviceState(MockPumpManagerError.pumpSuspended)
             logDeviceComms(.error, message: "Temp Basal failed because there is no insulin in the reservoir")
+            completion(error)
+        } else if state.inSignalLoss {
+            let error = PumpManagerError.deviceState(MockPumpManagerError.communicationFailure)
+            logDeviceComms(.error, message: "Temp Basal failed because pump is in signal loss")
             completion(error)
         } else {
             let now = Date()
@@ -451,7 +497,7 @@ public final class MockPumpManager: TestingPumpManager {
                     completion(nil)
                 }
             } else {
-                let temp = UnfinalizedDose(tempBasalRate: unitsPerHour, startTime: now, duration: duration, insulinType: state.insulinType)
+                let temp = UnfinalizedDose(tempBasalRate: unitsPerHour, startTime: now, duration: duration, insulinType: state.insulinType, decisionId: decisionId)
                 state.unfinalizedTempBasal = temp
                 storePumpEvents { (error) in
                     completion(nil)
@@ -465,7 +511,7 @@ public final class MockPumpManager: TestingPumpManager {
         self.delegate.delegate?.deviceManager(self, logEventForDeviceIdentifier: "mockpump", type: type, message: message, completion: nil)
     }
 
-    public func enactBolus(units: Double, activationType: BolusActivationType, completion: @escaping (PumpManagerError?) -> Void) {
+    public func enactBolus(decisionId: UUID?, units: Double, activationType: BolusActivationType, completion: @escaping (PumpManagerError?) -> Void) {
 
         logDeviceCommunication("enactBolus(\(units), \(activationType))")
 
@@ -481,13 +527,17 @@ public final class MockPumpManager: TestingPumpManager {
             state.deliveryIsUncertain = true
             logDeviceComms(.error, message: "Uncertain delivery for bolus")
             completion(PumpManagerError.uncertainDelivery)
-        } else if state.occlusionDetected || state.pumpErrorDetected {
+        } else if state.occlusionDetected || state.pumpErrorDetected || state.isPumpExpired {
             let error = PumpManagerError.deviceState(MockPumpManagerError.pumpError)
             logDeviceComms(.error, message: "Bolus failed because the pump is in an error state")
             completion(error)
         } else if state.reservoirUnitsRemaining == 0 {
             let error = PumpManagerError.deviceState(MockPumpManagerError.pumpSuspended)
             logDeviceComms(.error, message: "Bolus failed because there is no insulin in the reservoir")
+            completion(error)
+        } else if state.inSignalLoss {
+            let error = PumpManagerError.deviceState(MockPumpManagerError.communicationFailure)
+            logDeviceComms(.error, message: "Bolus failed because pump is in signal loss")
             completion(error)
         } else {
             state.finalizeFinishedDoses()
@@ -505,7 +555,7 @@ public final class MockPumpManager: TestingPumpManager {
             }
             
             
-            let bolus = UnfinalizedDose(bolusAmount: units, startTime: Date(), duration: .minutes(units / type(of: self).deliveryUnitsPerMinute), insulinType: state.insulinType, automatic: activationType.isAutomatic)
+            let bolus = UnfinalizedDose(bolusAmount: units, startTime: Date(), duration: .minutes(units / type(of: self).deliveryUnitsPerMinute), insulinType: state.insulinType, automatic: activationType.isAutomatic, decisionId: decisionId)
             state.unfinalizedBolus = bolus
             
             logDeviceComms(.receive, message: "Bolus accepted")
@@ -524,13 +574,17 @@ public final class MockPumpManager: TestingPumpManager {
             let error = PumpManagerError.communication(MockPumpManagerError.communicationFailure)
             logDeviceComms(.error, message: "Cancel failed with error: \(error)")
             completion(.failure(error))
+        } else if state.inSignalLoss {
+            let error = PumpManagerError.deviceState(MockPumpManagerError.communicationFailure)
+            logDeviceComms(.error, message: "Cancel failed because pump is in signal loss")
+            completion(.failure(error))
         } else {
             state.unfinalizedBolus?.cancel(at: Date())
-            
+            let bolusCanceled = state.unfinalizedBolus != nil ? DoseEntry(state.unfinalizedBolus!) : nil
             storePumpEvents { (_) in
                 DispatchQueue.main.async {
                     self.state.finalizeFinishedDoses()
-                    completion(.success(nil))
+                    completion(.success(bolusCanceled))
                 }
             }
         }
@@ -545,6 +599,48 @@ public final class MockPumpManager: TestingPumpManager {
         state.unfinalizedTempBasal?.cancel(at: now)
         state.unfinalizedBolus?.cancel(at: now)
         storePumpEvents { _ in }
+        state.suspendState = nil
+    }
+    
+    func issueInsulinSuspensionReminderAlert(reminderDelay: TimeInterval?) {
+        guard let reminderDelay = reminderDelay else { return }
+        Task {
+            await issueAlert(insulinSuspensionReminderAlert(reminderDelay: reminderDelay))
+        }
+    }
+    
+    private func retractInsulinSuspensionReminderAlert() {
+        Task {
+            await retractAlert(identifier: insulinSuspensionReminderAlertIdentifier)
+        }
+    }
+
+    var insulinSuspensionReminderAlertIdentifier: Alert.Identifier {
+        Alert.Identifier(managerIdentifier: pluginIdentifier, alertIdentifier: "insulinSuspensionReminder")
+    }
+
+    private func insulinSuspensionReminderAlert(reminderDelay: TimeInterval) -> Alert {
+        let identifier = insulinSuspensionReminderAlertIdentifier
+        let alertContentForeground = Alert.Content(title: LocalizedString("Delivery Suspension Reminder", comment: "Title of insulin suspension reminder alert"),
+                                                   body: LocalizedString("The insulin suspension period has ended. You can resume delivery from the banner on the home screen or from your pump settings screen.", comment: "The body of the insulin suspension reminder alert (in app)"),
+                                                   acknowledgeActionButtonLabel: LocalizedString("OK", comment: "Acknowledgement button title for insulin suspension reminder  alert"))
+        let alertContentBackground = Alert.Content(title: LocalizedString("Delivery Suspension Reminder", comment: "Title of insulin suspension reminder alert"),
+                                                   body: LocalizedString("The insulin suspension period has ended. Return to App and resume.", comment: "The body of the insulin suspension reminder alert (notification)"),
+                                                   acknowledgeActionButtonLabel: LocalizedString("OK", comment: "Acknowledgement button title for insulin suspension reminder  alert"))
+        return Alert(identifier: identifier,
+                     foregroundContent: alertContentForeground,
+                     backgroundContent: alertContentBackground,
+                     trigger: .delayed(interval: reminderDelay),
+                     interruptionLevel: .timeSensitive)
+    }
+    
+    public func suspendDelivery(reminderDelay: TimeInterval, completion: @escaping (Error?) -> Void) {
+        suspendDelivery { [weak self] error in
+            if error == nil {
+                self?.issueInsulinSuspensionReminderAlert(reminderDelay: reminderDelay)
+            }
+            completion(error)
+        }
     }
 
     public func suspendDelivery(completion: @escaping (Error?) -> Void) {
@@ -553,6 +649,10 @@ public final class MockPumpManager: TestingPumpManager {
         if self.state.deliverySuspensionShouldError {
             let error = PumpManagerError.communication(MockPumpManagerError.communicationFailure)
             logDeviceComms(.error, message: "Suspend failed with error: \(error)")
+            completion(error)
+        } else if state.inSignalLoss {
+            let error = PumpManagerError.deviceState(MockPumpManagerError.communicationFailure)
+            logDeviceComms(.error, message: "Suspend failed because pump is in signal loss")
             completion(error)
         } else {
             let now = Date()
@@ -570,6 +670,9 @@ public final class MockPumpManager: TestingPumpManager {
                 completion(error)
             }
             logDeviceCommunication("suspendDelivery succeeded", type: .receive)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                completion(nil)
+            }
         }
     }
 
@@ -580,19 +683,42 @@ public final class MockPumpManager: TestingPumpManager {
             let error = PumpManagerError.communication(MockPumpManagerError.communicationFailure)
             logDeviceComms(.error, message: "Resume failed with error: \(error)")
             completion(error)
+        } else if state.inSignalLoss {
+            let error = PumpManagerError.deviceState(MockPumpManagerError.communicationFailure)
+            logDeviceComms(.error, message: "Resume failed because pump is in signal loss")
+            completion(error)
         } else {
             let resumeDate = Date()
             let resume = UnfinalizedDose(resumeStartTime: resumeDate, insulinType: state.insulinType, automatic: false)
-            self.state.finalizedDoses.append(resume)
-            self.state.suspendState = .resumed(resumeDate)
-            storePumpEvents { (error) in
-                completion(error)
-            }
+            state.finalizedDoses.append(resume)
+            state.suspendState = .resumed(resumeDate)
             logDeviceCommunication("resumeDelivery succeeded", type: .receive)
+            retractInsulinSuspensionReminderAlert()
+            storePumpEvents { (error) in
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    completion(error)
+                }
+            }
         }
     }
     
     public func trigger(action: DeviceAction) {}
+    
+    public var pumpTimeZone: TimeZone {
+        state.timeZone
+    }
+    
+    public func setPumpTime(_ newPumpTime: Date = Date(), using timeZone: TimeZone, completion: @escaping (Error?) -> Void) {
+        logDeviceCommunication("set pump time success", type: .receive)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.recordPumpTime(newPumpTime, in: timeZone)
+            completion(nil)
+        }
+    }
+        
+    private func recordPumpTime(_ pumpTime: Date, in timeZone: TimeZone) {
+        state.timeZone = timeZone
+    }
 
     public func injectPumpEvents(_ pumpEvents: [NewPumpEvent]) {
         // directly report these pump events
@@ -626,9 +752,41 @@ extension MockPumpManager {
 }
 
 // MARK: - AlertResponder implementation
-extension MockPumpManager {
-    public func acknowledgeAlert(alertIdentifier: Alert.AlertIdentifier, completion: @escaping (Error?) -> Void) {
-        completion(nil)
+extension MockPumpManager: AlertIssuer {
+    public func issueAlert(_ alert: Alert) {
+        logDeviceComms(.delegate, message: "issuing \(alert.identifier) \(alert.backgroundContent.title) with trigger \(alert.trigger)")
+        delegate.notify { delegate in
+            guard let delegate else { return }
+            Task {
+                await delegate.issueAlert(alert)
+            }
+        }
+    }
+    
+    public func retractAlert(identifier: Alert.Identifier) {
+        logDeviceComms(.delegate, message: "retracting \(identifier)")
+        delegate.notify { delegate in
+            guard let delegate else { return }
+            Task {
+                await delegate.retractAlert(identifier: identifier)
+            }
+        }
+    }
+    
+    public func acknowledgeAlert(alertIdentifier: Alert.AlertIdentifier) async throws {
+        logDeviceComms(.delegate, message: "acknowledging \(alertIdentifier)")
+
+        if alertIdentifier == insulinSuspensionReminderAlertIdentifier.alertIdentifier {
+            if case .suspended = state.suspendState {
+                // subsequent reminder are delayed 15 mins
+                issueInsulinSuspensionReminderAlert(reminderDelay: .minutes(15))
+            }
+            return
+        }
+        
+    }
+
+    public func handleAlertAction(actionIdentifier: String, from alert: Alert) async throws {
     }
 }
 

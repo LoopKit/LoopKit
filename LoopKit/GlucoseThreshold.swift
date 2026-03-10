@@ -7,19 +7,19 @@
 //
 
 import Foundation
-import HealthKit
+import LoopAlgorithm
 
 public struct GlucoseThreshold: Equatable, RawRepresentable {
     public typealias RawValue = [String: Any]
 
     public let value: Double
-    public let unit: HKUnit
+    public let unit: LoopUnit
 
-    public var quantity: HKQuantity {
-        return HKQuantity(unit: unit, doubleValue: value)
+    public var quantity: LoopQuantity {
+        return LoopQuantity(unit: unit, doubleValue: value)
     }
 
-    public init(unit: HKUnit, value: Double) {
+    public init(unit: LoopUnit, value: Double) {
         self.value = value
         self.unit = unit
     }
@@ -28,7 +28,7 @@ public struct GlucoseThreshold: Equatable, RawRepresentable {
         guard let unitsStr = rawValue["units"] as? String, let value = rawValue["value"] as? Double else {
             return nil
         }
-        self.unit = HKUnit(from: unitsStr)
+        self.unit = LoopUnit(from: unitsStr)
         self.value = value
     }
 
@@ -39,7 +39,7 @@ public struct GlucoseThreshold: Equatable, RawRepresentable {
         ]
     }
 
-    public func convertTo(unit: HKUnit) -> GlucoseThreshold {
+    public func convertTo(unit: LoopUnit) -> GlucoseThreshold {
         guard unit != self.unit else {
             return self
         }
@@ -55,7 +55,7 @@ extension GlucoseThreshold: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.value = try container.decode(Double.self, forKey: .value)
-        self.unit = HKUnit(from: try container.decode(String.self, forKey: .unit))
+        self.unit = LoopUnit(from: try container.decode(String.self, forKey: .unit))
     }
 
     public func encode(to encoder: Encoder) throws {

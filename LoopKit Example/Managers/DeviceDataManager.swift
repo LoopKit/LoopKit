@@ -9,11 +9,11 @@
 import Foundation
 import HealthKit
 import LoopKit
-
+import LoopAlgorithm
 
 class DeviceDataManager {
 
-    init() {
+    init() async {
         healthStore = HKHealthStore()
         let cacheStore = PersistenceController(directoryURL: FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!)
 
@@ -30,9 +30,6 @@ class DeviceDataManager {
             healthKitSampleStore: carbSampleStore,
             cacheStore: cacheStore,
             cacheLength: observationInterval,
-            defaultAbsorptionTimes: (fast: .minutes(30), medium: .hours(3), slow: .hours(5)),
-            carbRatioSchedule: carbRatioSchedule,
-            insulinSensitivitySchedule: insulinSensitivitySchedule,
             provenanceIdentifier: HKSource.default().bundleIdentifier
         )
 
@@ -43,13 +40,10 @@ class DeviceDataManager {
             observationStart: Date().addingTimeInterval(-observationInterval),
             observationEnabled: false)
 
-        doseStore = DoseStore(
+        doseStore = await DoseStore(
             healthKitSampleStore: doseSampleStore,
             cacheStore: cacheStore,
-            insulinModelProvider: PresetInsulinModelProvider(defaultRapidActingModel: ExponentialInsulinModelPreset.rapidActingAdult),
             longestEffectDuration: ExponentialInsulinModelPreset.rapidActingAdult.effectDuration,
-            basalProfile: basalRateSchedule,
-            insulinSensitivitySchedule: insulinSensitivitySchedule,
             provenanceIdentifier: HKSource.default().bundleIdentifier
         )
 
@@ -61,7 +55,7 @@ class DeviceDataManager {
             observationStart: Date().addingTimeInterval(-observationInterval),
             observationEnabled: false)
 
-        glucoseStore = GlucoseStore(
+        glucoseStore = await GlucoseStore(
             healthKitSampleStore: glucoseSampleStore,
             cacheStore: cacheStore,
             provenanceIdentifier: HKSource.default().bundleIdentifier)
@@ -84,25 +78,18 @@ class DeviceDataManager {
     var basalRateSchedule = UserDefaults.standard.basalRateSchedule {
         didSet {
             UserDefaults.standard.basalRateSchedule = basalRateSchedule
-
-            doseStore.basalProfile = basalRateSchedule
         }
     }
 
     var carbRatioSchedule = UserDefaults.standard.carbRatioSchedule {
         didSet {
             UserDefaults.standard.carbRatioSchedule = carbRatioSchedule
-
-            carbStore?.carbRatioSchedule = carbRatioSchedule
         }
     }
 
     var insulinSensitivitySchedule = UserDefaults.standard.insulinSensitivitySchedule {
         didSet {
             UserDefaults.standard.insulinSensitivitySchedule = insulinSensitivitySchedule
-
-            carbStore?.insulinSensitivitySchedule = insulinSensitivitySchedule
-            doseStore.insulinSensitivitySchedule = insulinSensitivitySchedule
         }
     }
 
@@ -118,18 +105,14 @@ class DeviceDataManager {
         }
     }
 
-    public var legacyWorkoutTargetRange: DoubleRange? = UserDefaults.standard.legacyWorkoutTargetRange {
-        didSet {
-            UserDefaults.standard.legacyWorkoutTargetRange = legacyWorkoutTargetRange
-        }
-    }
-
     var pumpID = UserDefaults.standard.pumpID {
         didSet {
             UserDefaults.standard.pumpID = pumpID
 
             if pumpID != oldValue {
-                doseStore.resetPumpData()
+                Task {
+                    try await doseStore.resetPumpData()
+                }
             }
         }
     }

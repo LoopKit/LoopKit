@@ -93,6 +93,73 @@ extension ChartAxisValuesStaticGenerator {
             return []
         }
     }
+    
+    // This is the same as SwiftChart ChartAxisValuesStaticGenerator.generateYAxisValuesWithChartPoints(...) with the exception that the `firstValue` calculation has been corrected
+    //   such that the comment `The first axis value will be less than or equal to the first scalar value, aligned with the desired multiple` is true for negative values. the original
+    //    code produced a value LARGER than the first scalar value
+    public static func generateYAxisValuesWithChartPointsUpdated(_ chartPoints: [ChartPoint], minSegmentCount: Double, maxSegmentCount: Double, multiple: Double = 10, axisValueGenerator: ChartAxisValueStaticGenerator, addPaddingSegmentIfEdge: Bool) -> [ChartAxisValue] {
+        let axisPicker: (ChartPoint) -> ChartAxisValue = { $0.y }
+
+        let sortedChartPoints = chartPoints.sorted {(obj1, obj2) in
+            return axisPicker(obj1).scalar < axisPicker(obj2).scalar
+        }
+        
+        guard let firstPoint = sortedChartPoints.first,
+              let lastPoint = sortedChartPoints.last
+        else {
+            print("Trying to generate Y axis without datapoints, returning empty array")
+            return []
+        }
+        
+        let first: Double = axisPicker(firstPoint).scalar
+        let lastPar: Double = axisPicker(lastPoint).scalar
+
+        precondition(multiple > 0, "Invalid multiple: \(multiple)")
+        
+        guard lastPar >=~ first else {fatalError("Invalid range generating axis values")}
+        
+        let last = lastPar =~ first ? lastPar + 1 : lastPar
+
+        // The first axis value will be less than or equal to the first scalar value, aligned with the desired multiple
+        var firstValue = first - (multiple - abs(first.truncatingRemainder(dividingBy: multiple)))
+        // The last axis value will be greater than or equal to the first scalar value, aligned with the desired multiple
+        var lastValue = last + (abs(multiple - last).truncatingRemainder(dividingBy: multiple))
+        var segmentSize = multiple
+
+        // If there should be a padding segment added when a scalar value falls on the first or last axis value, adjust the first and last axis values
+        if firstValue =~ first && addPaddingSegmentIfEdge {
+            firstValue = firstValue - segmentSize
+        }
+        if lastValue =~ last && addPaddingSegmentIfEdge {
+            lastValue = lastValue + segmentSize
+        }
+        
+        let distance = lastValue - firstValue
+        var currentMultiple = multiple
+        var segmentCount = distance / currentMultiple
+
+        // Find the optimal number of segments and segment width
+
+        // If the number of segments is greater than desired, make each segment wider
+        while segmentCount > maxSegmentCount {
+            currentMultiple *= 2
+            segmentCount = distance / currentMultiple
+        }
+        segmentCount = ceil(segmentCount)
+
+        // Increase the number of segments until there are enough as desired
+        while segmentCount < minSegmentCount {
+            segmentCount += 1
+        }
+        segmentSize = currentMultiple
+
+        // Generate axis values from the first value, segment size and number of segments
+        let offset = firstValue
+        return (0...Int(segmentCount)).map {segment in
+            let scalar = offset + (Double(segment) * segmentSize)
+            return axisValueGenerator(scalar)
+        }
+    }
 }
 
 fileprivate func =~ (a: Double, b: Double) -> Bool {

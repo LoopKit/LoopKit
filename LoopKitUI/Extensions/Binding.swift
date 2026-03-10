@@ -7,23 +7,23 @@
 //
 
 import SwiftUI
-import HealthKit
+import LoopAlgorithm
 
 
 extension Binding where Value == Double {
-    func withUnit(_ unit: HKUnit) -> Binding<HKQuantity> {
-        Binding<HKQuantity>(
-            get: { HKQuantity(unit: unit, doubleValue: self.wrappedValue) },
+    func withUnit(_ unit: LoopUnit) -> Binding<LoopQuantity> {
+        Binding<LoopQuantity>(
+            get: { LoopQuantity(unit: unit, doubleValue: self.wrappedValue) },
             set: { self.wrappedValue = $0.doubleValue(for: unit) }
         )
     }
 }
 
-extension Binding where Value == HKQuantity {
-    func doubleValue(for unit: HKUnit) -> Binding<Double> {
+extension Binding where Value == LoopQuantity {
+    func doubleValue(for unit: LoopUnit) -> Binding<Double> {
         Binding<Double>(
             get: { self.wrappedValue.doubleValue(for: unit) },
-            set: { self.wrappedValue = HKQuantity(unit: unit, doubleValue: $0) }
+            set: { self.wrappedValue = LoopQuantity(unit: unit, doubleValue: $0) }
         )
     }
 }

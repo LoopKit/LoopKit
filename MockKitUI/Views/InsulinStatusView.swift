@@ -7,8 +7,9 @@
 //
 
 import SwiftUI
-import HealthKit
+import LoopAlgorithm
 import LoopKit
+import LoopKitUI
 
 struct InsulinStatusView: View {
     @Environment(\.guidanceColors) var guidanceColors
@@ -16,7 +17,7 @@ struct InsulinStatusView: View {
 
     @ObservedObject var viewModel: MockPumpManagerSettingsViewModel
 
-    private let subViewSpacing: CGFloat = 14
+    private let subViewSpacing: CGFloat = 16
 
     var body: some View {
         HStack(alignment: .top, spacing: 0) {
@@ -41,14 +42,14 @@ struct InsulinStatusView: View {
     }
 
     let basalRateFormatter = QuantityFormatter(for: .internationalUnitsPerHour)
-    let reservoirVolumeFormatter = QuantityFormatter(for: .internationalUnit())
+    let reservoirVolumeFormatter = QuantityFormatter(for: .internationalUnit)
 
     private var inNoDelivery: Bool {
         !viewModel.isDeliverySuspended && viewModel.basalDeliveryRate == nil
     }
 
     private var deliveryStatusSpacing: CGFloat {
-        return subViewSpacing
+        return subViewSpacing - 8
     }
 
     var deliveryStatus: some View {
@@ -58,8 +59,10 @@ struct InsulinStatusView: View {
                 .fixedSize(horizontal: false, vertical: true)
             if viewModel.isDeliverySuspended {
                 insulinSuspended
-            } else if let basalRate = viewModel.basalDeliveryRate {
-                basalRateView(basalRate)
+            } else if let basalRate = viewModel.basalDeliveryRate,
+                      let date = viewModel.basalDeliveryRateDate
+            {
+                basalRateView(basalRate, at: date)
             } else {
                 noDelivery
             }
@@ -79,34 +82,29 @@ struct InsulinStatusView: View {
         }
     }
 
-    private func basalRateView(_ basalRate: Double) -> some View {
+    private func basalRateView(_ basalRate: Double, at date: Date) -> some View {
         HStack(alignment: .center) {
             VStack(alignment: .leading) {
-                HStack(alignment: .lastTextBaseline, spacing: 3) {
-                    let unit = HKUnit.internationalUnitsPerHour
-                    let quantity = HKQuantity(unit: unit, doubleValue: basalRate)
+                HStack(spacing: 3) {
                     if viewModel.presentDeliveryWarning == true {
                         Image(systemName: "exclamationmark.circle.fill")
                             .foregroundColor(guidanceColors.warning)
                             .font(.system(size: 28))
                             .fixedSize()
                     }
-                    Text(basalRateFormatter.string(from: quantity, includeUnit: false) ?? "")
-                        .font(.system(size: 28))
+                    Image(systemName: viewModel.automatedTreatmentState.imageName)
+                        .font(.largeTitle)
+                        .foregroundColor(.accentColor)
+                    Text(viewModel.basalDisplayStateString)
+                        .lineSpacing(1)
+                        .font(.callout)
                         .fontWeight(.heavy)
-                        .fixedSize()
-                    Text(basalRateFormatter.localizedUnitStringWithPlurality(forQuantity: quantity))
-                        .foregroundColor(.secondary)
                 }
-                Group {
-                    if viewModel.isScheduledBasal {
-                        Text("Scheduled\(String.nonBreakingSpace)Basal")
-                    } else if viewModel.isTempBasal {
-                        Text("Temporary\(String.nonBreakingSpace)Basal")
-                    }
+                if let basalDeliveryRateDateString = viewModel.basalDeliveryRateDateString {
+                    Text("at \(basalDeliveryRateDateString)")
+                        .font(.footnote)
+                        .foregroundColor(.accentColor)
                 }
-                .font(.footnote)
-                .foregroundColor(.accentColor)
             }
         }
     }
@@ -138,9 +136,27 @@ struct InsulinStatusView: View {
                 Text("Insulin\(String.nonBreakingSpace)Remaining")
                     .foregroundColor(Color(UIColor.secondaryLabel))
                 HStack {
-                    reservoirLevelStatus
+                    if let pumpStatusHighlight = viewModel.pumpStatusHighlight {
+                        pumpStatusWarningText(pumpStatusHighlight: pumpStatusHighlight)
+                    } else {
+                        reservoirLevelStatus
+                    }
                 }
             }
+        }
+    }
+    
+    @ViewBuilder
+    func pumpStatusWarningText(pumpStatusHighlight: DeviceStatusHighlight) -> some View {
+        HStack(spacing: 2) {
+            Image(systemName: pumpStatusHighlight.imageName)
+                .font(.system(size: 34))
+                .fixedSize()
+                .foregroundColor(pumpStatusHighlight.state == .critical ? guidanceColors.critical : guidanceColors.warning)
+            
+            Text(pumpStatusHighlight.localizedMessage)
+                .font(.subheadline.weight(.heavy))
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 
@@ -159,7 +175,7 @@ struct InsulinStatusView: View {
                         .frame(width: 23, height: 34, alignment: .bottom)
                 }
                 HStack(alignment: .firstTextBaseline, spacing: 3) {
-                    Text("50+")
+                    Text(viewModel.reservoirLevelString)
                         .font(.system(size: 28))
                         .fontWeight(.heavy)
                         .fixedSize()
@@ -167,7 +183,7 @@ struct InsulinStatusView: View {
                         .foregroundColor(.secondary)
                 }
             }
-            Text("Estimated Reading")
+            Text(viewModel.reservoirAccuracyString)
                 .font(.footnote)
                 .foregroundColor(.accentColor)
         }

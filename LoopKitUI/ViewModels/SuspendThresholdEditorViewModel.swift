@@ -7,19 +7,19 @@
 //
 
 import Foundation
-import HealthKit
+import LoopAlgorithm
 import LoopKit
 
 struct SuspendThresholdEditorViewModel {
     let guardrail = Guardrail.suspendThreshold
 
-    let suspendThreshold: HKQuantity?
+    let suspendThreshold: LoopQuantity?
 
-    let suspendThresholdUnit: HKUnit
+    let suspendThresholdUnit: LoopUnit
 
-    let maxSuspendThresholdValue: HKQuantity
+    let maxSuspendThresholdValue: LoopQuantity
 
-    var saveSuspendThreshold: (_ suspendThreshold: HKQuantity, _ displayGlucoseUnit: HKUnit) -> Void
+    var saveSuspendThreshold: (_ suspendThreshold: LoopQuantity, _ displayGlucoseUnit: LoopUnit) -> Void
 
     public init(therapySettingsViewModel: TherapySettingsViewModel,
                 mode: SettingsPresentationMode,
@@ -32,10 +32,7 @@ struct SuspendThresholdEditorViewModel {
             // During a review/acceptance flow, do not limit suspend threshold by other targets
             self.maxSuspendThresholdValue = Guardrail.suspendThreshold.absoluteBounds.upperBound
         } else {
-            self.maxSuspendThresholdValue = Guardrail.maxSuspendThresholdValue(
-                correctionRangeSchedule: therapySettingsViewModel.glucoseTargetRangeSchedule,
-                preMealTargetRange: therapySettingsViewModel.correctionRangeOverrides.preMeal,
-                workoutTargetRange: therapySettingsViewModel.correctionRangeOverrides.workout)
+            self.maxSuspendThresholdValue = Guardrail.maxSuspendThresholdValue(minimumConfiguredLowerBound: therapySettingsViewModel.therapySettings.minimumConfiguredTargetLowerBound)
         }
         
         self.saveSuspendThreshold = { [weak therapySettingsViewModel] suspendThreshold, displayGlucoseUnit in

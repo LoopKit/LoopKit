@@ -6,7 +6,7 @@
 //  Copyright © 2019 LoopKit Authors. All rights reserved.
 //
 
-import HealthKit
+import LoopAlgorithm
 import LoopKit
 
 
@@ -14,8 +14,8 @@ struct DateRelativeGlucoseSample: DateRelativeQuantity, Codable {
     var mgdlValue: Double
     var dateOffset: TimeInterval
 
-    var quantity: HKQuantity {
-        return HKQuantity(unit: .milligramsPerDeciliter, doubleValue: mgdlValue)
+    var quantity: LoopQuantity {
+        return LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: mgdlValue)
     }
 
     func newGlucoseSample(relativeTo referenceDate: Date) -> NewGlucoseSample {

@@ -8,9 +8,9 @@
 
 import Foundation
 import HealthKit
+import LoopAlgorithm
 
-
-public struct DoubleRange {
+public struct DoubleRange: Sendable {
     public let minValue: Double
     public let maxValue: Double
 
@@ -23,7 +23,6 @@ public struct DoubleRange {
         return abs(minValue) < .ulpOfOne && abs(maxValue) < .ulpOfOne
     }
 }
-
 
 extension DoubleRange: RawRepresentable {
     public typealias RawValue = [Double]
@@ -49,9 +48,19 @@ extension DoubleRange: Equatable {
     }
 }
 
+extension DoubleRange {
+    public func quantityRange(for unit: LoopUnit) -> ClosedRange<LoopQuantity> {
+        let lowerBound = LoopQuantity(unit: unit, doubleValue: minValue)
+        let upperBound = LoopQuantity(unit: unit, doubleValue: maxValue)
+        return lowerBound...upperBound
+    }
+}
+
 extension DoubleRange: Hashable {}
 
 extension DoubleRange: Codable {}
+
+public typealias GlucoseRangeTimeline = [AbsoluteScheduleValue<ClosedRange<LoopQuantity>>]
 
 /// Defines a daily schedule of glucose ranges
 public struct GlucoseRangeSchedule: DailySchedule, Equatable {
@@ -96,7 +105,7 @@ public struct GlucoseRangeSchedule: DailySchedule, Equatable {
         self.override = override
     }
 
-    public init?(unit: HKUnit, dailyItems: [RepeatingScheduleValue<DoubleRange>], timeZone: TimeZone? = nil) {
+    public init?(unit: LoopUnit, dailyItems: [RepeatingScheduleValue<DoubleRange>], timeZone: TimeZone? = nil) {
         guard let rangeSchedule = DailyQuantitySchedule<DoubleRange>(unit: unit, dailyItems: dailyItems, timeZone: timeZone) else {
             return nil
         }
@@ -125,8 +134,8 @@ public struct GlucoseRangeSchedule: DailySchedule, Equatable {
         }
     }
 
-    public func quantityBetween(start: Date, end: Date) -> [AbsoluteScheduleValue<ClosedRange<HKQuantity>>] {
-        var quantitySchedule = [AbsoluteScheduleValue<ClosedRange<HKQuantity>>]()
+    public func quantityBetween(start: Date, end: Date) -> GlucoseRangeTimeline {
+        var quantitySchedule = GlucoseRangeTimeline()
 
         for schedule in between(start: start, end: end) {
             quantitySchedule.append(AbsoluteScheduleValue(
@@ -149,7 +158,7 @@ public struct GlucoseRangeSchedule: DailySchedule, Equatable {
         return rangeSchedule.value(at: time)
     }
 
-    public func quantityRange(at time: Date) -> ClosedRange<HKQuantity> {
+    public func quantityRange(at time: Date) -> ClosedRange<LoopQuantity> {
         return value(at: time).quantityRange(for: unit)
     }
 
@@ -157,9 +166,9 @@ public struct GlucoseRangeSchedule: DailySchedule, Equatable {
         return rangeSchedule.items
     }
 
-    public var quantityRanges: [RepeatingScheduleValue<ClosedRange<HKQuantity>>] {
+    public var quantityRanges: [RepeatingScheduleValue<ClosedRange<LoopQuantity>>] {
         return self.items.map {
-            RepeatingScheduleValue<ClosedRange<HKQuantity>>(startTime: $0.startTime,
+            RepeatingScheduleValue<ClosedRange<LoopQuantity>>(startTime: $0.startTime,
                                                             value: $0.value.quantityRange(for: unit))
         }
     }
@@ -173,7 +182,7 @@ public struct GlucoseRangeSchedule: DailySchedule, Equatable {
         }
     }
 
-    public var unit: HKUnit {
+    public var unit: LoopUnit {
         return rangeSchedule.unit
     }
 
@@ -181,22 +190,22 @@ public struct GlucoseRangeSchedule: DailySchedule, Equatable {
         return rangeSchedule.rawValue
     }
 
-    public func minLowerBound() -> HKQuantity {
+    public func minLowerBound() -> LoopQuantity {
         let minDoubleValue = items.lazy.map { $0.value.minValue }.min()!
-        return HKQuantity(unit: unit, doubleValue: minDoubleValue)
+        return LoopQuantity(unit: unit, doubleValue: minDoubleValue)
     }
 
-    public func scheduleRange() -> ClosedRange<HKQuantity> {
+    public func scheduleRange() -> ClosedRange<LoopQuantity> {
         let minDoubleValue = items.lazy.map { $0.value.minValue }.min()!
-        let lowerBound = HKQuantity(unit: unit, doubleValue: minDoubleValue)
+        let lowerBound = LoopQuantity(unit: unit, doubleValue: minDoubleValue)
 
         let maxDoubleValue = items.lazy.map { $0.value.maxValue }.max()!
-        let upperBound = HKQuantity(unit: unit, doubleValue: maxDoubleValue)
+        let upperBound = LoopQuantity(unit: unit, doubleValue: maxDoubleValue)
 
         return lowerBound...upperBound
     }
 
-    private func convertTo(unit: HKUnit) -> GlucoseRangeSchedule? {
+    private func convertTo(unit: LoopUnit) -> GlucoseRangeSchedule? {
         guard unit != self.unit else {
             return self
         }
@@ -212,7 +221,7 @@ public struct GlucoseRangeSchedule: DailySchedule, Equatable {
                                     timeZone: timeZone)
     }
 
-    public func schedule(for glucoseUnit: HKUnit) -> GlucoseRangeSchedule? {
+    public func schedule(for glucoseUnit: LoopUnit) -> GlucoseRangeSchedule? {
         precondition(glucoseUnit == .millimolesPerLiter || glucoseUnit == .milligramsPerDeciliter)
         return self.convertTo(unit: glucoseUnit)
     }
@@ -230,20 +239,12 @@ extension ClosedRange where Bound == HKQuantity {
     }
 }
 
-extension DoubleRange {
-    public func quantityRange(for unit: HKUnit) -> ClosedRange<HKQuantity> {
-        let lowerBound = HKQuantity(unit: unit, doubleValue: minValue)
-        let upperBound = HKQuantity(unit: unit, doubleValue: maxValue)
-        return lowerBound...upperBound
-    }
-}
-
-extension ClosedRange where Bound == HKQuantity {
-    public func doubleRange(for unit: HKUnit) -> DoubleRange {
+extension ClosedRange where Bound == LoopQuantity {
+    public func doubleRange(for unit: LoopUnit) -> DoubleRange {
         return DoubleRange(minValue: lowerBound.doubleValue(for: unit), maxValue: upperBound.doubleValue(for: unit))
     }
 
-    public func glucoseRange(for unit: HKUnit) -> GlucoseRange {
+    public func glucoseRange(for unit: LoopUnit) -> GlucoseRange {
         GlucoseRange(range: self.doubleRange(for: unit), unit: unit)
     }
 }
