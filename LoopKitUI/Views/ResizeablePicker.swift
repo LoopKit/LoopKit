@@ -9,7 +9,7 @@
 import SwiftUI
 import UIKit
 
-struct ResizeablePicker<SelectionValue>: UIViewRepresentable where SelectionValue: CustomStringConvertible & Hashable {
+public struct ResizeablePicker<SelectionValue>: UIViewRepresentable where SelectionValue: CustomStringConvertible & Hashable {
     private let selection: Binding<SelectionValue>
     private var selectedRow: Int = 0
     // TODO: Would be nice if we could just use `ForEach` and Content, but for now, this'll do
@@ -17,7 +17,7 @@ struct ResizeablePicker<SelectionValue>: UIViewRepresentable where SelectionValu
     private let formatter: (SelectionValue) -> String
     private let colorer: (SelectionValue) -> Color
 
-    init(selection: Binding<SelectionValue>,
+    public init(selection: Binding<SelectionValue>,
                 data: [SelectionValue],
                 formatter: @escaping (SelectionValue) -> String = { $0.description },
                 colorer: @escaping (SelectionValue) -> Color = { _ in .primary }
