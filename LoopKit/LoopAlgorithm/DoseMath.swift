@@ -274,8 +274,13 @@ extension Collection where Element: GlucoseValue {
                 maxValue: correctionRange.quantityRange(at: prediction.startDate).averageValue(for: unit)
             )
 
-            var unitGlucoseEffect: Double?
-            (unitEffectsIndex, unitGlucoseEffect) = unitEffects.interpolateValue(startIndex: unitEffectsIndex, at: prediction.startDate, unit: unit)
+            let (nextUnitEffectsIndex, unitGlucoseEffect) = unitEffects.interpolateValue(
+                startIndex: unitEffectsIndex,
+                at: prediction.startDate,
+                unit: unit
+            )
+
+            unitEffectsIndex = nextUnitEffectsIndex
             
             guard let unitGlucoseEffect = unitGlucoseEffect else {
                 preconditionFailure("Unable to locate unitEffect starting from date \(date) aligned with prediction startDate \(prediction.startDate)")
