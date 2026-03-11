@@ -627,7 +627,7 @@ extension Collection where Element == DoseEntry {
 
         var date = start
         var values = [GlucoseEffect]()
-        let unit = HKUnit.milligramsPerDeciliter
+        let unit = insulinSensitivity.unit
         var prevDate = start.addingTimeInterval(-delta)
         var prevIobEffect = 0.0
         var glucoseEffectValue = 0.0
