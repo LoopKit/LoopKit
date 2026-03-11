@@ -63,15 +63,15 @@ public struct ResizeablePicker<SelectionValue>: UIViewRepresentable where Select
             self.data = newData
         }
 
-        func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        public func numberOfComponents(in pickerView: UIPickerView) -> Int {
             1
         }
 
-        func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        public func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
             data.count
         }
 
-        func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+        public func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
             let text = self.picker.formatter(data[row])
             let result = view as? UILabel ?? UILabel()
             result.text = text
@@ -84,7 +84,7 @@ public struct ResizeablePicker<SelectionValue>: UIViewRepresentable where Select
             return result
         }
         
-        func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        public func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
             picker.selectedRow = row
             picker.selection.wrappedValue = data[row]
         }
