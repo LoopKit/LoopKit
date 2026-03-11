@@ -103,32 +103,12 @@ fileprivate extension TherapySetting {
         case .glucoseTargetRange:
             return lowHighText(for: Guardrail.correctionRange)
         case .preMealCorrectionRangeOverride:
-            let mgdlMax = Guardrail.premealCorrectionRangeMaximum.doubleValue(
-                for: .milligramsPerDeciliter,
-                withRounding: true,
-                rule: .down
-            )
-            let mmolMax = Guardrail.premealCorrectionRangeMaximum.doubleValue(
-                for: .millimolesPerLiter,
-                withRounding: true,
-                rule: .down
-            )
-            let upperBoundString = bothUnitsString(
-                mgdlValue: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: mgdlMax),
-                mmolValue: HKQuantity(unit: .millimolesPerLiter, doubleValue: mmolMax)
-            )
             return lowHighText(lowerBoundString: LocalizedString("your Glucose Safety Limit", comment: "Lower bound pre-meal information text"),
                                upperBoundString: Guardrail.premealCorrectionRangeMaximum.bothUnitsString)
-        case .workoutCorrectionRangeOverride:
-            let lowerBoundString = Guardrail.unconstrainedWorkoutCorrectionRange.absoluteBounds.lowerBound.bothUnitsString
-            let upperBoundString = Guardrail.unconstrainedWorkoutCorrectionRange.absoluteBounds.upperBound.bothUnitsString
-            return lowHighText(
-                lowerBoundString: String(format: LocalizedString("%1$@ or your Glucose Safety Limit, whichever is higher", comment: "Lower bound workout information text format (1: app name)"), lowerBoundString),
-                upperBoundString: upperBoundString)
         case .suspendThreshold:
             return lowHighText(for: Guardrail.suspendThreshold)
         case .basalRate, .deliveryLimits, .carbRatio, .insulinSensitivity, .none:
-            fatalError("Unexpected")
+            fatalError("Unexpected therapy setting")
         }
     }
    
