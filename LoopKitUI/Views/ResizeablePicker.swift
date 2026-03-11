@@ -29,11 +29,11 @@ public struct ResizeablePicker<SelectionValue>: UIViewRepresentable where Select
         self.colorer = colorer
     }
 
-    func makeCoordinator() -> ResizeablePicker.Coordinator {
+    public func makeCoordinator() -> ResizeablePicker.Coordinator {
         Coordinator(self)
     }
 
-    func makeUIView(context: UIViewRepresentableContext<ResizeablePicker>) -> UIPickerView {
+    public func makeUIView(context: UIViewRepresentableContext<ResizeablePicker>) -> UIPickerView {
         let picker = UIPickerViewResizeable(frame: .zero)
         
         picker.dataSource = context.coordinator
@@ -42,7 +42,7 @@ public struct ResizeablePicker<SelectionValue>: UIViewRepresentable where Select
         return picker
     }
 
-    func updateUIView(_ view: UIPickerView, context: UIViewRepresentableContext<ResizeablePicker>) {
+    public func updateUIView(_ view: UIPickerView, context: UIViewRepresentableContext<ResizeablePicker>) {
         context.coordinator.updateData(newData: data)
         view.reloadAllComponents()
         if view.selectedRow(inComponent: 0) != selectedRow {
@@ -50,7 +50,7 @@ public struct ResizeablePicker<SelectionValue>: UIViewRepresentable where Select
         }
     }
 
-    class Coordinator: NSObject, UIPickerViewDataSource, UIPickerViewDelegate {
+    public class Coordinator: NSObject, UIPickerViewDataSource, UIPickerViewDelegate {
         private var picker: ResizeablePicker
         private var data: [SelectionValue]
 
