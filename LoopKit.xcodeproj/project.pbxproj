@@ -32,6 +32,7 @@
 		1D1065E7282DC3BB00026A70 /* PopoverLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1065E6282DC3BB00026A70 /* PopoverLink.swift */; };
 		1D1065E9282DC54700026A70 /* VideoPlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1065E8282DC54700026A70 /* VideoPlayView.swift */; };
 		1D1438B825633E2100BE8F06 /* GlucoseTherapySettingInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1438B725633E2100BE8F06 /* GlucoseTherapySettingInformationView.swift */; };
+		1DC9240F2575EF9A004F132A /* QuantityFormatter+Guardrails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DC9240E2575EF9A004F132A /* QuantityFormatter+Guardrails.swift */; };
 		1D1A019E24B678BF0077D86E /* TherapySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1A019D24B678BF0077D86E /* TherapySettingsView.swift */; };
 		1D1FCE2324BD13A2000300A8 /* CorrectionRangeOverridesExpandableSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1FCE2224BD13A2000300A8 /* CorrectionRangeOverridesExpandableSetting.swift */; };
 		1D1FCE2524BD42EF000300A8 /* TherapySettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1FCE2424BD42EF000300A8 /* TherapySettingsViewModel.swift */; };
@@ -1048,6 +1049,7 @@
 		1D1065E6282DC3BB00026A70 /* PopoverLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopoverLink.swift; sourceTree = "<group>"; };
 		1D1065E8282DC54700026A70 /* VideoPlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayView.swift; sourceTree = "<group>"; };
 		1D1438B725633E2100BE8F06 /* GlucoseTherapySettingInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseTherapySettingInformationView.swift; sourceTree = "<group>"; };
+		1DC9240E2575EF9A004F132A /* QuantityFormatter+Guardrails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "QuantityFormatter+Guardrails.swift"; sourceTree = "<group>"; };
 		1D1A019D24B678BF0077D86E /* TherapySettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TherapySettingsView.swift; sourceTree = "<group>"; };
 		1D1FCE2224BD13A2000300A8 /* CorrectionRangeOverridesExpandableSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionRangeOverridesExpandableSetting.swift; sourceTree = "<group>"; };
 		1D1FCE2424BD42EF000300A8 /* TherapySettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TherapySettingsViewModel.swift; sourceTree = "<group>"; };
@@ -2841,6 +2843,7 @@
 				C18733A129B9492200519CDF /* UITextField.swift */,
 				1D97A33B256F11E00042737E /* View+InsetGroupedListStyle.swift */,
 				89CAB36E24C9ECCA009EE3CE /* View+KeyboardAware.swift */,
+				1DC9240E2575EF9A004F132A /* QuantityFormatter+Guardrails.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -3679,6 +3682,7 @@
 			files = (
 				A9D3FF142A6C1A01000C891D /* ChartPointsScatterDownTrianglesLayer.swift in Sources */,
 				1D1438B825633E2100BE8F06 /* GlucoseTherapySettingInformationView.swift in Sources */,
+				1DC9240F2575EF9A004F132A /* QuantityFormatter+Guardrails.swift in Sources */,
 				842E40522F22EDF0000CCCE0 /* ExistingPresetRangeEdit.swift in Sources */,
 				1D1065E7282DC3BB00026A70 /* PopoverLink.swift in Sources */,
 				898E6E6E2241ED9F0019E459 /* SuspendResumeTableViewCell.swift in Sources */,
