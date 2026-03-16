@@ -62,13 +62,13 @@ public struct ActivityPreset: Hashable, Identifiable, Sendable, RawRepresentable
         public var defaultInsulinNeedsScaleFactor: Double {
             switch self {
             case .biking:
-                0.23
+                0.22
             case .jogging:
                 0.21
             case .walking:
                 0.23
             case .strengthTraining:
-                0.37
+                0.39
             }
         }
         
