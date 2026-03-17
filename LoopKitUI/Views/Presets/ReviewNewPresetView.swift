@@ -53,7 +53,7 @@ struct ReviewNewPresetView: View {
             .padding(.top, 10)
 
             CardSection("Temporary Settings Adjustments") {
-                InsulinNeedsAdjustmentPreview(insulinPercentage: preset.insulinMultiplier * 100, guardrail: Guardrail.presetInsulinNeeds)
+                InsulinNeedsAdjustmentPreview(insulinPercentage: preset.insulinMultiplier, guardrail: Guardrail.presetInsulinNeeds)
             }
 
             CardSection {
