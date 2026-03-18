@@ -66,7 +66,7 @@ public struct InsulinNeedsAdjustmentPreview: View {
                         .foregroundColor(.secondary)
                 }
             }.padding(.bottom, 10)
-            Text("\(Int(insulinPercentage))%")
+            Text(insulinPercentage.formatted(.percent.precision(.fractionLength(0))))
                 .font(.system(size: 34, weight: .semibold))
                 .foregroundColor(valueColor)
             Text("of scheduled")

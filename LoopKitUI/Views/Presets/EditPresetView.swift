@@ -128,7 +128,7 @@ public struct EditPresetView: View {
         } label: {
             CardSection(preset.isPreMeal || trainingCompletion.isComplete ? "Temporary Settings Adjustments" : nil) {
                 InsulinNeedsAdjustmentPreview(
-                    insulinPercentage: preset.insulinNeedsScaleFactor * 100,
+                    insulinPercentage: preset.insulinNeedsScaleFactor,
                     guardrail: Guardrail.presetInsulinNeeds,
                     showDisclosure: preset.canAdjustSensitivity
                 )
