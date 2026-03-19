@@ -68,6 +68,10 @@ public struct DeviceWhitelist: Hashable {
     }
 }
 
+public enum TrainingMediaDomain: Hashable {
+    case presets
+}
+
 @MainActor
 public protocol SupportUI: Pluggable {
 
@@ -116,6 +120,9 @@ public protocol SupportUI: Pluggable {
     /// Called right after Loop resets UserDefaults and Documents storage
     /// Use this to restore any values that were cached before a reset occurred
     func loopDidReset()
+    
+    /// Provides playable media to Loop to be used in training new features
+    func trainingMedia(for domain: TrainingMediaDomain) -> [MediaContent]
     
     /// Initializes the support with the previously-serialized state.
     ///

@@ -65,6 +65,8 @@ public class MockSupport: SupportUI {
     public func loopWillReset() {}
     
     public func loopDidReset() {}
+    
+    public func trainingMedia(for domain: TrainingMediaDomain) -> [MediaContent] { [] }
 }
 
 extension MockSupport {
