@@ -26,7 +26,7 @@ public struct InsulinNeedsAdjustmentPreview: View {
     }
 
     var valueColor: Color {
-        switch Guardrail.presetInsulinNeeds.classification(for: .init(unit: .percent, doubleValue: insulinPercentage)) {
+        switch Guardrail.presetInsulinNeeds.classification(for: .init(unit: .percent, doubleValue: insulinPercentage * 100)) {
         case .withinRecommendedRange:
             return .accentColor
         case .outsideRecommendedRange(let threshold):
@@ -43,7 +43,7 @@ public struct InsulinNeedsAdjustmentPreview: View {
 
     private var guardrailWarningIfNecessary: some View {
 
-        let classification = Guardrail.presetInsulinNeeds.classification(for: .init(unit: .percent, doubleValue: insulinPercentage))
+        let classification = Guardrail.presetInsulinNeeds.classification(for: .init(unit: .percent, doubleValue: insulinPercentage * 100))
 
         return Group {
             if case .outsideRecommendedRange(let threshold) = classification {
