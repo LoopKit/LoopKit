@@ -11238,7 +11238,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Realizat"
+            "value" : "Gata"
           }
         },
         "ru" : {
@@ -14311,7 +14311,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Întoarce-te"
+            "value" : "Înapoi"
           }
         },
         "ru" : {
@@ -14597,7 +14597,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Raport carbohidrați/insulină ridicat"
+            "value" : "Raport carbohidrați insulină ridicat"
           }
         },
         "ru" : {
@@ -15884,7 +15884,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dacă aceste setări arată bine pentru tine, apasă pe Salvează Setări pentru a continua."
+            "value" : "Dacă aceste setări vi se par potrivite, atingeți Salvare setări pentru a continua."
           }
         },
         "ru" : {
@@ -23931,7 +23931,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Salvați rațiile insulina carbohidrați?"
+            "value" : "Salvați rapoartele insulină carbohidrați?"
           }
         },
         "ru" : {
@@ -24646,7 +24646,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Salvează Interval preprandial?"
+            "value" : "Salvează Interval Pre-masă?"
           }
         },
         "ru" : {
@@ -24789,7 +24789,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Salvați intervalul țintă pentru antrenament?"
+            "value" : "Salvați intervalul țintă pentru activitățile sportive?"
           }
         },
         "ru" : {
@@ -26249,7 +26249,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Asistenţă"
+            "value" : "Asistență"
           }
         },
         "ru" : {
@@ -26689,7 +26689,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Schimbă către Stare Previzualizare"
+            "value" : "Schimbă Stare Previzualizare"
           }
         },
         "ru" : {
@@ -34793,7 +34793,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Furnizorul dumneavoastră de servicii medicale vă poate ajuta să alegeți un interval de corecție potrivit pentru dvs."
+            "value" : "Furnizorul dumneavoastră de servicii medicale vă poate ajuta să alegeți un interval de corecție potrivit pentru dumneavoastră."
           }
         },
         "ru" : {
