@@ -561,7 +561,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@ va livra bazala și bolusul recomandat numai dacă glucoza este estimată a fi peste această limită pentru următoarele trei ore."
+            "value" : "%1$@ va livra bazala și bolusul recomandat numai dacă glicemia este estimată a fi peste această limită pentru următoarele trei ore."
           }
         },
         "ru" : {
@@ -1587,7 +1587,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Apidra (insulină glulisine)"
+            "value" : "Apidra (insulină glulizină)"
           }
         },
         "ru" : {
@@ -1634,19 +1634,19 @@
         }
       }
     },
-    "Apidra (insulin glulisine) is a rapid-acting insulin made by Sanofi-aventis " : {
+    "Apidra (insulin glulisine) is a rapid-acting insulin made by Sanofi-aventis" : {
       "comment" : "Description for apidra insulin type",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Apidra (insulin glulisine) is a rapid-acting insulin made by Sanofi-aventis "
+            "value" : "Apidra (insulin glulisine) is a rapid-acting insulin made by Sanofi-aventis"
           }
         },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Apidra (insulin glulisine) er en hurtigtvirkende insulin fremstillet af Sanofi-aventis "
+            "value" : "Apidra (insulin glulisine) er en hurtigtvirkende insulin fremstillet af Sanofi-aventis"
           }
         },
         "de" : {
@@ -1664,25 +1664,25 @@
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Apidra (insulin glulisine) is a rapid-acting insulin made by Sanofi-aventis "
+            "value" : "Apidra (insulin glulisine) is a rapid-acting insulin made by Sanofi-aventis"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Apidra (insuline glulisine) est une insuline à action rapide fabriquée par Sanofi-Aventis "
+            "value" : "Apidra (insuline glulisine) est une insuline à action rapide fabriquée par Sanofi-Aventis"
           }
         },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Apidra (insulin glulisine) is a rapid-acting insulin made by Sanofi-aventis "
+            "value" : "Apidra (insulin glulisine) is a rapid-acting insulin made by Sanofi-aventis"
           }
         },
         "hu" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Apidra (insulin glulisine) is a rapid-acting insulin made by Sanofi-aventis "
+            "value" : "Apidra (insulin glulisine) is a rapid-acting insulin made by Sanofi-aventis"
           }
         },
         "it" : {
@@ -1712,19 +1712,19 @@
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Apidra (insulina glulizynowa) to szybko działająca insulina firmy Sanofi-Aventis."
+            "value" : "Apidra (insulina glulizynowa) to szybko działająca insulina firmy Sanofi-Aventis"
           }
         },
         "pt" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Apidra (insulin glulisine) is a rapid-acting insulin made by Sanofi-aventis "
+            "value" : "Apidra (insulin glulisine) is a rapid-acting insulin made by Sanofi-aventis"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Apidra (insulin glulisine) is a rapid-acting insulin made by Sanofi-aventis "
+            "value" : "Apidra (insulin glulisine) is a rapid-acting insulin made by Sanofi-aventis"
           }
         },
         "ro" : {
@@ -1736,19 +1736,19 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Апидра (инсулин глюлизин) - это инсулин быстрого действия, производимый Sanofi-aventis "
+            "value" : "Апидра (инсулин глюлизин) - это инсулин быстрого действия, производимый Sanofi-aventis"
           }
         },
         "sk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Apidra (inzulín glulizín) je rýchlo pôsobiaci inzulín glulizín vyrábaný spoločnosťou Sanofi "
+            "value" : "Apidra (inzulín glulizín) je rýchlo pôsobiaci inzulín glulizín vyrábaný spoločnosťou Sanofi-aventis"
           }
         },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Apidra (insulin glulisine) är ett snabbverkande insulin från Sanofi-aventis "
+            "value" : "Apidra (insulin glulisine) är ett snabbverkande insulin från Sanofi-aventis"
           }
         },
         "tr" : {
@@ -1766,13 +1766,13 @@
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Apidra (insulin glulisine) là loại insulin tác dụng nhanh do Sanofi-Aventis sản xuất "
+            "value" : "Apidra (insulin glulisine) là loại insulin tác dụng nhanh do Sanofi-Aventis sản xuất"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "爱倍达（谷赖胰岛素）是一种由赛诺菲公司生产的速效胰岛素。"
+            "value" : "爱倍达（谷赖胰岛素）是一种由赛诺菲公司生产的速效胰岛素"
           }
         }
       }
@@ -10570,7 +10570,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Preprandial"
+            "value" : "Înainte de masă"
           }
         },
         "ru" : {
@@ -11916,7 +11916,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Reduceți temporar intervalul țintă de glicemie înainte de masă pentru a evita vârfurile postprandiale."
+            "value" : "Reduceți temporar intervalul țintă de glicemie înainte de masă pentru a evita vârfurile de după masă."
           }
         },
         "ru" : {

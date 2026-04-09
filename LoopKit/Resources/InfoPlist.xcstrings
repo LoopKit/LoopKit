@@ -45,7 +45,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Datele despre mese din baza de date Health sunt utilizate pentru a determina efectele glucozei. Datele despre glucoză sunt preluate din HealthKit pentru reprezentare grafică și analiză."
+            "value" : "Datele despre mese din baza de date Health sunt utilizate pentru a determina efectele glicemiei. Datele de glicemie sunt preluate din HealthKit pentru reprezentare grafică și analiză."
           }
         }
       }

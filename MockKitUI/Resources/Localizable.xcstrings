@@ -1918,7 +1918,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Realizat"
+            "value" : "Gata"
           }
         },
         "ru" : {
@@ -4368,7 +4368,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aplicația dvs. %1$@ nu este actualizată. Aceasta va continua să funcționeze, dar vă recomandăm să o actualizați la cea mai recentă versiune.\n\nAccesați %2$@ Setări > Actualizare software pentru a finaliza."
+            "value" : "Aplicația dumneavoastră %1$@ nu este actualizată. Aceasta va continua să funcționeze, dar vă recomandăm să o actualizați la cea mai recentă versiune.\n\nAccesați %2$@ Setări > Actualizare software pentru a finaliza."
           }
         },
         "ru" : {
