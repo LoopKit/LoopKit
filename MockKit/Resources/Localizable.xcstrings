@@ -281,6 +281,9 @@
         }
       }
     },
+    "Delivery Suspension Reminder" : {
+      "comment" : "Title of insulin suspension reminder alert"
+    },
     "Insulin Suspended" : {
       "comment" : "Status highlight that insulin delivery was suspended.",
       "localizations" : {
@@ -566,6 +569,12 @@
           }
         }
       }
+    },
+    "OK" : {
+      "comment" : "Acknowledgement button title for insulin suspension reminder  alert"
+    },
+    "Pump\nExpired" : {
+      "comment" : "Status highlight that the pump expired."
     },
     "Pump Battery Dead" : {
       "comment" : "Status highlight that pump has a dead battery.",
@@ -1145,6 +1154,9 @@
         }
       }
     },
+    "Signal Loss" : {
+      "comment" : "Status highlight that signal is lost."
+    },
     "Suspend" : {
       "comment" : "Pump Event title for UnfinalizedDose with doseType of .suspend",
       "localizations" : {
@@ -1424,6 +1436,12 @@
           }
         }
       }
+    },
+    "The insulin suspension period has ended. Return to App and resume." : {
+      "comment" : "The body of the insulin suspension reminder alert (notification)"
+    },
+    "The insulin suspension period has ended. You can resume delivery from the banner on the home screen or from your pump settings screen." : {
+      "comment" : "The body of the insulin suspension reminder alert (in app)"
     }
   },
   "version" : "1.0"

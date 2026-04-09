@@ -131,8 +131,21 @@
         }
       }
     },
+    " " : {
+
+    },
+    " - " : {
+
+    },
+    " %@" : {
+
+    },
+    " Extra Training Needed" : {
+
+    },
     " higher " : {
       "comment" : "Information about workout range relative to correction range",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -273,6 +286,12 @@
           }
         }
       }
+    },
+    " indicates you need more insulin" : {
+
+    },
+    " less " : {
+
     },
     " lower " : {
       "comment" : "Information about pre-meal range relative to correction range",
@@ -416,6 +435,24 @@
           }
         }
       }
+    },
+    " more " : {
+
+    },
+    " of scheduled" : {
+
+    },
+    " Overall insulin cannot be adjusted for this preset" : {
+
+    },
+    " setting. For this range, choose the specific glucose value (or range of values) that you want Tidepool Loop to aim for in adjusting your insulin delivery. This will be a narrower range." : {
+      "comment" : "Information about correction range format (1: app name)"
+    },
+    " tells the system you need less insulin" : {
+
+    },
+    " than your typical correction range." : {
+
     },
     "-" : {
       "comment" : "Separator between min and max glucose values",
@@ -863,7 +900,11 @@
         }
       }
     },
+    ": " : {
+
+    },
     "···" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -1727,6 +1768,7 @@
     },
     "%1$@ – %2$@ %3$@" : {
       "comment" : "The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit)",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -2025,6 +2067,7 @@
     },
     "%1$@ assumes that the insulin it has delivered is actively working to lower your glucose for 6 hours. This setting cannot be changed." : {
       "comment" : "Information about insulin action duration (1: app name)",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -2174,6 +2217,7 @@
     },
     "%1$@ or your Glucose Safety Limit, whichever is higher" : {
       "comment" : "Lower bound workout information text format (1: app name)",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -2460,6 +2504,7 @@
     },
     "%1$@ U" : {
       "comment" : "Reservoir entry (1: volume value)",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -2738,8 +2783,12 @@
         }
       }
     },
+    "%1$@ will set your correction range to 110 mg/dL or higher when this preset is enabled." : {
+      "comment" : "The format string for the high insulin needs preset warning text on the preset preview screen. (1: app name)"
+    },
     "%1$@: <b>%2$@</b> %3$@" : {
       "comment" : "Description of a basal temp basal dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit)\nDescription of a bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit)",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -3029,6 +3078,9 @@
           }
         }
       }
+    },
+    "%1$@%2$@" : {
+      "comment" : "The format for a preset symbol and name (1: symbol)(2: name)"
     },
     "%1$@%2$@%3$@" : {
       "comment" : "String format for value with units (1: value, 2: separator, 3: units)",
@@ -3612,6 +3664,9 @@
         }
       }
     },
+    "%lld%%" : {
+
+    },
     "🍽" : {
       "localizations" : {
         "ar" : {
@@ -3756,6 +3811,7 @@
     },
     "🍽 Pre-Meal" : {
       "comment" : "Premeal override preset title",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -4041,6 +4097,7 @@
     },
     "🏃‍♂️ Workout" : {
       "comment" : "Workout override preset title",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -4182,8 +4239,12 @@
         }
       }
     },
+    "A Correction Range is different. The Correction Range is a " : {
+
+    },
     "A Correction Range is different. This will be a narrower range." : {
       "comment" : "Information about differences between target range and correction range",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -4324,6 +4385,9 @@
           }
         }
       }
+    },
+    "A percentage " : {
+
     },
     "A value of 0 U/hr means you will be scheduled to receive no basal insulin." : {
       "comment" : "Warning text for basal rate of 0 U/hr",
@@ -4467,6 +4531,9 @@
           }
         }
       }
+    },
+    "above 100%" : {
+
     },
     "Absorption Time" : {
       "comment" : "Title of the carb entry absorption time cell",
@@ -5357,6 +5424,12 @@
         }
       }
     },
+    "Adjust Overall Insulin Needs" : {
+
+    },
+    "Adjusted Range" : {
+
+    },
     "Afrezza" : {
       "comment" : "Title of insulin model preset - afrezza",
       "localizations" : {
@@ -5500,8 +5573,15 @@
         }
       }
     },
+    "All App Sounds Muted" : {
+
+    },
+    "All app sounds, including sounds for all critical alerts such as Urgent Low, Sensor Fail, Pump Expiration, and others will NOT sound for your selected time duration." : {
+
+    },
     "Are you sure you want to delete all history entries?" : {
       "comment" : "Action sheet confirmation message for pump history deletion",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -5651,6 +5731,7 @@
     },
     "Are you sure you want to delete all reservoir values?" : {
       "comment" : "Action sheet confirmation message for reservoir deletion",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -5797,6 +5878,15 @@
           }
         }
       }
+    },
+    "Are you sure you want to delete this preset?" : {
+
+    },
+    "ask yourself, does my body need more or less than usual?" : {
+
+    },
+    "At 100%, your settings remain unchanged from your scheduled settings." : {
+
     },
     "Authenticate to save therapy setting" : {
       "comment" : "Authentication hint string for therapy settings",
@@ -6692,8 +6782,14 @@
         }
       }
     },
+    "Before deciding to adjust your overall insulin," : {
+
+    },
+    "below 100%" : {
+
+    },
     "Cancel" : {
-      "comment" : "Button text to cancel adding a new schedule item\nCancel editing settings button title\nThe text for the scheduled custom preset cancel button\nThe title of the cancel action in an action sheet",
+      "comment" : "Button text to cancel adding a new schedule item\nCancel editing settings button title\nThe text for the scheduled custom preset cancel button",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -7301,6 +7397,9 @@
         }
       }
     },
+    "Caution" : {
+
+    },
     "Changes will only apply this time you enable the override. The default settings of %@ will not be affected." : {
       "comment" : "Footer text for customizing an override from a preset (1: preset name)",
       "extractionState" : "manual",
@@ -7594,6 +7693,9 @@
         }
       }
     },
+    "Changing the percentage will affect:" : {
+
+    },
     "Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." : {
       "comment" : "Carb entry section footer text explaining absorption time",
       "extractionState" : "manual",
@@ -7745,7 +7847,7 @@
       }
     },
     "Close" : {
-      "comment" : "Button text to close a modal\nText to close informational page",
+      "comment" : "Text to close informational page",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -8189,7 +8291,7 @@
     },
     "com.loudnate.InsulinKit.IOBDateLabel" : {
       "comment" : "The format string describing the date of an IOB value. The first format argument is the localized date.",
-      "extractionState" : "extracted_with_value",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -8345,7 +8447,7 @@
     },
     "com.loudnate.InsulinKit.totalDateLabel" : {
       "comment" : "The format string describing the starting date of a total value. The first format argument is the localized date.",
-      "extractionState" : "extracted_with_value",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -8661,6 +8763,12 @@
         }
       }
     },
+    "Complete the training to change this preset’s settings." : {
+
+    },
+    "Complete the training to change this preset’s settings. You can still update the details." : {
+
+    },
     "Completed." : {
       "comment" : "Accessibility label for ProgressIndicatorView when showIndeterminantProgress",
       "localizations" : {
@@ -8953,6 +9061,9 @@
         }
       }
     },
+    "Confirm Preset" : {
+
+    },
     "Confirm Setting" : {
       "comment" : "The button text for confirming the setting",
       "localizations" : {
@@ -9233,6 +9344,12 @@
         }
       }
     },
+    "Continue with adjusted range" : {
+      "comment" : "Continue button for new preset range edit when range edited"
+    },
+    "Continue with scheduled range" : {
+      "comment" : "Continue button for new preset range edit when range is not edited"
+    },
     "Correct the highlighted unsupported value(s)." : {
       "comment" : "Instruction to correct unsupported value",
       "localizations" : {
@@ -9375,6 +9492,12 @@
           }
         }
       }
+    },
+    "Correction Range" : {
+
+    },
+    "Correction range adjustment when preset is enabled" : {
+
     },
     "Correction range is the blood glucose range that you would like Loop to correct to." : {
       "comment" : "The section footer of correction range schedule",
@@ -9668,8 +9791,18 @@
         }
       }
     },
+    "Create a Preset" : {
+
+    },
+    "Critical alerts will be muted" : {
+
+    },
+    "Currently Scheduled Correction Range" : {
+
+    },
     "Custom" : {
       "comment" : "The text for a custom preset\nTitle for custom override history cell",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -9819,6 +9952,7 @@
     },
     "Custom Override" : {
       "comment" : "Custom override preset title",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -9967,7 +10101,7 @@
       }
     },
     "Custom Preset" : {
-      "comment" : "The title for the custom preset entry screen\nThe title for the custom preset selection screen",
+      "comment" : "The title for the custom preset entry screen",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -10260,7 +10394,7 @@
       }
     },
     "Delete" : {
-      "comment" : "Delete values for Pre-Meal, inactivates Pre-Meal icon\nTest for table cell delete button\nThe title of the button to remove the credentials for a service",
+      "comment" : "Test for table cell delete button\nThe title of the button to remove the credentials for a service",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -10560,6 +10694,7 @@
     },
     "Delete All" : {
       "comment" : "Button title to delete all objects",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -10706,6 +10841,9 @@
           }
         }
       }
+    },
+    "Delete Preset" : {
+
     },
     "Delivery Limits" : {
       "comment" : "Title text for crossed thresholds guardrail warning",
@@ -11876,6 +12014,9 @@
           }
         }
       }
+    },
+    "Edit Preset" : {
+
     },
     "Editing affects only the active override. The default settings of %@ will not be affected." : {
       "comment" : "Footer text for editing an active override (1: preset name)",
@@ -13199,6 +13340,7 @@
     },
     "Event History" : {
       "comment" : "Segmented button title for insulin delivery log event history",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -13788,6 +13930,7 @@
     },
     "For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from %2$@ different models for how the app measures the insulin’s peak activity." : {
       "comment" : "Insulin model setting description (1: app name) (2: number of models)",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -13929,8 +14072,15 @@
         }
       }
     },
+    "For presets with insulin needs of 170%% or greater, %1$@ will set your correction range to 110 mg/dL or higher when this is preset enabled." : {
+      "comment" : "The format string for the high insulin needs preset warning text. (1: app name)"
+    },
+    "For presets with insulin needs of 170%% or greater, %1$@ will set your correction range to 110 mg/dL or higher when this preset is enabled." : {
+      "comment" : "The format string for the high insulin needs preset warning text. (1: app name)"
+    },
     "For this range, choose the specific glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin." : {
       "comment" : "Information about correction range format (1: app name)",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -15361,6 +15511,7 @@
     },
     "High Pre-Meal Value" : {
       "comment" : "Title text for the low pre-meal value warning",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -15504,6 +15655,7 @@
     },
     "High Workout Value" : {
       "comment" : "Title text for the high workout value warning",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -15645,8 +15797,12 @@
         }
       }
     },
+    "higher" : {
+
+    },
     "History" : {
       "comment" : "The text for the override history",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -15787,6 +15943,12 @@
           }
         }
       }
+    },
+    "hour" : {
+
+    },
+    "Hours" : {
+
     },
     "If these settings look good to you, tap Save Settings to continue." : {
       "comment" : "Description of how to interact with summary screen",
@@ -15931,8 +16093,12 @@
         }
       }
     },
+    "If vibration is enabled on your device, all alerts will still vibrate. Your insulin pump and CGM hardware may still sound." : {
+
+    },
     "If you've used a CGM before, you're likely familiar with target range as a wide range of values you'd like for your glucose notification alerts, such as 70-180 mg/dL or 90-200 mg/dL." : {
       "comment" : "Information about target range",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -16073,6 +16239,9 @@
           }
         }
       }
+    },
+    "If you’ve used CGM before, you’re likely familiar with target range as a wide range of values you’d like for your glucose notification alerts, such as 70-180 mg/dL or 90-200 mg/dL, etc." : {
+      "comment" : "Information about target range"
     },
     "info" : {
       "localizations" : {
@@ -16216,8 +16385,15 @@
         }
       }
     },
+    "Insulin adjustment is above the safety threshold" : {
+
+    },
+    "Insulin adjustment is below the safety threshold" : {
+
+    },
     "Insulin Model" : {
       "comment" : "Title text for insulin model",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -16663,8 +16839,12 @@
         }
       }
     },
+    "insulin than usual." : {
+
+    },
     "Interrupted %1$@: <b>%2$@</b> of %3$@ %4$@" : {
       "comment" : "Description of an interrupted bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: programmed value (? if no value), 4: unit)",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -16805,6 +16985,9 @@
           }
         }
       }
+    },
+    "Invalid Start Time" : {
+
     },
     "It can be set as low as %1$@. It can be set as high as %2$@." : {
       "comment" : "Guardrail info text format",
@@ -17952,6 +18135,7 @@
     },
     "Low Pre-Meal Value" : {
       "comment" : "Title text for the low pre-meal value warning",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -18095,6 +18279,7 @@
     },
     "Low Workout Value" : {
       "comment" : "Title text for the low workout value warning",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -18235,6 +18420,9 @@
           }
         }
       }
+    },
+    "lower" : {
+
     },
     "Lyumjev" : {
       "comment" : "Title of insulin model preset - lyumjev",
@@ -18678,8 +18866,12 @@
         }
       }
     },
+    "Maximum Basal Rate is the automatically adjusted basal rate that %1$@ is allowed to enact to help reach your Correction Range." : {
+      "comment" : "Information about maximum basal rate (1: app name)"
+    },
     "Maximum Basal Rate is the maximum automatically adjusted basal rate that %1$@ is allowed to enact to help reach your correction range." : {
       "comment" : "Information about maximum basal rate (1: app name)",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -18978,7 +19170,7 @@
       }
     },
     "Maximum Bolus is the highest bolus amount that you will allow %1$@ to recommend at one time to cover carbs or bring down high glucose." : {
-      "comment" : "Information about maximum bolus (1: app name)",
+      "comment" : "Information about maximum bolus (1: app name) part 1",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -19424,6 +19616,9 @@
         }
       }
     },
+    "Minutes" : {
+
+    },
     "More Info" : {
       "comment" : "Alert action title to open error help",
       "localizations" : {
@@ -19572,6 +19767,9 @@
           }
         }
       }
+    },
+    "Mute All App Sounds" : {
+
     },
     "Name" : {
       "comment" : "The text for the custom preset name setting",
@@ -19733,6 +19931,9 @@
           }
         }
       }
+    },
+    "Never" : {
+      "comment" : "Repeat option never for a preset schedule"
     },
     "New Entry" : {
       "comment" : "Title for mini-modal to add a new schedule entry",
@@ -20026,6 +20227,9 @@
         }
       }
     },
+    "Next Date" : {
+
+    },
     "No Basal Insulin" : {
       "comment" : "Title text for the zero basal rate warning",
       "localizations" : {
@@ -20169,6 +20373,15 @@
         }
       }
     },
+    "No change to insulin settings." : {
+
+    },
+    "Note" : {
+
+    },
+    "Note: These example values are based on your current settings. Values may be different when you enable the preset." : {
+
+    },
     "Nothing to See Here!" : {
       "localizations" : {
         "ar" : {
@@ -20310,6 +20523,12 @@
           }
         }
       }
+    },
+    "of scheduled" : {
+
+    },
+    "or" : {
+
     },
     "Other" : {
       "comment" : "Section title for no-carb food\nThe title for custom preset emoji miscellaneous section",
@@ -20460,6 +20679,9 @@
         }
       }
     },
+    "Overall Insulin" : {
+
+    },
     "Overall Insulin Needs" : {
       "comment" : "The title text for the insulin sensitivity scaling setting",
       "localizations" : {
@@ -20609,8 +20831,12 @@
         }
       }
     },
+    "Overall insulin should be adjusted when your body needs more or less insulin than usual." : {
+
+    },
     "Override History" : {
       "comment" : "Title for override history view",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -21202,7 +21428,7 @@
       }
     },
     "Pre-Meal" : {
-      "comment" : "Title for pre-meal override history cell\nTitle for the pre-meal override range",
+      "comment" : "Title for the pre-meal override range",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -21352,6 +21578,7 @@
     },
     "Pre-Meal Values" : {
       "comment" : "Title text for multi-value pre-meal value warning",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -21638,6 +21865,7 @@
     },
     "PRESETS" : {
       "comment" : "The section header text for custom presets",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -21930,6 +22158,7 @@
     },
     "Pump Event" : {
       "comment" : "The title of the screen displaying a pump event",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -22078,7 +22307,7 @@
       }
     },
     "Pump Inoperable" : {
-      "comment" : "Title text for suspend resume button when the basal delivery state is not set",
+      "comment" : "Title text for suspend resume button when the basal delivery state is not set or set to pump failure",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -22518,6 +22747,18 @@
         }
       }
     },
+    "Recommended starting values" : {
+
+    },
+    "Repeat" : {
+
+    },
+    "Repeat weekly on" : {
+
+    },
+    "Repeats weekly on %1$@ at %2$@" : {
+      "comment" : "preset weekly repeat footer (1: repeat day(s)) (2: repeat time)"
+    },
     "Required" : {
       "comment" : "The default placeholder string for a credential",
       "localizations" : {
@@ -22675,6 +22916,7 @@
     },
     "Reservoir" : {
       "comment" : "Segmented button title for insulin delivery log reservoir history",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -23120,6 +23362,9 @@
         }
       }
     },
+    "Revert to recommended values" : {
+
+    },
     "Review and Save Settings" : {
       "comment" : "title for summary description section",
       "localizations" : {
@@ -23262,6 +23507,12 @@
           }
         }
       }
+    },
+    "Review Settings" : {
+
+    },
+    "Review your preset settings below. To make any changes, navigate back to the setting you’d like to edit. You can edit these settings after saving your preset as well." : {
+
     },
     "Review your therapy settings below. If you’d like to edit any of these settings, tap Back to go back to that screen." : {
       "comment" : "Description of how to interact with summary screen",
@@ -23555,6 +23806,9 @@
         }
       }
     },
+    "safety" : {
+
+    },
     "Save" : {
       "comment" : "Button text for saving glucose correction range schedule\nButton text for saving insulin sensitivity schedule\nThe button text for saving on a configuration page",
       "localizations" : {
@@ -23691,6 +23945,9 @@
           }
         }
       }
+    },
+    "Save and Schedule for Later" : {
+
     },
     "Save Basal Rates?" : {
       "comment" : "Alert title for confirming basal rates outside the recommended range",
@@ -24264,6 +24521,9 @@
         }
       }
     },
+    "Save for Later" : {
+
+    },
     "Save Glucose Safety Limit?" : {
       "comment" : "Alert title for confirming a glucose safety limit outside the recommended range",
       "localizations" : {
@@ -24552,6 +24812,7 @@
     },
     "Save Pre-Meal Range?" : {
       "comment" : "Alert title for confirming pre-meal range overrides outside the recommended range",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -24693,8 +24954,12 @@
         }
       }
     },
+    "Save Preset" : {
+
+    },
     "Save Workout Range?" : {
       "comment" : "Alert title for confirming workout range overrides outside the recommended range",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -24985,6 +25250,9 @@
         }
       }
     },
+    "Schedule" : {
+
+    },
     "SCHEDULED OVERRIDE" : {
       "comment" : "The section header text for a scheduled override",
       "extractionState" : "manual",
@@ -25137,6 +25405,7 @@
     },
     "SCHEDULED PRESET" : {
       "comment" : "The section header text for a scheduled custom preset",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -25277,6 +25546,18 @@
           }
         }
       }
+    },
+    "Scheduled Range" : {
+
+    },
+    "Scheduled reminder" : {
+
+    },
+    "Select" : {
+
+    },
+    "Select Days" : {
+
     },
     "Selected" : {
       "localizations" : {
@@ -25419,6 +25700,21 @@
           }
         }
       }
+    },
+    "Selected days" : {
+
+    },
+    "Set an Adjusted Correction Range" : {
+
+    },
+    "Set your correction range" : {
+
+    },
+    "Set your overall insulin needs" : {
+
+    },
+    "Settings Impact" : {
+
     },
     "Slow" : {
       "comment" : "Section title for slow absorbing food",
@@ -25712,6 +26008,15 @@
         }
       }
     },
+    "Start at" : {
+
+    },
+    "Start Date" : {
+
+    },
+    "Start Preset" : {
+
+    },
     "Start Time" : {
       "comment" : "The text for the custom preset start time",
       "localizations" : {
@@ -25860,6 +26165,12 @@
           }
         }
       }
+    },
+    "Start time must be at least 1 minute in the future." : {
+
+    },
+    "Start Training" : {
+
     },
     "Starting Temp Basal" : {
       "comment" : "Title text for suspend resume button when temp basal starting",
@@ -26887,6 +27198,7 @@
     },
     "Tap '+' to create a new custom preset." : {
       "comment" : "Text directing the user to configure their first custom preset",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -27476,6 +27788,7 @@
     },
     "Temporarily lower your glucose target before a meal to impact post-meal glucose spikes." : {
       "comment" : "Description of pre-meal mode",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -27619,6 +27932,7 @@
     },
     "Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events." : {
       "comment" : "Description of workout mode",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -27759,6 +28073,9 @@
           }
         }
       }
+    },
+    "Temporarily silence all sounds from the %1$@ app." : {
+      "comment" : "Silence all app sounds description (1: appName)"
     },
     "Temporary Override" : {
       "comment" : "The title for the override selection screen",
@@ -28053,7 +28370,7 @@
       }
     },
     "than your Correction Range." : {
-      "comment" : "Information about pre-meal range relative to correction range\nInformation about workout range relative to correction range",
+      "comment" : "Information about pre-meal range relative to correction range",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -28789,6 +29106,7 @@
     },
     "The rapid-acting adult model assumes peak activity at 75 minutes." : {
       "comment" : "Information about adult insulin model",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -28932,6 +29250,7 @@
     },
     "The rapid-acting child model assumes peak activity at 65 minutes." : {
       "comment" : "Information about child insulin model",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -29075,6 +29394,7 @@
     },
     "The schedule starts at midnight and cannot contain a rate of 0 U/hr." : {
       "comment" : "Information about basal rate scheduling",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -29215,6 +29535,12 @@
           }
         }
       }
+    },
+    "The schedule starts at midnight and cannot equal 0 U/day." : {
+      "comment" : "Information about basal rate scheduling"
+    },
+    "The sum of your basal rates cannot equal 0 U/day. Please adjust your schedule to a value above zero." : {
+      "comment" : "Instruction to correct zero schedule"
     },
     "Therapy Settings" : {
       "comment" : "Therapy Settings screen title",
@@ -29358,6 +29684,12 @@
           }
         }
       }
+    },
+    "This adjustment will make your settings stronger." : {
+
+    },
+    "This adjustment will make your settings weaker." : {
+
     },
     "This model assumes peak insulin activity at 19 minutes." : {
       "comment" : "Subtitle of afrezza preset",
@@ -30073,8 +30405,12 @@
         }
       }
     },
+    "This setting will also determine a safety limit for automatic delivery to keep the amount of active insulin below twice your maximum bolus." : {
+      "comment" : "Information about maximum bolus part 2"
+    },
     "This setting will also determine a safety limit for automatic dosing. %1$@ will limit automatic delivery to keep the amount of active insulin below twice your maximum bolus." : {
       "comment" : "Information about maximum automated insulin on board (1: app name)",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -30217,7 +30553,7 @@
       }
     },
     "This will typically be" : {
-      "comment" : "Information about pre-meal range relative to correction range\nInformation about workout range relative to correction range",
+      "comment" : "Information about pre-meal range relative to correction range",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -30358,6 +30694,9 @@
           }
         }
       }
+    },
+    "Tidepool Loop will always ask you to confirm before turning on a scheduled preset." : {
+
     },
     "Time" : {
       "comment" : "Label for offset from midnight picker",
@@ -30657,6 +30996,9 @@
         }
       }
     },
+    "Tip" : {
+
+    },
     "To be implemented" : {
       "localizations" : {
         "ar" : {
@@ -30798,6 +31140,18 @@
           }
         }
       }
+    },
+    "To help avoid lows, set a range " : {
+
+    },
+    "To help avoid post-meal highs, set a range " : {
+
+    },
+    "To reduce the risk of highs or lows, you may want to set an adjusted range if you think your glucose will vary more than usual." : {
+
+    },
+    "Toggle off for a single use preset" : {
+
     },
     "Total" : {
       "comment" : "The text indicating Total for Daily Schedule Basal",
@@ -32092,6 +32446,27 @@
         }
       }
     },
+    "until " : {
+
+    },
+    "Until I turn off" : {
+
+    },
+    "Use Scheduled Range" : {
+
+    },
+    "Use the + and - buttons to set whether you need" : {
+
+    },
+    "Using this adjustment may lead to an over delivery of insulin and result in serious injury. Monitor your glucose while this preset is in use." : {
+
+    },
+    "Using this adjustment may lead to an over delivery of insulin. Monitor your glucose while this preset is in use." : {
+
+    },
+    "Using this adjustment may lead to an under delivery of insulin. Monitor your glucose while this preset is in use." : {
+
+    },
     "Value" : {
       "comment" : "Placeholder text until value is entered",
       "localizations" : {
@@ -32826,6 +33201,15 @@
         }
       }
     },
+    "Weekly" : {
+      "comment" : "Repeat option weekly for a preset schedule"
+    },
+    "With correction range set to using your scheduled range, overall insulin needs adjustment is required." : {
+
+    },
+    "With overall insulin needs at 100%, an adjusted correction range is required." : {
+
+    },
     "Work with your healthcare provider to choose a value that is higher than your highest scheduled basal rate, but as conservative or aggressive as you feel comfortable." : {
       "comment" : "Disclaimer",
       "localizations" : {
@@ -32971,6 +33355,7 @@
     },
     "Workout" : {
       "comment" : "Title for the workout override range\nTitle for workout override history cell",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -33120,6 +33505,7 @@
     },
     "Workout Range is the glucose value or range of values you want %1$@ to target during activity. This range will be in effect when you activate the Workout Preset button." : {
       "comment" : "Information about workout range format (1: app name)",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -33263,6 +33649,7 @@
     },
     "Workout Values" : {
       "comment" : "Title text for multi-value workout value warning",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -33403,6 +33790,12 @@
           }
         }
       }
+    },
+    "Yes, Delete" : {
+
+    },
+    "You can add different Basal Rates for different times of day by using the ➕." : {
+      "comment" : "Information about adding basal rates for different times of day"
     },
     "You can add different carb ratios for different times of day by using the ➕." : {
       "comment" : "Description of how to add a ratio",
@@ -33978,6 +34371,7 @@
     },
     "You can choose how %1$@ measures rapid acting insulin's peak activity according to one of these two insulin models." : {
       "comment" : "Information about insulin model (1: app name)",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -34699,6 +35093,7 @@
     },
     "Your healthcare provider can help you choose a Correction Range that's right for you." : {
       "comment" : "Disclaimer",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -34839,6 +35234,9 @@
           }
         }
       }
+    },
+    "Your healthcare provider can help you choose a Correction Range that’s right for you." : {
+      "comment" : "Disclaimer"
     },
     "Your Insulin Sensitivity Factor (ISF) is the drop in glucose expected from one unit of insulin." : {
       "comment" : "Description of insulin sensitivity factor",
@@ -34983,8 +35381,12 @@
         }
       }
     },
+    "Your Pre-Meal Preset should be the glucose value (or range of values) you want %1$@ to target by the time you take your first bite of your meal. This correction range will be in effect when you activate the Pre-Meal preset." : {
+      "comment" : "Information about pre-meal range format (1: app name)"
+    },
     "Your Pre-Meal Range should be the glucose value (or range of values) you want %1$@ to target by the time you take your first bite of your meal. This range will be in effect when you activate the Pre-Meal Preset button." : {
       "comment" : "Information about pre-meal range format (1: app name)",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {

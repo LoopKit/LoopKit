@@ -1,8 +1,29 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    ", " : {
+      "comment" : "Separator for multiple days"
+    },
+    "%.0f - %.0f %3$@" : {
+
+    },
+    "%@ and %@" : {
+      "comment" : "Format for two days",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ and %2$@"
+          }
+        }
+      }
+    },
+    "%@ Preset" : {
+      "comment" : "Format for correction range override therapy setting card"
+    },
     "%@ Range" : {
       "comment" : "Format for correction range override therapy setting card",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -140,6 +161,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ 目标范围"
+          }
+        }
+      }
+    },
+    "%@, and %@" : {
+      "comment" : "Format for three or more days",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@, and %2$@"
           }
         }
       }
@@ -434,6 +466,7 @@
     },
     "%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours." : {
       "comment" : "Descriptive format string for glucose safety limit (1: app name)",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -574,6 +607,9 @@
           }
         }
       }
+    },
+    "%1$@ will only increase your insulin delivery if your glucose is predicted to stay above this limit for the next three hours. If you bolus, the amount it recommends will be lower. " : {
+      "comment" : "Descriptive format string for glucose safety limit (1: app name)"
     },
     "%1$@%2$@%3$@" : {
       "comment" : "String format for value with units (1: value, 2: separator, 3: units)",
@@ -723,6 +759,9 @@
           }
         }
       }
+    },
+    "A rapid-acting insulin" : {
+      "comment" : "Description for rapid acting insulin types"
     },
     "A value you have entered is higher than what is typically recommended for most people." : {
       "comment" : "Descriptive text for guardrail high value warning for schedule interface",
@@ -1010,6 +1049,12 @@
         }
       }
     },
+    "Active until carbs are added" : {
+      "comment" : "Presets card pre-meal duration accessibility label"
+    },
+    "Active until turned off" : {
+      "comment" : "Presets card indefinite duration accessibility label"
+    },
     "Afrezza" : {
       "comment" : "Brand name for afrezza insulin type\nTitle for Afrezza insulin type",
       "localizations" : {
@@ -1155,6 +1200,7 @@
     },
     "Afrezza is an ultra rapid-acting mealtime insulin that is breathed in through your lungs using an oral inhaler and made by MannKind" : {
       "comment" : "Description for afrezza insulin type",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -1295,6 +1341,12 @@
           }
         }
       }
+    },
+    "An ultra-rapid-acting insulin" : {
+      "comment" : "Description for ultra rapid acting insulin types"
+    },
+    "An ultra-rapid-acting mealtime insulin that is inhaled" : {
+      "comment" : "Description for afrezza insulin type"
     },
     "Apidra" : {
       "comment" : "Brand name for apidra insulin type",
@@ -2161,6 +2213,9 @@
         }
       }
     },
+    "Biking" : {
+      "comment" : "biking activity preset name"
+    },
     "Bolus" : {
       "comment" : "Title for bolus dose type",
       "localizations" : {
@@ -2903,6 +2958,9 @@
         }
       }
     },
+    "Common Uses of Presets" : {
+
+    },
     "Communication Failure" : {
       "comment" : "Generic pump error description",
       "localizations" : {
@@ -3054,6 +3112,7 @@
     },
     "Communications interrupted during insulin delivery command." : {
       "comment" : "Failure reason for uncertain delivery",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -3493,8 +3552,12 @@
         }
       }
     },
+    "Correction Range is the glucose range (or range of values) that you want %1$@ to aim for in adjusting your insulin delivery and helping you calculate your boluses." : {
+      "comment" : "Descriptive text for glucose target range (1: app name)"
+    },
     "Correction Range is the glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin and helping you calculate your boluses." : {
       "comment" : "Descriptive text for glucose target range (1: app name)",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -3778,6 +3841,9 @@
           }
         }
       }
+    },
+    "Customizing Presets" : {
+
     },
     "Delivery Limits" : {
       "comment" : "Title text for delivery limits",
@@ -4512,6 +4578,9 @@
         }
       }
     },
+    "Duration" : {
+
+    },
     "Ensure carb data exists for the specified date" : {
       "comment" : "Recovery suggestion for a no data error",
       "localizations" : {
@@ -4660,6 +4729,9 @@
           }
         }
       }
+    },
+    "Exercise and Your Glucose Levels" : {
+
     },
     "Falling" : {
       "comment" : "Glucose trend down",
@@ -5259,6 +5331,7 @@
     },
     "Fiasp is a mealtime insulin aspart formulation with the addition of nicotinamide (vitamin B3) made by Novo Nordisk" : {
       "comment" : "Description for fiasp insulin type",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -5551,6 +5624,7 @@
     },
     "For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from different models for the peak activity." : {
       "comment" : "Descriptive text for fast acting insulin model (1: app name)",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -5983,6 +6057,9 @@
           }
         }
       }
+    },
+    "High-Intensity Exercise" : {
+
     },
     "Hour" : {
       "comment" : "The long unit display string for a singular hour",
@@ -6558,6 +6635,7 @@
     },
     "Humalog (insulin lispro) is a rapid-acting insulin made by Eli Lilly" : {
       "comment" : "Description for humalog insulin type",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -6699,8 +6777,12 @@
         }
       }
     },
+    "Impact on Bolusing" : {
+
+    },
     "Insulin Model" : {
       "comment" : "Title text for fast acting insulin model",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -7290,6 +7372,12 @@
         }
       }
     },
+    "Jogging" : {
+      "comment" : "jogging activity preset name"
+    },
+    "Light-to-Moderate Intensity Exercise" : {
+
+    },
     "Lyumjev" : {
       "comment" : "Brand name for lyumjev insulin type\nTitle for Lyumjev insulin type",
       "localizations" : {
@@ -7435,6 +7523,7 @@
     },
     "Lyumjev is a mealtime insulin lispro formulation with the addition of citrate and treprostinil made by Eli Lilly" : {
       "comment" : "Description for lyumjev insulin type",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -7868,8 +7957,12 @@
         }
       }
     },
+    "Maximum Basal Rate is the automatically adjusted basal rate that %1$@ is allowed to enact to help reach your Correction Range." : {
+      "comment" : "Descriptive text for maximum basal rate (1: app name)"
+    },
     "Maximum Basal Rate is the highest temporary basal rate %1$@ is allowed to set." : {
       "comment" : "Descriptive text for maximum basal rate (1: app name)",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -8160,8 +8253,12 @@
         }
       }
     },
+    "Maximum Bolus is the highest bolus amount that you will allow %1$@ to recommend at one time to cover carbs or bring down high glucose." : {
+      "comment" : "Descriptive text for maximum bolus (1: app name)"
+    },
     "Maximum Bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose." : {
       "comment" : "Descriptive text for maximum bolus",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -8594,6 +8691,9 @@
           }
         }
       }
+    },
+    "Mixed-Intensity Exercise" : {
+
     },
     "mmol/L" : {
       "comment" : "The short unit display string for millimoles per liter",
@@ -9035,6 +9135,12 @@
           }
         }
       }
+    },
+    "Multiple" : {
+      "comment" : "Preset schedule repeat option multiple days"
+    },
+    "multiple days" : {
+      "comment" : "Preset schedule repeat option multiple days"
     },
     "Needs Attention" : {
       "comment" : "Sensor state description for the non-valid state",
@@ -9478,7 +9584,7 @@
       }
     },
     "Novolog" : {
-      "comment" : "Brand name for novolog insulin type",
+      "comment" : "Brand name for novolog insulin type\nTitle for Novolog insulin type",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -9622,6 +9728,7 @@
     },
     "Novolog (insulin aspart)" : {
       "comment" : "Title for Novolog insulin type",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -9765,6 +9872,7 @@
     },
     "NovoLog (insulin aspart) is a rapid-acting insulin made by Novo Nordisk" : {
       "comment" : "Description for novolog insulin type",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -10061,6 +10169,12 @@
         }
       }
     },
+    "on until carbs added" : {
+      "comment" : "Preset card pre-meal expected end time\nPresets card pre-meal expected end time accessibility label"
+    },
+    "on until turned off" : {
+      "comment" : "Preset card indefinite scheduled end time\nPresets card indefinite duration accessibility label"
+    },
     "One or more of the values you have entered is outside of what is typically recommended for most people." : {
       "comment" : "Descriptive text for saving settings outside the recommended range",
       "localizations" : {
@@ -10203,6 +10317,12 @@
           }
         }
       }
+    },
+    "Overall Insulin" : {
+
+    },
+    "Perceived Intensity" : {
+
     },
     "Please re-enable sharing in Health" : {
       "comment" : "The error recovery suggestion when Health sharing was denied",
@@ -10349,7 +10469,7 @@
       }
     },
     "Pre-Meal" : {
-      "comment" : "Title for pre-meal mode",
+      "comment" : "The title of pre-meal preset\nTitle for pre-meal mode",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -10497,6 +10617,21 @@
         }
       }
     },
+    "Presets for Daily Activities" : {
+
+    },
+    "Presets for Daily Activity" : {
+
+    },
+    "Presets for Exercise" : {
+
+    },
+    "Presets for Illness" : {
+
+    },
+    "Preventing Lows" : {
+
+    },
     "Recommended Update" : {
       "comment" : "Description of supported software update needed",
       "localizations" : {
@@ -10636,6 +10771,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Recommended Update"
+          }
+        }
+      }
+    },
+    "Repeats weekly on %@ at %@" : {
+      "comment" : "Weekly repeat schedule format",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Repeats weekly on %1$@ at %2$@"
           }
         }
       }
@@ -11230,6 +11376,12 @@
         }
       }
     },
+    "Saved Presets" : {
+
+    },
+    "Single Use Preset" : {
+      "comment" : "The title shown for a single use preset"
+    },
     "Some of the values you have entered are outside of what is typically recommended for most people." : {
       "comment" : "Descriptive text for guardrail high value warning for schedule interface",
       "localizations" : {
@@ -11372,6 +11524,9 @@
           }
         }
       }
+    },
+    "Strength Training" : {
+      "comment" : "strength training activity preset name"
     },
     "Suspended" : {
       "comment" : "Title for suspend dose type",
@@ -11810,6 +11965,7 @@
     },
     "Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events." : {
       "comment" : "Descriptive text for workout correction range override",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -12239,6 +12395,7 @@
     },
     "The values you have entered are outside of what is typically recommended for most people." : {
       "comment" : "Descriptive text for guardrail high value warning",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -12379,6 +12536,9 @@
           }
         }
       }
+    },
+    "Training Complete" : {
+
     },
     "U" : {
       "comment" : "The short unit display string for international units of insulin",
@@ -12656,6 +12816,7 @@
     },
     "Uncertain Delivery" : {
       "comment" : "Error description for uncertain delivery",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -13393,6 +13554,15 @@
         }
       }
     },
+    "Unplanned Activity" : {
+
+    },
+    "until carbs added" : {
+      "comment" : "Preset card pre-meal duration"
+    },
+    "until turned off" : {
+      "comment" : "Preset card indefinite duration"
+    },
     "Update Available" : {
       "comment" : "Description of informational software update needed",
       "localizations" : {
@@ -13536,8 +13706,12 @@
         }
       }
     },
+    "Walking" : {
+      "comment" : "walking activity preset name"
+    },
     "Workout" : {
       "comment" : "Title for workout mode",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -13973,6 +14147,7 @@
     },
     "Your Insulin Sensitivities refer to the drop in glucose expected from one unit of insulin." : {
       "comment" : "Descriptive text for insulin sensitivity",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -14113,6 +14288,9 @@
           }
         }
       }
+    },
+    "Your Insulin Sensitivity Factor (ISF) is the mg/dL drop in glucose expected from one unit of insulin." : {
+      "comment" : "Descriptive text for insulin sensitivity"
     }
   },
   "version" : "1.0"
