@@ -42,8 +42,8 @@ class PredictedGlucoseChartTests: XCTestCase {
         XCTAssertEqual(predictedGlucosePoints[2].y.scalar, 280)
         XCTAssertEqual(predictedGlucosePoints[3].y.scalar, 380)
         XCTAssertEqual(predictedGlucosePoints[4].y.scalar, 400)
-        XCTAssertEqual(predictedGlucosePoints[5].y.scalar, 400)
-        XCTAssertEqual(predictedGlucosePoints[6].y.scalar, 400)
+        XCTAssertEqual(predictedGlucosePoints[5].y.scalar, 480)
+        XCTAssertEqual(predictedGlucosePoints[6].y.scalar, 520)
     }
 
     func testClampingPredictedGlucoseValues40To600() {

@@ -266,8 +266,13 @@ extension Collection where Element: GlucoseValue {
         var minCorrectionUnits: Double?
         var effectedSensitivityAtMinGlucose: Double?
 
+        var this_effectDuration = model.effectDuration
+        //var this_effectDuration = 60.0*60.0*3
+        
         // Only consider predictions within the model's effect duration
-        let validDateRange = DateInterval(start: date, duration: model.effectDuration)
+        let validDateRange = DateInterval(start: date, duration: this_effectDuration)
+        print("================effect duration: \(this_effectDuration)")
+        print("================valid date range: \(validDateRange)")
 
         let unit = correctionRange.unit
         let suspendThresholdValue = suspendThreshold.doubleValue(for: unit)
@@ -291,7 +296,7 @@ extension Collection where Element: GlucoseValue {
 
             // Compute the target value as a function of time since the dose started
             let targetValue = targetGlucoseValue(
-                percentEffectDuration: time / model.effectDuration,
+                percentEffectDuration: time / this_effectDuration,
                 minValue: suspendThresholdValue,
                 maxValue: correctionRange.quantityRange(at: prediction.startDate).averageValue(for: unit)
             )

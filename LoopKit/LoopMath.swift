@@ -158,15 +158,20 @@ public enum LoopMath {
                 previousEffectValue = value
             }
         }
+        print("HERE1")
+        let fixedIncrease =  0.0 //1.875 // 75 ogni due ore (1.875/5min) vs 0.6 basal //5.0
 
         let prediction = effectValuesAtDate.sorted { $0.0 < $1.0 }.reduce([PredictedGlucoseValue(startDate: startingGlucose.startDate, quantity: startingGlucose.quantity)]) { (prediction, effect) -> [PredictedGlucoseValue] in
             if effect.0 > startingGlucose.startDate, let lastValue = prediction.last {
                 let nextValue = PredictedGlucoseValue(
                     startDate: effect.0,
-                    quantity: HKQuantity(unit: unit, doubleValue: effect.1 + lastValue.quantity.doubleValue(for: unit))
+                    quantity: HKQuantity(unit: unit, doubleValue: effect.1 + lastValue.quantity.doubleValue(for: unit) + fixedIncrease)
                 )
+                print("HERE2")
+
                 return prediction + [nextValue]
             } else {
+                print("HERE3")
                 return prediction
             }
         }
