@@ -87,7 +87,7 @@ public struct CorrectionRangeOverridesEditor: View {
                 duration: .untilCarbsEntered,
                 insulinMultiplier: 1,
                 correctionRange: value.preMeal,
-                guardrail: nil,
+                guardrail: viewModel.guardrail,
                 expectedEndTime: nil,
                 isScheduled: false,
                 activityPresetIsModified: nil,
