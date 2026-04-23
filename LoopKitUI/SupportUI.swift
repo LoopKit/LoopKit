@@ -150,3 +150,8 @@ extension SupportUI {
         true
     }
 }
+
+@MainActor
+public protocol SupportProviding {
+    func createSupport() -> SupportUI
+}

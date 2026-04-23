@@ -9,6 +9,7 @@
 import Foundation
 import LoopKit
 import LoopKitUI
+import MockKit
 import SwiftUI
 
 public class MockSupport: SupportUI {
@@ -42,19 +43,22 @@ public class MockSupport: SupportUI {
     public weak var delegate: SupportUIDelegate?
 
     public func configurationMenuItems() -> [LoopKitUI.CustomMenuItem] {
-        return []
-    }
-
-    @ViewBuilder
-    public func supportMenuItem(supportInfoProvider: SupportInfoProvider, urlHandler: @escaping (URL) -> Void) -> some View {
-        SupportMenuItem(mockSupport: self)
+        return [
+            CustomMenuItem(section: .support, view: AnyView(SupportMenuItem(mockSupport: self)))
+        ]
     }
     
     public func softwareUpdateView(bundleIdentifier: String, currentVersion: String, guidanceColors: GuidanceColors, openAppStore: (() -> Void)?) -> AnyView? {
+        guard let versionUpdate, versionUpdate.softwareUpdateAvailable else {
+            return nil
+        }
         return AnyView(
-            Button("versionUpdate: \(versionUpdate!.localizedDescription)\n\nbundleIdentifier: \(bundleIdentifier)\n\ncurrentVersion: \(currentVersion)") {
-                openAppStore?()
-            }
+            MockSoftwareUpdateView(
+                versionUpdate: versionUpdate,
+                currentVersion: currentVersion,
+                guidanceColors: guidanceColors,
+                openAppStore: openAppStore
+            )
         )
     }
     
@@ -79,6 +83,19 @@ extension MockSupport {
         return Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as! String
     }
 
+    static func updateDescription(for versionUpdate: VersionUpdate) -> String {
+        switch versionUpdate {
+        case .required:
+            return LocalizedString("A critical update is available. Your app may not function correctly until you update to the latest version.", comment: "Software update description for required update")
+        case .recommended:
+            return LocalizedString("Your app is out of date. It will continue to work, but we recommend updating to the latest version.", comment: "Software update description for recommended update")
+        case .available:
+            return LocalizedString("A new version is ready for you. Please update through the App Store.", comment: "Software update description for available update")
+        case .noUpdateNeeded:
+            return ""
+        }
+    }
+
     private func maybeIssueAlert(_ versionUpdate: VersionUpdate) {
         guard versionUpdate >= .recommended else {
             noAlertNecessary()
@@ -86,23 +103,17 @@ extension MockSupport {
         }
         
         let alertIdentifier = Alert.Identifier(managerIdentifier: MockSupport.supportIdentifier, alertIdentifier: versionUpdate.rawValue)
+        let description = Self.updateDescription(for: versionUpdate)
+        let navigationGuidance = String(format: LocalizedString("\n\nGo to %1$@ Settings > Software Update to complete.", comment: "Navigation guidance appended to software update alerts (1: app name)"), appName)
         let alertContent: LoopKit.Alert.Content
         if firstAlert {
             alertContent = Alert.Content(title: versionUpdate.localizedDescription,
-                                         body: String(format: LocalizedString("""
-                                                    Your %1$@ app is out of date. It will continue to work, but we recommend updating to the latest version.
-                                                    
-                                                    Go to %2$@ Settings > Software Update to complete.
-                                                    """, comment: "Alert content body for first software update alert (1: app name)(2: app name)"), appName, appName),
+                                         body: description + navigationGuidance,
                                          acknowledgeActionButtonLabel: LocalizedString("OK", comment: "Default acknowledgement"))
         } else if let lastVersionCheckAlertDate = lastVersionCheckAlertDate,
                   abs(lastVersionCheckAlertDate.timeIntervalSinceNow) > alertCadence {
             alertContent = Alert.Content(title: LocalizedString("Update Reminder", comment: "Recurring software update alert title"),
-                                         body: String(format: LocalizedString("""
-                                                    A software update is recommended to continue using the %1$@ app.
-                                                    
-                                                    Go to %2$@ Settings > Software Update to install the latest version.
-                                                    """, comment: "Alert content body for recurring software update alert"), appName, appName),
+                                         body: description + navigationGuidance,
                                          acknowledgeActionButtonLabel: LocalizedString("OK", comment: "Default acknowledgement"))
         } else {
             return
@@ -168,5 +179,80 @@ struct SupportMenuItem : View {
     
     var currentVersionUpdate: String {
         return mockSupport.versionUpdate.map { "(\($0.rawValue))" } ?? ""
+    }
+}
+
+struct MockSoftwareUpdateView: View {
+
+    let versionUpdate: VersionUpdate
+    let currentVersion: String
+    let guidanceColors: GuidanceColors
+    let openAppStore: (() -> Void)?
+
+    private var iconColor: Color {
+        switch versionUpdate {
+        case .required: return guidanceColors.critical
+        case .recommended: return guidanceColors.warning
+        default: return .primary
+        }
+    }
+
+    private var bodyText: String {
+        MockSupport.updateDescription(for: versionUpdate)
+    }
+
+    var body: some View {
+        List {
+            Section {
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack {
+                        if versionUpdate >= .recommended {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .foregroundColor(iconColor)
+                        }
+                        Text(versionUpdate.localizedDescription)
+                            .bold()
+                    }
+                    .padding(.vertical, 5)
+
+                    Text(bodyText)
+                        .font(.footnote)
+                        .foregroundColor(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding(.bottom, 5)
+
+                    Divider()
+
+                    Button(action: { openAppStore?() }) {
+                        HStack {
+                            Text("App Store to Download and Install")
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .foregroundColor(.gray)
+                                .font(.footnote)
+                        }
+                    }
+                    .accentColor(.primary)
+                    .padding(.vertical, 5)
+                }
+            }
+
+            Section {
+                HStack {
+                    Text("Current Version")
+                    Spacer()
+                    Text(currentVersion)
+                        .foregroundColor(.secondary)
+                }
+            }
+        }
+        .insetGroupedListStyle()
+        .navigationBarTitle(Text("Software Update"))
+    }
+}
+
+extension MockService: @retroactive SupportProviding {
+    public func createSupport() -> SupportUI {
+        return MockSupport()
     }
 }
