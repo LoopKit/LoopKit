@@ -36,7 +36,10 @@ public class MockSupport: SupportUI {
     }
    
     public func checkVersion(bundleIdentifier: String, currentVersion: String) async -> VersionUpdate? {
-        maybeIssueAlert(versionUpdate ?? .noUpdateNeeded)
+        let update = versionUpdate ?? .noUpdateNeeded
+        if update != .required {
+            maybeIssueAlert(update)
+        }
         return versionUpdate
     }
     
