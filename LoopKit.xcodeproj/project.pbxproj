@@ -294,6 +294,22 @@
 		84AAB1E52C347EEA0054D304 /* Environment+InvestigationalDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AAB1E42C347EEA0054D304 /* Environment+InvestigationalDevice.swift */; };
 		84CB9CDE2C0FD94B007210DD /* LoopCompletionFreshnessTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CB9CDD2C0FD94B007210DD /* LoopCompletionFreshnessTests.swift */; };
 		84DF48892C33218100844FB1 /* MuteAllAppSoundsDurationSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DF48882C33217400844FB1 /* MuteAllAppSoundsDurationSheetView.swift */; };
+		84DF48E32F6C6B2100BEDB40 /* Metadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DF48DF2F6C6B2100BEDB40 /* Metadata.swift */; };
+		84DF48E42F6C6B2100BEDB40 /* MediaContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DF48E02F6C6B2100BEDB40 /* MediaContent.swift */; };
+		84DF48E52F6C6B2100BEDB40 /* TranscriptParagraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DF48DC2F6C6B2100BEDB40 /* TranscriptParagraph.swift */; };
+		84DF48E62F6C6B2100BEDB40 /* ClosedCaptionFragment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DF48E22F6C6B2100BEDB40 /* ClosedCaptionFragment.swift */; };
+		84DF48E72F6C6B2100BEDB40 /* TranscriptExcerpt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DF48DD2F6C6B2100BEDB40 /* TranscriptExcerpt.swift */; };
+		84DF48E82F6C6B2100BEDB40 /* ClosedCaptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DF48E12F6C6B2100BEDB40 /* ClosedCaptions.swift */; };
+		84DF48E92F6C6B2100BEDB40 /* Transcript.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DF48DE2F6C6B2100BEDB40 /* Transcript.swift */; };
+		84DF48EA2F6C6B2100BEDB40 /* Metadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DF48DF2F6C6B2100BEDB40 /* Metadata.swift */; };
+		84DF48EB2F6C6B2100BEDB40 /* MediaContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DF48E02F6C6B2100BEDB40 /* MediaContent.swift */; };
+		84DF48EC2F6C6B2100BEDB40 /* TranscriptParagraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DF48DC2F6C6B2100BEDB40 /* TranscriptParagraph.swift */; };
+		84DF48ED2F6C6B2100BEDB40 /* ClosedCaptionFragment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DF48E22F6C6B2100BEDB40 /* ClosedCaptionFragment.swift */; };
+		84DF48EE2F6C6B2100BEDB40 /* TranscriptExcerpt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DF48DD2F6C6B2100BEDB40 /* TranscriptExcerpt.swift */; };
+		84DF48EF2F6C6B2100BEDB40 /* ClosedCaptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DF48E12F6C6B2100BEDB40 /* ClosedCaptions.swift */; };
+		84DF48F02F6C6B2100BEDB40 /* Transcript.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DF48DE2F6C6B2100BEDB40 /* Transcript.swift */; };
+		84DF48F22F6C6B9000BEDB40 /* TimeInterval+Timecode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DF48F12F6C6B9000BEDB40 /* TimeInterval+Timecode.swift */; };
+		84DF48F32F6C6B9000BEDB40 /* TimeInterval+Timecode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DF48F12F6C6B9000BEDB40 /* TimeInterval+Timecode.swift */; };
 		84E8BBBE2CC9976E0078E6CF /* BulletedListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E8BBBD2CC9976E0078E6CF /* BulletedListView.swift */; };
 		84EE97812D71293E00D5E941 /* GlucoseHistoryLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84EE97802D71293E00D5E941 /* GlucoseHistoryLayer.swift */; };
 		84EE97B12D7A42DB00D5E941 /* ChartPointsScatterBorderedCirclesLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84EE97B02D7A42DB00D5E941 /* ChartPointsScatterBorderedCirclesLayer.swift */; };
@@ -1304,6 +1320,14 @@
 		84AAB1E42C347EEA0054D304 /* Environment+InvestigationalDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Environment+InvestigationalDevice.swift"; sourceTree = "<group>"; };
 		84CB9CDD2C0FD94B007210DD /* LoopCompletionFreshnessTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoopCompletionFreshnessTests.swift; sourceTree = "<group>"; };
 		84DF48882C33217400844FB1 /* MuteAllAppSoundsDurationSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuteAllAppSoundsDurationSheetView.swift; sourceTree = "<group>"; };
+		84DF48DC2F6C6B2100BEDB40 /* TranscriptParagraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptParagraph.swift; sourceTree = "<group>"; };
+		84DF48DD2F6C6B2100BEDB40 /* TranscriptExcerpt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptExcerpt.swift; sourceTree = "<group>"; };
+		84DF48DE2F6C6B2100BEDB40 /* Transcript.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transcript.swift; sourceTree = "<group>"; };
+		84DF48DF2F6C6B2100BEDB40 /* Metadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Metadata.swift; sourceTree = "<group>"; };
+		84DF48E02F6C6B2100BEDB40 /* MediaContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaContent.swift; sourceTree = "<group>"; };
+		84DF48E12F6C6B2100BEDB40 /* ClosedCaptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClosedCaptions.swift; sourceTree = "<group>"; };
+		84DF48E22F6C6B2100BEDB40 /* ClosedCaptionFragment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClosedCaptionFragment.swift; sourceTree = "<group>"; };
+		84DF48F12F6C6B9000BEDB40 /* TimeInterval+Timecode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval+Timecode.swift"; sourceTree = "<group>"; };
 		84E8BBBD2CC9976E0078E6CF /* BulletedListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BulletedListView.swift; sourceTree = "<group>"; };
 		84EE97802D71293E00D5E941 /* GlucoseHistoryLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseHistoryLayer.swift; sourceTree = "<group>"; };
 		84EE97B02D7A42DB00D5E941 /* ChartPointsScatterBorderedCirclesLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartPointsScatterBorderedCirclesLayer.swift; sourceTree = "<group>"; };
@@ -1607,12 +1631,10 @@
 		C12EE16B1F2964B3007DB9F1 /* InsulinModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsulinModel.swift; sourceTree = "<group>"; };
 		C13ACA092AC077F000F05D08 /* LoopAlgorithmInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoopAlgorithmInput.swift; sourceTree = "<group>"; };
 		C13ACA0A2AC077F000F05D08 /* LoopAlgorithmSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoopAlgorithmSettings.swift; sourceTree = "<group>"; };
-		C13ACA0B2AC077F000F05D08 /* LoopPredictionOutput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoopPredictionOutput.swift; sourceTree = "<group>"; };
 		C13E6D291EEB1CB9006F5880 /* ice_slow_absorption.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_slow_absorption.json; sourceTree = "<group>"; };
 		C140DFFE260276BF000A4FF7 /* ManualBolusRecommendation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManualBolusRecommendation.swift; sourceTree = "<group>"; };
 		C140E0512602908A000A4FF7 /* SettingsPresentationMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsPresentationMode.swift; sourceTree = "<group>"; };
 		C10759A12E4E3F2900EFF99A /* Environment+FeatureFlags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Environment+FeatureFlags.swift"; sourceTree = "<group>"; };
-		C109240E286A4AD500FAD2B8 /* AutomaticDosingStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutomaticDosingStrategy.swift; sourceTree = "<group>"; };
 		C10DF6D62C2CA3E80076DA10 /* HeartbeatFobPairingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeartbeatFobPairingView.swift; sourceTree = "<group>"; };
 		C10DF6D82C2CA4270076DA10 /* BluetoothManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BluetoothManager.swift; sourceTree = "<group>"; };
 		C10DF6D92C2CA4270076DA10 /* BluetoothServices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BluetoothServices.swift; sourceTree = "<group>"; };
@@ -1621,7 +1643,6 @@
 		C10DF6E22C2CB7FF0076DA10 /* OSLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSLog.swift; sourceTree = "<group>"; };
 		C10DF6E62C2CBA0D0076DA10 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		C13FF4252C5ADC8100FD2869 /* DiscoveredFob+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DiscoveredFob+UI.swift"; sourceTree = "<group>"; };
-		C140E0512602908A000A4FF7 /* SettingsPresentationMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsPresentationMode.swift; sourceTree = "<group>"; };
 		C14604812E0087AE00153DFD /* TemporaryPresetScheduleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemporaryPresetScheduleTests.swift; sourceTree = "<group>"; };
 		C14A7E7D295F43AB00CD87B4 /* ConfigurationPageScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationPageScrollView.swift; sourceTree = "<group>"; };
 		C15E994529C6790A004AB926 /* LocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedString.swift; sourceTree = "<group>"; };
@@ -1632,8 +1653,6 @@
 		C16BC0B42A5FA9D200BDC713 /* DoseMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoseMath.swift; sourceTree = "<group>"; };
 		C16BC0B62A5FAB6E00BDC713 /* DoseMathTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoseMathTests.swift; sourceTree = "<group>"; };
 		C15F9A572EB65D3B0082BDF4 /* TestingDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingDate.swift; sourceTree = "<group>"; };
-		C164A55F22F14C73000E3FA5 /* UnfinalizedDose.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfinalizedDose.swift; sourceTree = "<group>"; };
-		C164A56322F21081000E3FA5 /* MockPumpManagerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPumpManagerState.swift; sourceTree = "<group>"; };
 		C16BC0B92A60351900BDC713 /* far_future_high_bg_forecast_after_6_hours.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = far_future_high_bg_forecast_after_6_hours.json; sourceTree = "<group>"; };
 		C16BC0BA2A60351900BDC713 /* recommend_temp_basal_no_change_glucose.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = recommend_temp_basal_no_change_glucose.json; sourceTree = "<group>"; };
 		C16BC0BB2A60351900BDC713 /* recommend_temp_basal_start_low_end_high.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = recommend_temp_basal_start_low_end_high.json; sourceTree = "<group>"; };
@@ -1715,7 +1734,6 @@
 		C1B8E6E42A1BB14E00AF38D0 /* HealthKitSampleStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthKitSampleStore.swift; sourceTree = "<group>"; };
 		C1CAB9E826A3254800A57273 /* StoredInsulinModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoredInsulinModel.swift; sourceTree = "<group>"; };
 		C1CBF61B1EEA2A1E001E4851 /* ice_1_hour_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_1_hour_input.json; sourceTree = "<group>"; };
-		C1D476B62A8ED3E8002C1C87 /* LoopAlgorithm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoopAlgorithm.swift; sourceTree = "<group>"; };
 		C1D476B72A8ED3E8002C1C87 /* GlucosePredictionAlgorithm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucosePredictionAlgorithm.swift; sourceTree = "<group>"; };
 		C1D476B82A8ED3E8002C1C87 /* LoopPredictionInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoopPredictionInput.swift; sourceTree = "<group>"; };
 		C1D56375296B3F5E00BA15EC /* reservoir_for_iob_missing.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = reservoir_for_iob_missing.json; sourceTree = "<group>"; };
@@ -2176,6 +2194,7 @@
 		437AFF22203BE382008C4892 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				84DF48F12F6C6B9000BEDB40 /* TimeInterval+Timecode.swift */,
 				C187338329B9486200519CDF /* ClosedRange.swift */,
 				C187337F29B9486100519CDF /* Collection.swift */,
 				C187338029B9486100519CDF /* Comparable.swift */,
@@ -2332,6 +2351,7 @@
 		43D8FDCD1C728FDF0073BE78 /* LoopKit */ = {
 			isa = PBXGroup;
 			children = (
+				84DF48DB2F6C6B1200BEDB40 /* Media */,
 				C15F9A572EB65D3B0082BDF4 /* TestingDate.swift */,
 				1DA649AA2445174400F61E75 /* Alert.swift */,
 				A96E6C3627B35BC600F81A5B /* AnyCodableEquatable.swift */,
@@ -2649,6 +2669,20 @@
 				842E40B32F22F821000CCCE0 /* PresetsTraining.swift */,
 			);
 			path = Presets;
+			sourceTree = "<group>";
+		};
+		84DF48DB2F6C6B1200BEDB40 /* Media */ = {
+			isa = PBXGroup;
+			children = (
+				84DF48DC2F6C6B2100BEDB40 /* TranscriptParagraph.swift */,
+				84DF48DD2F6C6B2100BEDB40 /* TranscriptExcerpt.swift */,
+				84DF48DE2F6C6B2100BEDB40 /* Transcript.swift */,
+				84DF48DF2F6C6B2100BEDB40 /* Metadata.swift */,
+				84DF48E02F6C6B2100BEDB40 /* MediaContent.swift */,
+				84DF48E12F6C6B2100BEDB40 /* ClosedCaptions.swift */,
+				84DF48E22F6C6B2100BEDB40 /* ClosedCaptionFragment.swift */,
+			);
+			path = Media;
 			sourceTree = "<group>";
 		};
 		892A5D35222F03CB008961AB /* LoopTestingKit */ = {
@@ -2983,7 +3017,6 @@
 				43D8FEED1C7294E90073BE78 /* InsulinKit.storyboard */,
 				E9DFB93324E8CD5800468917 /* LegacyInsulinDeliveryTableViewController.storyboard */,
 				B66D1F432E6A603C00471149 /* Localizable.xcstrings */,
-				895FE06D22011E9A00FCF18A /* OverrideSelectionViewController.storyboard */,
 				7D68A9E31FE0A3D300522C49 /* Localizable.strings */,
 				43177D091D3732C70006E908 /* Assets.xcassets */,
 			);
@@ -4018,6 +4051,13 @@
 				A9498D8223386C3300DAA9B9 /* Service.swift in Sources */,
 				C187338F29B9486200519CDF /* NumberFormatter.swift in Sources */,
 				4322B785202FA2AF0002837D /* ReservoirValue.swift in Sources */,
+				84DF48E32F6C6B2100BEDB40 /* Metadata.swift in Sources */,
+				84DF48E42F6C6B2100BEDB40 /* MediaContent.swift in Sources */,
+				84DF48E52F6C6B2100BEDB40 /* TranscriptParagraph.swift in Sources */,
+				84DF48E62F6C6B2100BEDB40 /* ClosedCaptionFragment.swift in Sources */,
+				84DF48E72F6C6B2100BEDB40 /* TranscriptExcerpt.swift in Sources */,
+				84DF48E82F6C6B2100BEDB40 /* ClosedCaptions.swift in Sources */,
+				84DF48E92F6C6B2100BEDB40 /* Transcript.swift in Sources */,
 				B4A2ABEA2AA9F210007E3EC1 /* BolusActivationType.swift in Sources */,
 				891A3FD9224BEB4600378B27 /* EGPSchedule.swift in Sources */,
 				89AE2229228BC54C00BDFD85 /* TemporaryScheduleOverrideHistory.swift in Sources */,
@@ -4031,6 +4071,7 @@
 				4322B783202FA2AF0002837D /* Reservoir.swift in Sources */,
 				1DA649AB2445174400F61E75 /* Alert.swift in Sources */,
 				4322B782202FA2AF0002837D /* PumpEventType.swift in Sources */,
+				84DF48F32F6C6B9000BEDB40 /* TimeInterval+Timecode.swift in Sources */,
 				89AE2228228BC54C00BDFD85 /* TemporaryPresetSettings.swift in Sources */,
 				43D8FDFA1C7290350073BE78 /* GlucoseRangeSchedule.swift in Sources */,
 				4322B77E202FA2AF0002837D /* PersistedPumpEvent.swift in Sources */,
@@ -4351,6 +4392,13 @@
 				C1092410286A4ADB00FAD2B8 /* AutomaticDosingStrategy.swift in Sources */,
 				C17F39CB23CD2D2F00FA1113 /* DeviceLogEntryType.swift in Sources */,
 				A9E675AF22713F4700E25293 /* PumpEventType.swift in Sources */,
+				84DF48EA2F6C6B2100BEDB40 /* Metadata.swift in Sources */,
+				84DF48EB2F6C6B2100BEDB40 /* MediaContent.swift in Sources */,
+				84DF48EC2F6C6B2100BEDB40 /* TranscriptParagraph.swift in Sources */,
+				84DF48ED2F6C6B2100BEDB40 /* ClosedCaptionFragment.swift in Sources */,
+				84DF48EE2F6C6B2100BEDB40 /* TranscriptExcerpt.swift in Sources */,
+				84DF48EF2F6C6B2100BEDB40 /* ClosedCaptions.swift in Sources */,
+				84DF48F02F6C6B2100BEDB40 /* Transcript.swift in Sources */,
 				C1614F062AAFC36200F636E5 /* CgmEvent.swift in Sources */,
 				C11A17482CB713C10019C517 /* Model.xcdatamodeld in Sources */,
 				C1A174ED23DEAD6A0034DF11 /* DeviceLogEntry+CoreDataProperties.swift in Sources */,
@@ -4401,6 +4449,7 @@
 				A9E675D422713F4700E25293 /* CachedGlucoseObject+CoreDataClass.swift in Sources */,
 				A9498D7F23386C3300DAA9B9 /* GlucoseThreshold.swift in Sources */,
 				A9E675D522713F4700E25293 /* WalshInsulinModel.swift in Sources */,
+				84DF48F22F6C6B9000BEDB40 /* TimeInterval+Timecode.swift in Sources */,
 				A9A53E2D2714E5BC0050C0B1 /* CodableDevice.swift in Sources */,
 				840A2DD42E399BD400D4E245 /* Modelv5ToModelv6.xcmappingmodel in Sources */,
 				B40C43912707408400F5D86C /* DeliveryLimits.swift in Sources */,

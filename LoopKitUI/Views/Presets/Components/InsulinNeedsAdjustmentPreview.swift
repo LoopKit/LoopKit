@@ -26,7 +26,7 @@ public struct InsulinNeedsAdjustmentPreview: View {
     }
 
     var valueColor: Color {
-        switch Guardrail.presetInsulinNeeds.classification(for: .init(unit: .percent, doubleValue: insulinPercentage)) {
+        switch Guardrail.presetInsulinNeeds.classification(for: .init(unit: .percent, doubleValue: insulinPercentage * 100)) {
         case .withinRecommendedRange:
             return .accentColor
         case .outsideRecommendedRange(let threshold):
@@ -43,7 +43,7 @@ public struct InsulinNeedsAdjustmentPreview: View {
 
     private var guardrailWarningIfNecessary: some View {
 
-        let classification = Guardrail.presetInsulinNeeds.classification(for: .init(unit: .percent, doubleValue: insulinPercentage))
+        let classification = Guardrail.presetInsulinNeeds.classification(for: .init(unit: .percent, doubleValue: insulinPercentage * 100))
 
         return Group {
             if case .outsideRecommendedRange(let threshold) = classification {
@@ -66,7 +66,7 @@ public struct InsulinNeedsAdjustmentPreview: View {
                         .foregroundColor(.secondary)
                 }
             }.padding(.bottom, 10)
-            Text("\(Int(insulinPercentage))%")
+            Text(insulinPercentage.formatted(.percent.precision(.fractionLength(0))))
                 .font(.system(size: 34, weight: .semibold))
                 .foregroundColor(valueColor)
             Text("of scheduled")

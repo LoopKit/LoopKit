@@ -164,10 +164,10 @@ open class QuantityFormatter {
 
 public extension LoopQuantity {
     /// if fractionDigits is nil, defaults to the unit maxFractionDigits
-    func doubleValue(for unit: LoopUnit, withRounding: Bool, usingFractionDigits fractionDigits: Int? = nil, rule: FloatingPointRoundingRule = .toNearestOrAwayFromZero) -> Double {
+    func doubleValue(for unit: LoopUnit, withRounding: Bool, usingFractionDigits fractionDigits: Int? = nil) -> Double {
         var value = self.doubleValue(for: unit)
         if withRounding {
-            value = unit.round(value: value, fractionDigits: fractionDigits ?? unit.maxFractionDigits, rule: rule)
+            value = unit.round(value: value, fractionDigits: fractionDigits ?? unit.maxFractionDigits)
         }
 
         return value
@@ -207,13 +207,13 @@ public extension LoopUnit {
     }
     
     /// if fractionDigits is nil, defaults to the unit maxFractionDigits
-    func round(value: Double, fractionDigits: Int? = nil, rule: FloatingPointRoundingRule = .toNearestOrAwayFromZero) -> Double {
+    func round(value: Double, fractionDigits: Int? = nil) -> Double {
         let usedFractionDigits: Int = fractionDigits ?? maxFractionDigits
         if usedFractionDigits == 0 {
-            return value.rounded(rule)
+            return value.rounded()
         } else {
             let scaleFactor = pow(10.0, Double(usedFractionDigits))
-            return (value * scaleFactor).rounded(rule) / scaleFactor
+            return (value * scaleFactor).rounded() / scaleFactor
         }
     }
     

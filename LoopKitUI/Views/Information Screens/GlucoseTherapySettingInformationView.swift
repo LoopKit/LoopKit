@@ -93,9 +93,6 @@ public struct GlucoseTherapySettingInformationView<Content: View>: View {
     }
 }
 
-fileprivate let mgdLFormatter = QuantityFormatter(for: .milligramsPerDeciliter)
-fileprivate let mmolLFormatter = QuantityFormatter(for: .millimolesPerLiter)
-
 fileprivate extension TherapySetting {
     // TODO: pass in preferredUnit instead of having both units.
     var guardrailInformationText: String {
@@ -108,10 +105,10 @@ fileprivate extension TherapySetting {
         case .suspendThreshold:
             return lowHighText(for: Guardrail.suspendThreshold)
         case .basalRate, .deliveryLimits, .carbRatio, .insulinSensitivity, .none:
-            fatalError("Unexpected therapy setting")
+            fatalError("Unexpected")
         }
     }
-   
+       
     func lowHighText(for guardrail: Guardrail<LoopQuantity>) -> String {
         return lowHighText(lowerBoundString: guardrail.absoluteBounds.lowerBound.bothUnitsString,
                            upperBoundString: guardrail.absoluteBounds.upperBound.bothUnitsString)

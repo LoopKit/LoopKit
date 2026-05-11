@@ -1117,7 +1117,7 @@ extension DoseStore {
                 // Extend an unfinished suspend out to end time
                 return doses.map { dose in
                     var dose = dose
-                    if dose.type == .suspend && dose.startDate == dose.endDate {
+                    if dose.type == .suspend && dose.isMutable {
                         dose.endDate = end ?? self.currentDate() + InsulinMath.defaultInsulinActivityDuration
                     }
                     return dose

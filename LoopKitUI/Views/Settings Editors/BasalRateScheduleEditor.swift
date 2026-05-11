@@ -70,6 +70,8 @@ public struct BasalRateScheduleEditor: View {
         self.init(
             schedule: therapySettingsViewModel.therapySettings.basalRateSchedule,
             supportedBasalRates: therapySettingsViewModel.pumpSupportedIncrements()?.basalRates ?? [],
+            // DIY divergence: enforce max basal at the picker. See memory/divergence_basal_max_filter.md
+            // (rejects tidepool-org/LoopKit PR #734 / LOOP-5767).
             maximumBasalRate: therapySettingsViewModel.therapySettings.maximumBasalRatePerHour,
             maximumScheduleEntryCount: therapySettingsViewModel.pumpSupportedIncrements()?.maximumBasalScheduleEntryCount ?? 0,
             syncBasalRateSchedule: therapySettingsViewModel.syncBasalRateSchedule,
