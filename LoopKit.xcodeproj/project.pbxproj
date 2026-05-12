@@ -3524,11 +3524,10 @@
 				vi,
 				cs,
 				ar,
-				hi,
 				sk,
-				ce,
 				hu,
 				uk,
+				ko,
 			);
 			mainGroup = 43D8FDC11C728FDF0073BE78;
 			packageReferences = (

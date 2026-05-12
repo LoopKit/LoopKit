@@ -6743,12 +6743,6 @@
             "value" : "Cancel"
           }
         },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "निरस्त"
-          }
-        },
         "hu" : {
           "stringUnit" : {
             "state" : "translated",
@@ -19624,12 +19618,6 @@
             "value" : "Name"
           }
         },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "नाम"
-          }
-        },
         "hu" : {
           "stringUnit" : {
             "state" : "translated",
@@ -30402,12 +30390,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "שעה"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "समय"
           }
         },
         "hu" : {
