@@ -698,7 +698,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Introduceți ID-ul de pompă din 6 cifre"
+            "value" : "Introduceți ID de pompă din 6 cifre"
           }
         },
         "ru" : {
@@ -1299,7 +1299,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Resetare"
+            "value" : "Resetați"
           }
         },
         "ru" : {
@@ -1425,7 +1425,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sincronizează cu pompa"
+            "value" : "Sincronizați cu pompa"
           }
         },
         "ru" : {
@@ -1538,7 +1538,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ID-ul pompei poate fi găsit pe spate sau în partea inferioară a ecranului STATUS/Esc. Este format strict din porțiunea numerică a numărului serial (afișat ca SN sau S/N)."
+            "value" : "ID de pompă poate fi găsit pe spate sau în partea inferioară a ecranului STATUS/Esc. Este format strict din porțiunea numerică a numărului serial (afișat ca SN sau S/N)."
           }
         },
         "ru" : {
