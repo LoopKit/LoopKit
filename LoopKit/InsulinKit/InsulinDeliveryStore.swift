@@ -143,10 +143,17 @@ extension InsulinDeliveryStore: HealthKitSampleStoreDelegate {
                         }
                     }
 
-                    // Delete deleted samples
-                    let count = try self.deleteDoseEntries(withUUIDs: deleted.map { $0.uuid })
+                    // Only honor HealthKit deletions for samples that originated from
+                    // another app. A record that Loop itself wrote must not be removed from
+                    // Loop's dose history just because it was deleted in Apple Health: that
+                    // history feeds IOB and dosing, and a user deleting a Loop-written record
+                    // in Health should not silently change dosing without their awareness.
+                    // Loop's own deletions go through deleteDose(...)/deleteDoseEntries(...)
+                    // directly. (When insulin ingest from other apps is disabled, every
+                    // cached record is Loop's own, so no HealthKit deletion is propagated.)
+                    let count = try self.deleteDoseEntries(withUUIDs: deleted.map { $0.uuid }, excludingProvenanceIdentifier: self.provenanceIdentifier)
                     if count > 0 {
-                        self.log.debug("Deleted %d samples from cache from HKAnchoredObjectQuery", count)
+                        self.log.debug("Deleted %d externally-sourced sample(s) from cache from HKAnchoredObjectQuery", count)
                         changed = true
                     }
 
@@ -643,16 +650,25 @@ extension InsulinDeliveryStore {
         }
     }
 
-    private func deleteDoseEntries(withUUIDs uuids: [UUID], batchSize: Int = 500) throws -> Int {
+    /// Marks cached dose entries with the given HealthKit sample UUIDs as deleted.
+    ///
+    /// - Parameter excludingProvenanceIdentifier: When non-nil, entries whose
+    ///   `provenanceIdentifier` matches are left untouched. Used to avoid deleting
+    ///   Loop's own records in response to external HealthKit deletions.
+    private func deleteDoseEntries(withUUIDs uuids: [UUID], excludingProvenanceIdentifier: String? = nil, batchSize: Int = 500) throws -> Int {
         dispatchPrecondition(condition: .onQueue(queue))
 
         let deletedAt = self.currentDate()
 
         var count = 0
         for batch in uuids.chunked(into: batchSize) {
+            var subpredicates = [NSPredicate(format: "deletedAt == NIL"),
+                                 NSPredicate(format: "uuid IN %@", batch.map { $0 as NSUUID })]
+            if let excludingProvenanceIdentifier {
+                subpredicates.append(NSPredicate(format: "provenanceIdentifier != %@", excludingProvenanceIdentifier))
+            }
             let request: NSFetchRequest<CachedInsulinDeliveryObject> = CachedInsulinDeliveryObject.fetchRequest()
-            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "deletedAt == NIL"),
-                                                                                    NSPredicate(format: "uuid IN %@", batch.map { $0 as NSUUID })])
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: subpredicates)
             let objects = try self.cacheStore.managedObjectContext.fetch(request)
             for object in objects {
                 object.deletedAt = deletedAt
