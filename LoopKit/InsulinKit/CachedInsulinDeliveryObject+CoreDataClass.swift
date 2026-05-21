@@ -220,10 +220,12 @@ extension CachedInsulinDeliveryObject {
             unit = .units
         }
 
-        if self.programmedUnits == nil && self.deliveredUnits == nil && type == .bolus {
-            assertionFailure("programmedUnits and deliveredUnits should always exist though not enforced via type system")
-        }
-        
+        // A .bolus normally always has programmedUnits and/or deliveredUnits. Legacy records
+        // carried over when upgrading from an older DIY install can have neither; rather than
+        // crashing on read (the previous assertionFailure, which traps debug builds), fall back
+        // to the 0 value computed above so the upgrade and subsequent dose reads succeed.
+        // (Upstream keeps the assertion here, but only ever sees fresh installs.)
+
         return DoseEntry(
             type: type,
             startDate: startDate,
