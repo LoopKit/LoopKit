@@ -4,10 +4,10 @@
     {
       "identity" : "loopalgorithm",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/tidepool-org/LoopAlgorithm",
+      "location" : "https://github.com/LoopKit/LoopAlgorithm",
       "state" : {
         "branch" : "main",
-        "revision" : "8093b57fac6c0d9a1f00b94fd4bb4b122a775975"
+        "revision" : "1ca85662b1f8799758988108f46dba5f34d4889b"
       }
     },
     {
