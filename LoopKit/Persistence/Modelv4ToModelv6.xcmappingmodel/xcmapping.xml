@@ -387,6 +387,7 @@ cxIAAYagXxAPTlNLZXllZEFyY2hpdmVy0QAIAAlUcm9vdIABrxEJXwALAAwAGQA1ADYANwBNAE4ATwBQ
         <relationship name="entitymapping" type="1/1" destination="XDDEVENTITYMAPPING" idrefs="z175"></relationship>
     </object>
     <object type="XDDEVENTITYMAPPING" id="z175">
+        <attribute name="migrationpolicyclassname" type="string">LoopKit.CachedInsulinDeliveryObjectMigrationPolicy</attribute>
         <attribute name="sourcename" type="string">CachedInsulinDeliveryObject</attribute>
         <attribute name="mappingtypename" type="string">Undefined</attribute>
         <attribute name="mappingnumber" type="int16">4</attribute>
