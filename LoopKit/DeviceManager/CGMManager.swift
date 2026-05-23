@@ -131,6 +131,15 @@ public protocol CGMManager: DeviceManager {
     /// Whether the device is capable of waking the app
     var providesBLEHeartbeat: Bool { get }
 
+    /// True when this CGM source has its own first-party glucose-level
+    /// alerting (e.g. Dexcom G6/G7 via the Dexcom app, MiaoMiao with
+    /// SpikeApp, etc.). When true, Loop suppresses its own
+    /// threshold-based glucose alerts for samples from this source so
+    /// the user isn't double-alerted. Sensor-lifecycle alerts (expiry,
+    /// session ended) are unaffected. Default is false — the CGMs that
+    /// don't ship native alerts are the more common DIY case.
+    var providesOwnGlucoseAlerts: Bool { get }
+
     /// The length of time to keep samples in HealthKit before removal. Return nil to never remove samples.
     var managedDataInterval: TimeInterval? { get }
 
@@ -198,7 +207,13 @@ public extension CGMManager {
     var appURL: URL? {
         return nil
     }
-    
+
+    /// Default: this CGM source doesn't provide its own glucose alerts.
+    /// Loop's GlucoseAlertManager will evaluate samples against
+    /// thresholds. Plugins like Dexcom-app-paired G7 should override
+    /// to `true`.
+    var providesOwnGlucoseAlerts: Bool { false }
+
     /// Default is no delay to store samples in HealthKit
     static var healthKitStorageDelay: TimeInterval { 0 }
 
