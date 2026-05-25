@@ -972,7 +972,9 @@ extension DoseStore {
             matching: NSPredicate(format: "date >= %@ && doseType != nil", queryStart as NSDate),
             chronological: true
         ).compactMap({ $0.dose })
-        let normalizedDoses = doses.reconciled()
+        // reconciled() can emit doses out of startDate order (boluses are appended
+        // ahead of deferred basal entries), but filterDateRange requires ascending order.
+        let normalizedDoses = doses.reconciled().sorted { $0.startDate < $1.startDate }
 
         return normalizedDoses.filterDateRange(start, end)
     }
@@ -1114,14 +1116,16 @@ extension DoseStore {
                     doses = insulinDeliveryDoses.appendedUnion(with: try self.getNormalizedPumpEventDoseEntries(start: filteredStart, end: end))
                 }
 
-                // Extend an unfinished suspend out to end time
+                // Extend an unfinished suspend out to end time.
+                // Sources above are concatenated/unioned and may not be globally ordered;
+                // sort by startDate so downstream binary-search filterDateRange is correct.
                 return doses.map { dose in
                     var dose = dose
                     if dose.type == .suspend && dose.isMutable {
                         dose.endDate = end ?? self.currentDate() + InsulinMath.defaultInsulinActivityDuration
                     }
                     return dose
-                }
+                }.sorted { $0.startDate < $1.startDate }
             }
         }
     }
