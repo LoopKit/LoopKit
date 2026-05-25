@@ -3470,7 +3470,7 @@
 			mainGroup = 43D8FDC11C728FDF0073BE78;
 			packageReferences = (
 				C1CCF1042858F07A0035389C /* XCRemoteSwiftPackageReference "SwiftCharts" */,
-				C1B431C42B90E31400D1DA9F /* XCRemoteSwiftPackageReference "LoopAlgorithm" */,
+				C1B431C42B90E31400D1DA9F /* XCLocalSwiftPackageReference "LoopAlgorithm" */,
 			);
 			productRefGroup = 43D8FDCC1C728FDF0073BE78 /* Products */;
 			projectDirPath = "";
@@ -5672,13 +5672,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		C1B431C42B90E31400D1DA9F /* XCRemoteSwiftPackageReference "LoopAlgorithm" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/LoopKit/LoopAlgorithm";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
+		C1B431C42B90E31400D1DA9F /* XCLocalSwiftPackageReference "LoopAlgorithm" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../LoopAlgorithm;
 		};
 		C1CCF1042858F07A0035389C /* XCRemoteSwiftPackageReference "SwiftCharts" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -5698,12 +5694,12 @@
 		};
 		C1B431C52B90E31400D1DA9F /* LoopAlgorithm */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = C1B431C42B90E31400D1DA9F /* XCRemoteSwiftPackageReference "LoopAlgorithm" */;
+			package = C1B431C42B90E31400D1DA9F /* XCLocalSwiftPackageReference "LoopAlgorithm" */;
 			productName = LoopAlgorithm;
 		};
 		C1B431C72B90E3C800D1DA9F /* LoopAlgorithm */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = C1B431C42B90E31400D1DA9F /* XCRemoteSwiftPackageReference "LoopAlgorithm" */;
+			package = C1B431C42B90E31400D1DA9F /* XCLocalSwiftPackageReference "LoopAlgorithm" */;
 			productName = LoopAlgorithm;
 		};
 		C1CCF1052858F07A0035389C /* SwiftCharts */ = {
