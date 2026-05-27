@@ -221,7 +221,8 @@ extension CachedInsulinDeliveryObject {
         }
 
         if self.programmedUnits == nil && self.deliveredUnits == nil && type == .bolus {
-            assertionFailure("programmedUnits and deliveredUnits should always exist though not enforced via type system")
+            // Data inconsistency — log and continue rather than crashing; entry will appear as 0u bolus.
+            NSLog("CachedInsulinDeliveryObject: bolus record missing both programmedUnits and deliveredUnits (syncIdentifier=%@)", syncIdentifier ?? "nil")
         }
         
         return DoseEntry(
