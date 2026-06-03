@@ -143,8 +143,6 @@ struct MockPumpManagerSettingsView: View {
 
         manualTempBasalSubSection
 
-        replacePumpSection
-
         notificationSection
     }
 
@@ -208,29 +206,18 @@ struct MockPumpManagerSettingsView: View {
     private var suspendResumeInsulinSubSection: some View {
         Section(header: SectionHeader(label: LocalizedString("Activity", comment: "Section header for the activity section"))) {
             Button(action: suspendResumeTapped) {
-                HStack(spacing: 8) {
-                    Text("").frame(maxWidth: 0)
-                        .accessibilityHidden(true)
-                    
-                    Spacer()
-                    
-                    HStack(spacing: 4) {
-                        if viewModel.suspendResumeInsulinDeliveryStatus.showPauseIcon {
-                            Image(systemName: "pause.circle.fill")
-                                .foregroundColor(viewModel.suspendResumeInsulinDeliveryStatus != .suspended ? nil : guidanceColors.warning)
-                        }
-                        
-                        Text(viewModel.suspendResumeInsulinDeliveryStatus.localizedLabel)
-                            .fontWeight(.semibold)
+                HStack {
+                    if viewModel.suspendResumeInsulinDeliveryStatus.showPauseIcon {
+                        Image(systemName: "pause.circle.fill")
+                            .font(.system(size: 22))
+                            .foregroundColor(viewModel.suspendResumeInsulinDeliveryStatus != .suspended ? nil : guidanceColors.warning)
                     }
-                       
+                    Text(viewModel.suspendResumeInsulinDeliveryStatus.localizedLabel)
+                    Spacer()
                     if viewModel.transitioningSuspendResumeInsulinDelivery {
                         ProgressView()
                     }
-                    
-                    Spacer()
                 }
-                .padding(.vertical, 8)
                 .actionSheet(isPresented: $showSuspendOptions) {
                    suspendOptionsActionSheet
                 }
@@ -289,15 +276,6 @@ struct MockPumpManagerSettingsView: View {
         }
     }
     
-    private var replacePumpSection: some View {
-        Section {
-            NavigationLink(destination: DemoPlaceHolderView(appName: appName)) {
-                Text("Replace Pump")
-                    .foregroundColor(guidanceColors.critical)
-            }
-        }
-    }
-
     private var settingsSubSection: some View {
         Section {
             NavigationLink(destination: MockPumpManagerControlsView(pumpManager: viewModel.pumpManager, supportedInsulinTypes: supportedInsulinTypes)) {
