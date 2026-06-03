@@ -350,7 +350,7 @@ struct MockPumpManagerSettingsView: View {
     @ViewBuilder
     private var pumpTimeSubSectionFooter: some View {
         if !viewModel.canSynchronizePumpTime {
-            FrameworkLocalizedText("When the device time is manually set, Tidepool Loop will not synchronize the pump time to the device time.", comment: "Description for why the pump time is not synchronized")
+            Text(String(format: LocalizedString("When the device time is manually set, %1$@ will not synchronize the pump time to the device time.", comment: "Description for why the pump time is not synchronized (1: app name)"), appName))
         }
     }
     

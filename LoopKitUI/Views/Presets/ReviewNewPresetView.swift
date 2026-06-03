@@ -12,6 +12,7 @@ import SwiftUI
 
 struct ReviewNewPresetView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.appName) private var appName
 
     @Binding var preset: NewCustomPreset
     @Binding var path: NavigationPath
@@ -125,7 +126,7 @@ struct ReviewNewPresetView: View {
                     }
                 }
 
-                Text("Tidepool Loop will always ask you to confirm before turning on a scheduled preset.")
+                Text(String(format: LocalizedString("%1$@ will always ask you to confirm before turning on a scheduled preset.", comment: "Scheduled preset confirmation note (1: app name)"), appName))
                     .font(.footnote)
                     .foregroundColor(.secondary)
                     .padding(.horizontal, 10)
