@@ -17,16 +17,19 @@ struct MockPumpManagerSettingsView: View {
         case resumeInsulinDeliveryError(Error)
         case suspendInsulinDeliveryError(Error)
         case syncTimeError(Error)
+        case cancelManualTempBasalError(Error)
     }
-    
+
     @Environment(\.dismissAction) private var dismiss
     @Environment(\.guidanceColors) private var guidanceColors
     @Environment(\.insulinTintColor) private var insulinTintColor
     @ObservedObject var viewModel: MockPumpManagerSettingsViewModel
-    
+
     @State private var showSuspendOptions = false
     @State private var presentedAlert: PresentedAlert?
     @State private var showSyncTimeOptions = false
+    @State private var showManualTempBasalOptions = false
+    @State private var cancelingTempBasal = false
 
     private var supportedInsulinTypes: [InsulinType]
     private var appName: String
@@ -138,9 +141,68 @@ struct MockPumpManagerSettingsView: View {
 
         suspendResumeInsulinSubSection
 
+        manualTempBasalSubSection
+
         replacePumpSection
-        
+
         notificationSection
+    }
+
+    private var manualTempBasalSubSection: some View {
+        Section {
+            if let manualTempRemaining = viewModel.manualBasalTimeRemaining,
+               let remainingText = viewModel.timeRemainingFormatter.string(from: manualTempRemaining) {
+                HStack {
+                    if cancelingTempBasal {
+                        ProgressView()
+                            .padding(.trailing)
+                    } else {
+                        Image(systemName: "exclamationmark.circle.fill")
+                            .font(.system(size: 22))
+                            .foregroundColor(guidanceColors.warning)
+                    }
+                    Button(action: cancelManualTempBasal) {
+                        Text(LocalizedString("Cancel Manual Basal", comment: "Button title to cancel manual basal"))
+                    }
+                }
+                HStack {
+                    Text(LocalizedString("Remaining", comment: "Label for remaining time of manual basal"))
+                    Spacer()
+                    Text(remainingText)
+                        .foregroundColor(.secondary)
+                }
+            } else {
+                Button(action: { showManualTempBasalOptions = true }) {
+                    Text(LocalizedString("Set Temporary Basal Rate", comment: "Button title to set temporary basal rate"))
+                }
+                .sheet(isPresented: $showManualTempBasalOptions) {
+                    ManualTempBasalEntryView(
+                        enactBasal: { rate, duration, completion in
+                            viewModel.runTemporaryBasalProgram(decisionId: nil, unitsPerHour: rate, for: duration) { error in
+                                completion(error)
+                                if error == nil {
+                                    showManualTempBasalOptions = false
+                                }
+                            }
+                        },
+                        didCancel: { showManualTempBasalOptions = false },
+                        allowedRates: viewModel.allowedTempBasalRates,
+                        supportedDurations: viewModel.supportedTempBasalDurations
+                    )
+                }
+            }
+        }
+        .disabled(cancelingTempBasal || viewModel.insulinDeliveryDisabled || viewModel.isDeliverySuspended)
+    }
+
+    private func cancelManualTempBasal() {
+        cancelingTempBasal = true
+        viewModel.cancelManualTempBasal { error in
+            cancelingTempBasal = false
+            if let error = error {
+                presentedAlert = .cancelManualTempBasalError(error)
+            }
+        }
     }
     
     private var suspendResumeInsulinSubSection: some View {
@@ -343,6 +405,11 @@ struct MockPumpManagerSettingsView: View {
                title: FrameworkLocalizedText("Failed to Set Pump Time", comment: "Alert title for time sync error"),
                message: Text(error.localizedDescription)
             )
+        case .cancelManualTempBasalError(let error):
+            return Alert(
+                title: Text(LocalizedString("Failed to Cancel Manual Basal", comment: "Alert title for failure to cancel manual basal")),
+                message: Text(error.localizedDescription)
+            )
         }
     }
 }
@@ -356,6 +423,120 @@ extension MockPumpManagerSettingsView.PresentedAlert: Identifiable {
             return 1
         case .syncTimeError:
             return 2
+        case .cancelManualTempBasalError:
+            return 3
+        }
+    }
+}
+
+private struct ManualTempBasalEntryView: View {
+    @Environment(\.guidanceColors) private var guidanceColors
+
+    let enactBasal: (Double, TimeInterval, @escaping (PumpManagerError?) -> Void) -> Void
+    let didCancel: () -> Void
+    let allowedRates: [Double]
+    let supportedDurations: [TimeInterval]
+
+    @State private var rateEntered: Double = 0.0
+    @State private var durationEntered: TimeInterval = .hours(0.5)
+    @State private var enacting = false
+    @State private var error: PumpManagerError?
+    @State private var showingErrorAlert = false
+
+    private static let rateFormatter: QuantityFormatter = {
+        let f = QuantityFormatter(for: .internationalUnitsPerHour)
+        f.numberFormatter.minimumFractionDigits = 2
+        return f
+    }()
+
+    private static let durationFormatter: QuantityFormatter = {
+        let f = QuantityFormatter(for: .hour)
+        f.numberFormatter.minimumFractionDigits = 1
+        f.numberFormatter.maximumFractionDigits = 1
+        f.unitStyle = .long
+        return f
+    }()
+
+    private func formatRate(_ rate: Double) -> String {
+        Self.rateFormatter.string(from: LoopQuantity(unit: .internationalUnitsPerHour, doubleValue: rate)) ?? ""
+    }
+
+    private func formatDuration(_ duration: TimeInterval) -> String {
+        Self.durationFormatter.string(from: LoopQuantity(unit: .hour, doubleValue: duration.hours)) ?? ""
+    }
+
+    var body: some View {
+        NavigationView {
+            VStack {
+                List {
+                    HStack {
+                        Text(LocalizedString("Rate", comment: "Label text for basal rate summary"))
+                        Spacer()
+                        Text(String(format: LocalizedString("%1$@ for %2$@", comment: "Summary string for temporary basal rate configuration page"), formatRate(rateEntered), formatDuration(durationEntered)))
+                    }
+                    HStack {
+                        Picker(selection: $rateEntered) {
+                            ForEach(allowedRates, id: \.self) { value in
+                                Text(formatRate(value))
+                            }
+                        } label: { EmptyView() }
+                            .pickerStyle(.wheel)
+
+                        Picker(selection: $durationEntered) {
+                            ForEach(supportedDurations, id: \.self) { value in
+                                Text(formatDuration(value))
+                            }
+                        } label: { EmptyView() }
+                            .pickerStyle(.wheel)
+                    }
+                    .frame(maxHeight: 162.0)
+
+                    Section {
+                        Text(LocalizedString("Your insulin delivery will not be automatically adjusted until the temporary basal rate finishes or is canceled.", comment: "Description text on manual temp basal action sheet"))
+                            .font(.footnote)
+                            .foregroundColor(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
+                Button(action: {
+                    enacting = true
+                    enactBasal(rateEntered, durationEntered) { error in
+                        if let error = error {
+                            self.error = error
+                            showingErrorAlert = true
+                        }
+                        enacting = false
+                    }
+                }) {
+                    HStack {
+                        if enacting {
+                            ProgressView()
+                        } else {
+                            Text(LocalizedString("Set Temporary Basal", comment: "Button text for setting manual temporary basal rate"))
+                        }
+                    }
+                }
+                .buttonStyle(ActionButtonStyle(.primary))
+                .padding()
+            }
+            .navigationTitle(LocalizedString("Temporary Basal", comment: "Navigation Title for ManualTempBasalEntryView"))
+            .navigationBarItems(trailing: Button(LocalizedString("Cancel", comment: "Cancel button text"), action: didCancel))
+            .alert(isPresented: $showingErrorAlert) {
+                let recovery = error?.recoverySuggestion
+                let message: Text
+                if let recovery = recovery, let error = error {
+                    message = Text(String(format: LocalizedString("Unable to set a temporary basal rate: %1$@\n\n%2$@", comment: "Alert format string for a failure to set temporary basal with recovery suggestion. (1: error description) (2: recovery text)"), error.localizedDescription, recovery))
+                } else if let error = error {
+                    message = Text(String(format: LocalizedString("Unable to set a temporary basal rate: %1$@", comment: "Alert format string for a failure to set temporary basal. (1: error description)"), error.localizedDescription))
+                } else {
+                    message = Text("")
+                }
+                return Alert(
+                    title: Text(LocalizedString("Temporary Basal Failed", comment: "Alert title for a failure to set temporary basal")),
+                    message: message
+                )
+            }
+            .disabled(enacting)
         }
     }
 }

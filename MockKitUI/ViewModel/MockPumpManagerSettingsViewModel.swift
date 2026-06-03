@@ -161,6 +161,39 @@ class MockPumpManagerSettingsViewModel: ObservableObject {
             return false
         }
     }
+
+    var manualBasalTimeRemaining: TimeInterval? {
+        if case .tempBasal(let dose) = basalDeliveryState, !(dose.automatic ?? true) {
+            let remaining = dose.endDate.timeIntervalSinceNow
+            if remaining > 0 {
+                return remaining
+            }
+        }
+        return nil
+    }
+
+    var allowedTempBasalRates: [Double] {
+        return pumpManager.supportedBasalRates.filter { $0 <= pumpManager.state.maximumBasalRatePerHour }
+    }
+
+    var supportedTempBasalDurations: [TimeInterval] {
+        return MockPumpManager.supportedTempBasalDurations
+    }
+
+    lazy var timeRemainingFormatter: DateComponentsFormatter = {
+        let formatter = DateComponentsFormatter()
+        formatter.unitsStyle = .abbreviated
+        formatter.allowedUnits = [.hour, .minute]
+        return formatter
+    }()
+
+    func runTemporaryBasalProgram(decisionId: UUID?, unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (PumpManagerError?) -> Void) {
+        pumpManager.runTemporaryBasalProgram(decisionId: decisionId, unitsPerHour: unitsPerHour, for: duration, automatic: false, completion: completion)
+    }
+
+    func cancelManualTempBasal(completion: @escaping (PumpManagerError?) -> Void) {
+        pumpManager.runTemporaryBasalProgram(decisionId: nil, unitsPerHour: 0, for: 0, automatic: false, completion: completion)
+    }
     
     static let reservoirVolumeFormatter: QuantityFormatter = {
         let formatter = QuantityFormatter(for: .internationalUnit)
