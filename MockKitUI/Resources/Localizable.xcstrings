@@ -4358,8 +4358,8 @@
         }
       }
     },
-    "When the device time is manually set, Tidepool Loop will not synchronize the pump time to the device time." : {
-
+    "When the device time is manually set, %1$@ will not synchronize the pump time to the device time." : {
+      "comment" : "Description for why the pump time is not synchronized (1: app name)"
     },
     "Yes, Sync to Current Time" : {
 
