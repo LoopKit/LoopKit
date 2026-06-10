@@ -36,7 +36,7 @@ public struct CorrectionRangeInformationView: View {
             Text(LocalizedString("If you’ve used CGM before, you’re likely familiar with target range as a wide range of values you’d like for your glucose notification alerts, such as 70-180 mg/dL or 90-200 mg/dL, etc.", comment: "Information about target range"))
             Text(LocalizedString("A Correction Range is different. The Correction Range is a ", comment: ""))
             + Text("safety").bold()
-            + Text(String(format:  LocalizedString(" setting. For this range, choose the specific glucose value (or range of values) that you want Tidepool Loop to aim for in adjusting your insulin delivery. This will be a narrower range.", comment: "Information about correction range format (1: app name)"), appName))
+            + Text(String(format:  LocalizedString(" setting. For this range, choose the specific glucose value (or range of values) that you want %1$@ to aim for in adjusting your insulin delivery. This will be a narrower range.", comment: "Information about correction range format (1: app name)"), appName))
             Text(LocalizedString("Your healthcare provider can help you choose a Correction Range that’s right for you.", comment: "Disclaimer"))
         }
     }

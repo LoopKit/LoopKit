@@ -122,6 +122,9 @@ public final class MockPumpManager: TestingPumpManager {
         return state.supportedBasalRates
     }
 
+    // Supported manual temp basal durations: 30 minutes through 12 hours, in 30-minute increments.
+    public static let supportedTempBasalDurations: [TimeInterval] = (1...24).map { Double($0) * TimeInterval(minutes: 30) }
+
     public var maximumBasalScheduleEntryCount: Int {
         return 48
     }
@@ -452,7 +455,11 @@ public final class MockPumpManager: TestingPumpManager {
     }
 
     public func enactTempBasal(decisionId: UUID?, unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (PumpManagerError?) -> Void) {
-        logDeviceComms(.send, message: "Temp Basal \(unitsPerHour) U/hr Duration:\(duration.hours)")
+        runTemporaryBasalProgram(decisionId: decisionId, unitsPerHour: unitsPerHour, for: duration, automatic: true, completion: completion)
+    }
+
+    public func runTemporaryBasalProgram(decisionId: UUID?, unitsPerHour: Double, for duration: TimeInterval, automatic: Bool, completion: @escaping (PumpManagerError?) -> Void) {
+        logDeviceComms(.send, message: "Temp Basal \(unitsPerHour) U/hr Duration:\(duration.hours) automatic:\(automatic)")
 
         if state.tempBasalShouldCrash {
             fatalError("Crashing intentionally on temp basal")
@@ -497,7 +504,7 @@ public final class MockPumpManager: TestingPumpManager {
                     completion(nil)
                 }
             } else {
-                let temp = UnfinalizedDose(tempBasalRate: unitsPerHour, startTime: now, duration: duration, insulinType: state.insulinType, decisionId: decisionId)
+                let temp = UnfinalizedDose(tempBasalRate: unitsPerHour, startTime: now, duration: duration, insulinType: state.insulinType, automatic: automatic, decisionId: decisionId)
                 state.unfinalizedTempBasal = temp
                 storePumpEvents { (error) in
                     completion(nil)

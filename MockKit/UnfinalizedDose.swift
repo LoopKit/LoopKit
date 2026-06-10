@@ -95,14 +95,14 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.decisionId = decisionId
     }
 
-    init(tempBasalRate: Double, startTime: Date, duration: TimeInterval, insulinType: InsulinType? = nil, decisionId: UUID?) {
+    init(tempBasalRate: Double, startTime: Date, duration: TimeInterval, insulinType: InsulinType? = nil, automatic: Bool = true, decisionId: UUID?) {
         self.doseType = .tempBasal
         self.units = tempBasalRate * duration.hours
         self.startTime = startTime
         self.duration = duration
         self.scheduledUnits = nil
         self.insulinType = insulinType
-        self.automatic = true
+        self.automatic = automatic
         self.decisionId = decisionId
     }
 
@@ -299,7 +299,7 @@ extension DoseEntry {
         case .bolus:
             self = DoseEntry(type: .bolus, startDate: dose.startTime, endDate: dose.finishTime, value: dose.scheduledUnits ?? dose.units, unit: .units, decisionId: dose.decisionId, deliveredUnits: dose.finalizedUnits, insulinType: dose.insulinType, automatic: dose.automatic, isMutable: dose.isMutable)
         case .tempBasal:
-            self = DoseEntry(type: .tempBasal, startDate: dose.startTime, endDate: dose.finishTime, value: dose.scheduledTempRate ?? dose.rate, unit: .unitsPerHour, decisionId: dose.decisionId, deliveredUnits: dose.finalizedUnits, insulinType: dose.insulinType, isMutable: dose.isMutable)
+            self = DoseEntry(type: .tempBasal, startDate: dose.startTime, endDate: dose.finishTime, value: dose.scheduledTempRate ?? dose.rate, unit: .unitsPerHour, decisionId: dose.decisionId, deliveredUnits: dose.finalizedUnits, insulinType: dose.insulinType, automatic: dose.automatic, isMutable: dose.isMutable)
         case .suspend:
             self = DoseEntry(suspendDate: dose.startTime, automatic: dose.automatic)
         case .resume:
