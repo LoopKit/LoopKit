@@ -975,6 +975,12 @@ class InsulinMathTests: XCTestCase {
             DoseEntry(type: .tempBasal, startDate: f("2018-07-16 02:04:30 +0000"), endDate: f("2018-07-16 02:33:36 +0000"), value: 1.7250000000000001, unit: .unitsPerHour, decisionId: nil, syncIdentifier: "16015ec4134f12", scheduledBasalRate: LoopQuantity(unit: unit, doubleValue: 0.9)),
             DoseEntry(type: .suspend, startDate: f("2018-07-16 02:33:36 +0000"), endDate: f("2018-07-16 02:33:36 +0000"), value: 0.0, unit: .unitsPerHour, decisionId: nil, syncIdentifier: "1e0164e1130f12", scheduledBasalRate: LoopQuantity(unit: unit, doubleValue: 0.9)),
         ]
+        // Pump events arrive slightly out of startDate order (boluses ahead of
+        // deferred basals). Production sorts before any filterDateRange call
+        // (DoseStore.getNormalizedPumpEventDoseEntries does reconciled().sorted),
+        // because filterDateRange binary-searches and requires ascending order.
+        // Sort here to exercise the same precondition the real path guarantees.
+        .sorted { $0.startDate < $1.startDate }
 
         let cachedDoseEntries = [
             DoseEntry(type: .tempBasal, startDate: f("2018-07-15 03:34:29 +0000"), endDate: f("2018-07-15 03:54:29 +0000"), value: 0.0, unit: .units, decisionId: nil, syncIdentifier: "16015de2144e12", scheduledBasalRate: LoopQuantity(unit: unit, doubleValue: 1.2)),
