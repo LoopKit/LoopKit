@@ -2168,7 +2168,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@ presupune că insulina pe care a livrat-o acționează pentru a vă scădea glicemia timp de 6 ore. Această setare nu poate fi schimbată."
+            "value" : "%1$@ presupune că insulina pe care a administrat-o acționează pentru a vă scădea glicemia timp de 6 ore. Această setare nu poate fi schimbată."
           }
         },
         "ru" : {
@@ -5075,7 +5075,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Adaugă"
+            "value" : "Adăugați"
           }
         },
         "ru" : {
@@ -5230,7 +5230,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Adaugă cont"
+            "value" : "Adăugați cont"
           }
         },
         "ru" : {
@@ -6850,12 +6850,6 @@
             "value" : "Cancel"
           }
         },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "निरस्त"
-          }
-        },
         "hu" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6913,7 +6907,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Anulează"
+            "value" : "Anulați"
           }
         },
         "ru" : {
@@ -7063,7 +7057,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Oprește înlocuirea"
+            "value" : "Anulați suprascriere"
           }
         },
         "ru" : {
@@ -7212,7 +7206,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Oprește bazala temporară"
+            "value" : "Anulare bazală temporară"
           }
         },
         "ru" : {
@@ -7403,7 +7397,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "碳水化合物吸收率"
+            "value" : "碳水化合物系数"
           }
         }
       }
@@ -7953,7 +7947,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Închide"
+            "value" : "Închideți"
           }
         },
         "ru" : {
@@ -8103,7 +8097,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "la %1$@"
+            "value" : "com.loudnate.CarbKit.COBDateLabel"
           }
         },
         "ru" : {
@@ -8253,7 +8247,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "de la %1$@"
+            "value" : "com.loudnate.CarbKit.totalDateLabel"
           }
         },
         "ru" : {
@@ -9171,7 +9165,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Confirmați setările"
+            "value" : "Confirmați setarea"
           }
         },
         "ru" : {
@@ -9914,7 +9908,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Personalizată"
+            "value" : "Personalizat"
           }
         },
         "ru" : {
@@ -10064,7 +10058,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Modificare personalizată"
+            "value" : "Suprascriere personalizată"
           }
         },
         "ru" : {
@@ -10207,7 +10201,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Presetare particularizată"
+            "value" : "Presetare personalizată"
           }
         },
         "ru" : {
@@ -10500,7 +10494,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Șterge"
+            "value" : "Ștergeți"
           }
         },
         "ru" : {
@@ -10656,7 +10650,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Șterge cont"
+            "value" : "Ștergeți cont"
           }
         },
         "ru" : {
@@ -10806,7 +10800,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Șterge tot"
+            "value" : "Ștergeți tot"
           }
         },
         "ru" : {
@@ -10964,7 +10958,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Limite de livrare"
+            "value" : "Limite de administrare"
           }
         },
         "ru" : {
@@ -11107,7 +11101,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Limitele de livrare sunt măsuri de siguranță pentru administrarea insulinei."
+            "value" : "Limitele de administrare sunt măsuri de siguranță pentru administrarea insulinei."
           }
         },
         "ru" : {
@@ -11250,7 +11244,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dezactivează presetarea"
+            "value" : "Dezactivați presetarea"
           }
         },
         "ru" : {
@@ -11829,7 +11823,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Editează carbohidrați"
+            "value" : "Editați intrarea de carbohidrați"
           }
         },
         "ru" : {
@@ -11979,7 +11973,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Editează înlocuirea"
+            "value" : "Editați presetare"
           }
         },
         "ru" : {
@@ -12418,7 +12412,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Activează"
+            "value" : "Activați"
           }
         },
         "ru" : {
@@ -12567,7 +12561,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Activează pe termen nedeterminat"
+            "value" : "Activați pe termen nedeterminat"
           }
         },
         "ru" : {
@@ -16505,7 +16499,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Modelul de insulină"
+            "value" : "Model insulină"
           }
         },
         "ru" : {
@@ -16654,7 +16648,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Factor de sensibilitate la insulină"
+            "value" : "Sensibilități la insulină"
           }
         },
         "ru" : {
@@ -16950,7 +16944,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Întrerupere %1$@: <b>%2$@</b> din %3$@ %4$@"
+            "value" : "Întrerupt %1$@: <b>%2$@</b> din %3$@ %4$@"
           }
         },
         "ru" : {
@@ -19732,7 +19726,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Detalii"
+            "value" : "Mai multe informații"
           }
         },
         "ru" : {
@@ -19831,12 +19825,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Name"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "नाम"
           }
         },
         "hu" : {
@@ -20942,7 +20930,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Suprascrie istoricul"
+            "value" : "Istoric suprascriere"
           }
         },
         "ru" : {
@@ -21092,7 +21080,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Presetări de înlocuire"
+            "value" : "Presetări suprascriere"
           }
         },
         "ru" : {
@@ -21242,7 +21230,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Presetările de înlocuire pot fi setate în secțiunea 'Configurație' din ecranul de setări."
+            "value" : "Presetările suprascrierilor pot fi setate în secțiunea 'Configurare' din ecranul de setări."
           }
         },
         "ru" : {
@@ -23177,7 +23165,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Reia administrarea"
+            "value" : "Reluați administrarea"
           }
         },
         "ru" : {
@@ -23472,7 +23460,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Revizuiește și Salvează Setările"
+            "value" : "Revizuiți și salvați setările"
           }
         },
         "ru" : {
@@ -23770,7 +23758,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Se rulează"
+            "value" : "Rulează"
           }
         },
         "ru" : {
@@ -23910,7 +23898,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Salvează"
+            "value" : "Salvați"
           }
         },
         "ru" : {
@@ -24241,7 +24229,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Save Carb Ratios?"
+            "value" : "保存碳水化合物系数？"
           }
         }
       }
@@ -24342,7 +24330,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Salvați intervalul (intervalele) de corecție?"
+            "value" : "Salvați intervalele de corecție?"
           }
         },
         "ru" : {
@@ -24774,7 +24762,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Salvați sensibilitatea la insulină?"
+            "value" : "Salvați sensibilitățile la insulină?"
           }
         },
         "ru" : {
@@ -24918,7 +24906,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Salvează Interval Pre-masă?"
+            "value" : "Salvați interval pre-masă?"
           }
         },
         "ru" : {
@@ -25367,7 +25355,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ÎNLOCUIRE PLANIFICATĂ"
+            "value" : "SUPRASCRIERE PROGRAMATĂ"
           }
         },
         "ru" : {
@@ -26720,7 +26708,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Suspendă administrarea"
+            "value" : "Suspendați administrarea"
           }
         },
         "ru" : {
@@ -28191,7 +28179,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Înlocuire temporară"
+            "value" : "Suprascriere temporară"
           }
         },
         "ru" : {
@@ -30749,12 +30737,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "שעה"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "समय"
           }
         },
         "hu" : {
@@ -33901,7 +33883,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Poți adăuga diferite raporturi carbohidrați insulină pentru diferite momente ale zilei folosind ➕."
+            "value" : "Puteți adăuga diferite raporturi carbohidrați insulină pentru diferite momente ale zilei folosind ➕."
           }
         },
         "ru" : {
@@ -33943,7 +33925,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "您可以点击 ➕ 添加不同时间段的碳水化合物换算比例。"
+            "value" : "您可以点击 ➕ 添加不同时间段的碳水化合物系数。"
           }
         }
       }
@@ -34187,7 +34169,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Poți adăuga diferite intervale pentru diferite momente ale zilei folosind ➕."
+            "value" : "Puteți adăuga diferite intervale pentru diferite momente ale zilei folosind ➕."
           }
         },
         "ru" : {
@@ -34330,7 +34312,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Poți adăuga intrări pentru diferite momente ale zilei folosind ➕."
+            "value" : "Puteți adăuga intrări pentru diferite momente ale zilei folosind ➕."
           }
         },
         "ru" : {

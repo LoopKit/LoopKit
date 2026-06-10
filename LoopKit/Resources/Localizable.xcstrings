@@ -561,7 +561,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@ va livra bazala și bolusul recomandat numai dacă glicemia este estimată a fi peste această limită pentru următoarele trei ore."
+            "value" : "%1$@ va administra bazala și bolusul recomandat numai dacă glicemia este estimată a fi peste această limită pentru următoarele trei ore."
           }
         },
         "ru" : {
@@ -2501,7 +2501,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "碳水化合物吸收率"
+            "value" : "碳水化合物系数"
           }
         }
       }
@@ -3211,7 +3211,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Comunicații întrerupte în timpul comenzii de livrare a insulinei."
+            "value" : "Comunicații întrerupte în timpul comenzii de administrare a insulinei."
           }
         },
         "ru" : {
@@ -3509,7 +3509,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Interval țintă pentru corecție"
+            "value" : "Interval de corecție"
           }
         },
         "ru" : {
@@ -3957,7 +3957,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Limite de livrare"
+            "value" : "Limite administrare"
           }
         },
         "ru" : {
@@ -4249,7 +4249,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Starea dispozitivului este critică"
+            "value" : "Starea dispozitiv critică"
           }
         },
         "ru" : {
@@ -4535,7 +4535,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Avertisment privind starea dispozitivului"
+            "value" : "Avertisment stare dispozitiv"
           }
         },
         "ru" : {
@@ -4687,7 +4687,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Asigurați-vă că există date despre carbohidrați pentru data specificată"
+            "value" : "Asigurați-vă că există date carbohidrați pentru data specificată"
           }
         },
         "ru" : {
@@ -5723,7 +5723,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pentru insulina cu acțiune rapida, %1$@ presupune ca funcționează activ timp de 6 ore. Poți alege dintre modele diferite pentru vârful acțiunii."
+            "value" : "Pentru insulina cu acțiune rapida, %1$@ presupune ca funcționează activ timp de 6 ore. Puteți alege dintre modele diferite pentru vârful acțiunii."
           }
         },
         "ru" : {
@@ -6887,7 +6887,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Modelul de insulină"
+            "value" : "Model insulină"
           }
         },
         "ru" : {
@@ -7036,7 +7036,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Factor de sensibilitate la insulină"
+            "value" : "Sensibilități la insulină"
           }
         },
         "ru" : {
@@ -7329,7 +7329,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Este sigur să încercați din nou"
+            "value" : "Este sigur să reîncercați"
           }
         },
         "ru" : {
@@ -7765,7 +7765,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Asigură-te că pompa ta se află în raza de comunicare a telefonului."
+            "value" : "Asigurați-vă că pompa dumneavoastră se află în raza de comunicare a telefonului."
           }
         },
         "ru" : {
@@ -8357,7 +8357,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bolusul maxim este cea mai mare cantitate de insulina pe care o poți livra instantaneu pentru a acoperi carbohidrați sau pentru a corecta o glicemie mare."
+            "value" : "Bolusul maxim este cea mai mare cantitate de insulina pe care o puteți administra instantaneu pentru a acoperi carbohidrați sau pentru a corecta o glicemie mare."
           }
         },
         "ru" : {
@@ -12915,7 +12915,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Livrare incertă"
+            "value" : "Administrare incertă"
           }
         },
         "ru" : {
@@ -14144,7 +14144,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "碳水比例表示每单位胰岛素可以覆盖多少克碳水化合物。"
+            "value" : "碳水化合物系数表示每单位胰岛素可以覆盖多少克碳水化合物。"
           }
         }
       }
