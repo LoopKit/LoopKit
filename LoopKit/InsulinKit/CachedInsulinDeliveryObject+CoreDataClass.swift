@@ -226,6 +226,7 @@ extension CachedInsulinDeliveryObject {
         // to the 0 value computed above so the upgrade and subsequent dose reads succeed.
         // (Upstream keeps the assertion here, but only ever sees fresh installs.)
 
+
         return DoseEntry(
             type: type,
             startDate: startDate,

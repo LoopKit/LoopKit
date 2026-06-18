@@ -44,7 +44,12 @@ class GuardrailTests: XCTestCase {
     
     func testMinCorrectionRangeValue() {
         let suspendThresholdInputs: [Double?] = [ nil, 80, 88 ]
-        let expected: [Double] = [ 86.1, 86.1, 88 ]
+        // correctionRange absolute lower bound is 87 mg/dL. The historical 86.1 was
+        // #527's deliberately-offset constant (86.1...180.5), reverted to clean
+        // 87...180 in the Swift-package lineage we now track; leftover here and in
+        // testPreMealCorrectionRange when the constants were reverted. Boundary
+        // selectability is handled by GlucoseValuePicker, not offset constants.
+        let expected: [Double] = [ 87, 87, 88 ]
         for (index, suspendThreshold) in suspendThresholdInputs.enumerated() {
             XCTAssertEqual(expected[index], Guardrail.minCorrectionRangeValue(suspendThreshold: suspendThreshold.map { GlucoseThreshold(unit: .milligramsPerDeciliter, value: $0) }).doubleValue(for: .milligramsPerDeciliter), "Index \(index) failed")
         }
@@ -67,10 +72,10 @@ class GuardrailTests: XCTestCase {
     func testPreMealCorrectionRange() {
         let correctionRangeInputs = [ 60...80, 100...110, 150...180 ]
         let suspendThresholdInputs: [Double?] = [ nil, 90 ]
-        let expectedRecommendedHigh: [Double] = [ 66.1, 90,
+        let expectedRecommendedHigh: [Double] = [ 67, 90,
                                                   100, 100,
                                                   130, 130 ]
-        let expectedMin: [Double] = [ 66.1, 90, 66.1, 90, 66.1, 90 ]
+        let expectedMin: [Double] = [ 67, 90, 67, 90, 67, 90 ]
 
         var index = 0
         for correctionRange in correctionRangeInputs {

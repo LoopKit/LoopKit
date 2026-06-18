@@ -15,17 +15,19 @@ public struct DurationSheet: View {
     @Environment(\.dismiss) private var dismiss
     
     private let allowedDurations: [TimeInterval]
-    
+    private let criticalAlertsEnabled: Bool
+
     @Binding private var duration: TimeInterval?
     @Binding private var durationWasSelected: Bool
 
     @State private var sheetContentHeight = Double(0)
     @State private var sheetActionContentHeight = Double(0)
-    
-    public init(allowedDurations: [TimeInterval], duration: Binding<TimeInterval?>, durationWasSelected: Binding<Bool>) {
+
+    public init(allowedDurations: [TimeInterval], duration: Binding<TimeInterval?>, durationWasSelected: Binding<Bool>, criticalAlertsEnabled: Bool = false) {
         self.allowedDurations = allowedDurations
         self._duration = duration.projectedValue
         self._durationWasSelected = durationWasSelected.projectedValue
+        self.criticalAlertsEnabled = criticalAlertsEnabled
     }
     
     private var formatter: DateComponentsFormatter = {
@@ -55,11 +57,19 @@ public struct DurationSheet: View {
                         )
                         .padding(.horizontal)
                         
-                        Callout(
-                            .warning,
-                            title: Text("Critical alerts will be muted"),
-                            message: Text("All app sounds, including sounds for all critical alerts such as Urgent Low, Sensor Fail, Pump Expiration, and others will NOT sound for your selected time duration.")
-                        )
+                        if criticalAlertsEnabled {
+                            Callout(
+                                .warning,
+                                title: Text("Critical alerts will be muted"),
+                                message: Text("All app sounds, including sounds for all critical alerts such as Urgent Low, Sensor Fail, Pump Expiration, and others will NOT sound for your selected time duration.")
+                            )
+                        } else {
+                            Callout(
+                                .warning,
+                                title: Text("All app sounds will be muted"),
+                                message: Text("All sounds from the app, including alerts such as Urgent Low, Sensor Fail, Pump Expiration, and others will NOT sound for your selected time duration.")
+                            )
+                        }
                         
                         Text("If vibration is enabled on your device, all alerts will still vibrate. Your insulin pump and CGM hardware may still sound.")
                             .padding(.horizontal)

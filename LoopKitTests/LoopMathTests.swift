@@ -195,14 +195,26 @@ class LoopMathTests: XCTestCase {
 
         var effects = LoopQuantitySample(with: glucose).decayEffect(atRate: startingEffect, for: .minutes(30))
 
-        XCTAssertEqual([100, 110, 118, 124, 128, 130, 130], effects.map { $0.quantity.doubleValue(for: unit) })
+        // decayEffect is now a continuous function of the (unaligned) sample
+        // timestamp: the 10:13:20 glucose sits 1m40s before the first 5-min grid
+        // point, so the values interpolate rather than snapping to the grid.
+        // (testDecayEffectWithEvenGlucose, aligned to :00, still gives the integer
+        // grid values.) Irrational decimals, so compare with accuracy.
+        func assertEqual(_ expected: [Double], _ actual: [Double], line: UInt = #line) {
+            XCTAssertEqual(expected.count, actual.count, line: line)
+            for (e, a) in zip(expected, actual) { XCTAssertEqual(e, a, accuracy: 1e-6, line: line) }
+        }
+
+        assertEqual([100, 103.555556, 112.888889, 120.222222, 125.555556, 128.888889, 130.222222],
+                    effects.map { $0.quantity.doubleValue(for: unit) })
 
         let startDate = effects.first!.startDate
         XCTAssertEqual([0, 5, 10, 15, 20, 25, 30], effects.map { $0.startDate.timeIntervalSince(startDate).minutes })
 
         startingEffect = LoopQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: -0.5)
         effects = LoopQuantitySample(with: glucose).decayEffect(atRate: startingEffect, for: .minutes(30))
-        XCTAssertEqual([100, 97.5, 95.5, 94, 93, 92.5, 92.5], effects.map { $0.quantity.doubleValue(for: unit) })
+        assertEqual([100, 99.111111, 96.777778, 94.944444, 93.611111, 92.777778, 92.444444],
+                    effects.map { $0.quantity.doubleValue(for: unit) })
     }
 
     func testDecayEffectWithEvenGlucose() {
