@@ -22,6 +22,10 @@ LoopKit is a set of tools to speed up development of your own closed-loop insuli
 * Treatment decisions: Your Diabetes May Vary.
 * Device communications: Device-specific libraries are maintained separately.
 
+## Documentation
+
+* [Reporting Insulin Doses to Loop — A Guide for PumpManager Authors](Documentation/PumpManagerDoseReporting.md): how a `PumpManager` reports doses to Loop, the mutable-dose lifecycle, and `lastReconciliation` semantics. Essential reading before writing a new pump driver — incorrect dose tracking can lead to incorrect insulin dosing.
+
 # License
 
 LoopKit is available under the MIT license. See the LICENSE file for more info.
