@@ -212,7 +212,19 @@ public struct TemporaryScheduleOverride: Hashable, Sendable {
 
     public var scheduledEndDate: Date {
         get {
-            return startDate + duration.timeInterval
+            switch duration {
+            case .finite(let interval):
+                return startDate + interval
+            case .indefinite:
+                // The setter below uses `.distantFuture` as the sentinel for an
+                // indefinite duration, so round-trip to it here. Returning
+                // `startDate + .infinity` instead yields a Date whose
+                // timeIntervalSinceReferenceDate is +infinity, which makes any
+                // date-stepping timeline math (e.g. DailyValueSchedule.between,
+                // reached via getBasalHistory during a bolus recommendation)
+                // recurse without bound and crash with an allocation failure.
+                return .distantFuture
+            }
         }
         set {
             precondition(newValue > startDate)

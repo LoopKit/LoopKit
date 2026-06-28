@@ -138,6 +138,14 @@ public struct DailyValueSchedule<T>: DailySchedule {
             return []
         }
 
+        // Defense-in-depth: the recursion below splits the interval into 24-hour
+        // chunks, so a non-finite span (e.g. from an indefinite override's
+        // infinite end date) would recurse without bound and exhaust memory.
+        // Refuse to expand a non-finite interval.
+        guard endDate.timeIntervalSince(startDate).isFinite else {
+            return []
+        }
+
         let startOffset = scheduleOffset(for: startDate)
         let endOffset = startOffset + endDate.timeIntervalSince(startDate)
 

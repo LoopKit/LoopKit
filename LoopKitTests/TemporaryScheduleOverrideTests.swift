@@ -386,6 +386,38 @@ class TemporaryScheduleOverrideTests: XCTestCase {
         XCTAssertEqual(expectedValues, values)
     }
 
+    // Regression for an OOM crash (SIGABRT / swift_abortAllocationFailure) seen
+    // during manual-bolus recommendation while an indefinite-duration override is
+    // active. An indefinite override's `scheduledEndDate` must be the finite
+    // `.distantFuture` sentinel that the setter already uses to mean "indefinite"
+    // -- NOT `startDate + .infinity`. An infinite Date poisons any timeline math
+    // that steps by date (e.g. DailyValueSchedule.between), producing an unbounded
+    // array.
+    func testIndefiniteOverrideScheduledEndDateIsFinite() {
+        let override = TemporaryScheduleOverride(
+            context: .custom,
+            settings: TemporaryPresetSettings(targetRange: nil, insulinNeedsScaleFactor: 1.15),
+            startDate: date(at: "12:00"),
+            duration: .indefinite,
+            enactTrigger: .local,
+            syncIdentifier: UUID()
+        )
+        XCTAssertTrue(override.scheduledEndDate.timeIntervalSinceReferenceDate.isFinite,
+                      "indefinite override scheduledEndDate must be finite")
+        XCTAssertEqual(override.scheduledEndDate, .distantFuture)
+        XCTAssertTrue(override.actualEndDate.timeIntervalSinceReferenceDate.isFinite,
+                      "indefinite override actualEndDate must be finite")
+    }
+
+    // Without the non-finite guard in DailyValueSchedule.between, this call
+    // recurses (24h chunks) forever and exhausts memory -- the proximate cause of
+    // the bolus-recommendation crash. With the guard it returns immediately.
+    func testBasalScheduleBetweenWithNonFiniteEndDoesNotExpand() {
+        let infiniteEnd = Date(timeIntervalSinceReferenceDate: .infinity)
+        let result = basalRateSchedule.between(start: date(at: "12:00"), end: infiniteEnd)
+        XCTAssertTrue(result.isEmpty, "between() with a non-finite end must not expand")
+    }
+
     func testTimelineSensitivityApplication() {
         let timeline = [
             AbsoluteScheduleValue(startDate: .t(1) , endDate: .t(2), value: 50.0),
