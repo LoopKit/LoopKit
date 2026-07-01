@@ -22,6 +22,9 @@ public struct DoseEntry: TimelineValue, Equatable {
     public let automatic: Bool?
     public let manuallyEntered: Bool
     public internal(set) var syncIdentifier: String?
+    /// An opaque, caller-supplied reference echoed back from the bolus request that produced this dose, or nil.
+    /// The pump manager does not interpret it; it lets the caller correlate a reported dose with its request.
+    public let bolusReference: UUID?
     public let isMutable: Bool
     public let wasProgrammedByPumpUI: Bool
 
@@ -37,7 +40,7 @@ public struct DoseEntry: TimelineValue, Equatable {
     }
 
     // If the insulin model field is nil, it's assumed that the model is the type of insulin the pump dispenses
-    public init(type: DoseType, startDate: Date, endDate: Date? = nil, value: Double, unit: DoseUnit, deliveredUnits: Double? = nil, description: String? = nil, syncIdentifier: String? = nil, scheduledBasalRate: HKQuantity? = nil, insulinType: InsulinType? = nil, automatic: Bool? = nil, manuallyEntered: Bool = false, isMutable: Bool = false, wasProgrammedByPumpUI: Bool = false) {
+    public init(type: DoseType, startDate: Date, endDate: Date? = nil, value: Double, unit: DoseUnit, deliveredUnits: Double? = nil, description: String? = nil, syncIdentifier: String? = nil, scheduledBasalRate: HKQuantity? = nil, insulinType: InsulinType? = nil, automatic: Bool? = nil, manuallyEntered: Bool = false, isMutable: Bool = false, wasProgrammedByPumpUI: Bool = false, bolusReference: UUID? = nil) {
         self.type = type
         self.startDate = startDate
         self.endDate = endDate ?? startDate
@@ -52,6 +55,7 @@ public struct DoseEntry: TimelineValue, Equatable {
         self.manuallyEntered = manuallyEntered
         self.isMutable = isMutable
         self.wasProgrammedByPumpUI = wasProgrammedByPumpUI
+        self.bolusReference = bolusReference
     }
 }
 
@@ -167,6 +171,7 @@ extension DoseEntry {
             "description: \(optionalString(description))",
             "scheduledBasalRate: \(optionalString(scheduledBasalRate))",
             "syncIdentifier: \(optionalString(syncIdentifier))",
+            "bolusReference: \(optionalString(bolusReference))",
         ].joined(separator: "\n")
     }
 }
@@ -188,6 +193,7 @@ extension DoseEntry: Codable {
             self.scheduledBasalRate = HKQuantity(unit: HKUnit(from: scheduledBasalRateUnit), doubleValue: scheduledBasalRate)
         }
         self.automatic = try container.decodeIfPresent(Bool.self, forKey: .automatic)
+        self.bolusReference = try container.decodeIfPresent(UUID.self, forKey: .bolusReference)
         self.manuallyEntered = try container.decodeIfPresent(Bool.self, forKey: .manuallyEntered) ?? false
         self.isMutable = try container.decodeIfPresent(Bool.self, forKey: .isMutable) ?? false
         self.wasProgrammedByPumpUI = try container.decodeIfPresent(Bool.self, forKey: .wasProgrammedByPumpUI) ?? false
@@ -209,6 +215,7 @@ extension DoseEntry: Codable {
             try container.encode(DoseEntry.unitsPerHour.unitString, forKey: .scheduledBasalRateUnit)
         }
         try container.encodeIfPresent(automatic, forKey: .automatic)
+        try container.encodeIfPresent(bolusReference, forKey: .bolusReference)
         if manuallyEntered {
             try container.encode(manuallyEntered, forKey: .manuallyEntered)
         }
@@ -233,6 +240,7 @@ extension DoseEntry: Codable {
         case scheduledBasalRateUnit
         case insulinType
         case automatic
+        case bolusReference
         case manuallyEntered
         case isMutable
         case wasProgrammedByPumpUI
@@ -266,6 +274,7 @@ extension DoseEntry: RawRepresentable {
         self.description = rawValue["description"] as? String
         self.insulinType = (rawValue["insulinType"] as? InsulinType.RawValue).flatMap { InsulinType(rawValue: $0) }
         self.automatic = rawValue["automatic"] as? Bool
+        self.bolusReference = (rawValue["bolusReference"] as? String).flatMap { UUID(uuidString: $0) }
         self.syncIdentifier = rawValue["syncIdentifier"] as? String
         self.scheduledBasalRate = (rawValue["scheduledBasalRate"] as? Double).flatMap { HKQuantity(unit: .internationalUnitsPerHour, doubleValue: $0) }
         self.isMutable = rawValue["isMutable"] as? Bool ?? false
@@ -288,6 +297,7 @@ extension DoseEntry: RawRepresentable {
         rawValue["description"] = description
         rawValue["insulinType"] = insulinType?.rawValue
         rawValue["automatic"] = automatic
+        rawValue["bolusReference"] = bolusReference?.uuidString
         rawValue["syncIdentifier"] = syncIdentifier
         rawValue["scheduledBasalRate"] = scheduledBasalRate?.doubleValue(for: .internationalUnitsPerHour)
 

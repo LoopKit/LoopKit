@@ -169,6 +169,24 @@ public protocol PumpManager: DeviceManager {
     ///   - error: An optional error describing why the command failed
     func enactBolus(units: Double, activationType: BolusActivationType, completion: @escaping (_ error: PumpManagerError?) -> Void)
 
+    /// Send a bolus command carrying an opaque, caller-supplied reference, and handle the result.
+    ///
+    /// The reference is meaningless to the pump manager: it is stored alongside the in-progress dose and
+    /// echoed back, unchanged, on the resulting `DoseEntry.bolusReference` so the caller can correlate the
+    /// reported dose with the request that produced it. Pump managers that persist their in-progress dose
+    /// should persist the reference too, so the correlation survives an app restart while delivery is ongoing.
+    ///
+    /// A default implementation drops the reference and forwards to
+    /// `enactBolus(units:activationType:completion:)`, so existing pump managers remain source compatible.
+    ///
+    /// - Parameters:
+    ///   - units: The number of units to deliver
+    ///   - activationType: Whether the dose was triggered automatically as opposed to commanded by user
+    ///   - bolusReference: An opaque caller-supplied reference echoed back on the reported `DoseEntry`, or nil
+    ///   - completion: A closure called after the command is complete
+    ///   - error: An optional error describing why the command failed
+    func enactBolus(units: Double, activationType: BolusActivationType, bolusReference: UUID?, completion: @escaping (_ error: PumpManagerError?) -> Void)
+
     /// Cancels the current, in progress, bolus.
     ///
     /// - Parameters:
@@ -228,6 +246,12 @@ public protocol PumpManager: DeviceManager {
 
 
 public extension PumpManager {
+    /// Default implementation for pump managers that have not adopted bolus references. The opaque reference
+    /// is dropped and the call is forwarded to `enactBolus(units:activationType:completion:)`.
+    func enactBolus(units: Double, activationType: BolusActivationType, bolusReference: UUID?, completion: @escaping (_ error: PumpManagerError?) -> Void) {
+        enactBolus(units: units, activationType: activationType, completion: completion)
+    }
+
     func roundToSupportedBasalRate(unitsPerHour: Double) -> Double {
         return supportedBasalRates.filter({$0 <= unitsPerHour}).max() ?? 0
     }
