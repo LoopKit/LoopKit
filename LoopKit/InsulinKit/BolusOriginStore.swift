@@ -11,6 +11,7 @@
 //
 
 import Foundation
+import os.log
 
 /// Where a user-initiated bolus came from. Autobolus / SMB is intentionally absent — that is already conveyed
 /// by the dose's `automatic` flag (and, in Trio, the SMB event type). `rawValue` is the machine token uploaded
@@ -40,24 +41,38 @@ public final class BolusOriginStore {
         let createdAt: Date
     }
 
-    private let lock = NSRecursiveLock()
+    private let log = OSLog(category: "BolusOriginStore")
+    private let lock = NSLock()
+
+    /// Entries are keyed by either a request reference's `uuidString` or a reported dose's `syncIdentifier`
+    /// (after promotion). The two key kinds share one dictionary on purpose: a key is only ever written and
+    /// read as one kind, and a pump's syncIdentifier colliding with a caller-minted UUID string is not a
+    /// realistic concern.
     private var entries: [String: Entry]
 
     /// In-flight references are short-lived; drop anything older than this so the file stays bounded.
+    /// Expiry is applied when the store is loaded and whenever it is persisted — deliberately not on lookup,
+    /// so a dose that surfaces late (e.g. resolved after prolonged uncertain delivery) still gets its origin
+    /// if the entry happens to survive.
     private static let maxAge: TimeInterval = 6 * 60 * 60
 
     private let fileURL: URL?
 
-    init(fileURL: URL? = BolusOriginStore.defaultFileURL) {
+    public init(fileURL: URL? = BolusOriginStore.defaultFileURL) {
         self.fileURL = fileURL
-        let loaded = fileURL
-            .flatMap { try? Data(contentsOf: $0) }
-            .flatMap { try? JSONDecoder().decode([String: Entry].self, from: $0) } ?? [:]
+        var loaded: [String: Entry] = [:]
+        if let fileURL = fileURL, let data = try? Data(contentsOf: fileURL) {
+            do {
+                loaded = try JSONDecoder().decode([String: Entry].self, from: data)
+            } catch {
+                OSLog(category: "BolusOriginStore").error("Discarding unreadable bolus origin file: %{public}@", String(describing: error))
+            }
+        }
         let cutoff = Date().addingTimeInterval(-Self.maxAge)
         entries = loaded.filter { $0.value.createdAt > cutoff }
     }
 
-    private static var defaultFileURL: URL? {
+    public static var defaultFileURL: URL? {
         FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?
             .appendingPathComponent("bolus_origins.json")
     }
@@ -113,7 +128,11 @@ public final class BolusOriginStore {
     private func persist() {
         let cutoff = Date().addingTimeInterval(-Self.maxAge)
         entries = entries.filter { $0.value.createdAt > cutoff }
-        guard let fileURL = fileURL, let data = try? JSONEncoder().encode(entries) else { return }
-        try? data.write(to: fileURL, options: .atomic)
+        guard let fileURL = fileURL else { return }
+        do {
+            try JSONEncoder().encode(entries).write(to: fileURL, options: .atomic)
+        } catch {
+            log.error("Failed to persist bolus origins: %{public}@", String(describing: error))
+        }
     }
 }
