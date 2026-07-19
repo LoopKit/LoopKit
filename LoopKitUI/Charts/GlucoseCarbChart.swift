@@ -59,10 +59,6 @@ extension GlucoseCarbChart {
 
     public func generate(withFrame frame: CGRect, context: ChartGenerationContext) -> UIView
     {
-        guard #available(iOS 16.0, *) else {
-            return UIView(frame: frame)
-        }
-
         let yAxisValues = determineYAxisValues()
 
         let carbPoints = generateCarbChartPoints(carbEntries, fixedYValue: yAxisValues.min(), overrideColor: context.colors.carbTint)

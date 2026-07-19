@@ -83,10 +83,6 @@ extension PredictedGlucoseChart {
 
     public func generate(withFrame frame: CGRect, context: ChartGenerationContext) -> UIView
     {
-        guard #available(iOS 16.0, *) else {
-            return UIView(frame: frame)
-        }
-
         if targetGlucosePoints.isEmpty, let schedule = targetGlucoseSchedule {
 
             // TODO: This only considers one override: pre-meal or an active override. TargetChartBar.barsForGlucoseRangeSchedule needs to accept list of overridden ranges.

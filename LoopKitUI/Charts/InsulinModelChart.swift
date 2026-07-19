@@ -50,10 +50,6 @@ extension InsulinModelChart {
 
     public func generate(withFrame frame: CGRect, context: ChartGenerationContext) -> UIView
     {
-        guard #available(iOS 16.0, *) else {
-            return UIView(frame: frame)
-        }
-
         let yAxisValues = ChartAxisValuesStaticGenerator.generateYAxisValuesWithChartPoints(
             chartValues: glucoseDisplayRangePoints.map { $0.y.scalar },
             minSegmentCount: 2,

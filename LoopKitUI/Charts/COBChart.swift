@@ -40,10 +40,6 @@ public extension COBChart {
 
     func generate(withFrame frame: CGRect, context: ChartGenerationContext) -> UIView
     {
-        guard #available(iOS 16.0, *) else {
-            return UIView(frame: frame)
-        }
-
         let yAxisValues = ChartAxisValuesStaticGenerator.generateYAxisValuesWithChartPoints(
             chartValues: cobPoints.map { $0.y.scalar } + cobDisplayRangeValues,
             minSegmentCount: 2,

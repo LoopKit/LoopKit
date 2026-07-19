@@ -49,10 +49,6 @@ extension CarbEffectChart {
 
     public func generate(withFrame frame: CGRect, context: ChartGenerationContext) -> UIView
     {
-        guard #available(iOS 16.0, *) else {
-            return UIView(frame: frame)
-        }
-
         /// The minimum range to display for carb effect values.
         let carbEffectDisplayRangeValues: [Double] = [0, glucoseUnit.chartableIncrement]
 

@@ -83,7 +83,6 @@ enum ChartHosting {
     /// Wraps a SwiftUI chart in a plain UIView for display inside `ChartContainerView`.
     ///
     /// Chart generation is always initiated from UIKit layout on the main thread.
-    @available(iOS 16.0, *)
     static func view<Content: View>(frame: CGRect, rootView: Content) -> UIView {
         return MainActor.assumeIsolated {
             let contentView = UIHostingConfiguration { rootView }

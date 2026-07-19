@@ -54,10 +54,6 @@ public extension LegacyDoseChart {
 
     func generate(withFrame frame: CGRect, context: ChartGenerationContext) -> UIView
     {
-        guard #available(iOS 16.0, *) else {
-            return UIView(frame: frame)
-        }
-
         let integerFormatter = NumberFormatter.integer
 
         let points = generateDosePoints(startDate: context.xAxisModel.startDate)

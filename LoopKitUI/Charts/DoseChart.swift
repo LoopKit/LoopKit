@@ -48,10 +48,6 @@ public extension DoseChart {
 
     func generate(withFrame frame: CGRect, context: ChartGenerationContext) -> UIView
     {
-        guard #available(iOS 16.0, *) else {
-            return UIView(frame: frame)
-        }
-
         var chartSettings = context.chartSettings
         chartSettings.labelsToAxisSpacingX = -10
         let context = ChartGenerationContext(

@@ -44,10 +44,6 @@ public extension IOBChart {
 
     func generate(withFrame frame: CGRect, context: ChartGenerationContext) -> UIView
     {
-        guard #available(iOS 16.0, *) else {
-            return UIView(frame: frame)
-        }
-
         let yAxisValues = ChartAxisValuesStaticGenerator.generateYAxisValuesWithChartPoints(
             chartValues: iobPoints.map { $0.y.scalar } + iobDisplayRangeValues,
             minSegmentCount: 2,

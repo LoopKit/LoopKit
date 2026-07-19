@@ -12,7 +12,6 @@ import SwiftUI
 /// Shared scaffolding for the Loop charts: applies the shared X-axis, the generated Y-axis,
 /// Loop's chart colors, margins matching the previous SwiftCharts layout, and the
 /// touch-highlight overlay driven by an external gesture recognizer.
-@available(iOS 16.0, *)
 struct LoopChartView<Content: ChartContent>: View {
     let generationContext: ChartGenerationContext
     let yAxisValues: [Double]
