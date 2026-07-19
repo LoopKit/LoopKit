@@ -6,10 +6,10 @@
 //  Copyright © 2024 LoopKit Authors. All rights reserved.
 //
 
+import Charts
 import Foundation
 import LoopKit
-import SwiftCharts
-import HealthKit
+import SwiftUI
 import UIKit
 import LoopAlgorithm
 
@@ -17,8 +17,8 @@ public class GlucoseCarbChart: GlucoseChart, ChartProviding {
 
     public private(set) var glucosePoints: [ChartPoint] = [] {
         didSet {
-            if let lastDate = glucosePoints.last?.x as? ChartAxisValueDate {
-                updateEndDate(lastDate.date)
+            if let lastDate = glucosePoints.last?.date {
+                updateEndDate(lastDate)
             }
         }
     }
@@ -30,7 +30,7 @@ public class GlucoseCarbChart: GlucoseChart, ChartProviding {
     /// Image to display for when carb entry is a favorite food
     public var carbEntryFavoriteFoodImage: UIImage?
 
-    private var glucoseChartCache: ChartPointsTouchHighlightLayerViewCache?
+    private let gestureBridge = ChartGestureBridge()
 
     public private(set) var endDate: Date?
         
@@ -38,6 +38,8 @@ public class GlucoseCarbChart: GlucoseChart, ChartProviding {
         
     private var maxYAxisSegmentCount: Double { 4 }
     
+    private let carbEntryImageSize = CGSize(width: 16, height: 16)
+
     private func updateEndDate(_ date: Date) {
         if endDate == nil || date > endDate! {
             self.endDate = date
@@ -53,105 +55,120 @@ public class GlucoseCarbChart: GlucoseChart, ChartProviding {
 extension GlucoseCarbChart {
     public func didReceiveMemoryWarning() {
         glucosePoints = []
-        glucoseChartCache = nil
     }
 
-    public func generate(withFrame frame: CGRect, xAxisModel: ChartAxisModel, xAxisValues: [ChartAxisValue], axisLabelSettings: ChartLabelSettings, guideLinesLayerSettings: ChartGuideLinesLayerSettings, colors: ChartColorPalette, chartSettings: ChartSettings, labelsWidthY: CGFloat, gestureRecognizer: UIGestureRecognizer?, traitCollection: UITraitCollection, highlightLabelOffsetY: CGFloat = 0) -> Chart
+    public func generate(withFrame frame: CGRect, context: ChartGenerationContext) -> UIView
     {
-       let yAxisValues = determineYAxisValues(axisLabelSettings: axisLabelSettings)
-        let yAxisModel = ChartAxisModel(axisValues: yAxisValues, lineColor: colors.axisLine, labelSpaceReservationMode: .fixed(labelsWidthY))
-
-        let coordsSpace = ChartCoordsSpaceLeftBottomSingleAxis(chartSettings: chartSettings, chartFrame: frame, xModel: xAxisModel, yModel: yAxisModel)
-
-        let (xAxisLayer, yAxisLayer, innerFrame) = (coordsSpace.xAxisLayer, coordsSpace.yAxisLayer, coordsSpace.chartInnerFrame)
-        
-        // Grid lines
-        let gridLayer = ChartGuideLinesForValuesLayer(xAxis: xAxisLayer.axis, yAxis: yAxisLayer.axis, settings: guideLinesLayerSettings, axisValuesX: Array(xAxisValues.dropFirst().dropLast()), axisValuesY: yAxisValues)
-
-        let circles = ChartPointsScatterCirclesLayer(xAxis: xAxisLayer.axis, yAxis: yAxisLayer.axis, chartPoints: glucosePoints, displayDelay: 0, itemSize: CGSize(width: 4, height: 4), itemFillColor: colors.glucoseTint, optimized: true)
-        
-        // Carb points are highlighted in green with a circle 22 points in size
-        let carbPoints = generateCarbChartPoints(carbEntries, fixedYValue: yAxisValues.min(by: { $0.scalar < $1.scalar })?.scalar, overrideColor: colors.carbTint)
-        let carbCircles = ChartPointsScatterCarbImageLayer(xAxis: xAxisLayer.axis, yAxis: yAxisLayer.axis, chartPoints: carbPoints, displayDelay: 0, itemSize: CGSize(width: 16, height: 16), itemFillColor: colors.carbTint, carbEntryImage: carbEntryImage, carbEntryFavoriteFoodImage: carbEntryFavoriteFoodImage)
-
-        if gestureRecognizer != nil {
-            let highlightPoints = glucosePoints.mergeWithSortedArray(carbPoints)
-            glucoseChartCache = ChartPointsTouchHighlightLayerViewCache(
-                xAxisLayer: xAxisLayer,
-                yAxisLayer: yAxisLayer,
-                axisLabelSettings: axisLabelSettings,
-                chartPoints: highlightPoints,
-                tintColor: colors.glucoseTint,
-                allowOverridingTintColor: true,
-                allowOverridingHighlightPointSize: true,
-                highlightPointOffsetY: 8,
-                highlightLabelOffsetY: highlightLabelOffsetY,
-                gestureRecognizer: gestureRecognizer
-            )
+        guard #available(iOS 16.0, *) else {
+            return UIView(frame: frame)
         }
 
-        let layers: [ChartLayer?] = [
-            gridLayer,
-            xAxisLayer,
-            yAxisLayer,
-            glucoseChartCache?.highlightLayer,
-            circles,
-            carbCircles
-        ]
-        
-        // Inset to allow for carb points on x-axis without clipping
-        return Chart(
-            frame: frame.insetBy(dx: 0, dy: -2),
-            innerFrame: innerFrame.insetBy(dx: 0, dy: -8),
-            settings: chartSettings,
-            layers: layers.compactMap { $0 }
-        )
+        let yAxisValues = determineYAxisValues()
+
+        let carbPoints = generateCarbChartPoints(carbEntries, fixedYValue: yAxisValues.min(), overrideColor: context.colors.carbTint)
+
+        let glucoseColor = Color(context.colors.glucoseTint)
+        let carbColor = Color(context.colors.carbTint)
+        let glucosePoints = self.glucosePoints.datedPoints
+        let datedCarbPoints = carbPoints.datedPoints
+
+        let highlight: ChartHighlightSpec?
+        if context.gestureRecognizer != nil {
+            let highlightPoints = (self.glucosePoints + carbPoints).sorted { $0.startDate < $1.startDate }
+            highlight = ChartHighlightSpec(
+                points: highlightPoints,
+                tintColor: context.colors.glucoseTint,
+                highlightPointOffsetY: 8
+            )
+        } else {
+            highlight = nil
+        }
+
+        let chartView = LoopChartView(
+            generationContext: context,
+            yAxisValues: yAxisValues,
+            highlight: highlight,
+            highlightModel: gestureBridge.model
+        ) {
+            // The glucose values
+            ForEach(Array(glucosePoints.enumerated()), id: \.offset) { _, point in
+                PointMark(
+                    x: .value("Date", point.date!),
+                    y: .value("Glucose", point.y.scalar)
+                )
+                .symbolSize(CGSize(width: 4, height: 4))
+                .foregroundStyle(glucoseColor)
+            }
+
+            // The carb entries
+            ForEach(Array(datedCarbPoints.enumerated()), id: \.offset) { _, point in
+                PointMark(
+                    x: .value("Date", point.date!),
+                    y: .value("Carbs", point.y.scalar)
+                )
+                .symbol {
+                    self.carbEntrySymbol(isFavoriteFood: point.isFavoriteFood == true, tintColor: carbColor)
+                }
+            }
+        }
+
+        let host = ChartHosting.view(frame: frame, rootView: chartView)
+        gestureBridge.attach(to: context.gestureRecognizer, hostView: host)
+        return host
     }
-    
-    private func determineYAxisValues(axisLabelSettings: ChartLabelSettings? = nil) -> [ChartAxisValue] {
-        let points = [
+
+    private func carbEntrySymbol(isFavoriteFood: Bool, tintColor: Color) -> some View {
+        let image: UIImage
+        if isFavoriteFood, let carbEntryFavoriteFoodImage = carbEntryFavoriteFoodImage {
+            image = carbEntryFavoriteFoodImage
+        } else if let carbEntryImage = carbEntryImage {
+            image = carbEntryImage
+        } else {
+            image = UIImage(systemName: "fork.knife.circle.fill") ?? UIImage()
+        }
+
+        return Image(uiImage: image.withRenderingMode(.alwaysTemplate))
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: carbEntryImageSize.width, height: carbEntryImageSize.height)
+            .foregroundColor(tintColor)
+    }
+
+    private func determineYAxisValues() -> [Double] {
+        let scalars = [
             glucosePoints,
             glucoseDisplayRangePoints
-        ].flatMap { $0 }
+        ].flatMap { $0 }.map { $0.y.scalar }
 
-        let axisValueGenerator: ChartAxisValueStaticGenerator
-        if let axisLabelSettings = axisLabelSettings {
-            axisValueGenerator = { ChartAxisValueDouble($0, labelSettings: axisLabelSettings) }
-        } else {
-            axisValueGenerator = { ChartAxisValueDouble($0) }
+        guard !scalars.isEmpty else {
+            return []
         }
-        
-        let yAxisValues = ChartAxisValuesStaticGenerator.generateYAxisValuesUsingLinearSegmentStep(chartPoints: points,
+
+        return ChartAxisValuesStaticGenerator.generateYAxisValuesUsingLinearSegmentStep(chartValues: scalars,
             minSegmentCount: 2,
             maxSegmentCount: maxYAxisSegmentCount,
             multiple: glucoseUnit == .milligramsPerDeciliter ? (yAxisStepSizeMGDLOverride ?? 25) : 1,
-            axisValueGenerator: axisValueGenerator,
             addPaddingSegmentIfEdge: false
         )
-        
-        return yAxisValues
     }
     
     private func generateCarbChartPoints(_ carbEntries: [StoredCarbEntry], fixedYValue: Double?, overrideColor: UIColor) -> [ChartPoint] {
-        guard let fixedYValue else { return [] }
-        
+        guard let fixedYValue = fixedYValue else { return [] }
+
         let carbFormatter = QuantityFormatter(for: .gram)
         carbFormatter.unitStyle = .short
         let unitString = carbFormatter.localizedUnitStringWithPlurality()
-        let dateFormatter = DateFormatter(timeStyle: .short)
         
         return carbEntries.map { entry in
-            ChartPoint(
-                x: ChartAxisValueDate(date: entry.startDate, formatter: dateFormatter),
-                y: ChartAxisValueCarbEntry(
-                    carbQuantity: entry.amount,
-                    fixedY: fixedYValue,
-                    unitString: unitString,
-                    formatter: carbFormatter.numberFormatter,
-                    isFavoriteFood: entry.favoriteFoodID != nil,
-                    overrideColor: overrideColor,
-                    overrideHighlightPointSize: 22
-                )
+            ChartPoint.carbEntry(
+                date: entry.startDate,
+                carbQuantity: entry.amount,
+                fixedY: fixedYValue,
+                unitString: unitString,
+                formatter: carbFormatter.numberFormatter,
+                isFavoriteFood: entry.favoriteFoodID != nil,
+                overrideColor: overrideColor,
+                overrideHighlightPointSize: 22
             )
         }
     }

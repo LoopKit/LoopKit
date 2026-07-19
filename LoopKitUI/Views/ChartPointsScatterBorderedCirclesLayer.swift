@@ -6,71 +6,27 @@
 //  Copyright © 2025 LoopKit Authors. All rights reserved.
 //
 
-import SwiftCharts
+import SwiftUI
+import UIKit
 
-class ChartPointsScatterBorderedCirclesLayer<T: ChartPoint>: ChartPointsScatterCirclesLayer<T> {
-    private let itemBorderColor: UIColor
-    
-    public init(
-        xAxis: ChartAxis,
-        yAxis: ChartAxis,
-        chartPoints: [T],
-        displayDelay: Float = 0,
-        itemSize: CGSize,
-        itemFillColor: UIColor,
-        itemBorderColor: UIColor,
-        tapSettings: ChartPointsTapSettings<T>? = nil
-    ) {
-        self.itemBorderColor = itemBorderColor
-        
-        super.init(
-            xAxis: xAxis,
-            yAxis: yAxis,
-            chartPoints: chartPoints,
-            displayDelay: displayDelay,
-            itemSize: itemSize,
-            itemFillColor: itemFillColor,
-            optimized: false,
-            tapSettings: tapSettings
-        )
-    }
-    
-    required convenience init(
-        xAxis: ChartAxis,
-        yAxis: ChartAxis,
-        chartPoints: [T],
-        displayDelay: Float = 0,
-        itemSize: CGSize,
-        itemFillColor: UIColor,
-        optimized: Bool = false,
-        tapSettings: ChartPointsTapSettings<T>? = nil
-    ) {
-        self.init(
-            xAxis: xAxis,
-            yAxis: yAxis,
-            chartPoints: chartPoints,
-            displayDelay: displayDelay,
-            itemSize: itemSize,
-            itemFillColor: itemFillColor,
-            itemBorderColor: .systemBackground,
-            tapSettings: tapSettings
-        )
-    }
-    
-    override open func drawChartPointModel(
-        _ context: CGContext,
-        chartPointModel: ChartPointLayerModel<T>,
-        view: UIView
-    ) {
-        let w = itemSize.width
-        let h = itemSize.height
-        
-        let screenLoc = modelLocToScreenLoc(x: chartPointModel.chartPoint.x.scalar, y: chartPointModel.chartPoint.y.scalar)
-        
-        context.setFillColor(itemFillColor.cgColor)
-        context.fillEllipse(in: CGRect(x: screenLoc.x - w / 2, y: screenLoc.y - h / 2, width: w, height: h))
-        context.setStrokeColor(itemBorderColor.cgColor)
-        context.setLineWidth(1.2)
-        context.strokeEllipse(in: CGRect(x: screenLoc.x - w / 2, y: screenLoc.y - h / 2, width: w, height: h))
+
+/// A filled circle with a contrasting border stroke, used as a `PointMark` symbol to mark
+/// automatic boluses on the dose chart.
+///
+/// Replaces the SwiftCharts `ChartPointsScatterBorderedCirclesLayer`, which filled an
+/// ellipse with the item color and stroked its edge with the border color at a 1.2pt line
+/// width (defaulting to `.systemBackground`). Size the symbol with `.frame(width:height:)`.
+struct BorderedCircle: View {
+    var fillColor: Color
+    var borderColor: Color = Color(UIColor.systemBackground)
+    var borderWidth: CGFloat = 1.2
+
+    var body: some View {
+        Circle()
+            .fill(fillColor)
+            .overlay(
+                Circle()
+                    .stroke(borderColor, lineWidth: borderWidth)
+            )
     }
 }

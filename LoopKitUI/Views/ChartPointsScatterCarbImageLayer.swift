@@ -6,102 +6,45 @@
 //  Copyright © 2024 LoopKit Authors. All rights reserved.
 //
 
-import SwiftCharts
-import CoreGraphics
+import SwiftUI
 import UIKit
 
-class ChartPointsScatterCarbImageLayer<T: ChartPoint>: ChartPointsScatterLayer<T> {
-    private var carbEntryImage: UIImage?
-    private var carbEntryFavoriteFoodImage: UIImage?
-    
-    required init(
-        xAxis: ChartAxis,
-        yAxis: ChartAxis,
-        chartPoints: [T],
-        displayDelay: Float,
-        itemSize: CGSize,
-        itemFillColor: UIColor,
-        optimized: Bool = false,
-        tapSettings: ChartPointsTapSettings<T>? = nil
-    ) {
-        // optimized must be set to false because `generateCGLayer` isn't public and can't be overridden
-        super.init(
-            xAxis: xAxis,
-            yAxis: yAxis,
-            chartPoints: chartPoints,
-            displayDelay: displayDelay,
-            itemSize: itemSize,
-            itemFillColor: itemFillColor,
-            optimized: false,
-            tapSettings: tapSettings
-        )
-    }
-    
-    required init(
-        xAxis: ChartAxis,
-        yAxis: ChartAxis,
-        chartPoints: [T],
-        displayDelay: Float,
-        itemSize: CGSize,
-        itemFillColor: UIColor,
-        tapSettings: ChartPointsTapSettings<T>? = nil,
-        carbEntryImage: UIImage? = nil,
-        carbEntryFavoriteFoodImage: UIImage? = nil
-    ) {
-        self.carbEntryImage = carbEntryImage
-        self.carbEntryFavoriteFoodImage = carbEntryFavoriteFoodImage
-        
-        super.init(
-            xAxis: xAxis,
-            yAxis: yAxis,
-            chartPoints: chartPoints,
-            displayDelay: displayDelay,
-            itemSize: itemSize,
-            itemFillColor: itemFillColor,
-            optimized: false,
-            tapSettings: tapSettings
-        )
+
+/// The carb-entry image marker, used as a `PointMark` symbol on the glucose/carb chart.
+///
+/// Replaces the SwiftCharts `ChartPointsScatterCarbImageLayer`, which drew a caller-supplied
+/// carb-entry image (or a favorite-food variant for entries sourced from favorite foods),
+/// falling back to the "fork.knife.circle.fill" SF Symbol, tinted with the carb color and
+/// aspect-fit within the item size. Size the symbol with `.frame(width:height:)`
+/// (previously 16x16).
+struct CarbEntrySymbol: View {
+    /// The image to draw for a regular carb entry; falls back to "fork.knife.circle.fill"
+    var carbEntryImage: UIImage?
+
+    /// The image to draw when `isFavoriteFood` is true
+    var carbEntryFavoriteFoodImage: UIImage?
+
+    /// Marks a carb entry sourced from a favorite food (`ChartPoint.isFavoriteFood`)
+    var isFavoriteFood: Bool = false
+
+    /// The tint applied to the image (previously the layer's `itemFillColor`)
+    var tintColor: Color
+
+    private var image: Image {
+        if isFavoriteFood, let carbEntryFavoriteFoodImage {
+            return Image(uiImage: carbEntryFavoriteFoodImage)
+        } else if let carbEntryImage {
+            return Image(uiImage: carbEntryImage)
+        } else {
+            return Image(systemName: "fork.knife.circle.fill")
+        }
     }
 
-    override func drawChartPointModel(_ context: CGContext, chartPointModel: ChartPointLayerModel<T>, view: UIView) {
-        let point = chartPointModel.chartPoint
-        var image = UIImage()
-        
-        if point.isFavoriteFood == true, let carbEntryFavoriteFoodImage {
-            image = carbEntryFavoriteFoodImage
-        } else if let carbEntryImage {
-            image = carbEntryImage
-        } else if let defaultImage = UIImage(systemName: "fork.knife.circle.fill") {
-            image = defaultImage
-        }
-        
-        let tintedImage = image.withTintColor(self.itemFillColor, renderingMode: .alwaysOriginal)
-        
-        let w = self.itemSize.width
-        let h = self.itemSize.height
-        // Set the position where the image will be drawn
-        let x = chartPointModel.screenLoc.x - w / 2
-        let y = chartPointModel.screenLoc.y - h / 2
-                
-        let imageAspectRatio = image.size.width / image.size.height
-        let containerAspectRatio = w / h
-        var drawRect: CGRect
-        
-        if imageAspectRatio > containerAspectRatio {
-            // Image is wider than container: use container weight and regular x position, scale height and correct y-position
-            let drawHeight = w / imageAspectRatio
-            let drawY = y + (h - drawHeight) / 2
-            drawRect = CGRect(x: x, y: drawY, width: w, height: drawHeight)
-        } else {
-            // Image is narrower than container: use container height and regular y position, scale width and correct x-position
-            let drawWidth = h * imageAspectRatio
-            let drawX = x + (w - drawWidth) / 2
-            drawRect = CGRect(x: drawX, y: y, width: drawWidth, height: h)
-        }
-        
-        // Draw the UIImage into the CGContext
-        UIGraphicsPushContext(context)
-        tintedImage.draw(in: drawRect)
-        UIGraphicsPopContext()
+    var body: some View {
+        image
+            .resizable()
+            .renderingMode(.template)
+            .aspectRatio(contentMode: .fit)
+            .foregroundColor(tintColor)
     }
 }

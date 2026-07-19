@@ -5,9 +5,10 @@
 //  Copyright © 2019 LoopKit Authors. All rights reserved.
 //
 
+import Charts
 import Foundation
 import LoopKit
-import SwiftCharts
+import SwiftUI
 import UIKit
 import LoopAlgorithm
 
@@ -18,78 +19,86 @@ public class COBChart: ChartProviding {
     /// The chart points for COB
     public private(set) var cobPoints: [ChartPoint] = [] {
         didSet {
-            if let lastDate = cobPoints.last?.x as? ChartAxisValueDate {
-                endDate = lastDate.date
+            if let lastDate = cobPoints.last?.date {
+                endDate = lastDate
             }
         }
     }
 
     /// The minimum range to display for COB values.
-    private var cobDisplayRangePoints: [ChartPoint] = [0, 10].map {
-        return ChartPoint(
-            x: ChartAxisValue(scalar: 0),
-            y: ChartAxisValueInt($0)
-        )
-    }
+    private let cobDisplayRangeValues: [Double] = [0, 10]
 
     public private(set) var endDate: Date?
 
-    private var cobChartCache: ChartPointsTouchHighlightLayerViewCache?
+    private let gestureBridge = ChartGestureBridge()
 }
 
 public extension COBChart {
     func didReceiveMemoryWarning() {
         cobPoints = []
-        cobChartCache = nil
     }
 
-    func generate(withFrame frame: CGRect, xAxisModel: ChartAxisModel, xAxisValues: [ChartAxisValue], axisLabelSettings: ChartLabelSettings, guideLinesLayerSettings: ChartGuideLinesLayerSettings, colors: ChartColorPalette, chartSettings: ChartSettings, labelsWidthY: CGFloat, gestureRecognizer: UIGestureRecognizer?, traitCollection: UITraitCollection, highlightLabelOffsetY: CGFloat = 0) -> Chart
+    func generate(withFrame frame: CGRect, context: ChartGenerationContext) -> UIView
     {
-        let yAxisValues = ChartAxisValuesStaticGenerator.generateYAxisValuesWithChartPoints(cobPoints + cobDisplayRangePoints, minSegmentCount: 2, maxSegmentCount: 3, multiple: 10, axisValueGenerator: { ChartAxisValueDouble($0, labelSettings: axisLabelSettings) }, addPaddingSegmentIfEdge: false)
-
-        let yAxisModel = ChartAxisModel(axisValues: yAxisValues, lineColor: colors.axisLine, labelSpaceReservationMode: .fixed(labelsWidthY))
-
-        let coordsSpace = ChartCoordsSpaceLeftBottomSingleAxis(chartSettings: chartSettings, chartFrame: frame, xModel: xAxisModel, yModel: yAxisModel)
-
-        let (xAxisLayer, yAxisLayer, innerFrame) = (coordsSpace.xAxisLayer, coordsSpace.yAxisLayer, coordsSpace.chartInnerFrame)
-
-        // The COB area
-        let lineModel = ChartLineModel(chartPoints: cobPoints, lineColor: colors.carbTint, lineWidth: 2, animDuration: 0, animDelay: 0)
-        let cobLine = ChartPointsLineLayer(xAxis: xAxisLayer.axis, yAxis: yAxisLayer.axis, lineModels: [lineModel])
-
-        let cobArea = ChartPointsFillsLayer(xAxis: xAxisLayer.axis, yAxis: yAxisLayer.axis, fills: [ChartPointsFill(chartPoints: cobPoints, fillColor: colors.carbTint.withAlphaComponent(0.5))])
-
-        // Grid lines
-        let gridLayer = ChartGuideLinesForValuesLayer(xAxis: xAxisLayer.axis, yAxis: yAxisLayer.axis, settings: guideLinesLayerSettings, axisValuesX: Array(xAxisValues.dropFirst().dropLast()), axisValuesY: yAxisValues)
-
-        if gestureRecognizer != nil {
-            cobChartCache = ChartPointsTouchHighlightLayerViewCache(
-                xAxisLayer: xAxisLayer,
-                yAxisLayer: yAxisLayer,
-                axisLabelSettings: axisLabelSettings,
-                chartPoints: cobPoints,
-                tintColor: colors.carbTint,
-                highlightLabelOffsetY: highlightLabelOffsetY,
-                gestureRecognizer: gestureRecognizer
-            )
+        guard #available(iOS 16.0, *) else {
+            return UIView(frame: frame)
         }
 
-        let layers: [ChartLayer?] = [
-            gridLayer,
-            xAxisLayer,
-            yAxisLayer,
-            cobChartCache?.highlightLayer,
-            cobArea,
-            cobLine
-        ]
+        let yAxisValues = ChartAxisValuesStaticGenerator.generateYAxisValuesWithChartPoints(
+            chartValues: cobPoints.map { $0.y.scalar } + cobDisplayRangeValues,
+            minSegmentCount: 2,
+            maxSegmentCount: 3,
+            multiple: 10,
+            addPaddingSegmentIfEdge: false
+        )
 
-        return Chart(frame: frame, innerFrame: innerFrame, settings: chartSettings, layers: layers.compactMap { $0 })
+        let carbColor = Color(context.colors.carbTint)
+        let areaColor = Color(context.colors.carbTint.withAlphaComponent(0.5))
+        let points = cobPoints.datedPoints
+
+        let highlight: ChartHighlightSpec?
+        if context.gestureRecognizer != nil {
+            highlight = ChartHighlightSpec(points: cobPoints, tintColor: context.colors.carbTint)
+        } else {
+            highlight = nil
+        }
+
+        let chartView = LoopChartView(
+            generationContext: context,
+            yAxisValues: yAxisValues,
+            highlight: highlight,
+            highlightModel: gestureBridge.model
+        ) {
+            // The COB area
+            ForEach(Array(points.enumerated()), id: \.offset) { _, point in
+                AreaMark(
+                    x: .value("Date", point.date!),
+                    yStart: .value("Zero", 0),
+                    yEnd: .value("COB", point.y.scalar)
+                )
+                .foregroundStyle(areaColor)
+            }
+
+            // The COB line
+            ForEach(Array(points.enumerated()), id: \.offset) { _, point in
+                LineMark(
+                    x: .value("Date", point.date!),
+                    y: .value("COB", point.y.scalar),
+                    series: .value("Series", "COB")
+                )
+            }
+            .lineStyle(ChartLineStyle.valueLine())
+            .foregroundStyle(carbColor)
+        }
+
+        let host = ChartHosting.view(frame: frame, rootView: chartView)
+        gestureBridge.attach(to: context.gestureRecognizer, hostView: host)
+        return host
     }
 }
 
 public extension COBChart {
     func setCOBValues(_ cobValues: [CarbValue]) {
-        let dateFormatter = DateFormatter(timeStyle: .short)
         let integerFormatter = NumberFormatter.integer
 
         let unit = LoopUnit.gram
@@ -97,8 +106,12 @@ public extension COBChart {
 
         cobPoints = cobValues.map {
             ChartPoint(
-                x: ChartAxisValueDate(date: $0.startDate, formatter: dateFormatter),
-                y: ChartAxisValueDoubleUnit($0.quantity.doubleValue(for: unit), unitString: unitString, formatter: integerFormatter)
+                date: $0.startDate,
+                y: ChartValue(
+                    scalar: $0.quantity.doubleValue(for: unit),
+                    unitString: unitString,
+                    formatter: integerFormatter
+                )
             )
         }
     }

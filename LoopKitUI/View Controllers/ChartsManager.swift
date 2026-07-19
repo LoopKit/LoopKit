@@ -7,10 +7,40 @@
 //
 
 import Foundation
-import HealthKit
 import LoopKit
-import SwiftCharts
 import UIKit
+
+
+/// The shared X-axis model for a stack of charts, so all charts in a set align vertically.
+public struct ChartXAxisModel {
+    /// The earliest date displayed on the axis
+    public let startDate: Date
+
+    /// The latest date displayed on the axis
+    public let endDate: Date
+
+    /// The dates at which visible axis labels and vertical gridlines are drawn (interior whole hours)
+    public let labelDates: [Date]
+
+    /// Formats the axis labels (e.g. "3 PM")
+    public let axisLabelFormatter: DateFormatter
+
+    /// Formats the highlight-overlay time label (e.g. "3:45 PM")
+    public let highlightLabelFormatter: DateFormatter
+}
+
+
+/// Everything a chart needs, besides its own data, to render itself.
+public struct ChartGenerationContext {
+    public let xAxisModel: ChartXAxisModel
+    public let colors: ChartColorPalette
+    public let chartSettings: ChartSettings
+    public let axisLabelFont: UIFont
+    public let labelsWidthY: CGFloat
+    public let gestureRecognizer: UIGestureRecognizer?
+    public let traitCollection: UITraitCollection
+    public let highlightLabelOffsetY: CGFloat
+}
 
 
 open class ChartsManager {
@@ -25,6 +55,8 @@ open class ChartsManager {
         return formatter
     }()
 
+    private lazy var highlightTimeFormatter = DateFormatter(timeStyle: .short)
+
     public init(
         colors: ChartColorPalette,
         settings: ChartSettings,
@@ -34,13 +66,10 @@ open class ChartsManager {
     ) {
         self.colors = colors
         self.chartSettings = settings
+        self.axisLabelFont = axisLabelFont
         self.charts = charts
         self.traitCollection = traitCollection
         self.chartsCache = Array(repeating: nil, count: charts.count)
-
-        axisLabelSettings = ChartLabelSettings(font: axisLabelFont, fontColor: colors.axisLabel)
-
-        guideLinesLayerSettings = ChartGuideLinesLayerSettings(linesColor: colors.grid)
     }
 
     // MARK: - Configuration
@@ -48,6 +77,8 @@ open class ChartsManager {
     private let colors: ChartColorPalette
 
     private let chartSettings: ChartSettings
+
+    private let axisLabelFont: UIFont
 
     private let labelsWidthY: CGFloat = 30
 
@@ -57,10 +88,6 @@ open class ChartsManager {
     public var fixedHorizontalMargin: CGFloat {
         return chartSettings.leading + chartSettings.trailing + labelsWidthY + chartSettings.labelsToAxisSpacingY
     }
-
-    private let axisLabelSettings: ChartLabelSettings
-
-    private let guideLinesLayerSettings: ChartGuideLinesLayerSettings
 
     public var gestureRecognizer: UIGestureRecognizer?
 
@@ -74,7 +101,7 @@ open class ChartsManager {
             chart.didReceiveMemoryWarning()
         }
 
-        xAxisValues = nil
+        xAxisModel = nil
     }
 
     // MARK: - Data
@@ -83,7 +110,7 @@ open class ChartsManager {
     public var startDate = Date() {
         didSet {
             if startDate != oldValue {
-                xAxisValues = nil
+                xAxisModel = nil
 
                 // Set a new minimum end date
                 endDate = startDate.addingTimeInterval(.hours(3))
@@ -95,7 +122,7 @@ open class ChartsManager {
     private var endDate = Date() {
         didSet {
             if endDate != oldValue {
-                xAxisValues = nil
+                xAxisModel = nil
             }
         }
     }
@@ -128,37 +155,41 @@ open class ChartsManager {
     }
 
     // MARK: - State
-    public static var xAxisAccessibilityIDs: [ChartAxisValue]?
-        
-    private var xAxisValues: [ChartAxisValue]? {
-        didSet {
-            if let xAxisValues = xAxisValues, xAxisValues.count > 1 {
-                ChartsManager.xAxisAccessibilityIDs =  xAxisValues
-                xAxisModel = ChartAxisModel(axisValues: xAxisValues, lineColor: colors.axisLine, labelSpaceReservationMode: .fixed(20))
-            } else {
-                xAxisModel = nil
-            }
 
+    /// The dates of the current shared X-axis labels, exposed for accessibility identifiers
+    public static var xAxisAccessibilityIDs: [Date]?
+
+    private var xAxisModel: ChartXAxisModel? {
+        didSet {
+            ChartsManager.xAxisAccessibilityIDs = xAxisModel?.labelDates
             chartsCache.replaceAllElements(with: nil)
         }
     }
 
-    private var xAxisModel: ChartAxisModel?
-
-    private var chartsCache: [Chart?]
+    private var chartsCache: [(view: UIView, frame: CGRect)?]
 
     // MARK: - Generators
 
-    public func chart(atIndex index: Int, frame: CGRect, highlightLabelOffsetY: CGFloat = 0) -> Chart? {
-        if let chart = chartsCache[index], chart.frame != frame {
+    public func chart(atIndex index: Int, frame: CGRect, highlightLabelOffsetY: CGFloat = 0) -> UIView? {
+        if let cached = chartsCache[index], cached.frame != frame {
             chartsCache[index] = nil
         }
 
-        if chartsCache[index] == nil, let xAxisModel = xAxisModel, let xAxisValues = xAxisValues {
-            chartsCache[index] = charts[index].generate(withFrame: frame, xAxisModel: xAxisModel, xAxisValues: xAxisValues, axisLabelSettings: axisLabelSettings, guideLinesLayerSettings: guideLinesLayerSettings, colors: colors, chartSettings: chartSettings, labelsWidthY: labelsWidthY, gestureRecognizer: gestureRecognizer, traitCollection: traitCollection, highlightLabelOffsetY: highlightLabelOffsetY)
+        if chartsCache[index] == nil, let xAxisModel = xAxisModel {
+            let context = ChartGenerationContext(
+                xAxisModel: xAxisModel,
+                colors: colors,
+                chartSettings: chartSettings,
+                axisLabelFont: axisLabelFont,
+                labelsWidthY: labelsWidthY,
+                gestureRecognizer: gestureRecognizer,
+                traitCollection: traitCollection,
+                highlightLabelOffsetY: highlightLabelOffsetY
+            )
+            chartsCache[index] = (view: charts[index].generate(withFrame: frame, context: context), frame: frame)
         }
 
-        return chartsCache[index]
+        return chartsCache[index]?.view
     }
 
     public func invalidateChart(atIndex index: Int) {
@@ -172,41 +203,36 @@ open class ChartsManager {
             updateEndDate(endDate)
         }
 
-        let points = [
-            ChartPoint(
-                x: ChartAxisValueDate(date: startDate, formatter: timeFormatter),
-                y: ChartAxisValue(scalar: 0)
-            ),
-            ChartPoint(
-                x: ChartAxisValueDate(date: endDate, formatter: timeFormatter),
-                y: ChartAxisValue(scalar: 0)
-            )
-        ]
+        let calendar = Calendar.current
 
-        let segments = ceil(endDate.timeIntervalSince(startDate).hours)
+        // Axis bounds are aligned to whole hours containing the date range
+        let axisStart = calendar.dateInterval(of: .hour, for: startDate)?.start ?? startDate
+        var axisEnd = calendar.dateInterval(of: .hour, for: endDate)?.start ?? endDate
+        if axisEnd < endDate {
+            axisEnd = axisEnd.addingTimeInterval(.hours(1))
+        }
 
-        let xAxisValues = ChartAxisValuesStaticGenerator.generateXAxisValuesWithChartPoints(points,
-            minSegmentCount: segments - 1,
-            maxSegmentCount: segments + 1,
-            multiple: TimeInterval(hours: 1),
-            axisValueGenerator: {
-                ChartAxisValueDate(
-                    date: ChartAxisValueDate.dateFromScalar($0),
-                    formatter: timeFormatter,
-                    labelSettings: self.axisLabelSettings
-                )
-            },
-            addPaddingSegmentIfEdge: false
+        // Labels and gridlines are drawn at interior whole hours; the first and last
+        // axis values are hidden, matching the previous SwiftCharts behavior.
+        var labelDates: [Date] = []
+        var date = axisStart.addingTimeInterval(.hours(1))
+        while date < axisEnd {
+            labelDates.append(date)
+            date = date.addingTimeInterval(.hours(1))
+        }
+
+        xAxisModel = ChartXAxisModel(
+            startDate: axisStart,
+            endDate: axisEnd,
+            labelDates: labelDates,
+            axisLabelFormatter: timeFormatter,
+            highlightLabelFormatter: highlightTimeFormatter
         )
-        xAxisValues.first?.hidden = true
-        xAxisValues.last?.hidden = true
-
-        self.xAxisValues = xAxisValues
     }
 
     /// Runs any necessary steps before rendering charts
     public func prerender() {
-        if xAxisValues == nil {
+        if xAxisModel == nil {
             generateXAxisValues()
         }
     }
@@ -218,26 +244,15 @@ fileprivate extension Array {
     }
 }
 
-public protocol ChartProviding {
+public protocol ChartProviding: AnyObject {
     /// Instructs the chart to clear its non-critical resources like caches
     func didReceiveMemoryWarning()
 
     /// The last date represented in the chart data
     var endDate: Date? { get }
 
-    /// Creates a chart from the current data
+    /// Creates a chart view from the current data
     ///
-    /// - Returns: A new chart object
-    func generate(withFrame frame: CGRect,
-        xAxisModel: ChartAxisModel,
-        xAxisValues: [ChartAxisValue],
-        axisLabelSettings: ChartLabelSettings,
-        guideLinesLayerSettings: ChartGuideLinesLayerSettings,
-        colors: ChartColorPalette,
-        chartSettings: ChartSettings,
-        labelsWidthY: CGFloat,
-        gestureRecognizer: UIGestureRecognizer?,
-        traitCollection: UITraitCollection,
-        highlightLabelOffsetY: CGFloat
-    ) -> Chart
+    /// - Returns: A new chart view
+    func generate(withFrame frame: CGRect, context: ChartGenerationContext) -> UIView
 }

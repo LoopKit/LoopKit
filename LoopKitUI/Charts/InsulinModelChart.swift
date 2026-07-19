@@ -5,9 +5,10 @@
 //  Copyright © 2019 LoopKit Authors. All rights reserved.
 //
 
+import Charts
 import Foundation
 import LoopKit
-import SwiftCharts
+import SwiftUI
 import UIKit
 import LoopAlgorithm
 
@@ -15,8 +16,8 @@ public class InsulinModelChart: GlucoseChart, ChartProviding {
     /// The chart points for the selected model
     public private(set) var selectedInsulinModelChartPoints: [ChartPoint] = [] {
         didSet {
-            if let lastDate = selectedInsulinModelChartPoints.last?.x as? ChartAxisValueDate {
-                updateEndDate(lastDate.date)
+            if let lastDate = selectedInsulinModelChartPoints.last?.date {
+                updateEndDate(lastDate)
             }
         }
     }
@@ -24,14 +25,16 @@ public class InsulinModelChart: GlucoseChart, ChartProviding {
     public private(set) var unselectedInsulinModelChartPoints: [[ChartPoint]] = [] {
         didSet {
             for points in unselectedInsulinModelChartPoints {
-                if let lastDate = points.last?.x as? ChartAxisValueDate {
-                    updateEndDate(lastDate.date)
+                if let lastDate = points.last?.date {
+                    updateEndDate(lastDate)
                 }
             }
         }
     }
 
     public private(set) var endDate: Date?
+
+    private let gestureBridge = ChartGestureBridge()
 
     private func updateEndDate(_ date: Date) {
         if endDate == nil || date > endDate! {
@@ -45,88 +48,62 @@ extension InsulinModelChart {
 
     }
 
-    public func generate(withFrame frame: CGRect, xAxisModel: ChartAxisModel, xAxisValues: [ChartAxisValue], axisLabelSettings: ChartLabelSettings, guideLinesLayerSettings: ChartGuideLinesLayerSettings, colors: ChartColorPalette, chartSettings: ChartSettings, labelsWidthY: CGFloat, gestureRecognizer: UIGestureRecognizer?, traitCollection: UITraitCollection, highlightLabelOffsetY: CGFloat) -> Chart
+    public func generate(withFrame frame: CGRect, context: ChartGenerationContext) -> UIView
     {
-        let yAxisValues = ChartAxisValuesStaticGenerator.generateYAxisValuesWithChartPoints(glucoseDisplayRangePoints,
+        guard #available(iOS 16.0, *) else {
+            return UIView(frame: frame)
+        }
+
+        let yAxisValues = ChartAxisValuesStaticGenerator.generateYAxisValuesWithChartPoints(
+            chartValues: glucoseDisplayRangePoints.map { $0.y.scalar },
             minSegmentCount: 2,
             maxSegmentCount: 5,
             multiple: glucoseUnit.chartableIncrement / 2,
-            axisValueGenerator: {
-                ChartAxisValueDouble(round($0), labelSettings: axisLabelSettings)
-            },
             addPaddingSegmentIfEdge: false
-        )
+        ).map { round($0) }
 
-        let yAxisModel = ChartAxisModel(axisValues: yAxisValues, lineColor: colors.axisLine, labelSpaceReservationMode: .fixed(labelsWidthY))
+        let glucoseColor = Color(context.colors.glucoseTint)
+        let unselectedColor = Color(UIColor.secondaryLabel)
+        let selectedPoints = selectedInsulinModelChartPoints.datedPoints
+        let unselectedPointSets = unselectedInsulinModelChartPoints.map { $0.datedPoints }
 
-        let coordsSpace = ChartCoordsSpaceLeftBottomSingleAxis(
-            chartSettings: chartSettings,
-            chartFrame: frame,
-            xModel: xAxisModel,
-            yModel: yAxisModel
-        )
+        let chartView = LoopChartView(
+            generationContext: context,
+            yAxisValues: yAxisValues,
+            highlightModel: gestureBridge.model
+        ) {
+            // Unselected lines
+            ForEach(Array(unselectedPointSets.enumerated()), id: \.offset) { setIndex, points in
+                if points.count > 1 {
+                    ForEach(Array(points.enumerated()), id: \.offset) { _, point in
+                        LineMark(
+                            x: .value("Date", point.date!),
+                            y: .value("Glucose", point.y.scalar),
+                            series: .value("Series", "Unselected-\(setIndex)")
+                        )
+                    }
+                    .lineStyle(ChartLineStyle.predictionLine(width: 1))
+                    .foregroundStyle(unselectedColor)
+                }
+            }
 
-        // Grid lines
-        let gridLayer = ChartGuideLinesForValuesLayer(
-            xAxis: coordsSpace.xAxisLayer.axis,
-            yAxis: coordsSpace.yAxisLayer.axis,
-            settings: guideLinesLayerSettings,
-            axisValuesX: Array(xAxisValues.dropFirst().dropLast()),
-            axisValuesY: yAxisValues
-        )
-
-        // Selected line
-        var selectedLayer: ChartLayer?
-
-        if selectedInsulinModelChartPoints.count > 1 {
-            let lineModel = ChartLineModel.predictionLine(
-                points: selectedInsulinModelChartPoints,
-                color: colors.glucoseTint,
-                width: 2
-            )
-
-            selectedLayer = ChartPointsLineLayer(
-                xAxis: coordsSpace.xAxisLayer.axis,
-                yAxis: coordsSpace.yAxisLayer.axis,
-                lineModels: [lineModel]
-            )
+            // Selected line
+            if selectedPoints.count > 1 {
+                ForEach(Array(selectedPoints.enumerated()), id: \.offset) { _, point in
+                    LineMark(
+                        x: .value("Date", point.date!),
+                        y: .value("Glucose", point.y.scalar),
+                        series: .value("Series", "Selected")
+                    )
+                }
+                .lineStyle(ChartLineStyle.predictionLine(width: 2))
+                .foregroundStyle(glucoseColor)
+            }
         }
 
-        var unselectedLineModels = [ChartLineModel]()
-
-        for points in unselectedInsulinModelChartPoints where points.count > 1 {
-            unselectedLineModels.append(ChartLineModel.predictionLine(
-                points: points,
-                color: UIColor.secondaryLabel,
-                width: 1
-            ))
-        }
-
-        // Unselected lines
-        var unselectedLayer: ChartLayer?
-
-        if !unselectedLineModels.isEmpty {
-            unselectedLayer = ChartPointsLineLayer(
-                xAxis: coordsSpace.xAxisLayer.axis,
-                yAxis: coordsSpace.yAxisLayer.axis,
-                lineModels: unselectedLineModels
-            )
-        }
-
-        let layers: [ChartLayer?] = [
-            gridLayer,
-            coordsSpace.xAxisLayer,
-            coordsSpace.yAxisLayer,
-            unselectedLayer,
-            selectedLayer
-        ]
-
-        return Chart(
-            frame: frame,
-            innerFrame: coordsSpace.chartInnerFrame,
-            settings: chartSettings,
-            layers: layers.compactMap { $0 }
-        )
+        let host = ChartHosting.view(frame: frame, rootView: chartView)
+        gestureBridge.attach(to: context.gestureRecognizer, hostView: host)
+        return host
     }
 }
 

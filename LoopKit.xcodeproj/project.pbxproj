@@ -542,8 +542,6 @@
 		A9D3FF162A6C1A16000C891D /* ChartPointsTouchHighlightLayerViewCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D3FF152A6C1A16000C891D /* ChartPointsTouchHighlightLayerViewCache.swift */; };
 		A9D3FF192A6C2C85000C891D /* PredictedGlucoseChartTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D3FF182A6C2C85000C891D /* PredictedGlucoseChartTests.swift */; };
 		A9D3FF1B2A6C2CA9000C891D /* ChartAxisValuesStaticGeneratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D3FF1A2A6C2CA9000C891D /* ChartAxisValuesStaticGeneratorTests.swift */; };
-		A9D3FF1D2A6C307E000C891D /* SwiftCharts in Frameworks */ = {isa = PBXBuildFile; productRef = A9D3FF1C2A6C307E000C891D /* SwiftCharts */; };
-		A9D3FF1F2A6C307E000C891D /* SwiftCharts in Embed Frameworks */ = {isa = PBXBuildFile; productRef = A9D3FF1C2A6C307E000C891D /* SwiftCharts */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		A9DCF2CA25B0F38000C89088 /* LoopUIColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DCF2C925B0F38000C89088 /* LoopUIColorPalette.swift */; };
 		A9DF02C324F6EEE400B7C988 /* DeviceLogEntryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DF02C224F6EEE400B7C988 /* DeviceLogEntryTests.swift */; };
 		A9DF02C524F6FA5100B7C988 /* PumpEventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DF02C424F6FA5100B7C988 /* PumpEventTests.swift */; };
@@ -816,8 +814,6 @@
 		C1B8E6E52A1BB14E00AF38D0 /* HealthKitSampleStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B8E6E42A1BB14E00AF38D0 /* HealthKitSampleStore.swift */; };
 		C1BECA93285902F5008075C4 /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FDCB1C728FDF0073BE78 /* LoopKit.framework */; };
 		C1CAB9E926A3254800A57273 /* StoredInsulinModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CAB9E826A3254800A57273 /* StoredInsulinModel.swift */; };
-		C1CCF1062858F07A0035389C /* SwiftCharts in Frameworks */ = {isa = PBXBuildFile; productRef = C1CCF1052858F07A0035389C /* SwiftCharts */; };
-		C1CCF1082858F1E10035389C /* SwiftCharts in Frameworks */ = {isa = PBXBuildFile; productRef = C1CCF1072858F1E10035389C /* SwiftCharts */; };
 		C1CEBFD229BA9D43007FD8A3 /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = C187338229B9486200519CDF /* TimeInterval.swift */; };
 		C1CEBFD329BA9D4F007FD8A3 /* OSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C187338829B9486200519CDF /* OSLog.swift */; };
 		C1CEBFD429BA9D57007FD8A3 /* HKUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = C187338129B9486100519CDF /* HKUnit.swift */; };
@@ -1022,7 +1018,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				A9D3FF1F2A6C307E000C891D /* SwiftCharts in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1814,7 +1809,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C1CCF1062858F07A0035389C /* SwiftCharts in Frameworks */,
 				892A5D49222F03CC008961AB /* LoopTestingKit.framework in Frameworks */,
 				4301582D1C7ECD7A00B64B63 /* HealthKit.framework in Frameworks */,
 				430158191C7ECB5E00B64B63 /* LoopKit.framework in Frameworks */,
@@ -1826,7 +1820,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C1CCF1082858F1E10035389C /* SwiftCharts in Frameworks */,
 				C1BECA93285902F5008075C4 /* LoopKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1846,7 +1839,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				43D8FDD61C728FDF0073BE78 /* LoopKit.framework in Frameworks */,
-				A9D3FF1D2A6C307E000C891D /* SwiftCharts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3201,7 +3193,6 @@
 			);
 			name = "LoopKit Example";
 			packageProductDependencies = (
-				C1CCF1052858F07A0035389C /* SwiftCharts */,
 			);
 			productName = "LoopKit Example";
 			productReference = 430157F71C7EC03B00B64B63 /* LoopKit Example.app */;
@@ -3224,7 +3215,6 @@
 			);
 			name = LoopKitUI;
 			packageProductDependencies = (
-				C1CCF1072858F1E10035389C /* SwiftCharts */,
 			);
 			productName = LoopKitUI;
 			productReference = 43BA7154201E484D0058961E /* LoopKitUI.framework */;
@@ -3267,7 +3257,6 @@
 			);
 			name = LoopKitTests;
 			packageProductDependencies = (
-				A9D3FF1C2A6C307E000C891D /* SwiftCharts */,
 			);
 			productName = LoopKitTests;
 			productReference = 43D8FDD51C728FDF0073BE78 /* LoopKitTests.xctest */;
@@ -3468,7 +3457,6 @@
 			);
 			mainGroup = 43D8FDC11C728FDF0073BE78;
 			packageReferences = (
-				C1CCF1042858F07A0035389C /* XCRemoteSwiftPackageReference "SwiftCharts" */,
 			);
 			productRefGroup = 43D8FDCC1C728FDF0073BE78 /* Products */;
 			projectDirPath = "";
@@ -5670,22 +5658,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		C1CCF1042858F07A0035389C /* XCRemoteSwiftPackageReference "SwiftCharts" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/ivanschuetz/SwiftCharts";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		A9D3FF1C2A6C307E000C891D /* SwiftCharts */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = C1CCF1042858F07A0035389C /* XCRemoteSwiftPackageReference "SwiftCharts" */;
-			productName = SwiftCharts;
-		};
 		C1B431C52B90E31400D1DA9F /* LoopAlgorithm */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LoopAlgorithm;
@@ -5693,16 +5668,6 @@
 		C1B431C72B90E3C800D1DA9F /* LoopAlgorithm */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LoopAlgorithm;
-		};
-		C1CCF1052858F07A0035389C /* SwiftCharts */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = C1CCF1042858F07A0035389C /* XCRemoteSwiftPackageReference "SwiftCharts" */;
-			productName = SwiftCharts;
-		};
-		C1CCF1072858F1E10035389C /* SwiftCharts */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = C1CCF1042858F07A0035389C /* XCRemoteSwiftPackageReference "SwiftCharts" */;
-			productName = SwiftCharts;
 		};
 /* End XCSwiftPackageProductDependency section */
 

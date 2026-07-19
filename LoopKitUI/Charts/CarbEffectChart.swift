@@ -5,9 +5,10 @@
 //  Copyright © 2019 LoopKit Authors. All rights reserved.
 //
 
+import Charts
 import Foundation
 import LoopKit
-import SwiftCharts
+import SwiftUI
 import UIKit
 import LoopAlgorithm
 
@@ -23,8 +24,8 @@ public class CarbEffectChart: GlucoseChart, ChartProviding {
     public private(set) var insulinCounteractionEffectPoints: [ChartPoint] = [] {
         didSet {
             // Extend 1 hour past the seen effect to ensure some future prediction is displayed
-            if let lastDate = insulinCounteractionEffectPoints.last?.x as? ChartAxisValueDate {
-                endDate = lastDate.date.addingTimeInterval(.hours(1))
+            if let lastDate = insulinCounteractionEffectPoints.last?.date {
+                endDate = lastDate.addingTimeInterval(.hours(1))
             }
         }
     }
@@ -34,10 +35,9 @@ public class CarbEffectChart: GlucoseChart, ChartProviding {
 
     public private(set) var endDate: Date?
 
-    private lazy var dateFormatter = DateFormatter(timeStyle: .short)
     private lazy var decimalFormatter = NumberFormatter.dose
 
-    private var carbEffectChartCache: ChartPointsTouchHighlightLayerViewCache?
+    private let gestureBridge = ChartGestureBridge()
 }
 
 extension CarbEffectChart {
@@ -45,104 +45,75 @@ extension CarbEffectChart {
         carbEffectPoints = []
         insulinCounteractionEffectPoints = []
         allCarbEffectPoints = []
-
-        carbEffectChartCache = nil
     }
 
-    public func generate(withFrame frame: CGRect, xAxisModel: ChartAxisModel, xAxisValues: [ChartAxisValue], axisLabelSettings: ChartLabelSettings, guideLinesLayerSettings: ChartGuideLinesLayerSettings, colors: ChartColorPalette, chartSettings: ChartSettings, labelsWidthY: CGFloat, gestureRecognizer: UIGestureRecognizer?, traitCollection: UITraitCollection, highlightLabelOffsetY: CGFloat) -> Chart
+    public func generate(withFrame frame: CGRect, context: ChartGenerationContext) -> UIView
     {
-        /// The minimum range to display for carb effect values.
-        let carbEffectDisplayRangePoints: [ChartPoint] = [0, glucoseUnit.chartableIncrement].map {
-            return ChartPoint(
-                x: ChartAxisValue(scalar: 0),
-                y: ChartAxisValueDouble($0)
-            )
+        guard #available(iOS 16.0, *) else {
+            return UIView(frame: frame)
         }
 
-        let yAxisValues = ChartAxisValuesStaticGenerator.generateYAxisValuesWithChartPoints(carbEffectPoints + allCarbEffectPoints + carbEffectDisplayRangePoints,
+        /// The minimum range to display for carb effect values.
+        let carbEffectDisplayRangeValues: [Double] = [0, glucoseUnit.chartableIncrement]
+
+        let yAxisValues = ChartAxisValuesStaticGenerator.generateYAxisValuesWithChartPoints(
+            chartValues: (carbEffectPoints + allCarbEffectPoints).map { $0.y.scalar } + carbEffectDisplayRangeValues,
             minSegmentCount: 2,
             maxSegmentCount: 4,
             multiple: glucoseUnit.chartableIncrement / 2,
-            axisValueGenerator: {
-                ChartAxisValueDouble($0, labelSettings: axisLabelSettings)
-            },
             addPaddingSegmentIfEdge: false
         )
 
-        let yAxisModel = ChartAxisModel(axisValues: yAxisValues, lineColor: colors.axisLine, labelSpaceReservationMode: .fixed(labelsWidthY))
+        let carbFillColor = context.colors.carbTint.withAlphaComponent(0.5)
+        let expectedFillColor = Color(UIColor.secondaryLabel.withAlphaComponent(0.5))
+        let observedFillColor = Color(carbFillColor)
+        let expectedPoints = carbEffectPoints.datedPoints
+        let observedPoints = insulinCounteractionEffectPoints.datedPoints
 
-        let coordsSpace = ChartCoordsSpaceLeftBottomSingleAxis(chartSettings: chartSettings, chartFrame: frame, xModel: xAxisModel, yModel: yAxisModel)
-
-        let (xAxisLayer, yAxisLayer, innerFrame) = (coordsSpace.xAxisLayer, coordsSpace.yAxisLayer, coordsSpace.chartInnerFrame)
-
-        let carbFillColor = colors.carbTint.withAlphaComponent(0.5)
-        let carbBlendMode: CGBlendMode
-        switch traitCollection.userInterfaceStyle {
-        case .dark:
-            carbBlendMode = .plusLighter
-        case .light, .unspecified:
-            carbBlendMode = .plusDarker
-        @unknown default:
-            carbBlendMode = .plusDarker
+        let highlight: ChartHighlightSpec?
+        if context.gestureRecognizer != nil {
+            highlight = ChartHighlightSpec(points: allCarbEffectPoints, tintColor: context.colors.carbTint)
+        } else {
+            highlight = nil
         }
 
-        // Carb effect
-        let effectsLayer = ChartPointsFillsLayer(
-            xAxis: xAxisLayer.axis,
-            yAxis: yAxisLayer.axis,
-            fills: [
-                ChartPointsFill(chartPoints: carbEffectPoints, fillColor: UIColor.secondaryLabel.withAlphaComponent(0.5)),
-                ChartPointsFill(chartPoints: insulinCounteractionEffectPoints, fillColor: carbFillColor, blendMode: carbBlendMode)
-            ]
-        )
+        let chartView = LoopChartView(
+            generationContext: context,
+            yAxisValues: yAxisValues,
+            highlight: highlight,
+            highlightModel: gestureBridge.model
+        ) {
+            // The expected carb effect
+            ForEach(Array(expectedPoints.enumerated()), id: \.offset) { _, point in
+                AreaMark(
+                    x: .value("Date", point.date!),
+                    yStart: .value("Zero", 0),
+                    yEnd: .value("Effect", point.y.scalar),
+                    series: .value("Series", "Expected")
+                )
+                .foregroundStyle(expectedFillColor)
+            }
 
-        // Grid lines
-        let gridLayer = ChartGuideLinesForValuesLayer(
-            xAxis: xAxisLayer.axis,
-            yAxis: yAxisLayer.axis,
-            settings: guideLinesLayerSettings,
-            axisValuesX: Array(xAxisValues.dropFirst().dropLast()),
-            axisValuesY: yAxisValues
-        )
+            // The observed insulin counteraction effect
+            ForEach(Array(observedPoints.enumerated()), id: \.offset) { _, point in
+                AreaMark(
+                    x: .value("Date", point.date!),
+                    yStart: .value("Zero", 0),
+                    yEnd: .value("Effect", point.y.scalar),
+                    series: .value("Series", "Observed")
+                )
+                .foregroundStyle(observedFillColor)
+            }
 
-        // 0-line
-        let dummyZeroChartPoint = ChartPoint(x: ChartAxisValueDouble(0), y: ChartAxisValueDouble(0))
-        let zeroGuidelineLayer = ChartPointsViewsLayer(xAxis: xAxisLayer.axis, yAxis: yAxisLayer.axis, chartPoints: [dummyZeroChartPoint], viewGenerator: {(chartPointModel, layer, chart) -> UIView? in
-            let width: CGFloat = 1
-            let viewFrame = CGRect(x: chart.contentView.bounds.minX, y: chartPointModel.screenLoc.y - width / 2, width: chart.contentView.bounds.size.width, height: width)
-
-            let v = UIView(frame: viewFrame)
-            v.layer.backgroundColor = carbFillColor.cgColor
-            return v
-        })
-
-        if gestureRecognizer != nil {
-            carbEffectChartCache = ChartPointsTouchHighlightLayerViewCache(
-                xAxisLayer: xAxisLayer,
-                yAxisLayer: yAxisLayer,
-                axisLabelSettings: axisLabelSettings,
-                chartPoints: allCarbEffectPoints,
-                tintColor: colors.carbTint,
-                highlightLabelOffsetY: highlightLabelOffsetY,
-                gestureRecognizer: gestureRecognizer
-            )
+            // 0-line
+            RuleMark(y: .value("Zero", 0))
+                .lineStyle(StrokeStyle(lineWidth: 1))
+                .foregroundStyle(Color(carbFillColor))
         }
 
-        let layers: [ChartLayer?] = [
-            gridLayer,
-            xAxisLayer,
-            yAxisLayer,
-            zeroGuidelineLayer,
-            carbEffectChartCache?.highlightLayer,
-            effectsLayer
-        ]
-
-        return Chart(
-            frame: frame,
-            innerFrame: innerFrame,
-            settings: chartSettings,
-            layers: layers.compactMap { $0 }
-        )
+        let host = ChartHosting.view(frame: frame, rootView: chartView)
+        gestureBridge.attach(to: context.gestureRecognizer, hostView: host)
+        return host
     }
 }
 
@@ -160,24 +131,23 @@ extension CarbEffectChart {
 
         var carbEffectPoints = [ChartPoint]()
 
-        let zero = ChartAxisValueInt(0)
-
         for effect in effects.dropFirst() {
             let value = effect.quantity.doubleValue(for: glucoseUnit)
             let valuePerMinute = (value - lastValue!) / minuteInterval
             lastValue = value
 
-            let startX = ChartAxisValueDate(date: lastDate!, formatter: dateFormatter)
-            let endX = ChartAxisValueDate(date: effect.endDate, formatter: dateFormatter)
+            let startX = lastDate!
+            let endX = effect.endDate
             lastDate = effect.endDate
 
-            let valueY = ChartAxisValueDoubleUnit(valuePerMinute, unitString: unitString, formatter: decimalFormatter)
+            let valueY = ChartValue(scalar: valuePerMinute, unitString: unitString, formatter: decimalFormatter)
+            let zero = ChartValue(scalar: 0, label: "")
 
             carbEffectPoints += [
-                ChartPoint(x: startX, y: zero),
-                ChartPoint(x: startX, y: valueY),
-                ChartPoint(x: endX, y: valueY),
-                ChartPoint(x: endX, y: zero)
+                ChartPoint(date: startX, y: zero),
+                ChartPoint(date: startX, y: valueY),
+                ChartPoint(date: endX, y: valueY),
+                ChartPoint(date: endX, y: zero)
             ]
         }
 
@@ -194,24 +164,23 @@ extension CarbEffectChart {
         var insulinCounteractionEffectPoints: [ChartPoint] = []
         var allCarbEffectPoints: [ChartPoint] = []
 
-        let zero = ChartAxisValueInt(0)
-
         for effect in effects {
-            let startX = ChartAxisValueDate(date: effect.startDate, formatter: dateFormatter)
-            let endX = ChartAxisValueDate(date: effect.endDate, formatter: dateFormatter)
-            let value = ChartAxisValueDoubleUnit(effect.quantity.doubleValue(for: unit), unitString: unitString, formatter: decimalFormatter)
+            let startX = effect.startDate
+            let endX = effect.endDate
+            let value = ChartValue(scalar: effect.quantity.doubleValue(for: unit), unitString: unitString, formatter: decimalFormatter)
+            let zero = ChartValue(scalar: 0, label: "")
 
             guard value.scalar != 0 else {
                 continue
             }
 
-            let valuePoint = ChartPoint(x: endX, y: value)
+            let valuePoint = ChartPoint(date: endX, y: value)
 
             insulinCounteractionEffectPoints += [
-                ChartPoint(x: startX, y: zero),
-                ChartPoint(x: startX, y: value),
+                ChartPoint(date: startX, y: zero),
+                ChartPoint(date: startX, y: value),
                 valuePoint,
-                ChartPoint(x: endX, y: zero)
+                ChartPoint(date: endX, y: zero)
             ]
 
             allCarbEffectPoints.append(valuePoint)

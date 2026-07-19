@@ -6,74 +6,35 @@
 //  Copyright © 2025 LoopKit Authors. All rights reserved.
 //
 
-import SwiftCharts
+import SwiftUI
 
-class GlucoseHistoryLayer<T: ChartPoint>: ChartPointsScatterCirclesLayer<T> {
-    
-    private let lastPoint: T?
-    private let currentItemSize: CGSize
-    
-    public init(
-        xAxis: ChartAxis,
-        yAxis: ChartAxis,
-        chartPoints: [T],
-        displayDelay: Float = 0,
-        itemSize: CGSize,
-        currentItemSize: CGSize,
-        itemFillColor: UIColor,
-        tapSettings: ChartPointsTapSettings<T>? = nil
-    ) {
-        self.lastPoint = chartPoints.last
-        self.currentItemSize = currentItemSize
-        
-        super.init(
-            xAxis: xAxis,
-            yAxis: yAxis,
-            chartPoints: chartPoints,
-            displayDelay: displayDelay,
-            itemSize: itemSize,
-            itemFillColor: itemFillColor,
-            optimized: false,
-            tapSettings: tapSettings
-        )
+
+/// The glucose-history dot, used as a `PointMark` symbol.
+///
+/// Replaces the SwiftCharts `GlucoseHistoryLayer`, a scatter-circles layer that drew every
+/// glucose reading as a small filled circle and the most recent reading (the "current"
+/// glucose) at a larger size. The previous call site used a 4x4 item size with an 8x8
+/// current-item size, filled with the glucose tint color.
+struct GlucoseHistorySymbol: View {
+    /// Whether this point is the most recent reading, drawn at `currentItemSize`
+    var isCurrent: Bool = false
+
+    /// The diameter of a regular history dot
+    var itemSize: CGFloat = 4
+
+    /// The diameter of the most recent reading's dot
+    var currentItemSize: CGFloat = 8
+
+    /// The dot's fill color (previously the layer's `itemFillColor`)
+    var fillColor: Color
+
+    private var size: CGFloat {
+        isCurrent ? currentItemSize : itemSize
     }
-    
-    required convenience init(
-        xAxis: ChartAxis,
-        yAxis: ChartAxis,
-        chartPoints: [T],
-        displayDelay: Float = 0,
-        itemSize: CGSize,
-        itemFillColor: UIColor,
-        optimized: Bool = true,
-        tapSettings: ChartPointsTapSettings<T>? = nil
-    ) {
-        self.init(
-            xAxis: xAxis,
-            yAxis: yAxis,
-            chartPoints: chartPoints,
-            displayDelay: displayDelay,
-            itemSize: itemSize,
-            currentItemSize: itemSize,
-            itemFillColor: itemFillColor,
-            tapSettings: tapSettings
-        )
-    }
-    
-    override open func drawChartPointModel(
-        _ context: CGContext,
-        chartPointModel: ChartPointLayerModel<T>,
-        view: UIView
-    ) {
-        
-        let isLastPoint = chartPointModel.chartPoint == lastPoint
-        
-        let w = isLastPoint ? currentItemSize.width : itemSize.width
-        let h = isLastPoint ? currentItemSize.height : itemSize.height
-        
-        let screenLoc = modelLocToScreenLoc(x: chartPointModel.chartPoint.x.scalar, y: chartPointModel.chartPoint.y.scalar)
-        
-        context.setFillColor(itemFillColor.cgColor)
-        context.fillEllipse(in: CGRect(x: screenLoc.x - w / 2, y: screenLoc.y - h / 2, width: w, height: h))
+
+    var body: some View {
+        Circle()
+            .fill(fillColor)
+            .frame(width: size, height: size)
     }
 }

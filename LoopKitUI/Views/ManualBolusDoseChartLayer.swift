@@ -6,34 +6,26 @@
 //  Copyright © 2025 LoopKit Authors. All rights reserved.
 //
 
-import SwiftCharts
+import SwiftUI
+import UIKit
 
-class ManualBolusDoseChartLayer<T: ChartPoint>: ChartPointsScatterLayer<T> {
-    
-    convenience init(xAxis: ChartAxis, yAxis: ChartAxis, chartPoints: [T], displayDelay: Float = 0, itemSize: CGSize, tapSettings: ChartPointsTapSettings<T>? = nil) {
-        self.init(xAxis: xAxis, yAxis: yAxis, chartPoints: chartPoints, displayDelay: displayDelay, itemSize: itemSize, itemFillColor: .clear, optimized: false, tapSettings: tapSettings)
-    }
-    
-    override open func drawChartPointModel(
-        _ context: CGContext,
-        chartPointModel: ChartPointLayerModel<T>,
-        view: UIView
-    ) {
-        let w = itemSize.width * 0.6875
-        let h = itemSize.height
-        
-        let screenLoc = modelLocToScreenLoc(x: chartPointModel.chartPoint.x.scalar, y: chartPointModel.chartPoint.y.scalar)
-        
-        if let image = UIImage(named: "dose-chart-bolus-icon", in: .main, with: nil)?.cgImage {
-            let rect = CGRect(x: screenLoc.x - w / 2, y: screenLoc.y - h / 2, width: w, height: h)
-            context.saveGState()
-            context.translateBy(x: rect.origin.x, y: rect.origin.y)
-            context.translateBy(x: rect.width / 2, y: rect.height / 2)
-            context.scaleBy(x: 1, y: -1)
-            context.translateBy(x: -rect.width / 2, y: -rect.height / 2)
-            let drawRect = CGRect(x: 0, y: 0, width: rect.width, height: rect.height)
-            context.draw(image, in: drawRect)
-            context.restoreGState()
+
+/// The manual-bolus glyph on the dose chart, used as a `PointMark` symbol.
+///
+/// Replaces the SwiftCharts `ManualBolusDoseChartLayer`, which drew the app's
+/// "dose-chart-bolus-icon" asset (from `Bundle.main`) stretched to 0.6875x the item width
+/// at the full item height (previously an 18pt item size).
+struct ManualBolusDoseSymbol: View {
+    /// The marker's item size; the icon is drawn at 0.6875x this width and the full height
+    var size: CGFloat = 18
+
+    var body: some View {
+        Group {
+            if let image = UIImage(named: "dose-chart-bolus-icon", in: .main, with: nil) {
+                Image(uiImage: image)
+                    .resizable()
+            }
         }
+        .frame(width: size * 0.6875, height: size)
     }
 }

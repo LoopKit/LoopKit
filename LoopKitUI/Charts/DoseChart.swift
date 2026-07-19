@@ -5,11 +5,12 @@
 //  Copyright © 2025 LoopKit Authors. All rights reserved.
 //
 
+import Charts
 import Foundation
 import LoopKit
-import SwiftCharts
-import UIKit
 import LoopAlgorithm
+import SwiftUI
+import UIKit
 
 fileprivate struct DosePointsCache {
     let autoBolus: [ChartPoint]
@@ -29,21 +30,15 @@ public class DoseChart: ChartProviding {
 
     private var pointsCache: DosePointsCache? {
         didSet {
-            if let pointsCache = pointsCache, let lastDate = pointsCache.autoBolus.last?.x as? ChartAxisValueDate {
-                endDate = lastDate.date
+            if let pointsCache = pointsCache, let lastDate = pointsCache.autoBolus.last?.date {
+                endDate = lastDate
             }
         }
     }
 
-    /// The minimum range to display for insulin values.
-    private let doseDisplayRangePoints: [ChartPoint] = [0, 1].map {
-        return ChartPoint(
-            x: ChartAxisValue(scalar: 0),
-            y: ChartAxisValueInt($0)
-        )
-    }
-
     public private(set) var endDate: Date?
+
+    private let gestureBridge = ChartGestureBridge()
 }
 
 public extension DoseChart {
@@ -51,79 +46,84 @@ public extension DoseChart {
         pointsCache = nil
     }
 
-    func generate(withFrame frame: CGRect, xAxisModel: ChartAxisModel, xAxisValues: [ChartAxisValue], axisLabelSettings: ChartLabelSettings, guideLinesLayerSettings: ChartGuideLinesLayerSettings, colors: ChartColorPalette, chartSettings: ChartSettings, labelsWidthY: CGFloat, gestureRecognizer: UIGestureRecognizer?, traitCollection: UITraitCollection, highlightLabelOffsetY: CGFloat) -> Chart
+    func generate(withFrame frame: CGRect, context: ChartGenerationContext) -> UIView
     {
-        var chartSettings = chartSettings
+        guard #available(iOS 16.0, *) else {
+            return UIView(frame: frame)
+        }
+
+        var chartSettings = context.chartSettings
         chartSettings.labelsToAxisSpacingX = -10
-        
-        let startDate = ChartAxisValueDate.dateFromScalar(xAxisValues.first!.scalar)
-        
-        let points = generateDosePoints(startDate: startDate)
-        
-        let yAxisValues: [ChartAxisValue] = [
-            ChartAxisValue(scalar: 0),
-            ChartAxisValue(scalar: 1),
-            ChartAxisValue(scalar: 2)
-        ]
-        
-        let yAxisModel = ChartAxisModel(axisValues: yAxisValues, lineColor: colors.axisLine, labelSpaceReservationMode: .fixed(labelsWidthY))
+        let context = ChartGenerationContext(
+            xAxisModel: context.xAxisModel,
+            colors: context.colors,
+            chartSettings: chartSettings,
+            axisLabelFont: context.axisLabelFont,
+            labelsWidthY: context.labelsWidthY,
+            gestureRecognizer: context.gestureRecognizer,
+            traitCollection: context.traitCollection,
+            highlightLabelOffsetY: context.highlightLabelOffsetY
+        )
 
-        let coordsSpace = ChartCoordsSpaceLeftBottomSingleAxis(chartSettings: chartSettings, chartFrame: frame, xModel: xAxisModel, yModel: yAxisModel)
+        let points = generateDosePoints(startDate: context.xAxisModel.startDate)
 
-        let (xAxisLayer, yAxisLayer, innerFrame) = (coordsSpace.xAxisLayer, coordsSpace.yAxisLayer, coordsSpace.chartInnerFrame)
-        
-        // Manual bolus points
-        let manualBolusPointSize: Double = 18
-        let manualBolusLayer: ManualBolusDoseChartLayer<ChartPoint>?
-        
-        if points.manualBolus.count > 0 {
-            manualBolusLayer = ManualBolusDoseChartLayer(xAxis: xAxisLayer.axis, yAxis: yAxisLayer.axis, chartPoints: points.manualBolus, displayDelay: 0, itemSize: CGSize(width: manualBolusPointSize, height: manualBolusPointSize))
-        } else {
-            manualBolusLayer = nil
+        let yAxisValues: [Double] = [0, 1, 2]
+
+        let insulinColor = Color(context.colors.insulinTint)
+        let autoBolusPoints = points.autoBolus.datedPoints
+        let manualBolusPoints = points.manualBolus.datedPoints
+
+        let chartView = LoopChartView(
+            generationContext: context,
+            yAxisValues: yAxisValues,
+            yAxisLabelProvider: { _ in "" },
+            hidesAxes: true,
+            highlight: nil,
+            highlightModel: gestureBridge.model
+        ) {
+            // Manual bolus markers
+            ForEach(Array(manualBolusPoints.enumerated()), id: \.offset) { _, point in
+                PointMark(
+                    x: .value("Date", point.date!),
+                    y: .value("Bolus", point.y.scalar)
+                )
+                .symbol {
+                    ManualBolusDoseSymbol(size: 18)
+                }
+            }
+
+            // Automatic bolus markers
+            ForEach(Array(autoBolusPoints.enumerated()), id: \.offset) { _, point in
+                PointMark(
+                    x: .value("Date", point.date!),
+                    y: .value("Bolus", point.y.scalar)
+                )
+                .symbol {
+                    BorderedCircle(fillColor: insulinColor)
+                        .frame(width: 12, height: 12)
+                }
+            }
         }
 
-        // Auto bolus points
-        let autoBolusPointSize: Double = 12
-        let autoBolusLayer: ChartPointsScatterCirclesLayer<ChartPoint>?
-        
-        if points.autoBolus.count > 0 {
-            autoBolusLayer = ChartPointsScatterBorderedCirclesLayer(xAxis: xAxisLayer.axis, yAxis: yAxisLayer.axis, chartPoints: points.autoBolus, displayDelay: 0, itemSize: CGSize(width: autoBolusPointSize, height: autoBolusPointSize), itemFillColor: colors.insulinTint)
-        } else {
-            autoBolusLayer = nil
-        }
-
-        // Grid lines
-        let gridLayer = ChartGuideLinesForValuesLayer(xAxis: xAxisLayer.axis, yAxis: yAxisLayer.axis, settings: guideLinesLayerSettings, axisValuesX: Array(xAxisValues.dropFirst().dropLast()), axisValuesY: yAxisValues)
-
-        let layers: [ChartLayer?] = [
-            gridLayer,
-            manualBolusLayer,
-            autoBolusLayer
-        ]
-
-        return Chart(frame: frame, innerFrame: innerFrame, settings: chartSettings, layers: layers.compactMap { $0 })
+        let host = ChartHosting.view(frame: frame, rootView: chartView)
+        gestureBridge.attach(to: context.gestureRecognizer, hostView: host)
+        return host
     }
     
     private func generateDosePoints(startDate: Date) -> DosePointsCache {
         guard pointsCache == nil else {
             return pointsCache!
         }
-        
-        let dateFormatter = DateFormatter(timeStyle: .short)
 
         var autoBolusPoints = [ChartPoint]()
         var manualBolusPoints = [ChartPoint]()
         
         for entry in doseEntries {
             if entry.type == .bolus && entry.netBasalUnits > 0 {
-                let x = ChartAxisValueDate(date: entry.startDate, formatter: dateFormatter)
-
                 if entry.automatic == true {
-                    let point = ChartPoint(x: x, y: ChartAxisValue(scalar: 0.5))
-                    autoBolusPoints.append(point)
+                    autoBolusPoints.append(ChartPoint(date: entry.startDate, value: 0.5))
                 } else {
-                    let point = ChartPoint(x: x, y: ChartAxisValue(scalar: 1.5))
-                    manualBolusPoints.append(point)
+                    manualBolusPoints.append(ChartPoint(date: entry.startDate, value: 1.5))
                 }
             }
         }

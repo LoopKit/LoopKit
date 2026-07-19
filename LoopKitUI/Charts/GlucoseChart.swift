@@ -6,9 +6,7 @@
 //
 
 import Foundation
-import HealthKit
 import LoopKit
-import SwiftCharts
 import LoopAlgorithm
 
 open class GlucoseChart {
@@ -29,8 +27,8 @@ open class GlucoseChart {
         didSet {
             if let range = glucoseDisplayRange {
                 glucoseDisplayRangePoints = [
-                    ChartPoint(x: ChartAxisValue(scalar: 0), y: ChartAxisValueDouble(range.lowerBound.doubleValue(for: glucoseUnit))),
-                    ChartPoint(x: ChartAxisValue(scalar: 0), y: ChartAxisValueDouble(range.upperBound.doubleValue(for: glucoseUnit)))
+                    ChartPoint(date: nil, value: range.lowerBound.doubleValue(for: glucoseUnit)),
+                    ChartPoint(date: nil, value: range.upperBound.doubleValue(for: glucoseUnit))
                 ]
             } else {
                 glucoseDisplayRangePoints = []
@@ -44,12 +42,15 @@ open class GlucoseChart {
         let unitFormatter = QuantityFormatter(for: glucoseUnit)
         unitFormatter.unitStyle = .short
         let unitString = unitFormatter.localizedUnitStringWithPlurality()
-        let dateFormatter = DateFormatter(timeStyle: .short)
 
         return glucoseValues.map {
             return ChartPoint(
-                x: ChartAxisValueDate(date: $0.startDate, formatter: dateFormatter),
-                y: ChartAxisValueDoubleUnit($0.quantity.doubleValue(for: glucoseUnit), unitString: unitString, formatter: unitFormatter.numberFormatter)
+                date: $0.startDate,
+                y: ChartValue(
+                    scalar: $0.quantity.doubleValue(for: glucoseUnit),
+                    unitString: unitString,
+                    formatter: unitFormatter.numberFormatter
+                )
             )
         }
     }

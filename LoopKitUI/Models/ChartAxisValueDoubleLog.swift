@@ -6,51 +6,34 @@
 //  Copyright © 2016 Nathan Racklyeft. All rights reserved.
 //
 
-import UIKit
-import SwiftCharts
+import Foundation
 
 
-public final class ChartAxisValueDoubleLog: ChartAxisValueDoubleScreenLoc {
-
-    let unitString: String?
-
-    public init(actualDouble: Double, unitString: String? = nil, formatter: NumberFormatter, labelSettings: ChartLabelSettings = ChartLabelSettings()) {
-        let screenLocDouble: Double
-
-        switch actualDouble {
+/// A signed logarithmic transform used by the dose chart so large boluses don't dwarf basal rates.
+///
+/// Values are plotted at `sign(x) * log(|x| + 1)` and converted back for display.
+public enum ChartLogScale {
+    /// Converts an actual value into its plotted (signed-log) position.
+    public static func toPlot(_ actual: Double) -> Double {
+        switch actual {
         case let x where x < 0:
-            screenLocDouble = -log(-x + 1)
+            return -log(-x + 1)
         case let x where x > 0:
-            screenLocDouble = log(x + 1)
+            return log(x + 1)
         default:  // 0
-            screenLocDouble = 0
+            return 0
         }
-
-        self.unitString = unitString
-
-        super.init(screenLocDouble: screenLocDouble, actualDouble: actualDouble, formatter: formatter, labelSettings: labelSettings)
     }
 
-    public init(screenLocDouble: Double, formatter: NumberFormatter, labelSettings: ChartLabelSettings = ChartLabelSettings()) {
-        let actualDouble: Double
-
-        switch screenLocDouble {
+    /// Converts a plotted (signed-log) position back into an actual value.
+    public static func fromPlot(_ plot: Double) -> Double {
+        switch plot {
         case let x where x < 0:
-            actualDouble = -pow(M_E, -x) + 1
+            return -pow(M_E, -x) + 1
         case let x where x > 0:
-            actualDouble = pow(M_E, x) - 1
+            return pow(M_E, x) - 1
         default:  // 0
-            actualDouble = 0
+            return 0
         }
-
-        self.unitString = nil
-
-        super.init(screenLocDouble: screenLocDouble, actualDouble: actualDouble, formatter: formatter, labelSettings: labelSettings)
-    }
-
-    override public var description: String {
-        let suffix = unitString != nil ? " \(unitString!)" : ""
-
-        return super.description + suffix
     }
 }

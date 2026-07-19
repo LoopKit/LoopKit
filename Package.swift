@@ -23,10 +23,6 @@ let package = Package(
     ],
     dependencies: [
         .package(
-            url: "https://github.com/ivanschuetz/SwiftCharts",
-            branch: "master"
-        ),
-        .package(
             url: "https://github.com/LoopKit/LoopAlgorithm",
             branch: "main"
         )
@@ -42,14 +38,14 @@ let package = Package(
             path: "LoopKit"),
         .testTarget(
             name: "LoopKitTests",
-            dependencies: ["LoopKitUI", "LoopKit", "SwiftCharts"],
+            dependencies: ["LoopKitUI", "LoopKit"],
             path: "LoopKitTests",
             resources: [
                 .copy("Fixtures")
             ]),
         .target(
             name: "LoopKitUI",
-            dependencies: ["LoopKit", "SwiftCharts"],
+            dependencies: ["LoopKit"],
             path: "LoopKitUI"),
         .target(
             name: "LoopTestingKit",

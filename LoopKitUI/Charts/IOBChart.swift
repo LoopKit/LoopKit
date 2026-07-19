@@ -5,9 +5,10 @@
 //  Copyright © 2019 LoopKit Authors. All rights reserved.
 //
 
+import Charts
 import Foundation
 import LoopKit
-import SwiftCharts
+import SwiftUI
 import UIKit
 import LoopAlgorithm
 
@@ -22,96 +23,101 @@ public class IOBChart: ChartProviding {
     /// The chart points for IOB
     public private(set) var iobPoints: [ChartPoint] = [] {
         didSet {
-            if let lastDate = iobPoints.last?.x as? ChartAxisValueDate {
-                endDate = lastDate.date
+            if let lastDate = iobPoints.last?.date {
+                endDate = lastDate
             }
         }
     }
 
     /// The minimum range to display for insulin values.
-    private let iobDisplayRangePoints: [ChartPoint] = [0, 1].map {
-        return ChartPoint(
-            x: ChartAxisValue(scalar: 0),
-            y: ChartAxisValueInt($0)
-        )
-    }
+    private let iobDisplayRangeValues: [Double] = [0, 1]
 
     public private(set) var endDate: Date?
 
-    private var iobChartCache: ChartPointsTouchHighlightLayerViewCache?
+    private let gestureBridge = ChartGestureBridge()
 }
 
 public extension IOBChart {
     func didReceiveMemoryWarning() {
         iobPoints = []
-        iobChartCache = nil
     }
 
-    func generate(withFrame frame: CGRect, xAxisModel: ChartAxisModel, xAxisValues: [ChartAxisValue], axisLabelSettings: ChartLabelSettings, guideLinesLayerSettings: ChartGuideLinesLayerSettings, colors: ChartColorPalette, chartSettings: ChartSettings, labelsWidthY: CGFloat, gestureRecognizer: UIGestureRecognizer?, traitCollection: UITraitCollection, highlightLabelOffsetY: CGFloat = 0) -> Chart
+    func generate(withFrame frame: CGRect, context: ChartGenerationContext) -> UIView
     {
-        let yAxisValues = ChartAxisValuesStaticGenerator.generateYAxisValuesWithChartPointsUpdated(iobPoints + iobDisplayRangePoints, minSegmentCount: 2, maxSegmentCount: 3, multiple: 0.5, axisValueGenerator: { ChartAxisValueDouble($0, labelSettings: axisLabelSettings) }, addPaddingSegmentIfEdge: false)
-
-        let yAxisModel = ChartAxisModel(axisValues: yAxisValues, lineColor: colors.axisLine, labelSpaceReservationMode: .fixed(labelsWidthY))
-
-        let coordsSpace = ChartCoordsSpaceLeftBottomSingleAxis(chartSettings: chartSettings, chartFrame: frame, xModel: xAxisModel, yModel: yAxisModel)
-
-        let (xAxisLayer, yAxisLayer, innerFrame) = (coordsSpace.xAxisLayer, coordsSpace.yAxisLayer, coordsSpace.chartInnerFrame)
-
-        // The IOB area
-        let lineModel = ChartLineModel(chartPoints: iobPoints, lineColor: colors.insulinTint, lineWidth: 2, animDuration: 0, animDelay: 0)
-        let iobLine = ChartPointsLineLayer(xAxis: xAxisLayer.axis, yAxis: yAxisLayer.axis, lineModels: [lineModel])
-
-        let iobArea = ChartPointsFillsLayer(xAxis: xAxisLayer.axis, yAxis: yAxisLayer.axis, fills: [ChartPointsFill(chartPoints: iobPoints, fillColor: colors.insulinTint.withAlphaComponent(0.5))])
-
-        // Grid lines
-        let gridLayer = ChartGuideLinesForValuesLayer(xAxis: xAxisLayer.axis, yAxis: yAxisLayer.axis, settings: guideLinesLayerSettings, axisValuesX: Array(xAxisValues.dropFirst().dropLast()), axisValuesY: yAxisValues)
-
-        // 0-line
-        let dummyZeroChartPoint = ChartPoint(x: ChartAxisValueDouble(0), y: ChartAxisValueDouble(0))
-        let zeroGuidelineLayer = ChartPointsViewsLayer(xAxis: xAxisLayer.axis, yAxis: yAxisLayer.axis, chartPoints: [dummyZeroChartPoint], viewGenerator: {(chartPointModel, layer, chart) -> UIView? in
-            let width: CGFloat = 0.5
-            let viewFrame = CGRect(x: chart.contentView.bounds.minX, y: chartPointModel.screenLoc.y - width / 2, width: chart.contentView.bounds.size.width, height: width)
-
-            let v = UIView(frame: viewFrame)
-            v.layer.backgroundColor = colors.insulinTint.cgColor
-            return v
-        })
-
-        if gestureRecognizer != nil {
-            iobChartCache = ChartPointsTouchHighlightLayerViewCache(
-                xAxisLayer: xAxisLayer,
-                yAxisLayer: yAxisLayer,
-                axisLabelSettings: axisLabelSettings,
-                chartPoints: iobPoints,
-                tintColor: colors.insulinTint,
-                highlightLabelOffsetY: highlightLabelOffsetY,
-                gestureRecognizer: gestureRecognizer
-            )
+        guard #available(iOS 16.0, *) else {
+            return UIView(frame: frame)
         }
 
-        let layers: [ChartLayer?] = [
-            gridLayer,
-            xAxisLayer,
-            yAxisLayer,
-            zeroGuidelineLayer,
-            iobChartCache?.highlightLayer,
-            iobArea,
-            iobLine,
-        ]
+        let yAxisValues = ChartAxisValuesStaticGenerator.generateYAxisValuesWithChartPoints(
+            chartValues: iobPoints.map { $0.y.scalar } + iobDisplayRangeValues,
+            minSegmentCount: 2,
+            maxSegmentCount: 3,
+            multiple: 0.5,
+            addPaddingSegmentIfEdge: false
+        )
 
-        return Chart(frame: frame, innerFrame: innerFrame, settings: chartSettings, layers: layers.compactMap { $0 })
+        let insulinColor = Color(context.colors.insulinTint)
+        let areaColor = Color(context.colors.insulinTint.withAlphaComponent(0.5))
+        let points = iobPoints.datedPoints
+
+        let highlight: ChartHighlightSpec?
+        if context.gestureRecognizer != nil {
+            highlight = ChartHighlightSpec(points: iobPoints, tintColor: context.colors.insulinTint)
+        } else {
+            highlight = nil
+        }
+
+        let chartView = LoopChartView(
+            generationContext: context,
+            yAxisValues: yAxisValues,
+            highlight: highlight,
+            highlightModel: gestureBridge.model
+        ) {
+            // The IOB area
+            ForEach(Array(points.enumerated()), id: \.offset) { _, point in
+                AreaMark(
+                    x: .value("Date", point.date!),
+                    yStart: .value("Zero", 0),
+                    yEnd: .value("IOB", point.y.scalar)
+                )
+                .foregroundStyle(areaColor)
+            }
+
+            // The IOB line
+            ForEach(Array(points.enumerated()), id: \.offset) { _, point in
+                LineMark(
+                    x: .value("Date", point.date!),
+                    y: .value("IOB", point.y.scalar),
+                    series: .value("Series", "IOB")
+                )
+            }
+            .lineStyle(ChartLineStyle.valueLine())
+            .foregroundStyle(insulinColor)
+
+            // 0-line
+            RuleMark(y: .value("Zero", 0))
+                .lineStyle(StrokeStyle(lineWidth: 0.5))
+                .foregroundStyle(insulinColor)
+        }
+
+        let host = ChartHosting.view(frame: frame, rootView: chartView)
+        gestureBridge.attach(to: context.gestureRecognizer, hostView: host)
+        return host
     }
 }
 
 public extension IOBChart {
     func setIOBValues(_ iobValues: [InsulinValue]) {
-        let dateFormatter = DateFormatter(timeStyle: .short)
         let doseFormatter = NumberFormatter.dose
 
         iobPoints = iobValues.map {
             return ChartPoint(
-                x: ChartAxisValueDate(date: $0.startDate, formatter: dateFormatter),
-                y: ChartAxisValueDoubleUnit($0.value, unitString: Self.chartUnit.shortLocalizedUnitString(), formatter: doseFormatter)
+                date: $0.startDate,
+                y: ChartValue(
+                    scalar: $0.value,
+                    unitString: Self.chartUnit.shortLocalizedUnitString(),
+                    formatter: doseFormatter
+                )
             )
         }
     }
