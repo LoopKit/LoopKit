@@ -21,6 +21,23 @@ public enum AutomatedTreatmentState: Equatable {
     case minimumDelivery
 }
 
+/// Describes a request that the pump provide its own periodic BLE heartbeat (used when the CGM cannot
+/// wake the app, e.g. a network/remote CGM). Rather than a bare "provide a heartbeat" flag, it tells the
+/// pump *when* the last CGM reading landed and how often readings are expected, so the pump can schedule
+/// its next heartbeat to arrive just *after* the next reading is due — see `setBLEHeartbeatRequest(_:)`.
+public struct PumpHeartbeatRequest: Equatable {
+    /// The date of the most recent CGM reading, if any. `nil` when no reading has been received yet.
+    public let lastCGMReadingDate: Date?
+
+    /// The expected interval between CGM readings (e.g. 5 minutes for most CGMs).
+    public let expectedCGMReadingInterval: TimeInterval
+
+    public init(lastCGMReadingDate: Date?, expectedCGMReadingInterval: TimeInterval) {
+        self.lastCGMReadingDate = lastCGMReadingDate
+        self.expectedCGMReadingInterval = expectedCGMReadingInterval
+    }
+}
+
 public protocol PumpManagerStatusObserver: AnyObject {
     func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus, oldStatus: PumpManagerStatus)
 }
@@ -167,6 +184,18 @@ public protocol PumpManager: DeviceManager {
     /// The manager may choose to still enable its own heartbeat even if `mustProvideBLEHeartbeat` is false
     func setMustProvideBLEHeartbeat(_ mustProvideBLEHeartbeat: Bool)
 
+    /// Loop calls this to tell the pump whether it must provide its own periodic BLE heartbeat, and — when
+    /// it must — when the last CGM reading landed and how often readings are expected. `request == nil`
+    /// means no pump heartbeat is required (the CGM wakes the app itself). When non-nil, the pump should
+    /// schedule its next heartbeat to fire no earlier than
+    /// `lastCGMReadingDate + expectedCGMReadingInterval` (plus a small buffer, since the heartbeat usually
+    /// drives fetching a remote CGM value that then needs time to be stored). The manager may still run its
+    /// own heartbeat when `request` is nil.
+    ///
+    /// A default implementation bridges to `setMustProvideBLEHeartbeat(_:)` for managers that don't need the
+    /// timing detail, so existing PumpManagers need not implement this.
+    func setBLEHeartbeatRequest(_ request: PumpHeartbeatRequest?)
+
     /// Returns a dose estimator for the current bolus, if one is in progress
     func createBolusProgressReporter(reportingOn dispatchQueue: DispatchQueue) -> DoseProgressReporter?
 
@@ -241,6 +270,11 @@ public protocol PumpManager: DeviceManager {
 
 
 public extension PumpManager {
+    /// Default bridge for managers that only need the boolean "must provide a heartbeat" signal.
+    func setBLEHeartbeatRequest(_ request: PumpHeartbeatRequest?) {
+        setMustProvideBLEHeartbeat(request != nil)
+    }
+
     func roundToSupportedBasalRate(unitsPerHour: Double) -> Double {
         return supportedBasalRates.filter({$0 <= unitsPerHour}).max() ?? 0
     }
