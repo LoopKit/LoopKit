@@ -200,6 +200,13 @@ public extension CGMManager {
             }
         }
     }
+
+    /// The expected interval between glucose readings from this CGM. Used to schedule a pump-provided
+    /// BLE heartbeat (see `PumpManager.setBLEHeartbeatRequest(_:)`). Defaults to 5 minutes, which matches
+    /// virtually every CGM; a source with a different cadence may override.
+    var expectedGlucoseSampleInterval: TimeInterval {
+        return .minutes(5)
+    }
 }
 
 
