@@ -10,6 +10,7 @@ public enum LoopNotificationUserInfoKey: String {
     case bolusAmount
     case bolusStartDate
     case bolusActivationType
+    case bolusOrigin
     case alertTypeID
     case managerIDForAlert
     case missedMealTime
