@@ -165,6 +165,22 @@ public protocol CGMManager: DeviceManager {
     func delete(completion: @escaping () -> Void)
 }
 
+public extension CGMManager {
+    func fetchNewDataIfNeeded() async -> CGMReadingResult {
+        await withCheckedContinuation { continuation in
+            fetchNewDataIfNeeded { result in
+                continuation.resume(returning: result)
+            }
+        }
+    }
+
+    /// The expected interval between glucose readings from this CGM. Used to schedule a pump-provided
+    /// BLE heartbeat (see `PumpManager.setBLEHeartbeatRequest(_:)`). Defaults to 5 minutes, which matches
+    /// virtually every CGM; a source with a different cadence may override.
+    var expectedGlucoseSampleInterval: TimeInterval {
+        return .minutes(5)
+    }
+}
 
 public extension CGMManager {
     var appURL: URL? {
