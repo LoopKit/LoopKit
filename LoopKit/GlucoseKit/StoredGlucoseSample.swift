@@ -82,13 +82,20 @@ public struct StoredGlucoseSample: GlucoseSampleValue, Equatable {
 }
 
 extension StoredGlucoseSample {
-    init(managedObject: CachedGlucoseObject) {
+    /// Returns `nil` for a corrupt row whose `startDate` is NULL. Core Data models
+    /// `startDate` as optional, but the generated non-optional `startDate` accessor traps
+    /// (`Date._unconditionallyBridgeFromObjectiveC`) on a NULL value. Read it safely and
+    /// skip the row instead of crashing.
+    init?(managedObject: CachedGlucoseObject) {
+        guard let startDate = managedObject.safeStartDate else {
+            return nil
+        }
         self.init(
             uuid: managedObject.uuid,
             provenanceIdentifier: managedObject.provenanceIdentifier,
             syncIdentifier: managedObject.syncIdentifier,
             syncVersion: managedObject.syncVersion,
-            startDate: managedObject.startDate,
+            startDate: startDate,
             quantity: managedObject.quantity,
             condition: managedObject.condition,
             trend: managedObject.trend,
