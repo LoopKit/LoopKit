@@ -87,11 +87,6 @@ class CachedGlucoseObject: NSManagedObject {
 extension CachedGlucoseObject {
     var quantity: LoopQuantity { LoopQuantity(unit: LoopUnit(from: unitString), doubleValue: value) }
 
-    /// Non-trapping read of `startDate`. The Core Data attribute is optional, so a NULL
-    /// value makes the generated non-optional `startDate` accessor trap
-    /// (`Date._unconditionallyBridgeFromObjectiveC`). KVC returns the raw optional instead.
-    var safeStartDate: Date? { value(forKey: "startDate") as? Date }
-
     var quantitySample: HKQuantitySample {
         var metadata: [String: Any] = [:]
         metadata[HKMetadataKeySyncIdentifier] = syncIdentifier

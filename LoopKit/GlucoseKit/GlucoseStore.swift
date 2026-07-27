@@ -231,7 +231,7 @@ extension GlucoseStore {
     ///   - returns: An array of glucose samples, in chronological order by startDate, or error.
     public func getGlucoseSamples(start: Date? = nil, end: Date? = nil) async throws -> [StoredGlucoseSample] {
         try await cacheStore.managedObjectContext.perform {
-            try self.getCachedGlucoseObjects(start: start, end: end).compactMap { StoredGlucoseSample(managedObject: $0) }
+            try self.getCachedGlucoseObjects(start: start, end: end).map { StoredGlucoseSample(managedObject: $0) }
         }
     }
 
@@ -259,7 +259,7 @@ extension GlucoseStore {
                 request.fetchLimit = 1
 
                 let objects = try self.cacheStore.managedObjectContext.fetch(request)
-                return objects.first.flatMap { StoredGlucoseSample(managedObject: $0) }
+                return objects.first.map { StoredGlucoseSample(managedObject: $0) }
             }
             queue.sync {
                 self.latestGlucose = latestGlucose
@@ -321,7 +321,7 @@ extension GlucoseStore {
                 throw error
             }
 
-            return objects.compactMap { StoredGlucoseSample(managedObject: $0) }
+            return objects.map { StoredGlucoseSample(managedObject: $0) }
         }
 
         await self.handleUpdatedGlucoseData()
@@ -339,9 +339,7 @@ extension GlucoseStore {
                 request.predicate = NSPredicate(format: "healthKitEligibleDate <= %@", Date() as NSDate)
                 request.sortDescriptors = [NSSortDescriptor(key: "modificationCounter", ascending: true)]   // Maintains modificationCounter order
 
-                // Skip corrupt rows with a NULL startDate: `quantitySample` reads the
-                // non-optional `startDate`, which would trap on such a row.
-                return try self.cacheStore.managedObjectContext.fetch(request).filter { $0.safeStartDate != nil }
+                return try self.cacheStore.managedObjectContext.fetch(request)
             }
 
             guard !objects.isEmpty else {
@@ -412,7 +410,7 @@ extension GlucoseStore {
             request.fetchLimit = 1
 
             let objects = try self.cacheStore.managedObjectContext.fetch(request)
-            let samples = objects.compactMap { StoredGlucoseSample(managedObject: $0) }
+            let samples = objects.map { StoredGlucoseSample(managedObject: $0) }
             return samples.first
         }
     }
@@ -425,7 +423,7 @@ extension GlucoseStore {
     /// Get glucose samples in main app to deliver to Watch extension
     public func getSyncGlucoseSamples(start: Date? = nil, end: Date? = nil) async throws -> [StoredGlucoseSample] {
         try await self.cacheStore.managedObjectContext.perform {
-            try self.getCachedGlucoseObjects(start: start, end: end).compactMap { StoredGlucoseSample(managedObject: $0) }
+            try self.getCachedGlucoseObjects(start: start, end: end).map { StoredGlucoseSample(managedObject: $0) }
         }
     }
 
