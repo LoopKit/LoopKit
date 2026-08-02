@@ -22,6 +22,7 @@ public protocol OverrideSelectionViewControllerDelegate: AnyObject {
 }
 
 public final class OverrideSelectionViewController: UICollectionViewController, IdentifiableClass {
+    private static let contentHorizontalInset: CGFloat = 20
 
     public var glucoseUnit: HKUnit!
 
@@ -49,6 +50,13 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
         collectionView?.backgroundColor = .systemGroupedBackground
         navigationItem.rightBarButtonItems = [saveButton, editButton]
         navigationItem.leftBarButtonItem = cancelButton
+
+        navigationController?.navigationBar.directionalLayoutMargins = NSDirectionalEdgeInsets(
+            top: 0,
+            leading: Self.contentHorizontalInset,
+            bottom: 0,
+            trailing: Self.contentHorizontalInset
+        )
     }
 
     @objc private func cancel() {
@@ -398,7 +406,8 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
 
 extension OverrideSelectionViewController: UICollectionViewDelegateFlowLayout {
     private var sectionInsets: UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 12, bottom: 12, right: 12)
+        let horizontalInset = Self.contentHorizontalInset
+        return UIEdgeInsets(top: 0, left: horizontalInset, bottom: 12, right: horizontalInset)
     }
 
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
@@ -411,8 +420,8 @@ extension OverrideSelectionViewController: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
-        let paddingSpace = sectionInsets.left * 2
-        let width = view.frame.width - paddingSpace
+        let paddingSpace = sectionInsets.left + sectionInsets.right
+        let width = collectionView.bounds.width - paddingSpace
         let height: CGFloat
         switch cellContent(for: indexPath) {
         case .scheduledOverride, .preset:
