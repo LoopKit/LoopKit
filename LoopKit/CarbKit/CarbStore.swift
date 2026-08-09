@@ -501,35 +501,49 @@ extension CarbStore {
             completion(.failure(CarbStoreError.unauthorized))
             return
         }
-        deleteCarbEntrySkippingAuthorshipCheck(oldEntry, completion: completion)
+        deleteCarbEntrySkippingAuthorshipCheck(oldEntry) { result, _ in completion(result) }
     }
 
-    /// FORK ADDITION (Sport Mode R30/#89, 2026-08-08): `deleteCarbEntry` minus the
-    /// `createdByCurrentApp` guard, for a store that is an authoritative MIRROR of another
-    /// device's.
+    /// FORK ADDITION (Sport Mode R30/#89, 2026-08-08): `deleteCarbEntry` minus EVERY
+    /// authorship gate, for a store that is an authoritative MIRROR of another device's.
     ///
     /// During a pod loan the watch's carb store is wipe-then-replaced from the phone at every
-    /// takeover, and the seeded entries are (honestly) marked `createdByCurrentApp: false` —
-    /// which made every phone-originated carb undeletable through the public door: field
-    /// 2026-08-08 22:39, `delete FAILED — unauthorized`, row restored, COB unchanged. On a
-    /// mirror, "authorship" is an artifact of the seeding path, not an ownership boundary; the
-    /// REAL owner receives the deletion via the loan journal and applies it through its own
-    /// guarded door. The HealthKit tail is already safe here: seeded objects carry `uuid: nil`,
-    /// so `deleteObjectFromHealthKit` no-ops rather than touching a sample this app never wrote.
-    public func deleteCarbEntrySkippingAuthorshipCheck(_ oldEntry: StoredCarbEntry, completion: @escaping (_ result: CarbStoreResult<Bool>) -> Void) {
+    /// takeover, and the seeded entries are (honestly) marked `createdByCurrentApp: false` with
+    /// `uuid: nil`. Authorship gates the public door in TWO places, and the first fix (build
+    /// 260) only cleared the first: the method guard (`unauthorized`, field 22:39) — after
+    /// which the delete died in `cachedCarbObjectFromStoredCarbEntry`, whose OWN
+    /// `createdByCurrentApp` guard + `createdByCurrentApp == YES` predicate + uuid-requiring
+    /// fallback returned nil for every seeded entry (`noData`, field 23:28). So this method
+    /// does its own lookup with no authorship anywhere: syncIdentifier first (any authorship,
+    /// any syncVersion — seeded objects may carry a nil version), then (startDate ±1s,
+    /// grams ±0.01) for entries with no shared identity.
+    ///
+    /// On a mirror, "authorship" is an artifact of the seeding path, not an ownership
+    /// boundary; the REAL owner receives the deletion via the loan journal and applies it
+    /// through its own guarded door. The HealthKit tail is safe: seeded objects carry
+    /// `uuid: nil`, so `deleteObjectFromHealthKit` no-ops rather than touching a sample this
+    /// app never wrote.
+    ///
+    /// `diagnostics` reports which lookup stage matched and the candidate count at each stage,
+    /// so a field failure names its cause in one log line (Jeremy 2026-08-08: "add as much
+    /// instrumentation as you think you need, so we don't have to do 10 releases").
+    public func deleteCarbEntrySkippingAuthorshipCheck(_ oldEntry: StoredCarbEntry, completion: @escaping (_ result: CarbStoreResult<Bool>, _ diagnostics: String) -> Void) {
         queue.async {
             var error: CarbStoreError?
+            var diag = ""
 
             self.cacheStore.managedObjectContext.performAndWait {
                 do {
-                    guard let oldObject = try self.cacheStore.managedObjectContext.cachedCarbObjectFromStoredCarbEntry(oldEntry) else {
+                    guard let oldObject = try self.cacheStore.managedObjectContext.cachedCarbObjectIgnoringAuthorship(
+                        forSyncIdentifier: oldEntry.syncIdentifier,
+                        startDate: oldEntry.startDate,
+                        grams: oldEntry.quantity.doubleValue(for: HKUnit.gram()),
+                        diagnostics: &diag) else {
                         error = .noData
                         return
                     }
 
-                    // Use same date for superceding old object and adding new object; also used for userDeletedDate
                     let date = Date()
-
                     oldObject.supercededDate = date
 
                     let newObject = CachedCarbObject(context: self.cacheStore.managedObjectContext)
@@ -547,11 +561,11 @@ extension CarbStore {
             }
 
             if let error = error {
-                completion(.failure(error))
+                completion(.failure(error), diag)
                 return
             }
 
-            completion(.success(true))
+            completion(.success(true), diag)
 
             self.handleUpdatedCarbData()
         }
@@ -1182,6 +1196,42 @@ fileprivate extension NSManagedObjectContext {
                 return syncIdentifier
             }
         }
+    }
+
+    /// FORK ADDITION (Sport Mode R30/#89): the lookup behind
+    /// `deleteCarbEntrySkippingAuthorshipCheck` — no authorship predicate anywhere, because on
+    /// a mirror store the seeded objects are createdByCurrentApp:false / uuid:nil by design and
+    /// the stock lookup below returns nil for all of them (field 2026-08-08 23:28, `noData`).
+    ///
+    /// Stage 1 matches the phone's syncIdentifier (carried through the grant; syncVersion is
+    /// deliberately NOT required — seeded objects may hold nil). Stage 2 matches
+    /// (startDate ±1s, grams ±0.01) for entries with no shared identity (watch-entered).
+    /// `diagnostics` records the stage counts so a miss names itself in one log line.
+    func cachedCarbObjectIgnoringAuthorship(forSyncIdentifier syncIdentifier: String?, startDate: Date, grams: Double, diagnostics: inout String) throws -> CachedCarbObject? {
+        if let syncIdentifier = syncIdentifier {
+            let request: NSFetchRequest<CachedCarbObject> = CachedCarbObject.fetchRequest()
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+                NSPredicate(format: "syncIdentifier == %@", syncIdentifier),
+                NSPredicate(format: "operation != %d", Operation.delete.rawValue),
+                NSPredicate(format: "supercededDate == NIL")
+            ])
+            let matches = try fetch(request)
+            diagnostics += "syncId[\(syncIdentifier.prefix(8))]→\(matches.count)"
+            if let match = matches.first { return match }
+        } else {
+            diagnostics += "syncId[nil]"
+        }
+        let request: NSFetchRequest<CachedCarbObject> = CachedCarbObject.fetchRequest()
+        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+            NSPredicate(format: "startDate >= %@ AND startDate <= %@",
+                        startDate.addingTimeInterval(-1) as NSDate, startDate.addingTimeInterval(1) as NSDate),
+            NSPredicate(format: "grams >= %f AND grams <= %f", grams - 0.01, grams + 0.01),
+            NSPredicate(format: "operation != %d", Operation.delete.rawValue),
+            NSPredicate(format: "supercededDate == NIL")
+        ])
+        let matches = try fetch(request)
+        diagnostics += " date+grams→\(matches.count)"
+        return matches.first
     }
 
     func cachedCarbObjectFromStoredCarbEntry(_ entry: StoredCarbEntry) throws -> CachedCarbObject? {
