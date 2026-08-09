@@ -501,7 +501,22 @@ extension CarbStore {
             completion(.failure(CarbStoreError.unauthorized))
             return
         }
+        deleteCarbEntrySkippingAuthorshipCheck(oldEntry, completion: completion)
+    }
 
+    /// FORK ADDITION (Sport Mode R30/#89, 2026-08-08): `deleteCarbEntry` minus the
+    /// `createdByCurrentApp` guard, for a store that is an authoritative MIRROR of another
+    /// device's.
+    ///
+    /// During a pod loan the watch's carb store is wipe-then-replaced from the phone at every
+    /// takeover, and the seeded entries are (honestly) marked `createdByCurrentApp: false` —
+    /// which made every phone-originated carb undeletable through the public door: field
+    /// 2026-08-08 22:39, `delete FAILED — unauthorized`, row restored, COB unchanged. On a
+    /// mirror, "authorship" is an artifact of the seeding path, not an ownership boundary; the
+    /// REAL owner receives the deletion via the loan journal and applies it through its own
+    /// guarded door. The HealthKit tail is already safe here: seeded objects carry `uuid: nil`,
+    /// so `deleteObjectFromHealthKit` no-ops rather than touching a sample this app never wrote.
+    public func deleteCarbEntrySkippingAuthorshipCheck(_ oldEntry: StoredCarbEntry, completion: @escaping (_ result: CarbStoreResult<Bool>) -> Void) {
         queue.async {
             var error: CarbStoreError?
 
