@@ -55,8 +55,8 @@ struct CreatePresetNameAndScheduledEdit: View {
     ) {
         self._preset = preset
         self._path = path
-        self.isDurationPickerExpanded = isDurationPickerExpanded
-        self.selectedRepeatOption = preset.wrappedValue.repeatOptions == .none ? .never : .weekly
+        self._isDurationPickerExpanded = State(initialValue: isDurationPickerExpanded)
+        self._selectedRepeatOption = State(initialValue: preset.wrappedValue.repeatOptions == .none ? .never : .weekly)
         self.onCancel = onCancel
     }
 
