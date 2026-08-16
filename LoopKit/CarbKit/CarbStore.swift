@@ -398,6 +398,70 @@ extension CarbStore {
         }
     }
 
+    /// Adds a carb entry with a CALLER-SUPPLIED sync identifier, inserting only if absent (R36).
+    ///
+    /// For records AUTHORED ELSEWHERE and delivered over an at-least-once transport — the watch
+    /// loan's hand-back is the only caller today. `addCarbEntry(_:completion:)` mints a fresh
+    /// identity per call because it IS the authoring point; calling it from a delivery path turns
+    /// every redelivery into a new entry (2026-08-12: twelve copies of one confirmed 10 g entry,
+    /// 120 g of phantom COB). This variant makes the STORE the idempotency point: the lookup and
+    /// the insert run in one operation on the store's own serial queue, so concurrent
+    /// redeliveries cannot interleave between check and insert — which no caller-side guard can
+    /// promise. The store already practices this pattern for its other external source
+    /// (HealthKit ingestion, `addCarbEntry(for sample:)` above dedupes on the same identity
+    /// pair); this exposes it for a second one.
+    ///
+    /// INSERT-IF-ABSENT, never upsert: a redelivery must lose to any later local edit of the
+    /// same entry (edits keep this identity and bump syncVersion). On a hit the CURRENT stored
+    /// entry is returned unchanged, whatever its content — and a content mismatch against the
+    /// request is logged, because same-identity-different-content means a caller bug.
+    public func addCarbEntry(_ entry: NewCarbEntry, syncIdentifier: String, completion: @escaping (_ result: Result<StoredCarbEntry, Error>) -> Void) {
+        queue.async {
+            var result: Result<StoredCarbEntry, Error>?
+            var inserted = false
+
+            self.cacheStore.managedObjectContext.performAndWait {
+                do {
+                    let request: NSFetchRequest<CachedCarbObject> = CachedCarbObject.fetchRequest()
+                    request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+                        NSPredicate(format: "provenanceIdentifier == %@", self.provenanceIdentifier),
+                        NSPredicate(format: "syncIdentifier == %@", syncIdentifier)])
+                    request.sortDescriptors = [NSSortDescriptor(key: "anchorKey", ascending: true)]
+
+                    if let existing = try self.cacheStore.managedObjectContext.fetch(request).last {
+                        if existing.quantity != entry.quantity {
+                            self.log.default("addCarbEntry(syncIdentifier:) hit with DIFFERENT content — keeping stored (%{public}@ g) over request; same identity must mean same record", String(describing: existing.quantity))
+                        }
+                        result = .success(StoredCarbEntry(managedObject: existing))
+                        return
+                    }
+
+                    let newObject = CachedCarbObject(context: self.cacheStore.managedObjectContext)
+                    newObject.create(from: entry,
+                                     provenanceIdentifier: self.provenanceIdentifier,
+                                     syncIdentifier: syncIdentifier,
+                                     syncVersion: self.syncVersion)
+
+                    if let saveError = CarbStoreError(error: self.cacheStore.save()) {
+                        result = .failure(saveError)
+                        return
+                    }
+
+                    self.saveEntryToHealthKit(newObject)
+                    result = .success(StoredCarbEntry(managedObject: newObject))
+                    inserted = true
+                } catch let coreDataError {
+                    result = .failure(CarbStoreError.coreDataError(coreDataError))
+                }
+            }
+
+            completion(result!)
+            if inserted {
+                self.handleUpdatedCarbData()
+            }
+        }
+    }
+
     public func replaceCarbEntry(_ oldEntry: StoredCarbEntry, withEntry newEntry: NewCarbEntry) async throws -> StoredCarbEntry {
         try await withCheckedThrowingContinuation { continuation in
             replaceCarbEntry(oldEntry, withEntry: newEntry) { result in
