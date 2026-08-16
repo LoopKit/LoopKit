@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EA575FC584C04919A4D4775E /* EnactedTempBasal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAD1539C84349EE86665064 /* EnactedTempBasal.swift */; };
+		25C70C3412F44DACB716F787 /* EnactedTempBasal.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE4B6BF15324635B047B52E /* EnactedTempBasal.swift */; };
 		9D3D2DA3B9824EF48981F0E4 /* StoredInsulinModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A49588B49DD6430FB38A9C34 /* StoredInsulinModel.swift */; };
 		485ACF65C30744BFBC979CEF /* NotificationSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8831582DF3545CFBAA330C6 /* NotificationSettings.swift */; };
 		2383C3D7967B4602B8EB4A5B /* SettingsObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673A6C7A85F340A7B2E6B9C8 /* SettingsObject+CoreDataProperties.swift */; };
@@ -1053,6 +1055,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6AAD1539C84349EE86665064 /* EnactedTempBasal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "EnactedTempBasal.swift"; path = "LoopKit/EnactedTempBasal.swift"; sourceTree = SOURCE_ROOT; };
+		CDE4B6BF15324635B047B52E /* EnactedTempBasal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "EnactedTempBasal.swift"; path = "LoopKit/EnactedTempBasal.swift"; sourceTree = SOURCE_ROOT; };
 		A49588B49DD6430FB38A9C34 /* StoredInsulinModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "StoredInsulinModel.swift"; path = "LoopKit/StoredInsulinModel.swift"; sourceTree = SOURCE_ROOT; };
 		C8831582DF3545CFBAA330C6 /* NotificationSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "NotificationSettings.swift"; path = "LoopKit/NotificationSettings.swift"; sourceTree = SOURCE_ROOT; };
 		673A6C7A85F340A7B2E6B9C8 /* SettingsObject+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "SettingsObject+CoreDataProperties.swift"; path = "LoopKit/SettingsObject+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
@@ -4011,6 +4015,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				25C70C3412F44DACB716F787 /* EnactedTempBasal.swift in Sources */,
 				C1893D3A2AACBD81001947A2 /* CgmEventStore.swift in Sources */,
 				B4102D3224ABB068005D460B /* DeviceLifecycleProgress.swift in Sources */,
 				C17F39C923CD269200FA1113 /* DeviceLogEntryType.swift in Sources */,
@@ -4347,6 +4352,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EA575FC584C04919A4D4775E /* EnactedTempBasal.swift in Sources */,
 				9D3D2DA3B9824EF48981F0E4 /* StoredInsulinModel.swift in Sources */,
 				485ACF65C30744BFBC979CEF /* NotificationSettings.swift in Sources */,
 				2383C3D7967B4602B8EB4A5B /* SettingsObject+CoreDataProperties.swift in Sources */,

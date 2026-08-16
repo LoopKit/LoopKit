@@ -527,7 +527,7 @@ extension CarbStore {
     /// `diagnostics` reports which lookup stage matched and the candidate count at each stage,
     /// so a field failure names its cause in one log line (Jeremy 2026-08-08: "add as much
     /// instrumentation as you think you need, so we don't have to do 10 releases").
-    public func deleteCarbEntrySkippingAuthorshipCheck(_ oldEntry: StoredCarbEntry, completion: @escaping (_ result: CarbStoreResult<Bool>, _ diagnostics: String) -> Void) {
+    public func deleteCarbEntrySkippingAuthorshipCheck(_ oldEntry: StoredCarbEntry, completion: @escaping (_ result: Result<Bool, Error>, _ diagnostics: String) -> Void) {
         queue.async {
             var error: CarbStoreError?
             var diag = ""
@@ -537,7 +537,7 @@ extension CarbStore {
                     guard let oldObject = try self.cacheStore.managedObjectContext.cachedCarbObjectIgnoringAuthorship(
                         forSyncIdentifier: oldEntry.syncIdentifier,
                         startDate: oldEntry.startDate,
-                        grams: oldEntry.quantity.doubleValue(for: HKUnit.gram()),
+                        grams: oldEntry.quantity.doubleValue(for: LoopUnit.gram),
                         diagnostics: &diag) else {
                         error = .noData
                         return
