@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2DBE5A4919F244E2A30A2092 /* PumpManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432CF87220D774220066B889 /* PumpManager.swift */; };
 		142CB75D2A60C01E0075748A /* ListButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142CB75C2A60C01E0075748A /* ListButtonStyle.swift */; };
 		142CB7612A60C0440075748A /* FavoriteFood.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142CB7602A60C0440075748A /* FavoriteFood.swift */; };
 		1452F4B02A85219100F8B9E4 /* AbsorptionTimePickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1452F4AF2A85219100F8B9E4 /* AbsorptionTimePickerRow.swift */; };
@@ -4338,6 +4339,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2DBE5A4919F244E2A30A2092 /* PumpManager.swift in Sources */,
 				89AE2235228BCAAB00BDFD85 /* CarbSensitivitySchedule.swift in Sources */,
 				89AE2236228BCAAB00BDFD85 /* DailyQuantitySchedule+Override.swift in Sources */,
 				89AE2237228BCAAB00BDFD85 /* EGPSchedule.swift in Sources */,
