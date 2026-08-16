@@ -405,10 +405,24 @@ public protocol PumpConnectionLendable: AnyObject {
     /// "reclaiming…" indicator) keys on this rather than on the loan flag clearing. Default:
     /// true — a manager that can't report readiness never appears stuck "reconnecting".
     var isConnectionReady: Bool { get }
+
+    /// Escalate a reclaim whose link has not come back, from whatever gentle reconnect the
+    /// manager uses by default to its most aggressive reacquisition.
+    ///
+    /// `reclaimConnection()` only re-arms the bid, and for a device idle a while that bid is
+    /// probabilistic — it depends on happening to hear the device announce itself. A manager that
+    /// can instead go LOOKING (scanning for the device by address) should do so here. Called at
+    /// most once per reclaim and only after the link has failed to come up within a grace period,
+    /// so this is a recovery path, not the normal one.
+    ///
+    /// Idempotent, and safe to call when nothing needs escalating.
+    /// Default: no-op — a manager with a single reconnect strategy has nothing to escalate to.
+    func escalateConnectionReclaim()
 }
 
 extension PumpConnectionLendable {
     public var lentDeviceInsulinDelivered: Double? { return nil }
     public func refreshLentDeviceStatus(completion: @escaping (Bool) -> Void) { completion(false) }
     public var isConnectionReady: Bool { return true }
+    public func escalateConnectionReclaim() { }
 }
