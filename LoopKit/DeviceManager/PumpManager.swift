@@ -358,3 +358,57 @@ public extension PumpManager {
         }
     }
 }
+
+
+// MARK: - PumpConnectionLendable (optional capability)  // PODLOAN
+
+/// An OPTIONAL capability for pump managers whose device connection can be
+/// deliberately released — loaned to another controller (e.g. an Apple Watch
+/// commanding the pump directly) — and later reclaimed.
+///
+/// Motivation: some pumps (Omnipod DASH) hold a single BLE connection and give
+/// it to whichever credentialed controller connects last. A pump manager that
+/// maintains a standing auto-connect therefore reclaims the device within
+/// seconds of any radio availability, making a deliberate second-controller
+/// session impossible without disabling the phone's radio entirely. This
+/// capability lets the app ask the manager to stand down on purpose.
+///
+/// Managers that cannot support a deliberate release simply do not conform,
+/// and no behavior changes. Callers discover the capability by conditional
+/// cast, as with other optional capabilities.
+public protocol PumpConnectionLendable: AnyObject {
+    /// True while the connection is deliberately released (a loan is active).
+    /// Implementations should persist this so an app relaunch mid-loan does not
+    /// silently re-arm the connection and steal the device back.
+    var isConnectionReleased: Bool { get }
+
+    /// Stop bidding for the device's connection so another controller can hold
+    /// it uncontested. Must leave device state, pairing and keys intact.
+    func releaseConnection()
+
+    /// Resume bidding for the device's connection after a loan ends.
+    func reclaimConnection()
+
+    /// The device's cumulative-delivered odometer as last reported, if the pump
+    /// keeps one — an AUDIT input for post-loan reconciliation, never a record
+    /// source. Default: nil (no odometer).
+    var lentDeviceInsulinDelivered: Double? { get }
+
+    /// Force a real status round-trip (bypassing freshness optimizations) so the
+    /// odometer is current before an audit read. Completion: success.
+    /// Default: completes false (no forced read available).
+    func refreshLentDeviceStatus(completion: @escaping (Bool) -> Void)
+
+    /// True once a reclaimed connection is TRULY re-established (the link is up and the
+    /// device is reachable). `reclaimConnection()` only re-arms the bid; the actual reconnect
+    /// can land seconds-to-minutes later, so UI that must wait for the device (e.g. a
+    /// "reclaiming…" indicator) keys on this rather than on the loan flag clearing. Default:
+    /// true — a manager that can't report readiness never appears stuck "reconnecting".
+    var isConnectionReady: Bool { get }
+}
+
+extension PumpConnectionLendable {
+    public var lentDeviceInsulinDelivered: Double? { return nil }
+    public func refreshLentDeviceStatus(completion: @escaping (Bool) -> Void) { completion(false) }
+    public var isConnectionReady: Bool { return true }
+}
