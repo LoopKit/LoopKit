@@ -416,13 +416,21 @@ public protocol PumpConnectionLendable: AnyObject {
     /// so this is a recovery path, not the normal one.
     ///
     /// Idempotent, and safe to call when nothing needs escalating.
-    /// Default: no-op — a manager with a single reconnect strategy has nothing to escalate to.
-    func escalateConnectionReclaim()
+    ///
+    /// RETURNS a short description of what it actually did, for the CALLER to log. The manager's
+    /// own logging goes to os_log, which is invisible in the file logs field analysis reads — an
+    /// escalation that silently no-ops (no device address, wrong state) is otherwise
+    /// indistinguishable from one that ran and found nothing, and those need opposite fixes.
+    /// nil means "nothing to escalate".
+    ///
+    /// Default: nil — a manager with a single reconnect strategy has nothing to escalate to.
+    @discardableResult
+    func escalateConnectionReclaim() -> String?
 }
 
 extension PumpConnectionLendable {
     public var lentDeviceInsulinDelivered: Double? { return nil }
     public func refreshLentDeviceStatus(completion: @escaping (Bool) -> Void) { completion(false) }
     public var isConnectionReady: Bool { return true }
-    public func escalateConnectionReclaim() { }
+    public func escalateConnectionReclaim() -> String? { return nil }
 }
