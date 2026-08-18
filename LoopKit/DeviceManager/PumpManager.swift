@@ -426,6 +426,18 @@ public protocol PumpConnectionLendable: AnyObject {
     /// Default: nil — a manager with a single reconnect strategy has nothing to escalate to.
     @discardableResult
     func escalateConnectionReclaim() -> String?
+
+    /// A compact account of what the pump's BLE link has ACTUALLY been doing — connect and
+    /// disconnect edges with their reasons, and what this process was holding when a connect was
+    /// refused. nil when the manager has nothing to report.
+    ///
+    /// Exists because the caller cannot see any of this otherwise: the manager logs through
+    /// os_log, which does not reach the file logs field analysis reads, and the app does not link
+    /// the manager directly (pump managers load as plugins). A settle that reports the link up and
+    /// then never verifies is indistinguishable from one that never got a link at all without it.
+    ///
+    /// Default: nil.
+    func connectionDiagnostics() -> String?
 }
 
 extension PumpConnectionLendable {
@@ -433,4 +445,5 @@ extension PumpConnectionLendable {
     public func refreshLentDeviceStatus(completion: @escaping (Bool) -> Void) { completion(false) }
     public var isConnectionReady: Bool { return true }
     public func escalateConnectionReclaim() -> String? { return nil }
+    public func connectionDiagnostics() -> String? { return nil }
 }
