@@ -170,6 +170,22 @@ extension GlucoseStore: HealthKitSampleStoreDelegate {
                     // Add new samples
                     if let samples = added as? [HKQuantitySample] {
                         for sample in samples {
+                            // ZOMBIE-SAMPLE GUARD (field 2026-08-25, watchOS 26.6): HealthKit
+                            // delivered a sample whose underlying ObjC startDate was NIL.
+                            // Bridging it to Swift's non-optional Date traps
+                            // (Date._unconditionallyBridgeFromObjectiveC, EXC_BREAKPOINT), and
+                            // because the query anchor only advances on SUCCESSFUL processing,
+                            // the same sample re-delivered on every relaunch — a crash loop
+                            // that silently killed the watch app 7+ times across three days
+                            // (~1 s after launch, no app-container crash log; the reports were
+                            // in the phone's Analytics). KVC returns the raw value un-bridged,
+                            // so it can say "nil" without dying; skip the zombie loudly and
+                            // let the anchor advance past it.
+                            guard (sample as AnyObject).value(forKey: "startDate") as? NSDate != nil,
+                                  (sample as AnyObject).value(forKey: "quantity") is HKQuantity else {
+                                self.log.error("SKIPPING zombie HK sample (nil startDate/quantity would trap on bridge): %{public}@", sample.uuid.uuidString)
+                                continue
+                            }
                             if try self.addGlucoseSample(for: sample) {
                                 self.log.debug("Saved sample %@ into cache from HKAnchoredObjectQuery", sample.uuid.uuidString)
                                 changed = true
