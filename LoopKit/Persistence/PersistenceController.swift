@@ -90,8 +90,29 @@ public final class PersistenceController {
         }
     }
 
+    /// Waits for the persistent stack to finish loading.
+    ///
+    /// - Throws: `PersistenceControllerError` if the stack failed to load.
+    func waitUntilReady() async throws {
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            onReady { error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume()
+                }
+            }
+        }
+    }
+
     // Cache model
     private static var cachedModel: NSManagedObjectModel?
+
+    /// How many times a writable store retries when another process holds it. Delays are
+    /// cumulative (0.5s, 1.0s, 1.5s), so a wedged store costs at most ~3s before giving up.
+    private static let busyStoreRetryCount = 3
+
+    private static let busyStoreRetryDelay: TimeInterval = 0.5
 
     private static func model() throws -> NSManagedObjectModel {
         if cachedModel == nil {
@@ -208,24 +229,56 @@ public final class PersistenceController {
 
             let storeURL = directoryURL.appendingPathComponent("Model.sqlite")
 
-            var options: [AnyHashable : Any] = [
-                NSMigratePersistentStoresAutomaticallyOption: true,
-                NSInferMappingModelAutomaticallyOption: true
-            ]
-            
+            var options: [AnyHashable : Any] = [:]
+
+            if self.isReadOnly {
+                // A read-only opener -- in practice an app extension sharing the container app's
+                // store -- must never migrate. Two processes racing a migration is what produces
+                // SQLITE_BUSY "Failed to replace destination database": one builds the migrated
+                // copy in a temp file and cannot swap it into place because the other holds the
+                // store open. Open read-only and fail fast instead of joining the race. If the
+                // store needs migrating, the extension gets no data until the container app has
+                // done it -- which is the correct outcome, and better than the alternatives.
+                options[NSReadOnlyPersistentStoreOption] = true
+                options[NSMigratePersistentStoresAutomaticallyOption] = false
+                options[NSInferMappingModelAutomaticallyOption] = false
+            } else {
+                options[NSMigratePersistentStoresAutomaticallyOption] = true
+                options[NSInferMappingModelAutomaticallyOption] = true
+            }
+
 #if os(iOS)
             options[NSPersistentStoreFileProtectionKey] = FileProtectionType.completeUntilFirstUserAuthentication
 #endif
 
-            do {
-                try coordinator.addPersistentStore(ofType: NSSQLiteStoreType,
-                    configurationName: nil,
-                    at: storeURL,
-                    options: options
-                )
-            } catch let storeError as NSError {
-                self.log.error("Failed to initialize persistenceController: %{public}@", storeError)
-                error = .coreDataError(storeError)
+            // Retry a busy store. Read-only openers still hold shared locks, so making them
+            // fail fast narrows the window without closing it -- and the writer is the one
+            // process that has to win eventually. Read-only openers do not retry: there is
+            // nothing for them to wait for that a retry would fix.
+            var attempt = 0
+            while true {
+                do {
+                    try coordinator.addPersistentStore(ofType: NSSQLiteStoreType,
+                        configurationName: nil,
+                        at: storeURL,
+                        options: options
+                    )
+                    break
+                } catch let storeError as NSError {
+                    guard !self.isReadOnly,
+                          storeError.isPersistentStoreBusy,
+                          attempt < PersistenceController.busyStoreRetryCount
+                    else {
+                        self.log.error("Failed to initialize persistenceController: %{public}@", storeError)
+                        error = .coreDataError(storeError)
+                        break
+                    }
+                    attempt += 1
+                    let delay = PersistenceController.busyStoreRetryDelay * Double(attempt)
+                    self.log.default("Persistent store busy, retrying in %{public}.1fs (attempt %{public}d of %{public}d)",
+                                     delay, attempt, PersistenceController.busyStoreRetryCount)
+                    Thread.sleep(forTimeInterval: delay)
+                }
             }
 
             self.queue.async {
@@ -317,4 +370,15 @@ fileprivate extension FileManager {
         }
     }
  
+}
+
+
+fileprivate extension NSError {
+    /// True when Core Data could not open the store because another process holds it, rather than
+    /// because the store is missing or damaged. Only these are worth retrying.
+    var isPersistentStoreBusy: Bool {
+        guard domain == NSSQLiteErrorDomain else { return false }
+        // SQLITE_BUSY (5) and SQLITE_LOCKED (6).
+        return code == 5 || code == 6
+    }
 }
