@@ -6,7 +6,7 @@ version: 2.1
 
 jobs:
   test:
-    working_directory: *project_directory
+    working_directory: ~/project
     resource_class: m4pro.medium
     macos:
       xcode: "26.1.1"
