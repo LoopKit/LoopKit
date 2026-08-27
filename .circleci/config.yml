@@ -6,16 +6,36 @@ version: 2.1
 
 jobs:
   test:
-    working_directory: *project_directory
+    working_directory: ~/project
     resource_class: m4pro.medium
     macos:
       xcode: "26.1.1"
     steps:
       - checkout
       - run:
+          name: Check out LoopAlgorithm
+          command: |
+            git clone --depth 1 --branch main https://github.com/LoopKit/LoopAlgorithm.git LoopAlgorithm
+      - run:
+          name: Generate CI workspace
+          command: |
+            # LoopKit.xcodeproj takes LoopAlgorithm as a package supplied by the ENCLOSING
+            # workspace -- that is how LoopWorkspace provides it, as a local package folder --
+            # so its product dependency deliberately carries no package reference of its own and
+            # cannot resolve when the project is built standalone. Build through a workspace that
+            # supplies the same local package rather than adding a second, remote pin here.
+            mkdir -p CI.xcworkspace
+            printf '%s\n' \
+              '<?xml version="1.0" encoding="UTF-8"?>' \
+              '<Workspace version = "1.0">' \
+              '   <FileRef location = "group:LoopKit.xcodeproj"></FileRef>' \
+              '   <FileRef location = "group:LoopAlgorithm"></FileRef>' \
+              '</Workspace>' \
+              > CI.xcworkspace/contents.xcworkspacedata
+      - run:
           name: Test
           command: |
-            set -o pipefail && xcodebuild -project LoopKit.xcodeproj -scheme Shared build -destination 'name=iPhone 17' test | xcpretty
+            set -o pipefail && xcodebuild -workspace CI.xcworkspace -scheme Shared build -destination 'name=iPhone 17' test | xcpretty
       - store_test_results:
           path: test_output
   package:
