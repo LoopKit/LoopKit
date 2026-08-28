@@ -724,8 +724,17 @@ extension Array where Element == TemporaryScheduleOverride {
             while presetIndex < self.count {
                 let preset = self[presetIndex]
 
-                // Skip presets that end before this sensitivity period
-                if preset.actualEndDate < start {
+                // Skip presets that end before -- or exactly at -- the point we have
+                // advanced to. `isActive(at:)` tests a DateInterval, which is CLOSED at
+                // both ends, so a preset is still "active" at its own actualEndDate. With
+                // a strict `<` here, a preset ending exactly at `start` fell through to
+                // the active branch below, where `end` computes back to `start`: the
+                // preset index did not advance, `start` did not advance, and the loop did
+                // not break, so it appended a zero-length entry per pass until allocation
+                // failed. Reached in the field while recommending a manual bolus, which
+                // truncates the active override to end exactly at the dose time.
+                // A preset ending at `start` has no remaining duration to contribute.
+                if preset.actualEndDate <= start {
                     presetIndex += 1
                     continue
                 }
