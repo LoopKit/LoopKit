@@ -82,6 +82,23 @@ public struct StoredGlucoseSample: GlucoseSampleValue, Equatable {
 }
 
 extension StoredGlucoseSample {
+    /// The nil-safe twin of `init(managedObject:)`, for rows that may be GONE by read time.
+    /// [zombie-guard 2026-08-29] The watch died ~17 times in one day trapping
+    /// Date._unconditionallyBridgeFromObjectiveC inside addGlucoseSamples: a managed object
+    /// whose row a concurrent delete had removed (shouldDeleteInaccessibleFaults hands back
+    /// nil for every property of such a fault) reached the non-failable init below, and the
+    /// non-optional Date/String bridges trapped. Validate the raw stored attributes first;
+    /// a nil in any of them means the row is dead — skip it, never bridge it.
+    init?(validatingManagedObject managedObject: CachedGlucoseObject) {
+        guard !managedObject.isDeleted, managedObject.managedObjectContext != nil,
+              managedObject.value(forKey: "startDate") is NSDate,
+              managedObject.value(forKey: "unitString") is NSString,
+              managedObject.value(forKey: "provenanceIdentifier") is NSString else {
+            return nil
+        }
+        self.init(managedObject: managedObject)
+    }
+
     init(managedObject: CachedGlucoseObject) {
         self.init(
             uuid: managedObject.uuid,
