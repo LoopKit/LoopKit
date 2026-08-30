@@ -199,6 +199,7 @@
 		43CB51B2211EB1A400DB9B4A /* NSUserActivity+CarbKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CB51B0211EB16C00DB9B4A /* NSUserActivity+CarbKit.swift */; };
 		43D8FDCF1C728FDF0073BE78 /* LoopKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D8FDCE1C728FDF0073BE78 /* LoopKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43D8FDD61C728FDF0073BE78 /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FDCB1C728FDF0073BE78 /* LoopKit.framework */; };
+		C7A1D0011A0000010000AAA1 /* LoopKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BA7154201E484D0058961E /* LoopKitUI.framework */; };
 		43D8FDDB1C728FDF0073BE78 /* LoopKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDDA1C728FDF0073BE78 /* LoopKitTests.swift */; };
 		43D8FDF41C7290350073BE78 /* BasalRateSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDE51C7290340073BE78 /* BasalRateSchedule.swift */; };
 		43D8FDF51C7290350073BE78 /* CarbRatioSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDE61C7290350073BE78 /* CarbRatioSchedule.swift */; };
@@ -888,6 +889,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		C7A1D0031A0000030000AAA3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43BA7153201E484D0058961E;
+			remoteInfo = LoopKitUI;
+		};
 		1DEE226A24A676A300693C32 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
@@ -1846,6 +1854,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				43D8FDD61C728FDF0073BE78 /* LoopKit.framework in Frameworks */,
+				C7A1D0011A0000010000AAA1 /* LoopKitUI.framework in Frameworks */,
 				A9D3FF1D2A6C307E000C891D /* SwiftCharts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3264,6 +3273,7 @@
 			);
 			dependencies = (
 				43D8FDD81C728FDF0073BE78 /* PBXTargetDependency */,
+				C7A1D0021A0000020000AAA2 /* PBXTargetDependency */,
 			);
 			name = LoopKitTests;
 			packageProductDependencies = (
@@ -4479,6 +4489,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		C7A1D0021A0000020000AAA2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43BA7153201E484D0058961E /* LoopKitUI */;
+			targetProxy = C7A1D0031A0000030000AAA3 /* PBXContainerItemProxy */;
+		};
 		1DEE226924A676A300693C32 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 43D8FDCA1C728FDF0073BE78 /* LoopKit */;
