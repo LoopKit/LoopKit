@@ -438,6 +438,13 @@ public protocol PumpConnectionLendable: AnyObject {
     ///
     /// Default: nil.
     func connectionDiagnostics() -> String?
+
+    /// When the device last showed evidence of sessions by ANOTHER controller (e.g. an
+    /// EAP/SQN resync on a pod whose sequence advanced without this manager) — the
+    /// books-dirty primitive behind the phone mirror (R40(a)): observed while this phone
+    /// believes it is the sole controller, it means someone else drove the device.
+    /// Default: nil (no such telemetry).
+    var podLoanLastForeignSessionAt: Date? { get }
 }
 
 extension PumpConnectionLendable {
@@ -446,4 +453,5 @@ extension PumpConnectionLendable {
     public var isConnectionReady: Bool { return true }
     public func escalateConnectionReclaim() -> String? { return nil }
     public func connectionDiagnostics() -> String? { return nil }
+    public var podLoanLastForeignSessionAt: Date? { return nil }
 }
