@@ -97,9 +97,15 @@ class InsulinDeliveryStoreTestsAuthorized: InsulinDeliveryStoreTestsBase {
         // Check that an observer query is registered when authorization is already determined.
         XCTAssertFalse(hkSampleStore.authorizationRequired);
 
-        mockHealthStore.observerQueryStartedExpectation = expectation(description: "observer query started")
-
-        waitForExpectations(timeout: 30)
+        // The store is created already authorized in setUp, so the observer query may start
+        // before this test body runs. HKHealthStoreMock drops the fulfillment when the query
+        // starts before observerQueryStartedExpectation is assigned, so waiting on that
+        // expectation times out no matter how generous the timeout. Poll the recorded query
+        // instead -- that is order-independent.
+        let observerQueryStarted = XCTNSPredicateExpectation(
+            predicate: NSPredicate { [weak self] _, _ in self?.mockHealthStore.observerQuery != nil },
+            object: nil)
+        wait(for: [observerQueryStarted], timeout: 30)
 
         XCTAssertNotNil(mockHealthStore.observerQuery)
     }
