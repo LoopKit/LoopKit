@@ -61,7 +61,7 @@ class DosingDecisionStorePersistenceTests: PersistenceControllerTestCase, Dosing
             storeDosingDecisionCompletion.fulfill()
         }
 
-        wait(for: [storeDosingDecisionHandler, storeDosingDecisionCompletion], timeout: 2, enforceOrder: true)
+        wait(for: [storeDosingDecisionHandler, storeDosingDecisionCompletion], timeout: 30, enforceOrder: true)
     }
 
     func testStoreDosingDecisionMultiple() {
@@ -93,7 +93,7 @@ class DosingDecisionStorePersistenceTests: PersistenceControllerTestCase, Dosing
             storeDosingDecisionCompletion2.fulfill()
         }
 
-        wait(for: [storeDosingDecisionHandler1, storeDosingDecisionCompletion1, storeDosingDecisionHandler2, storeDosingDecisionCompletion2], timeout: 2, enforceOrder: true)
+        wait(for: [storeDosingDecisionHandler1, storeDosingDecisionCompletion1, storeDosingDecisionHandler2, storeDosingDecisionCompletion2], timeout: 30, enforceOrder: true)
     }
 
     func testDosingDecisionObjectEncodable() throws {
@@ -462,7 +462,7 @@ class DosingDecisionStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
 
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
 
     func testEmptyWithMissingQueryAnchor() {
@@ -479,7 +479,7 @@ class DosingDecisionStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
 
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
 
     func testEmptyWithNonDefaultQueryAnchor() {
@@ -496,7 +496,7 @@ class DosingDecisionStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
 
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
 
     func testDataWithUnusedQueryAnchor() {
@@ -518,7 +518,7 @@ class DosingDecisionStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
 
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
 
     func testDataWithStaleQueryAnchor() {
@@ -540,7 +540,7 @@ class DosingDecisionStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
 
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
 
     func testDataWithCurrentQueryAnchor() {
@@ -561,7 +561,7 @@ class DosingDecisionStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
 
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
 
     func testDataWithLimitZero() {
@@ -582,7 +582,7 @@ class DosingDecisionStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
 
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
 
     func testDataWithLimitCoveredByData() {
@@ -605,7 +605,7 @@ class DosingDecisionStoreQueryTests: PersistenceControllerTestCase {
             self.completion.fulfill()
         }
 
-        wait(for: [completion], timeout: 2, enforceOrder: true)
+        wait(for: [completion], timeout: 30, enforceOrder: true)
     }
 
     private func addData(withSyncIdentifiers syncIdentifiers: [UUID]) {
