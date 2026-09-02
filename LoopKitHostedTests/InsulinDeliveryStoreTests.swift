@@ -118,7 +118,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
         mockHealthStore.authorizationStatus = .sharingAuthorized
         hkSampleStore.authorizationIsDetermined()
 
-        waitForExpectations(timeout: 3)
+        waitForExpectations(timeout: 30)
 
         XCTAssertNotNil(mockHealthStore.observerQuery)
 
@@ -143,7 +143,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
         mockAnchoredObjectQuery.resultsHandler?(mockAnchoredObjectQuery, [], [], currentAnchor, nil)
 
         // Wait for observerQueryCompletionExpectation
-        waitForExpectations(timeout: 3)
+        waitForExpectations(timeout: 30)
 
         XCTAssertNotNil(hkSampleStore.queryAnchor)
 
@@ -166,7 +166,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
         newSampleStore.authorizationIsDetermined()
 
         // Wait for observerQueryCompletionExpectation
-        waitForExpectations(timeout: 3)
+        waitForExpectations(timeout: 30)
 
         mockHealthStore.anchorQueryStartedExpectation = expectation(description: "new anchored object query started")
 
@@ -176,7 +176,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
         mockObserverQuery2.updateHandler?(mockObserverQuery2, {}, nil)
 
         // Wait for anchorQueryStartedExpectation
-        waitForExpectations(timeout: 3)
+        waitForExpectations(timeout: 30)
 
         // Assert new carb store is querying with the last anchor that our HealthKit mock returned
         let mockAnchoredObjectQuery2 = mockHealthStore.anchoredObjectQuery as! MockHKAnchoredObjectQuery

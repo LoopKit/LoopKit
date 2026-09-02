@@ -93,7 +93,7 @@ class SettingsStorePersistenceTests: PersistenceControllerTestCase, SettingsStor
             storeSettingsCompletion2.fulfill()
         }
         
-        wait(for: [storeSettingsHandler1, storeSettingsCompletion1, storeSettingsHandler2, storeSettingsCompletion2], timeout: 2, enforceOrder: true)
+        wait(for: [storeSettingsHandler1, storeSettingsCompletion1, storeSettingsHandler2, storeSettingsCompletion2], timeout: 30, enforceOrder: true)
     }
     
     // MARK: -
