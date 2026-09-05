@@ -460,7 +460,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Interval țintă pentru corecție"
+            "value" : "Interval de corecție"
           }
         },
         "ru" : {

@@ -47,6 +47,12 @@
             "state" : "translated",
             "value" : "Datele despre mese din baza de date Health sunt utilizate pentru a determina efectele glicemiei. Datele de glicemie sunt preluate din HealthKit pentru reprezentare grafică și analiză."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取自健康数据库的进餐数据，用于评估进餐带来的血糖影响。\n从 HealthKit（苹果健康框架）获取血糖数据，用于图表绘制与分析计算。"
+          }
         }
       }
     },

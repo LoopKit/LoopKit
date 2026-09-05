@@ -380,7 +380,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Detail"
+            "value" : "详情"
           }
         }
       }
@@ -739,7 +739,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "U Total"
+            "value" : "U 总计"
           }
         }
       }
@@ -1243,7 +1243,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Insulin Delivery"
+            "value" : "胰岛素输注"
           }
         }
       }

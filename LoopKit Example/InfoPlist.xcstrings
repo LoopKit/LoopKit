@@ -178,6 +178,12 @@
             "state" : "translated",
             "value" : "Sağlık veri tabanından alınan yemek verileri, KŞ etkilerini belirlemek için kullanılır. Sağlık veri tabanından alınan KŞ verileri, grafik ve momentum hesaplaması için kullanılır."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "来自健康（Health）数据库的进餐数据，用于计算对血糖产生的影响。\n来自健康数据库的血糖数据，用于图表绘制以及血糖变化趋势（momentum）计算。"
+          }
         }
       }
     },
