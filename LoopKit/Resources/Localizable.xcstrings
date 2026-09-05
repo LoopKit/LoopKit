@@ -2742,7 +2742,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "没有权限"
+            "value" : "授权被拒绝"
           }
         }
       }
@@ -8739,7 +8739,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "毫摩尔/升"
+            "value" : "mmol/L"
           }
         }
       }

@@ -2733,7 +2733,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@ units remaining at %2$@"
+            "value" : "%1$@ 剩余单元 %2$@"
           }
         }
       }
@@ -5352,7 +5352,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "添加碳水"
+            "value" : "添加碳水摄入"
           }
         }
       }
@@ -7733,7 +7733,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "如果吃大餐请选择比较长的吸收时间，或者是以脂肪和蛋白为主的食物。该设置仅为算法的一般原则，具体请根据自身情况调整"
+            "value" : "对于分量较大的餐食，或含有脂肪和蛋白质的餐食，请选择较长的吸收时间。这仅作为算法的参考，无需完全精确。"
           }
         }
       }
@@ -15878,7 +15878,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dacă aceste setări vi se par potrivite, atingeți Salvare setări pentru a continua."
+            "value" : "Dacă aceste setări vi se par potrivite, atingeți Salvați setările pentru a continua."
           }
         },
         "ru" : {
@@ -16021,7 +16021,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dacă ați folosit anterior un CGM, probabil sunteți familiarizat cu intervalul țintă ca o gamă largă de valori pe care le-ați dori pentru alertele de notificare, cum sunt 70-180 mg/dl sau 90-200 mg/dl."
+            "value" : "Dacă ați folosit anterior un senzor de glicemie, probabil sunteți familiarizat cu intervalul țintă ca o gamă largă de valori pe care le-ați dori pentru alertele de notificare, cum sunt 70-180 mg/dl sau 90-200 mg/dl."
           }
         },
         "ru" : {
@@ -18667,7 +18667,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "最大基础率限制"
+            "value" : "最大基础速率"
           }
         }
       }
@@ -18966,7 +18966,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "最大剂量限制"
+            "value" : "最大剂量"
           }
         }
       }
@@ -20993,7 +20993,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Presetările suprascrierilor pot fi setate în secțiunea 'Configurare' din ecranul de setări."
+            "value" : "Presetările de suprascriere pot fi setate în secțiunea 'Configurare' din ecranul de setări."
           }
         },
         "ru" : {
@@ -21142,7 +21142,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Înlocuiri"
+            "value" : "Suprascrieri"
           }
         },
         "ru" : {
@@ -27266,7 +27266,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Apăsați pentru setare"
+            "value" : "Apăsați pentru a seta"
           }
         },
         "ru" : {
@@ -33238,7 +33238,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Workout Range is the glucose value or range of values you want %1$@ to target during activity. This range will be in effect when you activate the Workout Preset button."
+            "value" : "“运动范围”是您希望 %1$@ 在活动期间达到的目标血糖值或目标范围。启用“运动预设”按钮后，该范围将生效。"
           }
         }
       }
@@ -34918,7 +34918,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Factorul de sensibilitate la insulină (ISF) este scăderea glicemiei determinată de o unitate de insulină."
+            "value" : "Factorul de sensibilitate la insulină (FSI) este scăderea glicemiei determinată de o unitate de insulină."
           }
         },
         "ru" : {
