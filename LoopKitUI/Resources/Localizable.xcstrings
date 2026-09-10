@@ -1645,6 +1645,12 @@
             "value" : "%@U"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@E"
+          }
+        },
         "nb-NO" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2656,6 +2662,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ unità rimanenti alle ore %2$@"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@enheter igjen kl. %2$@"
           }
         },
         "nb-NO" : {
@@ -9147,6 +9159,12 @@
             "value" : "Continua"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fortsett"
+          }
+        },
         "nb-NO" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11197,6 +11215,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Fine"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ferdig"
           }
         },
         "nb-NO" : {
@@ -23600,6 +23624,12 @@
             "value" : "Salva"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lagre"
+          }
+        },
         "nb-NO" : {
           "stringUnit" : {
             "state" : "translated",
@@ -24348,7 +24378,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Salvați limita de siguranță pentru glicemie?"
+            "value" : "Salvați limita de siguranță a glicemiei?"
           }
         },
         "ru" : {
@@ -31565,6 +31595,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sconosciuto"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ukjent"
           }
         },
         "nb-NO" : {

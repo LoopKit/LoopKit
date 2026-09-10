@@ -58,6 +58,12 @@
             "value" : "Bolo"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bolus"
+          }
+        },
         "nb-NO" : {
           "stringUnit" : {
             "state" : "translated",
@@ -336,6 +342,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Insulina Sospesa"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Insulin pauset"
           }
         },
         "nb-NO" : {
@@ -1343,6 +1355,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Basale temporanea"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Midlertidig basal"
           }
         },
         "nb-NO" : {

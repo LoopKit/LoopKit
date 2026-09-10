@@ -1926,6 +1926,12 @@
             "value" : "Basale"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Basal"
+          }
+        },
         "nb-NO" : {
           "stringUnit" : {
             "state" : "new",
@@ -2216,6 +2222,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bolo"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bolus"
           }
         },
         "nb-NO" : {
@@ -11585,6 +11597,12 @@
             "value" : "Basale temporanea"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Midlertidig basal"
+          }
+        },
         "nb-NO" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12437,6 +12455,12 @@
             "value" : "U"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "E"
+          }
+        },
         "nb-NO" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12572,6 +12596,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "U/ora"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "E/t"
           }
         },
         "nb-NO" : {
