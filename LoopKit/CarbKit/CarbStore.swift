@@ -565,7 +565,45 @@ extension CarbStore {
             completion(.failure(CarbStoreError.unauthorized))
             return
         }
-        deleteCarbEntrySkippingAuthorshipCheck(oldEntry) { result, _ in completion(result) }
+
+        queue.async {
+            var error: CarbStoreError?
+
+            self.cacheStore.managedObjectContext.performAndWait {
+                do {
+                    guard let oldObject = try self.cacheStore.managedObjectContext.cachedCarbObjectFromStoredCarbEntry(oldEntry) else {
+                        error = .noData
+                        return
+                    }
+
+                    // Use same date for superceding old object and adding new object; also used for userDeletedDate
+                    let date = Date()
+
+                    oldObject.supercededDate = date
+
+                    let newObject = CachedCarbObject(context: self.cacheStore.managedObjectContext)
+                    newObject.delete(from: oldObject, on: date)
+
+                    if let saveError = CarbStoreError(error: self.cacheStore.save()) {
+                        error = saveError
+                        return
+                    }
+
+                    self.deleteObjectFromHealthKit(newObject)
+                } catch let coreDataError {
+                    error = .coreDataError(coreDataError)
+                }
+            }
+
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+
+            completion(.success(true))
+
+            self.handleUpdatedCarbData()
+        }
     }
 
     /// FORK ADDITION (Sport Mode R30/#89, 2026-08-08): `deleteCarbEntry` minus EVERY

@@ -89,6 +89,7 @@ extension StoredGlucoseSample {
     /// nil for every property of such a fault) reached the non-failable init below, and the
     /// non-optional Date/String bridges trapped. Validate the raw stored attributes first;
     /// a nil in any of them means the row is dead — skip it, never bridge it.
+#if os(watchOS)
     init?(validatingManagedObject managedObject: CachedGlucoseObject) {
         guard !managedObject.isDeleted, managedObject.managedObjectContext != nil,
               managedObject.value(forKey: "startDate") is NSDate,
@@ -98,6 +99,7 @@ extension StoredGlucoseSample {
         }
         self.init(managedObject: managedObject)
     }
+#endif
 
     init(managedObject: CachedGlucoseObject) {
         self.init(

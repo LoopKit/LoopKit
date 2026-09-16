@@ -4211,6 +4211,8 @@
 				1D0E708526BDE3BB00AECF0D /* HKDeviceCodableTests.swift in Sources */,
 				43D9888D1C87EBE400DA4467 /* LoopMathTests.swift in Sources */,
 				A9DF02D324F762DC00B7C988 /* CarbStoreTests.swift in Sources */,
+				A9D3FF1B2A6C2CA9000C891D /* ChartAxisValuesStaticGeneratorTests.swift in Sources */,
+				A9D3FF192A6C2C85000C891D /* PredictedGlucoseChartTests.swift in Sources */,
 				437874B5202FDD1200A3D8B9 /* DoseStoreTests.swift in Sources */,
 				A985465125144ABA0099C1A6 /* NotificationSettingsTests.swift in Sources */,
 				B455F4DF2600E0A8000ED456 /* GlucoseRangeTests.swift in Sources */,

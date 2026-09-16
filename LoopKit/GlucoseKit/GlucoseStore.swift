@@ -181,11 +181,13 @@ extension GlucoseStore: HealthKitSampleStoreDelegate {
                             // in the phone's Analytics). KVC returns the raw value un-bridged,
                             // so it can say "nil" without dying; skip the zombie loudly and
                             // let the anchor advance past it.
+#if os(watchOS)
                             guard (sample as AnyObject).value(forKey: "startDate") as? NSDate != nil,
                                   (sample as AnyObject).value(forKey: "quantity") is HKQuantity else {
                                 self.log.error("SKIPPING zombie HK sample (nil startDate/quantity would trap on bridge): %{public}@", sample.uuid.uuidString)
                                 continue
                             }
+#endif
                             if try self.addGlucoseSample(for: sample) {
                                 self.log.debug("Saved sample %@ into cache from HKAnchoredObjectQuery", sample.uuid.uuidString)
                                 changed = true
@@ -257,12 +259,16 @@ extension GlucoseStore {
     /// on it, and one such object killed the watch ~17 times in a day (2026-08-29; the
     /// no-CGM bench config makes the launch purge race hot). Call on the context's queue.
     private func validatedSamples(_ objects: [CachedGlucoseObject]) -> [StoredGlucoseSample] {
+#if os(watchOS)
         let samples = objects.compactMap { StoredGlucoseSample(validatingManagedObject: $0) }
         if samples.count != objects.count {
             self.log.error("[zombie-guard] SKIPPED %d glucose row(s) whose backing rows were gone by bridge time (of %d fetched)",
                            objects.count - samples.count, objects.count)
         }
         return samples
+#else
+        return objects.map { StoredGlucoseSample(managedObject: $0) }   // stock bridge
+#endif
     }
 
     private func getCachedGlucoseObjects(start: Date? = nil, end: Date? = nil) throws -> [CachedGlucoseObject] {
