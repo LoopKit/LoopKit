@@ -495,6 +495,7 @@
 		A9498D9123386D0800DAA9B9 /* MockService+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9498D9023386D0800DAA9B9 /* MockService+UI.swift */; };
 		A95A1D7F2460BBC70079378D /* DosingDecisionObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95A1D7E2460BBC70079378D /* DosingDecisionObject+CoreDataClass.swift */; };
 		A95A1D822460BBDC0079378D /* DosingDecisionObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95A1D812460BBDC0079378D /* DosingDecisionObject+CoreDataProperties.swift */; };
+		F78DB24B7725AFF7BCC8968E /* WeakSynchronizedDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AED7ECEB6B53942F3A25D956 /* WeakSynchronizedDelegateTests.swift */; };
 		A95A1D852460CAD50079378D /* CarbValueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95A1D842460CAD50079378D /* CarbValueTests.swift */; };
 		A95A1D872460F1250079378D /* GlucoseValueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95A1D862460F1250079378D /* GlucoseValueTests.swift */; };
 		A95A1D892460F8930079378D /* PumpManagerStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95A1D882460F8930079378D /* PumpManagerStatusTests.swift */; };
@@ -1501,6 +1502,7 @@
 		A9498D9023386D0800DAA9B9 /* MockService+UI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MockService+UI.swift"; sourceTree = "<group>"; };
 		A95A1D7E2460BBC70079378D /* DosingDecisionObject+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DosingDecisionObject+CoreDataClass.swift"; sourceTree = "<group>"; };
 		A95A1D812460BBDC0079378D /* DosingDecisionObject+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DosingDecisionObject+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		AED7ECEB6B53942F3A25D956 /* WeakSynchronizedDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeakSynchronizedDelegateTests.swift; sourceTree = "<group>"; };
 		A95A1D842460CAD50079378D /* CarbValueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarbValueTests.swift; sourceTree = "<group>"; };
 		A95A1D862460F1250079378D /* GlucoseValueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseValueTests.swift; sourceTree = "<group>"; };
 		A95A1D882460F8930079378D /* PumpManagerStatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PumpManagerStatusTests.swift; sourceTree = "<group>"; };
@@ -2441,6 +2443,7 @@
 				1DFB99D5245CB2E900DCC8C9 /* AlertTests.swift */,
 				43D8FE1A1C72906E0073BE78 /* BasalRateScheduleTests.swift */,
 				437AFF192039F149008C4892 /* CarbStoreTests.swift */,
+				AED7ECEB6B53942F3A25D956 /* WeakSynchronizedDelegateTests.swift */,
 				A95A1D842460CAD50079378D /* CarbValueTests.swift */,
 				A9B0D97D273313EB00D96D93 /* CGMManagerStatusTests.swift */,
 				A9D3FF172A6C2C6F000C891D /* Charts */,
@@ -4181,6 +4184,7 @@
 				A971C89F23C68B030099BEFC /* GlucoseStoreTests.swift in Sources */,
 				A971C8A423C6B1890099BEFC /* DosingDecisionStoreTests.swift in Sources */,
 				437AFF21203AA740008C4892 /* NSManagedObjectContext.swift in Sources */,
+				F78DB24B7725AFF7BCC8968E /* WeakSynchronizedDelegateTests.swift in Sources */,
 				A95A1D852460CAD50079378D /* CarbValueTests.swift in Sources */,
 				437AFF1F203A763F008C4892 /* HKHealthStoreMock.swift in Sources */,
 				A99C73792339ACDC00C80963 /* ServiceTests.swift in Sources */,
