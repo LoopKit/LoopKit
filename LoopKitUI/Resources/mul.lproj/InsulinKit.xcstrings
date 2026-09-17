@@ -1046,7 +1046,7 @@
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hendelseshistorie"
+            "value" : "Hendelseslogg"
           }
         },
         "nl" : {
@@ -1292,7 +1292,7 @@
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Insulin Levering"
+            "value" : "Insulintilførsel"
           }
         },
         "nl" : {
