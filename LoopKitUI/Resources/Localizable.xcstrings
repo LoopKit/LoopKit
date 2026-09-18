@@ -5286,7 +5286,7 @@
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Legg til karbohydrater"
+            "value" : "Legg inn karbohydrater"
           }
         },
         "nb-NO" : {
@@ -7224,7 +7224,7 @@
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Karb forhold"
+            "value" : "Karbohydratforhold"
           }
         },
         "nb-NO" : {

@@ -446,7 +446,7 @@
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "U IOB"
+            "value" : "E IOB"
           }
         },
         "nl" : {
@@ -1057,7 +1057,7 @@
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hendelseshistorie"
+            "value" : "Hendelseslogg"
           }
         },
         "nl" : {
