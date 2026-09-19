@@ -13,6 +13,13 @@ public protocol DeviceManagerUI: DeviceManager {
     /// An image representing a generalized device. Used during onboarding.
     static var onboardingImage: UIImage? { get }
 
+    /// An image used in the device picker
+    static var pickerImage: UIImage? { get }
+
     /// An image representing a device configuration after it is set up
     var smallImage: UIImage? { get }
+}
+
+public extension DeviceManagerUI {
+    static var pickerImage: UIImage? { onboardingImage }
 }
