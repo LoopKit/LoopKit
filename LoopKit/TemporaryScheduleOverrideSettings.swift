@@ -12,6 +12,7 @@ import HealthKit
 public struct TemporaryScheduleOverrideSettings: Hashable {
     private var targetRangeInMgdl: DoubleRange?
     public var insulinNeedsScaleFactor: Double?
+    public var autoBolusCarbsActive: Bool?
 
     public var targetRange: ClosedRange<HKQuantity>? {
         return targetRangeInMgdl.map { $0.quantityRange(for: .milligramsPerDeciliter) }
@@ -32,14 +33,20 @@ public struct TemporaryScheduleOverrideSettings: Hashable {
     public var effectiveInsulinNeedsScaleFactor: Double {
         return insulinNeedsScaleFactor ?? 1.0
     }
+    
+    public init() {
+        self.init(targetRange: nil)
+    }
+    
 
-    public init(unit: HKUnit, targetRange: DoubleRange?, insulinNeedsScaleFactor: Double? = nil) {
-        self.init(targetRange: targetRange?.quantityRange(for: unit), insulinNeedsScaleFactor: insulinNeedsScaleFactor)
+    public init(unit: HKUnit, targetRange: DoubleRange?, insulinNeedsScaleFactor: Double? = nil, autoBolusCarbsActive: Bool? = nil) {
+        self.init(targetRange: targetRange?.quantityRange(for: unit), insulinNeedsScaleFactor: insulinNeedsScaleFactor, autoBolusCarbsActive: autoBolusCarbsActive)
     }
 
-    public init(targetRange: ClosedRange<HKQuantity>?, insulinNeedsScaleFactor: Double? = nil) {
+    public init(targetRange: ClosedRange<HKQuantity>?, insulinNeedsScaleFactor: Double? = nil, autoBolusCarbsActive: Bool? = nil) {
         self.targetRangeInMgdl = targetRange?.doubleRange(for: .milligramsPerDeciliter)
         self.insulinNeedsScaleFactor = insulinNeedsScaleFactor
+        self.autoBolusCarbsActive = autoBolusCarbsActive
     }
 }
 
@@ -49,6 +56,7 @@ extension TemporaryScheduleOverrideSettings: RawRepresentable {
     private enum Key {
         static let targetRange = "targetRange"
         static let insulinNeedsScaleFactor = "insulinNeedsScaleFactor"
+        static let autoBolusCarbsActive = "autoBolusCarbsActive"
         static let version = "version"
     }
 
@@ -65,6 +73,7 @@ extension TemporaryScheduleOverrideSettings: RawRepresentable {
         }
 
         self.insulinNeedsScaleFactor = rawValue[Key.insulinNeedsScaleFactor] as? Double
+        self.autoBolusCarbsActive = rawValue[Key.autoBolusCarbsActive] as? Bool
     }
 
     public var rawValue: RawValue {
@@ -77,8 +86,12 @@ extension TemporaryScheduleOverrideSettings: RawRepresentable {
         if let insulinNeedsScaleFactor = insulinNeedsScaleFactor {
             raw[Key.insulinNeedsScaleFactor] = insulinNeedsScaleFactor
         }
+        
+        if let autoBolusCarbsActive = autoBolusCarbsActive {
+            raw[Key.autoBolusCarbsActive] = autoBolusCarbsActive
+        }
 
-        raw[Key.version] = 1
+        raw[Key.version] = 2
 
         return raw
     }

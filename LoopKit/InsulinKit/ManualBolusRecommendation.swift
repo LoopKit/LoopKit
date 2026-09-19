@@ -87,15 +87,39 @@ extension BolusRecommendationNotice: Codable {
     }
 }
 
+public struct BolusBreakdown {
+    public let carbsAmount: Double?
+    public let cobCorrectionAmount: Double
+    public let bgCorrectionAmount: Double
+    
+    public init(fullCarbsAmount: Double? = nil, fullCobCorrectionAmount: Double, fullCorrectionAmount: Double) {
+        if let fullCarbsAmount = fullCarbsAmount {
+            carbsAmount = fullCarbsAmount
+            cobCorrectionAmount = max(fullCobCorrectionAmount - carbsAmount!, 0)
+        } else {
+            carbsAmount = nil
+            cobCorrectionAmount = fullCobCorrectionAmount
+        }
+        
+        bgCorrectionAmount = fullCorrectionAmount - cobCorrectionAmount
+    }
+}
+
+extension BolusBreakdown : Codable {}
+
 public struct ManualBolusRecommendation {
     public let amount: Double
     public let pendingInsulin: Double
     public var notice: BolusRecommendationNotice?
+    public let missingAmount: Double?
+    public let bolusBreakdown: BolusBreakdown?
 
-    public init(amount: Double, pendingInsulin: Double, notice: BolusRecommendationNotice? = nil) {
+    public init(amount: Double, pendingInsulin: Double, notice: BolusRecommendationNotice? = nil, missingAmount: Double? = nil, bolusBreakdown: BolusBreakdown? = nil) {
         self.amount = amount
         self.pendingInsulin = pendingInsulin
         self.notice = notice
+        self.missingAmount = missingAmount
+        self.bolusBreakdown = bolusBreakdown
     }
 }
 
