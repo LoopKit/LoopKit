@@ -15,6 +15,52 @@ public struct GlucoseMath {
     public static let defaultDelta: TimeInterval = .minutes(5)
 }
 
+
+extension Collection where Element: SampleValue, Index == Int {
+
+    public func interpolateValue(at date: Date, unit: HKUnit) -> Double? {
+        return interpolateValue(at: date, unit: unit).1
+    }
+
+    public func interpolateValue(startIndex: Int? = nil, at date: Date, unit: HKUnit) -> (Int, Double?) {
+        let startIndex = startIndex ?? self.startIndex
+
+        guard startIndex >= self.startIndex, startIndex < self.endIndex, self[self.endIndex - 1].startDate >= date else {
+            return (startIndex, nil)
+        }
+
+        var precedingStartElement = self[startIndex]
+        var result: Double?
+
+        var index = startIndex
+
+        for idx in indices[startIndex..<self.endIndex] {
+            let element = self[idx]
+            if element.startDate < date {
+                precedingStartElement = element
+            } else {
+                result = Self.interpolate(first: precedingStartElement, second: element, at: date, unit: unit)
+                break
+            }
+
+            index = idx
+        }
+
+        return (index, result)
+    }
+
+    public static func interpolate(first: SampleValue, second: SampleValue, at date: Date, unit: HKUnit) -> Double {
+        let firstValue = first.quantity.doubleValue(for: unit)
+        let secondValue = second.quantity.doubleValue(for: unit)
+
+        guard firstValue != secondValue, first.startDate != second.startDate, date != first.startDate else {
+            return firstValue
+        }
+
+        return firstValue + ((secondValue - firstValue) * (date.timeIntervalSince(first.startDate) / second.startDate.timeIntervalSince(first.startDate)))
+    }
+}
+
 fileprivate extension Collection where Element == (x: Double, y: Double) {
     /**
      Calculates slope and intercept using linear regression
