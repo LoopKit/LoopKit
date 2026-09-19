@@ -63,21 +63,15 @@ extension ExponentialInsulinModelPreset {
         }
     }
     
-    var model: InsulinModel {
+    public var model: InsulinModel {
         return ExponentialInsulinModel(actionDuration: actionDuration, peakActivityTime: peakActivity, delay: delay)
     }
-}
-
-
-extension ExponentialInsulinModelPreset: InsulinModel {
-    public var effectDuration: TimeInterval {
+    
+    public var effectDuration : TimeInterval {
         return model.effectDuration
     }
-
-    public func percentEffectRemaining(at time: TimeInterval) -> Double {
-        return model.percentEffectRemaining(at: time)
-    }
 }
+
 
 extension ExponentialInsulinModelPreset: CustomDebugStringConvertible {
     public var debugDescription: String {
