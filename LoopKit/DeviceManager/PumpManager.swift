@@ -358,3 +358,100 @@ public extension PumpManager {
         }
     }
 }
+
+
+// MARK: - PumpConnectionLendable (optional capability)  // PODLOAN
+
+/// An OPTIONAL capability for pump managers whose device connection can be
+/// deliberately released — loaned to another controller (e.g. an Apple Watch
+/// commanding the pump directly) — and later reclaimed.
+///
+/// Motivation: some pumps (Omnipod DASH) hold a single BLE connection and give
+/// it to whichever credentialed controller connects last. A pump manager that
+/// maintains a standing auto-connect therefore reclaims the device within
+/// seconds of any radio availability, making a deliberate second-controller
+/// session impossible without disabling the phone's radio entirely. This
+/// capability lets the app ask the manager to stand down on purpose.
+///
+/// Managers that cannot support a deliberate release simply do not conform,
+/// and no behavior changes. Callers discover the capability by conditional
+/// cast, as with other optional capabilities.
+public protocol PumpConnectionLendable: AnyObject {
+    /// True while the connection is deliberately released (a loan is active).
+    /// Implementations should persist this so an app relaunch mid-loan does not
+    /// silently re-arm the connection and steal the device back.
+    var isConnectionReleased: Bool { get }
+
+    /// Stop bidding for the device's connection so another controller can hold
+    /// it uncontested. Must leave device state, pairing and keys intact.
+    func releaseConnection()
+
+    /// Resume bidding for the device's connection after a loan ends.
+    func reclaimConnection()
+
+    /// The device's cumulative-delivered odometer as last reported, if the pump
+    /// keeps one — an AUDIT input for post-loan reconciliation, never a record
+    /// source. Default: nil (no odometer).
+    var lentDeviceInsulinDelivered: Double? { get }
+
+    /// Force a real status round-trip (bypassing freshness optimizations) so the
+    /// odometer is current before an audit read. Completion: success.
+    /// Default: completes false (no forced read available).
+    func refreshLentDeviceStatus(completion: @escaping (Bool) -> Void)
+
+    /// True once a reclaimed connection is TRULY re-established (the link is up and the
+    /// device is reachable). `reclaimConnection()` only re-arms the bid; the actual reconnect
+    /// can land seconds-to-minutes later, so UI that must wait for the device (e.g. a
+    /// "reclaiming…" indicator) keys on this rather than on the loan flag clearing. Default:
+    /// true — a manager that can't report readiness never appears stuck "reconnecting".
+    var isConnectionReady: Bool { get }
+
+    /// Escalate a reclaim whose link has not come back, from whatever gentle reconnect the
+    /// manager uses by default to its most aggressive reacquisition.
+    ///
+    /// `reclaimConnection()` only re-arms the bid, and for a device idle a while that bid is
+    /// probabilistic — it depends on happening to hear the device announce itself. A manager that
+    /// can instead go LOOKING (scanning for the device by address) should do so here. Called at
+    /// most once per reclaim and only after the link has failed to come up within a grace period,
+    /// so this is a recovery path, not the normal one.
+    ///
+    /// Idempotent, and safe to call when nothing needs escalating.
+    ///
+    /// RETURNS a short description of what it actually did, for the CALLER to log. The manager's
+    /// own logging goes to os_log, which is invisible in the file logs field analysis reads — an
+    /// escalation that silently no-ops (no device address, wrong state) is otherwise
+    /// indistinguishable from one that ran and found nothing, and those need opposite fixes.
+    /// nil means "nothing to escalate".
+    ///
+    /// Default: nil — a manager with a single reconnect strategy has nothing to escalate to.
+    @discardableResult
+    func escalateConnectionReclaim() -> String?
+
+    /// A compact account of what the pump's BLE link has ACTUALLY been doing — connect and
+    /// disconnect edges with their reasons, and what this process was holding when a connect was
+    /// refused. nil when the manager has nothing to report.
+    ///
+    /// Exists because the caller cannot see any of this otherwise: the manager logs through
+    /// os_log, which does not reach the file logs field analysis reads, and the app does not link
+    /// the manager directly (pump managers load as plugins). A settle that reports the link up and
+    /// then never verifies is indistinguishable from one that never got a link at all without it.
+    ///
+    /// Default: nil.
+    func connectionDiagnostics() -> String?
+
+    /// When the device last showed evidence of sessions by ANOTHER controller (e.g. an
+    /// EAP/SQN resync on a pod whose sequence advanced without this manager) — the
+    /// books-dirty primitive behind the phone mirror (R40(a)): observed while this phone
+    /// believes it is the sole controller, it means someone else drove the device.
+    /// Default: nil (no such telemetry).
+    var podLoanLastForeignSessionAt: Date? { get }
+}
+
+extension PumpConnectionLendable {
+    public var lentDeviceInsulinDelivered: Double? { return nil }
+    public func refreshLentDeviceStatus(completion: @escaping (Bool) -> Void) { completion(false) }
+    public var isConnectionReady: Bool { return true }
+    public func escalateConnectionReclaim() -> String? { return nil }
+    public func connectionDiagnostics() -> String? { return nil }
+    public var podLoanLastForeignSessionAt: Date? { return nil }
+}
