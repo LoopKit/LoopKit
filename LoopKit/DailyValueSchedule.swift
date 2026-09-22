@@ -141,19 +141,27 @@ public struct DailyValueSchedule<T>: DailySchedule {
      - returns: A slice of `ScheduleItem` values
      */
     public func between(start startDate: Date, end endDate: Date) -> [AbsoluteScheduleValue<T>] {
-        guard startDate <= endDate else {
+        guard startDate <= endDate, endDate.timeIntervalSince(startDate).isFinite else {
             return []
         }
 
-        let startOffset = scheduleOffset(for: startDate)
-        let endOffset = startOffset + endDate.timeIntervalSince(startDate)
+        var values: [AbsoluteScheduleValue<T>] = []
+        var start = startDate
 
-        guard endOffset <= maxTimeInterval else {
-            let boundaryDate = startDate.addingTimeInterval(maxTimeInterval - startOffset)
+        while true {
+            let startOffset = scheduleOffset(for: start)
+            let endOffset = startOffset + endDate.timeIntervalSince(start)
 
-            return between(start: startDate, end: boundaryDate) + between(start: boundaryDate, end: endDate)
+            guard endOffset > maxTimeInterval else {
+                return values + valuesWithinRepeatInterval(start: start, startOffset: startOffset, endOffset: endOffset)
+            }
+
+            values += valuesWithinRepeatInterval(start: start, startOffset: startOffset, endOffset: maxTimeInterval)
+            start = start.addingTimeInterval(maxTimeInterval - startOffset)
         }
+    }
 
+    private func valuesWithinRepeatInterval(start startDate: Date, startOffset: TimeInterval, endOffset: TimeInterval) -> [AbsoluteScheduleValue<T>] {
         var startIndex = 0
         var endIndex = items.count
 
