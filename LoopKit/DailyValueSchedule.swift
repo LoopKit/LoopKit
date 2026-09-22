@@ -134,27 +134,27 @@ public struct DailyValueSchedule<T>: DailySchedule {
      - returns: A slice of `ScheduleItem` values
      */
     public func between(start startDate: Date, end endDate: Date) -> [AbsoluteScheduleValue<T>] {
-        guard startDate <= endDate else {
+        guard startDate <= endDate, endDate.timeIntervalSince(startDate).isFinite else {
             return []
         }
 
-        // Defense-in-depth: the recursion below splits the interval into 24-hour
-        // chunks, so a non-finite span (e.g. from an indefinite override's
-        // infinite end date) would recurse without bound and exhaust memory.
-        // Refuse to expand a non-finite interval.
-        guard endDate.timeIntervalSince(startDate).isFinite else {
-            return []
+        var values: [AbsoluteScheduleValue<T>] = []
+        var start = startDate
+
+        while true {
+            let startOffset = scheduleOffset(for: start)
+            let endOffset = startOffset + endDate.timeIntervalSince(start)
+
+            guard endOffset > maxTimeInterval else {
+                return values + valuesWithinRepeatInterval(start: start, startOffset: startOffset, endOffset: endOffset)
+            }
+
+            values += valuesWithinRepeatInterval(start: start, startOffset: startOffset, endOffset: maxTimeInterval)
+            start = start.addingTimeInterval(maxTimeInterval - startOffset)
         }
+    }
 
-        let startOffset = scheduleOffset(for: startDate)
-        let endOffset = startOffset + endDate.timeIntervalSince(startDate)
-
-        guard endOffset <= maxTimeInterval else {
-            let boundaryDate = startDate.addingTimeInterval(maxTimeInterval - startOffset)
-
-            return between(start: startDate, end: boundaryDate) + between(start: boundaryDate, end: endDate)
-        }
-
+    private func valuesWithinRepeatInterval(start startDate: Date, startOffset: TimeInterval, endOffset: TimeInterval) -> [AbsoluteScheduleValue<T>] {
         var startIndex = 0
         var endIndex = items.count
 
