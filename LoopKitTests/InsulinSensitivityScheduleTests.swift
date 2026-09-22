@@ -14,14 +14,17 @@ import HealthKit
 class InsulinSensitivityScheduleTests: XCTestCase {
 
     func testScheduleFor() {
-        let value1 = 15.0
+        // Values that survive the mg/dL -> mmol/L -> mg/dL round trip with rounding
+        let value1 = 18.0
         let value2 = 40.0
+        let timeZone = TimeZone(secondsFromGMT: 0)!
         let insulinSensitivityScheduleMGDL = InsulinSensitivitySchedule(
             unit: .milligramsPerDeciliter,
             dailyItems: [
                 RepeatingScheduleValue(startTime: 0, value: value1),
                 RepeatingScheduleValue(startTime: 1000, value: value2)
-            ])
+            ],
+            timeZone: timeZone)
         let insulinSensitivityScheduleMMOLL = InsulinSensitivitySchedule(
             unit: .millimolesPerLiter,
             dailyItems: [
@@ -29,12 +32,13 @@ class InsulinSensitivityScheduleTests: XCTestCase {
                                        value: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: value1).doubleValue(for: .millimolesPerLiter, withRounding: true)),
                 RepeatingScheduleValue(startTime: 1000,
                                        value: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: value2).doubleValue(for: .millimolesPerLiter, withRounding: true))
-            ])
-        let date = Date()
+            ],
+            timeZone: timeZone)
         XCTAssertEqual(insulinSensitivityScheduleMGDL!.schedule(for: .millimolesPerLiter), insulinSensitivityScheduleMMOLL!)
-        
-        
-        XCTAssertEqual(insulinSensitivityScheduleMGDL!.value(at: date), insulinSensitivityScheduleMMOLL!.value(for: .milligramsPerDeciliter, at: date))
-        XCTAssertEqual(insulinSensitivityScheduleMGDL!.value(at: date), insulinSensitivityScheduleMGDL!.value(for: .milligramsPerDeciliter, at: date))
+
+        for date in [Date(timeIntervalSinceReferenceDate: 500), Date(timeIntervalSinceReferenceDate: 2000)] {
+            XCTAssertEqual(insulinSensitivityScheduleMGDL!.value(at: date), insulinSensitivityScheduleMMOLL!.value(for: .milligramsPerDeciliter, at: date))
+            XCTAssertEqual(insulinSensitivityScheduleMGDL!.value(at: date), insulinSensitivityScheduleMGDL!.value(for: .milligramsPerDeciliter, at: date))
+        }
     }
 }
