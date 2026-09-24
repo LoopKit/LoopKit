@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftData
+import os.log
 
 public enum End: Equatable, Hashable, Codable, Sendable {
     case natural
@@ -353,32 +354,43 @@ public class TemporaryScheduleOverrideHistoryContainer {
     public static let shared = TemporaryScheduleOverrideHistoryContainer()
     public let context: ModelContext
 
+    private static let log = OSLog(subsystem: "com.loopkit.LoopKit", category: "TemporaryScheduleOverrideHistoryContainer")
+
     private init() {
+        let schema = Schema([TemporaryScheduleOverrideHistory.self])
         do {
-            let schema = Schema([TemporaryScheduleOverrideHistory.self])
             let container = try ModelContainer(for: schema)
             context = ModelContext(container)
         } catch {
-            fatalError()
+            // The override history is rebuilt from settings, so it is not worth
+            // crashing the app (a loop, since launch retries) when the on-disk
+            // store cannot be opened. Fall back to an in-memory store so the
+            // app can start; the persisted history is abandoned.
+            os_log("Unable to open override history store, falling back to in-memory: %{public}@", log: Self.log, type: .error, String(describing: error))
+            let container = try! ModelContainer(for: schema, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+            context = ModelContext(container)
         }
     }
-    
+
     public func fetch(descriptor: FetchDescriptor<TemporaryScheduleOverrideHistory>? = nil) -> TemporaryScheduleOverrideHistory {
         do {
-            let fetch = try context.fetch(descriptor ?? FetchDescriptor<TemporaryScheduleOverrideHistory>())
-            guard fetch.count == 1, let persisted = fetch.first else {
-                if fetch.count > 1 {
-                    fatalError("Should not have more than 1 item")
-                }
-                
-                let history = TemporaryScheduleOverrideHistory()
-                context.insert(history)
-                return history
+            let fetched = try context.fetch(descriptor ?? FetchDescriptor<TemporaryScheduleOverrideHistory>())
+            // There should only ever be one, but a duplicate must not crash the
+            // app at launch: use the first and move on.
+            if fetched.count > 1 {
+                os_log("Found %d override history records; expected 1. Using the first.", log: Self.log, type: .error, fetched.count)
             }
-            
-            return persisted
+            if let persisted = fetched.first {
+                return persisted
+            }
         } catch {
-            fatalError(error.localizedDescription)
+            // A fetch/decode failure here would otherwise take down the app at
+            // launch. Log and start from an empty history instead.
+            os_log("Unable to fetch override history, starting empty: %{public}@", log: Self.log, type: .error, String(describing: error))
         }
+
+        let history = TemporaryScheduleOverrideHistory()
+        context.insert(history)
+        return history
     }
 }
