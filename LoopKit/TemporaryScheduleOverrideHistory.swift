@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftData
+import os.log
 
 public enum End: Equatable, Hashable, Codable, Sendable {
     case natural
@@ -353,32 +354,75 @@ public class TemporaryScheduleOverrideHistoryContainer {
     public static let shared = TemporaryScheduleOverrideHistoryContainer()
     public let context: ModelContext
 
+    private static let log = OSLog(subsystem: "com.loopkit.LoopKit", category: "TemporaryScheduleOverrideHistoryContainer")
+
     private init() {
+        let schema = Schema([TemporaryScheduleOverrideHistory.self])
         do {
-            let schema = Schema([TemporaryScheduleOverrideHistory.self])
             let container = try ModelContainer(for: schema)
             context = ModelContext(container)
         } catch {
-            fatalError()
+            // The override history is rebuilt from settings, so it is not worth
+            // crashing the app (a loop, since launch retries) when the on-disk
+            // store cannot be opened. Fall back to an in-memory store so the
+            // app can start; the persisted history is abandoned.
+            os_log("Unable to open override history store, falling back to in-memory: %{public}@", log: Self.log, type: .error, String(describing: error))
+            let container = try! ModelContainer(for: schema, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+            context = ModelContext(container)
         }
     }
-    
+
     public func fetch(descriptor: FetchDescriptor<TemporaryScheduleOverrideHistory>? = nil) -> TemporaryScheduleOverrideHistory {
+        // Breadcrumb: this fetch materializes the persisted override events
+        // (decoding each event's context/preset/symbol). A launch crash here
+        // leaves this as the last line before the trap in a sysdiagnose, which
+        // is how we can locate it in reports from users who can reproduce it.
+        os_log("Loading override history…", log: Self.log, type: .default)
         do {
-            let fetch = try context.fetch(descriptor ?? FetchDescriptor<TemporaryScheduleOverrideHistory>())
-            guard fetch.count == 1, let persisted = fetch.first else {
-                if fetch.count > 1 {
-                    fatalError("Should not have more than 1 item")
-                }
-                
-                let history = TemporaryScheduleOverrideHistory()
-                context.insert(history)
-                return history
+            let fetched = try context.fetch(descriptor ?? FetchDescriptor<TemporaryScheduleOverrideHistory>())
+            // There should only ever be one, but a duplicate must not crash the
+            // app at launch: use the first and move on.
+            if fetched.count > 1 {
+                os_log("Found %d override history records; expected 1. Using the first.", log: Self.log, type: .error, fetched.count)
             }
-            
-            return persisted
+            if let persisted = fetched.first {
+                logSummary(of: persisted)
+                return persisted
+            }
+            os_log("No persisted override history; starting empty.", log: Self.log, type: .default)
         } catch {
-            fatalError(error.localizedDescription)
+            // A fetch/decode failure here would otherwise take down the app at
+            // launch. Log and start from an empty history instead.
+            os_log("Unable to fetch override history, starting empty: %{public}@", log: Self.log, type: .error, String(describing: error))
+        }
+
+        let history = TemporaryScheduleOverrideHistory()
+        context.insert(history)
+        return history
+    }
+
+    /// Logs a compact, structural summary of the loaded events so reports from
+    /// users who hit odd override/preset data (crash or not) show what was
+    /// stored, without dumping user content.
+    private func logSummary(of history: TemporaryScheduleOverrideHistory) {
+        let events = history.recentEvents
+        os_log("Loaded override history: %d event(s)", log: Self.log, type: .default, events.count)
+        for event in events {
+            let o = event.override
+            let contextKind: String
+            switch o.context {
+            case .preMeal: contextKind = "preMeal"
+            case .preset: contextKind = "preset"
+            case .activity: contextKind = "activity"
+            case .custom: contextKind = "custom"
+            }
+            os_log("  override context=%{public}@ duration=%{public}@ start=%{public}@ actualEnd=%{public}@ sync=%{public}@",
+                   log: Self.log, type: .default,
+                   contextKind,
+                   String(describing: o.duration),
+                   String(describing: o.startDate),
+                   String(describing: o.actualEnd),
+                   o.syncIdentifier.uuidString)
         }
     }
 }
