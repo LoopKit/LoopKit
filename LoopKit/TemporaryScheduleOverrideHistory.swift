@@ -373,6 +373,11 @@ public class TemporaryScheduleOverrideHistoryContainer {
     }
 
     public func fetch(descriptor: FetchDescriptor<TemporaryScheduleOverrideHistory>? = nil) -> TemporaryScheduleOverrideHistory {
+        // Breadcrumb: this fetch materializes the persisted override events
+        // (decoding each event's context/preset/symbol). A launch crash here
+        // leaves this as the last line before the trap in a sysdiagnose, which
+        // is how we can locate it in reports from users who can reproduce it.
+        os_log("Loading override history…", log: Self.log, type: .default)
         do {
             let fetched = try context.fetch(descriptor ?? FetchDescriptor<TemporaryScheduleOverrideHistory>())
             // There should only ever be one, but a duplicate must not crash the
@@ -381,8 +386,10 @@ public class TemporaryScheduleOverrideHistoryContainer {
                 os_log("Found %d override history records; expected 1. Using the first.", log: Self.log, type: .error, fetched.count)
             }
             if let persisted = fetched.first {
+                logSummary(of: persisted)
                 return persisted
             }
+            os_log("No persisted override history; starting empty.", log: Self.log, type: .default)
         } catch {
             // A fetch/decode failure here would otherwise take down the app at
             // launch. Log and start from an empty history instead.
@@ -392,5 +399,30 @@ public class TemporaryScheduleOverrideHistoryContainer {
         let history = TemporaryScheduleOverrideHistory()
         context.insert(history)
         return history
+    }
+
+    /// Logs a compact, structural summary of the loaded events so reports from
+    /// users who hit odd override/preset data (crash or not) show what was
+    /// stored, without dumping user content.
+    private func logSummary(of history: TemporaryScheduleOverrideHistory) {
+        let events = history.recentEvents
+        os_log("Loaded override history: %d event(s)", log: Self.log, type: .default, events.count)
+        for event in events {
+            let o = event.override
+            let contextKind: String
+            switch o.context {
+            case .preMeal: contextKind = "preMeal"
+            case .preset: contextKind = "preset"
+            case .activity: contextKind = "activity"
+            case .custom: contextKind = "custom"
+            }
+            os_log("  override context=%{public}@ duration=%{public}@ start=%{public}@ actualEnd=%{public}@ sync=%{public}@",
+                   log: Self.log, type: .default,
+                   contextKind,
+                   String(describing: o.duration),
+                   String(describing: o.startDate),
+                   String(describing: o.actualEnd),
+                   o.syncIdentifier.uuidString)
+        }
     }
 }
