@@ -52,7 +52,7 @@ public struct DatePickerRow: View {
     public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack {
-                Text("Time")
+                Text(LocalizedString("Time", comment: "Label for the time row on the carb entry screen"))
                     .foregroundColor(.primary)
                 
                 Spacer()

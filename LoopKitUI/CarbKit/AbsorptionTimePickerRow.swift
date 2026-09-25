@@ -35,7 +35,7 @@ public struct AbsorptionTimePickerRow: View {
     public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack {
-                Text("Absorption Time")
+                Text(LocalizedString("Absorption Time", comment: "Title of the carb entry absorption time cell"))
                     .foregroundColor(.primary)
                 
                 if showHowAbsorptionTimeWorks != nil {

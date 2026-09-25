@@ -4580,7 +4580,7 @@
         "he" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Absorption Time"
+            "value" : "זמן ספיגה"
           }
         },
         "hu" : {
@@ -4604,13 +4604,13 @@
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Absorbsjonstid"
+            "value" : "Absorpsjonstid"
           }
         },
         "nb-NO" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Absorbsjonstid"
+            "value" : "Absorpsjonstid"
           }
         },
         "nl" : {
