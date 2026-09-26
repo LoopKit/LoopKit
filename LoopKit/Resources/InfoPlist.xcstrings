@@ -42,6 +42,12 @@
             "value" : "Måltidsdata fra helsedatabasen brukes til å bestemme glukoseeffekter. Glukosedata hentes fra HealthKit for grafisk fremstilling og analyse."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maaltijdgegevens uit de Gezondheid-database worden gebruikt om glucose-effecten te bepalen. Glucosegegevens worden uit HealthKit opgehaald voor grafieken en analyse."
+          }
+        },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
