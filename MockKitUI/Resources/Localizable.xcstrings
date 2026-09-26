@@ -119,7 +119,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@ kan niet communiceren met de Pompsimulator sinds %2$@.\n\nZonder communicatie kan de app geen opdrachten meer versturen voor insulinetoediening of nauwkeurige recente informatie weergeven over jouw actieve insuline of de insuline die is toegediend."
+            "value" : "%1$@ kan niet communiceren met de pompsimulator sinds %2$@.\n\nZonder communicatie kan de app geen opdrachten meer versturen voor insulinetoediening of nauwkeurige recente informatie weergeven over jouw actieve insuline of de insuline die is toegediend."
           }
         },
         "pl" : {
@@ -554,6 +554,12 @@
             "value" : "2"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -612,6 +618,12 @@
             "value" : "5"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -665,6 +677,12 @@
           }
         },
         "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "50+"
+          }
+        },
+        "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "50+"
@@ -744,7 +762,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Een software-update wordt aanbevolen om de %1$@ app te blijven gebruiken. \n\nGa naar %2$@ Instellingen > Software Update om de nieuwste versie te installeren."
+            "value" : "Een software-update wordt aanbevolen om de %1$@ app te blijven gebruiken. \n\nGa naar %2$@ Instellingen > Algemeen > Software-update om de nieuwste versie te installeren."
           }
         },
         "pl" : {
@@ -1394,6 +1412,12 @@
             "value" : "CGM-simulator"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CGM-simulator"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1461,7 +1485,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wis laatste versie Controleer Waarschuwingsdatum"
+            "value" : "Wis laatste versie controleer waarschuwingsdatum"
           }
         },
         "pl" : {
@@ -1543,7 +1567,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Comms Herstel"
+            "value" : "Comms herstel"
           }
         },
         "pl" : {
@@ -1768,7 +1792,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Service Verwijderen"
+            "value" : "Service verwijderen"
           }
         },
         "pl" : {
@@ -1859,6 +1883,12 @@
             "value" : "Enhetsdetaljer"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apparaatgegevens"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1921,7 +1951,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gereed"
+            "value" : "Voltooid"
           }
         },
         "pl" : {
@@ -2016,7 +2046,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Fout Bij Hervatten"
+            "value" : "Fout bij hervatten"
           }
         },
         "pl" : {
@@ -2135,7 +2165,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Fout Bij Onderbreken"
+            "value" : "Fout bij onderbreken"
           }
         },
         "pl" : {
@@ -2226,6 +2256,12 @@
             "value" : "Estimert lesing"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geschatte meting"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2299,7 +2335,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Insulinetoediening Hervatten Mislukt"
+            "value" : "Insulinetoediening hervatten mislukt"
           }
         },
         "pl" : {
@@ -2378,6 +2414,12 @@
             "value" : "Kunne ikke avbryte insulintilførselen"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Onderbreken van insulinetoediening mislukt"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2436,6 +2478,12 @@
             "value" : "Få hjelp med CGM-en din"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hulp bij je CGM"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2492,6 +2540,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Få hjelp med pumpen din"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hulp bij je pomp"
           }
         },
         "pl" : {
@@ -2747,6 +2801,12 @@
             "value" : "Insulin\n Suspendert"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Insuline\nonderbroken"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2906,6 +2966,12 @@
             "value" : "Insulin %@ gjenstår"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Insuline%@over"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2991,7 +3057,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Laatste Meting"
+            "value" : "Laatste meting"
           }
         },
         "pl" : {
@@ -3209,7 +3275,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mock Versie Check %@"
+            "value" : "Mock versie check %@"
           }
         },
         "pl" : {
@@ -3276,6 +3342,12 @@
             "value" : "Ingen Leveranse"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen\ntoediening"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3332,6 +3404,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Innstillinger for varsling"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meldingsinstellingen"
           }
         },
         "pl" : {
@@ -3432,7 +3510,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ok"
+            "value" : "OK"
           }
         },
         "pl" : {
@@ -3523,6 +3601,12 @@
             "value" : "Pod utløper om"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pomp verloopt over "
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3597,7 +3681,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Simulator Herstellen"
+            "value" : "Simulator herstellen"
           }
         },
         "pl" : {
@@ -3732,6 +3816,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Planlagt%@Basal"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geplande%@basaal"
           }
         },
         "pl" : {
@@ -3902,6 +3992,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Simulatorinnstillinger"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simulatorinstellingen"
           }
         },
         "ro" : {
@@ -4156,6 +4252,12 @@
             "value" : "Midlertidig %@ Basal"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tijdelijke%@basaal"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4224,7 +4326,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Update Herinnering"
+            "value" : "Update herinnering"
           }
         },
         "pl" : {
@@ -4361,6 +4463,12 @@
             "value" : "versionUpdate: %1$@\n\nbundleIdentifier: %2$@\n\ncurrentVersion: %3$@"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "versionUpdate: %1$@\n\nbundleIdentifier: %2$@\n\ncurrentVersion: %3$@"
+          }
+        },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4423,7 +4531,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Je %1$@ app is verouderd. De app blijft werken, maar we raden je aan om de app bij te werken naar de nieuwste versie. \n\nGa naar %2$@ Instellingen > Software Update om de update te voltooien."
+            "value" : "Je %1$@ app is verouderd. De app blijft werken, maar we raden je aan om de app bij te werken naar de nieuwste versie. \n\nGa naar %2$@ Instellingen > Algemeen > Software-update om de update te voltooien."
           }
         },
         "pl" : {
