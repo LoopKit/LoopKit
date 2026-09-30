@@ -54,6 +54,12 @@ public struct CheckmarkListItem<LeadingView: View>: View {
             Button(action: { self.isSelected = true }) {
                 content
             }
+            // Opt out of iOS 26 Liquid Glass's default button styling, which otherwise
+            // wraps each row's custom label in a tinted Capsule background (ballooning into
+            // ovals on the tall multi-line rows) and accent-tints all the text. .plain keeps
+            // the row a borderless tappable item; the checkmark stays accent-colored via its
+            // own foregroundColor.
+            .buttonStyle(.plain)
         } else {
             content
         }
