@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		EA575FC584C04919A4D4775E /* EnactedTempBasal.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE4B6BF15324635B047B52E /* EnactedTempBasal.swift */; };
-		25C70C3412F44DACB716F787 /* EnactedTempBasal.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE4B6BF15324635B047B52E /* EnactedTempBasal.swift */; };
 		9D3D2DA3B9824EF48981F0E4 /* StoredInsulinModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CAB9E826A3254800A57273 /* StoredInsulinModel.swift */; };
 		485ACF65C30744BFBC979CEF /* NotificationSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A985464E251449FE0099C1A6 /* NotificationSettings.swift */; };
 		2383C3D7967B4602B8EB4A5B /* SettingsObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A912BE2A245B9E8600CBE199 /* SettingsObject+CoreDataProperties.swift */; };
@@ -481,6 +479,7 @@
 		A914472727BF044C0054A39D /* normalize_edge_case_doses_mutable_output.json in Resources */ = {isa = PBXBuildFile; fileRef = A914472627BF044C0054A39D /* normalize_edge_case_doses_mutable_output.json */; };
 		A919889C2354E5EB00B75EEE /* SettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A919889B2354E5EB00B75EEE /* SettingsStore.swift */; };
 		A919889F2355016B00B75EEE /* DosingDecisionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A919889E2355016B00B75EEE /* DosingDecisionStore.swift */; };
+		5D0A1B2C3D4E5F6071829304 /* DosingDecisionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A919889E2355016B00B75EEE /* DosingDecisionStore.swift */; };
 		A932803B2798D63B0091D0A1 /* SyncAlertObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = A932803A2798D63B0091D0A1 /* SyncAlertObject.swift */; };
 		A932803C2798D63B0091D0A1 /* SyncAlertObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = A932803A2798D63B0091D0A1 /* SyncAlertObject.swift */; };
 		A933DB8824BF956F009B417A /* CriticalEventLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A933DB8724BF956F009B417A /* CriticalEventLog.swift */; };
@@ -501,7 +500,9 @@
 		A9498D8F23386CE800DAA9B9 /* MockServiceTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9498D8E23386CE800DAA9B9 /* MockServiceTableViewController.swift */; };
 		A9498D9123386D0800DAA9B9 /* MockService+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9498D9023386D0800DAA9B9 /* MockService+UI.swift */; };
 		A95A1D7F2460BBC70079378D /* DosingDecisionObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95A1D7E2460BBC70079378D /* DosingDecisionObject+CoreDataClass.swift */; };
+		5D0A1B2C3D4E5F6071829310 /* DosingDecisionObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95A1D7E2460BBC70079378D /* DosingDecisionObject+CoreDataClass.swift */; };
 		A95A1D822460BBDC0079378D /* DosingDecisionObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95A1D812460BBDC0079378D /* DosingDecisionObject+CoreDataProperties.swift */; };
+		5D0A1B2C3D4E5F6071829311 /* DosingDecisionObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95A1D812460BBDC0079378D /* DosingDecisionObject+CoreDataProperties.swift */; };
 		F78DB24B7725AFF7BCC8968E /* WeakSynchronizedDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AED7ECEB6B53942F3A25D956 /* WeakSynchronizedDelegateTests.swift */; };
 		A95A1D852460CAD50079378D /* CarbValueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95A1D842460CAD50079378D /* CarbValueTests.swift */; };
 		A95A1D872460F1250079378D /* GlucoseValueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95A1D862460F1250079378D /* GlucoseValueTests.swift */; };
@@ -1057,7 +1058,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		CDE4B6BF15324635B047B52E /* EnactedTempBasal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnactedTempBasal.swift; sourceTree = "<group>"; };
 		142CB75C2A60C01E0075748A /* ListButtonStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListButtonStyle.swift; sourceTree = "<group>"; };
 		142CB7602A60C0440075748A /* FavoriteFood.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoriteFood.swift; sourceTree = "<group>"; };
 		1452F4AF2A85219100F8B9E4 /* AbsorptionTimePickerRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbsorptionTimePickerRow.swift; sourceTree = "<group>"; };
@@ -2393,7 +2393,6 @@
 				A95A1D7E2460BBC70079378D /* DosingDecisionObject+CoreDataClass.swift */,
 				A95A1D812460BBDC0079378D /* DosingDecisionObject+CoreDataProperties.swift */,
 				A919889E2355016B00B75EEE /* DosingDecisionStore.swift */,
-				CDE4B6BF15324635B047B52E /* EnactedTempBasal.swift */,
 				891A3FD8224BEB4500378B27 /* EGPSchedule.swift */,
 				437AFF22203BE382008C4892 /* Extensions */,
 				14D906EC2A84577C006EB79A /* FavoriteFood */,
@@ -4017,7 +4016,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				25C70C3412F44DACB716F787 /* EnactedTempBasal.swift in Sources */,
 				C1893D3A2AACBD81001947A2 /* CgmEventStore.swift in Sources */,
 				B4102D3224ABB068005D460B /* DeviceLifecycleProgress.swift in Sources */,
 				C17F39C923CD269200FA1113 /* DeviceLogEntryType.swift in Sources */,
@@ -4356,7 +4354,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EA575FC584C04919A4D4775E /* EnactedTempBasal.swift in Sources */,
+				5D0A1B2C3D4E5F6071829311 /* DosingDecisionObject+CoreDataProperties.swift in Sources */,
+				5D0A1B2C3D4E5F6071829310 /* DosingDecisionObject+CoreDataClass.swift in Sources */,
+				5D0A1B2C3D4E5F6071829304 /* DosingDecisionStore.swift in Sources */,
 				9D3D2DA3B9824EF48981F0E4 /* StoredInsulinModel.swift in Sources */,
 				485ACF65C30744BFBC979CEF /* NotificationSettings.swift in Sources */,
 				2383C3D7967B4602B8EB4A5B /* SettingsObject+CoreDataProperties.swift in Sources */,
