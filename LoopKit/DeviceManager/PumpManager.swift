@@ -358,3 +358,13 @@ public extension PumpManager {
         }
     }
 }
+
+/// A pump's cumulative delivered total. Required for a pump to be handed to another controller:
+/// it is the one figure both controllers can audit their records against.
+public protocol PumpDeliveryOdometer {
+    /// The total as last read from the pump, and when.
+    var deliveredUnits: (units: Double, at: Date)? { get }
+
+    /// Read the pump now, bypassing any freshness shortcut. Completion: success.
+    func refreshDeliveredUnits(completion: @escaping (Bool) -> Void)
+}

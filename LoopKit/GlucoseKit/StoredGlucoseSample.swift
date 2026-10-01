@@ -82,6 +82,20 @@ public struct StoredGlucoseSample: GlucoseSampleValue, Equatable {
 }
 
 extension StoredGlucoseSample {
+    /// `init(managedObject:)` for a row that may have been deleted since the fetch: nil instead
+    /// of trapping on its nil attributes.
+#if os(watchOS)
+    init?(validatingManagedObject managedObject: CachedGlucoseObject) {
+        guard !managedObject.isDeleted, managedObject.managedObjectContext != nil,
+              managedObject.value(forKey: "startDate") is NSDate,
+              managedObject.value(forKey: "unitString") is NSString,
+              managedObject.value(forKey: "provenanceIdentifier") is NSString else {
+            return nil
+        }
+        self.init(managedObject: managedObject)
+    }
+#endif
+
     init(managedObject: CachedGlucoseObject) {
         self.init(
             uuid: managedObject.uuid,
