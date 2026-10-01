@@ -365,6 +365,9 @@ public protocol PumpDeliveryOdometer {
     /// The total as last read from the pump, and when.
     var deliveredUnits: (units: Double, at: Date)? { get }
 
+    /// The size of one delivery pulse: the increment `deliveredUnits` counts in.
+    var deliveryPulseUnits: Double { get }
+
     /// Read the pump now, bypassing any freshness shortcut. Completion: success.
     func refreshDeliveredUnits(completion: @escaping (Bool) -> Void)
 }
