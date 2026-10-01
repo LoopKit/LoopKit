@@ -1285,8 +1285,10 @@ extension DoseStore {
     ///   - date: The date of the value to retrieve
     ///   - completion: A closure called once the value has been retrieved
     ///   - result: The insulin on-board value
-    public func insulinOnBoard(at date: Date, completion: @escaping (_ result: DoseStoreResult<InsulinValue>) -> Void) {
-        getInsulinOnBoardValues(start: date.addingTimeInterval(.minutes(-5)), end: date.addingTimeInterval(.minutes(5))) { (result) -> Void in
+    public func insulinOnBoard(at date: Date, basalDosingEnd: Date? = nil, completion: @escaping (_ result: DoseStoreResult<InsulinValue>) -> Void) {
+        getInsulinOnBoardValues(start: date.addingTimeInterval(.minutes(-5)),
+                                end: date.addingTimeInterval(.minutes(5)),
+                                basalDosingEnd: basalDosingEnd) { (result) -> Void in
             switch result {
             case .failure(let error):
                 completion(.failure(error))
