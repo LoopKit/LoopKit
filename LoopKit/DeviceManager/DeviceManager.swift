@@ -95,11 +95,22 @@ public protocol DeviceConfigurationSharing: DeviceManager {
     /// Export for another controller. The kit leaves out what is local to this controller.
     func exportConfiguration() -> SharedDeviceConfiguration
 
-    /// Build a manager from another controller's export ("passed the configuration").
-    init?(adopting configuration: SharedDeviceConfiguration)
+    /// Build a manager from another controller's export ("passed the configuration"), with the
+    /// `localState` an earlier manager of this plugin left here.
+    init?(adopting configuration: SharedDeviceConfiguration, localState: [String: Any]?)
 
-    /// True for a manager built by `init(adopting:)`; the kit hides setup, pairing and deletion.
+    /// True for a manager built by `init(adopting:localState:)`; the kit hides setup, pairing and deletion.
     var isConfiguredByAnotherController: Bool { get }
+
+    /// What this controller learned about the device that is its own (for example its Bluetooth
+    /// handle): never in the export, and it should outlive this manager. The host keeps the latest
+    /// value per `pluginIdentifier` (an export's `managerIdentifier`) and passes it to the next
+    /// `init(adopting:localState:)`. Default: nil.
+    var localState: [String: Any]? { get }
+}
+
+public extension DeviceConfigurationSharing {
+    var localState: [String: Any]? { nil }
 }
 
 /// A device whose hardware allows one controller at a time. Release, take and readiness say
@@ -132,9 +143,9 @@ public protocol ExclusiveDeviceControl: DeviceConfigurationSharing {
     /// Default: false.
     var takeControlNeedsSearch: Bool { get }
 
-    /// The same question asked of an export before adopting it: would this controller have to
-    /// find the device first? Default: false.
-    static func takeControlNeedsSearch(adopting configuration: SharedDeviceConfiguration) -> Bool
+    /// The same question asked of an export and this controller's `localState` before adopting
+    /// them: would this controller have to find the device first? Default: false.
+    static func takeControlNeedsSearch(adopting configuration: SharedDeviceConfiguration, localState: [String: Any]?) -> Bool
 
     /// The last take failed in a way only a reset of the host's radio clears. Default: false.
     var hostRadioNeedsReset: Bool { get }
@@ -146,7 +157,7 @@ public extension ExclusiveDeviceControl {
     func connectionDiagnostics() -> String? { nil }
     var lastForeignSessionAt: Date? { nil }
     var takeControlNeedsSearch: Bool { false }
-    static func takeControlNeedsSearch(adopting configuration: SharedDeviceConfiguration) -> Bool { false }
+    static func takeControlNeedsSearch(adopting configuration: SharedDeviceConfiguration, localState: [String: Any]?) -> Bool { false }
     var hostRadioNeedsReset: Bool { false }
 }
 
