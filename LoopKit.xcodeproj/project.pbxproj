@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		98DDAE0F669D9483450AF83D /* CgmEventStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1893D392AACBD81001947A2 /* CgmEventStore.swift */; };
+		4426CF7B895E5D6F4DE4F510 /* TherapySettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9086B3824B3CB4B0062F5C8 /* TherapySettings.swift */; };
+		58B8B449FD8628F32DCF9F48 /* RemoteActionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98A0C4629C78A270067DE0F /* RemoteActionDelegate.swift */; };
+		16923DB152C3D61349852542 /* StatefulPluggable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47D72472AA775CB00A4F783 /* StatefulPluggable.swift */; };
+		91AACBE6D5D60ACED4952A37 /* RemoteDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9498D7523386C3300DAA9B9 /* RemoteDataService.swift */; };
+		57964BF0EC9214B625E7504C /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9498D7623386C3300DAA9B9 /* Service.swift */; };
 		9D3D2DA3B9824EF48981F0E4 /* StoredInsulinModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CAB9E826A3254800A57273 /* StoredInsulinModel.swift */; };
 		485ACF65C30744BFBC979CEF /* NotificationSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A985464E251449FE0099C1A6 /* NotificationSettings.swift */; };
 		2383C3D7967B4602B8EB4A5B /* SettingsObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A912BE2A245B9E8600CBE199 /* SettingsObject+CoreDataProperties.swift */; };
@@ -4354,6 +4360,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				98DDAE0F669D9483450AF83D /* CgmEventStore.swift in Sources */,
+				4426CF7B895E5D6F4DE4F510 /* TherapySettings.swift in Sources */,
+				58B8B449FD8628F32DCF9F48 /* RemoteActionDelegate.swift in Sources */,
+				16923DB152C3D61349852542 /* StatefulPluggable.swift in Sources */,
+				91AACBE6D5D60ACED4952A37 /* RemoteDataService.swift in Sources */,
+				57964BF0EC9214B625E7504C /* Service.swift in Sources */,
 				5D0A1B2C3D4E5F6071829311 /* DosingDecisionObject+CoreDataProperties.swift in Sources */,
 				5D0A1B2C3D4E5F6071829310 /* DosingDecisionObject+CoreDataClass.swift in Sources */,
 				5D0A1B2C3D4E5F6071829304 /* DosingDecisionStore.swift in Sources */,
