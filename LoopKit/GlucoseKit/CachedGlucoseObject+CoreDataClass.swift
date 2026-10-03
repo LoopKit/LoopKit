@@ -85,6 +85,16 @@ class CachedGlucoseObject: NSManagedObject {
 // MARK: - Helpers
 
 extension CachedGlucoseObject {
+    /// False when the row was deleted after this object was fetched. Its
+    /// attributes then read back nil, and bridging them to the non-optional
+    /// `startDate`, `unitString` and `provenanceIdentifier` traps.
+    var isReadable: Bool {
+        !isDeleted && managedObjectContext != nil &&
+            self.value(forKey: "startDate") is NSDate &&
+            self.value(forKey: "unitString") is NSString &&
+            self.value(forKey: "provenanceIdentifier") is NSString
+    }
+
     var quantity: LoopQuantity { LoopQuantity(unit: LoopUnit(from: unitString), doubleValue: value) }
 
     var quantitySample: HKQuantitySample {
