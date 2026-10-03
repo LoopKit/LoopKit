@@ -4522,7 +4522,7 @@
         "he" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "זמן ספיגה"
+            "value" : "Absorption Time"
           }
         },
         "hu" : {
@@ -4546,7 +4546,7 @@
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Absorpsjonstid"
+            "value" : "Absorbsjonstid"
           }
         },
         "nb-NO" : {
@@ -13663,6 +13663,7 @@
       }
     },
     "Food Type" : {
+      "comment" : "Label for the food type row on the carb entry screen",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -30378,7 +30379,7 @@
       }
     },
     "Time" : {
-      "comment" : "Label for offset from midnight picker",
+      "comment" : "Label for offset from midnight picker\nLabel for the time row on the carb entry screen",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
