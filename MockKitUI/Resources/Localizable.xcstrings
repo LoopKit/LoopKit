@@ -119,7 +119,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@ kan niet communiceren met de pompsimulator sinds %2$@.\n\nZonder communicatie kan de app geen opdrachten meer versturen voor insulinetoediening of nauwkeurige recente informatie weergeven over jouw actieve insuline of de insuline die is toegediend."
+            "value" : "%@ kan niet communiceren met de pompsimulator sinds %@.\n\nZonder communicatie kan de app geen opdrachten meer versturen voor insulinetoediening of nauwkeurige recente informatie weergeven over jouw actieve insuline of de insuline die is toegediend."
           }
         },
         "pl" : {
