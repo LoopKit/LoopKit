@@ -14,19 +14,22 @@ public struct HistoricalOverrideDetailView: UIViewControllerRepresentable {
     public var override: TemporaryScheduleOverride
     public var glucoseUnit: HKUnit
     public weak var delegate: AddEditOverrideTableViewControllerDelegate?
+    public var autoBolusCarbsEnabled: Bool
     
     public init(
         override: TemporaryScheduleOverride,
         glucoseUnit: HKUnit,
-        delegate: AddEditOverrideTableViewControllerDelegate?
+        delegate: AddEditOverrideTableViewControllerDelegate?,
+        autoBolusCarbsEnabled: Bool
     ) {
         self.override = override
         self.glucoseUnit = glucoseUnit
         self.delegate = delegate
+        self.autoBolusCarbsEnabled = autoBolusCarbsEnabled
     }
     
     public func makeUIViewController(context: Context) -> AddEditOverrideTableViewController {
-        let viewController = AddEditOverrideTableViewController(glucoseUnit: glucoseUnit)
+        let viewController = AddEditOverrideTableViewController(glucoseUnit: glucoseUnit, autoBolusCarbsEnabled: autoBolusCarbsEnabled)
         viewController.inputMode = .viewOverride(override)
         viewController.delegate = delegate
         viewController.view.isUserInteractionEnabled = false // disable interactions while viewing historical data
