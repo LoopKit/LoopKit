@@ -7,16 +7,26 @@
 
 import HealthKit
 import SwiftUI
+import UIKit
 import LoopKit
 import LoopAlgorithm
 
 public struct CGMManagerDescriptor {
     public let identifier: String
     public let localizedTitle: String
+    public let manufacturer: String?
+    public let image: UIImage?
 
-    public init(identifier: String, localizedTitle: String) {
+    public init(
+        identifier: String,
+        localizedTitle: String,
+        manufacturer: String?,
+        image: UIImage?
+    ) {
         self.identifier = identifier
         self.localizedTitle = localizedTitle
+        self.manufacturer = manufacturer
+        self.image = image
     }
 }
 
