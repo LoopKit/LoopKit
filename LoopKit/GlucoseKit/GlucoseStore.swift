@@ -238,17 +238,8 @@ extension GlucoseStore {
     ///   - returns: An array of glucose samples, in chronological order by startDate, or error.
     public func getGlucoseSamples(start: Date? = nil, end: Date? = nil) async throws -> [StoredGlucoseSample] {
         try await cacheStore.managedObjectContext.perform {
-            try self.storedSamples(from: self.getCachedGlucoseObjects(start: start, end: end))
+            try self.getCachedGlucoseObjects(start: start, end: end).map { StoredGlucoseSample(managedObject: $0) }
         }
-    }
-
-    /// Call on the cache context's queue.
-    private func storedSamples(from objects: [CachedGlucoseObject]) -> [StoredGlucoseSample] {
-        let readable = objects.filter(\.isReadable)
-        if readable.count != objects.count {
-            log.error("Skipped %d deleted glucose row(s) of %d fetched", objects.count - readable.count, objects.count)
-        }
-        return readable.map { StoredGlucoseSample(managedObject: $0) }
     }
 
     private func getCachedGlucoseObjects(start: Date? = nil, end: Date? = nil) throws -> [CachedGlucoseObject] {
@@ -275,7 +266,7 @@ extension GlucoseStore {
                 request.fetchLimit = 1
 
                 let objects = try self.cacheStore.managedObjectContext.fetch(request)
-                return self.storedSamples(from: objects).first
+                return objects.first.map { StoredGlucoseSample(managedObject: $0) }
             }
             queue.sync {
                 self.latestGlucose = latestGlucose
@@ -337,7 +328,7 @@ extension GlucoseStore {
                 throw error
             }
 
-            return self.storedSamples(from: objects)
+            return objects.map { StoredGlucoseSample(managedObject: $0) }
         }
 
         await self.handleUpdatedGlucoseData()
@@ -355,7 +346,7 @@ extension GlucoseStore {
                 request.predicate = NSPredicate(format: "healthKitEligibleDate <= %@", Date() as NSDate)
                 request.sortDescriptors = [NSSortDescriptor(key: "modificationCounter", ascending: true)]   // Maintains modificationCounter order
 
-                let objects = try self.cacheStore.managedObjectContext.fetch(request).filter(\.isReadable)
+                let objects = try self.cacheStore.managedObjectContext.fetch(request)
                 return (objects, objects.map { $0.quantitySample })
             }
 
@@ -425,7 +416,8 @@ extension GlucoseStore {
             request.fetchLimit = 1
 
             let objects = try self.cacheStore.managedObjectContext.fetch(request)
-            return self.storedSamples(from: objects).first
+            let samples = objects.map { StoredGlucoseSample(managedObject: $0) }
+            return samples.first
         }
     }
 }
@@ -437,7 +429,7 @@ extension GlucoseStore {
     /// Get glucose samples in main app to deliver to Watch extension
     public func getSyncGlucoseSamples(start: Date? = nil, end: Date? = nil) async throws -> [StoredGlucoseSample] {
         try await self.cacheStore.managedObjectContext.perform {
-            try self.storedSamples(from: self.getCachedGlucoseObjects(start: start, end: end))
+            try self.getCachedGlucoseObjects(start: start, end: end).map { StoredGlucoseSample(managedObject: $0) }
         }
     }
 
@@ -601,7 +593,7 @@ extension GlucoseStore {
             if let modificationCounter = stored.max(by: { $0.modificationCounter < $1.modificationCounter })?.modificationCounter {
                 queryAnchor.modificationCounter = modificationCounter
             }
-            queryResult.append(contentsOf: self.storedSamples(from: stored))
+            queryResult.append(contentsOf: stored.compactMap { StoredGlucoseSample(managedObject: $0) })
         }
 
         return (queryAnchor, queryResult)

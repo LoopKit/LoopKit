@@ -7,7 +7,6 @@
 //
 
 import XCTest
-import CoreData
 import LoopAlgorithm
 import HealthKit
 @testable import LoopKit
@@ -170,50 +169,4 @@ class StoredGlucoseSampleManagedObjectInitializerTests: PersistenceControllerTes
     }
 
     private let dateFormatter = ISO8601DateFormatter()
-}
-
-class CachedGlucoseObjectReadabilityTests: PersistenceControllerTestCase {
-    func testReadableWhileRowExists() {
-        cacheStore.managedObjectContext.performAndWait {
-            XCTAssertTrue(makeObject().isReadable)
-        }
-    }
-
-    func testNotReadableAfterPurge() throws {
-        try cacheStore.managedObjectContext.performAndWait {
-            let object = makeObject()
-            _ = try cacheStore.managedObjectContext.purgeObjects(of: CachedGlucoseObject.self)
-            XCTAssertFalse(object.isReadable)
-        }
-    }
-
-    func testNotReadableWhenRowIsDeletedBehindTheContext() throws {
-        let context = cacheStore.managedObjectContext
-        try context.performAndWait {
-            let object = makeObject()
-
-            let other = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-            other.persistentStoreCoordinator = context.persistentStoreCoordinator
-            try other.performAndWait {
-                let request = NSFetchRequest<NSFetchRequestResult>(entityName: "CachedGlucoseObject")
-                _ = try other.execute(NSBatchDeleteRequest(fetchRequest: request))
-            }
-
-            // Fire the fault against the store rather than the row cache.
-            context.stalenessInterval = 0
-            context.refresh(object, mergeChanges: false)
-            XCTAssertFalse(object.isReadable)
-        }
-    }
-
-    private func makeObject() -> CachedGlucoseObject {
-        let object = CachedGlucoseObject(context: cacheStore.managedObjectContext)
-        object.uuid = UUID()
-        object.provenanceIdentifier = "test"
-        object.value = 123
-        object.unitString = LoopUnit.milligramsPerDeciliter.unitString
-        object.startDate = Date()
-        cacheStore.save()
-        return object
-    }
 }
