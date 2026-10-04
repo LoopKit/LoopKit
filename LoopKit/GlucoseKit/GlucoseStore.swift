@@ -293,8 +293,8 @@ extension GlucoseStore {
                 }
 
                 let request: NSFetchRequest<CachedGlucoseObject> = CachedGlucoseObject.fetchRequest()
-                request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "provenanceIdentifier == %@", self.provenanceIdentifier),
-                                                                                        NSPredicate(format: "syncIdentifier == %@", sample.syncIdentifier)])
+                // Any provenance: the store's uniqueness constraint on syncIdentifier is not per provenance.
+                request.predicate = NSPredicate(format: "syncIdentifier == %@", sample.syncIdentifier)
                 request.fetchLimit = 1
 
                 guard try self.cacheStore.managedObjectContext.count(for: request) == 0 else {
