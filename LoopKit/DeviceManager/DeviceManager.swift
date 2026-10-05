@@ -52,11 +52,11 @@ public extension DeviceManager {
 
 // MARK: - Sharing a device with another controller
 
-/// What another controller needs to use a device, plus a header the host can read.
+/// What another controller needs to use a device or service, plus a header the host can read.
 public struct SharedDeviceConfiguration: RawRepresentable {
     public typealias RawValue = [String: Any]
 
-    /// Which plugin builds from it: the exporting manager's `pluginIdentifier`.
+    /// Which plugin builds from it: the exporter's `pluginIdentifier`.
     public let managerIdentifier: String
     /// When it was true.
     public let asOf: Date
@@ -89,9 +89,9 @@ public struct SharedDeviceConfiguration: RawRepresentable {
     }
 }
 
-/// A device manager that can export what another controller needs and be built from such an
-/// export. Managers that cannot simply don't conform; callers find it by conditional cast.
-public protocol DeviceConfigurationSharing: DeviceManager {
+/// A device manager or service that can export what another controller needs and be built from
+/// such an export. Plugins that cannot simply don't conform; callers find it by conditional cast.
+public protocol DeviceConfigurationSharing: Pluggable {
     /// Export for another controller. The kit leaves out what is local to this controller.
     func exportConfiguration() -> SharedDeviceConfiguration
 
@@ -115,7 +115,7 @@ public extension DeviceConfigurationSharing {
 
 /// A device whose hardware allows one controller at a time. Release, take and readiness say
 /// nothing about who the controllers are; that is the host's business.
-public protocol ExclusiveDeviceControl: DeviceConfigurationSharing {
+public protocol ExclusiveDeviceControl: DeviceConfigurationSharing, DeviceManager {
     /// True while control is released. Persisted by the kit, so a relaunch does not take it back.
     var isControlReleased: Bool { get }
 
