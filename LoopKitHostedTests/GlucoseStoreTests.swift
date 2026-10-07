@@ -231,7 +231,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
+                guard samples.count == 3 else { XCTFail("Expected 3 samples, got \(samples.count)"); break }
             }
             addGlucoseSamplesCompletion.fulfill()
         }
@@ -243,7 +243,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
+                guard samples.count == 3 else { XCTFail("Expected 3 samples, got \(samples.count)"); break }
                 XCTAssertNotNil(samples[0].uuid)
                 XCTAssertNil(samples[0].healthKitEligibleDate)
                 assertEqualSamples(samples[0], self.sample1)
@@ -264,7 +264,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let samples):
-                XCTAssertEqual(samples.count, 1)
+                guard samples.count == 1 else { XCTFail("Expected 1 sample, got \(samples.count)"); break }
                 XCTAssertNotNil(samples[0].uuid)
                 XCTAssertNil(samples[0].healthKitEligibleDate)
                 assertEqualSamples(samples[0], self.sample3)
@@ -305,7 +305,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
+                guard samples.count == 3 else { XCTFail("Expected 3 samples, got \(samples.count)"); break }
             }
             addGlucoseSamplesCompletion.fulfill()
         }
@@ -317,7 +317,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
+                guard samples.count == 3 else { XCTFail("Expected 3 samples, got \(samples.count)"); break }
                 // HealthKit storage is deferred, so the second 2 UUIDs are nil
                 XCTAssertNotNil(samples[0].uuid)
                 XCTAssertNil(samples[0].healthKitEligibleDate)
@@ -347,7 +347,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
+                guard samples.count == 3 else { XCTFail("Expected 3 samples, got \(samples.count)"); break }
             }
             addGlucoseSamplesCompletion.fulfill()
         }
@@ -359,7 +359,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
+                guard samples.count == 3 else { XCTFail("Expected 3 samples, got \(samples.count)"); break }
                 // HealthKit storage is deferred, so the second 2 UUIDs are nil
                 XCTAssertNil(samples[0].uuid)
                 XCTAssertNotNil(samples[0].healthKitEligibleDate)
@@ -388,7 +388,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
+                guard samples.count == 3 else { XCTFail("Expected 3 samples, got \(samples.count)"); break }
             }
             addGlucoseSamplesCompletion.fulfill()
         }
@@ -400,7 +400,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
+                guard samples.count == 3 else { XCTFail("Expected 3 samples, got \(samples.count)"); break }
                 // HealthKit storage is denied, so all UUIDs are nil
                 XCTAssertNil(samples[0].uuid)
                 XCTAssertNil(samples[0].healthKitEligibleDate)
@@ -430,7 +430,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let samples):
-                XCTAssertEqual(samples.count, 1)
+                guard samples.count == 1 else { XCTFail("Expected 1 sample, got \(samples.count)"); break }
             }
             addGlucoseSamples1Completion.fulfill()
         }
@@ -446,7 +446,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let samples):
-                XCTAssertEqual(samples.count, 1)
+                guard samples.count == 1 else { XCTFail("Expected 1 sample, got \(samples.count)"); break }
             }
             addGlucoseSamples2Completion.fulfill()
         }
@@ -462,7 +462,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let samples):
-                XCTAssertEqual(samples.count, 1)
+                guard samples.count == 1 else { XCTFail("Expected 1 sample, got \(samples.count)"); break }
             }
             addGlucoseSamples3Completion.fulfill()
         }
@@ -476,7 +476,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
+                guard samples.count == 3 else { XCTFail("Expected 3 samples, got \(samples.count)"); break }
                 XCTAssertNotNil(samples[0].uuid)
                 XCTAssertNil(samples[0].healthKitEligibleDate)
                 assertEqualSamples(samples[0], self.sample1)
@@ -501,7 +501,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
+                guard samples.count == 3 else { XCTFail("Expected 3 samples, got \(samples.count)"); break }
                 assertEqualSamples(samples[0], self.sample1)
                 assertEqualSamples(samples[1], self.sample2)
                 assertEqualSamples(samples[2], self.sample3)
@@ -537,7 +537,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
+                guard samples.count == 3 else { XCTFail("Expected 3 samples, got \(samples.count)"); break }
                 // Note: the HealthKit UUID is no longer updated before being returned as a result of addGlucoseSamples.
                 XCTAssertNil(samples[0].uuid)
                 XCTAssertNotNil(samples[0].healthKitEligibleDate)
@@ -559,7 +559,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
+                guard samples.count == 3 else { XCTFail("Expected 3 samples, got \(samples.count)"); break }
                 XCTAssertNotNil(samples[0].uuid)
                 XCTAssertNil(samples[0].healthKitEligibleDate)
                 assertEqualSamples(samples[0], self.sample1)
@@ -592,7 +592,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
+                guard samples.count == 3 else { XCTFail("Expected 3 samples, got \(samples.count)"); break }
                 XCTAssertNotNil(samples[0].uuid)
                 XCTAssertNil(samples[0].healthKitEligibleDate)
                 assertEqualSamples(samples[0], self.sample1)
@@ -635,7 +635,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
+                guard samples.count == 3 else { XCTFail("Expected 3 samples, got \(samples.count)"); break }
             }
             addGlucoseSamplesCompletion.fulfill()
         }
@@ -656,7 +656,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
+                guard samples.count == 3 else { XCTFail("Expected 3 samples, got \(samples.count)"); break }
             }
             addGlucoseSamplesCompletion.fulfill()
         }
@@ -668,7 +668,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let objects):
-                XCTAssertEqual(objects.count, 3)
+                guard objects.count == 3 else { XCTFail("Expected 3 objects, got \(objects.count)"); break }
                 XCTAssertNotNil(objects[0].uuid)
                 assertEqualSamples(objects[0], self.sample1)
                 XCTAssertNotNil(objects[1].uuid)
@@ -687,7 +687,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let objects):
-                XCTAssertEqual(objects.count, 1)
+                guard objects.count == 1 else { XCTFail("Expected 1 object, got \(objects.count)"); break }
                 XCTAssertNotNil(objects[0].uuid)
                 assertEqualSamples(objects[0], self.sample3)
             }
@@ -727,7 +727,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let objects):
-                XCTAssertEqual(objects.count, 3)
+                guard objects.count == 3 else { XCTFail("Expected 3 objects, got \(objects.count)"); break }
                 XCTAssertNotNil(objects[0].uuid)
                 assertEqualSamples(objects[0], self.sample1)
                 XCTAssertNotNil(objects[1].uuid)
@@ -754,7 +754,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
+                guard samples.count == 3 else { XCTFail("Expected 3 samples, got \(samples.count)"); break }
             }
             addGlucoseSamplesCompletion.fulfill()
         }
@@ -766,7 +766,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
+                guard samples.count == 3 else { XCTFail("Expected 3 samples, got \(samples.count)"); break }
             }
             getGlucoseSamples1Completion.fulfill()
         }
@@ -822,7 +822,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
+                guard samples.count == 3 else { XCTFail("Expected 3 samples, got \(samples.count)"); break }
             }
             getGlucoseSamplesCompletion.fulfill()
         }
@@ -836,7 +836,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
+                guard samples.count == 3 else { XCTFail("Expected 3 samples, got \(samples.count)"); break }
             }
             addGlucoseSamplesCompletion.fulfill()
         }
@@ -848,7 +848,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
+                guard samples.count == 3 else { XCTFail("Expected 3 samples, got \(samples.count)"); break }
             }
             getGlucoseSamples1Completion.fulfill()
         }
@@ -902,7 +902,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let samples):
-                XCTAssertEqual(samples.count, 3)
+                guard samples.count == 3 else { XCTFail("Expected 3 samples, got \(samples.count)"); break }
             }
             addGlucoseSamplesCompletion.fulfill()
         }

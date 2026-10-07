@@ -213,7 +213,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let entries):
-                XCTAssertEqual(entries.count, 3)
+                guard entries.count == 3 else { XCTFail("Expected 3 entries, got \(entries.count)"); break }
                 XCTAssertEqual(entries[0].type, self.entry1.type)
                 XCTAssertEqual(entries[0].startDate, self.entry1.startDate)
                 XCTAssertEqual(entries[0].endDate, self.entry1.endDate)
@@ -253,7 +253,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let entries):
-                XCTAssertEqual(entries.count, 2)
+                guard entries.count == 2 else { XCTFail("Expected 2 entries, got \(entries.count)"); break }
                 XCTAssertEqual(entries[0].type, self.entry3.type)
                 XCTAssertEqual(entries[0].startDate, self.entry3.startDate)
                 XCTAssertEqual(entries[0].endDate, self.entry3.endDate)
@@ -375,7 +375,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let entries):
-                XCTAssertEqual(entries.count, 3)
+                guard entries.count == 3 else { XCTFail("Expected 3 entries, got \(entries.count)"); break }
                 XCTAssertEqual(entries[0].type, self.entry1.type)
                 XCTAssertEqual(entries[0].startDate, self.entry1.startDate)
                 XCTAssertEqual(entries[0].endDate, self.entry1.endDate)
@@ -426,7 +426,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let entries):
-                XCTAssertEqual(entries.count, 3)
+                guard entries.count == 3 else { XCTFail("Expected 3 entries, got \(entries.count)"); break }
                 XCTAssertEqual(entries[0].type, self.entry1.type)
                 XCTAssertEqual(entries[0].startDate, self.entry1.startDate)
                 XCTAssertEqual(entries[0].endDate, self.entry1.endDate)
@@ -522,7 +522,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let entries):
-                XCTAssertEqual(entries.count, 1)
+                guard entries.count == 1 else { XCTFail("Expected 1 entry, got \(entries.count)"); break }
                 XCTAssertEqual(entries[0], manualEntry)
             }
             getManuallyEnteredDoses1Completion.fulfill()
@@ -554,7 +554,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let entries):
-                XCTAssertEqual(entries.count, 1)
+                guard entries.count == 1 else { XCTFail("Expected 1 entry, got \(entries.count)"); break }
                 XCTAssertEqual(entries[0], manualEntry)
             }
             getManuallyEnteredDoses3Completion.fulfill()
@@ -606,7 +606,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let entries):
-                XCTAssertEqual(entries.count, 3)
+                guard entries.count == 3 else { XCTFail("Expected 3 entries, got \(entries.count)"); break }
             }
             getDoseEntries1Completion.fulfill()
         }
@@ -661,7 +661,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let entries):
-                XCTAssertEqual(entries.count, 3)
+                guard entries.count == 3 else { XCTFail("Expected 3 entries, got \(entries.count)"); break }
             }
             getDoseEntriesCompletion.fulfill()
         }
@@ -687,7 +687,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let entries):
-                XCTAssertEqual(entries.count, 3)
+                guard entries.count == 3 else { XCTFail("Expected 3 entries, got \(entries.count)"); break }
             }
             getDoseEntries1Completion.fulfill()
         }
@@ -707,7 +707,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let entries):
-                XCTAssertEqual(entries.count, 2)
+                guard entries.count == 2 else { XCTFail("Expected 2 entries, got \(entries.count)"); break }
             }
             getDoseEntries2Completion.fulfill()
         }
