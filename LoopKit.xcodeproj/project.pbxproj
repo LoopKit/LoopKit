@@ -1291,6 +1291,7 @@
 		43FB60E820DCBE64002B996B /* PumpManagerStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PumpManagerStatus.swift; sourceTree = "<group>"; };
 		43FB610620DDF19B002B996B /* PumpManagerError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PumpManagerError.swift; sourceTree = "<group>"; };
 		840A2D7D2E39635B00D4E245 /* Modelv6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Modelv6.xcdatamodel; sourceTree = "<group>"; };
+		E77A7883792945C59E39CEC0 /* Modelv7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Modelv7.xcdatamodel; sourceTree = "<group>"; };
 		840A2D812E39649500D4E245 /* ModelMappingv4v5Tov6Policy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelMappingv4v5Tov6Policy.swift; sourceTree = "<group>"; };
 		840A2DD22E399BD400D4E245 /* Modelv5ToModelv6.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Modelv5ToModelv6.xcmappingmodel; sourceTree = "<group>"; };
 		840A2DD52E39A30700D4E245 /* Modelv4ToModelv6.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Modelv4ToModelv6.xcmappingmodel; sourceTree = "<group>"; };
@@ -5732,11 +5733,12 @@
 		B41E10512C3D314600E186F7 /* Model.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				E77A7883792945C59E39CEC0 /* Modelv7.xcdatamodel */,
 				840A2D7D2E39635B00D4E245 /* Modelv6.xcdatamodel */,
 				B41E10522C3D314600E186F7 /* Modelv5.xcdatamodel */,
 				B41E10532C3D314600E186F7 /* Modelv4.xcdatamodel */,
 			);
-			currentVersion = 840A2D7D2E39635B00D4E245 /* Modelv6.xcdatamodel */;
+			currentVersion = E77A7883792945C59E39CEC0 /* Modelv7.xcdatamodel */;
 			path = Model.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

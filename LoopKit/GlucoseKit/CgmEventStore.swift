@@ -152,6 +152,7 @@ extension CgmEventStore {
                 cgmEvent.expectedLifetime = event.expectedLifetime
                 cgmEvent.warmupPeriod = event.warmupPeriod
                 cgmEvent.failureMessage = event.failureMessage
+                cgmEvent.serialNumber = event.serialNumber
                 cgmEvent.storedAt = Date()
             }
 
