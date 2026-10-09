@@ -22,14 +22,17 @@ public struct PersistedCgmEvent {
     public var expectedLifetime: TimeInterval?
     public var warmupPeriod: TimeInterval?
     public var failureMessage: String?
+    /// The device's serial number, when it differs from `deviceIdentifier` (e.g. a G7 advertises as DXCMxx).
+    public var serialNumber: String?
 
-    public init(date: Date, type: CgmEventType, deviceIdentifier: String, expectedLifetime: TimeInterval? = nil, warmupPeriod: TimeInterval? = nil, failureMessage: String? = nil) {
+    public init(date: Date, type: CgmEventType, deviceIdentifier: String, expectedLifetime: TimeInterval? = nil, warmupPeriod: TimeInterval? = nil, failureMessage: String? = nil, serialNumber: String? = nil) {
         self.date = date
         self.type = type
         self.deviceIdentifier = deviceIdentifier
         self.expectedLifetime = expectedLifetime
         self.warmupPeriod = warmupPeriod
         self.failureMessage = failureMessage
+        self.serialNumber = serialNumber
     }
 
 }
@@ -45,7 +48,8 @@ extension PersistedCgmEvent {
             deviceIdentifier: managedObject.deviceIdentifier,
             expectedLifetime: managedObject.expectedLifetime,
             warmupPeriod: managedObject.warmupPeriod,
-            failureMessage: managedObject.failureMessage
+            failureMessage: managedObject.failureMessage,
+            serialNumber: managedObject.serialNumber
         )
     }
 }

@@ -17,6 +17,7 @@ class CgmEvent: NSManagedObject {
     @NSManaged var primitiveExpectedLifetime: NSNumber?
     @NSManaged var primitiveWarmupPeriod: NSNumber?
     @NSManaged var failureMessage: String?
+    @NSManaged var serialNumber: String?
     @NSManaged var modificationCounter: Int64
 
     var type: CgmEventType? {

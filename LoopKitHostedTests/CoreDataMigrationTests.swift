@@ -109,6 +109,56 @@ class CoreDataMigrationTests: XCTestCase {
             XCTAssertEqual(idValue, id)
         }
     }
+
+    func testV6toV7Migration() throws {
+        let modelV6Container = try startPersistentContainer(.v6)
+        let oldContext = modelV6Container.viewContext
+
+        let date = Date()
+        let oldObject = NSEntityDescription.insertNewObject(forEntityName: "CgmEvent", into: oldContext)
+        oldObject.setValue(date, forKey: "date")
+        oldObject.setValue(date, forKey: "storedAt")
+        oldObject.setValue("sensorStart", forKey: "type")
+        oldObject.setValue("DXCM34", forKey: "deviceIdentifier")
+        try oldContext.save()
+
+        let modelV7Container = try migrate(container: modelV6Container, to: .v7)
+
+        let migratedObjects = try modelV7Container.viewContext.fetch(NSFetchRequest<NSManagedObject>(entityName: "CgmEvent"))
+        XCTAssertEqual(migratedObjects.count, 1)
+        XCTAssertEqual(migratedObjects.first?.value(forKey: "deviceIdentifier") as? String, "DXCM34")
+        XCTAssertNil(migratedObjects.first?.value(forKey: "serialNumber"))
+    }
+
+    func testV5StoreOpensWithCurrentModel() async throws {
+        let directoryURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(UUID().uuidString)
+        try FileManager.default.createDirectory(at: directoryURL, withIntermediateDirectories: true)
+        let storeURL = directoryURL.appendingPathComponent("Model.sqlite")
+
+        let id = UUID()
+        do {
+            let modelV5Container = try startPersistentContainer(.v5, storeURL: storeURL)
+            let oldContext = modelV5Container.viewContext
+            let oldObject = NSEntityDescription.insertNewObject(forEntityName: "DosingDecisionObject", into: oldContext)
+            oldObject.setValue(try PropertyListEncoder().encode(StoredDosingDecision(id: id, reason: "test")), forKey: "data")
+            oldObject.setValue(Date(), forKey: "date")
+            try oldContext.save()
+            for store in modelV5Container.persistentStoreCoordinator.persistentStores {
+                try modelV5Container.persistentStoreCoordinator.remove(store)
+            }
+        }
+
+        let persistenceController = PersistenceController(directoryURL: directoryURL)
+        try await persistenceController.waitUntilReady()
+
+        let context = persistenceController.managedObjectContext
+        let ids: [UUID?] = try await context.perform {
+            try context.fetch(NSFetchRequest<NSManagedObject>(entityName: "DosingDecisionObject")).map { $0.value(forKey: "id") as? UUID }
+        }
+        XCTAssertEqual(ids, [id])
+        let cgmEventEntity = context.persistentStoreCoordinator?.managedObjectModel.entitiesByName["CgmEvent"]
+        XCTAssertNotNil(cgmEventEntity?.propertiesByName["serialNumber"])
+    }
 }
     
 // taken from https://ifcaselet.com/writing-unit-tests-for-core-data-migrations/
@@ -118,12 +168,14 @@ extension CoreDataMigrationTests {
         case v4
         case v5
         case v6
+        case v7
         
         var name: String {
             switch self {
             case .v4: "Modelv4"
             case .v5: "Modelv5"
             case .v6: "Modelv6"
+            case .v7: "Modelv7"
             }
         }
     }
