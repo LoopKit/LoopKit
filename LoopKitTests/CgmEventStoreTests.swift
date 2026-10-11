@@ -50,7 +50,7 @@ class CgmEventStoreTests: PersistenceControllerTestCase {
                     sensorGlucose: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 131)
                 )
             ),
-            PersistedCgmEvent(date: date.addingTimeInterval(120), type: .sensorError, deviceIdentifier: "4A1B2C3D4E", error: CgmEventError(code: "18", message: "Sensor failed", isFatal: true)),
+            PersistedCgmEvent(date: date.addingTimeInterval(120), type: .sensorIssue, deviceIdentifier: "4A1B2C3D4E", error: CgmEventError(code: "sensorFailed", isFatal: true)),
             PersistedCgmEvent(date: date.addingTimeInterval(180), type: CgmEventType(rawValue: "sensorPaused"), deviceIdentifier: "4A1B2C3D4E", metadata: ["reason": "compression"])
         ]
 
