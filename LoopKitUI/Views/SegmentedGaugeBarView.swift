@@ -27,23 +27,13 @@ public class SegmentedGaugeBarView: UIView {
     }
 
     @IBInspectable
-    public var startColor: UIColor {
-        get {
-            return UIColor(cgColor: gaugeLayer.startColor)
-        }
-        set {
-            gaugeLayer.startColor = newValue.cgColor
-        }
+    public var startColor: UIColor = .white {
+        didSet { updateColors() }
     }
 
     @IBInspectable
-    public var endColor: UIColor {
-        get {
-            return UIColor(cgColor: gaugeLayer.endColor)
-        }
-        set {
-            gaugeLayer.endColor = newValue.cgColor
-        }
+    public var endColor: UIColor = .black {
+        didSet { updateColors() }
     }
 
     @IBInspectable
@@ -57,13 +47,8 @@ public class SegmentedGaugeBarView: UIView {
     }
 
     @IBInspectable
-    public var borderColor: UIColor {
-        get {
-            return UIColor(cgColor: gaugeLayer.gaugeBorderColor)
-        }
-        set {
-            gaugeLayer.gaugeBorderColor = newValue.cgColor
-        }
+    public var borderColor: UIColor = .black {
+        didSet { updateColors() }
     }
 
     @IBInspectable
@@ -110,6 +95,25 @@ public class SegmentedGaugeBarView: UIView {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupPanGestureRecognizer()
+    }
+
+    override public func didMoveToWindow() {
+        super.didMoveToWindow()
+        updateColors()
+    }
+
+    override public func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            updateColors()
+        }
+    }
+
+    private func updateColors() {
+        // Retain the dynamic UIColors and resolve them again when the appearance changes.
+        gaugeLayer.startColor = startColor.resolvedColor(with: traitCollection).cgColor
+        gaugeLayer.endColor = endColor.resolvedColor(with: traitCollection).cgColor
+        gaugeLayer.gaugeBorderColor = borderColor.resolvedColor(with: traitCollection).cgColor
     }
 
     private lazy var thumb = ThumbView()

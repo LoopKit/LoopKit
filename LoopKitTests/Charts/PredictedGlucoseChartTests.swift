@@ -10,6 +10,7 @@ import XCTest
 import LoopKit
 import SwiftCharts
 import LoopAlgorithm
+import UIKit
 @testable import LoopKitUI
 
 class PredictedGlucoseChartTests: XCTestCase {
@@ -144,4 +145,90 @@ struct GlucoseValueTestable: GlucoseValue {
     var quantity: LoopQuantity
     
     var startDate: Date
+}
+
+@MainActor
+final class ChartAppearanceTests: XCTestCase {
+    func testDoseScrubDisplaysActualValueInsteadOfLogCoordinate() throws {
+        let formatter = NumberFormatter()
+        formatter.locale = Locale(identifier: "en_US")
+        formatter.minimumFractionDigits = 2
+        formatter.maximumFractionDigits = 2
+        for dose in [-1.5, 0, 1.5] {
+            let settings = ChartSettings()
+            let frame = CGRect(x: 0, y: 0, width: 320, height: 200)
+            let model = ChartAxisModel(axisValues: [ChartAxisValueInt(-1), ChartAxisValueInt(1)], lineColor: .clear)
+            let space = ChartCoordsSpaceLeftBottomSingleAxis(chartSettings: settings, chartFrame: frame, xModel: model, yModel: model)
+            let point = ChartPoint(x: ChartAxisValueInt(0), y: ChartAxisValueDoubleLog(actualDouble: dose, unitString: "U", formatter: formatter))
+            let cache = ChartPointsTouchHighlightLayerViewCache(
+                xAxisLayer: space.xAxisLayer, yAxisLayer: space.yAxisLayer,
+                axisLabelSettings: ChartLabelSettings(), chartPoints: [point],
+                tintColor: .systemOrange, backgroundColor: .systemBackground)
+            let chart = Chart(frame: frame, innerFrame: space.chartInnerFrame, settings: settings, layers: [cache.highlightLayer])
+            cache.highlightLayer.highlightedPoint = point
+            let container = try XCTUnwrap(cache.highlightLayer.view?.subviews.first)
+            let labels = container.subviews.compactMap { $0 as? UILabel }
+            let valueLabel = try XCTUnwrap(labels.first { $0.attributedText != nil })
+            XCTAssertEqual(valueLabel.attributedText?.string, "\(formatter.string(from: NSNumber(value: dose))!)\u{00a0}U")
+            withExtendedLifetime(chart) {}
+        }
+    }
+
+    func testScrubOverlayMatchesSurfaceAcrossAppearanceChanges() throws {
+        for background in [UIColor.systemBackground, .secondarySystemGroupedBackground, .systemPink] {
+            var settings = ChartSettings()
+            settings.clipInnerFrame = false
+            let frame = CGRect(x: 0, y: 0, width: 320, height: 200)
+            let labelSettings = ChartLabelSettings(font: .systemFont(ofSize: 14), fontColor: .secondaryLabel)
+            let values = [ChartAxisValueDouble(0, labelSettings: labelSettings), ChartAxisValueDouble(1, labelSettings: labelSettings)]
+            let model = ChartAxisModel(axisValues: values, lineColor: .clear)
+            let space = ChartCoordsSpaceLeftBottomSingleAxis(chartSettings: settings, chartFrame: frame, xModel: model, yModel: model)
+            let point = ChartPoint(x: values[0], y: values[1])
+            let cache = ChartPointsTouchHighlightLayerViewCache(
+                xAxisLayer: space.xAxisLayer, yAxisLayer: space.yAxisLayer,
+                axisLabelSettings: labelSettings, chartPoints: [point],
+                tintColor: .systemBlue, backgroundColor: background)
+            let chart = Chart(frame: frame, innerFrame: space.chartInnerFrame, settings: settings,
+                              layers: [space.xAxisLayer, space.yAxisLayer, cache.highlightLayer])
+            let window = UIWindow(frame: frame)
+            let controller = UIViewController()
+            window.rootViewController = controller
+            controller.view.backgroundColor = background
+            controller.view.addSubview(chart.view)
+            window.isHidden = false
+            defer { window.isHidden = true }
+            cache.highlightLayer.highlightedPoint = point
+            let container = try XCTUnwrap(cache.highlightLayer.view?.subviews.first)
+            let overlay = try XCTUnwrap(container.subviews.first)
+            XCTAssertTrue(overlay.isOpaque)
+            XCTAssertTrue(container.subviews.contains { ($0 as? UILabel)?.text == "0" })
+            for style in [UIUserInterfaceStyle.light, .dark, .light] {
+                window.overrideUserInterfaceStyle = style
+                window.layoutIfNeeded()
+                let traits = overlay.traitCollection
+                XCTAssertEqual(overlay.backgroundColor?.resolvedColor(with: traits), background.resolvedColor(with: traits))
+            }
+        }
+    }
+
+    func testPresetGaugeColorsFollowAppearanceChanges() throws {
+        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 320, height: 200))
+        let controller = UIViewController()
+        window.rootViewController = controller
+        let gauge = SegmentedGaugeBarView(frame: CGRect(x: 20, y: 60, width: 280, height: 24))
+        gauge.startColor = .systemBlue
+        gauge.endColor = .systemOrange
+        gauge.borderColor = .label
+        controller.view.addSubview(gauge)
+        window.isHidden = false
+        defer { window.isHidden = true }
+        let layer = try XCTUnwrap(gauge.layer as? SegmentedGaugeBarLayer)
+        for style in [UIUserInterfaceStyle.light, .dark, .light] {
+            window.overrideUserInterfaceStyle = style
+            window.layoutIfNeeded()
+            XCTAssertEqual(layer.startColor, UIColor.systemBlue.resolvedColor(with: gauge.traitCollection).cgColor)
+            XCTAssertEqual(layer.endColor, UIColor.systemOrange.resolvedColor(with: gauge.traitCollection).cgColor)
+            XCTAssertEqual(layer.gaugeBorderColor, UIColor.label.resolvedColor(with: gauge.traitCollection).cgColor)
+        }
+    }
 }

@@ -82,6 +82,7 @@ extension GlucoseCarbChart {
                 axisLabelSettings: axisLabelSettings,
                 chartPoints: highlightPoints,
                 tintColor: colors.glucoseTint,
+                backgroundColor: colors.background,
                 allowOverridingTintColor: true,
                 allowOverridingHighlightPointSize: true,
                 highlightPointOffsetY: 8,
