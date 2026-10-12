@@ -76,6 +76,7 @@ public struct ProgressIndicatorView: View {
             ActivityIndicator(isAnimating: .constant(true), style: .large)
                 .opacity(self.state.showIndeterminantProgress ? 1 : 0)
                 .frame(height: self.state.showIndeterminantProgress ? fullSize : 0)
+                .accessibilityHidden(true)
 
             ZStack {
                 ProgressView(progress: self.state.showProgressBar ? 1 : 0)

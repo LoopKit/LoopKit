@@ -52,6 +52,7 @@ public struct InsulinTypeChooser: View {
                             .resizable()
                             .scaledToFit()
                     }
+                    .accessibilityHidden(true)
                     .padding([.trailing])
                     .frame(height: 70)
                 }
