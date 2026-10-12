@@ -48,6 +48,12 @@ public final class ChartAxisValueDoubleLog: ChartAxisValueDoubleScreenLoc {
         super.init(screenLocDouble: screenLocDouble, actualDouble: actualDouble, formatter: formatter, labelSettings: labelSettings)
     }
 
+    override public func copy(_ scalar: Double) -> ChartAxisValueDoubleLog {
+        // Preserve the logarithmic mapping when copying plot coordinates. Like
+        // ChartAxisValueDoubleUnit, a copy omits the original unit suffix.
+        ChartAxisValueDoubleLog(screenLocDouble: scalar, formatter: formatter, labelSettings: labelSettings)
+    }
+
     override public var description: String {
         let suffix = unitString != nil ? " \(unitString!)" : ""
 

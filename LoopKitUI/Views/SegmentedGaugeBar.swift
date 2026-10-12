@@ -31,5 +31,9 @@ struct SegmentedGaugeBar: UIViewRepresentable {
         return view
     }
     
-    func updateUIView(_ view: SegmentedGaugeBarView, context: Context) { }
+    func updateUIView(_ view: SegmentedGaugeBarView, context: Context) {
+        view.startColor = startColor
+        view.endColor = endColor
+        view.progress = insulinNeedsScaler
+    }
 }
