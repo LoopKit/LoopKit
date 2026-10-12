@@ -224,6 +224,7 @@
 		43B17C89208EEC0B00AC27E9 /* HealthStoreUnitCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B17C88208EEC0B00AC27E9 /* HealthStoreUnitCache.swift */; };
 		43BA7158201E484D0058961E /* LoopKitUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 43BA7156201E484D0058961E /* LoopKitUI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43BA715B201E484D0058961E /* LoopKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BA7154201E484D0058961E /* LoopKitUI.framework */; };
+		C1A0D6332E9A4B0000F1A001 /* LoopKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BA7154201E484D0058961E /* LoopKitUI.framework */; };
 		43BA715C201E484D0058961E /* LoopKitUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 43BA7154201E484D0058961E /* LoopKitUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		43BA7162201E490D0058961E /* ErrorBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FEEF1C7294E90073BE78 /* ErrorBackgroundView.swift */; };
 		43BA7164201E49130058961E /* InsulinKit.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43D8FEED1C7294E90073BE78 /* InsulinKit.storyboard */; };
@@ -942,6 +943,13 @@
 			remoteInfo = LoopKit;
 		};
 		43BA7159201E484D0058961E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43BA7153201E484D0058961E;
+			remoteInfo = LoopKitUI;
+		};
+		C1A0D6332E9A4B0000F1A002 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
 			proxyType = 1;
@@ -1885,6 +1893,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				43D8FDD61C728FDF0073BE78 /* LoopKit.framework in Frameworks */,
+				C1A0D6332E9A4B0000F1A001 /* LoopKitUI.framework in Frameworks */,
 				A9D3FF1D2A6C307E000C891D /* SwiftCharts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3330,6 +3339,7 @@
 			);
 			dependencies = (
 				43D8FDD81C728FDF0073BE78 /* PBXTargetDependency */,
+				C1A0D6332E9A4B0000F1A003 /* PBXTargetDependency */,
 			);
 			name = LoopKitTests;
 			packageProductDependencies = (
@@ -4595,6 +4605,11 @@
 			isa = PBXTargetDependency;
 			target = 43BA7153201E484D0058961E /* LoopKitUI */;
 			targetProxy = 43BA7159201E484D0058961E /* PBXContainerItemProxy */;
+		};
+		C1A0D6332E9A4B0000F1A003 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43BA7153201E484D0058961E /* LoopKitUI */;
+			targetProxy = C1A0D6332E9A4B0000F1A002 /* PBXContainerItemProxy */;
 		};
 		43CACE1022483AC500F90AF5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
