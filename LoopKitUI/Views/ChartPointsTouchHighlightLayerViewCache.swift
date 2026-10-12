@@ -100,13 +100,7 @@ final class ChartPointsTouchHighlightLayerViewCache {
 
                 let text = chartPointModel.chartPoint.y
                 let label = strongSelf.labelY
-                let valueString: String
-                if let logarithmicValue = text as? ChartAxisValueDoubleLog {
-                    // The scalar is a log-transformed plot coordinate, not the dose to display.
-                    valueString = logarithmicValue.valueDescription
-                } else {
-                    valueString = String(describing: text.copy)
-                }
+                let valueString = String(describing: text.copy)
 
                 let valueAttributedString = NSMutableAttributedString(string: valueString, attributes: [.font: UIFont.systemFont(ofSize: 20, weight: .semibold), .foregroundColor: newColor])
                 let spacer = NSAttributedString(string: "\u{00a0}")

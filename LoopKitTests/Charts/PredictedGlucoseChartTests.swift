@@ -149,6 +149,30 @@ struct GlucoseValueTestable: GlucoseValue {
 
 @MainActor
 final class ChartAppearanceTests: XCTestCase {
+    func testLogarithmicAxisCopiesPreserveCoordinateMappingWithoutUnits() throws {
+        let formatter = NumberFormatter()
+        formatter.locale = Locale(identifier: "en_US")
+        formatter.minimumFractionDigits = 2
+        formatter.maximumFractionDigits = 2
+        let labelSettings = ChartLabelSettings(font: .systemFont(ofSize: 14), fontColor: .secondaryLabel)
+        let source = ChartAxisValueDoubleLog(actualDouble: 1.5, unitString: "U", formatter: formatter, labelSettings: labelSettings)
+        XCTAssertEqual(source.description, "1.50 U")
+        XCTAssertEqual(source.copy.description, "1.50")
+        XCTAssertEqual(source.copy.scalar, source.scalar)
+
+        // SwiftCharts also copies with a new scalar when interpolating values.
+        for dose in [-1.5, 0, 1.5] {
+            let coordinate = ChartAxisValueDoubleLog(actualDouble: dose, formatter: formatter).scalar
+            let copy = source.copy(coordinate)
+            let expected = try XCTUnwrap(formatter.string(from: NSNumber(value: dose)))
+            XCTAssertEqual(copy.scalar, coordinate)
+            XCTAssertEqual(copy.description, expected)
+            XCTAssertTrue(copy.formatter === formatter)
+            XCTAssertEqual(copy.labelSettings.font, labelSettings.font)
+            XCTAssertEqual(copy.labelSettings.fontColor, labelSettings.fontColor)
+        }
+    }
+
     func testDoseScrubDisplaysActualValueInsteadOfLogCoordinate() throws {
         let formatter = NumberFormatter()
         formatter.locale = Locale(identifier: "en_US")

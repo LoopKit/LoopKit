@@ -89,12 +89,12 @@ public class SegmentedGaugeBarView: UIView {
 
     override public init(frame: CGRect) {
         super.init(frame: frame)
-        setupPanGestureRecognizer()
+        setUp()
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        setupPanGestureRecognizer()
+        setUp()
     }
 
     override public func didMoveToWindow() {
@@ -102,10 +102,10 @@ public class SegmentedGaugeBarView: UIView {
         updateColors()
     }
 
-    override public func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            updateColors()
+    private func setUp() {
+        setupPanGestureRecognizer()
+        registerForTraitChanges(UITraitCollection.systemTraitsAffectingColorAppearance) { (view: SegmentedGaugeBarView, _: UITraitCollection) in
+            view.updateColors()
         }
     }
 
