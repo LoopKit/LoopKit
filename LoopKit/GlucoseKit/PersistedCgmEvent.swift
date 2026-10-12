@@ -22,8 +22,10 @@ public struct CgmEventType: RawRepresentable, Hashable, Codable, Sendable {
     public static let transmitterStart = CgmEventType(rawValue: "transmitterStart")
     public static let transmitterEnd = CgmEventType(rawValue: "transmitterEnd")
     public static let calibration = CgmEventType(rawValue: "calibration")
-    /// An error reported by the device itself, such as a sensor failure. Not communication loss.
-    public static let sensorError = CgmEventType(rawValue: "sensorError")
+    /// The device reports a state without reliable glucose, from warmup to a sensor failure; `error`
+    /// holds the device's name for the state. Reported by the device when the state changes, not
+    /// for communication loss.
+    public static let sensorIssue = CgmEventType(rawValue: "sensorIssue")
 }
 
 public struct CgmCalibration: Equatable, Sendable {
@@ -39,7 +41,7 @@ public struct CgmCalibration: Equatable, Sendable {
 }
 
 public struct CgmEventError: Equatable, Codable, Sendable {
-    /// The device's own error code, if it has one.
+    /// The device's own code or name for the state, if it has one.
     public var code: String?
     public var message: String?
     /// Whether the error ends the sensor session.
