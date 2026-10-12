@@ -117,7 +117,7 @@ extension ChartPoint {
 
 
 
-extension ChartPoint: TimelineValue {
+extension ChartPoint: @retroactive TimelineValue {
     public var startDate: Date {
         if let dateValue = x as? ChartAxisValueDate {
             return dateValue.date

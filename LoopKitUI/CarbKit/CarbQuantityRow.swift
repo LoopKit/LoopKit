@@ -57,10 +57,10 @@ public struct CarbQuantityRow: View {
             carbUnitsLabel
         }
         .accessibilityElement(children: .combine)
-        .onChange(of: carbInput) { newValue in
+        .onChange(of: carbInput) { _, newValue in
             updateQuantity(with: newValue)
         }
-        .onChange(of: quantity) { newQuantity in
+        .onChange(of: quantity) { _, newQuantity in
             updateCarbInput(with: newQuantity)
         }
         .onAppear {

@@ -14,7 +14,7 @@ import LoopKitUI
 import MockKit
 
 
-extension MockCGMManager: CGMManagerUI {
+extension MockCGMManager: @retroactive CGMManagerUI {
 
     fileprivate var appName: String {
         return Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as! String
