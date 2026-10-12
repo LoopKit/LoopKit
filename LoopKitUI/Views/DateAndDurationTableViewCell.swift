@@ -39,6 +39,10 @@ public class DateAndDurationTableViewCell: DatePickerTableViewCell {
             dateLabel.text = DateFormatter.localizedString(from: date, dateStyle: .short, timeStyle: .short)
         case .time:
             dateLabel.text = DateFormatter.localizedString(from: date, dateStyle: .none, timeStyle: .medium)
+        case .yearAndMonth:
+            let formatter = DateFormatter()
+            formatter.setLocalizedDateFormatFromTemplate("yMMMM")
+            dateLabel.text = formatter.string(from: date)
         @unknown default:
             break // Do nothing
         }

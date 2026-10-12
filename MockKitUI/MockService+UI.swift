@@ -12,7 +12,7 @@ import LoopKitUI
 import MockKit
 import HealthKit
 
-extension MockService: ServiceUI {
+extension MockService: @retroactive ServiceUI {
     public static var image: UIImage? {
         return UIImage(systemName: "icloud.and.arrow.up")
     }

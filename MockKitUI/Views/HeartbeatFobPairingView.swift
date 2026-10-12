@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import LoopKitUI
 import MockKit
 
 struct HeartbeatFobPairingView: View {
