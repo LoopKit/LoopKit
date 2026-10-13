@@ -9,7 +9,7 @@ jobs:
     working_directory: ~/project
     resource_class: m4pro.medium
     macos:
-      xcode: "26.1.1"
+      xcode: "27.0"
     steps:
       - checkout
       - run:
