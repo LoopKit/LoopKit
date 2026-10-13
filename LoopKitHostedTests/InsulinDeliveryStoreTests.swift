@@ -20,7 +20,7 @@ class InsulinDeliveryStoreTestsBase: PersistenceControllerTestCase {
                                     decisionId: nil,
                                     deliveredUnits: 0.015,
                                     syncIdentifier: "4B14522E-A7B5-4E73-B76B-5043CD7176B0",
-                                    scheduledBasalRate: nil)
+                                    scheduledBasalRate: LoopQuantity(unit: .internationalUnitsPerHour, doubleValue: 1.8))
     internal let entry2 = DoseEntry(type: .tempBasal,
                                     startDate: Date(timeIntervalSinceNow: -.minutes(2)),
                                     endDate: Date(timeIntervalSinceNow: -.minutes(1.5)),
@@ -202,8 +202,8 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
         XCTAssertEqual(entries[0].type, self.entry1.type)
         XCTAssertEqual(entries[0].startDate, self.entry1.startDate)
         XCTAssertEqual(entries[0].endDate, self.entry1.endDate)
-        XCTAssertEqual(entries[0].value, 0.015)
-        XCTAssertEqual(entries[0].unit, .units)
+        XCTAssertEqual(entries[0].value, 1.8)
+        XCTAssertEqual(entries[0].unit, .unitsPerHour)
         XCTAssertEqual(entries[0].deliveredUnits, 0.015)
         XCTAssertEqual(entries[0].description, self.entry1.description)
         XCTAssertEqual(entries[0].syncIdentifier, self.entry1.syncIdentifier)
@@ -282,8 +282,8 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
         XCTAssertEqual(entries[0].type, self.entry1.type)
         XCTAssertEqual(entries[0].startDate, self.entry1.startDate)
         XCTAssertEqual(entries[0].endDate, self.entry1.endDate)
-        XCTAssertEqual(entries[0].value, 0.015)
-        XCTAssertEqual(entries[0].unit, .units)
+        XCTAssertEqual(entries[0].value, 1.8)
+        XCTAssertEqual(entries[0].unit, .unitsPerHour)
         XCTAssertEqual(entries[0].deliveredUnits, 0.015)
         XCTAssertEqual(entries[0].description, self.entry1.description)
         XCTAssertEqual(entries[0].syncIdentifier, self.entry1.syncIdentifier)
@@ -314,8 +314,8 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
         XCTAssertEqual(entries[0].type, self.entry1.type)
         XCTAssertEqual(entries[0].startDate, self.entry1.startDate)
         XCTAssertEqual(entries[0].endDate, self.entry1.endDate)
-        XCTAssertEqual(entries[0].value, 0.015)
-        XCTAssertEqual(entries[0].unit, .units)
+        XCTAssertEqual(entries[0].value, 1.8)
+        XCTAssertEqual(entries[0].unit, .unitsPerHour)
         XCTAssertEqual(entries[0].deliveredUnits, 0.015)
         XCTAssertEqual(entries[0].description, self.entry1.description)
         XCTAssertEqual(entries[0].syncIdentifier, self.entry1.syncIdentifier)
