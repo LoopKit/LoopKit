@@ -316,7 +316,8 @@ public struct StoredDosingDecision: DosingDecision {
     public var enactedBolusAmount: Double?
     public var warnings: [Issue]
     public var errors: [Issue]
-    public var algorithmExperiments: AlgorithmExperiments?
+    /// The algorithm experiments in effect when the decision was made
+    public var algorithmExperiments: [AlgorithmExperiment]?
     public var syncIdentifier: UUID
 
     public init(id: UUID = UUID(),
@@ -345,7 +346,7 @@ public struct StoredDosingDecision: DosingDecision {
                 enactedBolusAmount: Double? = nil,
                 warnings: [Issue] = [],
                 errors: [Issue] = [],
-                algorithmExperiments: AlgorithmExperiments? = nil,
+                algorithmExperiments: [AlgorithmExperiment]? = nil,
                 syncIdentifier: UUID = UUID()) {
         self.id = id
         self.date = date
@@ -375,20 +376,6 @@ public struct StoredDosingDecision: DosingDecision {
         self.errors = errors
         self.algorithmExperiments = algorithmExperiments
         self.syncIdentifier = syncIdentifier
-    }
-
-    /// The algorithm experiments in effect when the decision was made
-    public struct AlgorithmExperiments: Codable, Equatable {
-        public var integralRetrospectiveCorrection: Bool
-        public var glucoseBasedApplicationFactor: Bool
-        /// The automatic bolus application factor glucose based partial application chose, when it was in effect
-        public var applicationFactor: Double?
-
-        public init(integralRetrospectiveCorrection: Bool, glucoseBasedApplicationFactor: Bool, applicationFactor: Double? = nil) {
-            self.integralRetrospectiveCorrection = integralRetrospectiveCorrection
-            self.glucoseBasedApplicationFactor = glucoseBasedApplicationFactor
-            self.applicationFactor = applicationFactor
-        }
     }
 
     public struct Settings: Codable, Equatable {
@@ -488,7 +475,7 @@ extension StoredDosingDecision: Codable {
                   enactedBolusAmount: try container.decodeIfPresent(Double.self, forKey: .enactedBolusAmount),
                   warnings: try container.decodeIfPresent([Issue].self, forKey: .warnings) ?? [],
                   errors: try container.decodeIfPresent([Issue].self, forKey: .errors) ?? [],
-                  algorithmExperiments: try container.decodeIfPresent(AlgorithmExperiments.self, forKey: .algorithmExperiments),
+                  algorithmExperiments: try container.decodeIfPresent([AlgorithmExperiment].self, forKey: .algorithmExperiments),
                   syncIdentifier: try container.decode(UUID.self, forKey: .syncIdentifier))
     }
 

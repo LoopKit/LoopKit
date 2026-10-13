@@ -505,7 +505,9 @@
 		A967D94924F99B6A00CDDF8A /* DataOutputStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = A967D94824F99B6A00CDDF8A /* DataOutputStream.swift */; };
 		A967D94A24F99B6A00CDDF8A /* DataOutputStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = A967D94824F99B6A00CDDF8A /* DataOutputStream.swift */; };
 		A96E6C3727B35BC600F81A5B /* AnyCodableEquatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96E6C3627B35BC600F81A5B /* AnyCodableEquatable.swift */; };
+		C5F29FAB7EAB482AAE2FFF4F /* AlgorithmExperiment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B7D67BBAB24D8B8CFF9824 /* AlgorithmExperiment.swift */; };
 		A96E6C3827B35BC600F81A5B /* AnyCodableEquatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96E6C3627B35BC600F81A5B /* AnyCodableEquatable.swift */; };
+		DAA11C4EA8724AD5B0C19941 /* AlgorithmExperiment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B7D67BBAB24D8B8CFF9824 /* AlgorithmExperiment.swift */; };
 		A971C89F23C68B030099BEFC /* GlucoseStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A971C89E23C68B030099BEFC /* GlucoseStoreTests.swift */; };
 		A971C8A223C6B17D0099BEFC /* SettingsStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A971C8A123C6B17D0099BEFC /* SettingsStoreTests.swift */; };
 		A971C8A423C6B1890099BEFC /* DosingDecisionStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A971C8A323C6B1890099BEFC /* DosingDecisionStoreTests.swift */; };
@@ -1514,6 +1516,7 @@
 		A9672B5226E80C060025B0CD /* NewGlucoseSampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGlucoseSampleTests.swift; sourceTree = "<group>"; };
 		A967D94824F99B6A00CDDF8A /* DataOutputStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataOutputStream.swift; sourceTree = "<group>"; };
 		A96E6C3627B35BC600F81A5B /* AnyCodableEquatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyCodableEquatable.swift; sourceTree = "<group>"; };
+		01B7D67BBAB24D8B8CFF9824 /* AlgorithmExperiment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlgorithmExperiment.swift; sourceTree = "<group>"; };
 		A971C89E23C68B030099BEFC /* GlucoseStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseStoreTests.swift; sourceTree = "<group>"; };
 		A971C8A123C6B17D0099BEFC /* SettingsStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStoreTests.swift; sourceTree = "<group>"; };
 		A971C8A323C6B1890099BEFC /* DosingDecisionStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DosingDecisionStoreTests.swift; sourceTree = "<group>"; };
@@ -2369,6 +2372,7 @@
 				C15F9A572EB65D3B0082BDF4 /* TestingDate.swift */,
 				1DA649AA2445174400F61E75 /* Alert.swift */,
 				A96E6C3627B35BC600F81A5B /* AnyCodableEquatable.swift */,
+				01B7D67BBAB24D8B8CFF9824 /* AlgorithmExperiment.swift */,
 				C109240E286A4AD500FAD2B8 /* AutomaticDosingStrategy.swift */,
 				43D8FDE51C7290340073BE78 /* BasalRateSchedule.swift */,
 				A93761C025ED670200F6BE43 /* BluetoothProvider.swift */,
@@ -4118,6 +4122,7 @@
 				434113AB20F171CB00D05747 /* CachedInsulinDeliveryObject+CoreDataProperties.swift in Sources */,
 				A9E1E6A924E1B6700073CA39 /* SyncCarbObject.swift in Sources */,
 				A96E6C3727B35BC600F81A5B /* AnyCodableEquatable.swift in Sources */,
+				C5F29FAB7EAB482AAE2FFF4F /* AlgorithmExperiment.swift in Sources */,
 				A9A53E2C2714E5BC0050C0B1 /* CodableDevice.swift in Sources */,
 				C1893D3E2AACD640001947A2 /* CgmEvent.swift in Sources */,
 				A933DB8824BF956F009B417A /* CriticalEventLog.swift in Sources */,
@@ -4475,6 +4480,7 @@
 				E9F54FBA258052130034795E /* InsulinType.swift in Sources */,
 				C15F9A492EB55E9A0082BDF4 /* Guardrail.swift in Sources */,
 				A96E6C3827B35BC600F81A5B /* AnyCodableEquatable.swift in Sources */,
+				DAA11C4EA8724AD5B0C19941 /* AlgorithmExperiment.swift in Sources */,
 				A9E675DA22713F4700E25293 /* HKQuantitySample+CarbKit.swift in Sources */,
 				A9E675DB22713F4700E25293 /* HKQuantitySample+GlucoseKit.swift in Sources */,
 				A9E675DC22713F4700E25293 /* CachedGlucoseObject+CoreDataProperties.swift in Sources */,

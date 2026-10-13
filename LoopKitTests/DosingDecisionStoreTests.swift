@@ -974,9 +974,16 @@ class StoredDosingDecisionCodableTests: XCTestCase {
                                                   syncIdentifier: UUID(uuidString: "2A67A303-5203-4CB8-8263-79498265368E")!)
         XCTAssertNil(try decoder.decode(StoredDosingDecision.self, from: encoder.encode(dosingDecision)).algorithmExperiments)
 
-        dosingDecision.algorithmExperiments = StoredDosingDecision.AlgorithmExperiments(integralRetrospectiveCorrection: true, glucoseBasedApplicationFactor: true, applicationFactor: 0.4)
+        dosingDecision.algorithmExperiments = [
+            AlgorithmExperiment(identifier: "integralRetrospectiveCorrection"),
+            AlgorithmExperiment(identifier: "someFutureExperiment", parameters: .object(["gain": .number(0.5), "mode": .string("fast"), "levels": .array([.number(1), .null]), "enabled": .bool(true)]))
+        ]
         let decoded = try decoder.decode(StoredDosingDecision.self, from: encoder.encode(dosingDecision))
         XCTAssertEqual(decoded.algorithmExperiments, dosingDecision.algorithmExperiments)
+
+        // DosingDecisionStore persists decisions as property lists
+        let plistDecoded = try PropertyListDecoder().decode(StoredDosingDecision.self, from: PropertyListEncoder().encode(dosingDecision))
+        XCTAssertEqual(plistDecoded.algorithmExperiments, dosingDecision.algorithmExperiments)
     }
 
     private func assertStoredDosingDecisionCodable(_ original: StoredDosingDecision, encodesJSON string: String) throws {
