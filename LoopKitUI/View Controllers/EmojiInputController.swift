@@ -135,7 +135,7 @@ extension EmojiInputControllerDelegate {
     public func emojiInputControllerDidSelectItemInSection(_ section: Int) { }
 }
 
-extension UIInputView: UIInputViewAudioFeedback {
+extension UIInputView: @retroactive UIInputViewAudioFeedback {
     public var enableInputClicksWhenVisible: Bool { return true }
 
     func playInputClick​() {

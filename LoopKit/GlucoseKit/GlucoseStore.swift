@@ -170,6 +170,13 @@ extension GlucoseStore: HealthKitSampleStoreDelegate {
                     // Add new samples
                     if let samples = added as? [HKQuantitySample] {
                         for sample in samples {
+                            // The anchor only advances on success, so trapping here
+                            // would redeliver the same sample on every launch.
+                            guard (sample as AnyObject).value(forKey: "startDate") is NSDate,
+                                  (sample as AnyObject).value(forKey: "quantity") is HKQuantity else {
+                                self.log.error("Skipping HealthKit sample with nil startDate or quantity: %{public}@", sample.uuid.uuidString)
+                                continue
+                            }
                             if try self.addGlucoseSample(for: sample) {
                                 self.log.debug("Saved sample %@ into cache from HKAnchoredObjectQuery", sample.uuid.uuidString)
                                 changed = true
@@ -334,19 +341,18 @@ extension GlucoseStore {
         }
 
         do {
-            let objects = try await cacheStore.managedObjectContext.perform {
+            let (objects, quantitySamples) = try await cacheStore.managedObjectContext.perform {
                 let request: NSFetchRequest<CachedGlucoseObject> = CachedGlucoseObject.fetchRequest()
                 request.predicate = NSPredicate(format: "healthKitEligibleDate <= %@", Date() as NSDate)
                 request.sortDescriptors = [NSSortDescriptor(key: "modificationCounter", ascending: true)]   // Maintains modificationCounter order
 
-                return try self.cacheStore.managedObjectContext.fetch(request)
+                let objects = try self.cacheStore.managedObjectContext.fetch(request)
+                return (objects, objects.map { $0.quantitySample })
             }
 
             guard !objects.isEmpty else {
                 return
             }
-
-            let quantitySamples = objects.map { $0.quantitySample }
 
             try await hkSampleStore.healthStore.save(quantitySamples)
 

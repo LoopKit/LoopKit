@@ -72,12 +72,16 @@ public class WeakSynchronizedDelegate<Delegate> {
     }
 
     public func call<ReturnType>(_ block: (_ delegate: Delegate?) -> ReturnType) -> ReturnType {
-        return lock.withLock { () -> ReturnType in
-            var result: ReturnType!
-            _queue.sync {
-                result = block(_delegate as? Delegate)
-            }
-            return result
+        var delegate: Delegate?
+        var queue: DispatchQueue!
+
+        lock.withLock {
+            delegate = _delegate as? Delegate
+            queue = _queue
+        }
+
+        return queue.sync {
+            block(delegate)
         }
     }
 }

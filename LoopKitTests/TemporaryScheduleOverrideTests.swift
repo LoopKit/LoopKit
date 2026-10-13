@@ -483,6 +483,68 @@ class TemporaryScheduleOverrideTests: XCTestCase {
         XCTAssertEqual(expectedValues, values)
     }
 
+    /// An override whose end lands exactly on the end of a timeline entry it is
+    /// active over used to spin forever in `apply(over:transform:)`: the preset
+    /// index never advanced, `start` never advanced, and the loop never broke, so
+    /// it appended a zero-length entry per pass until allocation failed. Seen in
+    /// the field as a crash in `swift_abortAllocationFailure` under
+    /// `Array.append` while recommending a manual bolus -- that path truncates
+    /// the active override to end exactly at the dose time.
+    func testTimelineApplicationWithOverrideEndingExactlyAtEntryEnd() {
+        let timeline = [
+            AbsoluteScheduleValue(startDate: .t(1), endDate: .t(2), value: 50.0),
+            AbsoluteScheduleValue(startDate: .t(2), endDate: .t(3), value: 120.0),
+        ]
+
+        let overrides: [TemporaryScheduleOverride] = [
+            .custom(scale: 0.5, start: .t(1), end: .t(2))
+        ]
+
+        let applied = overrides.applySensitivity(over: timeline)
+
+        XCTAssertEqual([Date.t(1), .t(2)], applied.map { $0.startDate })
+        XCTAssertEqual([Date.t(2), .t(3)], applied.map { $0.endDate })
+        XCTAssertEqual([100.0, 120.0], applied.map { $0.value })
+    }
+
+    /// Same boundary condition on the basal path, which is where the field crash
+    /// was reported (`applyBasal` -> `apply` -> `Array.append`).
+    func testBasalApplicationWithOverrideEndingExactlyAtEntryEnd() {
+        let timeline = [
+            AbsoluteScheduleValue(startDate: .t(1), endDate: .t(2), value: 1.0),
+            AbsoluteScheduleValue(startDate: .t(2), endDate: .t(3), value: 2.0),
+        ]
+
+        let overrides: [TemporaryScheduleOverride] = [
+            .custom(scale: 0.5, start: .t(1), end: .t(2))
+        ]
+
+        let applied = overrides.applyBasal(over: timeline)
+
+        XCTAssertEqual([Date.t(1), .t(2)], applied.map { $0.startDate })
+        XCTAssertEqual([Date.t(2), .t(3)], applied.map { $0.endDate })
+        XCTAssertEqual([0.5, 2.0], applied.map { $0.value })
+    }
+
+    /// The override covers the entry exactly AND is the only entry, so the loop
+    /// reaches `start == entry.endDate == preset.actualEndDate` with nothing
+    /// after it to advance into.
+    func testTimelineApplicationWithOverrideExactlyCoveringSoleEntry() {
+        let timeline = [
+            AbsoluteScheduleValue(startDate: .t(1), endDate: .t(2), value: 50.0),
+        ]
+
+        let overrides: [TemporaryScheduleOverride] = [
+            .custom(scale: 0.5, start: .t(1), end: .t(2))
+        ]
+
+        let applied = overrides.applySensitivity(over: timeline)
+
+        XCTAssertEqual([Date.t(1)], applied.map { $0.startDate })
+        XCTAssertEqual([Date.t(2)], applied.map { $0.endDate })
+        XCTAssertEqual([100.0], applied.map { $0.value })
+    }
+
     func testTimelineSensitivityApplicationInMiddleOfTimeRange() {
         let timeline = [
             AbsoluteScheduleValue(startDate: .t(1) , endDate: .t(3), value: 50.0),

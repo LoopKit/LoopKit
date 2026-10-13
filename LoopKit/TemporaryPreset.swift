@@ -130,15 +130,20 @@ public struct PresetSymbol: Hashable, Sendable, Codable, RawRepresentable, Expre
     public init?(rawValue: [String : Any?]) {
         guard let symbolTypeRawValue = rawValue["symbolType"] as? SymbolType.RawValue,
               let symbolType = SymbolType(rawValue: symbolTypeRawValue),
-              let symbolTintRawValue = rawValue["tint"] as? SymbolTint.RawValue,
-              let symbolTint = SymbolTint(rawValue: symbolTintRawValue),
               let value = rawValue["value"] as? String else {
             return nil
         }
-        
+
         self.symbolType = symbolType
-        self.tint = symbolTint
         self.value = value
+        // tint is optional and omitted from rawValue when nil (see above), so
+        // it must decode as optional here too — otherwise every tint-less
+        // symbol (all emoji) fails to round-trip and loses its icon.
+        if let symbolTintRawValue = rawValue["tint"] as? SymbolTint.RawValue {
+            self.tint = SymbolTint(rawValue: symbolTintRawValue)
+        } else {
+            self.tint = nil
+        }
     }
     
     public func encode(to encoder: any Encoder) throws {

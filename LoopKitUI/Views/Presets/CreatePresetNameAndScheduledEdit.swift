@@ -38,7 +38,7 @@ struct CreatePresetNameAndScheduledEdit: View {
     @Binding var preset: NewCustomPreset
     @Binding var path: NavigationPath
     
-    @State private var isDurationPickerExpanded = false
+    @State private var isDurationPickerExpanded: Bool
 
     @FocusState private var isTextFieldFocused: Bool
 

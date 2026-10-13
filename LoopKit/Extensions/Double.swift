@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension Double: RawRepresentable {
+extension Double: @retroactive RawRepresentable {
     public typealias RawValue = Double
 
     public init?(rawValue: RawValue) {

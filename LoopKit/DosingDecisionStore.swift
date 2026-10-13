@@ -43,6 +43,15 @@ public class DosingDecisionStore {
     }
 
     public func storeDosingDecision(_ dosingDecision: StoredDosingDecision) async {
+        // See SettingsStore.storeSettings: inserting into a stack that failed to load traps in
+        // DosingDecisionObject.awakeFromInsert on a nil modificationCounter.
+        do {
+            try await store.waitUntilReady()
+        } catch {
+            log.error("Not storing dosing decision, persistent store unavailable: %{public}@", String(describing: error))
+            return
+        }
+
         if let data = self.encodeDosingDecision(dosingDecision) {
             self.store.managedObjectContext.performAndWait {
                 let object = DosingDecisionObject(context: self.store.managedObjectContext)

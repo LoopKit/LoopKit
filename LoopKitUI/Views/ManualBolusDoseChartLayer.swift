@@ -6,6 +6,7 @@
 //  Copyright © 2025 LoopKit Authors. All rights reserved.
 //
 
+import UIKit
 import SwiftCharts
 
 class ManualBolusDoseChartLayer<T: ChartPoint>: ChartPointsScatterLayer<T> {

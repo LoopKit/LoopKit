@@ -277,4 +277,37 @@ class TemporaryPresetScheduleTests: XCTestCase {
 
         XCTAssertEqual(result, expected)
     }
+
+    // MARK: - PresetSymbol rawValue round-trip
+
+    func testPresetSymbolEmojiRoundTripsThroughRawValue() {
+        // An emoji symbol has no tint; rawValue omits the tint key, so the
+        // initializer must accept its absence. Regression: it used to require
+        // tint and returned nil for every emoji, dropping the icon over the
+        // watch settings transport.
+        let symbol = PresetSymbol.emoji("🏃")
+        let restored = PresetSymbol(rawValue: symbol.rawValue)
+        XCTAssertNotNil(restored)
+        XCTAssertEqual(restored?.symbolType, .emoji)
+        XCTAssertNil(restored?.tint)
+        XCTAssertEqual(restored?.value, "🏃")
+    }
+
+    func testPresetSymbolImageWithTintRoundTripsThroughRawValue() {
+        let symbol = PresetSymbol.image("Pre-Meal-symbol", tint: .preMeal)
+        let restored = PresetSymbol(rawValue: symbol.rawValue)
+        XCTAssertNotNil(restored)
+        XCTAssertEqual(restored?.symbolType, .image)
+        XCTAssertEqual(restored?.tint, .preMeal)
+        XCTAssertEqual(restored?.value, "Pre-Meal-symbol")
+    }
+
+    func testPresetSymbolSystemImageWithoutTintRoundTripsThroughRawValue() {
+        let symbol = PresetSymbol.systemImage("figure.run")
+        let restored = PresetSymbol(rawValue: symbol.rawValue)
+        XCTAssertNotNil(restored)
+        XCTAssertEqual(restored?.symbolType, .systemImage)
+        XCTAssertNil(restored?.tint)
+        XCTAssertEqual(restored?.value, "figure.run")
+    }
 }

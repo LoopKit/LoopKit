@@ -323,7 +323,7 @@ extension CachedInsulinDeliveryObject {
 
 extension CachedInsulinDeliveryObject {
     var issueReportDescription: String {
-        return "CachedInsulinDeliveryObject(startDate: \(startDate), endDate: \(endDate), reason: \(reason.issueReportDescription), syncIdentifier: \(syncIdentifier ?? "nil"), deletedAt: \(String(describing: deletedAt)), programmedUnits: \(String(describing: programmedUnits)), programmedTempBasalRate: \(String(describing: programmedTempBasalRate)), deliveredUnits: \(deliveredUnits), scheduledBasalRate: \(String(describing: scheduledBasalRate)), insulinType: \(String(describing: insulinType)), automaticallyIssued: \(String(describing: automaticallyIssued)), manuallyEntered: \(manuallyEntered), isSuspend: \(isSuspend), isMutable: \(isMutable), wasProgrammedByPumpUI: \(wasProgrammedByPumpUI))"
+        return "CachedInsulinDeliveryObject(startDate: \(startDate), endDate: \(endDate), reason: \(reason.issueReportDescription), syncIdentifier: \(syncIdentifier ?? "nil"), deletedAt: \(String(describing: deletedAt)), programmedUnits: \(String(describing: programmedUnits)), programmedTempBasalRate: \(String(describing: programmedTempBasalRate)), deliveredUnits: \(String(describing: deliveredUnits)), scheduledBasalRate: \(String(describing: scheduledBasalRate)), insulinType: \(String(describing: insulinType)), automaticallyIssued: \(String(describing: automaticallyIssued)), manuallyEntered: \(manuallyEntered), isSuspend: \(isSuspend), isMutable: \(isMutable), wasProgrammedByPumpUI: \(wasProgrammedByPumpUI))"
     }
 }
 

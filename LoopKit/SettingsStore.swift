@@ -72,6 +72,21 @@ public class SettingsStore {
     }
     
     public func storeSettings(_ settings: StoredSettings, completion: @escaping (Error?) -> Void) {
+        // Never insert into a stack that failed to load. Its coordinator has no persistent store,
+        // so SettingsObject.awakeFromInsert -> updateModificationCounter finds a nil
+        // modificationCounter and traps on the force-unwrap. Report the failure instead. Every
+        // other store that writes this stack already gates on onReady.
+        store.onReady { readyError in
+            if let readyError = readyError {
+                self.log.error("Not storing settings, persistent store unavailable: %{public}@", String(describing: readyError))
+                completion(readyError)
+                return
+            }
+            self.storeSettingsWhenReady(settings, completion: completion)
+        }
+    }
+
+    private func storeSettingsWhenReady(_ settings: StoredSettings, completion: @escaping (Error?) -> Void) {
         dataAccessQueue.async {
             var error: Error?
 

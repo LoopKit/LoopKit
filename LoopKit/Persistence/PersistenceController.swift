@@ -90,8 +90,29 @@ public final class PersistenceController {
         }
     }
 
+    /// Waits for the persistent stack to finish loading.
+    ///
+    /// - Throws: `PersistenceControllerError` if the stack failed to load.
+    func waitUntilReady() async throws {
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            onReady { error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume()
+                }
+            }
+        }
+    }
+
     // Cache model
     private static var cachedModel: NSManagedObjectModel?
+
+    /// How many times a writable store retries when another process holds it. Delays are
+    /// cumulative (0.5s, 1.0s, 1.5s), so a wedged store costs at most ~3s before giving up.
+    private static let busyStoreRetryCount = 3
+
+    private static let busyStoreRetryDelay: TimeInterval = 0.5
 
     private static func model() throws -> NSManagedObjectModel {
         if cachedModel == nil {
@@ -208,24 +229,60 @@ public final class PersistenceController {
 
             let storeURL = directoryURL.appendingPathComponent("Model.sqlite")
 
-            var options: [AnyHashable : Any] = [
-                NSMigratePersistentStoresAutomaticallyOption: true,
-                NSInferMappingModelAutomaticallyOption: true
-            ]
-            
+            if !self.isReadOnly {
+                self.migrateToModelv6IfNeeded(storeURL: storeURL, currentModel: model)
+            }
+
+            var options: [AnyHashable : Any] = [:]
+
+            if self.isReadOnly {
+                // A read-only opener -- in practice an app extension sharing the container app's
+                // store -- must never migrate. Two processes racing a migration is what produces
+                // SQLITE_BUSY "Failed to replace destination database": one builds the migrated
+                // copy in a temp file and cannot swap it into place because the other holds the
+                // store open. Open read-only and fail fast instead of joining the race. If the
+                // store needs migrating, the extension gets no data until the container app has
+                // done it -- which is the correct outcome, and better than the alternatives.
+                options[NSReadOnlyPersistentStoreOption] = true
+                options[NSMigratePersistentStoresAutomaticallyOption] = false
+                options[NSInferMappingModelAutomaticallyOption] = false
+            } else {
+                options[NSMigratePersistentStoresAutomaticallyOption] = true
+                options[NSInferMappingModelAutomaticallyOption] = true
+            }
+
 #if os(iOS)
             options[NSPersistentStoreFileProtectionKey] = FileProtectionType.completeUntilFirstUserAuthentication
 #endif
 
-            do {
-                try coordinator.addPersistentStore(ofType: NSSQLiteStoreType,
-                    configurationName: nil,
-                    at: storeURL,
-                    options: options
-                )
-            } catch let storeError as NSError {
-                self.log.error("Failed to initialize persistenceController: %{public}@", storeError)
-                error = .coreDataError(storeError)
+            // Retry a busy store. Read-only openers still hold shared locks, so making them
+            // fail fast narrows the window without closing it -- and the writer is the one
+            // process that has to win eventually. Read-only openers do not retry: there is
+            // nothing for them to wait for that a retry would fix.
+            var attempt = 0
+            while true {
+                do {
+                    try coordinator.addPersistentStore(ofType: NSSQLiteStoreType,
+                        configurationName: nil,
+                        at: storeURL,
+                        options: options
+                    )
+                    break
+                } catch let storeError as NSError {
+                    guard !self.isReadOnly,
+                          storeError.isPersistentStoreBusy,
+                          attempt < PersistenceController.busyStoreRetryCount
+                    else {
+                        self.log.error("Failed to initialize persistenceController: %{public}@", storeError)
+                        error = .coreDataError(storeError)
+                        break
+                    }
+                    attempt += 1
+                    let delay = PersistenceController.busyStoreRetryDelay * Double(attempt)
+                    self.log.default("Persistent store busy, retrying in %{public}.1fs (attempt %{public}d of %{public}d)",
+                                     delay, attempt, PersistenceController.busyStoreRetryCount)
+                    Thread.sleep(forTimeInterval: delay)
+                }
             }
 
             self.queue.async {
@@ -241,6 +298,51 @@ public final class PersistenceController {
 
                 self.readyCallbacks = []
             }
+        }
+    }
+}
+
+
+// MARK: - Migration
+
+extension PersistenceController {
+    /// The v4 and v5 mapping models end at v6, and Core Data won't chain a mapping model with an
+    /// inferred one. So bring a v4 or v5 store to v6 here; the automatic migration that follows
+    /// infers v6 to the current model.
+    func migrateToModelv6IfNeeded(storeURL: URL, currentModel: NSManagedObjectModel) {
+        guard FileManager.default.fileExists(atPath: storeURL.path),
+              let metadata = try? NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: storeURL),
+              !currentModel.isConfiguration(withName: nil, compatibleWithStoreMetadata: metadata),
+              let modelsURL = LocalBundle.main.url(forResource: "Model", withExtension: "momd"),
+              let modelv6 = NSManagedObjectModel(contentsOf: modelsURL.appendingPathComponent("Modelv6.mom")),
+              !modelv6.isConfiguration(withName: nil, compatibleWithStoreMetadata: metadata)
+        else {
+            return
+        }
+
+        let sourceModel = ["Modelv4", "Modelv5"]
+            .compactMap { NSManagedObjectModel(contentsOf: modelsURL.appendingPathComponent($0).appendingPathExtension("mom")) }
+            .first { $0.isConfiguration(withName: nil, compatibleWithStoreMetadata: metadata) }
+        guard let sourceModel,
+              let mappingModel = NSMappingModel(from: [LocalBundle.main], forSourceModel: sourceModel, destinationModel: modelv6)
+        else {
+            log.error("No mapping to Modelv6 for the existing store")
+            return
+        }
+
+        let migratedURL = storeURL.deletingLastPathComponent().appendingPathComponent("Model-v6-migration.sqlite")
+        let coordinator = NSPersistentStoreCoordinator(managedObjectModel: modelv6)
+        do {
+            try? coordinator.destroyPersistentStore(at: migratedURL, ofType: NSSQLiteStoreType, options: nil)
+            let manager = NSMigrationManager(sourceModel: sourceModel, destinationModel: modelv6)
+            try manager.migrateStore(from: storeURL, sourceType: NSSQLiteStoreType, options: nil, with: mappingModel,
+                                     toDestinationURL: migratedURL, destinationType: NSSQLiteStoreType, destinationOptions: nil)
+            try coordinator.replacePersistentStore(at: storeURL, destinationOptions: nil,
+                                                   withPersistentStoreFrom: migratedURL, sourceOptions: nil, ofType: NSSQLiteStoreType)
+            try? coordinator.destroyPersistentStore(at: migratedURL, ofType: NSSQLiteStoreType, options: nil)
+            log.default("Migrated store to Modelv6")
+        } catch {
+            log.error("Migrating store to Modelv6 failed: %{public}@", String(describing: error))
         }
     }
 }
@@ -317,4 +419,15 @@ fileprivate extension FileManager {
         }
     }
  
+}
+
+
+fileprivate extension NSError {
+    /// True when Core Data could not open the store because another process holds it, rather than
+    /// because the store is missing or damaged. Only these are worth retrying.
+    var isPersistentStoreBusy: Bool {
+        guard domain == NSSQLiteErrorDomain else { return false }
+        // SQLITE_BUSY (5) and SQLITE_LOCKED (6).
+        return code == 5 || code == 6
+    }
 }

@@ -11,6 +11,13 @@ import UserNotifications
 public protocol DeviceManagerDelegate: AlertIssuer, PersistedAlertStore {
     // This will be called from an unspecified queue
     func deviceManager(_ manager: DeviceManager, logEventForDeviceIdentifier deviceIdentifier: String?, type: DeviceLogEntryType, message: String, completion: ((Error?) -> Void)?)
+
+    /// Records an event with the app's analytics services. This will be called from an unspecified queue
+    func deviceManager(_ manager: DeviceManager, recordAnalyticsEvent name: String, properties: [AnyHashable: Any]?)
+}
+
+public extension DeviceManagerDelegate {
+    func deviceManager(_ manager: DeviceManager, recordAnalyticsEvent name: String, properties: [AnyHashable: Any]?) {}
 }
 
 public protocol DeviceManager: CustomDebugStringConvertible, AlertResponder, AlertSoundVendor, Pluggable {

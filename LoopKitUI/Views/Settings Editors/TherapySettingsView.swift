@@ -83,6 +83,7 @@ public struct TherapySettingsView: View {
         }
         cards.append(suspendThresholdSection)
         cards.append(correctionRangeSection)
+        cards.append(preMealCorrectionRangeSection)
         cards.append(carbRatioSection)
         cards.append(basalRatesSection)
         cards.append(deliveryLimitsSection)
@@ -205,6 +206,22 @@ extension TherapySettingsView {
                                       guardrail: .correctionRange)
                     .accessibilityIdentifier("correctionRangeValue")
                 }
+            }
+        }
+    }
+
+    private var preMealCorrectionRangeSection: Card {
+        card(for: .preMealCorrectionRangeOverride) {
+            let correctionRangeOverrides = self.viewModel.correctionRangeOverrides
+            if let schedule = self.viewModel.glucoseTargetRangeSchedule {
+                SectionDivider()
+                CorrectionRangeOverridesRangeItem(
+                    value: correctionRangeOverrides,
+                    displayGlucoseUnit: glucoseUnit,
+                    preset: CorrectionRangeOverrides.Preset.preMeal,
+                    suspendThreshold: viewModel.suspendThreshold,
+                    correctionRangeScheduleRange: schedule.scheduleRange()
+                )
             }
         }
     }
