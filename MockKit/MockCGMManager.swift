@@ -584,7 +584,8 @@ public final class MockCGMManager: TestingCGMManager {
                     trendRate: sample.trendRate,
                     isDisplayOnly: sample.isDisplayOnly,
                     wasUserEntered: sample.wasUserEntered,
-                    syncIdentifier: sample.syncIdentifier
+                    syncIdentifier: sample.syncIdentifier,
+                    isBackfill: sample.isBackfill
                 )
             }
             self.delegate.notify { delegate in
@@ -644,6 +645,8 @@ public final class MockCGMManager: TestingCGMManager {
                 self.logDeviceComms(.error, message: "Backfill error: \(error)")
             case .newData(let samples):
                 self.logDeviceComms(.receive, message: "Backfill data: \(samples)")
+                self.sendCGMReadingResult(.newData(samples.map { NewGlucoseSample($0, device: $0.device, isBackfill: true) }))
+                return
             case .unreliableData:
                 self.logDeviceComms(.receive, message: "Backfill data unreliable")
             case .noData:
@@ -685,7 +688,7 @@ public final class MockCGMManager: TestingCGMManager {
 }
 
 fileprivate extension NewGlucoseSample {
-    init(_ other: NewGlucoseSample, device: HKDevice?) {
+    init(_ other: NewGlucoseSample, device: HKDevice?, isBackfill: Bool? = nil) {
         self.init(date: other.date,
                   quantity: other.quantity,
                   condition: other.condition,
@@ -695,7 +698,8 @@ fileprivate extension NewGlucoseSample {
                   wasUserEntered: other.wasUserEntered,
                   syncIdentifier: other.syncIdentifier,
                   syncVersion: other.syncVersion,
-                  device: device)
+                  device: device,
+                  isBackfill: isBackfill ?? other.isBackfill)
     }
 }
 

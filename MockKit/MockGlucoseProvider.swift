@@ -270,7 +270,8 @@ private extension CGMReadingResult {
                     wasUserEntered: sample.wasUserEntered,
                     syncIdentifier: sample.syncIdentifier,
                     syncVersion: sample.syncVersion,
-                    device: sample.device
+                    device: sample.device,
+                    isBackfill: sample.isBackfill
                 )
             }
         )

@@ -49,6 +49,20 @@ class GlucoseStoreTests: PersistenceControllerTestCase {
         try await glucoseStore.purgeAllGlucose(for: device)
         XCTAssertNil(self.glucoseStore.latestGlucose)
     }
+
+    func testBackfillFlagAndReceivedDateAreStored() async throws {
+        let quantity = LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 100)
+        let backfill = NewGlucoseSample(date: Date().addingTimeInterval(-.minutes(30)), quantity: quantity, condition: nil, trend: nil, trendRate: nil, isDisplayOnly: false, wasUserEntered: false, syncIdentifier: "backfill", isBackfill: true)
+        let live = NewGlucoseSample(date: Date(), quantity: quantity, condition: nil, trend: nil, trendRate: nil, isDisplayOnly: false, wasUserEntered: false, syncIdentifier: "live")
+
+        let before = Date()
+        let samples = try await glucoseStore.addGlucoseSamples([backfill, live])
+
+        XCTAssertEqual(samples.map { $0.isBackfill }, [true, false])
+        for sample in samples {
+            XCTAssertGreaterThanOrEqual(try XCTUnwrap(sample.receivedDate), before)
+        }
+    }
 }
 
 class GlucoseStoreRemoteDataServiceQueryAnchorTests: XCTestCase {
