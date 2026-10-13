@@ -30,13 +30,6 @@ open class SwitchTableViewCell: UITableViewCell {
         accessoryView = `switch`
     }
 
-    override open func layoutSubviews() {
-        super.layoutSubviews()
-
-        contentView.layoutMargins.left = separatorInset.left
-        contentView.layoutMargins.right = separatorInset.left
-    }
-
     override open func prepareForReuse() {
         super.prepareForReuse()
 

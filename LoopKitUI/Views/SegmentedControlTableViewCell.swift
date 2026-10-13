@@ -45,13 +45,6 @@ open class SegmentedControlTableViewCell: UITableViewCell {
         ])
     }
 
-    override open func layoutSubviews() {
-        super.layoutSubviews()
-
-        contentView.layoutMargins.left = separatorInset.left
-        contentView.layoutMargins.right = separatorInset.left
-    }
-
     override open func prepareForReuse() {
         super.prepareForReuse()
 
