@@ -26,6 +26,9 @@ extension CachedGlucoseObject {
     @NSManaged public var unitString: String
     @NSManaged public var startDate: Date
     @NSManaged public var isDisplayOnly: Bool
+    @NSManaged public var isBackfill: Bool
+    /// When Loop received the sample from the CGM. Nil for samples read from HealthKit or stored before this was recorded.
+    @NSManaged public var receivedDate: Date?
     @NSManaged public var wasUserEntered: Bool
     @NSManaged public var modificationCounter: Int64
     @NSManaged public var primitiveDevice: Data?
@@ -50,6 +53,8 @@ extension CachedGlucoseObject: Encodable {
         try container.encode(unitString, forKey: .unitString)
         try container.encode(startDate, forKey: .startDate)
         try container.encode(isDisplayOnly, forKey: .isDisplayOnly)
+        try container.encode(isBackfill, forKey: .isBackfill)
+        try container.encodeIfPresent(receivedDate, forKey: .receivedDate)
         try container.encode(wasUserEntered, forKey: .wasUserEntered)
         try container.encode(modificationCounter, forKey: .modificationCounter)
         try container.encodeIfPresent(device, forKey: .device)
@@ -68,6 +73,8 @@ extension CachedGlucoseObject: Encodable {
         case unitString
         case startDate
         case isDisplayOnly
+        case isBackfill
+        case receivedDate
         case wasUserEntered
         case modificationCounter
         case device
