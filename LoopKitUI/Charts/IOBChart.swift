@@ -84,6 +84,7 @@ public extension IOBChart {
                 axisLabelSettings: axisLabelSettings,
                 chartPoints: iobPoints,
                 tintColor: colors.insulinTint,
+                backgroundColor: colors.background,
                 highlightLabelOffsetY: highlightLabelOffsetY,
                 gestureRecognizer: gestureRecognizer
             )
