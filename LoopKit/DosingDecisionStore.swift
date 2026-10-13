@@ -316,6 +316,8 @@ public struct StoredDosingDecision: DosingDecision {
     public var enactedBolusAmount: Double?
     public var warnings: [Issue]
     public var errors: [Issue]
+    /// The algorithm experiments in effect when the decision was made
+    public var algorithmExperiments: [AlgorithmExperiment]?
     public var syncIdentifier: UUID
 
     public init(id: UUID = UUID(),
@@ -344,6 +346,7 @@ public struct StoredDosingDecision: DosingDecision {
                 enactedBolusAmount: Double? = nil,
                 warnings: [Issue] = [],
                 errors: [Issue] = [],
+                algorithmExperiments: [AlgorithmExperiment]? = nil,
                 syncIdentifier: UUID = UUID()) {
         self.id = id
         self.date = date
@@ -371,6 +374,7 @@ public struct StoredDosingDecision: DosingDecision {
         self.enactedBolusAmount = enactedBolusAmount
         self.warnings = warnings
         self.errors = errors
+        self.algorithmExperiments = algorithmExperiments
         self.syncIdentifier = syncIdentifier
     }
 
@@ -471,6 +475,7 @@ extension StoredDosingDecision: Codable {
                   enactedBolusAmount: try container.decodeIfPresent(Double.self, forKey: .enactedBolusAmount),
                   warnings: try container.decodeIfPresent([Issue].self, forKey: .warnings) ?? [],
                   errors: try container.decodeIfPresent([Issue].self, forKey: .errors) ?? [],
+                  algorithmExperiments: try container.decodeIfPresent([AlgorithmExperiment].self, forKey: .algorithmExperiments),
                   syncIdentifier: try container.decode(UUID.self, forKey: .syncIdentifier))
     }
 
@@ -502,6 +507,7 @@ extension StoredDosingDecision: Codable {
         try container.encodeIfPresent(enactedBolusAmount, forKey: .enactedBolusAmount)
         try container.encodeIfPresent(!warnings.isEmpty ? warnings : nil, forKey: .warnings)
         try container.encodeIfPresent(!errors.isEmpty ? errors : nil, forKey: .errors)
+        try container.encodeIfPresent(algorithmExperiments, forKey: .algorithmExperiments)
         try container.encode(syncIdentifier, forKey: .syncIdentifier)
     }
 
@@ -532,6 +538,7 @@ extension StoredDosingDecision: Codable {
         case enactedBolusAmount
         case warnings
         case errors
+        case algorithmExperiments
         case syncIdentifier
     }
 }
