@@ -63,6 +63,21 @@ class GlucoseStoreTests: PersistenceControllerTestCase {
             XCTAssertGreaterThanOrEqual(try XCTUnwrap(sample.receivedDate), before)
         }
     }
+
+    func testReceivedDateIsWrittenToHealthKitMetadata() async throws {
+        let quantity = LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 100)
+        let sample = NewGlucoseSample(date: Date(), quantity: quantity, condition: nil, trend: nil, trendRate: nil, isDisplayOnly: false, wasUserEntered: false, syncIdentifier: "live")
+        let stored = try await glucoseStore.addGlucoseSamples([sample])
+        let receivedDate = try XCTUnwrap(stored.first?.receivedDate)
+
+        let quantitySample = try await cacheStore.managedObjectContext.perform {
+            let request: NSFetchRequest<CachedGlucoseObject> = CachedGlucoseObject.fetchRequest()
+            return try XCTUnwrap(self.cacheStore.managedObjectContext.fetch(request).first).quantitySample
+        }
+
+        XCTAssertEqual(quantitySample.receivedDate, receivedDate)
+        XCTAssertEqual(StoredGlucoseSample(sample: quantitySample).receivedDate, receivedDate)
+    }
 }
 
 class GlucoseStoreRemoteDataServiceQueryAnchorTests: XCTestCase {
