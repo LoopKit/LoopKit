@@ -15,8 +15,6 @@ open class SetupTableViewController: UITableViewController {
 
     private(set) open lazy var footerView = SetupTableFooterView(frame: .zero)
 
-    private var lastContentHeight: CGFloat = 0
-
     public var padFooterToBottom: Bool = true
 
     public weak var delegate: SetupTableViewControllerDelegate?
@@ -32,19 +30,22 @@ open class SetupTableViewController: UITableViewController {
     open override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        // Reposition footer view if necessary
-        if tableView.contentSize.height != lastContentHeight {
-            lastContentHeight = tableView.contentSize.height
-            tableView.tableFooterView = nil
-
-            var footerSize = footerView.systemLayoutSizeFitting(CGSize(width: tableView.frame.size.width, height: UIView.layoutFittingCompressedSize.height))
-            let visibleHeight = tableView.bounds.size.height - (tableView.adjustedContentInset.top + tableView.adjustedContentInset.bottom)
-            let footerHeight = padFooterToBottom ? max(footerSize.height, visibleHeight - tableView.contentSize.height) : footerSize.height
-
-            footerSize.height = footerHeight
-            footerView.frame.size = footerSize
-            tableView.tableFooterView = footerView
+        // Rotation can change the available space without changing the row heights.
+        // Exclude the current footer so its previous size cannot affect the new size.
+        let contentHeight = tableView.contentSize.height - (tableView.tableFooterView?.frame.height ?? 0)
+        let visibleHeight = tableView.bounds.height - tableView.adjustedContentInset.top - tableView.adjustedContentInset.bottom
+        var footerSize = footerView.systemLayoutSizeFitting(
+            CGSize(width: tableView.bounds.width, height: UIView.layoutFittingCompressedSize.height),
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        )
+        if padFooterToBottom {
+            footerSize.height = max(footerSize.height, visibleHeight - contentHeight)
         }
+
+        guard tableView.tableFooterView !== footerView || footerView.frame.size != footerSize else { return }
+        footerView.frame.size = footerSize
+        tableView.tableFooterView = footerView
     }
 
     @IBAction open func cancelButtonPressed(_: Any) {
