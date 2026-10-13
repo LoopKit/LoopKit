@@ -13,10 +13,19 @@ import LoopAlgorithm
 public struct PumpManagerDescriptor {
     public let identifier: String
     public let localizedTitle: String
+    public let manufacturer: String?
+    public let image: UIImage?
 
-    public init(identifier: String, localizedTitle: String) {
+    public init(
+        identifier: String,
+        localizedTitle: String,
+        manufacturer: String?,
+        image: UIImage?
+    ) {
         self.identifier = identifier
         self.localizedTitle = localizedTitle
+        self.manufacturer = manufacturer
+        self.image = image
     }
 }
 
