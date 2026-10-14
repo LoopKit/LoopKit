@@ -24,4 +24,12 @@ extension UIImage {
     convenience init?(frameworkImage name: String) {
         self.init(named: name, in: LocalBundle.main, with: nil)
     }
+
+    public func tintedForTextAttachment(_ color: UIColor, size: CGSize) -> UIImage {
+        let tinted = withTintColor(color, renderingMode: .alwaysOriginal)
+        return UIGraphicsImageRenderer(size: size).image { _ in
+            tinted.draw(in: CGRect(origin: .zero, size: size))
+        }
+        .withRenderingMode(.alwaysOriginal)
+    }
 }

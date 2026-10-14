@@ -48,5 +48,13 @@ class NewGlucoseSampleTests: XCTestCase {
         XCTAssertEqual(quantitySample.metadata?[MetadataKeyGlucoseTrendRateValue] as? Double, 1.1)
         XCTAssertNil(quantitySample.metadata?[MetadataKeyGlucoseIsDisplayOnly])
         XCTAssertEqual(quantitySample.metadata?[HKMetadataKeyWasUserEntered] as? Bool, true)
+        XCTAssertNil(quantitySample.metadata?[MetadataKeyGlucoseIsBackfill])
+    }
+
+    func testBackfill() {
+        let sample = NewGlucoseSample(date: Date(), quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 100), condition: nil, trend: nil, trendRate: nil, isDisplayOnly: false, wasUserEntered: false, syncIdentifier: "id", isBackfill: true)
+        XCTAssertEqual(sample.quantitySample.metadata?[MetadataKeyGlucoseIsBackfill] as? Bool, true)
+        XCTAssertTrue(sample.quantitySample.isBackfill)
+        XCTAssertEqual(NewGlucoseSample(rawValue: sample.rawValue)?.isBackfill, true)
     }
 }

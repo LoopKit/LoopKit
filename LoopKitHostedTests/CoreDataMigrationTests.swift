@@ -130,6 +130,26 @@ class CoreDataMigrationTests: XCTestCase {
         XCTAssertNil(migratedObjects.first?.value(forKey: "details"))
     }
 
+    func testV7toV8Migration() throws {
+        let modelV7Container = try startPersistentContainer(.v7)
+        let oldContext = modelV7Container.viewContext
+
+        let oldObject = NSEntityDescription.insertNewObject(forEntityName: "CachedGlucoseObject", into: oldContext)
+        oldObject.setValue("com.LoopKit.Loop", forKey: "provenanceIdentifier")
+        oldObject.setValue(Date(), forKey: "startDate")
+        oldObject.setValue("mg/dL", forKey: "unitString")
+        oldObject.setValue(123.0, forKey: "value")
+        try oldContext.save()
+
+        let modelV8Container = try migrate(container: modelV7Container, to: .v8)
+
+        let migratedObjects = try modelV8Container.viewContext.fetch(NSFetchRequest<NSManagedObject>(entityName: "CachedGlucoseObject"))
+        XCTAssertEqual(migratedObjects.count, 1)
+        XCTAssertEqual(migratedObjects.first?.value(forKey: "value") as? Double, 123.0)
+        XCTAssertEqual(migratedObjects.first?.value(forKey: "isBackfill") as? Bool, false)
+        XCTAssertNil(migratedObjects.first?.value(forKey: "receivedDate"))
+    }
+
     func testV5StoreOpensWithCurrentModel() async throws {
         let directoryURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: directoryURL, withIntermediateDirectories: true)
@@ -169,6 +189,7 @@ extension CoreDataMigrationTests {
         case v5
         case v6
         case v7
+        case v8
         
         var name: String {
             switch self {
@@ -176,6 +197,7 @@ extension CoreDataMigrationTests {
             case .v5: "Modelv5"
             case .v6: "Modelv6"
             case .v7: "Modelv7"
+            case .v8: "Modelv8"
             }
         }
     }

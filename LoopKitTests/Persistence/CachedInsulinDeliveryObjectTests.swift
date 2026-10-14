@@ -346,6 +346,34 @@ class CachedInsulinDeliveryObjectOperationsTests: PersistenceControllerTestCase 
         }
     }
 
+    func testCreateFromScheduledBasalEntryPreservesRate() {
+        // A scheduled `.basal` reported without a scheduledBasalRate (e.g. after a PumpEvent
+        // round-trip, which doesn't persist it) must keep its exact rate. Without the fix the
+        // cache stores only the quantized delivered total and the read-back rate drifts.
+        let start = dateFormatter.date(from: "2020-01-02T03:04:05Z")!
+        let entry = DoseEntry(type: .basal,
+                              startDate: start,
+                              endDate: start.addingTimeInterval(180.2), // 3 min 0.2 s → quantized total would drift
+                              value: 1.0,
+                              unit: .unitsPerHour,
+                              decisionId: nil,
+                              deliveredUnits: nil,
+                              syncIdentifier: "scheduled-basal",
+                              scheduledBasalRate: nil,
+                              isMutable: true)
+        cacheStore.managedObjectContext.performAndWait {
+            let object = CachedInsulinDeliveryObject(context: cacheStore.managedObjectContext)
+            object.create(from: entry, by: "Test Providence Identifier", at: start)
+
+            XCTAssertEqual(object.scheduledBasalRate, LoopQuantity(unit: .internationalUnitsPerHour, doubleValue: 1.0))
+
+            let dose = object.dose
+            XCTAssertNotNil(dose)
+            XCTAssertEqual(dose!.unit, .unitsPerHour)
+            XCTAssertEqual(dose!.unitsPerHour, 1.0, accuracy: 1e-9)
+        }
+    }
+
     func testCreateAndUpdateFromEntry() {
         let createEntry = DoseEntry(type: .tempBasal,
                               startDate: dateFormatter.date(from: "2020-02-03T04:05:06Z")!,

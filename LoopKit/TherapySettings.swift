@@ -146,7 +146,7 @@ extension TherapySettings {
         }
         var carbRatio: LoopQuantity? {
             if let baseValue = carbRatioSchedule?.value(at: Date()) {
-                return LoopQuantity(unit: .gram, doubleValue: baseValue / insulinMultiplier)
+                return LoopQuantity(unit: .gramsPerUnit, doubleValue: baseValue / insulinMultiplier)
             } else {
                 return nil
             }
