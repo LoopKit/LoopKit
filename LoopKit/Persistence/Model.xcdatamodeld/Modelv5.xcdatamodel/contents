@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23788.4" systemVersion="25A5316i" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="CachedCarbObject" representedClassName="LoopKit.CachedCarbObject" syncable="YES">
+        <attribute name="absorptionTime" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
+        <attribute name="addedDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="anchorKey" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" elementID="modificationCounter"/>
+        <attribute name="createdByCurrentApp" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="favoriteFoodID" optional="YES" attributeType="String"/>
+        <attribute name="foodType" optional="YES" attributeType="String"/>
+        <attribute name="grams" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="operation" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="provenanceIdentifier" attributeType="String" defaultValueString=""/>
+        <attribute name="startDate" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="supercededDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="syncIdentifier" optional="YES" attributeType="String"/>
+        <attribute name="syncVersion" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <attribute name="userCreatedDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="userDeletedDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="userUpdatedDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="uuid" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+    </entity>
+    <entity name="CachedGlucoseObject" representedClassName="LoopKit.CachedGlucoseObject" syncable="YES">
+        <attribute name="condition" optional="YES" attributeType="String"/>
+        <attribute name="device" optional="YES" attributeType="Binary"/>
+        <attribute name="healthKitEligibleDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="isDisplayOnly" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="modificationCounter" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="provenanceIdentifier" attributeType="String"/>
+        <attribute name="startDate" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="syncIdentifier" optional="YES" attributeType="String"/>
+        <attribute name="syncVersion" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <attribute name="trend" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="trendRateValue" optional="YES" attributeType="Double" usesScalarValueType="YES"/>
+        <attribute name="unitString" attributeType="String"/>
+        <attribute name="uuid" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="value" attributeType="Double" usesScalarValueType="YES"/>
+        <attribute name="wasUserEntered" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <fetchIndex name="byUUIDIndex">
+            <fetchIndexElement property="uuid" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byStartDateDescendingIndex">
+            <fetchIndexElement property="startDate" type="Binary" order="descending"/>
+        </fetchIndex>
+        <fetchIndex name="byStartDateAscendingIndex">
+            <fetchIndexElement property="startDate" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="bySyncIdentifierIndex">
+            <fetchIndexElement property="syncIdentifier" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="uuid"/>
+            </uniquenessConstraint>
+            <uniquenessConstraint>
+                <constraint value="syncIdentifier"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="CachedInsulinDeliveryObject" representedClassName="LoopKit.CachedInsulinDeliveryObject" syncable="YES">
+        <attribute name="automaticallyIssued" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="deletedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="deliveredUnits" optional="YES" attributeType="Double" usesScalarValueType="YES" versionHashModifier="1" elementID="value"/>
+        <attribute name="endDate" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="hasLoopKitOrigin" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="insulinType" optional="YES" attributeType="Integer 16" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="isMutable" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="isSuspend" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="manuallyEntered" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="modificationCounter" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="programmedTempBasalRate" optional="YES" attributeType="Double" usesScalarValueType="NO" elementID="scheduledTempBasalRate"/>
+        <attribute name="programmedUnits" optional="YES" attributeType="Double" usesScalarValueType="YES"/>
+        <attribute name="provenanceIdentifier" attributeType="String"/>
+        <attribute name="reason" attributeType="Integer 16" usesScalarValueType="NO"/>
+        <attribute name="scheduledBasalRate" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
+        <attribute name="startDate" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="syncIdentifier" attributeType="String"/>
+        <attribute name="uuid" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="wasProgrammedByPumpUI" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <fetchIndex name="byUUIDIndex">
+            <fetchIndexElement property="uuid" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byStartDateAscendingIndex">
+            <fetchIndexElement property="startDate" type="Binary" order="ascending"/>
+            <fetchIndexElement property="endDate" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="bySyncIdentifierIndex">
+            <fetchIndexElement property="syncIdentifier" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="uuid"/>
+            </uniquenessConstraint>
+            <uniquenessConstraint>
+                <constraint value="syncIdentifier"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="CgmEvent" representedClassName="LoopKit.CgmEvent" syncable="YES">
+        <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="deviceIdentifier" attributeType="String"/>
+        <attribute name="expectedLifetime" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="failureMessage" optional="YES" attributeType="String"/>
+        <attribute name="modificationCounter" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="storedAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="type" attributeType="String"/>
+        <attribute name="warmupPeriod" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <fetchIndex name="byDeviceId">
+            <fetchIndexElement property="deviceIdentifier" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byDate">
+            <fetchIndexElement property="date" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="DosingDecisionObject" representedClassName="LoopKit.DosingDecisionObject" syncable="YES">
+        <attribute name="data" attributeType="Binary"/>
+        <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="modificationCounter" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <fetchIndex name="byDateIndex">
+            <fetchIndexElement property="date" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="modificationCounter"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="PumpEvent" representedClassName="LoopKit.PumpEvent" syncable="YES">
+        <attribute name="alarmType" optional="YES" attributeType="String"/>
+        <attribute name="automatic" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="deliveredUnits" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
+        <attribute name="doseType" optional="YES" attributeType="String"/>
+        <attribute name="duration" attributeType="Double" minValueString="0" defaultValueString="0.0" usesScalarValueType="NO"/>
+        <attribute name="insulinType" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="modificationCounter" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="mutable" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="raw" optional="YES" attributeType="Binary"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <attribute name="type" optional="YES" attributeType="String"/>
+        <attribute name="unit" optional="YES" attributeType="String"/>
+        <attribute name="uploaded" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="NO"/>
+        <attribute name="value" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
+        <attribute name="wasProgrammedByPumpUI" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <fetchIndex name="byDateIndex">
+            <fetchIndexElement property="date" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byTypeIndex">
+            <fetchIndexElement property="type" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byUploadedIndex">
+            <fetchIndexElement property="uploaded" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byMutable">
+            <fetchIndexElement property="mutable" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="raw"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="Reservoir" representedClassName="LoopKit.Reservoir" syncable="YES">
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="raw" optional="YES" attributeType="Binary"/>
+        <attribute name="volume" attributeType="Double" usesScalarValueType="NO"/>
+        <fetchIndex name="byDateIndex">
+            <fetchIndexElement property="date" type="Binary" order="descending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="SettingsObject" representedClassName="LoopKit.SettingsObject" syncable="YES">
+        <attribute name="data" attributeType="Binary"/>
+        <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="modificationCounter" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+    </entity>
+</model>

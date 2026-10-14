@@ -32,6 +32,8 @@ public final class PersistenceController {
     public enum PersistenceControllerError: Error, LocalizedError {
         case configurationError(String)
         case coreDataError(NSError)
+        /// The store was written by a newer version of the app, with a model this version doesn't have.
+        case storeFromNewerVersion
 
         public var errorDescription: String? {
             switch self {
@@ -39,6 +41,8 @@ public final class PersistenceController {
                 return description
             case .coreDataError(let error):
                 return error.localizedDescription
+            case .storeFromNewerVersion:
+                return LocalizedString("The stored data is from a newer version of the app.", comment: "Error description when the database was written by a newer version of the app")
             }
         }
 
@@ -48,6 +52,8 @@ public final class PersistenceController {
                 return "Unrecoverable Error"
             case .coreDataError(let error):
                 return error.localizedRecoverySuggestion
+            case .storeFromNewerVersion:
+                return LocalizedString("Install the newer version again to use your data.", comment: "Recovery suggestion when the database was written by a newer version of the app")
             }
         }
     }
@@ -211,6 +217,12 @@ public final class PersistenceController {
 
             let storeURL = directoryURL.appendingPathComponent("Model.sqlite")
 
+            let isStoreFromNewerVersion = PersistenceController.isStoreFromNewerVersion(inDirectory: directoryURL)
+
+            if !self.isReadOnly && !isStoreFromNewerVersion {
+                self.migrateToModelv6IfNeeded(storeURL: storeURL, currentModel: model)
+            }
+
             var options: [AnyHashable : Any] = [
                 NSMigratePersistentStoresAutomaticallyOption: true,
                 NSInferMappingModelAutomaticallyOption: true
@@ -221,11 +233,17 @@ public final class PersistenceController {
 #endif
 
             do {
+                guard !isStoreFromNewerVersion else {
+                    throw PersistenceControllerError.storeFromNewerVersion
+                }
                 try coordinator.addPersistentStore(ofType: NSSQLiteStoreType,
                     configurationName: nil,
                     at: storeURL,
                     options: options
                 )
+            } catch let storeError as PersistenceControllerError {
+                self.log.error("Store was written by a newer version; leaving it untouched")
+                error = storeError
             } catch let storeError as NSError {
                 self.log.error("Failed to initialize persistenceController: %{public}@", storeError)
                 error = .coreDataError(storeError)
@@ -244,6 +262,97 @@ public final class PersistenceController {
 
                 self.readyCallbacks = []
             }
+        }
+    }
+}
+
+
+// MARK: - Migration
+
+extension PersistenceController {
+    /// The v4 and v5 mapping models end at v6, and Core Data won't chain a mapping model with an
+    /// inferred one. So bring an older store to v6 here; the automatic migration that follows
+    /// infers v6 to the current model.
+    func migrateToModelv6IfNeeded(storeURL: URL, currentModel: NSManagedObjectModel) {
+        guard FileManager.default.fileExists(atPath: storeURL.path),
+              var metadata = try? NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: storeURL),
+              !currentModel.isConfiguration(withName: nil, compatibleWithStoreMetadata: metadata),
+              let modelv6 = PersistenceController.bundledModel(named: "Modelv6"),
+              !modelv6.isConfiguration(withName: nil, compatibleWithStoreMetadata: metadata)
+        else {
+            return
+        }
+
+        if let modelv1 = PersistenceController.bundledModel(named: "Model"),
+           modelv1.isConfiguration(withName: nil, compatibleWithStoreMetadata: metadata),
+           let modelv4 = PersistenceController.bundledModel(named: "Modelv4")
+        {
+            guard migrateStore(at: storeURL, from: modelv1, to: modelv4),
+                  let migratedMetadata = try? NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: storeURL)
+            else {
+                return
+            }
+            metadata = migratedMetadata
+        }
+
+        guard let sourceModel = ["Modelv4", "Modelv5"]
+            .compactMap({ PersistenceController.bundledModel(named: $0) })
+            .first(where: { $0.isConfiguration(withName: nil, compatibleWithStoreMetadata: metadata) })
+        else {
+            log.error("No mapping to Modelv6 for the existing store")
+            return
+        }
+
+        if migrateStore(at: storeURL, from: sourceModel, to: modelv6) {
+            log.default("Migrated store to Modelv6")
+        }
+    }
+
+    /// True when the store matches none of the bundled model versions, which means a newer
+    /// version of the app wrote it. Opening it would fail, and migrating it would lose data.
+    public static func isStoreFromNewerVersion(inDirectory directoryURL: URL) -> Bool {
+        let storeURL = directoryURL.appendingPathComponent("Model.sqlite")
+        guard FileManager.default.fileExists(atPath: storeURL.path),
+              let metadata = try? NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: storeURL),
+              let modelsURL = LocalBundle.main.url(forResource: "Model", withExtension: "momd"),
+              let modelURLs = try? FileManager.default.contentsOfDirectory(at: modelsURL, includingPropertiesForKeys: nil)
+        else {
+            return false
+        }
+
+        return !modelURLs
+            .filter { $0.pathExtension == "mom" }
+            .compactMap { NSManagedObjectModel(contentsOf: $0) }
+            .contains { $0.isConfiguration(withName: nil, compatibleWithStoreMetadata: metadata) }
+    }
+
+    private static func bundledModel(named name: String) -> NSManagedObjectModel? {
+        guard let modelsURL = LocalBundle.main.url(forResource: "Model", withExtension: "momd") else {
+            return nil
+        }
+        return NSManagedObjectModel(contentsOf: modelsURL.appendingPathComponent(name).appendingPathExtension("mom"))
+    }
+
+    private func migrateStore(at storeURL: URL, from sourceModel: NSManagedObjectModel, to destinationModel: NSManagedObjectModel) -> Bool {
+        guard let mappingModel = NSMappingModel(from: [LocalBundle.main], forSourceModel: sourceModel, destinationModel: destinationModel) else {
+            log.error("No mapping model for the existing store")
+            return false
+        }
+
+        let migratedURL = storeURL.deletingLastPathComponent().appendingPathComponent("Model-migration.sqlite")
+        let coordinator = NSPersistentStoreCoordinator(managedObjectModel: destinationModel)
+        do {
+            try? coordinator.destroyPersistentStore(at: migratedURL, ofType: NSSQLiteStoreType, options: nil)
+            let manager = NSMigrationManager(sourceModel: sourceModel, destinationModel: destinationModel)
+            try manager.migrateStore(from: storeURL, sourceType: NSSQLiteStoreType, options: nil, with: mappingModel,
+                                     toDestinationURL: migratedURL, destinationType: NSSQLiteStoreType, destinationOptions: nil)
+            try coordinator.replacePersistentStore(at: storeURL, destinationOptions: nil,
+                                                   withPersistentStoreFrom: migratedURL, sourceOptions: nil, ofType: NSSQLiteStoreType)
+            try? coordinator.destroyPersistentStore(at: migratedURL, ofType: NSSQLiteStoreType, options: nil)
+            return true
+        } catch {
+            log.error("Migrating store failed: %{public}@", String(describing: error))
+            return false
         }
     }
 }

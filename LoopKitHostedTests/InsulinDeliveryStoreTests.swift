@@ -1000,7 +1000,7 @@ class InsulinDeliveryStoreQueryTests: PersistenceControllerTestCase {
                 object.startDate = Date().addingTimeInterval(-.minutes(15))
                 object.endDate = Date().addingTimeInterval(-.minutes(5))
                 object.syncIdentifier = doseDatum.syncIdentifier
-                object.value = 1.0
+                object.deliveredUnits = 1.0
                 object.reason = .bolus
                 object.createdAt = Date()
                 object.deletedAt = doseDatum.deleted ? Date() : nil
