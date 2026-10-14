@@ -38,7 +38,7 @@ final class ChartPointsTouchHighlightLayerViewCache {
 
     private(set) var highlightLayer: ChartPointsTouchHighlightLayer<ChartPoint, UIView>!
 
-    init(xAxisLayer: ChartAxisLayer, yAxisLayer: ChartAxisLayer, axisLabelSettings: ChartLabelSettings, chartPoints: [ChartPoint], tintColor: UIColor, allowOverridingTintColor: Bool = false, allowOverridingHighlightPointSize: Bool = false, highlightPointOffsetY: CGFloat = 0, highlightLabelOffsetY: CGFloat = 0, gestureRecognizer: UIGestureRecognizer? = nil, onCompleteHighlight: (() -> Void)? = nil) {
+    init(xAxisLayer: ChartAxisLayer, yAxisLayer: ChartAxisLayer, axisLabelSettings: ChartLabelSettings, chartPoints: [ChartPoint], tintColor: UIColor, backgroundColor: UIColor, allowOverridingTintColor: Bool = false, allowOverridingHighlightPointSize: Bool = false, highlightPointOffsetY: CGFloat = 0, highlightLabelOffsetY: CGFloat = 0, gestureRecognizer: UIGestureRecognizer? = nil, onCompleteHighlight: (() -> Void)? = nil) {
 
         self.axisLabelSettings = axisLabelSettings
 
@@ -71,7 +71,7 @@ final class ChartPointsTouchHighlightLayerViewCache {
                                         y: containerView.bounds.maxY + 1), // Don't clip X line
                         size: xAxisLayer.frame.size
                     )
-                    xAxisOverlayView.backgroundColor = .systemBackground
+                    xAxisOverlayView.backgroundColor = backgroundColor
                     xAxisOverlayView.isOpaque = true
                     containerView.addSubview(xAxisOverlayView)
                 }
@@ -100,10 +100,11 @@ final class ChartPointsTouchHighlightLayerViewCache {
 
                 let text = chartPointModel.chartPoint.y
                 let label = strongSelf.labelY
+                let valueString = String(describing: text.copy)
 
-                let valueAttributedString = NSMutableAttributedString(string: String(describing: text.copy), attributes: [.font: UIFont.systemFont(ofSize: 20, weight: .semibold), .foregroundColor: newColor])
+                let valueAttributedString = NSMutableAttributedString(string: valueString, attributes: [.font: UIFont.systemFont(ofSize: 20, weight: .semibold), .foregroundColor: newColor])
                 let spacer = NSAttributedString(string: "\u{00a0}")
-                let unitAttributedString =  NSAttributedString(string: String(describing: text).replacingOccurrences(of: String(describing: text.copy), with: "").trimmingCharacters(in: .whitespacesAndNewlines), attributes: [.font: UIFont.systemFont(ofSize: 15, weight: .regular), .foregroundColor: newColor])
+                let unitAttributedString =  NSAttributedString(string: String(describing: text).replacingOccurrences(of: valueString, with: "").trimmingCharacters(in: .whitespacesAndNewlines), attributes: [.font: UIFont.systemFont(ofSize: 15, weight: .regular), .foregroundColor: newColor])
                 
                 valueAttributedString.append(spacer)
                 valueAttributedString.append(unitAttributedString)

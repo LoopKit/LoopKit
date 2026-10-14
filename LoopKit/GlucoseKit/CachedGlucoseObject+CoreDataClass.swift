@@ -97,6 +97,9 @@ extension CachedGlucoseObject {
         if wasUserEntered {
             metadata[HKMetadataKeyWasUserEntered] = true
         }
+        if isBackfill {
+            metadata[MetadataKeyGlucoseIsBackfill] = true
+        }
         metadata[MetadataKeyGlucoseCondition] = condition?.rawValue
         metadata[MetadataKeyGlucoseTrend] = trend?.symbol
         metadata[MetadataKeyGlucoseTrendRateValue] = trendRateValue
@@ -139,7 +142,7 @@ extension CachedGlucoseObject {
     ///   - sample: A new glucose (CGM) sample to copy data from.
     ///   - provenanceIdentifier: A string uniquely identifying the provenance (origin) of the sample.
     ///   - healthKitStorageDelay: The amount of time (seconds) to delay writing this sample to HealthKit.  A `nil` here means this sample is not eligible (i.e. authorized) to be written to HealthKit. Note that user entered glucose samples are sent directly to HealthKit without any delay
-    func create(from sample: NewGlucoseSample, provenanceIdentifier: String, healthKitStorageDelay: TimeInterval?) {
+    func create(from sample: NewGlucoseSample, provenanceIdentifier: String, healthKitStorageDelay: TimeInterval?, receivedDate: Date = Date()) {
         self.uuid = nil
         self.provenanceIdentifier = provenanceIdentifier
         self.syncIdentifier = sample.syncIdentifier
@@ -148,6 +151,8 @@ extension CachedGlucoseObject {
         self.unitString = HKUnit.milligramsPerDeciliter.unitString
         self.startDate = sample.date
         self.isDisplayOnly = sample.isDisplayOnly
+        self.isBackfill = sample.isBackfill
+        self.receivedDate = receivedDate
         self.wasUserEntered = sample.wasUserEntered
         self.device = sample.device
         self.condition = sample.condition
@@ -166,6 +171,7 @@ extension CachedGlucoseObject {
         self.unitString = HKUnit.milligramsPerDeciliter.unitString
         self.startDate = sample.startDate
         self.isDisplayOnly = sample.isDisplayOnly
+        self.isBackfill = sample.isBackfill
         self.wasUserEntered = sample.wasUserEntered
         self.device = sample.device
         self.condition = sample.condition
@@ -189,6 +195,8 @@ extension CachedGlucoseObject {
         self.unitString = HKUnit.milligramsPerDeciliter.unitString
         self.startDate = sample.startDate
         self.isDisplayOnly = sample.isDisplayOnly
+        self.isBackfill = sample.isBackfill
+        self.receivedDate = sample.receivedDate
         self.wasUserEntered = sample.wasUserEntered
         self.device = sample.device
         self.condition = sample.condition

@@ -229,6 +229,10 @@ public final class PersistenceController {
 
             let storeURL = directoryURL.appendingPathComponent("Model.sqlite")
 
+            if !self.isReadOnly {
+                self.migrateToModelv6IfNeeded(storeURL: storeURL, currentModel: model)
+            }
+
             var options: [AnyHashable : Any] = [:]
 
             if self.isReadOnly {
@@ -294,6 +298,51 @@ public final class PersistenceController {
 
                 self.readyCallbacks = []
             }
+        }
+    }
+}
+
+
+// MARK: - Migration
+
+extension PersistenceController {
+    /// The v4 and v5 mapping models end at v6, and Core Data won't chain a mapping model with an
+    /// inferred one. So bring a v4 or v5 store to v6 here; the automatic migration that follows
+    /// infers v6 to the current model.
+    func migrateToModelv6IfNeeded(storeURL: URL, currentModel: NSManagedObjectModel) {
+        guard FileManager.default.fileExists(atPath: storeURL.path),
+              let metadata = try? NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: storeURL),
+              !currentModel.isConfiguration(withName: nil, compatibleWithStoreMetadata: metadata),
+              let modelsURL = LocalBundle.main.url(forResource: "Model", withExtension: "momd"),
+              let modelv6 = NSManagedObjectModel(contentsOf: modelsURL.appendingPathComponent("Modelv6.mom")),
+              !modelv6.isConfiguration(withName: nil, compatibleWithStoreMetadata: metadata)
+        else {
+            return
+        }
+
+        let sourceModel = ["Modelv4", "Modelv5"]
+            .compactMap { NSManagedObjectModel(contentsOf: modelsURL.appendingPathComponent($0).appendingPathExtension("mom")) }
+            .first { $0.isConfiguration(withName: nil, compatibleWithStoreMetadata: metadata) }
+        guard let sourceModel,
+              let mappingModel = NSMappingModel(from: [LocalBundle.main], forSourceModel: sourceModel, destinationModel: modelv6)
+        else {
+            log.error("No mapping to Modelv6 for the existing store")
+            return
+        }
+
+        let migratedURL = storeURL.deletingLastPathComponent().appendingPathComponent("Model-v6-migration.sqlite")
+        let coordinator = NSPersistentStoreCoordinator(managedObjectModel: modelv6)
+        do {
+            try? coordinator.destroyPersistentStore(at: migratedURL, ofType: NSSQLiteStoreType, options: nil)
+            let manager = NSMigrationManager(sourceModel: sourceModel, destinationModel: modelv6)
+            try manager.migrateStore(from: storeURL, sourceType: NSSQLiteStoreType, options: nil, with: mappingModel,
+                                     toDestinationURL: migratedURL, destinationType: NSSQLiteStoreType, destinationOptions: nil)
+            try coordinator.replacePersistentStore(at: storeURL, destinationOptions: nil,
+                                                   withPersistentStoreFrom: migratedURL, sourceOptions: nil, ofType: NSSQLiteStoreType)
+            try? coordinator.destroyPersistentStore(at: migratedURL, ofType: NSSQLiteStoreType, options: nil)
+            log.default("Migrated store to Modelv6")
+        } catch {
+            log.error("Migrating store to Modelv6 failed: %{public}@", String(describing: error))
         }
     }
 }

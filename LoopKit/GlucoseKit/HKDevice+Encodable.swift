@@ -9,7 +9,7 @@
 import Foundation
 import HealthKit
 
-extension HKDevice: Encodable {
+extension HKDevice: @retroactive Encodable {
     private enum CodingKeys: String, CodingKey {
        case name, manufacturer, model, hardwareVersion, firmwareVersion, softwareVersion, localIdentifier, udiDeviceIdentifier
     }

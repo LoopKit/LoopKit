@@ -17,13 +17,14 @@ class CgmEvent: NSManagedObject {
     @NSManaged var primitiveExpectedLifetime: NSNumber?
     @NSManaged var primitiveWarmupPeriod: NSNumber?
     @NSManaged var failureMessage: String?
+    @NSManaged var details: Data?
     @NSManaged var modificationCounter: Int64
 
     var type: CgmEventType? {
         get {
             willAccessValue(forKey: "type")
             defer { didAccessValue(forKey: "type") }
-            return CgmEventType(rawValue: primitiveType)
+            return primitiveType.map { CgmEventType(rawValue: $0) }
         }
         set {
             willChangeValue(forKey: "type")

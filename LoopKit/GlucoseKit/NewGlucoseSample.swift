@@ -19,6 +19,7 @@ public struct NewGlucoseSample: Equatable, RawRepresentable {
     public let syncIdentifier: String
     public var syncVersion: Int
     public let device: HKDevice?
+    public let isBackfill: Bool
 
     /// - Parameters:
     ///   - date: The date the sample was collected
@@ -29,6 +30,7 @@ public struct NewGlucoseSample: Equatable, RawRepresentable {
     ///   - syncIdentifier: A unique identifier representing the sample, used for de-duplication
     ///   - syncVersion: A version number for determining resolution in de-duplication
     ///   - device: The description of the device the collected the sample
+    ///   - isBackfill: Whether the reading was recovered after a gap (sensor history or backfill) rather than received in real time
     public init(date: Date,
                 quantity: LoopQuantity,
                 condition: GlucoseCondition?,
@@ -38,7 +40,8 @@ public struct NewGlucoseSample: Equatable, RawRepresentable {
                 wasUserEntered: Bool,
                 syncIdentifier: String,
                 syncVersion: Int = 1,
-                device: HKDevice? = nil) {
+                device: HKDevice? = nil,
+                isBackfill: Bool = false) {
         self.date = date
         self.quantity = quantity
         self.condition = condition
@@ -49,6 +52,7 @@ public struct NewGlucoseSample: Equatable, RawRepresentable {
         self.syncIdentifier = syncIdentifier
         self.syncVersion = syncVersion
         self.device = device
+        self.isBackfill = isBackfill
     }
     
     public init?(rawValue: [String : Any]) {
@@ -77,6 +81,7 @@ public struct NewGlucoseSample: Equatable, RawRepresentable {
         self.syncIdentifier = syncIdentifier
         self.syncVersion = syncVersion
         self.device = nil
+        self.isBackfill = rawValue["isBackfill"] as? Bool ?? false
     }
     
     public var rawValue: [String : Any] {
@@ -91,6 +96,7 @@ public struct NewGlucoseSample: Equatable, RawRepresentable {
         rawValue["wasUserEntered"] = wasUserEntered
         rawValue["syncIdentifier"] = syncIdentifier
         rawValue["syncVersion"] = syncVersion
+        rawValue["isBackfill"] = isBackfill
         
         return rawValue
     }
@@ -115,6 +121,9 @@ extension NewGlucoseSample {
         }
         if wasUserEntered {
             metadata[HKMetadataKeyWasUserEntered] = true
+        }
+        if isBackfill {
+            metadata[MetadataKeyGlucoseIsBackfill] = true
         }
 
         return HKQuantitySample(

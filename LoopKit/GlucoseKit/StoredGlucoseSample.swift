@@ -20,6 +20,8 @@ public struct StoredGlucoseSample: GlucoseSampleValue, Equatable {
     public let syncVersion: Int?
     public let device: HKDevice?
     public let healthKitEligibleDate: Date?
+    /// When Loop received the sample from the CGM, if known
+    public let receivedDate: Date?
 
     // MARK: - SampleValue
 
@@ -29,6 +31,7 @@ public struct StoredGlucoseSample: GlucoseSampleValue, Equatable {
     // MARK: - GlucoseSampleValue
 
     public let isDisplayOnly: Bool
+    public let isBackfill: Bool
     public let wasUserEntered: Bool
     public let condition: GlucoseCondition?
     public let trend: GlucoseTrend?
@@ -46,6 +49,7 @@ public struct StoredGlucoseSample: GlucoseSampleValue, Equatable {
             trend: sample.trend,
             trendRate: sample.trendRate,
             isDisplayOnly: sample.isDisplayOnly,
+            isBackfill: sample.isBackfill,
             wasUserEntered: sample.wasUserEntered,
             device: sample.device,
             healthKitEligibleDate: nil)
@@ -62,9 +66,11 @@ public struct StoredGlucoseSample: GlucoseSampleValue, Equatable {
         trend: GlucoseTrend? = nil,
         trendRate: LoopQuantity? = nil,
         isDisplayOnly: Bool = false,
+        isBackfill: Bool = false,
         wasUserEntered: Bool = false,
         device: HKDevice? = nil,
-        healthKitEligibleDate: Date? = nil) {
+        healthKitEligibleDate: Date? = nil,
+        receivedDate: Date? = nil) {
         self.uuid = uuid
         self.provenanceIdentifier = provenanceIdentifier
         self.syncIdentifier = syncIdentifier
@@ -75,9 +81,11 @@ public struct StoredGlucoseSample: GlucoseSampleValue, Equatable {
         self.trend = trend
         self.trendRate = trendRate
         self.isDisplayOnly = isDisplayOnly
+        self.isBackfill = isBackfill
         self.wasUserEntered = wasUserEntered
         self.device = device
         self.healthKitEligibleDate = healthKitEligibleDate
+        self.receivedDate = receivedDate
     }
 }
 
@@ -94,9 +102,11 @@ extension StoredGlucoseSample {
             trend: managedObject.trend,
             trendRate: managedObject.trendRate,
             isDisplayOnly: managedObject.isDisplayOnly,
+            isBackfill: managedObject.isBackfill,
             wasUserEntered: managedObject.wasUserEntered,
             device: managedObject.device,
-            healthKitEligibleDate: managedObject.healthKitEligibleDate)
+            healthKitEligibleDate: managedObject.healthKitEligibleDate,
+            receivedDate: managedObject.receivedDate)
     }
 }
 
@@ -119,9 +129,11 @@ extension StoredGlucoseSample: Codable {
                   trend: try container.decodeIfPresent(GlucoseTrend.self, forKey: .trend),
                   trendRate: try container.decodeIfPresent(Double.self, forKey: .trendRate).map { LoopQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: $0) },
                   isDisplayOnly: isDisplayOnly,
+                  isBackfill: try container.decodeIfPresent(Bool.self, forKey: .isBackfill) ?? false,
                   wasUserEntered: wasUserEntered,
                   device: try container.decodeIfPresent(CodableDevice.self, forKey: .device).map { $0.device },
-                  healthKitEligibleDate: try container.decodeIfPresent(Date.self, forKey: .healthKitEligibleDate))
+                  healthKitEligibleDate: try container.decodeIfPresent(Date.self, forKey: .healthKitEligibleDate),
+                  receivedDate: try container.decodeIfPresent(Date.self, forKey: .receivedDate))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -140,11 +152,15 @@ extension StoredGlucoseSample: Codable {
         if isDisplayOnly {
             try container.encode(isDisplayOnly, forKey: .isDisplayOnly)
         }
+        if isBackfill {
+            try container.encode(isBackfill, forKey: .isBackfill)
+        }
         if wasUserEntered {
             try container.encode(wasUserEntered, forKey: .wasUserEntered)
         }
         try container.encodeIfPresent(device.map { CodableDevice($0) }, forKey: .device)
         try container.encodeIfPresent(healthKitEligibleDate, forKey: .healthKitEligibleDate)
+        try container.encodeIfPresent(receivedDate, forKey: .receivedDate)
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -158,8 +174,10 @@ extension StoredGlucoseSample: Codable {
         case trend
         case trendRate
         case isDisplayOnly
+        case isBackfill
         case wasUserEntered
         case device
         case healthKitEligibleDate
+        case receivedDate
     }
 }

@@ -14,7 +14,7 @@ import MockKit
 import LoopAlgorithm
 
 
-extension MockPumpManager: PumpManagerUI {
+extension MockPumpManager: @retroactive PumpManagerUI {
     
     private var appName: String {
         return Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as! String

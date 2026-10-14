@@ -14,6 +14,13 @@ public protocol DeviceManagerDelegate: AlertIssuer, PersistedAlertStore {
 
     /// An `ExclusiveDeviceControl` device's link is up and the device has answered. Optional.
     func deviceManagerControlDidBecomeReady(_ manager: DeviceManager)
+
+    /// Records an event with the app's analytics services. This will be called from an unspecified queue
+    func deviceManager(_ manager: DeviceManager, recordAnalyticsEvent name: String, properties: [AnyHashable: Any]?)
+}
+
+public extension DeviceManagerDelegate {
+    func deviceManager(_ manager: DeviceManager, recordAnalyticsEvent name: String, properties: [AnyHashable: Any]?) {}
 }
 
 public protocol DeviceManager: CustomDebugStringConvertible, AlertResponder, AlertSoundVendor, Pluggable {
