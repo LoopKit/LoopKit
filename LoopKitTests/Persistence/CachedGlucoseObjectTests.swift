@@ -220,6 +220,7 @@ class CachedGlucoseObjectEncodableTests: PersistenceControllerTestCase {
 
             let expected = """
 {
+  "isBackfill" : false,
   "isDisplayOnly" : false,
   "modificationCounter" : 123,
   "provenanceIdentifier" : "238E41EA-9576-4981-A1A4-51E10228584F",
@@ -251,6 +252,7 @@ class CachedGlucoseObjectEncodableTests: PersistenceControllerTestCase {
 
             let expected = """
 {
+  "isBackfill" : false,
   "isDisplayOnly" : true,
   "modificationCounter" : 234,
   "provenanceIdentifier" : "238E41EA-9576-4981-A1A4-51E10228584F",
