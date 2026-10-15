@@ -32,8 +32,6 @@ public final class PersistenceController {
     public enum PersistenceControllerError: Error, LocalizedError {
         case configurationError(String)
         case coreDataError(NSError)
-        /// The store was written by a newer version of the app, with a model this version doesn't have.
-        case storeFromNewerVersion
 
         public var errorDescription: String? {
             switch self {
@@ -41,8 +39,6 @@ public final class PersistenceController {
                 return description
             case .coreDataError(let error):
                 return error.localizedDescription
-            case .storeFromNewerVersion:
-                return LocalizedString("The stored data is from a newer version of the app.", comment: "Error description when the database was written by a newer version of the app")
             }
         }
 
@@ -52,8 +48,6 @@ public final class PersistenceController {
                 return "Unrecoverable Error"
             case .coreDataError(let error):
                 return error.localizedRecoverySuggestion
-            case .storeFromNewerVersion:
-                return LocalizedString("Install the newer version again to use your data.", comment: "Recovery suggestion when the database was written by a newer version of the app")
             }
         }
     }
@@ -235,9 +229,7 @@ public final class PersistenceController {
 
             let storeURL = directoryURL.appendingPathComponent("Model.sqlite")
 
-            let isStoreFromNewerVersion = PersistenceController.isStoreFromNewerVersion(inDirectory: directoryURL)
-
-            if !self.isReadOnly && !isStoreFromNewerVersion {
+            if !self.isReadOnly {
                 self.migrateToModelv6IfNeeded(storeURL: storeURL, currentModel: model)
             }
 
@@ -270,18 +262,11 @@ public final class PersistenceController {
             var attempt = 0
             while true {
                 do {
-                    guard !isStoreFromNewerVersion else {
-                        throw PersistenceControllerError.storeFromNewerVersion
-                    }
                     try coordinator.addPersistentStore(ofType: NSSQLiteStoreType,
                         configurationName: nil,
                         at: storeURL,
                         options: options
                     )
-                    break
-                } catch let storeError as PersistenceControllerError {
-                    self.log.error("Store was written by a newer version; leaving it untouched")
-                    error = storeError
                     break
                 } catch let storeError as NSError {
                     guard !self.isReadOnly,
@@ -359,24 +344,6 @@ extension PersistenceController {
         } catch {
             log.error("Migrating store to Modelv6 failed: %{public}@", String(describing: error))
         }
-    }
-
-    /// True when the store matches none of the bundled model versions, which means a newer
-    /// version of the app wrote it. Opening it would fail, and migrating it would lose data.
-    public static func isStoreFromNewerVersion(inDirectory directoryURL: URL) -> Bool {
-        let storeURL = directoryURL.appendingPathComponent("Model.sqlite")
-        guard FileManager.default.fileExists(atPath: storeURL.path),
-              let metadata = try? NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: storeURL),
-              let modelsURL = LocalBundle.main.url(forResource: "Model", withExtension: "momd"),
-              let modelURLs = try? FileManager.default.contentsOfDirectory(at: modelsURL, includingPropertiesForKeys: nil)
-        else {
-            return false
-        }
-
-        return !modelURLs
-            .filter { $0.pathExtension == "mom" }
-            .compactMap { NSManagedObjectModel(contentsOf: $0) }
-            .contains { $0.isConfiguration(withName: nil, compatibleWithStoreMetadata: metadata) }
     }
 }
 
