@@ -143,6 +143,19 @@ extension Collection where Element: GlucoseSampleValue, Index == Int {
 
         return true
     }
+    
+    // interpolate the two values; note if they have the same date the value returned will be the first
+    private func interpolateMgdL(_ first: GlucoseEffect, _ second: GlucoseEffect, _ date: Date) -> Double {
+        let mgdL = HKUnit.milligramsPerDeciliter
+        let firstValue = first.quantity.doubleValue(for: mgdL)
+        let secondValue = second.quantity.doubleValue(for: mgdL)
+        
+        guard firstValue != secondValue, first.startDate != second.startDate, date != first.startDate else {
+            return firstValue
+        }
+        
+        return firstValue + ((secondValue - firstValue) * (date.timeIntervalSince(first.startDate) / second.startDate.timeIntervalSince(first.startDate)))
+    }
 
     /// Calculates a timeline of effect velocity (glucose/time) observed in glucose readings that counteract the specified effects.
     ///
@@ -164,7 +177,7 @@ extension Collection where Element: GlucoseSampleValue, Index == Int {
         guard var startGlucoseIdx else {
             return []
         }
-
+        
         var endGlucoseIdx = startGlucoseIdx + 1
 
         while endGlucoseIdx != self.endIndex {
@@ -196,10 +209,19 @@ extension Collection where Element: GlucoseSampleValue, Index == Int {
                 break
             }
 
+            var precedingStartEffect: GlucoseEffect = effects[Swift.max(effectIndex - 1, 0)]
+            var precedingEndEffect: GlucoseEffect = precedingStartEffect
             var startEffect: GlucoseEffect?
             var endEffect: GlucoseEffect?
 
             for effect in effects[effectIndex..<effects.count] {
+                if effect.startDate < startGlucose.startDate {
+                    precedingStartEffect = effect
+                }
+                if effect.startDate < endGlucose.startDate {
+                    precedingEndEffect = effect
+                }
+                
                 if startEffect == nil && effect.startDate >= startGlucose.startDate {
                     startEffect = effect
                 } else if endEffect == nil && effect.startDate >= endGlucose.startDate {
@@ -209,12 +231,14 @@ extension Collection where Element: GlucoseSampleValue, Index == Int {
 
                 effectIndex += 1
             }
+                        
 
-            guard let startEffectValue = startEffect?.quantity.doubleValue(for: mgdL),
-                let endEffectValue = endEffect?.quantity.doubleValue(for: mgdL)
-            else {
+            guard let startEffect = startEffect, let endEffect = endEffect else {
                 break
             }
+            
+            let startEffectValue = interpolateMgdL(startEffect, precedingStartEffect, startGlucose.startDate)
+            let endEffectValue = interpolateMgdL(endEffect, precedingEndEffect, endGlucose.startDate)
 
             let effectChange = endEffectValue - startEffectValue
             let discrepancy = glucoseChange - effectChange
