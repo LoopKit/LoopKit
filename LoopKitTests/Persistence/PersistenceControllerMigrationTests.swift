@@ -54,7 +54,8 @@ class PersistenceControllerMigrationTests: XCTestCase {
         }
     }
 
-    func testStoreFromNewerModelIsLeftUntouched() throws {
+    // Core Data keeps the store's model in the store, so it can infer the mapping down to ours
+    func testStoreFromNewerModelOpensAndKeepsItsData() throws {
         let newerModel = try bundledModel(named: "Modelv8")
         let attribute = NSAttributeDescription()
         attribute.name = "addedInANewerVersion"
@@ -64,19 +65,19 @@ class PersistenceControllerMigrationTests: XCTestCase {
         entity.properties.append(attribute)
         try createStore(model: newerModel) { context in
             self.insert("CachedCarbObject", into: context, values: ["grams": 30.0, "addedInANewerVersion": "x"])
-        }
-        let storeURL = directoryURL.appendingPathComponent("Model.sqlite")
-        let metadataBefore = try NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: storeURL)
-
-        XCTAssertThrowsError(try openCacheStore()) { error in
-            guard case PersistenceController.PersistenceControllerError.storeFromNewerVersion = error else {
-                return XCTFail("Unexpected error \(error)")
-            }
+            self.insert("CachedInsulinDeliveryObject", into: context, values: [
+                "syncIdentifier": "bolus", "deliveredUnits": 2.5, "programmedUnits": 2.5, "reason": HKInsulinDeliveryReason.bolus.rawValue
+            ])
         }
 
-        let metadataAfter = try NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: storeURL)
-        XCTAssertTrue(newerModel.isConfiguration(withName: nil, compatibleWithStoreMetadata: metadataAfter))
-        XCTAssertEqual(metadataBefore[NSStoreUUIDKey] as? String, metadataAfter[NSStoreUUIDKey] as? String)
+        let cacheStore = try openCacheStore()
+        defer { cacheStore.tearDown() }
+
+        XCTAssertEqual(try fetchDoses(in: cacheStore)["bolus"]?.deliveredUnits, 2.5)
+        try cacheStore.managedObjectContext.performAndWait {
+            let carbs = try cacheStore.managedObjectContext.fetch(CachedCarbObject.fetchRequest())
+            XCTAssertEqual(carbs.map(\.grams), [30])
+        }
     }
 
     // MARK: -
