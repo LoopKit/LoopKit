@@ -524,13 +524,52 @@ extension GlucoseStore {
         }
 
         let end = min(Date(timeIntervalSinceNow: -managedDataInterval), date)
-        let predicate = HKQuery.predicateForSamples(withStart: Date(timeIntervalSinceNow: -maxPurgeInterval), end: end)
-        hkSampleStore.healthStore.deleteObjects(of: HealthKitSampleStore.glucoseType, predicate: predicate) { (success, count, error) -> Void in
-            // error is expected and ignored if protected data is unavailable
-            if success {
-                self.log.debug("Successfully purged %d HealthKit objects older than %{public}@", count, String(describing: end))
+        let ownPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+            HKQuery.predicateForSamples(withStart: Date(timeIntervalSinceNow: -maxPurgeInterval), end: end),
+            HKQuery.predicateForObjects(from: HKSource.default())
+        ])
+
+        // Only delete our samples that the manufacturer's app has already written, so a reading is never left without a copy
+        fetchGlucoseSamples(hkSampleStore, matching: ownPredicate) { own in
+            guard let start = own.map(\.startDate).min(), let latest = own.map(\.startDate).max() else {
+                return
+            }
+            let othersPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+                HKQuery.predicateForSamples(withStart: start.addingTimeInterval(-Self.duplicateTolerance), end: latest.addingTimeInterval(Self.duplicateTolerance)),
+                NSCompoundPredicate(notPredicateWithSubpredicate: HKQuery.predicateForObjects(from: HKSource.default()))
+            ])
+            self.fetchGlucoseSamples(hkSampleStore, matching: othersPredicate) { others in
+                let duplicates = Self.samples(own, duplicatedIn: others)
+                guard !duplicates.isEmpty else {
+                    return
+                }
+                let predicate = HKQuery.predicateForObjects(with: Set(duplicates.map(\.uuid)))
+                hkSampleStore.healthStore.deleteObjects(of: HealthKitSampleStore.glucoseType, predicate: predicate) { (success, count, error) -> Void in
+                    // error is expected and ignored if protected data is unavailable
+                    if success {
+                        self.log.debug("Successfully purged %d duplicated HealthKit objects older than %{public}@", count, String(describing: end))
+                    }
+                }
             }
         }
+    }
+
+    static let duplicateTolerance: TimeInterval = .minutes(2)
+
+    static func samples(_ samples: [HKSample], duplicatedIn others: [HKSample]) -> [HKSample] {
+        samples.filter { sample in
+            others.contains { abs($0.startDate.timeIntervalSince(sample.startDate)) <= duplicateTolerance }
+        }
+    }
+
+    private func fetchGlucoseSamples(_ hkSampleStore: HealthKitSampleStore, matching predicate: NSPredicate, completion: @escaping ([HKSample]) -> Void) {
+        let query = HKSampleQuery(sampleType: HealthKitSampleStore.glucoseType, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: nil) { (_, samples, error) in
+            // error is expected and ignored if protected data is unavailable
+            if let samples {
+                completion(samples)
+            }
+        }
+        hkSampleStore.healthStore.execute(query)
     }
 
     private func handleUpdatedGlucoseData() async {
