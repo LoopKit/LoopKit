@@ -80,6 +80,32 @@ class GlucoseStoreTests: PersistenceControllerTestCase {
     }
 }
 
+class GlucoseStoreDuplicateSampleTests: XCTestCase {
+    private func sample(at date: Date) -> HKQuantitySample {
+        HKQuantitySample(type: HealthKitSampleStore.glucoseType, quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 100), start: date, end: date)
+    }
+
+    func testOnlySamplesWithAnotherSampleWithinToleranceAreDuplicates() {
+        let now = Date()
+        let duplicated = sample(at: now)
+        let nearlyDuplicated = sample(at: now.addingTimeInterval(.minutes(10)))
+        let alone = sample(at: now.addingTimeInterval(.minutes(20)))
+        let others = [
+            sample(at: now.addingTimeInterval(30)),
+            sample(at: now.addingTimeInterval(.minutes(10) - GlucoseStore.duplicateTolerance)),
+            sample(at: now.addingTimeInterval(.minutes(25)))
+        ]
+
+        let duplicates = GlucoseStore.samples([duplicated, nearlyDuplicated, alone], duplicatedIn: others)
+
+        XCTAssertEqual(duplicates.map(\.uuid), [duplicated.uuid, nearlyDuplicated.uuid])
+    }
+
+    func testNoSamplesAreDuplicatesWithoutOtherSamples() {
+        XCTAssertTrue(GlucoseStore.samples([sample(at: Date())], duplicatedIn: []).isEmpty)
+    }
+}
+
 class GlucoseStoreRemoteDataServiceQueryAnchorTests: XCTestCase {
     var rawValue: GlucoseStore.QueryAnchor.RawValue = [
         "modificationCounter": Int64(123)
