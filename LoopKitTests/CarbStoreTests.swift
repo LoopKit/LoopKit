@@ -182,6 +182,27 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
         XCTAssertTrue(entries.isEmpty)
     }
 
+    func testReplaceCarbEntryRetriedThrowsWithoutStoringAgain() async throws {
+        let entry = newEntry(10)
+        let edit = CarbEntryUpdate(quantity: LoopQuantity(unit: .gram, doubleValue: 15), startDate: entry.startDate, foodType: "Edit", absorptionTime: .hours(3))
+
+        let added = try await carbStore.addCarbEntry(entry)
+        let edited = try await carbStore.replaceCarbEntry(added, withEntry: edit)
+        do {
+            _ = try await carbStore.replaceCarbEntry(added, withEntry: edit)
+            XCTFail("Expected an error")
+        } catch CarbStore.CarbStoreError.noData {
+        }
+
+        let entries = try await carbStore.getCarbEntries(start: Date().addingTimeInterval(-.minutes(1)))
+        XCTAssertEqual(entries.count, 1)
+        XCTAssertEqual(entries.first?.syncVersion, edited.syncVersion)
+        XCTAssertEqual(entries.first?.quantity, edit.quantity)
+
+        let objects: [CachedCarbObject] = cacheStore.managedObjectContext.performAndWait { cacheStore.managedObjectContext.all() }
+        XCTAssertEqual(objects.count, 2)
+    }
+
     func testCarbEntryWithSyncIdentifier() async throws {
         let entry = newEntry(10)
         let edit = CarbEntryUpdate(quantity: LoopQuantity(unit: .gram, doubleValue: 15), startDate: entry.startDate, foodType: "Edit", absorptionTime: .hours(3))
