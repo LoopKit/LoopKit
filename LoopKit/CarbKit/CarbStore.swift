@@ -65,6 +65,10 @@ public final class CarbStore {
         case unauthorized
         // No data was found to match the specified request
         case noData
+        // An entry was already added under this sync identifier with different content
+        case conflictingSyncIdentifier
+        // The entry added under this sync identifier has since been deleted
+        case deletedSyncIdentifier
 
         init?(error: PersistenceController.PersistenceControllerError?) {
             guard let error = error, case .coreDataError(let coreDataError) = error else {
@@ -351,50 +355,77 @@ extension CarbStore {
 
 extension CarbStore {
 
-    public func addCarbEntry(_ entry: NewCarbEntry) async throws -> StoredCarbEntry {
+    /// Adds a carb entry under a caller-chosen identity, so that a retried add stores it once.
+    ///
+    /// If this store already added an entry under `syncIdentifier`, nothing is stored. When `entry`
+    /// matches that original add, the current version is returned (as edited since, if it was). An
+    /// entry since deleted throws `deletedSyncIdentifier`; different content throws
+    /// `conflictingSyncIdentifier`.
+    public func addCarbEntry(_ entry: NewCarbEntry, syncIdentifier: String) async throws -> StoredCarbEntry {
         try await withCheckedThrowingContinuation { continuation in
-            addCarbEntry(entry) { result in
-                continuation.resume(with: result)
+            queue.async {
+                var result: Result<StoredCarbEntry, CarbStoreError>!
+                var inserted = false
+
+                self.cacheStore.managedObjectContext.performAndWait {
+                    do {
+                        let related = try self.fetchRelatedCarbObjects(syncIdentifier: syncIdentifier, provenanceIdentifier: self.provenanceIdentifier)
+                        if let original = related.first(where: { $0.operation == .create }) ?? related.first {
+                            if !original.hasContent(of: entry) {
+                                result = .failure(.conflictingSyncIdentifier)
+                            } else if let current = related.last, current.operation != .delete {
+                                result = .success(StoredCarbEntry(managedObject: current))
+                            } else {
+                                result = .failure(.deletedSyncIdentifier)
+                            }
+                            return
+                        }
+
+                        let newObject = CachedCarbObject(context: self.cacheStore.managedObjectContext)
+                        newObject.create(from: entry,
+                                         provenanceIdentifier: self.provenanceIdentifier,
+                                         syncIdentifier: syncIdentifier,
+                                         syncVersion: self.syncVersion)
+
+                        if let saveError = CarbStoreError(error: self.cacheStore.save()) {
+                            result = .failure(saveError)
+                            return
+                        }
+
+                        self.saveEntryToHealthKit(newObject)
+
+                        result = .success(StoredCarbEntry(managedObject: newObject))
+                        inserted = true
+                    } catch let coreDataError {
+                        result = .failure(.coreDataError(coreDataError))
+                    }
+                }
+
+                continuation.resume(with: result.mapError { $0 as Error })
+
+                if inserted {
+                    self.handleUpdatedCarbData()
+                }
             }
         }
     }
 
-    public func addCarbEntry(_ entry: NewCarbEntry, completion: @escaping (_ result: Result<StoredCarbEntry,Error>) -> Void) {
-        queue.async {
-            var storedEntry: StoredCarbEntry?
-            var error: CarbStoreError?
-
-            self.cacheStore.managedObjectContext.performAndWait {
-                do {
-                    let syncIdentifier = try self.cacheStore.managedObjectContext.generateUniqueSyncIdentifier()
-
-                    let newObject = CachedCarbObject(context: self.cacheStore.managedObjectContext)
-                    newObject.create(from: entry,
-                                     provenanceIdentifier: self.provenanceIdentifier,
-                                     syncIdentifier: syncIdentifier,
-                                     syncVersion: self.syncVersion)
-
-                    if let saveError = CarbStoreError(error: self.cacheStore.save()) {
-                        error = saveError
-                        return
+    /// The current version of the entry this store added under `syncIdentifier`, or nil if there is
+    /// none or it was deleted.
+    public func carbEntry(withSyncIdentifier syncIdentifier: String) async throws -> StoredCarbEntry? {
+        try await withCheckedThrowingContinuation { continuation in
+            queue.async {
+                var result: Result<StoredCarbEntry?, Error>!
+                self.cacheStore.managedObjectContext.performAndWait {
+                    do {
+                        let current = try self.fetchRelatedCarbObjects(syncIdentifier: syncIdentifier, provenanceIdentifier: self.provenanceIdentifier).last
+                        result = .success(current.flatMap { $0.operation == .delete ? nil : StoredCarbEntry(managedObject: $0) })
+                    } catch let coreDataError {
+                        result = .failure(CarbStoreError.coreDataError(coreDataError))
                     }
-
-                    self.saveEntryToHealthKit(newObject)
-
-                    storedEntry = StoredCarbEntry(managedObject: newObject)
-                } catch let coreDataError {
-                    error = .coreDataError(coreDataError)
                 }
+                continuation.resume(with: result)
             }
-
-            if let error = error {
-                completion(.failure(error))
-                return
-            }
-
-            completion(.success(storedEntry!))
-
-            self.handleUpdatedCarbData()
         }
     }
 

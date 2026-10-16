@@ -61,6 +61,14 @@ class CachedCarbObject: NSManagedObject {
 
 extension CachedCarbObject {
     var quantity: LoopQuantity { LoopQuantity(unit: .gram, doubleValue: grams) }
+
+    func hasContent(of entry: NewCarbEntry) -> Bool {
+        grams == entry.quantity.doubleValue(for: .gram) &&
+            startDate == entry.startDate &&
+            foodType == entry.foodType &&
+            absorptionTime == entry.absorptionTime &&
+            favoriteFoodID == entry.favoriteFoodID
+    }
 }
 
 // MARK: - Operations

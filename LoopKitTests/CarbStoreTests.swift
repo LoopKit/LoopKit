@@ -54,74 +54,144 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
     
     // MARK: -
     
-    func testGetCarbEntriesAfterAdd() {
+    func testGetCarbEntriesAfterAdd() async throws {
         let firstCarbEntry = NewCarbEntry(quantity: LoopQuantity(unit: .gram, doubleValue: 10), startDate: Date(timeIntervalSinceNow: -1), foodType: "First", absorptionTime: .hours(5))
         let secondCarbEntry = NewCarbEntry(quantity: LoopQuantity(unit: .gram, doubleValue: 20), startDate: Date(), foodType: "Second", absorptionTime: .hours(3))
         let thirdCarbEntry = NewCarbEntry(quantity: LoopQuantity(unit: .gram, doubleValue: 30), startDate: Date(timeIntervalSinceNow: 1), foodType: "Third", absorptionTime: .minutes(30))
-        let getCarbEntriesCompletion = expectation(description: "Get carb entries completion")
 
-        carbStore.addCarbEntry(firstCarbEntry) { (_) in
-            DispatchQueue.main.async {
-                self.carbStore.addCarbEntry(secondCarbEntry) { (_) in
-                    DispatchQueue.main.async {
-                        self.carbStore.addCarbEntry(thirdCarbEntry) { (_) in
-                            DispatchQueue.main.async {
-                                self.carbStore.getCarbEntries(start: Date().addingTimeInterval(-.minutes(1))) { result in
-                                    getCarbEntriesCompletion.fulfill()
-                                    switch result {
-                                    case .failure(let error):
-                                        XCTFail("Unexpected failure: \(error)")
-                                    case .success(let entries):
-                                        XCTAssertEqual(entries.count, 3)
+        _ = try await carbStore.addCarbEntry(firstCarbEntry, syncIdentifier: UUID().uuidString)
+        _ = try await carbStore.addCarbEntry(secondCarbEntry, syncIdentifier: UUID().uuidString)
+        _ = try await carbStore.addCarbEntry(thirdCarbEntry, syncIdentifier: UUID().uuidString)
 
-                                        // First
-                                        XCTAssertNotNil(entries[0].uuid)
-                                        XCTAssertEqual(entries[0].provenanceIdentifier, Bundle.main.bundleIdentifier!)
-                                        XCTAssertNotNil(entries[0].syncIdentifier)
-                                        XCTAssertEqual(entries[0].syncVersion, 1)
-                                        XCTAssertEqual(entries[0].startDate, firstCarbEntry.startDate)
-                                        XCTAssertEqual(entries[0].quantity, firstCarbEntry.quantity)
-                                        XCTAssertEqual(entries[0].foodType, firstCarbEntry.foodType)
-                                        XCTAssertEqual(entries[0].absorptionTime, firstCarbEntry.absorptionTime)
-                                        XCTAssertEqual(entries[0].createdByCurrentApp, true)
-                                        XCTAssertEqual(entries[0].userCreatedDate, firstCarbEntry.date)
-                                        XCTAssertNil(entries[0].userUpdatedDate)
+        let entries = try await carbStore.getCarbEntries(start: Date().addingTimeInterval(-.minutes(1)))
+        XCTAssertEqual(entries.count, 3)
 
-                                        // Second
-                                        XCTAssertNotNil(entries[1].uuid)
-                                        XCTAssertEqual(entries[1].provenanceIdentifier, Bundle.main.bundleIdentifier!)
-                                        XCTAssertNotNil(entries[1].syncIdentifier)
-                                        XCTAssertEqual(entries[1].syncVersion, 1)
-                                        XCTAssertEqual(entries[1].startDate, secondCarbEntry.startDate)
-                                        XCTAssertEqual(entries[1].quantity, secondCarbEntry.quantity)
-                                        XCTAssertEqual(entries[1].foodType, secondCarbEntry.foodType)
-                                        XCTAssertEqual(entries[1].absorptionTime, secondCarbEntry.absorptionTime)
-                                        XCTAssertEqual(entries[1].createdByCurrentApp, true)
-                                        XCTAssertEqual(entries[1].userCreatedDate, secondCarbEntry.date)
-                                        XCTAssertNil(entries[1].userUpdatedDate)
+        // First
+        XCTAssertNotNil(entries[0].uuid)
+        XCTAssertEqual(entries[0].provenanceIdentifier, Bundle.main.bundleIdentifier!)
+        XCTAssertNotNil(entries[0].syncIdentifier)
+        XCTAssertEqual(entries[0].syncVersion, 1)
+        XCTAssertEqual(entries[0].startDate, firstCarbEntry.startDate)
+        XCTAssertEqual(entries[0].quantity, firstCarbEntry.quantity)
+        XCTAssertEqual(entries[0].foodType, firstCarbEntry.foodType)
+        XCTAssertEqual(entries[0].absorptionTime, firstCarbEntry.absorptionTime)
+        XCTAssertEqual(entries[0].createdByCurrentApp, true)
+        XCTAssertEqual(entries[0].userCreatedDate, firstCarbEntry.date)
+        XCTAssertNil(entries[0].userUpdatedDate)
 
-                                        // Third
-                                        XCTAssertNotNil(entries[2].uuid)
-                                        XCTAssertEqual(entries[2].provenanceIdentifier, Bundle.main.bundleIdentifier!)
-                                        XCTAssertNotNil(entries[2].syncIdentifier)
-                                        XCTAssertEqual(entries[2].syncVersion, 1)
-                                        XCTAssertEqual(entries[2].startDate, thirdCarbEntry.startDate)
-                                        XCTAssertEqual(entries[2].quantity, thirdCarbEntry.quantity)
-                                        XCTAssertEqual(entries[2].foodType, thirdCarbEntry.foodType)
-                                        XCTAssertEqual(entries[2].absorptionTime, thirdCarbEntry.absorptionTime)
-                                        XCTAssertEqual(entries[2].createdByCurrentApp, true)
-                                        XCTAssertEqual(entries[2].userCreatedDate, thirdCarbEntry.date)
-                                        XCTAssertNil(entries[2].userUpdatedDate)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+        // Second
+        XCTAssertNotNil(entries[1].uuid)
+        XCTAssertEqual(entries[1].provenanceIdentifier, Bundle.main.bundleIdentifier!)
+        XCTAssertNotNil(entries[1].syncIdentifier)
+        XCTAssertEqual(entries[1].syncVersion, 1)
+        XCTAssertEqual(entries[1].startDate, secondCarbEntry.startDate)
+        XCTAssertEqual(entries[1].quantity, secondCarbEntry.quantity)
+        XCTAssertEqual(entries[1].foodType, secondCarbEntry.foodType)
+        XCTAssertEqual(entries[1].absorptionTime, secondCarbEntry.absorptionTime)
+        XCTAssertEqual(entries[1].createdByCurrentApp, true)
+        XCTAssertEqual(entries[1].userCreatedDate, secondCarbEntry.date)
+        XCTAssertNil(entries[1].userUpdatedDate)
+
+        // Third
+        XCTAssertNotNil(entries[2].uuid)
+        XCTAssertEqual(entries[2].provenanceIdentifier, Bundle.main.bundleIdentifier!)
+        XCTAssertNotNil(entries[2].syncIdentifier)
+        XCTAssertEqual(entries[2].syncVersion, 1)
+        XCTAssertEqual(entries[2].startDate, thirdCarbEntry.startDate)
+        XCTAssertEqual(entries[2].quantity, thirdCarbEntry.quantity)
+        XCTAssertEqual(entries[2].foodType, thirdCarbEntry.foodType)
+        XCTAssertEqual(entries[2].absorptionTime, thirdCarbEntry.absorptionTime)
+        XCTAssertEqual(entries[2].createdByCurrentApp, true)
+        XCTAssertEqual(entries[2].userCreatedDate, thirdCarbEntry.date)
+        XCTAssertNil(entries[2].userUpdatedDate)
+    }
+
+    // MARK: - Sync identifier
+
+    private func assertAddThrows(_ entry: NewCarbEntry, syncIdentifier: String, _ isExpected: (CarbStore.CarbStoreError) -> Bool, file: StaticString = #filePath, line: UInt = #line) async {
+        do {
+            _ = try await carbStore.addCarbEntry(entry, syncIdentifier: syncIdentifier)
+            XCTFail("Expected an error", file: file, line: line)
+        } catch let error as CarbStore.CarbStoreError {
+            XCTAssertTrue(isExpected(error), "Unexpected error: \(error)", file: file, line: line)
+        } catch {
+            XCTFail("Unexpected error: \(error)", file: file, line: line)
         }
+    }
 
-        wait(for: [getCarbEntriesCompletion], timeout: 30, enforceOrder: true)
+    func testAddCarbEntryWithSameSyncIdentifierStoresOnce() async throws {
+        let entry = NewCarbEntry(quantity: LoopQuantity(unit: .gram, doubleValue: 10), startDate: Date(), foodType: "Add", absorptionTime: .hours(3))
+        let syncIdentifier = UUID().uuidString
+
+        let first = try await carbStore.addCarbEntry(entry, syncIdentifier: syncIdentifier)
+        let retry = try await carbStore.addCarbEntry(entry, syncIdentifier: syncIdentifier)
+
+        XCTAssertEqual(first.syncIdentifier, syncIdentifier)
+        XCTAssertEqual(retry.syncIdentifier, syncIdentifier)
+        XCTAssertEqual(retry.syncVersion, first.syncVersion)
+        let entries = try await carbStore.getCarbEntries(start: Date().addingTimeInterval(-.minutes(1)))
+        XCTAssertEqual(entries.count, 1)
+    }
+
+    func testAddCarbEntryWithSameSyncIdentifierAndDifferentContentThrows() async throws {
+        let entry = NewCarbEntry(quantity: LoopQuantity(unit: .gram, doubleValue: 10), startDate: Date(), foodType: "Add", absorptionTime: .hours(3))
+        let other = NewCarbEntry(quantity: LoopQuantity(unit: .gram, doubleValue: 20), startDate: entry.startDate, foodType: "Add", absorptionTime: .hours(3))
+        let syncIdentifier = UUID().uuidString
+
+        _ = try await carbStore.addCarbEntry(entry, syncIdentifier: syncIdentifier)
+        await assertAddThrows(other, syncIdentifier: syncIdentifier) { if case .conflictingSyncIdentifier = $0 { return true } else { return false } }
+
+        let entries = try await carbStore.getCarbEntries(start: Date().addingTimeInterval(-.minutes(1)))
+        XCTAssertEqual(entries.map { $0.quantity.doubleValue(for: .gram) }, [10])
+    }
+
+    func testAddCarbEntryRetriedAfterEditReturnsEditedEntry() async throws {
+        let entry = NewCarbEntry(quantity: LoopQuantity(unit: .gram, doubleValue: 10), startDate: Date(), foodType: "Add", absorptionTime: .hours(3))
+        let edit = NewCarbEntry(quantity: LoopQuantity(unit: .gram, doubleValue: 15), startDate: entry.startDate, foodType: "Edit", absorptionTime: .hours(3))
+        let syncIdentifier = UUID().uuidString
+
+        let added = try await carbStore.addCarbEntry(entry, syncIdentifier: syncIdentifier)
+        let edited = try await carbStore.replaceCarbEntry(added, withEntry: edit)
+        let retry = try await carbStore.addCarbEntry(entry, syncIdentifier: syncIdentifier)
+
+        XCTAssertEqual(retry.syncVersion, edited.syncVersion)
+        XCTAssertEqual(retry.quantity, edit.quantity)
+        let entries = try await carbStore.getCarbEntries(start: Date().addingTimeInterval(-.minutes(1)))
+        XCTAssertEqual(entries.count, 1)
+    }
+
+    func testAddCarbEntryRetriedAfterDeleteThrows() async throws {
+        let entry = NewCarbEntry(quantity: LoopQuantity(unit: .gram, doubleValue: 10), startDate: Date(), foodType: "Add", absorptionTime: .hours(3))
+        let syncIdentifier = UUID().uuidString
+
+        let added = try await carbStore.addCarbEntry(entry, syncIdentifier: syncIdentifier)
+        _ = try await carbStore.deleteCarbEntry(added)
+        await assertAddThrows(entry, syncIdentifier: syncIdentifier) { if case .deletedSyncIdentifier = $0 { return true } else { return false } }
+
+        let entries = try await carbStore.getCarbEntries(start: Date().addingTimeInterval(-.minutes(1)))
+        XCTAssertTrue(entries.isEmpty)
+    }
+
+    func testCarbEntryWithSyncIdentifier() async throws {
+        let entry = NewCarbEntry(quantity: LoopQuantity(unit: .gram, doubleValue: 10), startDate: Date(), foodType: "Add", absorptionTime: .hours(3))
+        let edit = NewCarbEntry(quantity: LoopQuantity(unit: .gram, doubleValue: 15), startDate: entry.startDate, foodType: "Edit", absorptionTime: .hours(3))
+        let syncIdentifier = UUID().uuidString
+
+        let missing = try await carbStore.carbEntry(withSyncIdentifier: syncIdentifier)
+        XCTAssertNil(missing)
+
+        let added = try await carbStore.addCarbEntry(entry, syncIdentifier: syncIdentifier)
+        let found = try await carbStore.carbEntry(withSyncIdentifier: syncIdentifier)
+        XCTAssertEqual(found?.syncVersion, added.syncVersion)
+
+        let edited = try await carbStore.replaceCarbEntry(added, withEntry: edit)
+        let foundEdited = try await carbStore.carbEntry(withSyncIdentifier: syncIdentifier)
+        XCTAssertEqual(foundEdited?.syncVersion, edited.syncVersion)
+        XCTAssertEqual(foundEdited?.quantity, edit.quantity)
+
+        _ = try await carbStore.deleteCarbEntry(edited)
+        let foundDeleted = try await carbStore.carbEntry(withSyncIdentifier: syncIdentifier)
+        XCTAssertNil(foundDeleted)
     }
 
     // MARK: -
@@ -216,11 +286,13 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
             }
         }
 
-        carbStore.addCarbEntry(addCarbEntry) { (result) in
+        Task {
+            _ = try await carbStore.addCarbEntry(addCarbEntry, syncIdentifier: UUID().uuidString)
             addCarbEntryCompletion.fulfill()
         }
 
-        wait(for: [addHealthStoreHandler, addCarbEntryCompletion, addCarbEntryHandler, getCarbEntriesCompletion], timeout: 30, enforceOrder: true)
+        wait(for: [addHealthStoreHandler, addCarbEntryHandler, getCarbEntriesCompletion], timeout: 30, enforceOrder: true)
+        wait(for: [addCarbEntryCompletion], timeout: 30)
     }
 
     func testAddAndReplaceCarbEntry() {
@@ -385,11 +457,13 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
             }
         }
 
-        carbStore.addCarbEntry(addCarbEntry) { (result) in
+        Task {
+            _ = try await carbStore.addCarbEntry(addCarbEntry, syncIdentifier: UUID().uuidString)
             addCarbEntryCompletion.fulfill()
         }
 
-        wait(for: [addHealthStoreHandler, addCarbEntryCompletion, addCarbEntryHandler, updateHealthStoreHandler, updateCarbEntryCompletion, updateCarbEntryHandler, getCarbEntriesCompletion], timeout: 30, enforceOrder: true)
+        wait(for: [addHealthStoreHandler, addCarbEntryHandler, updateHealthStoreHandler, updateCarbEntryCompletion, updateCarbEntryHandler, getCarbEntriesCompletion], timeout: 30, enforceOrder: true)
+        wait(for: [addCarbEntryCompletion], timeout: 30)
     }
 
     func testAddAndDeleteCarbEntry() {
@@ -529,11 +603,13 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
 
         }
 
-        carbStore.addCarbEntry(addCarbEntry) { (result) in
+        Task {
+            _ = try await carbStore.addCarbEntry(addCarbEntry, syncIdentifier: UUID().uuidString)
             addCarbEntryCompletion.fulfill()
         }
 
-        wait(for: [addHealthStoreHandler, addCarbEntryCompletion, addCarbEntryHandler, deleteHealthStoreHandler, deleteCarbEntryCompletion, deleteCarbEntryHandler, getCarbEntriesCompletion], timeout: 30, enforceOrder: true)
+        wait(for: [addHealthStoreHandler, addCarbEntryHandler, deleteHealthStoreHandler, deleteCarbEntryCompletion, deleteCarbEntryHandler, getCarbEntriesCompletion], timeout: 30, enforceOrder: true)
+        wait(for: [addCarbEntryCompletion], timeout: 30)
     }
 
     func testAddAndReplaceAndDeleteCarbEntry() {
@@ -761,11 +837,13 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
 
         }
 
-        carbStore.addCarbEntry(addCarbEntry) { (result) in
+        Task {
+            _ = try await carbStore.addCarbEntry(addCarbEntry, syncIdentifier: UUID().uuidString)
             addCarbEntryCompletion.fulfill()
         }
 
-        wait(for: [addHealthStoreHandler, addCarbEntryCompletion, addCarbEntryHandler, updateHealthStoreHandler, updateCarbEntryCompletion, updateCarbEntryHandler, deleteHealthStoreHandler, deleteCarbEntryCompletion, deleteCarbEntryHandler, getCarbEntriesCompletion], timeout: 30, enforceOrder: true)
+        wait(for: [addHealthStoreHandler, addCarbEntryHandler, updateHealthStoreHandler, updateCarbEntryCompletion, updateCarbEntryHandler, deleteHealthStoreHandler, deleteCarbEntryCompletion, deleteCarbEntryHandler, getCarbEntriesCompletion], timeout: 30, enforceOrder: true)
+        wait(for: [addCarbEntryCompletion], timeout: 30)
     }
 
     // MARK: -
@@ -775,9 +853,9 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
         let secondCarbEntry = NewCarbEntry(quantity: LoopQuantity(unit: .gram, doubleValue: 20), startDate: Date(), foodType: "Second", absorptionTime: .hours(3))
         let thirdCarbEntry = NewCarbEntry(quantity: LoopQuantity(unit: .gram, doubleValue: 30), startDate: Date(timeIntervalSinceNow: 1), foodType: "Third", absorptionTime: .minutes(30))
 
-        let _ = try await carbStore.addCarbEntry(firstCarbEntry)
-        let _ = try await carbStore.addCarbEntry(secondCarbEntry)
-        let _ = try await carbStore.addCarbEntry(thirdCarbEntry)
+        let _ = try await carbStore.addCarbEntry(firstCarbEntry, syncIdentifier: UUID().uuidString)
+        let _ = try await carbStore.addCarbEntry(secondCarbEntry, syncIdentifier: UUID().uuidString)
+        let _ = try await carbStore.addCarbEntry(thirdCarbEntry, syncIdentifier: UUID().uuidString)
 
         let objects = try await carbStore.getSyncCarbObjects(start: Date().addingTimeInterval(-.minutes(1)))
 
@@ -886,7 +964,8 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
         let getCarbEntriesCompletion = expectation(description: "Get carb entries completion")
 
         // Add a carb entry first, that will be purged when setSyncCarbObjects is invoked
-        carbStore.addCarbEntry(carbEntry) { (_) in
+        Task {
+            _ = try await self.carbStore.addCarbEntry(carbEntry, syncIdentifier: UUID().uuidString)
             DispatchQueue.main.async {
                 self.carbStore.setSyncCarbObjects(syncCarbObjects) { (error) in
                     XCTAssertNil(error)
