@@ -65,6 +65,10 @@ public final class CarbStore {
         case unauthorized
         // No data was found to match the specified request
         case noData
+        // An entry was already added under this sync identifier with different content
+        case conflictingSyncIdentifier
+        // The entry added under this sync identifier has since been deleted
+        case deletedSyncIdentifier
 
         init?(error: PersistenceController.PersistenceControllerError?) {
             guard let error = error, case .coreDataError(let coreDataError) = error else {
@@ -351,54 +355,80 @@ extension CarbStore {
 
 extension CarbStore {
 
+    /// Adds a carb entry under the identity its author chose, so that a retried add stores it once.
+    ///
+    /// If this store already added an entry under `entry.syncIdentifier`, nothing is stored. When
+    /// `entry` matches that original add, the current version is returned (as edited since, if it
+    /// was). An entry since deleted throws `deletedSyncIdentifier`; different content throws
+    /// `conflictingSyncIdentifier`.
     public func addCarbEntry(_ entry: NewCarbEntry) async throws -> StoredCarbEntry {
         try await withCheckedThrowingContinuation { continuation in
-            addCarbEntry(entry) { result in
+            queue.async {
+                var result: Result<StoredCarbEntry, CarbStoreError>!
+                var inserted = false
+
+                self.cacheStore.managedObjectContext.performAndWait {
+                    do {
+                        let related = try self.fetchRelatedCarbObjects(syncIdentifier: entry.syncIdentifier, provenanceIdentifier: self.provenanceIdentifier)
+                        if let original = related.first(where: { $0.operation == .create }) ?? related.first {
+                            if !original.hasContent(of: entry) {
+                                result = .failure(.conflictingSyncIdentifier)
+                            } else if let current = related.last, current.operation != .delete {
+                                result = .success(StoredCarbEntry(managedObject: current))
+                            } else {
+                                result = .failure(.deletedSyncIdentifier)
+                            }
+                            return
+                        }
+
+                        let newObject = CachedCarbObject(context: self.cacheStore.managedObjectContext)
+                        newObject.create(from: entry,
+                                         provenanceIdentifier: self.provenanceIdentifier,
+                                         syncVersion: self.syncVersion)
+
+                        if let saveError = CarbStoreError(error: self.cacheStore.save()) {
+                            result = .failure(saveError)
+                            return
+                        }
+
+                        self.saveEntryToHealthKit(newObject)
+
+                        result = .success(StoredCarbEntry(managedObject: newObject))
+                        inserted = true
+                    } catch let coreDataError {
+                        result = .failure(.coreDataError(coreDataError))
+                    }
+                }
+
+                continuation.resume(with: result.mapError { $0 as Error })
+
+                if inserted {
+                    self.handleUpdatedCarbData()
+                }
+            }
+        }
+    }
+
+    /// The current version of the entry this store added under `syncIdentifier`, or nil if there is
+    /// none or it was deleted.
+    public func carbEntry(withSyncIdentifier syncIdentifier: String) async throws -> StoredCarbEntry? {
+        try await withCheckedThrowingContinuation { continuation in
+            queue.async {
+                var result: Result<StoredCarbEntry?, Error>!
+                self.cacheStore.managedObjectContext.performAndWait {
+                    do {
+                        let current = try self.fetchRelatedCarbObjects(syncIdentifier: syncIdentifier, provenanceIdentifier: self.provenanceIdentifier).last
+                        result = .success(current.flatMap { $0.operation == .delete ? nil : StoredCarbEntry(managedObject: $0) })
+                    } catch let coreDataError {
+                        result = .failure(CarbStoreError.coreDataError(coreDataError))
+                    }
+                }
                 continuation.resume(with: result)
             }
         }
     }
 
-    public func addCarbEntry(_ entry: NewCarbEntry, completion: @escaping (_ result: Result<StoredCarbEntry,Error>) -> Void) {
-        queue.async {
-            var storedEntry: StoredCarbEntry?
-            var error: CarbStoreError?
-
-            self.cacheStore.managedObjectContext.performAndWait {
-                do {
-                    let syncIdentifier = try self.cacheStore.managedObjectContext.generateUniqueSyncIdentifier()
-
-                    let newObject = CachedCarbObject(context: self.cacheStore.managedObjectContext)
-                    newObject.create(from: entry,
-                                     provenanceIdentifier: self.provenanceIdentifier,
-                                     syncIdentifier: syncIdentifier,
-                                     syncVersion: self.syncVersion)
-
-                    if let saveError = CarbStoreError(error: self.cacheStore.save()) {
-                        error = saveError
-                        return
-                    }
-
-                    self.saveEntryToHealthKit(newObject)
-
-                    storedEntry = StoredCarbEntry(managedObject: newObject)
-                } catch let coreDataError {
-                    error = .coreDataError(coreDataError)
-                }
-            }
-
-            if let error = error {
-                completion(.failure(error))
-                return
-            }
-
-            completion(.success(storedEntry!))
-
-            self.handleUpdatedCarbData()
-        }
-    }
-
-    public func replaceCarbEntry(_ oldEntry: StoredCarbEntry, withEntry newEntry: NewCarbEntry) async throws -> StoredCarbEntry {
+    public func replaceCarbEntry(_ oldEntry: StoredCarbEntry, withEntry newEntry: CarbEntryUpdate) async throws -> StoredCarbEntry {
         try await withCheckedThrowingContinuation { continuation in
             replaceCarbEntry(oldEntry, withEntry: newEntry) { result in
                 continuation.resume(with: result)
@@ -406,7 +436,7 @@ extension CarbStore {
         }
     }
 
-    public func replaceCarbEntry(_ oldEntry: StoredCarbEntry, withEntry newEntry: NewCarbEntry, completion: @escaping (_ result: Result<StoredCarbEntry,Error>) -> Void) {
+    public func replaceCarbEntry(_ oldEntry: StoredCarbEntry, withEntry newEntry: CarbEntryUpdate, completion: @escaping (_ result: Result<StoredCarbEntry,Error>) -> Void) {
         guard oldEntry.createdByCurrentApp else {
             completion(.failure(CarbStoreError.unauthorized))
             return
@@ -1074,12 +1104,9 @@ extension CarbStore {
             self.cacheStore.managedObjectContext.performAndWait {
                 do {
                     for entry in entries {
-                        let syncIdentifier = try self.cacheStore.managedObjectContext.generateUniqueSyncIdentifier()
-
                         let object = CachedCarbObject(context: self.cacheStore.managedObjectContext)
                         object.create(from: entry,
                                       provenanceIdentifier: self.provenanceIdentifier,
-                                      syncIdentifier: syncIdentifier,
                                       on: entry.date)
                     }
                     error = self.cacheStore.save()
@@ -1155,20 +1182,6 @@ extension CarbStore {
 // MARK: - NSManagedObjectContext
 
 fileprivate extension NSManagedObjectContext {
-    func generateUniqueSyncIdentifier() throws -> String {
-        while true {
-            let syncIdentifier = UUID().uuidString
-
-            let request: NSFetchRequest<CachedCarbObject> = CachedCarbObject.fetchRequest()
-            request.predicate = NSPredicate(format: "syncIdentifier == %@", syncIdentifier)
-            request.fetchLimit = 1
-
-            if try count(for: request) == 0 {
-                return syncIdentifier
-            }
-        }
-    }
-
     func cachedCarbObjectFromStoredCarbEntry(_ entry: StoredCarbEntry) throws -> CachedCarbObject? {
         guard entry.createdByCurrentApp, let syncIdentifier = entry.syncIdentifier, let syncVersion = entry.syncVersion else {
             return nil
