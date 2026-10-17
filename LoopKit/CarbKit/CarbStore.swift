@@ -591,52 +591,6 @@ extension CarbStore {
         }
     }
 
-    /// `deleteCarbEntry` without the authorship checks, for a store that mirrors another device's
-    /// entries; `diagnostics` names the lookup stage that matched.
-    public func deleteCarbEntrySkippingAuthorshipCheck(_ oldEntry: StoredCarbEntry, completion: @escaping (_ result: Result<Bool, Error>, _ diagnostics: String) -> Void) {
-        queue.async {
-            var error: CarbStoreError?
-            var diag = ""
-
-            self.cacheStore.managedObjectContext.performAndWait {
-                do {
-                    guard let oldObject = try self.cacheStore.managedObjectContext.cachedCarbObjectIgnoringAuthorship(
-                        forSyncIdentifier: oldEntry.syncIdentifier,
-                        startDate: oldEntry.startDate,
-                        grams: oldEntry.quantity.doubleValue(for: LoopUnit.gram),
-                        diagnostics: &diag) else {
-                        error = .noData
-                        return
-                    }
-
-                    let date = Date()
-                    oldObject.supercededDate = date
-
-                    let newObject = CachedCarbObject(context: self.cacheStore.managedObjectContext)
-                    newObject.delete(from: oldObject, on: date)
-
-                    if let saveError = CarbStoreError(error: self.cacheStore.save()) {
-                        error = saveError
-                        return
-                    }
-
-                    self.deleteObjectFromHealthKit(newObject)
-                } catch let coreDataError {
-                    error = .coreDataError(coreDataError)
-                }
-            }
-
-            if let error = error {
-                completion(.failure(error), diag)
-                return
-            }
-
-            completion(.success(true), diag)
-
-            self.handleUpdatedCarbData()
-        }
-    }
-
     private func deleteObjectFromHealthKit(_ object: CachedCarbObject) {
         dispatchPrecondition(condition: .onQueue(queue))
 
@@ -1262,35 +1216,6 @@ fileprivate extension NSManagedObjectContext {
                 return syncIdentifier
             }
         }
-    }
-
-    /// Finds an entry by sync identifier, else by start date and grams, regardless of which app
-    /// created it.
-    func cachedCarbObjectIgnoringAuthorship(forSyncIdentifier syncIdentifier: String?, startDate: Date, grams: Double, diagnostics: inout String) throws -> CachedCarbObject? {
-        if let syncIdentifier = syncIdentifier {
-            let request: NSFetchRequest<CachedCarbObject> = CachedCarbObject.fetchRequest()
-            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
-                NSPredicate(format: "syncIdentifier == %@", syncIdentifier),
-                NSPredicate(format: "operation != %d", Operation.delete.rawValue),
-                NSPredicate(format: "supercededDate == NIL")
-            ])
-            let matches = try fetch(request)
-            diagnostics += "syncId[\(syncIdentifier.prefix(8))]→\(matches.count)"
-            if let match = matches.first { return match }
-        } else {
-            diagnostics += "syncId[nil]"
-        }
-        let request: NSFetchRequest<CachedCarbObject> = CachedCarbObject.fetchRequest()
-        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
-            NSPredicate(format: "startDate >= %@ AND startDate <= %@",
-                        startDate.addingTimeInterval(-1) as NSDate, startDate.addingTimeInterval(1) as NSDate),
-            NSPredicate(format: "grams >= %f AND grams <= %f", grams - 0.01, grams + 0.01),
-            NSPredicate(format: "operation != %d", Operation.delete.rawValue),
-            NSPredicate(format: "supercededDate == NIL")
-        ])
-        let matches = try fetch(request)
-        diagnostics += " date+grams→\(matches.count)"
-        return matches.first
     }
 
     func cachedCarbObjectFromStoredCarbEntry(_ entry: StoredCarbEntry) throws -> CachedCarbObject? {
