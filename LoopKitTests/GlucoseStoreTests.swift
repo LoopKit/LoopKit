@@ -64,6 +64,43 @@ class GlucoseStoreTests: PersistenceControllerTestCase {
         }
     }
 
+    func testAddGlucoseSamplesSkipsSyncedSampleFromDifferentProvenance() async throws {
+        let date = Date()
+        let synced = StoredGlucoseSample(
+            uuid: UUID(),
+            provenanceIdentifier: "com.example.phone",
+            syncIdentifier: "shared-sample",
+            syncVersion: 1,
+            startDate: date,
+            quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 100))
+        try await glucoseStore.setSyncGlucoseSamples([synced])
+
+        // The watch receives a latest-value update after backfilling the same sample.
+        // A differing value ensures that the existing sample is preserved, not overwritten.
+        let duplicate = NewGlucoseSample(
+            date: date,
+            quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 110),
+            condition: nil, trend: nil, trendRate: nil, isDisplayOnly: false, wasUserEntered: false,
+            syncIdentifier: "shared-sample")
+        let newSample = NewGlucoseSample(
+            date: date.addingTimeInterval(1),
+            quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 120),
+            condition: nil, trend: nil, trendRate: nil, isDisplayOnly: false, wasUserEntered: false,
+            syncIdentifier: "new-sample")
+
+        let added = try await glucoseStore.addGlucoseSamples([duplicate, newSample, newSample])
+        XCTAssertEqual(added.map { $0.syncIdentifier }, ["new-sample"])
+        XCTAssertEqual(added.first?.startDate, newSample.date)
+        XCTAssertEqual(added.first?.quantity, newSample.quantity)
+
+        let cached = try await glucoseStore.getGlucoseSamples()
+        XCTAssertEqual(cached.count, 2)
+        XCTAssertEqual(cached.first { $0.syncIdentifier == synced.syncIdentifier }, synced)
+
+        let repeated = try await glucoseStore.addGlucoseSamples([duplicate, newSample])
+        XCTAssertTrue(repeated.isEmpty)
+    }
+
     func testReceivedDateIsWrittenToHealthKitMetadata() async throws {
         let quantity = LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 100)
         let sample = NewGlucoseSample(date: Date(), quantity: quantity, condition: nil, trend: nil, trendRate: nil, isDisplayOnly: false, wasUserEntered: false, syncIdentifier: "live")

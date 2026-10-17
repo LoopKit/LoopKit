@@ -291,7 +291,10 @@ extension GlucoseStore {
         }
 
         let storedSamples: [StoredGlucoseSample] = try await self.cacheStore.managedObjectContext.perform {
-            // Filter samples to ensure no duplicate sync identifiers nor existing sample with matching sync identifier for our provenance identifier
+            // Match the cache's global syncIdentifier uniqueness constraint. A sample synced
+            // from the phone can have a different provenance identifier. Inserting it again
+            // lets the store-trump merge policy invalidate the new object during save, before
+            // it is converted to a StoredGlucoseSample below.
             var syncIdentifiers = Set<String>()
             let samples: [NewGlucoseSample] = try samples.compactMap { sample in
                 guard syncIdentifiers.insert(sample.syncIdentifier).inserted else {
@@ -300,8 +303,7 @@ extension GlucoseStore {
                 }
 
                 let request: NSFetchRequest<CachedGlucoseObject> = CachedGlucoseObject.fetchRequest()
-                request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "provenanceIdentifier == %@", self.provenanceIdentifier),
-                                                                                        NSPredicate(format: "syncIdentifier == %@", sample.syncIdentifier)])
+                request.predicate = NSPredicate(format: "syncIdentifier == %@", sample.syncIdentifier)
                 request.fetchLimit = 1
 
                 guard try self.cacheStore.managedObjectContext.count(for: request) == 0 else {
