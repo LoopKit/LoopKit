@@ -166,10 +166,12 @@ open class ChartsTableViewController: UITableViewController, UIGestureRecognizer
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         // Give chart scrubbing priority over iOS 26's full-content back swipe.
         // The back swipe can still begin when the chart's long press fails.
+        #if compiler(>=6.2)
         if #available(iOS 26.0, *) {
             return gestureRecognizer === charts.gestureRecognizer &&
                 otherGestureRecognizer === navigationController?.interactiveContentPopGestureRecognizer
         }
+        #endif
 
         return false
     }
