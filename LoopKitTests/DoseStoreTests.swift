@@ -837,6 +837,42 @@ class DoseStoreTests: PersistenceControllerTestCase {
         XCTAssertEqual(0.41, doses[1].deliveredUnits!, accuracy: 0.01) // Part of second temp
         XCTAssertEqual(0.75, doses[2].deliveredUnits!, accuracy: 0.01) // Reservoir
     }
+
+    func testPumpReplacementSeparatesReservoirValues() async throws {
+        let now = testingDate("2024-10-14 16:37:08 +0000")
+        let doseStore = await defaultStore(testingDate: now)
+
+        _ = try await doseStore.addReservoirValue(12.0, at: now.addingTimeInterval(-.minutes(20)))
+        _ = try await doseStore.addReservoirValue(11.5, at: now.addingTimeInterval(-.minutes(15)))
+        XCTAssertEqual(doseStore.lastReservoirValue?.unitVolume, 11.5)
+
+        let podChange = NewPumpEvent(date: now.addingTimeInterval(-.minutes(10)), dose: nil, raw: Data("Pod Change".utf8), title: "Pod Change", type: .replaceComponent(componentType: .pump))
+        try await doseStore.addPumpEvents([podChange], lastReconciliation: now)
+
+        XCTAssertNil(doseStore.lastReservoirValue)
+        let history = try await doseStore.getReservoirValues(since: now.addingTimeInterval(-.hours(1)))
+        XCTAssertEqual(history.map(\.unitVolume), [11.5, 12.0])
+
+        let reloadedStore = await defaultStore(testingDate: now)
+        XCTAssertNil(reloadedStore.lastReservoirValue)
+
+        let (value, previousValue, _) = try await doseStore.addReservoirValue(49.0, at: now.addingTimeInterval(-.minutes(5)))
+        XCTAssertEqual(value.unitVolume, 49.0)
+        XCTAssertNil(previousValue)
+        XCTAssertEqual(doseStore.lastReservoirValue?.unitVolume, 49.0)
+    }
+
+    func testInfusionSetReplacementKeepsReservoirValues() async throws {
+        let now = testingDate("2024-10-14 16:37:08 +0000")
+        let doseStore = await defaultStore(testingDate: now)
+
+        _ = try await doseStore.addReservoirValue(11.5, at: now.addingTimeInterval(-.minutes(15)))
+
+        let setChange = NewPumpEvent(date: now.addingTimeInterval(-.minutes(10)), dose: nil, raw: Data("Set Change".utf8), title: "Set Change", type: .replaceComponent(componentType: .infusionSet))
+        try await doseStore.addPumpEvents([setChange], lastReconciliation: now)
+
+        XCTAssertEqual(doseStore.lastReservoirValue?.unitVolume, 11.5)
+    }
 }
 
 class DoseStoreQueryAnchorTests: XCTestCase {
