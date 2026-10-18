@@ -303,6 +303,27 @@ public final class DoseStore {
     }
     private var _lastRecordedPrimeEventDate: Date?
 
+    /// The date of the most recent pump replacement event, if known. Reservoir values from before it belong to the previous pump.
+    ///
+    /// *Access should be isolated to a managed object context block*
+    private var lastRecordedPumpReplacementDate: Date {
+        get {
+            if _lastRecordedPumpReplacementDate == nil {
+                let pumpEvents = try? self.getPumpEventObjects(
+                    matching: NSPredicate(format: "type = %@", PumpEventType.replaceComponent(componentType: .pump).rawValue),
+                    chronological: false,
+                    limit: 1
+                )
+                _lastRecordedPumpReplacementDate = pumpEvents?.first?.date ?? .distantPast
+            }
+            return _lastRecordedPumpReplacementDate!
+        }
+        set {
+            _lastRecordedPumpReplacementDate = newValue
+        }
+    }
+    private var _lastRecordedPumpReplacementDate: Date?
+
 }
 
 
@@ -323,7 +344,7 @@ extension DoseStore {
         
         let continuityStartDate = date.addingTimeInterval(-longestEffectDuration)
 
-        if  let recentReservoirObjects = try? self.getReservoirObjects(since: continuityStartDate - maximumInterval),
+        if  let recentReservoirObjects = try? self.getReservoirObjects(since: max(continuityStartDate - maximumInterval, lastRecordedPumpReplacementDate)),
             let oldestRelevantReservoirObject = recentReservoirObjects.last
         {
             // Verify reservoir timestamps are continuous
@@ -503,7 +524,7 @@ extension DoseStore {
         } else {
             // Attempt to get the reading before "start", so we can build those doses that have an end date after "start", but a start date before "start"
             // Any extra doses will be filtered out below, via filterDateRange
-            let doses = try self.getReservoirObjects(since: start.addingTimeInterval(-.minutes(10))).reversed().doseEntries
+            let doses = try self.getReservoirObjects(since: max(start.addingTimeInterval(-.minutes(10)), lastRecordedPumpReplacementDate)).reversed().doseEntries
 
             self.recentReservoirNormalizedDoseEntriesCache = doses
             return doses.filterDateRange(start, end)
@@ -620,6 +641,7 @@ extension DoseStore {
             var lastFinalDate: Date?
             var firstMutableDate: Date?
             var primeValueAdded = false
+            var pumpReplacementAdded = false
 
             if replacePendingEvents {
                 try self.purgePumpEventObjects(matching: NSPredicate(format: "mutable == YES"))
@@ -636,6 +658,9 @@ extension DoseStore {
             for event in events {
                 if case .prime? = event.type {
                     primeValueAdded = true
+                }
+                if case .replaceComponent(componentType: .pump)? = event.type {
+                    pumpReplacementAdded = true
                 }
 
                 let isMutable = event.dose?.isMutable == true
@@ -669,6 +694,12 @@ extension DoseStore {
 
             if primeValueAdded {
                 self.lastRecordedPrimeEventDate = nil
+            }
+            if pumpReplacementAdded {
+                self._lastRecordedPumpReplacementDate = nil
+                self.clearReservoirNormalizedDoseCache()
+            }
+            if primeValueAdded || pumpReplacementAdded {
                 self.validateReservoirContinuity()
             }
 
@@ -710,6 +741,8 @@ extension DoseStore {
             completion(DoseStoreError(error: error))
             NotificationCenter.default.post(name: DoseStore.valuesDidChange, object: self)
             self.lastRecordedPrimeEventDate = nil
+            self._lastRecordedPumpReplacementDate = nil
+            self.clearReservoirNormalizedDoseCache()
             self.validateReservoirContinuity()
         }
     }
@@ -731,6 +764,9 @@ extension DoseStore {
             self.pumpEventQueryAfterDate = self.cacheStartDate
             self.lastPumpEventsReconciliation = nil
             self.lastRecordedPrimeEventDate = nil
+            self._lastRecordedPumpReplacementDate = nil
+            self.clearReservoirNormalizedDoseCache()
+            self.validateReservoirContinuity()
 
             NotificationCenter.default.post(name: DoseStore.valuesDidChange, object: self)
             if let error {
@@ -1162,6 +1198,7 @@ extension DoseStore {
             "* lastStoredReservoirValue: \(String(describing: lastStoredReservoirValue))",
             "* pumpEventQueryAfterDate: \(pumpEventQueryAfterDate)",
             "* lastRecordedPrimeEventDate: \(String(describing: lastRecordedPrimeEventDate))",
+            "* lastRecordedPumpReplacementDate: \(lastRecordedPumpReplacementDate)",
             "* pumpRecordsBasalProfileStartEvents: \(pumpRecordsBasalProfileStartEvents)",
             "* device: \(String(describing: device))",
         ]
