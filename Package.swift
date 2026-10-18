@@ -11,7 +11,7 @@ import PackageDescription
 let package = Package(
     name: "LoopKit",
     defaultLocalization: "en",
-    platforms: [.iOS("17.0")],
+    platforms: [.iOS("17.6")],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
