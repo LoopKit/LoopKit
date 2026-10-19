@@ -100,6 +100,7 @@ extension CachedGlucoseObject {
         if isBackfill {
             metadata[MetadataKeyGlucoseIsBackfill] = true
         }
+        metadata[MetadataKeyGlucoseReceivedDate] = receivedDate
         metadata[MetadataKeyGlucoseCondition] = condition?.rawValue
         metadata[MetadataKeyGlucoseTrend] = trend?.symbol
         metadata[MetadataKeyGlucoseTrendRateValue] = trendRateValue
@@ -172,6 +173,7 @@ extension CachedGlucoseObject {
         self.startDate = sample.startDate
         self.isDisplayOnly = sample.isDisplayOnly
         self.isBackfill = sample.isBackfill
+        self.receivedDate = sample.receivedDate
         self.wasUserEntered = sample.wasUserEntered
         self.device = sample.device
         self.condition = sample.condition

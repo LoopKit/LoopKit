@@ -63,6 +63,84 @@ class GlucoseStoreTests: PersistenceControllerTestCase {
             XCTAssertGreaterThanOrEqual(try XCTUnwrap(sample.receivedDate), before)
         }
     }
+
+    func testAddGlucoseSamplesSkipsSyncedSampleFromDifferentProvenance() async throws {
+        let date = Date()
+        let synced = StoredGlucoseSample(
+            uuid: UUID(),
+            provenanceIdentifier: "com.example.phone",
+            syncIdentifier: "shared-sample",
+            syncVersion: 1,
+            startDate: date,
+            quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 100))
+        try await glucoseStore.setSyncGlucoseSamples([synced])
+
+        // The watch receives a latest-value update after backfilling the same sample.
+        // A differing value ensures that the existing sample is preserved, not overwritten.
+        let duplicate = NewGlucoseSample(
+            date: date,
+            quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 110),
+            condition: nil, trend: nil, trendRate: nil, isDisplayOnly: false, wasUserEntered: false,
+            syncIdentifier: "shared-sample")
+        let newSample = NewGlucoseSample(
+            date: date.addingTimeInterval(1),
+            quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 120),
+            condition: nil, trend: nil, trendRate: nil, isDisplayOnly: false, wasUserEntered: false,
+            syncIdentifier: "new-sample")
+
+        let added = try await glucoseStore.addGlucoseSamples([duplicate, newSample, newSample])
+        XCTAssertEqual(added.map { $0.syncIdentifier }, ["new-sample"])
+        XCTAssertEqual(added.first?.startDate, newSample.date)
+        XCTAssertEqual(added.first?.quantity, newSample.quantity)
+
+        let cached = try await glucoseStore.getGlucoseSamples()
+        XCTAssertEqual(cached.count, 2)
+        XCTAssertEqual(cached.first { $0.syncIdentifier == synced.syncIdentifier }, synced)
+
+        let repeated = try await glucoseStore.addGlucoseSamples([duplicate, newSample])
+        XCTAssertTrue(repeated.isEmpty)
+    }
+
+    func testReceivedDateIsWrittenToHealthKitMetadata() async throws {
+        let quantity = LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 100)
+        let sample = NewGlucoseSample(date: Date(), quantity: quantity, condition: nil, trend: nil, trendRate: nil, isDisplayOnly: false, wasUserEntered: false, syncIdentifier: "live")
+        let stored = try await glucoseStore.addGlucoseSamples([sample])
+        let receivedDate = try XCTUnwrap(stored.first?.receivedDate)
+
+        let quantitySample = try await cacheStore.managedObjectContext.perform {
+            let request: NSFetchRequest<CachedGlucoseObject> = CachedGlucoseObject.fetchRequest()
+            return try XCTUnwrap(self.cacheStore.managedObjectContext.fetch(request).first).quantitySample
+        }
+
+        XCTAssertEqual(quantitySample.receivedDate, receivedDate)
+        XCTAssertEqual(StoredGlucoseSample(sample: quantitySample).receivedDate, receivedDate)
+    }
+}
+
+class GlucoseStoreDuplicateSampleTests: XCTestCase {
+    private func sample(at date: Date) -> HKQuantitySample {
+        HKQuantitySample(type: HealthKitSampleStore.glucoseType, quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 100), start: date, end: date)
+    }
+
+    func testOnlySamplesWithAnotherSampleWithinToleranceAreDuplicates() {
+        let now = Date()
+        let duplicated = sample(at: now)
+        let nearlyDuplicated = sample(at: now.addingTimeInterval(.minutes(10)))
+        let alone = sample(at: now.addingTimeInterval(.minutes(20)))
+        let others = [
+            sample(at: now.addingTimeInterval(30)),
+            sample(at: now.addingTimeInterval(.minutes(10) - GlucoseStore.duplicateTolerance)),
+            sample(at: now.addingTimeInterval(.minutes(25)))
+        ]
+
+        let duplicates = GlucoseStore.samples([duplicated, nearlyDuplicated, alone], duplicatedIn: others)
+
+        XCTAssertEqual(duplicates.map(\.uuid), [duplicated.uuid, nearlyDuplicated.uuid])
+    }
+
+    func testNoSamplesAreDuplicatesWithoutOtherSamples() {
+        XCTAssertTrue(GlucoseStore.samples([sample(at: Date())], duplicatedIn: []).isEmpty)
+    }
 }
 
 class GlucoseStoreRemoteDataServiceQueryAnchorTests: XCTestCase {
@@ -294,11 +372,13 @@ class GlucoseStoreCriticalEventLogExportTests: PersistenceControllerTestCase {
                                          endDate: dateFormatter.date(from: "2100-01-02T03:09:00Z")!,
                                          to: outputStream,
                                          progress: progress))
-        XCTAssertEqual(outputStream.string, """
+        let receivedDatePattern = #""receivedDate":"[^"]+","#
+        XCTAssertEqual(outputStream.string.ranges(of: try! Regex(receivedDatePattern)).count, 3)
+        XCTAssertEqual(outputStream.string.replacingOccurrences(of: receivedDatePattern, with: "", options: .regularExpression), """
             [
-            {"isDisplayOnly":false,"modificationCounter":1,"provenanceIdentifier":"com.apple.dt.xctest.tool","startDate":"2100-01-02T03:08:00.000Z","syncIdentifier":"18CF3948-0B3D-4B12-8BFE-14986B0E6784","syncVersion":1,"unitString":"mg/dL","value":111,"wasUserEntered":false},
-            {"isDisplayOnly":false,"modificationCounter":3,"provenanceIdentifier":"com.apple.dt.xctest.tool","startDate":"2100-01-02T03:04:00.000Z","syncIdentifier":"2B03D96C-6F5D-4140-99CD-80C3E64D6010","syncVersion":3,"trend":3,"trendRateValue":1,"unitString":"mg/dL","value":113,"wasUserEntered":false},
-            {"isDisplayOnly":false,"modificationCounter":4,"provenanceIdentifier":"com.apple.dt.xctest.tool","startDate":"2100-01-02T03:06:00.000Z","syncIdentifier":"FF1C4F01-3558-4FB2-957E-FA1522C4735E","syncVersion":4,"trend":3,"trendRateValue":1,"unitString":"mg/dL","value":114,"wasUserEntered":false}
+            {"isBackfill":false,"isDisplayOnly":false,"modificationCounter":1,"provenanceIdentifier":"com.apple.dt.xctest.tool","startDate":"2100-01-02T03:08:00.000Z","syncIdentifier":"18CF3948-0B3D-4B12-8BFE-14986B0E6784","syncVersion":1,"unitString":"mg/dL","value":111,"wasUserEntered":false},
+            {"isBackfill":false,"isDisplayOnly":false,"modificationCounter":3,"provenanceIdentifier":"com.apple.dt.xctest.tool","startDate":"2100-01-02T03:04:00.000Z","syncIdentifier":"2B03D96C-6F5D-4140-99CD-80C3E64D6010","syncVersion":3,"trend":3,"trendRateValue":1,"unitString":"mg/dL","value":113,"wasUserEntered":false},
+            {"isBackfill":false,"isDisplayOnly":false,"modificationCounter":4,"provenanceIdentifier":"com.apple.dt.xctest.tool","startDate":"2100-01-02T03:06:00.000Z","syncIdentifier":"FF1C4F01-3558-4FB2-957E-FA1522C4735E","syncVersion":4,"trend":3,"trendRateValue":1,"unitString":"mg/dL","value":114,"wasUserEntered":false}
             ]
             """
         )

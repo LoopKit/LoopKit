@@ -52,7 +52,8 @@ public struct StoredGlucoseSample: GlucoseSampleValue, Equatable {
             isBackfill: sample.isBackfill,
             wasUserEntered: sample.wasUserEntered,
             device: sample.device,
-            healthKitEligibleDate: nil)
+            healthKitEligibleDate: nil,
+            receivedDate: sample.receivedDate)
     }
 
     public init(
