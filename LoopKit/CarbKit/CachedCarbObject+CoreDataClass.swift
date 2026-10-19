@@ -61,6 +61,14 @@ class CachedCarbObject: NSManagedObject {
 
 extension CachedCarbObject {
     var quantity: LoopQuantity { LoopQuantity(unit: .gram, doubleValue: grams) }
+
+    func hasContent(of entry: NewCarbEntry) -> Bool {
+        grams == entry.quantity.doubleValue(for: .gram) &&
+            startDate == entry.startDate &&
+            foodType == entry.foodType &&
+            absorptionTime == entry.absorptionTime &&
+            favoriteFoodID == entry.favoriteFoodID
+    }
 }
 
 // MARK: - Operations
@@ -68,7 +76,7 @@ extension CachedCarbObject {
 extension CachedCarbObject {
 
     // Loop
-    func create(from entry: NewCarbEntry, provenanceIdentifier: String, syncIdentifier: String, syncVersion: Int = 1, on date: Date = Date()) {
+    func create(from entry: NewCarbEntry, provenanceIdentifier: String, syncVersion: Int = 1, on date: Date = Date()) {
         self.absorptionTime = entry.absorptionTime
         self.createdByCurrentApp = true
         self.foodType = entry.foodType
@@ -78,7 +86,7 @@ extension CachedCarbObject {
         self.favoriteFoodID = entry.favoriteFoodID
 
         self.provenanceIdentifier = provenanceIdentifier
-        self.syncIdentifier = syncIdentifier
+        self.syncIdentifier = entry.syncIdentifier
         self.syncVersion = syncVersion
 
         self.userCreatedDate = entry.date
@@ -114,7 +122,7 @@ extension CachedCarbObject {
     }
 
     // Loop
-    func update(from entry: NewCarbEntry, replacing object: CachedCarbObject, on date: Date = Date()) {
+    func update(from entry: CarbEntryUpdate, replacing object: CachedCarbObject, on date: Date = Date()) {
         precondition(object.createdByCurrentApp)
         precondition(object.syncIdentifier != nil)
         precondition(object.syncVersion != nil)
