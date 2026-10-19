@@ -20,6 +20,10 @@ extension CarbStore.CarbStoreError: LocalizedError {
             return error.localizedDescription
         case .noData:
             return LocalizedString("No values found", comment: "Describes an error for no data found in a CarbStore request")
+        case .conflictingSyncIdentifier:
+            return LocalizedString("A different carb entry was already saved with this identifier", comment: "Describes an error for adding a carb entry whose identifier is already used by an entry with different content")
+        case .deletedSyncIdentifier:
+            return LocalizedString("This carb entry was already saved and has since been deleted", comment: "Describes an error for adding a carb entry that was already added and then deleted")
         }
     }
 
@@ -35,6 +39,8 @@ extension CarbStore.CarbStoreError: LocalizedError {
             return nil
         case .noData:
             return LocalizedString("Ensure carb data exists for the specified date", comment: "Recovery suggestion for a no data error")
+        case .conflictingSyncIdentifier, .deletedSyncIdentifier:
+            return nil
         }
     }
 }

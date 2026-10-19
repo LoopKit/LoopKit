@@ -15,14 +15,16 @@ public struct NewCarbEntry: CarbEntry, Equatable, RawRepresentable {
     public typealias RawValue = [String: Any]
 
     public let date: Date
+    public let syncIdentifier: String
     public let quantity: LoopQuantity
     public let startDate: Date
     public let foodType: String?
     public let absorptionTime: TimeInterval?
     public let favoriteFoodID: String?
 
-    public init(date: Date = Date(), quantity: LoopQuantity, startDate: Date, foodType: String?, absorptionTime: TimeInterval?, favoriteFoodID: String? = nil) {
+    public init(date: Date = Date(), syncIdentifier: String, quantity: LoopQuantity, startDate: Date, foodType: String?, absorptionTime: TimeInterval?, favoriteFoodID: String? = nil) {
         self.date = date
+        self.syncIdentifier = syncIdentifier
         self.quantity = quantity
         self.startDate = startDate
         self.foodType = foodType
@@ -33,6 +35,7 @@ public struct NewCarbEntry: CarbEntry, Equatable, RawRepresentable {
     public init?(rawValue: RawValue) {
         guard
             let date = rawValue["date"] as? Date,
+            let syncIdentifier = rawValue["syncIdentifier"] as? String,
             let grams = rawValue["grams"] as? Double,
             let startDate = rawValue["startDate"] as? Date
         else {
@@ -41,6 +44,7 @@ public struct NewCarbEntry: CarbEntry, Equatable, RawRepresentable {
 
         self.init(
             date: date,
+            syncIdentifier: syncIdentifier,
             quantity: LoopQuantity(unit: .gram, doubleValue: grams),
             startDate: startDate,
             foodType: rawValue["foodType"] as? String,
@@ -52,6 +56,7 @@ public struct NewCarbEntry: CarbEntry, Equatable, RawRepresentable {
     public var rawValue: RawValue {
         var rawValue: RawValue = [
             "date": date,
+            "syncIdentifier": syncIdentifier,
             "grams": quantity.doubleValue(for: .gram),
             "startDate": startDate
         ]

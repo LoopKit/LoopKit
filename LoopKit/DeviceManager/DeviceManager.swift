@@ -140,6 +140,10 @@ public protocol ExclusiveDeviceControl: DeviceConfigurationSharing, DeviceManage
     /// has. Idempotent. Returns what it did, for the caller to log; nil means nothing to escalate.
     @discardableResult func escalateTakeControl() -> String?
 
+    /// Undo `escalateTakeControl()` once the take it served is over, reached or given up, so the
+    /// escalation never outlives it and ordinary connects resume. Idempotent. Default: does nothing.
+    func endTakeEscalation()
+
     /// What the link has actually been doing, for the host's logs. Default: nil.
     func connectionDiagnostics() -> String?
 
@@ -161,6 +165,7 @@ public protocol ExclusiveDeviceControl: DeviceConfigurationSharing, DeviceManage
 public extension ExclusiveDeviceControl {
     var isControlReady: Bool { true }
     func escalateTakeControl() -> String? { nil }
+    func endTakeEscalation() {}
     func connectionDiagnostics() -> String? { nil }
     var lastForeignSessionAt: Date? { nil }
     var takeControlNeedsSearch: Bool { false }
