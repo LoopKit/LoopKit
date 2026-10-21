@@ -592,6 +592,95 @@ class InsulinMathTests: XCTestCase {
             print(expected.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter), calculated.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter))
         }
     }
+    
+    func testGlucoseEffectFromBolusExponentialWithISFScheduleBoundaryChange() {
+        let unit = HKUnit.milligramsPerDeciliter
+        let insulinSensitivitySchedule = InsulinSensitivitySchedule(
+            unit: unit,
+            dailyItems: [
+                RepeatingScheduleValue(startTime: 0, value: 100),
+                RepeatingScheduleValue(startTime: TimeInterval(hours: 12), value: 200)
+            ],
+            timeZone: fixtureTimeZone
+        )!
+        
+        func dose(at startDate: Date) -> DoseEntry {
+            DoseEntry(
+                type: .bolus,
+                startDate: startDate,
+                endDate: startDate,
+                value: 1,
+                unit: .units,
+                insulinType: .novolog
+            )
+        }
+        
+        func deltas(effects: [GlucoseEffect]) -> [Double] {
+            var result = [Double]()
+            
+            var prevValue = effects.first!.quantity.doubleValue(for: .milligramsPerDeciliter)
+            for i in 1..<effects.count {
+                let value = effects[i].quantity.doubleValue(for: .milligramsPerDeciliter)
+                result.append(value - prevValue)
+                prevValue = value
+            }
+            return result
+        }
+        
+        let baseDate = fixtureDate("2026-02-21 00:00:00 +0000")
+        
+        let baselineEffects = [dose(at: baseDate)].glucoseEffects(
+            insulinModelProvider: insulinModelSettings,
+            longestEffectDuration: insulinModelDuration,
+            insulinSensitivity: insulinSensitivitySchedule,
+            from: baseDate
+        )
+        
+        let baselineDeltas = deltas(effects: baselineEffects)
+        
+        for hour in 6...13 {
+            let start = baseDate.addingTimeInterval(TimeInterval(hours: Double(hour))).addingTimeInterval(-exponentialModel.delay)
+            let effects = [dose(at: start)].glucoseEffects(
+                insulinModelProvider: insulinModelSettings,
+                longestEffectDuration: insulinModelDuration,
+                insulinSensitivity: insulinSensitivitySchedule,
+                from: start
+            )
+            let deltas = deltas(effects: effects)
+            
+            let transitionIndex = (Int)(exponentialModel.delay / .minutes(5)) + 12 * (12 - hour)
+            
+            for i in 0..<deltas.count {
+                let expectedRatio = i < transitionIndex ? 1.0 : 2.0
+                XCTAssertEqual(expectedRatio * baselineDeltas[i], deltas[i], accuracy: 1E-12, "hour \(hour) index \(i)")
+            }
+        }
+        
+        for offset in 1...4 {
+            let insulinSensitivityScheduleOffset = InsulinSensitivitySchedule(
+                unit: unit,
+                dailyItems: [
+                    RepeatingScheduleValue(startTime: 0, value: 100),
+                    RepeatingScheduleValue(startTime: TimeInterval(hours: 12) + TimeInterval(minutes: Double(-offset)), value: 200)
+                ],
+                timeZone: fixtureTimeZone
+            )!
+            
+
+            let start = baseDate.addingTimeInterval(TimeInterval(hours: 11.0))
+            let effects = [dose(at: start)].glucoseEffects(
+                insulinModelProvider: insulinModelSettings,
+                longestEffectDuration: insulinModelDuration,
+                insulinSensitivity: insulinSensitivityScheduleOffset,
+                from: start
+            )
+            let deltas = deltas(effects: effects)
+            
+            let transitionIndex = 11
+            let expectedRatio = 1 + Double(offset) / 5.0 // here we use a simple averaging approximation for ISF, this isn't quite as precise as the actual code
+            XCTAssertEqual(expectedRatio * baselineDeltas[transitionIndex], deltas[transitionIndex], accuracy: 0.02, "offset \(offset)")
+        }
+    }
 
     func testGlucoseEffectFromHistory() {
         let input = loadDoseFixture("normalized_doses")
