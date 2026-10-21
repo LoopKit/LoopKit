@@ -370,4 +370,8 @@ public protocol PumpDeliveryOdometer {
 
     /// Reads the pump now, bypassing any freshness shortcut. Returns whether the read succeeded.
     func refreshDeliveredUnits() async -> Bool
+
+    /// When the bolus the pump reported giving at its last read will end, whoever started it; nil
+    /// when it reported none. A controller's own bolus state knows only the boluses it started.
+    var bolusUnderWayEndsAt: Date? { get }
 }
