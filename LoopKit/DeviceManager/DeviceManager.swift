@@ -129,33 +129,15 @@ public protocol ExclusiveDeviceControl: DeviceConfigurationSharing {
     /// Stop bidding for the device; keep keys and pairing.
     func releaseControl()
 
-    /// Connect, searching for the device if this controller has never met it. Readiness follows
-    /// through `DeviceManagerDelegate.deviceManagerControlDidBecomeReady(_:)`.
+    /// Connect, and keep reacquiring however the kit sees fit until ready or released. Readiness
+    /// follows through `DeviceManagerDelegate.deviceManagerControlDidBecomeReady(_:)`.
     func takeControl()
 
     /// The link is up and the device has answered. Default: true.
     var isControlReady: Bool { get }
 
-    /// Escalate a take whose link has not come up to the most aggressive reacquisition the kit
-    /// has. Idempotent. Returns what it did, for the caller to log; nil means nothing to escalate.
-    @discardableResult func escalateTakeControl() -> String?
-
-    /// Undo `escalateTakeControl()` once the take it served is over, reached or given up, so the
-    /// escalation never outlives it and ordinary connects resume. Idempotent. Default: does nothing.
-    func endTakeEscalation()
-
-    /// What the link has actually been doing, for the host's logs. Default: nil.
-    func connectionDiagnostics() -> String?
-
-    /// When the device last showed evidence that another controller used it. Default: nil.
-    var lastForeignSessionAt: Date? { get }
-
-    /// The next `takeControl()` has to find the device first, which may need the host awake.
-    /// Default: false.
-    var takeControlNeedsSearch: Bool { get }
-
-    /// The same question asked of an export and this controller's `localState` before adopting
-    /// them: would this controller have to find the device first? Default: false.
+    /// Whether taking control with this export and local state means finding the device first
+    /// (the host may need to keep its screen or radio awake). Default: false.
     static func takeControlNeedsSearch(adopting configuration: SharedDeviceConfiguration, localState: [String: Any]?) -> Bool
 
     /// The last take failed in a way only a reset of the host's radio clears. Default: false.
@@ -164,11 +146,6 @@ public protocol ExclusiveDeviceControl: DeviceConfigurationSharing {
 
 public extension ExclusiveDeviceControl {
     var isControlReady: Bool { true }
-    func escalateTakeControl() -> String? { nil }
-    func endTakeEscalation() {}
-    func connectionDiagnostics() -> String? { nil }
-    var lastForeignSessionAt: Date? { nil }
-    var takeControlNeedsSearch: Bool { false }
     static func takeControlNeedsSearch(adopting configuration: SharedDeviceConfiguration, localState: [String: Any]?) -> Bool { false }
     var hostRadioNeedsReset: Bool { false }
 }
