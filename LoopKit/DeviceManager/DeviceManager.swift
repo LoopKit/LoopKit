@@ -106,9 +106,6 @@ public protocol DeviceConfigurationSharing: DeviceManager {
     /// `localState` an earlier manager of this plugin left here.
     init?(adopting configuration: SharedDeviceConfiguration, localState: [String: Any]?)
 
-    /// True for a manager built by `init(adopting:localState:)`; the kit hides setup, pairing and deletion.
-    var isConfiguredByAnotherController: Bool { get }
-
     /// What this controller learned about the device that is its own (for example its Bluetooth
     /// handle): never in the export, and it should outlive this manager. The host keeps the latest
     /// value per `pluginIdentifier` (an export's `managerIdentifier`) and passes it to the next
