@@ -125,7 +125,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@ kan niet communiceren met de Pompsimulator sinds %2$@.\n\nZonder communicatie kan de app geen opdrachten meer versturen voor insulinetoediening of nauwkeurige recente informatie weergeven over jouw actieve insuline of de insuline die is toegediend."
+            "value" : "%@ kan niet communiceren met de pompsimulator sinds %@.\n\nZonder communicatie kan de app geen opdrachten meer versturen voor insulinetoediening of nauwkeurige recente informatie weergeven over jouw actieve insuline of de insuline die is toegediend."
           }
         },
         "pl" : {
@@ -150,6 +150,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@, %2$@'den beri Simülatör Pompası ile iletişim kuramıyor.\n\nİletişim olmadan, uygulama insülin verilmesi için komutlar göndermeye devam edemez veya aktif insülininiz veya verilen insülin hakkında doğru ve güncel bilgileri görüntüleyemez."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 自 %@以来，该应用一直无法与模拟器泵建立通信。\n\n如果无法通信，该应用将无法继续发送胰岛素输送指令，也无法显示有关您当前活性胰岛素或正在输送的胰岛素的准确、最新信息。"
           }
         }
       }
@@ -560,6 +566,12 @@
             "value" : "2"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -573,6 +585,12 @@
           }
         },
         "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "2"
@@ -612,6 +630,12 @@
             "value" : "5"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -625,6 +649,12 @@
           }
         },
         "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "5"
@@ -664,6 +694,12 @@
             "value" : "50+"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "50+"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -677,6 +713,12 @@
           }
         },
         "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "50+"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "50+"
@@ -739,7 +781,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Een software-update wordt aanbevolen om de %1$@ app te blijven gebruiken. \n\nGa naar %2$@ Instellingen > Software Update om de nieuwste versie te installeren."
+            "value" : "Een software-update wordt aanbevolen om de %1$@ app te blijven gebruiken. \n\nGa naar %2$@ Instellingen > Algemeen > Software-update om de nieuwste versie te installeren."
           }
         },
         "pl" : {
@@ -764,6 +806,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ uygulamasını kullanmaya devam etmek için bir yazılım güncellemesi önerilir.\n\nEn son sürümü yüklemek için %2$@ Ayarlar > Yazılım Güncellemesi'ne gidin."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "建议进行软件更新，以继续使用本 %1$@App。\n前往%2$@ 设置 > 软件更新 安装最新版本。"
           }
         }
       }
@@ -1338,7 +1386,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Setări CGM"
+            "value" : "Setări senzor de glicemie"
           }
         },
         "ru" : {
@@ -1399,6 +1447,12 @@
             "value" : "CGM-simulator"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CGM-simulator"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1408,7 +1462,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Simulator CGM"
+            "value" : "Simulator senzor de glicemie"
           }
         },
         "ru" : {
@@ -1466,7 +1520,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wis laatste versie Controleer Waarschuwingsdatum"
+            "value" : "Wis laatste versie controleer waarschuwingsdatum"
           }
         },
         "pl" : {
@@ -1491,6 +1545,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Son Sürüm Kontrolü Uyarı Tarihini Temizle"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "清除上一次版本检查提醒日期"
           }
         }
       }
@@ -1542,7 +1602,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Comms Herstel"
+            "value" : "Comms herstel"
           }
         },
         "pl" : {
@@ -1573,6 +1633,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "İletişim Kurtarma"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通信恢复"
           }
         }
       }
@@ -1768,7 +1834,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Service Verwijderen"
+            "value" : "Service verwijderen"
           }
         },
         "pl" : {
@@ -1862,6 +1928,12 @@
             "value" : "Enhetsdetaljer"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apparaatgegevens"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1924,7 +1996,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gereed"
+            "value" : "Voltooid"
           }
         },
         "pl" : {
@@ -1943,6 +2015,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Готово"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完成"
           }
         }
       }
@@ -2013,7 +2091,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Fout Bij Hervatten"
+            "value" : "Fout bij hervatten"
           }
         },
         "pl" : {
@@ -2132,7 +2210,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Fout Bij Onderbreken"
+            "value" : "Fout bij onderbreken"
           }
         },
         "pl" : {
@@ -2223,6 +2301,12 @@
             "value" : "Estimert lesing"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geschatte meting"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2239,6 +2323,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Приблизительное данные"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "预估读数"
           }
         }
       }
@@ -2293,7 +2383,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Insulinetoediening Hervatten Mislukt"
+            "value" : "Insulinetoediening hervatten mislukt"
           }
         },
         "pl" : {
@@ -2375,6 +2465,12 @@
             "value" : "Kunne ikke avbryte insulintilførselen"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Onderbreken van insulinetoediening mislukt"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2433,6 +2529,12 @@
             "value" : "Få hjelp med CGM-en din"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hulp bij je CGM"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2442,7 +2544,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Obțineți ajutor cu senzorul dumneavoastră CGM"
+            "value" : "Obțineți ajutor cu senzorul dumneavoastră de glicemie"
           }
         },
         "ru" : {
@@ -2491,6 +2593,12 @@
             "value" : "Få hjelp med pumpen din"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hulp bij je pomp"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2507,6 +2615,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Получите помощь по работе с помпой"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "获取泵相关帮助"
           }
         }
       }
@@ -2706,6 +2820,12 @@
             "state" : "translated",
             "value" : "Simülatör bir sürüm kontrolüne nasıl yanıt vermelidir?"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "模拟器应如何响应版本检查？"
+          }
         }
       }
     },
@@ -2744,6 +2864,12 @@
             "value" : "Insulin\n Suspendert"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Insuline\nonderbroken"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2760,6 +2886,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Подача инсулина приостановлена"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "胰岛素\n暂停使用"
           }
         }
       }
@@ -2856,6 +2988,12 @@
             "state" : "translated",
             "value" : "İnsülin Tipi"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "胰岛素类型"
+          }
         }
       }
     },
@@ -2891,6 +3029,12 @@
             "value" : "Insulin %@ gjenstår"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Insuline%@over"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2907,6 +3051,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Остаток инсулина %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "胰岛素%@余量"
           }
         }
       }
@@ -2970,7 +3120,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Laatste Meting"
+            "value" : "Laatste meting"
           }
         },
         "pl" : {
@@ -3191,7 +3341,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mock Versie Check %@"
+            "value" : "Mock versie check %@"
           }
         },
         "pl" : {
@@ -3216,6 +3366,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sahte Sürüm Kontrolü %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "模拟版本校验 %@"
           }
         }
       }
@@ -3252,6 +3408,12 @@
             "value" : "Ingen Leveranse"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen\ntoediening"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3268,6 +3430,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Нет подачи"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No\n输注"
           }
         }
       }
@@ -3305,6 +3473,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Innstillinger for varsling"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meldingsinstellingen"
           }
         },
         "pl" : {
@@ -3405,7 +3579,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ok"
+            "value" : "OK"
           }
         },
         "pl" : {
@@ -3499,6 +3673,12 @@
             "value" : "Pod utløper om"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pomp verloopt over "
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3515,6 +3695,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Под истекает в "
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "泵将过期于 "
           }
         }
       }
@@ -3573,7 +3759,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Simulator Herstellen"
+            "value" : "Simulator herstellen"
           }
         },
         "pl" : {
@@ -3604,6 +3790,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Simülatörü kurtar"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "恢复模拟器"
           }
         }
       }
@@ -3666,6 +3858,12 @@
             "state" : "translated",
             "value" : "Замените помпу"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更换泵"
+          }
         }
       }
     },
@@ -3711,6 +3909,12 @@
             "value" : "Planlagt%@Basal"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geplande%@basaal"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3727,6 +3931,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Запланированный базал %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "预设%@基础率"
           }
         }
       }
@@ -3884,10 +4094,22 @@
             "value" : "Simulatorinnstillinger"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simulatorinstellingen"
+          }
+        },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Setări simulator"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "模拟器设置"
           }
         }
       }
@@ -3964,6 +4186,12 @@
             "state" : "translated",
             "value" : "Kaynak"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "来源"
+          }
         }
       }
     },
@@ -4021,6 +4249,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Стоп сенсор"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "停止传感器"
           }
         }
       }
@@ -4084,6 +4318,12 @@
             "state" : "translated",
             "value" : "Приостановлено в"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "暂停于"
+          }
         }
       }
     },
@@ -4138,6 +4378,12 @@
             "value" : "Midlertidig %@ Basal"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tijdelijke%@basaal"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4154,6 +4400,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Временный базал %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "临时%@基础率"
           }
         }
       }
@@ -4212,7 +4464,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Update Herinnering"
+            "value" : "Update herinnering"
           }
         },
         "pl" : {
@@ -4314,6 +4566,12 @@
             "state" : "translated",
             "value" : "Sürüm Kontrolü Yanıtı"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "版本检查响应"
+          }
         }
       }
     },
@@ -4344,10 +4602,22 @@
             "value" : "versionUpdate: %1$@\n\nbundleIdentifier: %2$@\n\ncurrentVersion: %3$@"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "versionUpdate: %1$@\n\nbundleIdentifier: %2$@\n\ncurrentVersion: %3$@"
+          }
+        },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "actualizareVersiune: %1$@\n\nidentificatorPachet: %2$@\n\nversiuneaCurentă: %3$@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "版本更新：%1$@\nbundleIdentifier: %2$@\n当前版本：%3$@"
           }
         }
       }
@@ -4407,7 +4677,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Je %1$@ app is verouderd. De app blijft werken, maar we raden je aan om de app bij te werken naar de nieuwste versie. \n\nGa naar %2$@ Instellingen > Software Update om de update te voltooien."
+            "value" : "Je %1$@ app is verouderd. De app blijft werken, maar we raden je aan om de app bij te werken naar de nieuwste versie. \n\nGa naar %2$@ Instellingen > Algemeen > Software-update om de update te voltooien."
           }
         },
         "pl" : {
@@ -4432,6 +4702,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ uygulamanız güncel değil. Çalışmaya devam edecektir, ancak en son sürüme güncellemenizi öneririz.\n\nTamamlamak için %2$@ Ayarlar > Yazılım Güncellemesi'ne gidin."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您的 %1$@ 应用程序已过时。虽然它仍可正常使用，但我们建议您更新至最新版本。\n\n请前往 %2$@ ，进入“设置” > “软件更新”以完成更新。"
           }
         }
       }
