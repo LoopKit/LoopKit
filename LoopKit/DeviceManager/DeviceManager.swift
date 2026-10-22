@@ -136,15 +136,11 @@ public protocol ExclusiveDeviceControl: DeviceConfigurationSharing {
     /// Whether taking control with this export and local state means finding the device first
     /// (the host may need to keep its screen or radio awake). Default: false.
     static func takeControlNeedsSearch(adopting configuration: SharedDeviceConfiguration, localState: [String: Any]?) -> Bool
-
-    /// The last take failed in a way only a reset of the host's radio clears. Default: false.
-    var hostRadioNeedsReset: Bool { get }
 }
 
 public extension ExclusiveDeviceControl {
     var isControlReady: Bool { true }
     static func takeControlNeedsSearch(adopting configuration: SharedDeviceConfiguration, localState: [String: Any]?) -> Bool { false }
-    var hostRadioNeedsReset: Bool { false }
 }
 
 public extension DeviceManagerDelegate {
