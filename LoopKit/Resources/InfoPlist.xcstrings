@@ -42,10 +42,22 @@
             "value" : "Måltidsdata fra helsedatabasen brukes til å bestemme glukoseeffekter. Glukosedata hentes fra HealthKit for grafisk fremstilling og analyse."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maaltijdgegevens uit de Gezondheid-database worden gebruikt om glucose-effecten te bepalen. Glucosegegevens worden uit HealthKit opgehaald voor grafieken en analyse."
+          }
+        },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Datele despre mese din baza de date Health sunt utilizate pentru a determina efectele glicemiei. Datele de glicemie sunt preluate din HealthKit pentru reprezentare grafică și analiză."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取自健康数据库的进餐数据，用于评估进餐带来的血糖影响。\n从 HealthKit（苹果健康框架）获取血糖数据，用于图表绘制与分析计算。"
           }
         }
       }

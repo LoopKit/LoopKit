@@ -686,7 +686,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "E Totaal"
+            "value" : "E totaal"
           }
         },
         "pl" : {
@@ -1046,7 +1046,7 @@
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hendelseshistorie"
+            "value" : "Hendelseslogg"
           }
         },
         "nl" : {
@@ -1292,7 +1292,7 @@
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Insulin Levering"
+            "value" : "Insulintilførsel"
           }
         },
         "nl" : {
@@ -1316,7 +1316,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Administrarea insulinei"
+            "value" : "Administrare insulină"
           }
         },
         "ru" : {
@@ -1352,7 +1352,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "已输注胰岛素"
+            "value" : "胰岛素输注"
           }
         }
       }
