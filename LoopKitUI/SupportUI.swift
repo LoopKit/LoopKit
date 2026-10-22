@@ -56,6 +56,10 @@ public struct CustomMenuItem {
 public protocol SupportUIDelegate: AlertIssuer, SupportInfoProvider  {
     @MainActor
     func openURL(url: URL)
+
+    /// The app's screen for exporting critical event logs.
+    @MainActor
+    func criticalEventLogExportView() -> AnyView
 }
 
 public struct DeviceWhitelist: Hashable {
@@ -123,7 +127,12 @@ public protocol SupportUI: Pluggable {
     
     /// Provides playable media to Loop to be used in training new features
     func trainingMedia(for domain: TrainingMediaDomain) -> [MediaContent]
-    
+
+    /// The screen listing the ways to report a problem, for the app to open
+    /// from outside settings. Nil if this support doesn't provide one.
+    @MainActor
+    func reportProblemView() -> AnyView?
+
     /// Initializes the support with the previously-serialized state.
     ///
     /// - Parameters:
@@ -148,6 +157,11 @@ extension SupportUI {
     
     public var showsDeleteTestDataUI: Bool {
         true
+    }
+
+    @MainActor
+    public func reportProblemView() -> AnyView? {
+        nil
     }
 }
 
