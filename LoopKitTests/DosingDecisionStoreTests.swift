@@ -975,8 +975,8 @@ class StoredDosingDecisionCodableTests: XCTestCase {
         XCTAssertNil(try decoder.decode(StoredDosingDecision.self, from: encoder.encode(dosingDecision)).algorithmExperiments)
 
         dosingDecision.algorithmExperiments = [
-            AlgorithmExperiment(identifier: "integralRetrospectiveCorrection"),
-            AlgorithmExperiment(identifier: "someFutureExperiment", parameters: .object(["gain": .number(0.5), "mode": .string("fast"), "levels": .array([.number(1), .null]), "enabled": .bool(true)]))
+            LoopKit.AlgorithmExperiment(identifier: "integralRetrospectiveCorrection"),
+            LoopKit.AlgorithmExperiment(identifier: "someFutureExperiment", parameters: .object(["gain": .number(0.5), "mode": .string("fast"), "levels": .array([.number(1), .null]), "enabled": .bool(true)]))
         ]
         let decoded = try decoder.decode(StoredDosingDecision.self, from: encoder.encode(dosingDecision))
         XCTAssertEqual(decoded.algorithmExperiments, dosingDecision.algorithmExperiments)
