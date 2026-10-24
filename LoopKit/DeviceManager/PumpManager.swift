@@ -358,3 +358,20 @@ public extension PumpManager {
         }
     }
 }
+
+/// A pump's cumulative delivered total. Required for a pump to be handed to another controller:
+/// it is the one figure both controllers can audit their records against.
+public protocol PumpDeliveryOdometer {
+    /// The total as last read from the pump, and when.
+    var deliveredUnits: (units: Double, at: Date)? { get }
+
+    /// The size of one delivery pulse: the increment `deliveredUnits` counts in.
+    var deliveryPulseUnits: Double { get }
+
+    /// Reads the pump now, bypassing any freshness shortcut. Returns whether the read succeeded.
+    func refreshDeliveredUnits() async -> Bool
+
+    /// When the bolus the pump reported giving at its last read will end, whoever started it; nil
+    /// when it reported none. A controller's own bolus state knows only the boluses it started.
+    var bolusUnderWayEndsAt: Date? { get }
+}
