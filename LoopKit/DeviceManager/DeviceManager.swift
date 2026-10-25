@@ -111,10 +111,15 @@ public protocol DeviceConfigurationSharing: Pluggable {
     /// value per `pluginIdentifier` (an export's `managerIdentifier`) and passes it to the next
     /// `init(adopting:localState:)`. Default: nil.
     var localState: [String: Any]? { get }
+
+    /// Whether the user wants this device shared with another controller (for example a watch reading
+    /// a CGM itself). The host exports only while it is true. Default: true.
+    var isConfigurationSharingEnabled: Bool { get }
 }
 
 public extension DeviceConfigurationSharing {
     var localState: [String: Any]? { nil }
+    var isConfigurationSharingEnabled: Bool { true }
 }
 
 /// A device whose hardware allows one controller at a time. Release, take and readiness say

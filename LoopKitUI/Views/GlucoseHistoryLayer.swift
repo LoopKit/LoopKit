@@ -73,7 +73,14 @@ class GlucoseHistoryLayer<T: ChartPoint>: ChartPointsScatterCirclesLayer<T> {
         let h = isLastPoint ? currentItemSize.height : itemSize.height
         
         let screenLoc = modelLocToScreenLoc(x: chartPointModel.chartPoint.x.scalar, y: chartPointModel.chartPoint.y.scalar)
-        
+
+        if chartPointModel.chartPoint is ManualGlucoseChartPoint {
+            let d = max(w, h) + 2
+            context.setFillColor(UIColor.systemRed.cgColor)
+            context.fillEllipse(in: CGRect(x: screenLoc.x - d / 2, y: screenLoc.y - d / 2, width: d, height: d))
+            return
+        }
+
         context.setFillColor(itemFillColor.cgColor)
         context.fillEllipse(in: CGRect(x: screenLoc.x - w / 2, y: screenLoc.y - h / 2, width: w, height: h))
     }

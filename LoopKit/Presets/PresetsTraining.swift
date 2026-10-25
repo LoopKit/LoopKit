@@ -13,9 +13,17 @@ import SwiftUI
 public class PresetsTrainingCompletion {
     
     public let allowDebugFeatures: Bool
-    
-    public init(allowDebugFeatures: Bool) {
+
+    /// When false, the exercise chapter is optional: training is complete without it.
+    public var exerciseRequired: Bool
+
+    public init(allowDebugFeatures: Bool, exerciseRequired: Bool = true) {
         self.allowDebugFeatures = allowDebugFeatures
+        self.exerciseRequired = exerciseRequired
+    }
+
+    public func isRequired(_ chapter: PresetsTraining.Chapter) -> Bool {
+        chapter != .exercise || exerciseRequired
     }
     
     public var completedChapters: [PresetsTraining.Chapter: Bool] {
@@ -34,7 +42,8 @@ public class PresetsTrainingCompletion {
     }
     
     public var isComplete: Bool {
-        completedChapters.values.allSatisfy({ $0 })
+        let completedChapters = completedChapters
+        return PresetsTraining.Chapter.allCases.allSatisfy { completedChapters[$0] == true || !isRequired($0) }
     }
     
     public func complete(to chapter: PresetsTraining.Chapter) {
@@ -348,24 +357,18 @@ public class PresetsTraining {
         if let startingAt {
             self.startingAt = startingAt
         } else {
-            var startingAt: Chapter?
-            
-            Chapter.allCases.reversed().forEach { chapter in
-                if trainingCompletion.completedChapters[chapter] != true {
-                    startingAt = chapter
-                }
-            }
-            
-            if let startingAt {
-                self.startingAt = startingAt
-            } else {
-                self.startingAt = .customizingPresets
-            }
+            let completedChapters = trainingCompletion.completedChapters
+            let incomplete = Chapter.allCases.filter { completedChapters[$0] != true }
+            // An optional chapter left unread is where the Learning Hub opens once the rest is done.
+            self.startingAt = incomplete.first(where: trainingCompletion.isRequired) ?? incomplete.first ?? .customizingPresets
         }
     }
-    
+
     public func next() {
-        let (next, completedChapter) = currentStep.next()
+        var (next, completedChapter) = currentStep.next()
+        if currentStep == .dailyActivities(.savedPresets), !trainingCompletion.exerciseRequired {
+            next = .trainingComplete
+        }
         if let next {
             navigationPath.append(next)
         }
