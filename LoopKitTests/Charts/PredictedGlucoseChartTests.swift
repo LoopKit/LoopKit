@@ -138,6 +138,20 @@ class PredictedGlucoseChartTests: XCTestCase {
         XCTAssertEqual(predictedGlucosePoints[5].y.scalar, 600)
         XCTAssertEqual(predictedGlucosePoints[6].y.scalar, 600)
     }
+
+    func testManualGlucoseEntriesAreMarked() {
+        let quantity = LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 120)
+        let glucoseValues: [GlucoseValue] = [
+            StoredGlucoseSample(startDate: Date(), quantity: quantity),
+            StoredGlucoseSample(startDate: Date(), quantity: quantity, wasUserEntered: true),
+            StoredGlucoseSample(startDate: Date(), quantity: quantity, isDisplayOnly: true, wasUserEntered: true),
+            GlucoseValueTestable(quantity: quantity, startDate: Date())
+        ]
+        let predictedGlucoseChart = PredictedGlucoseChart(predictedGlucoseBounds: .default, yAxisStepSizeMGDLOverride: yAxisStepSizeMGDL)
+        predictedGlucoseChart.setGlucoseValues(glucoseValues)
+
+        XCTAssertEqual(predictedGlucoseChart.glucosePoints.map { $0 is ManualGlucoseChartPoint }, [false, true, false, false])
+    }
 }
 
 struct GlucoseValueTestable: GlucoseValue {
