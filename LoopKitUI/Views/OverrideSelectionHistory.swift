@@ -30,8 +30,9 @@ public struct OverrideSelectionHistory: View {
     private var quantityFormatter: QuantityFormatter
     private var glucoseNumberFormatter: NumberFormatter
     private var durationFormatter: DateComponentsFormatter
+    private let autoBolusCarbsEnabled: Bool
     
-    public init(model: OverrideHistoryViewModel) {
+    public init(model: OverrideHistoryViewModel, autoBolusCarbsEnabled: Bool) {
         self.model = model
         self.quantityFormatter = {
             let quantityFormatter = QuantityFormatter(for: model.glucoseUnit)
@@ -46,6 +47,7 @@ public struct OverrideSelectionHistory: View {
 
             return formatter
         }()
+        self.autoBolusCarbsEnabled = autoBolusCarbsEnabled
     }
     
     // Style conditionally based on iOS so we get a grouped list style
@@ -101,6 +103,7 @@ public struct OverrideSelectionHistory: View {
         }
         
         let insulinNeeds = override.settings.insulinNeedsScaleFactor
+        let autoBolusCarbsActive = autoBolusCarbsEnabled ? override.settings.autoBolusCarbsActive : nil
         
         switch override.context {
         case .legacyWorkout:
@@ -110,7 +113,8 @@ public struct OverrideSelectionHistory: View {
                 targetRange: Text(targetRange),
                 duration: Text(duration),
                 subtitle: Text(startTime),
-                insulinNeedsScaleFactor: insulinNeeds)
+                insulinNeedsScaleFactor: insulinNeeds,
+                autoBolusCarbsActive: autoBolusCarbsActive)
         case .preMeal:
             return OverrideViewCell(
                 symbol: Text("🍽"),
@@ -118,7 +122,8 @@ public struct OverrideSelectionHistory: View {
                 targetRange: Text(targetRange),
                 duration: Text(duration),
                 subtitle: Text(startTime),
-                insulinNeedsScaleFactor: insulinNeeds)
+                insulinNeedsScaleFactor: insulinNeeds,
+                autoBolusCarbsActive: autoBolusCarbsActive)
         case .preset(let preset):
             return OverrideViewCell(
                 symbol: Text(preset.symbol),
@@ -126,7 +131,8 @@ public struct OverrideSelectionHistory: View {
                 targetRange: Text(targetRange),
                 duration: Text(duration),
                 subtitle: Text(startTime),
-                insulinNeedsScaleFactor: insulinNeeds)
+                insulinNeedsScaleFactor: insulinNeeds,
+                autoBolusCarbsActive: autoBolusCarbsActive)
         case .custom:
             return OverrideViewCell(
                 symbol: Text("···"),
@@ -134,7 +140,8 @@ public struct OverrideSelectionHistory: View {
                 targetRange: Text(targetRange),
                 duration: Text(duration),
                 subtitle: Text(startTime),
-                insulinNeedsScaleFactor: insulinNeeds)
+                insulinNeedsScaleFactor: insulinNeeds,
+                autoBolusCarbsActive: autoBolusCarbsActive)
         }
     }
     
@@ -159,7 +166,8 @@ public struct OverrideSelectionHistory: View {
         return HistoricalOverrideDetailView(
             override: override,
             glucoseUnit: model.glucoseUnit,
-            delegate: nil
+            delegate: nil,
+            autoBolusCarbsEnabled: autoBolusCarbsEnabled
         ).navigationBarTitle(editorTitle)
     }
 }
