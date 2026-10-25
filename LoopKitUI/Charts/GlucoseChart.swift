@@ -47,10 +47,15 @@ open class GlucoseChart {
         let dateFormatter = DateFormatter(timeStyle: .short)
 
         return glucoseValues.map {
-            return ChartPoint(
+            let sample = $0 as? GlucoseSampleValue
+            let pointType: ChartPoint.Type = sample?.wasUserEntered == true && sample?.isDisplayOnly == false ? ManualGlucoseChartPoint.self : ChartPoint.self
+            return pointType.init(
                 x: ChartAxisValueDate(date: $0.startDate, formatter: dateFormatter),
                 y: ChartAxisValueDoubleUnit($0.quantity.doubleValue(for: glucoseUnit), unitString: unitString, formatter: unitFormatter.numberFormatter)
             )
         }
     }
 }
+
+/// A glucose value entered by hand, such as a fingerstick or calibration.
+final class ManualGlucoseChartPoint: ChartPoint {}
