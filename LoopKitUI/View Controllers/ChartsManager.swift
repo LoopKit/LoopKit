@@ -100,6 +100,15 @@ open class ChartsManager {
         }
     }
 
+    /// Hours between x-axis labels
+    public var labelStepHours = 1 {
+        didSet {
+            if labelStepHours != oldValue {
+                xAxisValues = nil
+            }
+        }
+    }
+
     /// The latest allowed date on the X-axis
     public var maxEndDate = Date.distantFuture {
         didSet {
@@ -184,6 +193,24 @@ open class ChartsManager {
         ]
 
         let segments = ceil(endDate.timeIntervalSince(startDate).hours)
+
+        if labelStepHours > 1 {
+            let calendar = Calendar.current
+            var dates = [startDate]
+            var date = calendar.nextDate(after: startDate, matching: DateComponents(minute: 0), matchingPolicy: .strict) ?? endDate
+            while date < endDate {
+                if calendar.component(.hour, from: date) % labelStepHours == 0 {
+                    dates.append(date)
+                }
+                date = date.addingTimeInterval(.hours(1))
+            }
+            dates.append(endDate)
+            let xAxisValues = dates.map { ChartAxisValueDate(date: $0, formatter: timeFormatter, labelSettings: axisLabelSettings) }
+            xAxisValues.first?.hidden = true
+            xAxisValues.last?.hidden = true
+            self.xAxisValues = xAxisValues
+            return
+        }
 
         let xAxisValues = ChartAxisValuesStaticGenerator.generateXAxisValuesWithChartPoints(points,
             minSegmentCount: segments - 1,

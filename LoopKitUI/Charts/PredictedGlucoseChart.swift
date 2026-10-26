@@ -165,6 +165,7 @@ extension PredictedGlucoseChart {
 
         let layers: [ChartLayer?] = [
             gridLayer,
+            nowLineLayer(xAxisLayer: xAxisLayer, yAxisLayer: yAxisLayer, color: colors.glucoseTint),
             targetsLayer,
             xAxisLayer,
             yAxisLayer,
@@ -195,7 +196,11 @@ extension PredictedGlucoseChart {
         } else {
             axisValueGenerator = { ChartAxisValueDouble($0) }
         }
-        
+
+        if let fixed = fixedYAxisValues(axisValueGenerator: axisValueGenerator) {
+            return fixed
+        }
+
         let yAxisValues = ChartAxisValuesStaticGenerator.generateYAxisValuesUsingLinearSegmentStep(chartPoints: points,
             minSegmentCount: 2,
             maxSegmentCount: maxYAxisSegmentCount,
