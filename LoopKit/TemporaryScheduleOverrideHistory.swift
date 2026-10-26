@@ -343,6 +343,47 @@ extension TemporaryScheduleOverrideHistory: CustomDebugStringConvertible {
 }
 
 
+extension TemporaryScheduleOverrideHistory: CriticalEventLog {
+    public var exportName: String { "Overrides.json" }
+
+    public func exportProgressTotalUnitCount(startDate: Date, endDate: Date? = nil) -> Result<Int64, Error> {
+        return .success(Int64(exportOverrides(startDate: startDate, endDate: endDate).count))
+    }
+
+    public func export(startDate: Date, endDate: Date, to stream: DataOutputStream, progress: Progress) -> Error? {
+        guard !progress.isCancelled else {
+            return CriticalEventLogError.cancelled
+        }
+
+        let overrides = exportOverrides(startDate: startDate, endDate: endDate)
+        let encoder = JSONStreamEncoder(stream: stream)
+        var error: Error?
+        do {
+            try encoder.encode(overrides)
+            progress.completedUnitCount += Int64(overrides.count)
+        } catch let encodeError {
+            error = encodeError
+        }
+
+        if let closeError = encoder.close(), error == nil {
+            error = closeError
+        }
+
+        return error
+    }
+
+    // Exports run on background queues, but the history is read and written on the main thread
+    private func exportOverrides(startDate: Date, endDate: Date?) -> [TemporaryScheduleOverride] {
+        let read = {
+            self.recentEvents
+                .map(\.override)
+                .filter { override in override.startDate >= startDate && endDate.map { override.startDate < $0 } ?? true }
+                .sorted { $0.startDate < $1.startDate }
+        }
+        return Thread.isMainThread ? read() : DispatchQueue.main.sync(execute: read)
+    }
+}
+
 private extension Date {
     var nearestPrevious: Date {
         return Date(timeIntervalSince1970: timeIntervalSince1970.nextDown)
