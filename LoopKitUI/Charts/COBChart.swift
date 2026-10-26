@@ -77,6 +77,7 @@ public extension COBChart {
 
         let layers: [ChartLayer?] = [
             gridLayer,
+            nowLineLayer(xAxisLayer: xAxisLayer, yAxisLayer: yAxisLayer, color: colors.carbTint),
             xAxisLayer,
             yAxisLayer,
             cobChartCache?.highlightLayer,

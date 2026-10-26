@@ -92,6 +92,7 @@ public extension IOBChart {
 
         let layers: [ChartLayer?] = [
             gridLayer,
+            nowLineLayer(xAxisLayer: xAxisLayer, yAxisLayer: yAxisLayer, color: colors.insulinTint),
             xAxisLayer,
             yAxisLayer,
             zeroGuidelineLayer,
