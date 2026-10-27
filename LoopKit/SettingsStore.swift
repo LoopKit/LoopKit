@@ -368,6 +368,16 @@ public struct StoredSettings: Equatable {
     }
 }
 
+/// An element that decodes as nil instead of failing the whole array, so one unreadable preset
+/// doesn't lose the therapy settings stored with it.
+private struct Lossy<Value: Decodable>: Decodable {
+    let value: Value?
+
+    init(from decoder: Decoder) throws {
+        value = try? Value(from: decoder)
+    }
+}
+
 extension StoredSettings: Codable {
     fileprivate static let codingGlucoseUnit = HKUnit.milligramsPerDeciliter
 
@@ -380,7 +390,7 @@ extension StoredSettings: Codable {
                   glucoseTargetRangeSchedule: try container.decodeIfPresent(GlucoseRangeSchedule.self, forKey: .glucoseTargetRangeSchedule),
                   preMealTargetRange: try container.decodeIfPresent(DoubleRange.self, forKey: .preMealTargetRange)?.quantityRange(for: bloodGlucoseUnit),
                   workoutTargetRange: try container.decodeIfPresent(DoubleRange.self, forKey: .workoutTargetRange)?.quantityRange(for: bloodGlucoseUnit),
-                  overridePresets: try container.decodeIfPresent([TemporaryScheduleOverridePreset].self, forKey: .overridePresets),
+                  overridePresets: try container.decodeIfPresent([Lossy<TemporaryScheduleOverridePreset>].self, forKey: .overridePresets)?.compactMap(\.value),
                   scheduleOverride: try container.decodeIfPresent(TemporaryScheduleOverride.self, forKey: .scheduleOverride),
                   preMealOverride: try container.decodeIfPresent(TemporaryScheduleOverride.self, forKey: .preMealOverride),
                   maximumBasalRatePerHour: try container.decodeIfPresent(Double.self, forKey: .maximumBasalRatePerHour),
