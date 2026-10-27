@@ -605,6 +605,31 @@ class DosingDecisionStoreQueryTests: PersistenceControllerTestCase {
         await fulfillment(of: [completion], timeout: 30)
     }
 
+    func testGetDosingDecisionsInRange() async throws {
+        let start = Date()
+        for (minutes, experiments) in [(0, nil), (5, []), (10, ["guardAndRunway"]), (15, ["guardAndRunway"])] as [(Double, [String]?)] {
+            await dosingDecisionStore.storeDosingDecision(StoredDosingDecision(
+                date: start.addingTimeInterval(.minutes(minutes)),
+                reason: "test",
+                algorithmExperiments: experiments?.map { AlgorithmExperiment(identifier: $0) }))
+        }
+
+        struct ExperimentsRecord: Decodable {
+            let date: Date
+            let algorithmExperiments: [AlgorithmExperiment]?
+        }
+        let records = try await dosingDecisionStore.getDosingDecisions(start: start.addingTimeInterval(.minutes(5)), end: start.addingTimeInterval(.minutes(15)), as: ExperimentsRecord.self)
+
+        XCTAssertEqual(records.map(\.date), [start.addingTimeInterval(.minutes(5)), start.addingTimeInterval(.minutes(10))])
+        XCTAssertEqual(records.map { $0.algorithmExperiments?.map(\.identifier) }, [[], ["guardAndRunway"]])
+
+        let full = try await dosingDecisionStore.getDosingDecisions(start: start, end: start.addingTimeInterval(.minutes(5)), as: StoredDosingDecision.self)
+        XCTAssertEqual(full.count, 1)
+        XCTAssertNil(full.first?.algorithmExperiments)
+        completion.fulfill()
+        await fulfillment(of: [completion], timeout: 1)
+    }
+
     private func addData(withSyncIdentifiers syncIdentifiers: [UUID]) async {
         for syncIdentifier in syncIdentifiers {
             await dosingDecisionStore.storeDosingDecision(StoredDosingDecision(reason: "test", syncIdentifier: syncIdentifier))
