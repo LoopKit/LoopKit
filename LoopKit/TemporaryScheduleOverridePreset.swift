@@ -72,8 +72,10 @@ extension TemporaryScheduleOverridePreset: Codable {
         case id, symbol, name, settings, duration
     }
 
-    // Newer builds store the symbol as {symbolType, tint, value}
+    // Newer builds store an optional symbol as {symbolType, tint, value}, where only an emoji
+    // can be shown here
     private struct Symbol: Decodable {
+        let symbolType: String
         let value: String
     }
 
@@ -82,8 +84,10 @@ extension TemporaryScheduleOverridePreset: Codable {
         let symbol: String
         if let string = try? container.decode(String.self, forKey: .symbol) {
             symbol = string
+        } else if let newer = try container.decodeIfPresent(Symbol.self, forKey: .symbol), newer.symbolType == "emoji" {
+            symbol = newer.value
         } else {
-            symbol = try container.decode(Symbol.self, forKey: .symbol).value
+            symbol = ""
         }
         self.init(id: try container.decode(UUID.self, forKey: .id),
                   symbol: symbol,

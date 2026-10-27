@@ -1003,6 +1003,20 @@ class StoredSettingsCodableTests: XCTestCase {
       "name" : "unreadable",
       "settings" : { },
       "symbol" : "🏃"
+    },
+    {
+      "duration" : { "finite" : { "duration" : 7200 } },
+      "id" : "3DC69BC4-DBC1-411D-9FBE-D5CA3223B050",
+      "name" : "no symbol",
+      "repeatOptions" : 0,
+      "settings" : { "insulinNeedsScaleFactor" : 1, "targetRangeInMgdl" : { "maxValue" : 115, "minValue" : 105 } }
+    },
+    {
+      "duration" : "indefinite",
+      "id" : "5B1C6E0A-2F1D-4E7B-9C3A-8D2E1F0A4B6C",
+      "name" : "system image",
+      "settings" : { "insulinNeedsScaleFactor" : 0.8 },
+      "symbol" : { "symbolType" : "systemImage", "value" : "figure.run" }
     }
   ],
   "syncIdentifier" : "BDF73A2F-B357-4933-9077-FD00319DCEAF"
@@ -1010,8 +1024,8 @@ class StoredSettingsCodableTests: XCTestCase {
 """
         let decoded = try decoder.decode(StoredSettings.self, from: Data(json.utf8))
         XCTAssertEqual(decoded.basalRateSchedule?.items, [RepeatingScheduleValue(startTime: 0, value: 1.15)])
-        XCTAssertEqual(decoded.overridePresets?.map(\.name), ["football"])
-        XCTAssertEqual(decoded.overridePresets?.map(\.symbol), ["🏈"])
+        XCTAssertEqual(decoded.overridePresets?.map(\.name), ["football", "no symbol", "system image"])
+        XCTAssertEqual(decoded.overridePresets?.map(\.symbol), ["🏈", "", ""])
     }
 
     private func assertStoredSettingsCodable(_ original: StoredSettings, encodesJSON string: String) throws {
