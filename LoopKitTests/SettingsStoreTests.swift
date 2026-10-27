@@ -975,6 +975,59 @@ class StoredSettingsCodableTests: XCTestCase {
         )
     }
     
+    func testDecodesSettingsWithPresetsFromNextDev() throws {
+        let json = """
+{
+  "basalRateSchedule" : {
+    "items" : [ { "startTime" : 0, "value" : 1.15 } ],
+    "referenceTimeInterval" : 0,
+    "repeatInterval" : 86400,
+    "timeZone" : { "identifier" : "America/Chicago" }
+  },
+  "bloodGlucoseUnit" : "mg/dL",
+  "controllerTimeZone" : { "identifier" : "America/Chicago" },
+  "date" : "2026-10-20T19:02:37Z",
+  "dosingEnabled" : true,
+  "overridePresets" : [
+    {
+      "duration" : { "finite" : { "duration" : 10800 } },
+      "id" : "9140B20E-496A-4D0B-9F1F-90BE6F0F68D6",
+      "name" : "football",
+      "repeatOptions" : 0,
+      "settings" : { "targetRangeInMgdl" : { "maxValue" : 130, "minValue" : 120 } },
+      "symbol" : { "symbolType" : "emoji", "value" : "🏈" }
+    },
+    {
+      "duration" : "indefinite",
+      "id" : "not a uuid",
+      "name" : "unreadable",
+      "settings" : { },
+      "symbol" : "🏃"
+    },
+    {
+      "duration" : { "finite" : { "duration" : 7200 } },
+      "id" : "3DC69BC4-DBC1-411D-9FBE-D5CA3223B050",
+      "name" : "no symbol",
+      "repeatOptions" : 0,
+      "settings" : { "insulinNeedsScaleFactor" : 1, "targetRangeInMgdl" : { "maxValue" : 115, "minValue" : 105 } }
+    },
+    {
+      "duration" : "indefinite",
+      "id" : "5B1C6E0A-2F1D-4E7B-9C3A-8D2E1F0A4B6C",
+      "name" : "system image",
+      "settings" : { "insulinNeedsScaleFactor" : 0.8 },
+      "symbol" : { "symbolType" : "systemImage", "value" : "figure.run" }
+    }
+  ],
+  "syncIdentifier" : "BDF73A2F-B357-4933-9077-FD00319DCEAF"
+}
+"""
+        let decoded = try decoder.decode(StoredSettings.self, from: Data(json.utf8))
+        XCTAssertEqual(decoded.basalRateSchedule?.items, [RepeatingScheduleValue(startTime: 0, value: 1.15)])
+        XCTAssertEqual(decoded.overridePresets?.map(\.name), ["football", "no symbol", "system image"])
+        XCTAssertEqual(decoded.overridePresets?.map(\.symbol), ["🏈", "", ""])
+    }
+
     private func assertStoredSettingsCodable(_ original: StoredSettings, encodesJSON string: String) throws {
         let data = try encoder.encode(original)
         XCTAssertEqual(String(data: data, encoding: .utf8), string)

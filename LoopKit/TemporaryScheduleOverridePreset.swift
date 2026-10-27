@@ -67,4 +67,32 @@ extension TemporaryScheduleOverridePreset: RawRepresentable {
     }
 }
 
-extension TemporaryScheduleOverridePreset: Codable {}
+extension TemporaryScheduleOverridePreset: Codable {
+    private enum CodingKeys: String, CodingKey {
+        case id, symbol, name, settings, duration
+    }
+
+    // Newer builds store an optional symbol as {symbolType, tint, value}, where only an emoji
+    // can be shown here
+    private struct Symbol: Decodable {
+        let symbolType: String
+        let value: String
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let symbol: String
+        if let string = try? container.decode(String.self, forKey: .symbol) {
+            symbol = string
+        } else if let newer = try container.decodeIfPresent(Symbol.self, forKey: .symbol), newer.symbolType == "emoji" {
+            symbol = newer.value
+        } else {
+            symbol = ""
+        }
+        self.init(id: try container.decode(UUID.self, forKey: .id),
+                  symbol: symbol,
+                  name: try container.decode(String.self, forKey: .name),
+                  settings: try container.decode(TemporaryScheduleOverrideSettings.self, forKey: .settings),
+                  duration: try container.decode(TemporaryScheduleOverride.Duration.self, forKey: .duration))
+    }
+}
