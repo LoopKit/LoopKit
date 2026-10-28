@@ -97,6 +97,7 @@ public extension DoseChart {
 
         let layers: [ChartLayer?] = [
             gridLayer,
+            nowLineLayer(xAxisLayer: xAxisLayer, yAxisLayer: yAxisLayer, color: colors.insulinTint),
             manualBolusLayer,
             autoBolusLayer
         ]

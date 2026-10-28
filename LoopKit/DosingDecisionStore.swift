@@ -107,7 +107,21 @@ public class DosingDecisionStore {
         }
     }
 
-    
+    /// Decodes each dosing decision dated in `start..<end` as `D`, oldest first. Decoding only
+    /// the fields `D` declares avoids building every full decision.
+    public func getDosingDecisions<D: Decodable>(start: Date, end: Date, as type: D.Type = D.self) async throws -> [D] {
+        try await self.store.managedObjectContext.perform {
+            let request: NSFetchRequest<DosingDecisionObject> = DosingDecisionObject.fetchRequest()
+            request.predicate = NSPredicate(format: "date >= %@ AND date < %@", start as NSDate, end as NSDate)
+            request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
+
+            return try self.store.managedObjectContext.fetch(request).compactMap { object in
+                try? Self.decoder.decode(D.self, from: object.data)
+            }
+        }
+    }
+
+
     private static var encoder: PropertyListEncoder = {
         let encoder = PropertyListEncoder()
         encoder.outputFormat = .binary

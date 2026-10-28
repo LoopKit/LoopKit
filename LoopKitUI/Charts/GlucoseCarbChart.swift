@@ -93,6 +93,7 @@ extension GlucoseCarbChart {
 
         let layers: [ChartLayer?] = [
             gridLayer,
+            nowLineLayer(xAxisLayer: xAxisLayer, yAxisLayer: yAxisLayer, color: colors.glucoseTint),
             xAxisLayer,
             yAxisLayer,
             glucoseChartCache?.highlightLayer,
@@ -121,7 +122,11 @@ extension GlucoseCarbChart {
         } else {
             axisValueGenerator = { ChartAxisValueDouble($0) }
         }
-        
+
+        if let fixed = fixedYAxisValues(axisValueGenerator: axisValueGenerator) {
+            return fixed
+        }
+
         let yAxisValues = ChartAxisValuesStaticGenerator.generateYAxisValuesUsingLinearSegmentStep(chartPoints: points,
             minSegmentCount: 2,
             maxSegmentCount: maxYAxisSegmentCount,
