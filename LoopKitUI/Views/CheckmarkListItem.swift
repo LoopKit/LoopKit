@@ -60,8 +60,15 @@ public struct CheckmarkListItem<LeadingView: View>: View {
             // the row a borderless tappable item; the checkmark stays accent-colored via its
             // own foregroundColor.
             .buttonStyle(.plain)
+            .accessibilityLabel(title)
+            .accessibilityHint(description)
+            .accessibilityAddTraits(isSelected ? .isSelected : [])
         } else {
             content
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(title)
+                .accessibilityHint(description)
+                .accessibilityAddTraits(isSelected ? .isSelected : [])
         }
     }
     
@@ -83,7 +90,7 @@ public struct CheckmarkListItem<LeadingView: View>: View {
             Spacer(minLength: 12)
 
             selectionIndicator
-                .accessibility(label: Text(isSelected ? "Selected" : "Unselected"))
+                .accessibilityHidden(true)
         }
     }
 
