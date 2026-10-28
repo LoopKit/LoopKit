@@ -67,12 +67,14 @@ public struct GuardrailConstrainedQuantityView: View {
                 } else {
                     Text("–")
                         .foregroundColor(.secondary)
+                        .accessibilityLabel(LocalizedString("Not set", comment: "Accessibility label for a setting that has no value"))
                 }
             }
 
             if isUnitLabelVisible {
                 Text(unit.shortLocalizedUnitString())
                     .foregroundColor(Color(.secondaryLabel))
+                    .accessibilityHidden(value == nil)
             }
         }
         .accessibilityElement(children: .combine)
