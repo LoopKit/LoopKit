@@ -73,6 +73,15 @@ class JSONStreamEncoderTests: XCTestCase {
         }
     }
 
+    func testEncodeFailureIsValidJSON() throws {
+        let values = [FailingValue(description: "line one\nline \"two\"")]
+        XCTAssertNoThrow(try encoder.encode(values))
+        XCTAssertNil(encoder.close())
+        let decoded = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(outputStream.string.utf8)) as? [[String: String]])
+        XCTAssertEqual(decoded.count, 1)
+        XCTAssertTrue(decoded[0]["error"]?.hasPrefix("Failed to encode value: line one\nline \"two\" due to: ") == true)
+    }
+
     private let dateFormatter = ISO8601DateFormatter()
 }
 
@@ -80,6 +89,14 @@ fileprivate struct MockValue: Codable {
     let left: String
     let center: Int
     let right: Date
+}
+
+fileprivate struct FailingValue: Encodable, CustomStringConvertible {
+    let description: String
+
+    func encode(to encoder: Encoder) throws {
+        throw EncodingError.invalidValue(description, EncodingError.Context(codingPath: [], debugDescription: "Mock failure"))
+    }
 }
 
 fileprivate struct MockError: Error, Equatable {}
