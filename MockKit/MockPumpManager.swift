@@ -762,21 +762,15 @@ extension MockPumpManager {
 extension MockPumpManager: AlertIssuer {
     public func issueAlert(_ alert: Alert) {
         logDeviceComms(.delegate, message: "issuing \(alert.identifier) \(alert.backgroundContent.title) with trigger \(alert.trigger)")
-        delegate.notify { delegate in
-            guard let delegate else { return }
-            Task {
-                await delegate.issueAlert(alert)
-            }
+        delegate.notifyInOrder { delegate in
+            await delegate?.issueAlert(alert)
         }
     }
     
     public func retractAlert(identifier: Alert.Identifier) {
         logDeviceComms(.delegate, message: "retracting \(identifier)")
-        delegate.notify { delegate in
-            guard let delegate else { return }
-            Task {
-                await delegate.retractAlert(identifier: identifier)
-            }
+        delegate.notifyInOrder { delegate in
+            await delegate?.retractAlert(identifier: identifier)
         }
     }
     

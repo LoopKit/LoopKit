@@ -12,6 +12,7 @@ public class WeakSynchronizedDelegate<Delegate> {
     private let lock = UnfairLock()
     private weak var _delegate: AnyObject?
     private var _queue: DispatchQueue
+    private var lastOrderedTask: Task<Void, Never>?
 
     public init(queue: DispatchQueue = .main) {
         _queue = queue
@@ -57,6 +58,18 @@ public class WeakSynchronizedDelegate<Delegate> {
         }
     }
     
+    /// Calls an async delegate method in order: each block starts only after the previous one passed here has finished.
+    public func notifyInOrder(_ block: @escaping (_ delegate: Delegate?) async -> Void) {
+        lock.withLock {
+            let delegate = _delegate as? Delegate
+            let previous = lastOrderedTask
+            lastOrderedTask = Task {
+                await previous?.value
+                await block(delegate)
+            }
+        }
+    }
+
     public func notifyDelayed(by interval: TimeInterval, _ block: @escaping (_ delegate: Delegate?) -> Void) {
         var delegate: Delegate?
         var queue: DispatchQueue!

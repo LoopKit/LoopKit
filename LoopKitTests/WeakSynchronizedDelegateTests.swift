@@ -98,4 +98,30 @@ class WeakSynchronizedDelegateTests: XCTestCase {
 
         wait(for: [finished], timeout: 2)
     }
+
+    func testNotifyInOrderRunsBlocksInCallOrder() {
+        let subject = WeakSynchronizedDelegate<TestDelegate>(queue: delegateQueue)
+        let delegate = TestDelegateImpl(id: 1)
+        subject.delegate = delegate
+
+        let count = 500
+        let recorded = Locked<[Int]>([])
+        let finished = expectation(description: "all blocks ran")
+        finished.expectedFulfillmentCount = count
+
+        for index in 0..<count {
+            subject.notifyInOrder { delegate in
+                XCTAssertEqual(1, delegate?.identify())
+                // Yield so a later block could overtake this one if the calls were not chained.
+                await Task.yield()
+                recorded.mutate { $0.append(index) }
+                finished.fulfill()
+            }
+        }
+
+        withExtendedLifetime(delegate) {
+            wait(for: [finished], timeout: 10)
+        }
+        XCTAssertEqual(Array(0..<count), recorded.value)
+    }
 }

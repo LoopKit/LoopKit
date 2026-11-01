@@ -769,10 +769,8 @@ extension MockCGMManager {
 
     public func retractAlert(identifier: Alert.AlertIdentifier) {
         
-        delegate.notify { delegate in
-            Task {
-                await delegate?.retractAlert(identifier: Alert.Identifier(managerIdentifier: self.pluginIdentifier, alertIdentifier: identifier))
-            }
+        delegate.notifyInOrder { delegate in
+            await delegate?.retractAlert(identifier: Alert.Identifier(managerIdentifier: self.pluginIdentifier, alertIdentifier: identifier))
         }
 
         // updating the status highlight
@@ -828,10 +826,8 @@ extension MockCGMManager {
                           trigger: .immediate,
                           interruptionLevel: interruptionLevel)
 
-        delegate.notify { delegate in
-            Task {
-                await delegate?.issueAlert(alert)
-            }
+        delegate.notifyInOrder { delegate in
+            await delegate?.issueAlert(alert)
         }
     }
 }
