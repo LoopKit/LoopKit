@@ -7,7 +7,7 @@
 
 import UIKit
 import Combine
-import LoopAlgorithm
+import LoopKit
 
 /// Abstract class providing boilerplate setup for chart-based table view controllers
 @MainActor

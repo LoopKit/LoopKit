@@ -9,7 +9,6 @@
 import SwiftUI
 import LoopKit
 import MockKit
-import LoopAlgorithm
 
 extension View {
     func openMockPumpSettingsOnLongPress(enabled: Bool = true, minimumDuration: Double = 5, pumpManager: MockPumpManager, supportedInsulinTypes: [InsulinType]) -> some View {

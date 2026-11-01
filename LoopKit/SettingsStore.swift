@@ -10,7 +10,6 @@ import os.log
 import Foundation
 import CoreData
 import HealthKit
-import LoopAlgorithm
 
 public protocol SettingsStoreDelegate: AnyObject {
     /**

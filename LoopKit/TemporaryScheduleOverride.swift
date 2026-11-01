@@ -8,7 +8,6 @@
 
 import Foundation
 import HealthKit
-import LoopAlgorithm
 
 public struct ActivityPreset: Hashable, Identifiable, Sendable, RawRepresentable, Codable {
     public enum ActivityType: String, Hashable, Identifiable, Sendable, Codable, CaseIterable {

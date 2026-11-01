@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 import HealthKit
-import LoopAlgorithm
 
 class CachedCarbObject: NSManagedObject {
     var absorptionTime: TimeInterval? {

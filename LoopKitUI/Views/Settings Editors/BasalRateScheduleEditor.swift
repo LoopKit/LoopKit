@@ -8,7 +8,6 @@
 
 import SwiftUI
 import HealthKit
-import LoopAlgorithm
 import LoopKit
 
 public typealias SyncBasalRateSchedule = (_ items: [RepeatingScheduleValue<Double>], _ completion: @escaping (Result<BasalRateSchedule, Error>) -> Void) -> Void

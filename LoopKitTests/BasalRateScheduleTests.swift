@@ -8,7 +8,6 @@
 
 import XCTest
 @testable import LoopKit
-import LoopAlgorithm
 
 private class TestingBundle {
     /// Returns the resource bundle associated with the current Swift module.

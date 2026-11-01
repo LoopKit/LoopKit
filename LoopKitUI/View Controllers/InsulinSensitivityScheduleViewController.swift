@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import LoopAlgorithm
 import LoopKit
 
 public enum SaveInsulinSensitivityScheduleResult {

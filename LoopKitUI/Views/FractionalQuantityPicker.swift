@@ -8,7 +8,6 @@
 
 import SwiftUI
 import LoopKit
-import LoopAlgorithm
 
 
 /// Enables selecting the whole and fractional parts of an HKQuantity value in independent pickers.

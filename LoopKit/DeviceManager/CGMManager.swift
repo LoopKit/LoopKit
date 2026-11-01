@@ -120,6 +120,16 @@ public protocol CGMManagerDelegate: DeviceManagerDelegate, CGMManagerStatusObser
     /// - Parameter manager: The manager instance
     /// - Returns: The unique prefix for the credential store
     func credentialStoragePrefix(for manager: CGMManager) -> String
+
+    /// Asks the delegate whether the app can read the CGM directly on Apple Watch
+    ///
+    /// - Parameter manager: The manager instance
+    /// - Returns: true if the app's watch app can read the sensor itself
+    func supportsWatchDirectRead(for manager: CGMManager) -> Bool
+}
+
+public extension CGMManagerDelegate {
+    func supportsWatchDirectRead(for manager: CGMManager) -> Bool { false }
 }
 
 

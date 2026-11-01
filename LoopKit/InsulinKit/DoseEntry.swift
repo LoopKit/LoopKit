@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import LoopAlgorithm
 
 
 public struct DoseEntry: TimelineValue, Hashable {

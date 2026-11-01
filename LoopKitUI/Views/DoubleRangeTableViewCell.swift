@@ -8,7 +8,6 @@
 
 import UIKit
 import LoopKit
-import LoopAlgorithm
 
 protocol DoubleRangeTableViewCellDelegate: AnyObject {
     func doubleRangeTableViewCellDidBeginEditing(_ cell: DoubleRangeTableViewCell)

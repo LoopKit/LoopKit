@@ -9,7 +9,6 @@
 import SwiftUI
 import LoopKit
 import MockKit
-import LoopAlgorithm
 
 struct MockPumpManagerControlsView: UIViewControllerRepresentable {
     private let pumpManager: MockPumpManager

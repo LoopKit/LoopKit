@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import LoopAlgorithm
 
 /// Stored as a string, so a type added later is kept rather than dropped by an older reader.
 public struct CgmEventType: RawRepresentable, Hashable, Codable, Sendable {

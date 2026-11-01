@@ -6,7 +6,6 @@
 //
 
 import XCTest
-import LoopAlgorithm
 @testable import LoopKit
 
 class CachedGlucoseObjectTests: PersistenceControllerTestCase {

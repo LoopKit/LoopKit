@@ -9,7 +9,6 @@
 import CoreData
 import HealthKit
 import os.log
-import LoopAlgorithm
 
 public protocol DoseStoreDelegate: AnyObject {
 
@@ -127,7 +126,7 @@ public final class DoseStore {
         healthKitSampleStore: HealthKitSampleStore? = nil,
         cacheStore: PersistenceController,
         cacheLength: TimeInterval = 24 /* hours */ * 60 /* minutes */ * 60 /* seconds */,
-        longestEffectDuration: TimeInterval = InsulinMath.longestInsulinActivityDuration,
+        longestEffectDuration: TimeInterval = (6 * 60 + 10) * 60,
         syncVersion: Int = 1,
         lastPumpEventsReconciliation: Date? = nil,
         provenanceIdentifier: String = HKSource.default().bundleIdentifier,
@@ -1158,7 +1157,7 @@ extension DoseStore {
                 return doses.map { dose in
                     var dose = dose
                     if dose.type == .suspend && dose.isMutable {
-                        dose.endDate = end ?? self.currentDate() + InsulinMath.defaultInsulinActivityDuration
+                        dose.endDate = end ?? self.currentDate() + (.hours(6) + .minutes(10))
                     }
                     return dose
                 }.sorted { $0.startDate < $1.startDate }

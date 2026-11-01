@@ -9,7 +9,6 @@
 import os.log
 import Foundation
 import CoreData
-import LoopAlgorithm
 
 public protocol DosingDecision: Decodable {
     var automaticDoseRecommendation: AutomaticDoseRecommendation? { get }

@@ -8,7 +8,6 @@
 
 import XCTest
 import HealthKit
-import LoopAlgorithm
 @testable import LoopKit
 
 class SettingsStorePersistenceTests: PersistenceControllerTestCase, SettingsStoreDelegate {

@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import LoopAlgorithm
 
 public struct GlucoseThreshold: Equatable, RawRepresentable {
     public typealias RawValue = [String: Any]

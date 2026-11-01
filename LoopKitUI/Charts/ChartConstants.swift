@@ -11,7 +11,6 @@ import HealthKit
 import SwiftCharts
 import UIKit
 import LoopKit
-import LoopAlgorithm
 
 public enum ChartConstants {
     public static let minimumChartWidthPerHour: CGFloat = 50
