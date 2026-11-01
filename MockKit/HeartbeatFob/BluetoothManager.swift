@@ -73,7 +73,6 @@ protocol BluetoothManagerDelegate: AnyObject {
     func peripheralDidDisconnect(_ manager: BluetoothManager, peripheralManager: PeripheralManager, wasRemoteDisconnect: Bool)
 }
 
-@MainActor
 class BluetoothManager: NSObject {
 
     weak var delegate: BluetoothManagerDelegate?
