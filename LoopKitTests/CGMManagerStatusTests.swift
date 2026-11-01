@@ -45,6 +45,18 @@ class CGMManagerStatusCodableTests: XCTestCase {
         )
     }
 
+    func testDecodeWithoutWarmupAndInoperable() throws {
+        let data = """
+{
+  "hasValidSensorSession" : true
+}
+""".data(using: .utf8)!
+        let decoded = try decoder.decode(CGMManagerStatus.self, from: data)
+        XCTAssertTrue(decoded.hasValidSensorSession)
+        XCTAssertFalse(decoded.inSensorWarmup)
+        XCTAssertFalse(decoded.isInoperable)
+    }
+
     private func assertCGMManagerStatusCodable(_ original: CGMManagerStatus, encodesJSON string: String) throws {
         let data = try encoder.encode(original)
         XCTAssertEqual(String(data: data, encoding: .utf8), string)
