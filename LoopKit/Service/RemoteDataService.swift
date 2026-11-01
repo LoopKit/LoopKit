@@ -11,7 +11,6 @@
 */
 
 import Foundation
-import LoopAlgorithm
 
 public protocol RemoteDataServiceDelegate: AnyObject {
     func fetchDeviceLogs(startDate: Date, endDate: Date) async throws -> [StoredDeviceLogEntry]

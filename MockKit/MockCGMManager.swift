@@ -11,7 +11,6 @@ import LoopKit
 import LoopKitUI // TODO: DeviceStatusBadge references should live in MockKitUI
 import LoopTestingKit
 import UIKit
-import LoopAlgorithm
 
 public struct MockCGMState: GlucoseDisplayable {
     public var isStateValid: Bool

@@ -6,7 +6,7 @@
 //  Copyright © 2021 LoopKit Authors. All rights reserved.
 //
 
-import LoopAlgorithm
+import LoopKit
 
 public protocol DisplayGlucoseUnitObserver {
     func unitDidChange(to displayGlucoseUnit: LoopUnit)

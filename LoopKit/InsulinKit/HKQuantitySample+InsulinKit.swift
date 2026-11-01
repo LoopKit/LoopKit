@@ -6,7 +6,6 @@
 //
 
 import HealthKit
-import LoopAlgorithm
 
 
 /// Defines the id of the dosing decision associated with the dose

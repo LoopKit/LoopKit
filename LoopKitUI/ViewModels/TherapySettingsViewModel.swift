@@ -9,7 +9,6 @@
 import Combine
 import LoopKit
 import SwiftUI
-import LoopAlgorithm
 
 public protocol TherapySettingsViewModelDelegate: AnyObject {
     func syncBasalRateSchedule(items: [RepeatingScheduleValue<Double>], completion: @escaping (Result<BasalRateSchedule, Error>) -> Void)

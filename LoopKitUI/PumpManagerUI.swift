@@ -8,7 +8,6 @@
 import UIKit
 import SwiftUI
 import LoopKit
-import LoopAlgorithm
 
 public struct PumpManagerDescriptor {
     public let identifier: String

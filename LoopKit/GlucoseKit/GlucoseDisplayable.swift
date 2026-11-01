@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import LoopAlgorithm
 
 public protocol GlucoseDisplayable {
     /// Returns whether the current state is valid

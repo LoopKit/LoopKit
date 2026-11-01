@@ -7,7 +7,6 @@
 
 import XCTest
 import CoreData
-import LoopAlgorithm
 @testable import LoopKit
 
 class CgmEventStoreTests: PersistenceControllerTestCase {

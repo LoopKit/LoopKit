@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import LoopAlgorithm
 
 
 /// New content for a stored carb entry, which keeps its identity.

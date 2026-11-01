@@ -8,7 +8,6 @@
 
 import Foundation
 import CoreData
-import LoopAlgorithm
 
 
 public protocol ReservoirValue: TimelineValue {

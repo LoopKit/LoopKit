@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-import LoopAlgorithm
+import LoopKit
 
 
 extension Binding where Value == Double {

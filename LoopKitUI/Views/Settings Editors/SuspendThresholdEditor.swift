@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-import LoopAlgorithm
 import LoopKit
 
 // Also known as "Glucose Safety Limit"

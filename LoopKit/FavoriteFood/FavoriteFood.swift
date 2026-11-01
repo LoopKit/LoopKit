@@ -6,7 +6,6 @@
 //  Copyright © 2023 LoopKit Authors. All rights reserved.
 //
 
-import LoopAlgorithm
 import Foundation
 
 public protocol FavoriteFood {

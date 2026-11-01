@@ -8,7 +8,6 @@
 
 import Foundation
 import LoopKit
-import LoopAlgorithm
 
 public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConvertible {
     public typealias RawValue = [String: Any]

@@ -8,7 +8,6 @@
 
 import SwiftUI
 import LoopKit
-import LoopAlgorithm
 
 public struct CarbQuantityRow: View {
     @Binding private var quantity: Double?

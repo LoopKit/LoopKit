@@ -8,7 +8,6 @@
 
 import SwiftUI
 import Combine
-import LoopAlgorithm
 import LoopKit
 import LoopKitUI
 import MockKit

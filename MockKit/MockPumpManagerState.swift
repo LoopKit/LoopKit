@@ -8,7 +8,6 @@
 
 import Foundation
 import LoopKit
-import LoopAlgorithm
 
 public struct MockPumpManagerState: Equatable {
     public enum DeliverableIncrements: String, CaseIterable {
