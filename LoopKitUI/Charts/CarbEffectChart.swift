@@ -9,7 +9,6 @@ import Foundation
 import LoopKit
 import SwiftCharts
 import UIKit
-import LoopAlgorithm
 
 public class CarbEffectChart: GlucoseChart, ChartProviding {
     /// The chart points for expected carb effect velocity

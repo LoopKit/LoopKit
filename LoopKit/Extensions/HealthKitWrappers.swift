@@ -7,7 +7,6 @@
 //
 
 import HealthKit
-import LoopAlgorithm
 
 public extension LoopUnit {
     var hkUnit: HKUnit {

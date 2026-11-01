@@ -8,7 +8,6 @@
 
 import Foundation
 import HealthKit
-import LoopAlgorithm
 
 extension BidirectionalCollection where Element == GlucoseEffect {
 

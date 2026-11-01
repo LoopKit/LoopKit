@@ -6,7 +6,6 @@
 //  Copyright © 2020 LoopKit Authors. All rights reserved.
 //
 
-import LoopAlgorithm
 
 public struct DeliveryLimits: Equatable {
     public enum Setting: Equatable {

@@ -8,7 +8,6 @@
 
 import HealthKit
 import Foundation
-import LoopAlgorithm
 
 public struct CorrectionRangeOverrides: Equatable {
     public enum Preset: Hashable, CaseIterable {

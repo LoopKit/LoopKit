@@ -7,7 +7,6 @@
 //
 
 import HealthKit
-import LoopAlgorithm
 
 let MetadataKeyGlucoseIsDisplayOnly = "com.loudnate.GlucoseKit.HKMetadataKey.GlucoseIsDisplayOnly"
 let MetadataKeyGlucoseIsBackfill = "com.LoopKit.GlucoseKit.HKMetadataKey.GlucoseIsBackfill"

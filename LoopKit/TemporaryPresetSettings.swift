@@ -7,7 +7,6 @@
 //
 
 import HealthKit
-import LoopAlgorithm
 
 public struct TemporaryPresetSettings: Hashable, Sendable {
     private var targetRangeInMgdl: DoubleRange?

@@ -8,7 +8,6 @@
 
 import Foundation
 import HealthKit
-import LoopAlgorithm
 
 public struct DoubleRange: Sendable {
     public let minValue: Double

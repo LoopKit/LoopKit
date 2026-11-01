@@ -7,7 +7,6 @@
 //
 
 import HealthKit
-import LoopAlgorithm
 
 
 extension HKUnit {

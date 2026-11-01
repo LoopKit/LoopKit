@@ -11,7 +11,6 @@ import LoopKit
 import SwiftCharts
 import HealthKit
 import UIKit
-import LoopAlgorithm
 
 public class GlucoseCarbChart: GlucoseChart, ChartProviding {
 

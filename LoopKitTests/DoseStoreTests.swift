@@ -8,7 +8,6 @@
 import XCTest
 import CoreData
 import HealthKit
-import LoopAlgorithm
 @testable import LoopKit
 
 class DoseStoreDelegateMock: DoseStoreDelegate {
@@ -20,7 +19,10 @@ class DoseStoreDelegateMock: DoseStoreDelegate {
     }
 
     func scheduledBasalHistory(from start: Date, to end: Date) async throws -> [AbsoluteScheduleValue<Double>] {
-        return basal.trimmed(from: start, to: end)
+        return basal.compactMap { entry in
+            guard entry.endDate >= start, entry.startDate <= end else { return nil }
+            return AbsoluteScheduleValue(startDate: max(start, entry.startDate), endDate: min(end, entry.endDate), value: entry.value)
+        }
     }
 }
 

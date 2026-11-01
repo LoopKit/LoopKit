@@ -8,7 +8,6 @@
 
 import Foundation
 import HealthKit
-import LoopAlgorithm
 
 public extension Sequence where Element: TimelineValue {
     /// Returns all elements inmmediately adjacent to the specified date

@@ -10,7 +10,6 @@ import Foundation
 import CoreData
 import HealthKit
 import os.log
-import LoopAlgorithm
 
 public protocol GlucoseStoreDelegate: AnyObject {
 
@@ -121,7 +120,7 @@ public final class GlucoseStore {
         healthKitSampleStore: HealthKitSampleStore? = nil,
         cacheStore: PersistenceController,
         cacheLength: TimeInterval = 60 /* minutes */ * 60 /* seconds */,
-        momentumDataInterval: TimeInterval = GlucoseMath.momentumDataInterval,
+        momentumDataInterval: TimeInterval = 15 * 60,
         provenanceIdentifier: String = HKSource.default().bundleIdentifier
     ) async {
         let cacheLength = max(cacheLength, momentumDataInterval)

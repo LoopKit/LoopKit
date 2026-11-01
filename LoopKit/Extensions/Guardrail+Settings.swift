@@ -7,7 +7,6 @@
 //
 
 import HealthKit
-import LoopAlgorithm
 
 public extension Guardrail where Value == LoopQuantity {
     static let suspendThreshold = Guardrail(absoluteBounds: 67...110, recommendedBounds: 74...80, unit: .milligramsPerDeciliter, startingSuggestion: 80)

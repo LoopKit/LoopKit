@@ -7,7 +7,6 @@
 
 import Foundation
 import HealthKit
-import LoopAlgorithm
 
 
 /// Formats unit quantities as localized strings
