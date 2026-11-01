@@ -537,6 +537,7 @@
 		A9A53E2C2714E5BC0050C0B1 /* CodableDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A53E2B2714E5BC0050C0B1 /* CodableDevice.swift */; };
 		A9A53E2D2714E5BC0050C0B1 /* CodableDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A53E2B2714E5BC0050C0B1 /* CodableDevice.swift */; };
 		A9B0D97E273313EB00D96D93 /* CGMManagerStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B0D97D273313EB00D96D93 /* CGMManagerStatusTests.swift */; };
+		BEF387DBDF7141918B39858C /* CGMManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5CD21A3F04A494993776306 /* CGMManagerTests.swift */; };
 		A9BFA03E245CCCB9001E4AE3 /* DailyQuantityScheduleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BFA03D245CCCB9001E4AE3 /* DailyQuantityScheduleTests.swift */; };
 		A9CFCA8F2582F9FA00A04932 /* OnboardingUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CFCA8E2582F9FA00A04932 /* OnboardingUI.swift */; };
 		A9CFCAA52582FA0400A04932 /* SupportUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CFCAA42582FA0400A04932 /* SupportUI.swift */; };
@@ -1548,6 +1549,7 @@
 		A99C73782339ACDC00C80963 /* ServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTests.swift; sourceTree = "<group>"; };
 		A9A53E2B2714E5BC0050C0B1 /* CodableDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableDevice.swift; sourceTree = "<group>"; };
 		A9B0D97D273313EB00D96D93 /* CGMManagerStatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGMManagerStatusTests.swift; sourceTree = "<group>"; };
+		C5CD21A3F04A494993776306 /* CGMManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGMManagerTests.swift; sourceTree = "<group>"; };
 		A9BFA03D245CCCB9001E4AE3 /* DailyQuantityScheduleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyQuantityScheduleTests.swift; sourceTree = "<group>"; };
 		A9CFCA8E2582F9FA00A04932 /* OnboardingUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingUI.swift; sourceTree = "<group>"; };
 		A9CFCAA42582FA0400A04932 /* SupportUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportUI.swift; sourceTree = "<group>"; };
@@ -2473,6 +2475,7 @@
 				AED7ECEB6B53942F3A25D956 /* WeakSynchronizedDelegateTests.swift */,
 				A95A1D842460CAD50079378D /* CarbValueTests.swift */,
 				A9B0D97D273313EB00D96D93 /* CGMManagerStatusTests.swift */,
+				C5CD21A3F04A494993776306 /* CGMManagerTests.swift */,
 				A9D3FF172A6C2C6F000C891D /* Charts */,
 				C1E7035C24FFFA5C00DAB534 /* CollectionTests.swift */,
 				B455F35525FC0284000ED456 /* CorrectionRangeOverridesTests.swift */,
@@ -4265,6 +4268,7 @@
 				A91263872790B45300C6C950 /* NewPumpEventTests.swift in Sources */,
 				437AFF1D203A45DB008C4892 /* CacheStore.swift in Sources */,
 				A9B0D97E273313EB00D96D93 /* CGMManagerStatusTests.swift in Sources */,
+				BEF387DBDF7141918B39858C /* CGMManagerTests.swift in Sources */,
 				891A3FD12249948A00378B27 /* TemporaryScheduleOverrideHistoryTests.swift in Sources */,
 				A9BFA03E245CCCB9001E4AE3 /* DailyQuantityScheduleTests.swift in Sources */,
 				A99C73772339A67A00C80963 /* GlucoseThresholdTests.swift in Sources */,

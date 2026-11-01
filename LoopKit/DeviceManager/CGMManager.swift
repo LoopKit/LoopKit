@@ -242,7 +242,7 @@ public extension CGMManager {
         delegateQueue.async {
             Task {
                 await self.cgmManagerDelegate?.cgmManagerWantsDeletion(self)
-                completion()
+                self.delegateQueue.async(execute: completion)
             }
         }
     }
