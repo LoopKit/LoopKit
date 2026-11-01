@@ -155,6 +155,8 @@
 		437874D1202FDD2D00A3D8B9 /* reservoir_history_with_rewind_and_prime_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 43D8FED11C7294B80073BE78 /* reservoir_history_with_rewind_and_prime_input.json */; };
 		437874D2202FDD2D00A3D8B9 /* reservoir_history_with_rewind_and_prime_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43D8FED21C7294B80073BE78 /* reservoir_history_with_rewind_and_prime_output.json */; };
 		437874D3202FDD2D00A3D8B9 /* short_basal_dose.json in Resources */ = {isa = PBXBuildFile; fileRef = 43B99B031C74538D00D050F5 /* short_basal_dose.json */; };
+		437874D6202FDD2D00A3D8B9 /* suspend_dose_reconciled.json in Resources */ = {isa = PBXBuildFile; fileRef = 4378B6461ED55F8C000AE785 /* suspend_dose_reconciled.json */; };
+		437874D7202FDD2D00A3D8B9 /* suspend_dose.json in Resources */ = {isa = PBXBuildFile; fileRef = 4378B6421ED55E81000AE785 /* suspend_dose.json */; };
 		4379CFE321102A4100AADC79 /* DeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4379CFE221102A4100AADC79 /* DeviceManager.swift */; };
 		437AFEED2036A156008C4892 /* CachedCarbObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437AFEE92036A156008C4892 /* CachedCarbObject+CoreDataClass.swift */; };
 		437AFEEE2036A156008C4892 /* CachedCarbObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437AFEEA2036A156008C4892 /* CachedCarbObject+CoreDataProperties.swift */; };
@@ -1179,6 +1181,8 @@
 		4369F08E208859E6000E3E45 /* PaddedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddedTextField.swift; sourceTree = "<group>"; };
 		4369F091208B0DFF000E3E45 /* DateAndDurationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateAndDurationTableViewCell.swift; sourceTree = "<group>"; };
 		4369F093208BA001000E3E45 /* TextButtonTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextButtonTableViewCell.swift; sourceTree = "<group>"; };
+		4378B6421ED55E81000AE785 /* suspend_dose.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = suspend_dose.json; sourceTree = "<group>"; };
+		4378B6461ED55F8C000AE785 /* suspend_dose_reconciled.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = suspend_dose_reconciled.json; sourceTree = "<group>"; };
 		4379CFE221102A4100AADC79 /* DeviceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceManager.swift; sourceTree = "<group>"; };
 		437AFEE92036A156008C4892 /* CachedCarbObject+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CachedCarbObject+CoreDataClass.swift"; sourceTree = "<group>"; };
 		437AFEEA2036A156008C4892 /* CachedCarbObject+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CachedCarbObject+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -2613,6 +2617,8 @@
 				43D8FED21C7294B80073BE78 /* reservoir_history_with_rewind_and_prime_output.json */,
 				C1FAC06228C7B0A100754AE2 /* reservoir_iob_test.json */,
 				43B99B031C74538D00D050F5 /* short_basal_dose.json */,
+				4378B6461ED55F8C000AE785 /* suspend_dose_reconciled.json */,
+				4378B6421ED55E81000AE785 /* suspend_dose.json */,
 				C1D56375296B3F5E00BA15EC /* reservoir_for_iob_missing.json */,
 			);
 			path = InsulinKit;
@@ -3562,6 +3568,7 @@
 				C16BC0CA2A60351B00BDC713 /* far_future_high_bg_forecast_after_6_hours.json in Resources */,
 				437874D1202FDD2D00A3D8B9 /* reservoir_history_with_rewind_and_prime_input.json in Resources */,
 				437874CA202FDD2D00A3D8B9 /* normalized_doses.json in Resources */,
+				437874D7202FDD2D00A3D8B9 /* suspend_dose.json in Resources */,
 				437874BD202FDD2D00A3D8B9 /* iob_from_bolus_120min_output.json in Resources */,
 				437874D2202FDD2D00A3D8B9 /* reservoir_history_with_rewind_and_prime_output.json in Resources */,
 				437874BF202FDD2D00A3D8B9 /* iob_from_bolus_240min_output.json in Resources */,
@@ -3570,6 +3577,7 @@
 				E93E865A24DC744300FF40C8 /* effect_from_basal_output_exponential.json in Resources */,
 				437874D3202FDD2D00A3D8B9 /* short_basal_dose.json in Resources */,
 				C1FAC06328C7B0A100754AE2 /* reservoir_iob_test.json in Resources */,
+				437874D6202FDD2D00A3D8B9 /* suspend_dose_reconciled.json in Resources */,
 				437874C3202FDD2D00A3D8B9 /* iob_from_bolus_420min_output.json in Resources */,
 				437874C2202FDD2D00A3D8B9 /* iob_from_bolus_360min_output.json in Resources */,
 				C16BC0D92A60351B00BDC713 /* recommend_temp_basal_start_low_end_in_range.json in Resources */,

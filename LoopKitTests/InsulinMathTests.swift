@@ -214,6 +214,22 @@ class InsulinMathTests: XCTestCase {
     }
     
 
+    func testReconcileSuspend() {
+        let input = loadDoseFixture("suspend_dose")
+        let output = loadDoseFixture("suspend_dose_reconciled")
+
+        let reconciled = input.reconciled()
+
+        XCTAssertEqual(output.count, reconciled.count)
+
+        for (expected, calculated) in zip(output, reconciled) {
+            XCTAssertEqual(expected.startDate, calculated.startDate)
+            XCTAssertEqual(expected.endDate, calculated.endDate)
+            XCTAssertEqual(expected.value, calculated.value)
+            XCTAssertEqual(expected.unit, calculated.unit)
+        }
+    }
+
     func testReconcileTempBasals() {
         // Fixture contains numerous overlapping temp basals, as well as a Suspend event interleaved with a temp basal
         let input = loadDoseFixture("reconcile_history_input")
