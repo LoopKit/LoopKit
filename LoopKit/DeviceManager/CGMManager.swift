@@ -51,8 +51,8 @@ extension CGMManagerStatus: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.hasValidSensorSession = try container.decode(Bool.self, forKey: .hasValidSensorSession)
-        self.inSensorWarmup = try container.decode(Bool.self, forKey: .inSensorWarmup)
-        self.isInoperable = try container.decode(Bool.self, forKey: .isInoperable)
+        self.inSensorWarmup = try container.decodeIfPresent(Bool.self, forKey: .inSensorWarmup) ?? false
+        self.isInoperable = try container.decodeIfPresent(Bool.self, forKey: .isInoperable) ?? false
         self.lastCommunicationDate = try container.decodeIfPresent(Date.self, forKey: .lastCommunicationDate)
         self.device = try container.decodeIfPresent(CodableDevice.self, forKey: .device)?.device
     }
