@@ -129,6 +129,8 @@
 		4352A73C20DECF0700CAC200 /* CGMManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4352A73B20DECF0600CAC200 /* CGMManager.swift */; };
 		5B16B7C672EBB933AAC82F77 /* SmartwatchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F53F70BD36C31A8ABBF7893D /* SmartwatchManager.swift */; };
 		081DA9793121A5AD1280FA0F /* SmartwatchManager+Host.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D01F9DCAFEA1AE864C21F59 /* SmartwatchManager+Host.swift */; };
+		5A7C0FFE0000000000000B02 /* SmartwatchRemoteActionPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7C0FFE0000000000000B01 /* SmartwatchRemoteActionPolicy.swift */; };
+		87DDB056C1A2676A74A7174C /* SmartwatchRemoteActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5E88CCC0907F94409DA4E2 /* SmartwatchRemoteActions.swift */; };
 		4353D16F203D104F007B4ECD /* CarbStoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4353D16E203D104F007B4ECD /* CarbStoreError.swift */; };
 		4353D170203D3E5C007B4ECD /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4301582C1C7ECD7A00B64B63 /* HealthKit.framework */; };
 		4353D173203D3E7E007B4ECD /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4353D172203D3E7E007B4ECD /* CoreData.framework */; };
@@ -351,6 +353,7 @@
 		89653C822473592600E1BAA5 /* CarbRatioScheduleEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89653C812473592600E1BAA5 /* CarbRatioScheduleEditor.swift */; };
 		89653C8424738D2B00E1BAA5 /* BasalRateScheduleEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89653C8324738D2B00E1BAA5 /* BasalRateScheduleEditor.swift */; };
 		8974AFC022120D7A0043F01B /* TemporaryScheduleOverrideTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8974AFBF22120D7A0043F01B /* TemporaryScheduleOverrideTests.swift */; };
+		5A7C0FFE0000000000000B05 /* SmartwatchRemoteActionPolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7C0FFE0000000000000B04 /* SmartwatchRemoteActionPolicyTests.swift */; };
 		898B4E75246CCAB50053C484 /* Binding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898B4E74246CCAB50053C484 /* Binding.swift */; };
 		898B4E77246DAE280053C484 /* GlucoseRangePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898B4E76246DAE280053C484 /* GlucoseRangePicker.swift */; };
 		898B4E7B246DC6A70053C484 /* CorrectionRangeScheduleEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898B4E7A246DC6A70053C484 /* CorrectionRangeScheduleEditor.swift */; };
@@ -608,6 +611,8 @@
 		A9E675E222713F4700E25293 /* CGMManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4352A73B20DECF0600CAC200 /* CGMManager.swift */; };
 		E56B6E01B9A25F04279DF442 /* SmartwatchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F53F70BD36C31A8ABBF7893D /* SmartwatchManager.swift */; };
 		6C6572A545C43AB7FB716CDD /* SmartwatchManager+Host.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D01F9DCAFEA1AE864C21F59 /* SmartwatchManager+Host.swift */; };
+		5A7C0FFE0000000000000B03 /* SmartwatchRemoteActionPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7C0FFE0000000000000B01 /* SmartwatchRemoteActionPolicy.swift */; };
+		79BFB4BE74EFBCDAEC647046 /* SmartwatchRemoteActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5E88CCC0907F94409DA4E2 /* SmartwatchRemoteActions.swift */; };
 		A9E675E322713F4700E25293 /* CarbStoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4353D16E203D104F007B4ECD /* CarbStoreError.swift */; };
 		A9E675E922713F4700E25293 /* LoopKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D8FDCE1C728FDF0073BE78 /* LoopKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A9E675F3227140D800E25293 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9E675F2227140D800E25293 /* CoreData.framework */; };
@@ -1180,6 +1185,9 @@
 		4352A73B20DECF0600CAC200 /* CGMManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGMManager.swift; sourceTree = "<group>"; };
 		F53F70BD36C31A8ABBF7893D /* SmartwatchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartwatchManager.swift; sourceTree = "<group>"; };
 		8D01F9DCAFEA1AE864C21F59 /* SmartwatchManager+Host.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SmartwatchManager+Host.swift"; sourceTree = "<group>"; };
+		5A7C0FFE0000000000000B01 /* SmartwatchRemoteActionPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartwatchRemoteActionPolicy.swift; sourceTree = "<group>"; };
+		2D5E88CCC0907F94409DA4E2 /* SmartwatchRemoteActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartwatchRemoteActions.swift; sourceTree = "<group>"; };
+		5A7C0FFE0000000000000B04 /* SmartwatchRemoteActionPolicyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartwatchRemoteActionPolicyTests.swift; sourceTree = "<group>"; };
 		4353D16E203D104F007B4ECD /* CarbStoreError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarbStoreError.swift; sourceTree = "<group>"; };
 		4353D172203D3E7E007B4ECD /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		4359E74D1EEA1FBC0022EF0C /* FoodEmojiDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoodEmojiDataSource.swift; sourceTree = "<group>"; };
@@ -2519,6 +2527,7 @@
 				C14604812E0087AE00153DFD /* TemporaryPresetScheduleTests.swift */,
 				891A3FD02249948A00378B27 /* TemporaryScheduleOverrideHistoryTests.swift */,
 				8974AFBF22120D7A0043F01B /* TemporaryScheduleOverrideTests.swift */,
+				5A7C0FFE0000000000000B04 /* SmartwatchRemoteActionPolicyTests.swift */,
 				E93C86AF24CF7C470073089B /* TherapySettingsTests.swift */,
 				1D70C40C26F01D9F00C62570 /* VersionCheckServiceTests.swift */,
 			);
@@ -2998,6 +3007,8 @@
 				4352A73B20DECF0600CAC200 /* CGMManager.swift */,
 				F53F70BD36C31A8ABBF7893D /* SmartwatchManager.swift */,
 				8D01F9DCAFEA1AE864C21F59 /* SmartwatchManager+Host.swift */,
+				5A7C0FFE0000000000000B01 /* SmartwatchRemoteActionPolicy.swift */,
+				2D5E88CCC0907F94409DA4E2 /* SmartwatchRemoteActions.swift */,
 				A9A53E2B2714E5BC0050C0B1 /* CodableDevice.swift */,
 				B4102D3124ABB068005D460B /* DeviceLifecycleProgress.swift */,
 				4379CFE221102A4100AADC79 /* DeviceManager.swift */,
@@ -4145,6 +4156,8 @@
 				4352A73C20DECF0700CAC200 /* CGMManager.swift in Sources */,
 				5B16B7C672EBB933AAC82F77 /* SmartwatchManager.swift in Sources */,
 				081DA9793121A5AD1280FA0F /* SmartwatchManager+Host.swift in Sources */,
+				5A7C0FFE0000000000000B02 /* SmartwatchRemoteActionPolicy.swift in Sources */,
+				87DDB056C1A2676A74A7174C /* SmartwatchRemoteActions.swift in Sources */,
 				4353D16F203D104F007B4ECD /* CarbStoreError.swift in Sources */,
 				89F6E30F244A1A5D00CB9E15 /* Guardrail.swift in Sources */,
 				A985464F251449FE0099C1A6 /* NotificationSettings.swift in Sources */,
@@ -4225,6 +4238,7 @@
 				B4B7C1772603F5F6007379F6 /* HKUnitTests.swift in Sources */,
 				A9DF02C924F724D900B7C988 /* CriticalEventLogTests.swift in Sources */,
 				8974AFC022120D7A0043F01B /* TemporaryScheduleOverrideTests.swift in Sources */,
+				5A7C0FFE0000000000000B05 /* SmartwatchRemoteActionPolicyTests.swift in Sources */,
 				A91263872790B45300C6C950 /* NewPumpEventTests.swift in Sources */,
 				437AFF1D203A45DB008C4892 /* CacheStore.swift in Sources */,
 				A9B0D97E273313EB00D96D93 /* CGMManagerStatusTests.swift in Sources */,
@@ -4489,6 +4503,8 @@
 				A9E675E222713F4700E25293 /* CGMManager.swift in Sources */,
 				E56B6E01B9A25F04279DF442 /* SmartwatchManager.swift in Sources */,
 				6C6572A545C43AB7FB716CDD /* SmartwatchManager+Host.swift in Sources */,
+				5A7C0FFE0000000000000B03 /* SmartwatchRemoteActionPolicy.swift in Sources */,
+				79BFB4BE74EFBCDAEC647046 /* SmartwatchRemoteActions.swift in Sources */,
 				A9E675E322713F4700E25293 /* CarbStoreError.swift in Sources */,
 				AC5CD58D81CB29E1D0B38C57 /* LoopUnit.swift in Sources */,
 				CC96AD4965829FFF63DCFDB3 /* LoopQuantity.swift in Sources */,
