@@ -9,7 +9,6 @@ import Foundation
 import LoopKit
 import SwiftCharts
 import UIKit
-import LoopAlgorithm
 
 
 public class IOBChart: ChartProviding {
@@ -92,6 +91,7 @@ public extension IOBChart {
 
         let layers: [ChartLayer?] = [
             gridLayer,
+            nowLineLayer(xAxisLayer: xAxisLayer, yAxisLayer: yAxisLayer, color: colors.insulinTint),
             xAxisLayer,
             yAxisLayer,
             zeroGuidelineLayer,

@@ -6,7 +6,6 @@
 //
 
 import HealthKit
-import LoopAlgorithm
 
 public struct StoredGlucoseSample: GlucoseSampleValue, Equatable {
     public let uuid: UUID?  // Note this is the UUID from HealthKit.  Nil if not (yet) stored in HealthKit.

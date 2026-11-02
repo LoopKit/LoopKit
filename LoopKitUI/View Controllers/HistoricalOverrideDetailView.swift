@@ -7,7 +7,6 @@
 //
 import SwiftUI
 import LoopKit
-import LoopAlgorithm
 
 
 public struct HistoricalOverrideDetailView: UIViewControllerRepresentable {

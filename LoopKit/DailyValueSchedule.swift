@@ -8,7 +8,6 @@
 
 import Foundation
 import HealthKit
-import LoopAlgorithm
 
 
 public struct RepeatingScheduleValue<T> {

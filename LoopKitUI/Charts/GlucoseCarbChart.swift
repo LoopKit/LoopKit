@@ -11,7 +11,6 @@ import LoopKit
 import SwiftCharts
 import HealthKit
 import UIKit
-import LoopAlgorithm
 
 public class GlucoseCarbChart: GlucoseChart, ChartProviding {
 
@@ -68,7 +67,7 @@ extension GlucoseCarbChart {
         // Grid lines
         let gridLayer = ChartGuideLinesForValuesLayer(xAxis: xAxisLayer.axis, yAxis: yAxisLayer.axis, settings: guideLinesLayerSettings, axisValuesX: Array(xAxisValues.dropFirst().dropLast()), axisValuesY: yAxisValues)
 
-        let circles = ChartPointsScatterCirclesLayer(xAxis: xAxisLayer.axis, yAxis: yAxisLayer.axis, chartPoints: glucosePoints, displayDelay: 0, itemSize: CGSize(width: 4, height: 4), itemFillColor: colors.glucoseTint, optimized: true)
+        let circles = GlucoseHistoryLayer(xAxis: xAxisLayer.axis, yAxis: yAxisLayer.axis, chartPoints: glucosePoints, displayDelay: 0, itemSize: CGSize(width: 4, height: 4), itemFillColor: colors.glucoseTint)
         
         // Carb points are highlighted in green with a circle 22 points in size
         let carbPoints = generateCarbChartPoints(carbEntries, fixedYValue: yAxisValues.min(by: { $0.scalar < $1.scalar })?.scalar, overrideColor: colors.carbTint)
@@ -93,6 +92,7 @@ extension GlucoseCarbChart {
 
         let layers: [ChartLayer?] = [
             gridLayer,
+            nowLineLayer(xAxisLayer: xAxisLayer, yAxisLayer: yAxisLayer, color: colors.glucoseTint),
             xAxisLayer,
             yAxisLayer,
             glucoseChartCache?.highlightLayer,
@@ -121,7 +121,11 @@ extension GlucoseCarbChart {
         } else {
             axisValueGenerator = { ChartAxisValueDouble($0) }
         }
-        
+
+        if let fixed = fixedYAxisValues(axisValueGenerator: axisValueGenerator) {
+            return fixed
+        }
+
         let yAxisValues = ChartAxisValuesStaticGenerator.generateYAxisValuesUsingLinearSegmentStep(chartPoints: points,
             minSegmentCount: 2,
             maxSegmentCount: maxYAxisSegmentCount,

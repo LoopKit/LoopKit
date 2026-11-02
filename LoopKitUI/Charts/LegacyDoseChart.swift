@@ -9,7 +9,6 @@ import Foundation
 import LoopKit
 import SwiftCharts
 import UIKit
-import LoopAlgorithm
 
 fileprivate struct LegacyDosePointsCache {
     let basal: [ChartPoint]
@@ -18,12 +17,34 @@ fileprivate struct LegacyDosePointsCache {
     let highlight: [ChartPoint]
 }
 
+/// A dose to chart, with units net of the scheduled basal
+public struct ChartedDose {
+    public enum DoseType {
+        case bolus
+        case basal
+    }
+
+    public var type: DoseType
+    public var startDate: Date
+    public var endDate: Date
+    public var volume: Double
+    public var netBasalUnits: Double
+
+    public init(type: DoseType, startDate: Date, endDate: Date, volume: Double, netBasalUnits: Double) {
+        self.type = type
+        self.startDate = startDate
+        self.endDate = endDate
+        self.volume = volume
+        self.netBasalUnits = netBasalUnits
+    }
+}
+
 public class LegacyDoseChart: ChartProviding {
     public init() {
         doseEntries = []
     }
 
-    public var doseEntries: [BasalRelativeDose] {
+    public var doseEntries: [ChartedDose] {
         didSet {
             pointsCache = nil
         }

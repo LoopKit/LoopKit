@@ -9,7 +9,6 @@
 import XCTest
 import LoopKit
 import SwiftCharts
-import LoopAlgorithm
 @testable import LoopKitUI
 
 class PredictedGlucoseChartTests: XCTestCase {
@@ -137,6 +136,44 @@ class PredictedGlucoseChartTests: XCTestCase {
         XCTAssertEqual(predictedGlucosePoints[4].y.scalar, 600)
         XCTAssertEqual(predictedGlucosePoints[5].y.scalar, 600)
         XCTAssertEqual(predictedGlucosePoints[6].y.scalar, 600)
+    }
+
+    func testFixedScaleClampsPredictionsToAxis() {
+        let glucoseValues = [
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 110), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 150), startDate: Date())
+        ]
+        let predictedGlucoseValues = [
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 150), startDate: Date()),
+            GlucoseValueTestable(quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 520), startDate: Date())
+        ]
+        let predictedGlucoseChart = PredictedGlucoseChart(predictedGlucoseBounds: .default)
+        predictedGlucoseChart.usesFixedScale = true
+        predictedGlucoseChart.setGlucoseValues(glucoseValues)
+        predictedGlucoseChart.setPredictedGlucoseValues(predictedGlucoseValues)
+
+        XCTAssertEqual(predictedGlucoseChart.chartMinimumValue?.doubleValue(for: .milligramsPerDeciliter), 40)
+        XCTAssertEqual(predictedGlucoseChart.chartMaximumValue?.doubleValue(for: .milligramsPerDeciliter), 400)
+        XCTAssertEqual(predictedGlucoseChart.predictedGlucosePoints.map { $0.y.scalar }, [150, 400])
+    }
+
+    func testFixedScaleAxisValues() {
+        XCTAssertEqual(GlucoseChart.fixedScaleAxisValues(for: .milligramsPerDeciliter), [40, 100, 200, 300, 400])
+        XCTAssertEqual(GlucoseChart.fixedScaleAxisValues(for: .millimolesPerLiter), [2, 6, 10, 14, 18, 22])
+    }
+
+    func testManualGlucoseEntriesAreMarked() {
+        let quantity = LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 120)
+        let glucoseValues: [GlucoseValue] = [
+            StoredGlucoseSample(startDate: Date(), quantity: quantity),
+            StoredGlucoseSample(startDate: Date(), quantity: quantity, wasUserEntered: true),
+            StoredGlucoseSample(startDate: Date(), quantity: quantity, isDisplayOnly: true, wasUserEntered: true),
+            GlucoseValueTestable(quantity: quantity, startDate: Date())
+        ]
+        let predictedGlucoseChart = PredictedGlucoseChart(predictedGlucoseBounds: .default, yAxisStepSizeMGDLOverride: yAxisStepSizeMGDL)
+        predictedGlucoseChart.setGlucoseValues(glucoseValues)
+
+        XCTAssertEqual(predictedGlucoseChart.glucosePoints.map { $0 is ManualGlucoseChartPoint }, [false, true, false, false])
     }
 }
 

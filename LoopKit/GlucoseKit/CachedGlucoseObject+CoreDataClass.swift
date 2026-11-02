@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 import HealthKit
-import LoopAlgorithm
 
 
 class CachedGlucoseObject: NSManagedObject {

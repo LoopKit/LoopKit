@@ -9,7 +9,6 @@
 import UIKit
 import LoopKit
 import LoopKitUI
-import LoopAlgorithm
 
 
 class MasterViewController: UITableViewController {

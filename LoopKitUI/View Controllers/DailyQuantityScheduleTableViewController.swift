@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import LoopAlgorithm
+import LoopKit
 
 
 public class DailyQuantityScheduleTableViewController: SingleValueScheduleTableViewController {

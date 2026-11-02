@@ -9,7 +9,6 @@ import Foundation
 import LoopKit
 import SwiftCharts
 import UIKit
-import LoopAlgorithm
 
 public class COBChart: ChartProviding {
     public init() {
@@ -77,6 +76,7 @@ public extension COBChart {
 
         let layers: [ChartLayer?] = [
             gridLayer,
+            nowLineLayer(xAxisLayer: xAxisLayer, yAxisLayer: yAxisLayer, color: colors.carbTint),
             xAxisLayer,
             yAxisLayer,
             cobChartCache?.highlightLayer,

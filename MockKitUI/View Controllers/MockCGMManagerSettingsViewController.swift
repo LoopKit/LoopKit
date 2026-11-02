@@ -8,7 +8,6 @@
 
 import UIKit
 import Combine
-import LoopAlgorithm
 import LoopKit
 import LoopKitUI
 import LoopTestingKit

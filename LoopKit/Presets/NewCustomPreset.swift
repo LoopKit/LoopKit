@@ -6,7 +6,6 @@
 //  Copyright © 2025 LoopKit Authors. All rights reserved.
 //
 
-import LoopAlgorithm
 import UIKit
 
 extension PresetScheduleRepeatOptions: CustomStringConvertible {

@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-import LoopAlgorithm
 import LoopKit
 
 struct ExistingPresetRangeEdit: View {

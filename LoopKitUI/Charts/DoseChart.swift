@@ -9,7 +9,6 @@ import Foundation
 import LoopKit
 import SwiftCharts
 import UIKit
-import LoopAlgorithm
 
 fileprivate struct DosePointsCache {
     let autoBolus: [ChartPoint]
@@ -97,6 +96,7 @@ public extension DoseChart {
 
         let layers: [ChartLayer?] = [
             gridLayer,
+            nowLineLayer(xAxisLayer: xAxisLayer, yAxisLayer: yAxisLayer, color: colors.insulinTint),
             manualBolusLayer,
             autoBolusLayer
         ]

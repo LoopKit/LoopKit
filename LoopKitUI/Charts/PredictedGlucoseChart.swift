@@ -9,7 +9,6 @@ import Foundation
 import LoopKit
 import SwiftCharts
 import UIKit
-import LoopAlgorithm
 
 public class PredictedGlucoseChart: GlucoseChart, ChartProviding {
 
@@ -32,6 +31,9 @@ public class PredictedGlucoseChart: GlucoseChart, ChartProviding {
 
     /// The chart points for alternate predicted glucose
     public private(set) var alternatePredictedGlucosePoints: [ChartPoint]?
+
+    /// The chart points for the forecast a low guard checks, drawn dotted
+    public private(set) var guardPredictedGlucosePoints: [ChartPoint]?
 
     public var targetGlucoseSchedule: GlucoseRangeSchedule? {
         didSet {
@@ -77,6 +79,7 @@ extension PredictedGlucoseChart {
         glucosePoints = []
         predictedGlucosePoints = []
         alternatePredictedGlucosePoints = nil
+        guardPredictedGlucosePoints = nil
         targetGlucosePoints = [TargetChartBar]()
 
         glucoseChartCache = nil
@@ -136,6 +139,13 @@ extension PredictedGlucoseChart {
             alternatePrediction = ChartPointsLineLayer(xAxis: xAxisLayer.axis, yAxis: yAxisLayer.axis, lineModels: [lineModel])
         }
 
+        var guardPrediction: ChartLayer?
+
+        if let guardPoints = guardPredictedGlucosePoints, guardPoints.count > 1 {
+            let lineModel = ChartLineModel(chartPoints: guardPoints, lineColor: colors.glucoseTint, lineWidth: 1.5, animDuration: 0.0001, animDelay: 0, dashPattern: [2, 3])
+            guardPrediction = ChartPointsLineLayer(xAxis: xAxisLayer.axis, yAxis: yAxisLayer.axis, lineModels: [lineModel])
+        }
+
         var prediction: ChartLayer?
 
         if predictedGlucosePoints.count > 1 {
@@ -165,10 +175,12 @@ extension PredictedGlucoseChart {
 
         let layers: [ChartLayer?] = [
             gridLayer,
+            nowLineLayer(xAxisLayer: xAxisLayer, yAxisLayer: yAxisLayer, color: colors.glucoseTint),
             targetsLayer,
             xAxisLayer,
             yAxisLayer,
             glucoseChartCache?.highlightLayer,
+            guardPrediction,
             prediction,
             alternatePrediction,
             circles
@@ -184,7 +196,7 @@ extension PredictedGlucoseChart {
     
     private func determineYAxisValues(axisLabelSettings: ChartLabelSettings? = nil) -> [ChartAxisValue] {
         let points = [
-            glucosePoints, predictedGlucosePoints,
+            glucosePoints, predictedGlucosePoints, guardPredictedGlucosePoints ?? [],
             targetGlucosePoints.flatMap { $0.points },
             glucoseDisplayRangePoints
         ].flatMap { $0 }
@@ -195,7 +207,11 @@ extension PredictedGlucoseChart {
         } else {
             axisValueGenerator = { ChartAxisValueDouble($0) }
         }
-        
+
+        if let fixed = fixedYAxisValues(axisValueGenerator: axisValueGenerator) {
+            return fixed
+        }
+
         let yAxisValues = ChartAxisValuesStaticGenerator.generateYAxisValuesUsingLinearSegmentStep(chartPoints: points,
             minSegmentCount: 2,
             maxSegmentCount: maxYAxisSegmentCount,
@@ -220,6 +236,10 @@ extension PredictedGlucoseChart {
 
     public func setAlternatePredictedGlucoseValues(_ glucoseValues: [GlucoseValue]) {
         alternatePredictedGlucosePoints = glucosePointsFromValues(glucoseValues)
+    }
+
+    public func setGuardPredictedGlucoseValues(_ glucoseValues: [GlucoseValue]) {
+        guardPredictedGlucosePoints = glucosePointsFromValues(clampPredictedGlucoseValues(glucoseValues))
     }
 }
 

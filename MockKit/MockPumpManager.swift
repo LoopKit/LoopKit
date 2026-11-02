@@ -9,7 +9,6 @@
 import HealthKit
 import LoopKit
 import LoopTestingKit
-import LoopAlgorithm
 
 @MainActor
 public protocol MockPumpManagerStateObserver {

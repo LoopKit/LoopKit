@@ -8,7 +8,6 @@
 
 import HealthKit
 import CoreData
-import LoopAlgorithm
 
 public struct StoredCarbEntry: CarbEntry, Equatable, Hashable {
 
