@@ -141,10 +141,24 @@ public protocol ExclusiveDeviceControl: DeviceConfigurationSharing, DeviceManage
     /// Whether taking control with this export and local state means finding the device first
     /// (the host may need to keep its screen or radio awake). Default: false.
     static func takeControlNeedsSearch(adopting configuration: SharedDeviceConfiguration, localState: [String: Any]?) -> Bool
+
+    /// The kit's name for ending the device from this controller (for example "Deactivate Pod"),
+    /// set only while the device has failed for good: a controller away from the one that set the
+    /// device up can still end it, and its alarm. Default: nil.
+    var failedDeviceDeactivationTitle: String? { get }
+
+    /// Ends a failed device and forgets it, as the kit's own deactivation does: its last delivery is
+    /// booked here. Throws if the device did not confirm; then nothing is forgotten.
+    func deactivateFailedDevice() async throws
+
+    /// Another controller ended the device and booked its last delivery: forget it, booking nothing.
+    /// Only a device this controller released.
+    func forgetDeviceDeactivatedElsewhere() async
 }
 
 public extension ExclusiveDeviceControl {
     var isControlReady: Bool { true }
+    var failedDeviceDeactivationTitle: String? { nil }
     static func takeControlNeedsSearch(adopting configuration: SharedDeviceConfiguration, localState: [String: Any]?) -> Bool { false }
 }
 
