@@ -51,7 +51,7 @@ public protocol PumpManagerDelegate: DeviceManagerDelegate, PumpManagerStatusObs
     func pumpManagerMustProvideBLEHeartbeat(_ pumpManager: PumpManager) -> Bool
 
     /// Informs the delegate that the manager is deactivating and should be deleted
-    func pumpManagerWillDeactivate(_ pumpManager: PumpManager)
+    func pumpManagerWantsDeletion(_ pumpManager: PumpManager) async
 
     /// Informs the delegate that the hardware this PumpManager has been reporting for has been replaced.
     func pumpManagerPumpWasReplaced(_ pumpManager: PumpManager)
@@ -260,12 +260,8 @@ public protocol PumpManager: DeviceManager {
     ///   - result: The delivery limits set or an error describing why the command failed
     func syncDeliveryLimits(limits deliveryLimits: DeliveryLimits, completion: @escaping (_ result: Result<DeliveryLimits, Error>) -> Void)
     
-    ///
-    /// Warn the pump manager that it will be deactivated
-    ///
-    /// - Parameters:
-    ///   - completion: A closure called after preparations are complete
-    func prepareForDeactivation(_ completion: @escaping (Error?) -> Void)
+    /// Tears the manager down and asks its delegate to remove it. Returns once the delegate has removed it.
+    func delete() async
 }
 
 
@@ -283,19 +279,8 @@ public extension PumpManager {
         return supportedBolusVolumes.filter({$0 <= units}).max() ?? 0
     }
     
-    func prepareForDeactivation(_ completion: @escaping (Error?) -> Void) {
-        notifyDelegateOfDeactivation() { completion(nil) }
-    }
-
-    /// Convenience wrapper for notifying the delegate of deactivation on the delegate queue
-    ///
-    /// - Parameters:
-    ///   - completion: A closure called from the delegate queue after the delegate is called
-    func notifyDelegateOfDeactivation(completion: @escaping () -> Void) {
-        delegateQueue.async {
-            self.pumpManagerDelegate?.pumpManagerWillDeactivate(self)
-            completion()
-        }
+    func delete() async {
+        await pumpManagerDelegate?.pumpManagerWantsDeletion(self)
     }
 }
 

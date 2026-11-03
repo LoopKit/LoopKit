@@ -196,10 +196,11 @@ public protocol CGMManager: DeviceManager {
     /// - Parameter observer: The observing object
     func removeStatusObserver(_ observer: CGMManagerStatusObserver)
 
-    /// Requests that the manager completes its deletion process
+    /// Tears the manager down and asks its delegate to remove it. Returns once the delegate has removed it.
     ///
-    /// - Parameter completion: Action to take after the CGM manager is deleted
-    func delete(completion: @escaping () -> Void)
+    /// Implementations that tear down first should finish that teardown, including awaiting any alert
+    /// retractions, before awaiting `cgmManagerDelegate?.cgmManagerWantsDeletion(self)`.
+    func delete() async
 }
 
 public extension CGMManager {
@@ -234,19 +235,6 @@ public extension CGMManager {
     /// Default is no delay to store samples in HealthKit
     static var healthKitStorageDelay: TimeInterval { 0 }
 
-    /// Convenience wrapper for notifying the delegate of deletion on the delegate queue
-    ///
-    /// - Parameters:
-    ///   - completion: A closure called from the delegate queue after the delegate is called
-    func notifyDelegateOfDeletion(completion: @escaping () -> Void) {
-        delegateQueue.async {
-            Task {
-                await self.cgmManagerDelegate?.cgmManagerWantsDeletion(self)
-                completion()
-            }
-        }
-    }
-    
     func addStatusObserver(_ observer: CGMManagerStatusObserver, queue: DispatchQueue) {
         // optional since a CGM manager may not support status observers
     }
@@ -256,7 +244,7 @@ public extension CGMManager {
     }
 
     /// Override this default behaviour if the CGM Manager needs to complete tasks before being deleted
-    func delete(completion: @escaping () -> Void) {
-        notifyDelegateOfDeletion(completion: completion)
+    func delete() async {
+        await cgmManagerDelegate?.cgmManagerWantsDeletion(self)
     }
 }
