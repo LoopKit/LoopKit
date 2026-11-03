@@ -415,11 +415,11 @@ public protocol SmartwatchManagerDelegate: AnyObject {
 
     /// Asks the host to remove the manager.
     ///
-    /// **Call it** (through `notifyDelegateOfDeletion`) when the user deletes the
-    /// watch in the plugin's settings, after the plugin has stopped its own work.
-    /// The host then drops the manager and its saved state, and turns off the
-    /// user's watch permissions, so a later watch starts with every remote action
-    /// off. The host calls nothing on the manager afterwards.
+    /// **Call it** from `delete()` when the user deletes the watch in the plugin's
+    /// settings, after the plugin has stopped its own work. The host then drops
+    /// the manager and its saved state, and turns off the user's watch permissions,
+    /// so a later watch starts with every remote action off. The host calls nothing
+    /// on the manager afterwards.
     func smartwatchManagerWantsDeletion(_ manager: SmartwatchManager) async
 
     /// Asks the host to send the current snapshot again.
@@ -564,8 +564,8 @@ public extension SmartwatchManagerDelegate {
 /// 2. The host sets `smartwatchManagerDelegate`, then sends the first snapshot.
 /// 3. From then on the host calls `watchDataDidUpdate` for new data and, with
 ///    `.alerts`, the alert methods; the plugin calls the delegate.
-/// 4. When the user deletes the watch, the plugin stops its work and calls
-///    `notifyDelegateOfDeletion`; the host drops it.
+/// 4. When the user deletes the watch, the plugin's `delete()` stops its work
+///    and awaits `smartwatchManagerWantsDeletion`; the host drops it.
 ///
 /// **Threads:** the host calls the `@MainActor` methods on the main actor and
 /// expects them to return quickly: send to the watch asynchronously. The plugin
@@ -666,13 +666,14 @@ public protocol SmartwatchManager: AnyObject {
     @MainActor
     func watchHostDidReceiveURL(_ url: URL) -> Bool
 
-    /// Stops the manager and asks the host to remove it.
+    /// Stops the manager and asks the host to remove it. Returns once the host has
+    /// removed it.
     ///
     /// **Called** when the user deletes the watch, usually from the plugin's own
-    /// settings. Stop everything (Bluetooth, timers, sending), retract device
-    /// alerts, then call `notifyDelegateOfDeletion(completion:)`. The default does
-    /// only the last step.
-    func delete(completion: @escaping () -> Void)
+    /// settings. Stop everything (Bluetooth, timers, sending) and retract device
+    /// alerts, then await `smartwatchManagerDelegate?.smartwatchManagerWantsDeletion(self)`.
+    /// The default does only the last step.
+    func delete() async
 }
 
 public extension SmartwatchManager {
@@ -702,16 +703,8 @@ public extension SmartwatchManager {
     @MainActor
     func watchHostDidReceiveURL(_ url: URL) -> Bool { false }
 
-    /// Asks the delegate to remove the manager, then calls `completion`.
-    func notifyDelegateOfDeletion(completion: @escaping () -> Void) {
-        Task {
-            await smartwatchManagerDelegate?.smartwatchManagerWantsDeletion(self)
-            completion()
-        }
-    }
-
     /// Override this default behaviour if the watch manager needs to complete tasks before being deleted
-    func delete(completion: @escaping () -> Void) {
-        notifyDelegateOfDeletion(completion: completion)
+    func delete() async {
+        await smartwatchManagerDelegate?.smartwatchManagerWantsDeletion(self)
     }
 }
