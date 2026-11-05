@@ -94,13 +94,15 @@ extension InsulinCorrection {
         volumeRounder: ((Double) -> Double)?
     ) -> ManualBolusRecommendation {
         var units = self.units - pendingInsulin
+        let excess = units - maxBolus
         units = Swift.min(maxBolus, Swift.max(0, units))
         units = volumeRounder?(units) ?? units
 
         return ManualBolusRecommendation(
             amount: units,
             pendingInsulin: pendingInsulin,
-            notice: bolusRecommendationNotice
+            notice: bolusRecommendationNotice,
+            missingAmount: excess > 0 ? excess : nil
         )
     }
 

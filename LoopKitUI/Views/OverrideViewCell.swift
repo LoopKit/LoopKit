@@ -20,6 +20,7 @@ public struct OverrideViewCell: View {
     var durationLabel: Text
     var subtitleLabel: Text
     var insulinNeedsScaleFactor: Double?
+    var autoBolusCarbsActive: Bool?
     
     public init(
         symbol: Text,
@@ -27,7 +28,8 @@ public struct OverrideViewCell: View {
         targetRange: Text,
         duration: Text,
         subtitle: Text,
-        insulinNeedsScaleFactor: Double?
+        insulinNeedsScaleFactor: Double?,
+        autoBolusCarbsActive: Bool?
     ) {
         self.symbolLabel = symbol
         self.nameLabel = name
@@ -35,6 +37,7 @@ public struct OverrideViewCell: View {
         self.durationLabel = duration
         self.subtitleLabel = subtitle
         self.insulinNeedsScaleFactor = insulinNeedsScaleFactor
+        self.autoBolusCarbsActive = autoBolusCarbsActive
     }
 
     public var body: some View {
@@ -44,9 +47,14 @@ public struct OverrideViewCell: View {
             .frame(width: Self.symbolWidth) // for alignment
             VStack(alignment: .leading, spacing: 3) {
                 nameLabel
-                targetRangeLabel
-                .font(.caption)
-                .foregroundColor(Color.gray)
+                HStack(spacing: 4) {
+                    if autoBolusCarbsActive != nil {
+                        autoBolusCarbsActiveIconSmall
+                    }
+                    targetRangeLabel
+                    .font(.caption)
+                    .foregroundColor(Color.gray)
+                }
                 if self.insulinNeedsScaleFactor != nil {
                     insulinNeedsBar
                 }
@@ -65,7 +73,7 @@ public struct OverrideViewCell: View {
         }
         .frame(minHeight: 53)
     }
-    
+        
     private var insulinNeedsBar: some View {
         GeometryReader { geo in
             HStack {
@@ -79,6 +87,21 @@ public struct OverrideViewCell: View {
             }
         }
     }
+    
+    private var autoBolusCarbsActiveIconSmall: some View {
+        /*
+        // We used this implementation before but because the Preset page is with UIKit, it
+        // wasn't possible to have a ZStack. So for consistency, we use just 1 character
+        ZStack{
+            
+            if !autoBolusCarbsActive! {
+                Text("❌").font(.caption)
+            }
+        }*/
+        
+        Text(autoBolusCarbsActive! ? "🔶" : "❌").font(.caption)
+    }
+
 
     var timer: some View {
         Image(systemName: "timer")

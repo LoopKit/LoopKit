@@ -34,6 +34,8 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
     }
     
     public var overrideHistory: [TemporaryScheduleOverride] = []
+    
+    public var autoBolusCarbsEnabled: Bool = false
 
     public weak var delegate: OverrideSelectionViewControllerDelegate?
 
@@ -221,8 +223,21 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
     }
 
     private func configure(_ cell: OverridePresetCollectionViewCell, with settings: TemporaryScheduleOverrideSettings, duration: TemporaryScheduleOverride.Duration) {
+        // FIXME - had issues with updating the storyboard; instead just leveraging targetRange
+        // note: UIKit doesn't support ZStack so we removed ZStack from the HistoryView
+        let autoBolusCarbsIcon: String
+        if autoBolusCarbsEnabled, let autoBolusCarbsActive = settings.autoBolusCarbsActive {
+            // FIXME need to either reimplement in SwiftUI or add another stack and label for
+            // implementing ZStack or change the history view to remove the ZStack
+            autoBolusCarbsIcon = autoBolusCarbsActive ? "🔶" : "❌"
+        } else {
+            autoBolusCarbsIcon = ""
+        }
+        
         if let targetRange = settings.targetRange {
-            cell.targetRangeLabel.text = makeTargetRangeText(from: targetRange)
+            cell.targetRangeLabel.text = autoBolusCarbsIcon + " " + makeTargetRangeText(from: targetRange)
+        } else if !autoBolusCarbsIcon.isEmpty {
+            cell.targetRangeLabel.text = autoBolusCarbsIcon
         } else {
             cell.targetRangeLabel.isHidden = true
         }
@@ -232,6 +247,9 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
         } else {
             cell.insulinNeedsBar.isHidden = true
         }
+                
+       
+        
 
         switch duration {
         case .finite(let interval):
@@ -258,7 +276,7 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
             case .scheduledOverride, .customOverride, .history:
                 break
             case .preset(let preset):
-                let editVC = AddEditOverrideTableViewController(glucoseUnit: glucoseUnit)
+                let editVC = AddEditOverrideTableViewController(glucoseUnit: glucoseUnit, autoBolusCarbsEnabled: autoBolusCarbsEnabled)
                 editVC.inputMode = .editPreset(preset)
                 editVC.delegate = self
                 show(editVC, sender: collectionView.cellForItem(at: indexPath))
@@ -266,7 +284,7 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
         } else {
             switch cellContent(for: indexPath) {
             case .scheduledOverride(let override):
-                let editOverrideVC = AddEditOverrideTableViewController(glucoseUnit: glucoseUnit)
+                let editOverrideVC = AddEditOverrideTableViewController(glucoseUnit: glucoseUnit, autoBolusCarbsEnabled: autoBolusCarbsEnabled)
                 editOverrideVC.inputMode = .editOverride(override)
                 editOverrideVC.customDismissalMode = .dismissModal
                 editOverrideVC.delegate = self
@@ -275,7 +293,7 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
                 delegate?.overrideSelectionViewController(self, didConfirmPreset: preset)
                 dismiss(animated: true)
             case .customOverride:
-                let customOverrideVC = AddEditOverrideTableViewController(glucoseUnit: glucoseUnit)
+                let customOverrideVC = AddEditOverrideTableViewController(glucoseUnit: glucoseUnit, autoBolusCarbsEnabled: autoBolusCarbsEnabled)
                 customOverrideVC.inputMode = .customOverride
                 customOverrideVC.delegate = self
                 show(customOverrideVC, sender: collectionView.cellForItem(at: indexPath))
@@ -284,7 +302,7 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
                     overrides: overrideHistory,
                     glucoseUnit: glucoseUnit
                 )
-                let overrideHistoryView = OverrideSelectionHistory(model: model)
+                let overrideHistoryView = OverrideSelectionHistory(model: model, autoBolusCarbsEnabled: autoBolusCarbsEnabled)
                 let hostedView = UIHostingController(rootView: overrideHistoryView)
                 hostedView.title = LocalizedString("Override History", comment: "Title for override history view") // Hack to fix animations
                 navigationController?.pushViewController(hostedView, animated: true)
@@ -293,7 +311,7 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
     }
 
     @objc private func addNewPreset() {
-        let addVC = AddEditOverrideTableViewController(glucoseUnit: glucoseUnit)
+        let addVC = AddEditOverrideTableViewController(glucoseUnit: glucoseUnit, autoBolusCarbsEnabled: autoBolusCarbsEnabled)
         addVC.inputMode = .newPreset
         addVC.delegate = self
 
@@ -472,7 +490,7 @@ extension OverrideSelectionViewController: OverridePresetCollectionViewCellDeleg
             return
         }
 
-        let customizePresetVC = AddEditOverrideTableViewController(glucoseUnit: glucoseUnit)
+        let customizePresetVC = AddEditOverrideTableViewController(glucoseUnit: glucoseUnit, autoBolusCarbsEnabled: autoBolusCarbsEnabled)
         customizePresetVC.inputMode = .customizePresetOverride(preset)
         customizePresetVC.delegate = self
         show(customizePresetVC, sender: nil)
