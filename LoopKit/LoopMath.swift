@@ -193,20 +193,27 @@ extension GlucoseValue {
 
         let glucoseUnit = HKUnit.milligramsPerDeciliter
         let velocityUnit = GlucoseEffectVelocity.perSecondUnit
-
-        // The starting rate, which we will decay to 0 over the specified duration
-        let intercept = rate.doubleValue(for: velocityUnit) // mg/dL/s
-        let decayStartDate = startDate.addingTimeInterval(delta)
-        let slope = -intercept / (duration - delta)  // mg/dL/s/s
+        
+        let firstChange = rate.doubleValue(for: velocityUnit) * delta // mg/dl/s * time = mg/dL
+        let secondChange = firstChange * (1 - delta / (duration - delta))
+        
+        // we solve for f(t) = a*t^2 + b*t + c, where t is relative to self.startDate
+        let c = quantity.doubleValue(for: glucoseUnit) // f(0) = c
+        // f(delta) - c = firstChange = a*delta*delta + b*delta
+        // f(2*delta) -  c = firstChange + secondChange = 4*a*delta*delta + 2*b*delta
+        // --> firstChange - secondChange = 2*a*delta*delta
+        
+        let a = (secondChange - firstChange) / (2 * delta * delta) // mg/dL/s/s
+        let b = (firstChange + secondChange - 4 * a * delta * delta) / (2 * delta) // mg/dL/s
+        
 
         var values = [GlucoseEffect(startDate: startDate, quantity: quantity)]
-        var date = decayStartDate
-        var lastValue = quantity.doubleValue(for: glucoseUnit)
+        var date = startDate.addingTimeInterval(delta)
 
         repeat {
-            let value = lastValue + (intercept + slope * date.timeIntervalSince(decayStartDate)) * delta
+            let time = min(duration, date.timeIntervalSince(self.startDate))
+            let value = a * time * time + b * time + c
             values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: glucoseUnit, doubleValue: value)))
-            lastValue = value
             date = date.addingTimeInterval(delta)
         } while date < endDate
 
