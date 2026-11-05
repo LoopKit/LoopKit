@@ -483,6 +483,21 @@ public protocol SmartwatchManagerDelegate: AnyObject {
     ///   bolus is still being delivered, so the watch doesn't report a failure.
     func smartwatchManager(_ manager: SmartwatchManager, requestBolus request: SmartwatchBolusRequest) async throws -> Double
 
+    /// Asks the host what it would recommend with the carbs the user is about to
+    /// add (0 for none), so the watch can show it before a bolus is picked.
+    /// Nothing is added or delivered.
+    ///
+    /// **Call it** only with `.remoteBolus` in `effectiveCapabilities`, when the
+    /// user starts a bolus on the watch. The host answers only while its user
+    /// allows boluses from the watch and its glucose is recent, like a bolus
+    /// request. The bolus the user then confirms is checked as usual, against the
+    /// context after the carbs are added.
+    ///
+    /// - Throws: `SmartwatchBolusError`: `.notAllowed`, `.noRecentGlucose`,
+    ///   `.invalidAmount` for carbs that aren't a valid entry, or `.refusedByHost`
+    ///   when no recommendation can be computed.
+    func smartwatchManager(_ manager: SmartwatchManager, recommendBolusFor request: SmartwatchBolusRecommendationRequest) async throws -> SmartwatchBolusRecommendation
+
     /// Asks the host to mute its alerts, as the user chose on the watch.
     ///
     /// **Call it** only with `.remoteMute` in `effectiveCapabilities`, for a mute
@@ -536,6 +551,10 @@ public extension SmartwatchManagerDelegate {
 /// Every remote action is refused unless the host implements it.
 public extension SmartwatchManagerDelegate {
     func smartwatchManager(_ manager: SmartwatchManager, requestBolus request: SmartwatchBolusRequest) async throws -> Double {
+        throw SmartwatchBolusError.notAllowed
+    }
+
+    func smartwatchManager(_ manager: SmartwatchManager, recommendBolusFor request: SmartwatchBolusRecommendationRequest) async throws -> SmartwatchBolusRecommendation {
         throw SmartwatchBolusError.notAllowed
     }
 

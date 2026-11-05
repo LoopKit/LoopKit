@@ -60,6 +60,39 @@ public struct SmartwatchBolusRequest: Equatable {
     }
 }
 
+/// A question from the watch before the user picks a bolus: what the host would
+/// recommend with `grams` of carbs added now (0 for none). Nothing is added or
+/// delivered; the watch shows the answer and starts its bolus picker there.
+public struct SmartwatchBolusRecommendationRequest: Equatable {
+    /// The carbs the user is about to add with the bolus, 0 for none.
+    public var grams: Double
+
+    public init(grams: Double) {
+        self.grams = grams
+    }
+}
+
+/// The host's answer to a `SmartwatchBolusRecommendationRequest`.
+public struct SmartwatchBolusRecommendation: Equatable {
+    /// The recommended bolus with those carbs, in units, rounded to a supported
+    /// volume; 0 when the host recommends none.
+    public var units: Double
+    /// The carbs the recommendation counts.
+    public var grams: Double
+    /// The user's maximum bolus, in units.
+    public var maximumBolus: Double?
+    /// When the host computed it. The bolus itself is checked again, against
+    /// the context after the carbs are added.
+    public var issuedAt: Date
+
+    public init(units: Double, grams: Double, maximumBolus: Double?, issuedAt: Date) {
+        self.units = units
+        self.grams = grams
+        self.maximumBolus = maximumBolus
+        self.issuedAt = issuedAt
+    }
+}
+
 /// A mute the user confirmed on the watch, sent with `.remoteMute`.
 public struct SmartwatchAlertMuteRequest: Equatable {
     /// How long to mute the host's alerts.
