@@ -106,7 +106,7 @@ public struct SmartwatchBolusRecommendation: Equatable {
 
 /// A mute the user confirmed on the watch, sent with `.remoteMute`.
 public struct SmartwatchAlertMuteRequest: Equatable {
-    /// How long to mute the host's alerts.
+    /// How long to mute the host's alerts; 0 ends the mute.
     public var duration: TimeInterval
     /// When the user confirmed it on the watch. Take it from the watch, not from when the
     /// command reached the phone, which can be much later; hosts refuse requests

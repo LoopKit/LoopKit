@@ -502,10 +502,11 @@ public protocol SmartwatchManagerDelegate: AnyObject {
     ///
     /// **Call it** only with `.remoteMute` in `effectiveCapabilities`, for a mute
     /// the user confirmed on the watch, with `requestedAt` from the watch. The
-    /// host checks its user's permission and the request's age, and may cap the
-    /// duration at its own maximum.
+    /// host checks its user's permission and the request's age, and may round
+    /// the duration up to one it offers or cap it at its own maximum. A duration
+    /// of 0 ends the mute.
     ///
-    /// - Returns: When the mute ends.
+    /// - Returns: When the mute ends (now, when it was ended).
     /// - Throws: `SmartwatchAlertMuteError`.
     func smartwatchManager(_ manager: SmartwatchManager, requestAlertMute request: SmartwatchAlertMuteRequest) async throws -> Date
 
