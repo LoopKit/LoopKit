@@ -101,8 +101,8 @@ public struct SmartwatchBolusPolicy {
             requestWindow: SmartwatchRequestWindow = .standard,
             maximumContextAge: TimeInterval = 15 * 60,
             maximumGlucoseAge: TimeInterval = 15 * 60,
-            minimumInterval: TimeInterval = 15 * 60,
-            dailyLimitInMaximumBoluses: Double = 2,
+            minimumInterval: TimeInterval = 5 * 60,
+            dailyLimitInMaximumBoluses: Double = 3,
             requiresContextToken: Bool = true,
             capsAtRecommendation: Bool = true
         ) {
@@ -294,7 +294,7 @@ public struct SmartwatchCarbEntryPolicy {
         /// Minimum time between carb entries from the watch.
         public var minimumInterval: TimeInterval
 
-        public init(requestWindow: SmartwatchRequestWindow = .standard, minimumInterval: TimeInterval = 15 * 60) {
+        public init(requestWindow: SmartwatchRequestWindow = .standard, minimumInterval: TimeInterval = 5 * 60) {
             self.requestWindow = requestWindow
             self.minimumInterval = minimumInterval
         }

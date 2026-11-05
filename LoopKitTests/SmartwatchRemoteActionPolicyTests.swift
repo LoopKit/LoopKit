@@ -150,21 +150,22 @@ final class SmartwatchRemoteActionPolicyTests: XCTestCase {
     }
 
     func testRateLimitsWatchBoluses() {
-        let recent = [SmartwatchBolusPolicy.Delivery(date: now.addingTimeInterval(-10 * 60), units: 1)]
+        let recent = [SmartwatchBolusPolicy.Delivery(date: now.addingTimeInterval(-4 * 60), units: 1)]
         XCTAssertEqual(policy(deliveries: recent).evaluate(request(1), now: now), .failure(.rateLimited))
-        let older = [SmartwatchBolusPolicy.Delivery(date: now.addingTimeInterval(-16 * 60), units: 1)]
+        let older = [SmartwatchBolusPolicy.Delivery(date: now.addingTimeInterval(-6 * 60), units: 1)]
         XCTAssertNotNil(try? policy(deliveries: older).evaluate(request(1), now: now).get())
     }
 
     func testLimitsTheDailyTotal() {
-        // Daily limit is 2 × the 5 U maximum bolus = 10 U.
+        // Daily limit is 3 × the 5 U maximum bolus = 15 U.
         let earlier = [
             SmartwatchBolusPolicy.Delivery(date: now.addingTimeInterval(-20 * 60 * 60), units: 5),
+            SmartwatchBolusPolicy.Delivery(date: now.addingTimeInterval(-10 * 60 * 60), units: 5),
             SmartwatchBolusPolicy.Delivery(date: now.addingTimeInterval(-2 * 60 * 60), units: 4),
         ]
         XCTAssertEqual(policy(deliveries: earlier).evaluate(request(1.5), now: now), .failure(.dailyLimitReached))
         XCTAssertNotNil(try? policy(deliveries: earlier).evaluate(request(1), now: now).get())
-        let yesterday = [SmartwatchBolusPolicy.Delivery(date: now.addingTimeInterval(-25 * 60 * 60), units: 9)]
+        let yesterday = [SmartwatchBolusPolicy.Delivery(date: now.addingTimeInterval(-25 * 60 * 60), units: 14)]
         XCTAssertNotNil(try? policy(deliveries: yesterday).evaluate(request(2), now: now).get())
     }
 
@@ -251,8 +252,8 @@ final class SmartwatchRemoteActionPolicyTests: XCTestCase {
     }
 
     func testRateLimitsCarbEntries() {
-        XCTAssertEqual(carbPolicy(lastEntry: now.addingTimeInterval(-10 * 60)).evaluate(carbs(30), now: now), .failure(.rateLimited))
-        XCTAssertEqual(try? carbPolicy(lastEntry: now.addingTimeInterval(-16 * 60)).evaluate(carbs(30), now: now).get(), 30)
+        XCTAssertEqual(carbPolicy(lastEntry: now.addingTimeInterval(-4 * 60)).evaluate(carbs(30), now: now), .failure(.rateLimited))
+        XCTAssertEqual(try? carbPolicy(lastEntry: now.addingTimeInterval(-6 * 60)).evaluate(carbs(30), now: now).get(), 30)
     }
 
     // MARK: - Request window

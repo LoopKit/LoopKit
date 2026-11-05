@@ -60,15 +60,26 @@ public struct SmartwatchBolusRequest: Equatable {
     }
 }
 
+/// How fast carbs from the watch are absorbed, as the user chose there. The host
+/// maps it to its own fast, medium and slow absorption times.
+public enum SmartwatchCarbAbsorption: String, Equatable, Sendable, CaseIterable {
+    case fast
+    case medium
+    case slow
+}
+
 /// A question from the watch before the user picks a bolus: what the host would
 /// recommend with `grams` of carbs added now (0 for none). Nothing is added or
 /// delivered; the watch shows the answer and starts its bolus picker there.
 public struct SmartwatchBolusRecommendationRequest: Equatable {
     /// The carbs the user is about to add with the bolus, 0 for none.
     public var grams: Double
+    /// How fast they are absorbed; `nil` for the host's default.
+    public var absorption: SmartwatchCarbAbsorption?
 
-    public init(grams: Double) {
+    public init(grams: Double, absorption: SmartwatchCarbAbsorption? = nil) {
         self.grams = grams
+        self.absorption = absorption
     }
 }
 
@@ -123,10 +134,14 @@ public struct SmartwatchCarbEntryRequest: Equatable {
     /// command reached the phone, which can be much later; hosts refuse requests
     /// older than 30 seconds.
     public var requestedAt: Date
+    /// How fast the carbs are absorbed, as chosen on the watch; `nil` for the
+    /// host's default.
+    public var absorption: SmartwatchCarbAbsorption?
 
-    public init(grams: Double, requestedAt: Date) {
+    public init(grams: Double, requestedAt: Date, absorption: SmartwatchCarbAbsorption? = nil) {
         self.grams = grams
         self.requestedAt = requestedAt
+        self.absorption = absorption
     }
 }
 
