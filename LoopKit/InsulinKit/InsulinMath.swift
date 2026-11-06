@@ -330,7 +330,8 @@ extension Collection where Element == DoseEntry {
                 var newDose = dose
                 newDose.startDate = lastDate
 
-                if let endDate, dose.type == .suspend, idx+1 == self.count, dose.endDate < endDate {
+                // reconciled() leaves a suspend with no resume yet at zero length
+                if let endDate, dose.type == .suspend, idx+1 == self.count, dose.endDate <= dose.startDate, dose.endDate < endDate {
                     newDose.endDate = endDate
                 }
                 newEntries.append(newDose)
