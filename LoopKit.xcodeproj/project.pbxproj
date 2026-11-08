@@ -637,6 +637,7 @@
 		B451D11D2A171751004878F1 /* MockPumpManagerControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B451D11C2A171751004878F1 /* MockPumpManagerControlsView.swift */; };
 		B455F31825FBEC5F000ED456 /* SuspendThresholdEditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B455F2A125FBE985000ED456 /* SuspendThresholdEditorViewModel.swift */; };
 		B455F35625FC0284000ED456 /* CorrectionRangeOverridesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B455F35525FC0284000ED456 /* CorrectionRangeOverridesTests.swift */; };
+		FC9C03387F09C720715BB0E5 /* DisplayGlucosePreferenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 465DFC5E536D23E71993920A /* DisplayGlucosePreferenceTests.swift */; };
 		B455F3A425FF7FF0000ED456 /* CorrectionRangeOverridesEditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B455F3A325FF7FF0000ED456 /* CorrectionRangeOverridesEditorViewModel.swift */; };
 		B455F48125FF9A8B000ED456 /* InsulinSensitivityScheduleEditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B455F48025FF9A8B000ED456 /* InsulinSensitivityScheduleEditorViewModel.swift */; };
 		B455F4D32600DA0B000ED456 /* GlucoseRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = B455F4D22600DA0B000ED456 /* GlucoseRange.swift */; };
@@ -1582,6 +1583,7 @@
 		B451D1262A171C51004878F1 /* OpenMockCGMSettingsOnLongPressGesture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenMockCGMSettingsOnLongPressGesture.swift; sourceTree = "<group>"; };
 		B455F2A125FBE985000ED456 /* SuspendThresholdEditorViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SuspendThresholdEditorViewModel.swift; path = LoopKitUI/ViewModels/SuspendThresholdEditorViewModel.swift; sourceTree = SOURCE_ROOT; };
 		B455F35525FC0284000ED456 /* CorrectionRangeOverridesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionRangeOverridesTests.swift; sourceTree = "<group>"; };
+		465DFC5E536D23E71993920A /* DisplayGlucosePreferenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayGlucosePreferenceTests.swift; sourceTree = "<group>"; };
 		B455F3A325FF7FF0000ED456 /* CorrectionRangeOverridesEditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionRangeOverridesEditorViewModel.swift; sourceTree = "<group>"; };
 		B455F48025FF9A8B000ED456 /* InsulinSensitivityScheduleEditorViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsulinSensitivityScheduleEditorViewModel.swift; sourceTree = "<group>"; };
 		B455F4D22600DA0B000ED456 /* GlucoseRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseRange.swift; sourceTree = "<group>"; };
@@ -2468,6 +2470,7 @@
 				A9D3FF172A6C2C6F000C891D /* Charts */,
 				C1E7035C24FFFA5C00DAB534 /* CollectionTests.swift */,
 				B455F35525FC0284000ED456 /* CorrectionRangeOverridesTests.swift */,
+				465DFC5E536D23E71993920A /* DisplayGlucosePreferenceTests.swift */,
 				A9DF02C824F724D900B7C988 /* CriticalEventLogTests.swift */,
 				A9BFA03D245CCCB9001E4AE3 /* DailyQuantityScheduleTests.swift */,
 				891A3FD6224BE62100378B27 /* DailyValueScheduleTests.swift */,
@@ -4203,6 +4206,7 @@
 				C1E7035D24FFFA5C00DAB534 /* CollectionTests.swift in Sources */,
 				1DFB99D6245CB2E900DCC8C9 /* AlertTests.swift in Sources */,
 				B455F35625FC0284000ED456 /* CorrectionRangeOverridesTests.swift in Sources */,
+				FC9C03387F09C720715BB0E5 /* DisplayGlucosePreferenceTests.swift in Sources */,
 				898C897124D4C0E4002FA994 /* GuardrailTests.swift in Sources */,
 				A9DF02CF24F732FC00B7C988 /* JSONStreamEncoderTests.swift in Sources */,
 				A9672B5326E80C060025B0CD /* NewGlucoseSampleTests.swift in Sources */,
