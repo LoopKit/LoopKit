@@ -15,7 +15,8 @@ public struct DoseEntry: TimelineValue, Hashable {
     public var endDate: Date
     public var value: Double
     public var unit: DoseUnit
-    public var decisionId: UUID?
+    /// The identifier Loop passed to `PumpManager.enactBolus` or `enactTempBasal` for this dose. Loop keys its `DoseMetadata` by it.
+    public var doseId: UUID?
     public var deliveredUnits: Double?
     public var description: String?
     public var insulinType: InsulinType?
@@ -29,21 +30,21 @@ public struct DoseEntry: TimelineValue, Hashable {
     public var scheduledBasalRate: LoopQuantity?
 
     public init(suspendDate: Date, automatic: Bool? = nil, isMutable: Bool = false, wasProgrammedByPumpUI: Bool = false) {
-        self.init(type: .suspend, startDate: suspendDate, value: 0, unit: .units, decisionId: nil, automatic: automatic, isMutable: isMutable, wasProgrammedByPumpUI: wasProgrammedByPumpUI)
+        self.init(type: .suspend, startDate: suspendDate, value: 0, unit: .units, automatic: automatic, isMutable: isMutable, wasProgrammedByPumpUI: wasProgrammedByPumpUI)
     }
 
     public init(resumeDate: Date, insulinType: InsulinType? = nil, automatic: Bool? = nil, isMutable: Bool = false, wasProgrammedByPumpUI: Bool = false) {
-        self.init(type: .resume, startDate: resumeDate, value: 0, unit: .units, decisionId: nil, insulinType: insulinType, automatic: automatic, isMutable: isMutable, wasProgrammedByPumpUI: wasProgrammedByPumpUI)
+        self.init(type: .resume, startDate: resumeDate, value: 0, unit: .units, insulinType: insulinType, automatic: automatic, isMutable: isMutable, wasProgrammedByPumpUI: wasProgrammedByPumpUI)
     }
 
     // If the insulin model field is nil, it's assumed that the model is the type of insulin the pump dispenses
-    public init(type: DoseType, startDate: Date, endDate: Date? = nil, value: Double, unit: DoseUnit, decisionId: UUID?, deliveredUnits: Double? = nil, description: String? = nil, syncIdentifier: String? = nil, scheduledBasalRate: LoopQuantity? = nil, insulinType: InsulinType? = nil, automatic: Bool? = nil, manuallyEntered: Bool = false, isMutable: Bool = false, wasProgrammedByPumpUI: Bool = false) {
+    public init(type: DoseType, startDate: Date, endDate: Date? = nil, value: Double, unit: DoseUnit, doseId: UUID? = nil, deliveredUnits: Double? = nil, description: String? = nil, syncIdentifier: String? = nil, scheduledBasalRate: LoopQuantity? = nil, insulinType: InsulinType? = nil, automatic: Bool? = nil, manuallyEntered: Bool = false, isMutable: Bool = false, wasProgrammedByPumpUI: Bool = false) {
         self.type = type
         self.startDate = startDate
         self.endDate = endDate ?? startDate
         self.value = value
         self.unit = unit
-        self.decisionId = decisionId
+        self.doseId = doseId
         self.deliveredUnits = deliveredUnits
         self.description = description
         self.syncIdentifier = syncIdentifier
@@ -184,7 +185,7 @@ extension DoseEntry: Codable {
         self.endDate = try container.decode(Date.self, forKey: .endDate)
         self.value = try container.decode(Double.self, forKey: .value)
         self.unit = try container.decode(DoseUnit.self, forKey: .unit)
-        self.decisionId = try container.decodeIfPresent(UUID.self, forKey: .decisionId)
+        self.doseId = try container.decodeIfPresent(UUID.self, forKey: .doseId) ?? container.decodeIfPresent(UUID.self, forKey: .decisionId)
         self.deliveredUnits = try container.decodeIfPresent(Double.self, forKey: .deliveredUnits)
         self.description = try container.decodeIfPresent(String.self, forKey: .description)
         self.syncIdentifier = try container.decodeIfPresent(String.self, forKey: .syncIdentifier)
@@ -206,7 +207,7 @@ extension DoseEntry: Codable {
         try container.encode(endDate, forKey: .endDate)
         try container.encode(value, forKey: .value)
         try container.encode(unit, forKey: .unit)
-        try container.encodeIfPresent(decisionId, forKey: .decisionId)
+        try container.encodeIfPresent(doseId, forKey: .doseId)
         try container.encodeIfPresent(deliveredUnits, forKey: .deliveredUnits)
         try container.encodeIfPresent(description, forKey: .description)
         try container.encodeIfPresent(syncIdentifier, forKey: .syncIdentifier)
@@ -233,7 +234,8 @@ extension DoseEntry: Codable {
         case endDate
         case value
         case unit
-        case decisionId
+        case doseId
+        case decisionId // Before doseId replaced it
         case deliveredUnits
         case description
         case syncIdentifier
@@ -270,7 +272,7 @@ extension DoseEntry: RawRepresentable {
         self.unit = unit
         self.manuallyEntered = manuallyEntered
 
-        self.decisionId = UUID(uuidString: rawValue["decisionId"] as? String ?? "")
+        self.doseId = UUID(uuidString: rawValue["doseId"] as? String ?? rawValue["decisionId"] as? String ?? "")
         self.deliveredUnits = rawValue["deliveredUnits"] as? Double
         self.description = rawValue["description"] as? String
         self.insulinType = (rawValue["insulinType"] as? InsulinType.RawValue).flatMap { InsulinType(rawValue: $0) }
@@ -293,7 +295,7 @@ extension DoseEntry: RawRepresentable {
             "wasProgrammedByPumpUI": wasProgrammedByPumpUI
         ]
 
-        rawValue["decisionId"] = decisionId?.uuidString
+        rawValue["doseId"] = doseId?.uuidString
         rawValue["deliveredUnits"] = deliveredUnits
         rawValue["description"] = description
         rawValue["insulinType"] = insulinType?.rawValue
