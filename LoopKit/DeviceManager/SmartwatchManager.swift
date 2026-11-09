@@ -244,6 +244,11 @@ public struct SmartwatchStatusSnapshot: Equatable {
     /// The host's largest carb entry in grams, with `.remoteCarbs`.
     public var maximumCarbEntry: Double?
 
+    /// Whether the host uses a carb entry's `SmartwatchCarbAbsorption`, with
+    /// `.remoteCarbs` or `.remoteBolus`. When false (a carb model without
+    /// per-entry absorption), a watch shouldn't ask for one.
+    public var usesCarbAbsorption: Bool
+
     /// The pump's smallest bolus step in units, with `.remoteBolus`, for a watch
     /// that picks an amount before it has a bolus context.
     public var bolusIncrement: Double?
@@ -269,6 +274,7 @@ public struct SmartwatchStatusSnapshot: Equatable {
         tempTargetPresets: [SmartwatchPreset]? = nil,
         permittedActions: SmartwatchCapabilities = [],
         maximumCarbEntry: Double? = nil,
+        usesCarbAbsorption: Bool = true,
         bolusIncrement: Double? = nil
     ) {
         self.displayUnit = displayUnit
@@ -285,6 +291,7 @@ public struct SmartwatchStatusSnapshot: Equatable {
         self.tempTargetPresets = tempTargetPresets
         self.permittedActions = permittedActions
         self.maximumCarbEntry = maximumCarbEntry
+        self.usesCarbAbsorption = usesCarbAbsorption
         self.bolusIncrement = bolusIncrement
     }
 }
