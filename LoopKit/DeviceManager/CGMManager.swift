@@ -196,10 +196,6 @@ public protocol CGMManager: DeviceManager {
     /// - Parameter observer: The observing object
     func removeStatusObserver(_ observer: CGMManagerStatusObserver)
 
-    /// Makes sure a connection to the device is up or under way, for a wake that is not the device's own:
-    /// a lost Bluetooth callback can leave no connection standing and nothing to notice.
-    func ensureConnectionActiveOrPending()
-
     /// Whether the manager is scanning for a sensor it has not yet connected to.
     var isSearchingForSensor: Bool { get }
 
@@ -253,8 +249,6 @@ public extension CGMManager {
     func removeStatusObserver(_ observer: CGMManagerStatusObserver) {
         // optional since a CGM manager may not support status observers
     }
-
-    func ensureConnectionActiveOrPending() {}
 
     var isSearchingForSensor: Bool { false }
 
