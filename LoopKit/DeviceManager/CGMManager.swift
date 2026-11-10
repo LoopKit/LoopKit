@@ -196,6 +196,13 @@ public protocol CGMManager: DeviceManager {
     /// - Parameter observer: The observing object
     func removeStatusObserver(_ observer: CGMManagerStatusObserver)
 
+    /// Whether the manager is scanning for a sensor it has not yet connected to.
+    var isSearchingForSensor: Bool { get }
+
+    /// A short text form of what needs the user's attention (a code to enter, the app to keep open), for
+    /// a small display; nil for nothing. Changes are reported to status observers.
+    var shortStatusNote: String? { get }
+
     /// Tears the manager down and asks its delegate to remove it. Returns once the delegate has removed it.
     ///
     /// Implementations that tear down first should finish that teardown, including awaiting any alert
@@ -242,6 +249,10 @@ public extension CGMManager {
     func removeStatusObserver(_ observer: CGMManagerStatusObserver) {
         // optional since a CGM manager may not support status observers
     }
+
+    var isSearchingForSensor: Bool { false }
+
+    var shortStatusNote: String? { nil }
 
     /// Override this default behaviour if the CGM Manager needs to complete tasks before being deleted
     func delete() async {

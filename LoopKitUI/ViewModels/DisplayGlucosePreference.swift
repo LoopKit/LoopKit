@@ -57,6 +57,7 @@ extension DisplayGlucosePreference: DisplayGlucoseUnitObserver {
     public func unitDidChange(to displayGlucoseUnit: LoopUnit) {
         self.unit = displayGlucoseUnit
         let formatter = QuantityFormatter(for: displayGlucoseUnit)
+        formatter.numberFormatter.notANumberSymbol = "–"
         self.formatter = formatter
     }
 }

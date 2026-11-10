@@ -20400,6 +20400,9 @@
     "No change to insulin settings." : {
 
     },
+    "Not set" : {
+      "comment" : "Accessibility label for a setting that has no value"
+    },
     "Note" : {
 
     },
