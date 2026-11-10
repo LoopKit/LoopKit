@@ -28,9 +28,10 @@ Everything flows through a single `PumpManagerDelegate` call
 func pumpManager(_ pumpManager: PumpManager,
                  hasNewPumpEvents events: [NewPumpEvent],
                  lastReconciliation: Date?,
-                 replacePendingEvents: Bool,
-                 completion: @escaping (_ error: Error?) -> Void)
+                 replacePendingEvents: Bool) async throws
 ```
+
+How and in what order a manager calls its delegate is in [DeviceManagerDelegates.md](DeviceManagerDelegates.md).
 
 In the Loop app this is implemented in `DeviceDataManager` and forwards directly to:
 

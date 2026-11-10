@@ -317,14 +317,13 @@ public final class MockPumpManager: TestingPumpManager {
                 }
             }
 
+            let readDate = Date()
             delegate.notify { (delegate) in
                 if newValue.reservoirUnitsRemaining != oldValue.reservoirUnitsRemaining {
-                    delegate?.pumpManager(self, didReadReservoirValue: self.state.reservoirUnitsRemaining, at: Date()) { result in
-                        // nothing to do here
-                    }
+                    _ = try? await delegate?.pumpManager(self, didReadReservoirValue: newValue.reservoirUnitsRemaining, at: readDate)
                 }
-                delegate?.pumpManagerDidUpdateState(self)
-                
+                await delegate?.pumpManagerDidUpdateState(self)
+
                 delegate?.pumpManager(self, didUpdate: newStatus, oldStatus: oldStatus)
             }
         }
@@ -336,15 +335,6 @@ public final class MockPumpManager: TestingPumpManager {
         }
         set {
             delegate.delegate = newValue
-        }
-    }
-
-    public var delegateQueue: DispatchQueue! {
-        get {
-            return delegate.queue
-        }
-        set {
-            delegate.queue = newValue
         }
     }
 
@@ -444,10 +434,11 @@ public final class MockPumpManager: TestingPumpManager {
         state.finalizeFinishedDoses()
         let pendingPumpEvents = state.pumpEventsToStore
         delegate.notify { (delegate) in
-            delegate?.pumpManager(self, hasNewPumpEvents: pendingPumpEvents, lastReconciliation: self.lastSync, replacePendingEvents: true) { error in
-                if error == nil {
-                    self.state.additionalPumpEvents = []
-                }
+            do {
+                try await delegate?.pumpManager(self, hasNewPumpEvents: pendingPumpEvents, lastReconciliation: self.lastSync, replacePendingEvents: true)
+                self.state.additionalPumpEvents = []
+                completion(nil)
+            } catch {
                 completion(error)
             }
         }
@@ -729,7 +720,7 @@ public final class MockPumpManager: TestingPumpManager {
     public func injectPumpEvents(_ pumpEvents: [NewPumpEvent]) {
         // directly report these pump events
         delegate.notify { delegate in
-            delegate?.pumpManager(self, hasNewPumpEvents: pumpEvents, lastReconciliation: Date(), replacePendingEvents: true) { _ in }
+            try? await delegate?.pumpManager(self, hasNewPumpEvents: pumpEvents, lastReconciliation: Date(), replacePendingEvents: true)
         }
     }
     
@@ -762,20 +753,14 @@ extension MockPumpManager: AlertIssuer {
     public func issueAlert(_ alert: Alert) {
         logDeviceComms(.delegate, message: "issuing \(alert.identifier) \(alert.backgroundContent.title) with trigger \(alert.trigger)")
         delegate.notify { delegate in
-            guard let delegate else { return }
-            Task {
-                await delegate.issueAlert(alert)
-            }
+            await delegate?.issueAlert(alert)
         }
     }
-    
+
     public func retractAlert(identifier: Alert.Identifier) {
         logDeviceComms(.delegate, message: "retracting \(identifier)")
         delegate.notify { delegate in
-            guard let delegate else { return }
-            Task {
-                await delegate.retractAlert(identifier: identifier)
-            }
+            await delegate?.retractAlert(identifier: identifier)
         }
     }
     
