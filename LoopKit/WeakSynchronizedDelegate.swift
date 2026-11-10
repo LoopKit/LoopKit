@@ -8,7 +8,7 @@
 import Foundation
 
 /// Holds a device manager's delegate weakly, and delivers the manager's calls to it one at a time, in the
-/// order they were made. See Documentation/DeviceManagerDelegates.md.
+/// order they were made.
 public final class WeakSynchronizedDelegate<Delegate>: @unchecked Sendable {
 
     private let lock = UnfairLock()

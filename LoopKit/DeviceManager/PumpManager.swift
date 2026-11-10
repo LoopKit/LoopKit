@@ -44,7 +44,6 @@ public protocol PumpManagerStatusObserver: AnyObject {
 
 /// Calls to the delegate may come from any thread or actor; the delegate decides where its own work runs. A
 /// manager awaits each call before making the next, so the delegate sees them in the order they happened.
-/// See Documentation/DeviceManagerDelegates.md.
 public protocol PumpManagerDelegate: DeviceManagerDelegate, PumpManagerStatusObserver {
     func pumpManagerBLEHeartbeatDidFire(_ pumpManager: PumpManager) async
 

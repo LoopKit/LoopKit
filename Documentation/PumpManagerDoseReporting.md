@@ -31,8 +31,6 @@ func pumpManager(_ pumpManager: PumpManager,
                  replacePendingEvents: Bool) async throws
 ```
 
-How and in what order a manager calls its delegate is in [DeviceManagerDelegates.md](DeviceManagerDelegates.md).
-
 In the Loop app this is implemented in `DeviceDataManager` and forwards directly to:
 
 ```swift

@@ -8,7 +8,6 @@
 import Foundation
 import UserNotifications
 
-/// See Documentation/DeviceManagerDelegates.md.
 public protocol DeviceManagerDelegate: AlertIssuer, PersistedAlertStore {
     /// Called from any thread, and not awaited, so a manager can log from anywhere. The delegate keeps
     /// entries in the order it receives them.
