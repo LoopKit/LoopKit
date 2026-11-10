@@ -7,20 +7,25 @@
 
 import Foundation
 
+// Checks a watch plugin can apply before it asks the host to bolus or add carbs:
+// how fresh a request is, whether it was made against what the watch was shown,
+// the recommendation cap, and how often. The host doesn't call these; it applies
+// its own limits to every action (see `SmartwatchManagerDelegate`). There are no
+// default limits: each plugin states its own, so the numbers are visible where
+// they apply. Shared here so plugins with remote actions don't each copy them.
+
 /// How fresh a request from the watch must be: confirmed at most `maximumAge`
-/// ago, and dated at most `maximumClockSkew` in the future. A host uses one
+/// ago, and dated at most `maximumClockSkew` in the future. A plugin uses one
 /// window for every remote action: it passes it to the bolus and carb policies
 /// and checks mute and preset requests with it directly.
 public struct SmartwatchRequestWindow: Equatable, Sendable {
     public var maximumAge: TimeInterval
     public var maximumClockSkew: TimeInterval
 
-    public init(maximumAge: TimeInterval = 30, maximumClockSkew: TimeInterval = 5) {
+    public init(maximumAge: TimeInterval, maximumClockSkew: TimeInterval) {
         self.maximumAge = maximumAge
         self.maximumClockSkew = maximumClockSkew
     }
-
-    public static let standard = SmartwatchRequestWindow()
 
     /// Whether a request confirmed at `requestedAt` may still run at `now`.
     public func contains(_ requestedAt: Date, now: Date) -> Bool {
@@ -29,53 +34,83 @@ public struct SmartwatchRequestWindow: Equatable, Sendable {
     }
 }
 
-/// Every limit a host applies to one watch's remote actions, from
-/// `SmartwatchManager.remoteActionLimits`: `.standard` unless the plugin declares
-/// its own. One request window covers every action.
-public struct SmartwatchRemoteActionLimits: Equatable, Sendable {
-    public var requestWindow: SmartwatchRequestWindow
-    public var bolus: SmartwatchBolusPolicy.Limits
-    public var carbEntry: SmartwatchCarbEntryPolicy.Limits
+/// What the watch was shown to pick a bolus: the recommendation, the maximum
+/// bolus and the pump's volumes at one moment, under one token.
+public struct SmartwatchBolusContext: Equatable, Sendable {
+    /// Identifies the state the recommendation was computed from. A request must
+    /// echo it, and requests made against an older state are refused.
+    public var token: UUID
 
-    public init(
-        requestWindow: SmartwatchRequestWindow = .standard,
-        bolus: SmartwatchBolusPolicy.Limits = .standard,
-        carbEntry: SmartwatchCarbEntryPolicy.Limits = .standard
-    ) {
-        self.requestWindow = requestWindow
-        self.bolus = bolus
-        self.carbEntry = carbEntry
+    /// When this context was issued.
+    public var issuedAt: Date
+
+    /// The host's manual bolus recommendation, in units. `nil` when it
+    /// recommends none; watch boluses are then refused unless forced.
+    public var recommendedBolus: Double?
+
+    /// The user's maximum bolus, in units.
+    public var maximumBolus: Double?
+
+    /// Bolus volumes the pump can deliver, in units.
+    public var supportedBolusVolumes: [Double]
+
+    public init(token: UUID, issuedAt: Date, recommendedBolus: Double?, maximumBolus: Double?, supportedBolusVolumes: [Double]) {
+        self.token = token
+        self.issuedAt = issuedAt
+        self.recommendedBolus = recommendedBolus
+        self.maximumBolus = maximumBolus
+        self.supportedBolusVolumes = supportedBolusVolumes
     }
 
-    public static let standard = SmartwatchRemoteActionLimits()
-
-    /// The bolus limits with this request window.
-    public var bolusPolicyLimits: SmartwatchBolusPolicy.Limits {
-        var limits = bolus
-        limits.requestWindow = requestWindow
-        return limits
-    }
-
-    /// The carb entry limits with this request window.
-    public var carbEntryPolicyLimits: SmartwatchCarbEntryPolicy.Limits {
-        var limits = carbEntry
-        limits.requestWindow = requestWindow
-        return limits
+    /// The pump's smallest bolus step in units, for a watch that picks an amount.
+    public var bolusIncrement: Double? {
+        let steps = zip(supportedBolusVolumes.dropFirst(), supportedBolusVolumes).map { $0 - $1 }.filter { $0 > 0 }
+        return steps.min() ?? supportedBolusVolumes.first
     }
 }
 
-/// Decides whether a bolus requested from a watch plugin may be delivered.
+/// A bolus the user confirmed on the watch, after the plugin authenticated it.
+public struct SmartwatchBolusRequest: Equatable, Sendable {
+    public var units: Double
+    /// `SmartwatchBolusContext.token` from the context the watch showed.
+    public var contextToken: UUID
+    /// When the user confirmed the bolus on the watch. Take it from the watch, not
+    /// from when the command reached the phone, which can be much later.
+    public var requestedAt: Date
+    /// Skips only the recommendation check; every other check (ages, maximum
+    /// bolus, rate limits) still applies.
+    public var isForced: Bool
+
+    public init(units: Double, contextToken: UUID, requestedAt: Date, isForced: Bool) {
+        self.units = units
+        self.contextToken = contextToken
+        self.requestedAt = requestedAt
+        self.isForced = isForced
+    }
+}
+
+/// Carbs the user confirmed on the watch.
+public struct SmartwatchCarbEntryRequest: Equatable, Sendable {
+    public var grams: Double
+    /// When the user confirmed the entry on the watch, taken from the watch; the
+    /// entry is dated then.
+    public var requestedAt: Date
+
+    public init(grams: Double, requestedAt: Date) {
+        self.grams = grams
+        self.requestedAt = requestedAt
+    }
+}
+
+/// Decides whether a bolus requested on the watch may be passed to the host.
 ///
-/// A host calls `evaluate` from its `requestBolus`. The plugin authenticates the
-/// request; this policy is the host's own check and does not trust the plugin's
-/// numbers. It rejects requests that are not explicitly allowed, are old or made
-/// against an older state, exceed the maximum bolus or the current recommendation,
-/// or come too often. A forced request skips only the recommendation check.
-///
-/// A host can pass its own `Limits`, add checks before or after `evaluate`, or not
-/// use this policy at all.
+/// A plugin calls `evaluate` after it authenticated the request and before it
+/// calls the host's `deliverBolus`. It rejects requests that are not allowed, are
+/// old or made against an older state, exceed the maximum bolus or the
+/// recommendation the watch was shown, or come too often. A forced request skips
+/// only the recommendation check. The host still applies its own limits.
 public struct SmartwatchBolusPolicy {
-    /// How strict the policy is. `standard` is what Loop uses.
+    /// How strict the policy is. No defaults: a plugin states each one.
     public struct Limits: Equatable, Sendable {
         /// How fresh a request must be.
         public var requestWindow: SmartwatchRequestWindow
@@ -98,13 +133,13 @@ public struct SmartwatchBolusPolicy {
         public var capsAtRecommendation: Bool
 
         public init(
-            requestWindow: SmartwatchRequestWindow = .standard,
-            maximumContextAge: TimeInterval = 15 * 60,
-            maximumGlucoseAge: TimeInterval = 15 * 60,
-            minimumInterval: TimeInterval = 5 * 60,
-            dailyLimitInMaximumBoluses: Double = 3,
-            requiresContextToken: Bool = true,
-            capsAtRecommendation: Bool = true
+            requestWindow: SmartwatchRequestWindow,
+            maximumContextAge: TimeInterval,
+            maximumGlucoseAge: TimeInterval,
+            minimumInterval: TimeInterval,
+            dailyLimitInMaximumBoluses: Double,
+            requiresContextToken: Bool,
+            capsAtRecommendation: Bool
         ) {
             self.requestWindow = requestWindow
             self.maximumContextAge = maximumContextAge
@@ -114,12 +149,12 @@ public struct SmartwatchBolusPolicy {
             self.requiresContextToken = requiresContextToken
             self.capsAtRecommendation = capsAtRecommendation
         }
-
-        public static let standard = Limits()
     }
 
-    /// A watch bolus the host delivered, for the rate limits. Codable, so a host
-    /// can store its recent deliveries as it likes.
+    /// A watch bolus passed to the host, for the rate limits. Codable, so a plugin
+    /// can store its recent deliveries as it likes. Store one with 0 units when the
+    /// bolus starts (it counts toward `minimumInterval` even if delivery fails or is
+    /// uncertain), and replace it with the delivered units once the host confirms.
     public struct Delivery: Equatable, Codable, Sendable {
         public let date: Date
         public let units: Double
@@ -134,9 +169,9 @@ public struct SmartwatchBolusPolicy {
     private static let tolerance = 0.0001
 
     public var limits: Limits
-    /// Watch boluses are off unless the user turned them on and the plugin offers them.
+    /// Watch boluses are off unless the user turned them on in the plugin.
     public var isAllowed: Bool
-    /// The context the host last sent to the watch.
+    /// The context the watch was last shown.
     public var currentContext: SmartwatchBolusContext?
     /// When the newest glucose reading was taken, CGM or entered by the user.
     public var latestGlucoseDate: Date?
@@ -146,7 +181,7 @@ public struct SmartwatchBolusPolicy {
     public var roundToSupportedVolume: (Double) -> Double
 
     public init(
-        limits: Limits = .standard,
+        limits: Limits,
         isAllowed: Bool,
         currentContext: SmartwatchBolusContext?,
         latestGlucoseDate: Date?,
@@ -189,7 +224,7 @@ public struct SmartwatchBolusPolicy {
         guard let maximumBolus = context.maximumBolus, units <= maximumBolus + Self.tolerance else {
             return .failure(.exceedsMaximumBolus)
         }
-        // The watch may bolus up to the recommendation the host showed it, rounded
+        // The watch may bolus up to the recommendation it was shown, rounded
         // the same way; never more, and nothing when the host recommends no bolus.
         // A forced request skips this check only.
         if !request.isForced, limits.capsAtRecommendation {
@@ -212,10 +247,13 @@ public struct SmartwatchBolusPolicy {
     }
 }
 
-/// Hands out the bolus context a host sends to the watch, and keeps the state the
-/// bolus checks need: a context is reused while its inputs are unchanged, spent
-/// when a bolus starts, and a resend of the bolus being delivered is recognised.
-/// Keep one per host and use it only from one actor (the main actor in Loop and Trio).
+/// Hands out the bolus context a plugin shows on the watch, and keeps the state
+/// the bolus checks need: a context is reused while its inputs are unchanged,
+/// spent when a bolus starts, and a resend of the bolus being delivered is
+/// recognised. Issue a context again after every glucose or loop change, from
+/// the host's recommendation, maximum bolus and bolus volumes, so a bolus made
+/// against an older state is refused. Keep one per manager and use it only from
+/// one actor.
 public struct SmartwatchBolusContextIssuer {
     /// What a context is computed from; a new token is issued when it changes.
     public struct Inputs: Equatable, Sendable {
@@ -284,9 +322,9 @@ public struct SmartwatchBolusContextIssuer {
     }
 }
 
-/// Decides whether a carb entry requested from a watch plugin may be added. In a
-/// closed loop the host may dose for it, so the rules are shared like the bolus
-/// ones. A host can pass its own `Limits`, add checks, or not use this policy.
+/// Decides whether a carb entry requested on the watch may be passed to the host.
+/// In a closed loop the host may dose for it, so it gets checks like a bolus. The
+/// host still applies its own maximum carb entry.
 public struct SmartwatchCarbEntryPolicy {
     public struct Limits: Equatable, Sendable {
         /// How fresh a request must be.
@@ -294,32 +332,30 @@ public struct SmartwatchCarbEntryPolicy {
         /// Minimum time between carb entries from the watch.
         public var minimumInterval: TimeInterval
 
-        public init(requestWindow: SmartwatchRequestWindow = .standard, minimumInterval: TimeInterval = 5 * 60) {
+        public init(requestWindow: SmartwatchRequestWindow, minimumInterval: TimeInterval) {
             self.requestWindow = requestWindow
             self.minimumInterval = minimumInterval
         }
-
-        public static let standard = Limits()
     }
 
     public var limits: Limits
-    /// Carb entries are off unless the user turned them on and the plugin offers them.
+    /// Carb entries are off unless the user turned them on in the plugin.
     public var isAllowed: Bool
     /// The host's largest carb entry, in grams.
     public var maximumGrams: Double
     /// When the last carb entry from the watch was added.
     public var lastEntry: Date?
 
-    public init(limits: Limits = .standard, isAllowed: Bool, maximumGrams: Double, lastEntry: Date?) {
+    public init(limits: Limits, isAllowed: Bool, maximumGrams: Double, lastEntry: Date?) {
         self.limits = limits
         self.isAllowed = isAllowed
         self.maximumGrams = maximumGrams
         self.lastEntry = lastEntry
     }
 
-    /// The grams to add, or why not. A host takes its rate-limit slot (records the
-    /// entry) before it stores the carbs, so a resend that arrives meanwhile is
-    /// rate limited instead of added twice.
+    /// The grams to add, or why not. A plugin takes its rate-limit slot (records the
+    /// entry) before it asks the host to add the carbs, so a resend that arrives
+    /// meanwhile is rate limited instead of added twice.
     public func evaluate(_ request: SmartwatchCarbEntryRequest, now: Date) -> Result<Double, SmartwatchCarbEntryError> {
         guard isAllowed else {
             return .failure(.notAllowed)

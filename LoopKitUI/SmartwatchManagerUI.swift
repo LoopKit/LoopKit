@@ -33,8 +33,8 @@ public struct SmartwatchManagerDescriptor {
 
 public typealias SmartwatchManagerViewController = (UIViewController & SmartwatchManagerOnboarding & CompletionNotifying)
 
-/// The display unit reaches the plugin in each `SmartwatchStatusSnapshot`, so
-/// the UI protocol doesn't observe unit changes separately.
+/// The plugin reads the display unit from its delegate after `hostDataDidChange`
+/// with `.settings`, so the UI protocol doesn't observe unit changes separately.
 public protocol SmartwatchManagerUI: SmartwatchManager, DeviceManagerUI {
     /// Create and onboard a new watch manager.
     ///

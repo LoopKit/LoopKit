@@ -128,7 +128,6 @@
 		434C5FA0209ABD4700B2FD1A /* QuantityFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434C5F9F209ABD4700B2FD1A /* QuantityFormatterTests.swift */; };
 		4352A73C20DECF0700CAC200 /* CGMManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4352A73B20DECF0600CAC200 /* CGMManager.swift */; };
 		5B16B7C672EBB933AAC82F77 /* SmartwatchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F53F70BD36C31A8ABBF7893D /* SmartwatchManager.swift */; };
-		081DA9793121A5AD1280FA0F /* SmartwatchManager+Host.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D01F9DCAFEA1AE864C21F59 /* SmartwatchManager+Host.swift */; };
 		5A7C0FFE0000000000000B02 /* SmartwatchRemoteActionPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7C0FFE0000000000000B01 /* SmartwatchRemoteActionPolicy.swift */; };
 		87DDB056C1A2676A74A7174C /* SmartwatchRemoteActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5E88CCC0907F94409DA4E2 /* SmartwatchRemoteActions.swift */; };
 		4353D16F203D104F007B4ECD /* CarbStoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4353D16E203D104F007B4ECD /* CarbStoreError.swift */; };
@@ -610,7 +609,6 @@
 		A9E675E122713F4700E25293 /* WeakSynchronizedDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1814B8B226371DF008D2D8E /* WeakSynchronizedDelegate.swift */; };
 		A9E675E222713F4700E25293 /* CGMManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4352A73B20DECF0600CAC200 /* CGMManager.swift */; };
 		E56B6E01B9A25F04279DF442 /* SmartwatchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F53F70BD36C31A8ABBF7893D /* SmartwatchManager.swift */; };
-		6C6572A545C43AB7FB716CDD /* SmartwatchManager+Host.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D01F9DCAFEA1AE864C21F59 /* SmartwatchManager+Host.swift */; };
 		5A7C0FFE0000000000000B03 /* SmartwatchRemoteActionPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7C0FFE0000000000000B01 /* SmartwatchRemoteActionPolicy.swift */; };
 		79BFB4BE74EFBCDAEC647046 /* SmartwatchRemoteActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5E88CCC0907F94409DA4E2 /* SmartwatchRemoteActions.swift */; };
 		A9E675E322713F4700E25293 /* CarbStoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4353D16E203D104F007B4ECD /* CarbStoreError.swift */; };
@@ -1185,7 +1183,6 @@
 		434FF1F31CF294A9000DB779 /* TextFieldTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewController.swift; sourceTree = "<group>"; };
 		4352A73B20DECF0600CAC200 /* CGMManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGMManager.swift; sourceTree = "<group>"; };
 		F53F70BD36C31A8ABBF7893D /* SmartwatchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartwatchManager.swift; sourceTree = "<group>"; };
-		8D01F9DCAFEA1AE864C21F59 /* SmartwatchManager+Host.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SmartwatchManager+Host.swift"; sourceTree = "<group>"; };
 		5A7C0FFE0000000000000B01 /* SmartwatchRemoteActionPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartwatchRemoteActionPolicy.swift; sourceTree = "<group>"; };
 		2D5E88CCC0907F94409DA4E2 /* SmartwatchRemoteActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartwatchRemoteActions.swift; sourceTree = "<group>"; };
 		5A7C0FFE0000000000000B04 /* SmartwatchRemoteActionPolicyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartwatchRemoteActionPolicyTests.swift; sourceTree = "<group>"; };
@@ -3009,7 +3006,6 @@
 				B4A2ABE92AA9F210007E3EC1 /* BolusActivationType.swift */,
 				4352A73B20DECF0600CAC200 /* CGMManager.swift */,
 				F53F70BD36C31A8ABBF7893D /* SmartwatchManager.swift */,
-				8D01F9DCAFEA1AE864C21F59 /* SmartwatchManager+Host.swift */,
 				5A7C0FFE0000000000000B01 /* SmartwatchRemoteActionPolicy.swift */,
 				2D5E88CCC0907F94409DA4E2 /* SmartwatchRemoteActions.swift */,
 				A9A53E2B2714E5BC0050C0B1 /* CodableDevice.swift */,
@@ -4158,7 +4154,6 @@
 				1D1FCE2924BE4F11000300A8 /* TherapySetting.swift in Sources */,
 				4352A73C20DECF0700CAC200 /* CGMManager.swift in Sources */,
 				5B16B7C672EBB933AAC82F77 /* SmartwatchManager.swift in Sources */,
-				081DA9793121A5AD1280FA0F /* SmartwatchManager+Host.swift in Sources */,
 				5A7C0FFE0000000000000B02 /* SmartwatchRemoteActionPolicy.swift in Sources */,
 				87DDB056C1A2676A74A7174C /* SmartwatchRemoteActions.swift in Sources */,
 				4353D16F203D104F007B4ECD /* CarbStoreError.swift in Sources */,
@@ -4506,7 +4501,6 @@
 				A9E675E122713F4700E25293 /* WeakSynchronizedDelegate.swift in Sources */,
 				A9E675E222713F4700E25293 /* CGMManager.swift in Sources */,
 				E56B6E01B9A25F04279DF442 /* SmartwatchManager.swift in Sources */,
-				6C6572A545C43AB7FB716CDD /* SmartwatchManager+Host.swift in Sources */,
 				5A7C0FFE0000000000000B03 /* SmartwatchRemoteActionPolicy.swift in Sources */,
 				79BFB4BE74EFBCDAEC647046 /* SmartwatchRemoteActions.swift in Sources */,
 				A9E675E322713F4700E25293 /* CarbStoreError.swift in Sources */,

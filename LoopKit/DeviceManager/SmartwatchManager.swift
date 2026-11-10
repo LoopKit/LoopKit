@@ -7,312 +7,76 @@
 
 import Foundation
 
-// This protocol family is intentionally free of `DeviceManager` and of any other
-// LoopKit type, so the same plugin builds against any AID's LoopKit (Loop loads it
-// dynamically; Trio imports it statically). The UI layer (`SmartwatchManagerUI` in
-// LoopKitUI) adds `DeviceManagerUI`, so a plugin conforms to `DeviceManager` in its
-// own extension.
-
-/// What a watch plugin shows. The host only builds and sends the parts a
-/// plugin declares.
-public struct SmartwatchCapabilities: OptionSet, Sendable {
+/// What changed in the host since a plugin last read it, sent with
+/// `SmartwatchManager.hostDataDidChange`. A plugin reads only what it shows.
+public struct SmartwatchHostDataChange: OptionSet, Sendable {
     public let rawValue: Int
 
     public init(rawValue: Int) {
         self.rawValue = rawValue
     }
 
-    /// The latest glucose reading.
-    public static let glucose = SmartwatchCapabilities(rawValue: 1 << 0)
-    /// Recent glucose readings, for a graph.
-    public static let history = SmartwatchCapabilities(rawValue: 1 << 1)
-    /// Predicted glucose from the last loop run.
-    public static let prediction = SmartwatchCapabilities(rawValue: 1 << 2)
-    /// Insulin and carbs on board, last loop completion and closed loop state.
-    public static let loopStatus = SmartwatchCapabilities(rawValue: 1 << 3)
-    /// Host-issued alerts: the host forwards its own alerts to the watch as they
-    /// fire and retracts them. The host decides
-    /// what alarms; the watch does not evaluate thresholds itself. A host forwards
-    /// what its own mute lets through: Loop's mute silences every alert, so it
-    /// forwards none while muted; a host whose critical alerts bypass its mute
-    /// may forward those.
-    public static let alerts = SmartwatchCapabilities(rawValue: 1 << 4)
-    /// Boluses requested from the watch. The plugin must authenticate each
-    /// request; the host then applies its own permission and safety checks.
-    public static let remoteBolus = SmartwatchCapabilities(rawValue: 1 << 5)
-    /// Therapy context: basal, insulin sensitivity, eventual glucose, sensitivity
-    /// ratio, correction target and the active preset. Off unless a plugin declares it.
-    public static let therapy = SmartwatchCapabilities(rawValue: 1 << 6)
-    /// The watch can ask the host to mute its alerts. The host acts on it only if
-    /// its user allowed muting from the watch.
-    public static let remoteMute = SmartwatchCapabilities(rawValue: 1 << 7)
-    /// The watch can ask the host to add a carb entry. The host acts on it only
-    /// if its user allowed it.
-    public static let remoteCarbs = SmartwatchCapabilities(rawValue: 1 << 8)
-    /// The watch can ask the host to start or end an override preset. The host
-    /// sends its presets and acts on requests only if its user allowed it.
-    public static let remoteOverride = SmartwatchCapabilities(rawValue: 1 << 9)
-    /// The watch can ask the host to start or end a temp target preset, for hosts
-    /// that have temp targets. The host acts on it only if its user allowed it.
-    public static let remoteTempTarget = SmartwatchCapabilities(rawValue: 1 << 10)
+    /// A new glucose reading was stored, before the loop runs on it.
+    public static let glucose = SmartwatchHostDataChange(rawValue: 1 << 0)
+    /// The loop completed, or its output changed: `SmartwatchLoopState`, temp basal.
+    public static let loop = SmartwatchHostDataChange(rawValue: 1 << 1)
+    /// Override or temp target presets, or the active one, changed.
+    public static let presets = SmartwatchHostDataChange(rawValue: 1 << 2)
+    /// A setting a watch may show or check changed: display unit, maximum bolus or
+    /// carb entry, schedules, the pump's bolus volumes.
+    public static let settings = SmartwatchHostDataChange(rawValue: 1 << 3)
+    /// The host's alert mute started, changed or ended.
+    public static let alertMute = SmartwatchHostDataChange(rawValue: 1 << 4)
+
+    public static let all: SmartwatchHostDataChange = [.glucose, .loop, .presets, .settings, .alertMute]
 }
 
-extension SmartwatchCapabilities: CustomStringConvertible {
-    private static let names: [(SmartwatchCapabilities, String)] = [
-        (.glucose, "glucose"),
-        (.history, "history"),
-        (.prediction, "prediction"),
-        (.loopStatus, "loopStatus"),
-        (.alerts, "alerts"),
-        (.remoteBolus, "remoteBolus"),
-        (.therapy, "therapy"),
-        (.remoteMute, "remoteMute"),
-        (.remoteCarbs, "remoteCarbs"),
-        (.remoteOverride, "remoteOverride"),
-        (.remoteTempTarget, "remoteTempTarget"),
-    ]
+/// The loop's output from one loop run, read together so a watch never shows a
+/// new value next to an older one from a previous run.
+public struct SmartwatchLoopState {
+    /// When the loop last completed; `nil` before the first run.
+    public var lastLoopCompleted: Date?
 
-    /// The capability names, for logs, for example "loopStatus, remoteBolus".
-    /// Bits without a name show as their raw value.
-    public var description: String {
-        var parts = Self.names.filter { contains($0.0) }.map(\.1)
-        let unnamed = subtracting(Self.names.reduce(into: []) { $0.formUnion($1.0) })
-        if !unnamed.isEmpty {
-            parts.append("raw value \(unnamed.rawValue)")
-        }
-        return parts.isEmpty ? "none" : parts.joined(separator: ", ")
-    }
-}
+    /// Whether automatic dosing is on. True only in full closed loop; hosts with
+    /// other modes (open loop, low glucose suspend only) report false for them.
+    public var isClosedLoop: Bool
 
-/// What the algorithm is working with right now, sent with `.therapy`. Glucose
-/// values are mg/dL. A host leaves out what it doesn't have: Loop has no
-/// sensitivity ratio, for example.
-public struct SmartwatchTherapyContext: Equatable, Sendable {
-    /// Units per hour of the running temp basal; `nil` while none is running.
-    public var tempBasalRate: Double?
+    public var insulinOnBoard: InsulinValue?
 
-    /// Units per hour of the scheduled basal now.
-    public var scheduledBasalRate: Double?
+    public var carbsOnBoard: CarbValue?
 
-    /// mg/dL per unit, the insulin sensitivity now.
-    public var insulinSensitivity: Double?
+    /// The forecast from the last loop run; empty before it has run.
+    public var predictedGlucose: [PredictedGlucoseValue]
 
-    /// mg/dL, where the latest forecast ends.
-    public var eventualGlucose: Double?
+    /// Where the algorithm expects glucose to end up. Loop reports the end of
+    /// `predictedGlucose`; a host whose algorithm computes its own (Trio's
+    /// eventual BG) reports that.
+    public var eventualGlucose: LoopQuantity?
 
     /// The algorithm's sensitivity ratio (1 = no adjustment), for hosts that have one.
     public var sensitivityRatio: Double?
 
-    /// mg/dL, the correction range in effect now, including any preset or temp target.
-    public var correctionRange: ClosedRange<Double>?
-
-    /// The name of the active preset, override or temp target.
-    public var activePresetName: String?
-
-    /// When the active preset ends; `nil` while none is active or it runs indefinitely.
-    public var activePresetEnd: Date?
-
     public init(
-        tempBasalRate: Double? = nil,
-        scheduledBasalRate: Double? = nil,
-        insulinSensitivity: Double? = nil,
-        eventualGlucose: Double? = nil,
-        sensitivityRatio: Double? = nil,
-        correctionRange: ClosedRange<Double>? = nil,
-        activePresetName: String? = nil,
-        activePresetEnd: Date? = nil
+        lastLoopCompleted: Date?,
+        isClosedLoop: Bool,
+        insulinOnBoard: InsulinValue? = nil,
+        carbsOnBoard: CarbValue? = nil,
+        predictedGlucose: [PredictedGlucoseValue] = [],
+        eventualGlucose: LoopQuantity? = nil,
+        sensitivityRatio: Double? = nil
     ) {
-        self.tempBasalRate = tempBasalRate
-        self.scheduledBasalRate = scheduledBasalRate
-        self.insulinSensitivity = insulinSensitivity
-        self.eventualGlucose = eventualGlucose
-        self.sensitivityRatio = sensitivityRatio
-        self.correctionRange = correctionRange
-        self.activePresetName = activePresetName
-        self.activePresetEnd = activePresetEnd
-    }
-}
-
-/// A glucose display unit. Plugins get plain values instead of a quantity type,
-/// so they build against any LoopKit variant a host uses.
-public enum SmartwatchGlucoseUnit: Equatable, Sendable {
-    case milligramsPerDeciliter
-    case millimolesPerLiter
-}
-
-/// A glucose trend, independent of LoopKit's `GlucoseTrend` so the wire model
-/// carries no LoopKit type. Raw values match `GlucoseTrend` (1...7), so a host
-/// maps with `SmartwatchGlucoseTrend(rawValue:)`.
-public enum SmartwatchGlucoseTrend: Int, Equatable, Sendable, CaseIterable {
-    case upUpUp = 1
-    case upUp
-    case up
-    case flat
-    case down
-    case downDown
-    case downDownDown
-}
-
-/// A stored glucose reading, in mg/dL.
-public struct SmartwatchGlucoseReading: Equatable, Sendable {
-    public var date: Date
-    public var milligramsPerDeciliter: Double
-    public var trend: SmartwatchGlucoseTrend?
-    /// mg/dL per minute, if the CGM reports a rate.
-    public var trendRate: Double?
-    /// Entered by the user, such as a fingerstick.
-    public var wasUserEntered: Bool
-    /// Shown by the CGM but not to be used for dosing or graphs.
-    public var isDisplayOnly: Bool
-
-    public init(date: Date, milligramsPerDeciliter: Double, trend: SmartwatchGlucoseTrend? = nil, trendRate: Double? = nil, wasUserEntered: Bool = false, isDisplayOnly: Bool = false) {
-        self.date = date
-        self.milligramsPerDeciliter = milligramsPerDeciliter
-        self.trend = trend
-        self.trendRate = trendRate
-        self.wasUserEntered = wasUserEntered
-        self.isDisplayOnly = isDisplayOnly
-    }
-}
-
-/// One point of the predicted glucose curve, in mg/dL.
-public struct SmartwatchPredictedGlucose: Equatable, Sendable {
-    public var date: Date
-    public var milligramsPerDeciliter: Double
-
-    public init(date: Date, milligramsPerDeciliter: Double) {
-        self.date = date
-        self.milligramsPerDeciliter = milligramsPerDeciliter
-    }
-}
-
-/// The state a watch shows, built by the host.
-///
-/// The host sends a new snapshot as soon as a new CGM reading is stored, before
-/// the loop runs, and again when the loop's output changes. Loop-derived values
-/// keep their last known value until the loop updates them.
-public struct SmartwatchStatusSnapshot: Equatable {
-    /// How far back `glucoseHistory` reaches.
-    public static let historyInterval: TimeInterval = .hours(3)
-
-    public var displayUnit: SmartwatchGlucoseUnit
-
-    /// Bolus context, with `.remoteBolus`. Replaced whenever the recommendation, the
-    /// maximum bolus or the latest glucose changes, and after each watch bolus.
-    public var bolusContext: SmartwatchBolusContext?
-
-    /// The host's override presets, with `.remoteOverride`.
-    public var overridePresets: [SmartwatchPreset]?
-
-    /// The host's temp target presets, with `.remoteTempTarget`.
-    public var tempTargetPresets: [SmartwatchPreset]?
-
-    /// The latest stored reading, including user-entered and display-only
-    /// readings; check their flags before showing one as a CGM reading.
-    public var glucose: SmartwatchGlucoseReading?
-
-    /// Stored readings from the last `historyInterval`, oldest first.
-    /// Empty unless the plugin declares `.history`.
-    public var glucoseHistory: [SmartwatchGlucoseReading]
-
-    /// Predicted glucose from the last loop run. `nil` unless the plugin
-    /// declares `.prediction`, or before the loop has run.
-    public var predictedGlucose: [SmartwatchPredictedGlucose]?
-
-    /// Units of insulin on board, with `.loopStatus`.
-    public var insulinOnBoard: Double?
-
-    /// Grams of carbs on board, with `.loopStatus`.
-    public var carbsOnBoard: Double?
-
-    /// When the loop last completed, with `.loopStatus`.
-    public var lastLoopCompleted: Date?
-
-    /// Whether automatic dosing is on, with `.loopStatus`. True only in full
-    /// closed loop; hosts with other modes (open loop, low glucose suspend only,
-    /// basal testing) send false for them.
-    public var isClosedLoop: Bool?
-
-    /// Basal, sensitivity and target context, with `.therapy`.
-    public var therapy: SmartwatchTherapyContext?
-
-    /// The remote actions the user allowed for this watch: a subset of the
-    /// remote capabilities in `effectiveCapabilities`, so a watch can hide what
-    /// is off. Informational only: the host checks its permissions on every request.
-    public var permittedActions: SmartwatchCapabilities
-
-    /// The host's largest carb entry in grams, with `.remoteCarbs`.
-    public var maximumCarbEntry: Double?
-
-    /// Whether the host uses a carb entry's `SmartwatchCarbAbsorption`, with
-    /// `.remoteCarbs` or `.remoteBolus`. When false (a carb model without
-    /// per-entry absorption), a watch shouldn't ask for one.
-    public var usesCarbAbsorption: Bool
-
-    /// The pump's smallest bolus step in units, with `.remoteBolus`, for a watch
-    /// that picks an amount before it has a bolus context.
-    public var bolusIncrement: Double?
-
-    /// The smallest step between a pump's supported bolus volumes, for `bolusIncrement`.
-    public static func bolusIncrement(of supportedBolusVolumes: [Double]) -> Double? {
-        let steps = zip(supportedBolusVolumes.dropFirst(), supportedBolusVolumes).map { $0 - $1 }.filter { $0 > 0 }
-        return steps.min() ?? supportedBolusVolumes.first
-    }
-
-    public init(
-        displayUnit: SmartwatchGlucoseUnit,
-        glucose: SmartwatchGlucoseReading?,
-        glucoseHistory: [SmartwatchGlucoseReading] = [],
-        predictedGlucose: [SmartwatchPredictedGlucose]? = nil,
-        insulinOnBoard: Double? = nil,
-        carbsOnBoard: Double? = nil,
-        lastLoopCompleted: Date? = nil,
-        isClosedLoop: Bool? = nil,
-        bolusContext: SmartwatchBolusContext? = nil,
-        therapy: SmartwatchTherapyContext? = nil,
-        overridePresets: [SmartwatchPreset]? = nil,
-        tempTargetPresets: [SmartwatchPreset]? = nil,
-        permittedActions: SmartwatchCapabilities = [],
-        maximumCarbEntry: Double? = nil,
-        usesCarbAbsorption: Bool = true,
-        bolusIncrement: Double? = nil
-    ) {
-        self.displayUnit = displayUnit
-        self.glucose = glucose
-        self.glucoseHistory = glucoseHistory
-        self.predictedGlucose = predictedGlucose
-        self.insulinOnBoard = insulinOnBoard
-        self.carbsOnBoard = carbsOnBoard
         self.lastLoopCompleted = lastLoopCompleted
         self.isClosedLoop = isClosedLoop
-        self.bolusContext = bolusContext
-        self.therapy = therapy
-        self.overridePresets = overridePresets
-        self.tempTargetPresets = tempTargetPresets
-        self.permittedActions = permittedActions
-        self.maximumCarbEntry = maximumCarbEntry
-        self.usesCarbAbsorption = usesCarbAbsorption
-        self.bolusIncrement = bolusIncrement
+        self.insulinOnBoard = insulinOnBoard
+        self.carbsOnBoard = carbsOnBoard
+        self.predictedGlucose = predictedGlucose
+        self.eventualGlucose = eventualGlucose
+        self.sensitivityRatio = sensitivityRatio
     }
 }
 
-/// Identifies a host alert so it can be retracted.
-public struct SmartwatchAlertIdentifier: Equatable, Hashable, Sendable {
-    public var value: String
-    public init(_ value: String) {
-        self.value = value
-    }
-}
-
-/// How urgent a host alert is. Maps from the host's own interruption levels.
-public enum SmartwatchAlertLevel: Int, Equatable, Sendable {
-    case informational
-    case warning
-    case critical
-}
-
-/// Which glucose alert a host alert is. The host sets it on `SmartwatchAlert`;
-/// `nil` means the alert isn't a glucose alert.
+/// Which glucose alert a host alert is. The host passes it with each alert it
+/// forwards (`watchAlertDidIssue`); `nil` means the alert isn't a glucose alert.
 ///
 /// Why a dedicated type rather than reading the alert itself:
 /// - A watch needs to know *which* glucose alert is active, for example to colour
@@ -338,80 +102,37 @@ public enum SmartwatchGlucoseAlertType: String, Equatable, Sendable {
     case predictedLow
 }
 
-/// An alert the host issued and forwarded to the watch. The host evaluates its
-/// own alerts (on a background CGM or pump update) and sends the result; the
-/// watch shows it and vibrates.
-public struct SmartwatchAlert: Equatable, Sendable {
-    public var identifier: SmartwatchAlertIdentifier
-    public var level: SmartwatchAlertLevel
-    public var title: String?
-    public var body: String?
-    /// When the host issued the alert.
-    public var issuedAt: Date
-    /// Set by the host for glucose alerts; `nil` for any other alert.
-    public var glucoseAlertType: SmartwatchGlucoseAlertType?
-
-    public init(identifier: SmartwatchAlertIdentifier, level: SmartwatchAlertLevel, title: String? = nil, body: String? = nil, issuedAt: Date, glucoseAlertType: SmartwatchGlucoseAlertType? = nil) {
-        self.identifier = identifier
-        self.level = level
-        self.title = title
-        self.body = body
-        self.issuedAt = issuedAt
-        self.glucoseAlertType = glucoseAlertType
-    }
-}
-
-/// An alert about the watch itself, such as a missing companion app, which the
-/// plugin asks the host to show (`issueDeviceAlert`). Glucose alerts come from
-/// the host, never from a plugin.
-public struct SmartwatchDeviceAlert: Equatable, Sendable {
-    /// Unique within the plugin; issuing the same identifier again replaces the alert.
-    public var identifier: SmartwatchAlertIdentifier
-    public var level: SmartwatchAlertLevel
-    public var title: String
-    public var body: String
-
-    public init(identifier: SmartwatchAlertIdentifier, level: SmartwatchAlertLevel, title: String, body: String) {
-        self.identifier = identifier
-        self.level = level
-        self.title = title
-        self.body = body
-    }
-}
-
-/// One line for the host's device log, sent by the plugin. Mirrors LoopKit's
-/// `DeviceLogEntryType` so a host that keeps a device log maps it directly,
-/// without the plugin depending on `DeviceManagerDelegate`.
-public struct SmartwatchDeviceLogEntry: Equatable, Sendable {
-    public enum EntryType: String, Sendable {
-        case send, receive, error, delegate, delegateResponse, connection
-    }
-    public var type: EntryType
-    public var message: String
-    /// The watch the line is about (for example the watchface UUID), if any.
-    public var deviceIdentifier: String?
-
-    public init(type: EntryType, message: String, deviceIdentifier: String? = nil) {
-        self.type = type
-        self.message = message
-        self.deviceIdentifier = deviceIdentifier
-    }
-}
-
-/// The host side of a watch plugin: what the plugin calls on the host.
+/// The host side of a watch plugin: what the plugin reads from and asks of the host.
 ///
-/// **Who implements it:** the host app (Loop's `DeviceDataManager`, Trio's
-/// `SmartwatchHost`). The host sets itself as `smartwatchManagerDelegate` right
-/// after it creates or restores the manager, before the first snapshot.
+/// **Who implements it:** the host app, in an object of its own for the watch
+/// (Loop's `SmartwatchManagerHost`, Trio's `SmartwatchHost`), so it knows which
+/// manager an alert came from. The host sets it as `smartwatchManagerDelegate`
+/// right after it creates or restores the manager, then calls
+/// `hostDataDidChange(.all)`.
 ///
-/// **Threads:** a plugin may call any of these from any thread or task; the host
-/// hops to its own actor. The `async` methods may suspend for as long as the host
-/// needs (a bolus waits for the pump), so don't call them while holding a lock.
+/// **Logs and alerts** come from `DeviceManagerDelegate`, as for CGM and pump
+/// plugins: `deviceManager(_:logEventForDeviceIdentifier:type:message:completion:)`
+/// and `issueAlert`/`retractAlert`. Use alerts for problems with the watch itself
+/// that the user must fix outside it, such as a missing companion app; never for
+/// glucose (the host forwards its own glucose alerts). A host shows a watch
+/// plugin's alerts at most time-sensitive, never critical.
 ///
-/// **What's optional:** a host must implement the first four. Device alerts
-/// default to being ignored, and every remote action defaults to throwing
-/// `.notAllowed`, so a host implements only what it supports.
-public protocol SmartwatchManagerDelegate: AnyObject {
+/// **Reads** return what the host has now. Read after `hostDataDidChange`, and
+/// read only what the watch shows. They may suspend while the host fetches from
+/// its stores.
+///
+/// **Actions** (bolus, carbs, presets, mute) get the same checks the host applies
+/// to any request of that kind, such as its maximum bolus, and nothing
+/// watch-specific. Whether a watch may ask at all, and how fresh or frequent its
+/// requests must be, is the plugin's own setting and policy
+/// (`SmartwatchRemoteActionPolicy.swift` has shared checks). A host that doesn't
+/// offer an action throws `.notAllowed` (the default).
+///
+/// **Threads:** like every `DeviceManagerDelegate` (through `PersistedAlertStore`),
+/// the delegate is main-actor isolated: call its synchronous methods on the main
+/// actor; the `async` ones may be awaited from any task. Don't await them while
+/// holding a lock: a bolus waits for the pump.
+public protocol SmartwatchManagerDelegate: DeviceManagerDelegate {
     /// The manager's `rawState` changed and should be saved.
     ///
     /// **Call it** after every change to what `rawState` returns: a setting the
@@ -423,259 +144,204 @@ public protocol SmartwatchManagerDelegate: AnyObject {
     /// Asks the host to remove the manager.
     ///
     /// **Call it** from `delete()` when the user deletes the watch in the plugin's
-    /// settings, after the plugin has stopped its own work. The host then drops
-    /// the manager and its saved state, and turns off the user's watch permissions,
-    /// so a later watch starts with every remote action off. The host calls nothing
-    /// on the manager afterwards.
+    /// settings, after the plugin has stopped its own work and retracted its
+    /// alerts. The host then drops the manager and its saved state, and calls
+    /// nothing on it afterwards.
     func smartwatchManagerWantsDeletion(_ manager: SmartwatchManager) async
 
-    /// Asks the host to send the current snapshot again.
-    ///
-    /// **Call it** when the plugin needs fresh data rather than waiting for the
-    /// next reading: the watch reconnected or restarted, the user changed
-    /// `requestedCapabilities`, or the plugin added carbs and needs a bolus
-    /// context that counts them. The host answers with `watchDataDidUpdate`
-    /// soon, not necessarily before this returns.
-    func smartwatchManagerRequestsRefresh(_ manager: SmartwatchManager)
+    // MARK: Reads
 
-    /// A line for the host's device log.
-    ///
-    /// **Call it** for what someone reading a support log (Loop's Issue Report)
-    /// needs: connections and disconnections, messages to and from the watch,
-    /// each remote request and its outcome, and every error with its reason.
-    /// Never log secrets such as keys or tokens. A host without a device log may
-    /// ignore it.
-    func smartwatchManager(_ manager: SmartwatchManager, didLogEvent event: SmartwatchDeviceLogEntry)
+    /// The unit the user sees glucose in.
+    func smartwatchManagerGlucoseDisplayUnit(_ manager: SmartwatchManager) async -> LoopUnit
 
-    /// Asks the host to show an alert about the watch itself, as one of the host's
-    /// own alerts from this plugin.
-    ///
-    /// **Call it** when the watch can't work until the user does something outside
-    /// the watch, for example a companion app the plugin needs is missing (the
-    /// Garmin plugin when Garmin Connect isn't installed) or a permission was
-    /// withdrawn. Issue it once per problem, with a stable identifier; issuing the
-    /// same identifier again replaces it. Call `retractDeviceAlert` once the
-    /// problem is fixed.
-    ///
-    /// **Don't use it** for glucose alerts (the host issues those, and forwards
-    /// them with `watchAlertDidIssue`), or for a dropped connection that recovers
-    /// on its own: log that instead.
-    ///
-    /// The host decides how to show it and may lower its level; no plugin alert is
-    /// critical. A host may also ignore it (the default), so the plugin should show
-    /// the same problem in its own settings.
-    func smartwatchManager(_ manager: SmartwatchManager, issueDeviceAlert alert: SmartwatchDeviceAlert)
+    /// Stored glucose readings since `date`, oldest first, including user-entered
+    /// and display-only readings: check their flags before showing one as a CGM reading.
+    func smartwatchManager(_ manager: SmartwatchManager, glucoseSamplesSince date: Date) async throws -> [StoredGlucoseSample]
 
-    /// Withdraws an alert the plugin issued with `issueDeviceAlert`.
-    ///
-    /// **Call it** as soon as the cause is gone (the companion app is installed,
-    /// the permission granted), and when the watch is deleted.
-    func smartwatchManager(_ manager: SmartwatchManager, retractDeviceAlert identifier: SmartwatchAlertIdentifier)
+    /// The loop's output from its last run.
+    func smartwatchManagerLoopState(_ manager: SmartwatchManager) async -> SmartwatchLoopState
 
-    /// Asks the host to deliver a bolus the user confirmed on the watch.
-    ///
-    /// **Call it** only with `.remoteBolus` in `effectiveCapabilities`, only for a
-    /// request the user confirmed on the watch and the plugin authenticated (for
-    /// example signed by the watch), and once per request: a resend of a request
-    /// already passed on must not reach the host again. Use the token from the
-    /// latest snapshot's `bolusContext`, and `requestedAt` from the watch.
-    ///
-    /// The host checks its user's permission, the request's age, the context
-    /// token, recent glucose, the maximum bolus, the recommendation (unless
-    /// forced) and its rate limits, all within `remoteActionLimits`, plus checks of
-    /// its own, and then delivers. Don't retry a refusal automatically.
-    ///
-    /// - Returns: The delivered units, rounded to a supported volume.
-    /// - Throws: `SmartwatchBolusError`; `.inProgress` when the same context's
-    ///   bolus is still being delivered, so the watch doesn't report a failure.
-    func smartwatchManager(_ manager: SmartwatchManager, requestBolus request: SmartwatchBolusRequest) async throws -> Double
+    /// The scheduled basal rate now, in units per hour.
+    func smartwatchManagerScheduledBasalRate(_ manager: SmartwatchManager) async -> LoopQuantity?
 
-    /// Asks the host what it would recommend with the carbs the user is about to
-    /// add (0 for none), so the watch can show it before a bolus is picked.
+    /// The temp basal running now; `nil` while none is.
+    func smartwatchManagerTempBasal(_ manager: SmartwatchManager) async -> DoseEntry?
+
+    /// The insulin sensitivity now, including any active override.
+    func smartwatchManagerInsulinSensitivity(_ manager: SmartwatchManager) async -> LoopQuantity?
+
+    /// The correction range in effect now, including any override or temp target.
+    func smartwatchManagerCorrectionRange(_ manager: SmartwatchManager) async -> ClosedRange<LoopQuantity>?
+
+    /// The user's override presets (Loop's presets, Trio's overrides).
+    func smartwatchManagerOverridePresets(_ manager: SmartwatchManager) async -> [TemporaryPreset]
+
+    /// The override running now; `nil` while none is. One started from a preset
+    /// has the context `.preset(preset)`, so a watch can mark that preset as running.
+    func smartwatchManagerActiveOverride(_ manager: SmartwatchManager) async -> TemporaryScheduleOverride?
+
+    /// The user's temp target presets, for hosts that have temp targets (Trio):
+    /// presets whose settings set only a target range. `nil` (the default) for a
+    /// host without temp targets; empty for one whose user has no presets.
+    func smartwatchManagerTempTargetPresets(_ manager: SmartwatchManager) async -> [TemporaryPreset]?
+
+    /// The temp target running now; `nil` while none is, or for hosts without temp
+    /// targets. One started from a preset has the context `.preset(preset)`.
+    func smartwatchManagerActiveTempTarget(_ manager: SmartwatchManager) async -> TemporaryScheduleOverride?
+
+    /// When the host's alert mute ends; `nil` while alerts aren't muted.
+    func smartwatchManagerAlertMuteEnd(_ manager: SmartwatchManager) async -> Date?
+
+    /// The user's maximum bolus, in units.
+    func smartwatchManagerMaximumBolus(_ manager: SmartwatchManager) async -> Double?
+
+    /// The host's largest carb entry, in grams.
+    func smartwatchManagerMaximumCarbEntry(_ manager: SmartwatchManager) async -> Double?
+
+    /// The bolus volumes the pump can deliver, in units; empty without a pump.
+    func smartwatchManagerSupportedBolusVolumes(_ manager: SmartwatchManager) async -> [Double]
+
+    /// The host's fast, medium and slow carb absorption times, for a watch that
+    /// lets the user pick one. `nil` (the default) for a host whose carb model has
+    /// no per-entry absorption time (Trio): a watch then shouldn't ask for one.
+    func smartwatchManagerDefaultCarbAbsorptionTimes(_ manager: SmartwatchManager) async -> (fast: TimeInterval, medium: TimeInterval, slow: TimeInterval)?
+
+    /// What the host would recommend now, with `grams` of carbs added (0 for none).
     /// Nothing is added or delivered.
     ///
-    /// **Call it** only with `.remoteBolus` in `effectiveCapabilities`, when the
-    /// user starts a bolus on the watch. The host answers only while its user
-    /// allows boluses from the watch and its glucose is recent, like a bolus
-    /// request. The bolus the user then confirms is checked as usual, against the
-    /// context after the carbs are added.
-    ///
-    /// - Throws: `SmartwatchBolusError`: `.notAllowed`, `.noRecentGlucose`,
-    ///   `.invalidAmount` for carbs that aren't a valid entry, or `.refusedByHost`
-    ///   when no recommendation can be computed.
-    func smartwatchManager(_ manager: SmartwatchManager, recommendBolusFor request: SmartwatchBolusRecommendationRequest) async throws -> SmartwatchBolusRecommendation
+    /// - Returns: Units, rounded to a supported volume; 0 when the host recommends none.
+    /// - Throws: `SmartwatchBolusError`: `.invalidAmount` for carbs that aren't a
+    ///   valid entry, `.refusedByHost` when no recommendation can be computed.
+    func smartwatchManager(_ manager: SmartwatchManager, recommendBolusForCarbs grams: Double, absorptionTime: TimeInterval?) async throws -> Double
 
-    /// Asks the host to mute its alerts, as the user chose on the watch.
+    // MARK: Actions
+
+    /// Delivers a bolus.
     ///
-    /// **Call it** only with `.remoteMute` in `effectiveCapabilities`, for a mute
-    /// the user confirmed on the watch, with `requestedAt` from the watch. The
-    /// host checks its user's permission and the request's age, and may round
-    /// the duration up to one it offers or cap it at its own maximum. A duration
-    /// of 0 ends the mute.
+    /// **Call it** once per bolus the user confirmed on the watch and the plugin's
+    /// own checks passed. The host applies its own limits (Loop: maximum bolus;
+    /// Trio: maximum bolus and maximum IOB), rounds to a supported volume and
+    /// delivers. Only the host's current watch manager may bolus.
+    ///
+    /// - Returns: The units, once the pump accepted the bolus. It may still be
+    ///   cancelled on the phone or the pump while it runs, and then delivers
+    ///   less; the host doesn't report that to the plugin.
+    /// - Throws: `SmartwatchBolusError`. `.deliveryFailed` when the pump was asked
+    ///   and didn't accept it, including uncertain delivery. Every other error
+    ///   means nothing was sent to the pump: `.exceedsMaximumBolus` or
+    ///   `.refusedByHost` for the host's limits, `.inProgress` while another
+    ///   bolus is being delivered.
+    func smartwatchManager(_ manager: SmartwatchManager, deliverBolus units: Double) async throws -> Double
+
+    /// Adds a carb entry dated `date`.
+    ///
+    /// **Call it** once per entry the user confirmed on the watch. The host
+    /// applies its own maximum carb entry. For a meal bolus, add the carbs first,
+    /// then ask for the recommendation again.
+    ///
+    /// - Parameter absorptionTime: `nil` for the host's default.
+    /// - Returns: The grams added.
+    /// - Throws: `SmartwatchCarbEntryError`.
+    func smartwatchManager(_ manager: SmartwatchManager, addCarbEntry grams: Double, absorptionTime: TimeInterval?, date: Date) async throws -> Double
+
+    /// Starts an override preset (by `TemporaryPreset.id`) or ends the running one.
+    /// Ending when none is running succeeds.
+    ///
+    /// - Throws: `SmartwatchPresetError`.
+    func smartwatchManager(_ manager: SmartwatchManager, enactOverride action: SmartwatchPresetAction) async throws
+
+    /// Starts a temp target preset or ends the running one, for hosts that have
+    /// temp targets. Others throw `.notAllowed` (the default).
+    ///
+    /// - Throws: `SmartwatchPresetError`.
+    func smartwatchManager(_ manager: SmartwatchManager, enactTempTarget action: SmartwatchPresetAction) async throws
+
+    /// Mutes the host's alerts for `duration`, or ends the mute when it's 0. The
+    /// host may round the duration up to one it offers or cap it at its maximum.
     ///
     /// - Returns: When the mute ends (now, when it was ended).
     /// - Throws: `SmartwatchAlertMuteError`.
-    func smartwatchManager(_ manager: SmartwatchManager, requestAlertMute request: SmartwatchAlertMuteRequest) async throws -> Date
-
-    /// Asks the host to add carbs, as the user chose on the watch.
-    ///
-    /// **Call it** only with `.remoteCarbs` in `effectiveCapabilities`, once per
-    /// request, with `requestedAt` from the watch; the entry is dated then. The
-    /// host checks its user's permission, the request's age, its maximum carb
-    /// entry and its rate limit. For a meal bolus, add the carbs first, then ask
-    /// for a refresh and bolus against the new context.
-    ///
-    /// - Returns: The grams added.
-    /// - Throws: `SmartwatchCarbEntryError`.
-    func smartwatchManager(_ manager: SmartwatchManager, requestCarbEntry request: SmartwatchCarbEntryRequest) async throws -> Double
-
-    /// Asks the host to start an override preset, or end the running one.
-    ///
-    /// **Call it** only with `.remoteOverride` in `effectiveCapabilities`, with a
-    /// preset id from the latest snapshot's `overridePresets` and `requestedAt`
-    /// from the watch. The host checks its user's permission, the request's age
-    /// and that the preset exists. Ending when none is running succeeds.
-    ///
-    /// - Throws: `SmartwatchPresetError`.
-    func smartwatchManager(_ manager: SmartwatchManager, requestOverride request: SmartwatchOverrideRequest) async throws
-
-    /// Asks the host to start a temp target preset, or end the running one.
-    ///
-    /// **Call it** only with `.remoteTempTarget` in `effectiveCapabilities`, with a
-    /// preset id from the latest snapshot's `tempTargetPresets`; otherwise as
-    /// `requestOverride`. Hosts without temp targets (Loop) refuse it.
-    ///
-    /// - Throws: `SmartwatchPresetError`.
-    func smartwatchManager(_ manager: SmartwatchManager, requestTempTarget request: SmartwatchTempTargetRequest) async throws
+    func smartwatchManager(_ manager: SmartwatchManager, muteAlertsFor duration: TimeInterval) async throws -> Date
 }
 
-/// Device alerts are ignored unless the host shows them, so a plugin should also
-/// show the problem in its own settings.
+/// Reads a host may not have.
 public extension SmartwatchManagerDelegate {
-    func smartwatchManager(_ manager: SmartwatchManager, issueDeviceAlert alert: SmartwatchDeviceAlert) {}
-    func smartwatchManager(_ manager: SmartwatchManager, retractDeviceAlert identifier: SmartwatchAlertIdentifier) {}
+    func smartwatchManagerTempTargetPresets(_ manager: SmartwatchManager) async -> [TemporaryPreset]? { nil }
+    func smartwatchManagerActiveTempTarget(_ manager: SmartwatchManager) async -> TemporaryScheduleOverride? { nil }
+    func smartwatchManagerDefaultCarbAbsorptionTimes(_ manager: SmartwatchManager) async -> (fast: TimeInterval, medium: TimeInterval, slow: TimeInterval)? { nil }
 }
 
-/// Every remote action is refused unless the host implements it.
+/// Every action is refused unless the host implements it.
 public extension SmartwatchManagerDelegate {
-    func smartwatchManager(_ manager: SmartwatchManager, requestBolus request: SmartwatchBolusRequest) async throws -> Double {
+    func smartwatchManager(_ manager: SmartwatchManager, recommendBolusForCarbs grams: Double, absorptionTime: TimeInterval?) async throws -> Double {
         throw SmartwatchBolusError.notAllowed
     }
 
-    func smartwatchManager(_ manager: SmartwatchManager, recommendBolusFor request: SmartwatchBolusRecommendationRequest) async throws -> SmartwatchBolusRecommendation {
+    func smartwatchManager(_ manager: SmartwatchManager, deliverBolus units: Double) async throws -> Double {
         throw SmartwatchBolusError.notAllowed
     }
 
-    func smartwatchManager(_ manager: SmartwatchManager, requestAlertMute request: SmartwatchAlertMuteRequest) async throws -> Date {
-        throw SmartwatchAlertMuteError.notAllowed
-    }
-
-    func smartwatchManager(_ manager: SmartwatchManager, requestCarbEntry request: SmartwatchCarbEntryRequest) async throws -> Double {
+    func smartwatchManager(_ manager: SmartwatchManager, addCarbEntry grams: Double, absorptionTime: TimeInterval?, date: Date) async throws -> Double {
         throw SmartwatchCarbEntryError.notAllowed
     }
 
-    func smartwatchManager(_ manager: SmartwatchManager, requestOverride request: SmartwatchOverrideRequest) async throws {
+    func smartwatchManager(_ manager: SmartwatchManager, enactOverride action: SmartwatchPresetAction) async throws {
         throw SmartwatchPresetError.notAllowed
     }
 
-    func smartwatchManager(_ manager: SmartwatchManager, requestTempTarget request: SmartwatchTempTargetRequest) async throws {
+    func smartwatchManager(_ manager: SmartwatchManager, enactTempTarget action: SmartwatchPresetAction) async throws {
         throw SmartwatchPresetError.notAllowed
+    }
+
+    func smartwatchManager(_ manager: SmartwatchManager, muteAlertsFor duration: TimeInterval) async throws -> Date {
+        throw SmartwatchAlertMuteError.notAllowed
     }
 }
 
-/// A watch that shows the host app's state, implemented by a plugin.
+/// A watch that shows the host app's state, implemented by a plugin. A device
+/// manager like a CGM or pump manager: `init?(rawState:)`, `rawState`,
+/// `pluginIdentifier`, alert acknowledgement and sounds come from `DeviceManager`.
 ///
 /// **Lifecycle:**
 /// 1. *New:* the plugin's setup UI creates the manager; *after a restart:* the
 ///    host calls `init?(rawState:)` with the saved state.
-/// 2. The host sets `smartwatchManagerDelegate`, then sends the first snapshot.
-/// 3. From then on the host calls `watchDataDidUpdate` for new data and, with
-///    `.alerts`, the alert methods; the plugin calls the delegate.
+/// 2. The host sets `smartwatchManagerDelegate` and registers the manager with
+///    its alert manager, then calls `hostDataDidChange(.all)`.
+/// 3. From then on the host calls `hostDataDidChange` and the alert methods; the
+///    plugin reads from and calls the delegate.
 /// 4. When the user deletes the watch, the plugin's `delete()` stops its work
 ///    and awaits `smartwatchManagerWantsDeletion`; the host drops it.
 ///
 /// **Threads:** the host calls the `@MainActor` methods on the main actor and
-/// expects them to return quickly: send to the watch asynchronously. The plugin
-/// may call the delegate from any thread.
-///
-/// **Capabilities:** the host fills a snapshot, forwards alerts and passes remote
-/// actions only for `effectiveCapabilities`, what the plugin both declares and
-/// requests.
-public protocol SmartwatchManager: AnyObject {
-    typealias RawStateValue = [String: Any]
-
-    /// Recreates the manager from its saved state when the host starts.
-    ///
-    /// Return `nil` only if the state can't be restored; the host then keeps the
-    /// state for a later build. Don't call the delegate here: it isn't set yet.
-    init?(rawState: RawStateValue)
-
-    /// The state the host saves, to recreate the manager on the next launch.
-    ///
-    /// Read by the host after `smartwatchManagerDidUpdateState` and when it saves.
-    /// Use property-list values only (strings, numbers, dates, data, arrays and
-    /// dictionaries of them); encode anything else as `Data`. Keep secrets out,
-    /// or keep them only as long as the host's storage is acceptable for them.
-    var rawState: RawStateValue { get }
-
-    /// A stable identifier for this watch manager, used to save, restore and log
-    /// it. Never change it: saved state is matched by it. It matches the plugin
-    /// bundle's `com.loopkit.Loop.SmartwatchManagerIdentifier`, and, when the
-    /// manager also conforms to `Pluggable` (via a host's `DeviceManager`), the
-    /// same value satisfies both.
-    var pluginIdentifier: String { get }
-
-    /// The host, set by the host after creating or restoring the manager and
-    /// before the first snapshot. Keep it `weak`.
+/// expects them to return quickly: read and send to the watch asynchronously.
+public protocol SmartwatchManager: DeviceManager {
+    /// The host, set by the host after creating or restoring the manager. Keep it `weak`.
     var smartwatchManagerDelegate: SmartwatchManagerDelegate? { get set }
 
-    /// Everything the plugin can show or do. The host never gives it more.
+    /// Something the watch may show changed in the host.
     ///
-    /// Declare a remote action only when the watch side confirms each request with
-    /// the user and the plugin can authenticate it; hosts still require their
-    /// user's permission for each one.
-    static var capabilities: SmartwatchCapabilities { get }
-
-    /// What the watch wants right now, for example less than `capabilities` when
-    /// the user turned a display element off, so the host doesn't fetch it. Only
-    /// declared capabilities count: anything requested beyond `capabilities` is
-    /// ignored (see `effectiveCapabilities`). Call `smartwatchManagerRequestsRefresh`
-    /// after it changes. Defaults to `capabilities`.
-    var requestedCapabilities: SmartwatchCapabilities { get }
-
-    /// The limits the host applies to this watch's remote actions. Defaults to
-    /// `.standard`. A plugin may declare its own, for example to match its watch
-    /// app's rules; the host applies them as given, together with its own checks
-    /// (such as Trio's max IOB).
-    var remoteActionLimits: SmartwatchRemoteActionLimits { get }
-
-    /// The latest snapshot of the host's state.
-    ///
-    /// **Called** on the main actor as soon as a new glucose reading is stored,
-    /// whenever the loop's output changes, after the plugin asks for a refresh,
-    /// and when the user's watch permissions change. A host may skip a snapshot
-    /// equal to the last one. It carries only what `effectiveCapabilities` allows.
-    /// Keep it for later (a reconnecting watch needs the latest), and send to the
-    /// watch without blocking.
+    /// **Called** on the main actor right after the delegate is set (`.all`), as
+    /// soon as a new glucose reading is stored, when the loop completes, and when
+    /// presets, settings or the alert mute change. Changes that happen close
+    /// together may arrive as one call. Read what changed from the delegate.
     @MainActor
-    func watchDataDidUpdate(_ snapshot: SmartwatchStatusSnapshot)
+    func hostDataDidChange(_ changes: SmartwatchHostDataChange)
 
-    /// A host alert fired and should show on the watch.
+    /// A host alert fired and may show on the watch.
     ///
-    /// **Called** on the main actor, only with `.alerts`, each time the host issues
-    /// or repeats an alert it forwards to watches (Loop and Trio forward their
-    /// glucose alerts and follow their own mute). Use
-    /// `glucoseAlertType` rather than the identifier to tell which glucose alert
-    /// it is.
+    /// **Called** on the main actor each time the host issues or repeats an alert
+    /// it forwards to watches (Loop and Trio forward their glucose alerts and
+    /// follow their own mute). Use `glucoseAlertType` rather than the identifier
+    /// to tell which glucose alert it is. Defaults to ignoring it.
     @MainActor
-    func watchAlertDidIssue(_ alert: SmartwatchAlert)
+    func watchAlertDidIssue(_ alert: Alert, glucoseAlertType: SmartwatchGlucoseAlertType?, issuedAt: Date)
 
     /// A host alert was retracted and should clear on the watch.
     ///
-    /// **Called** on the main actor, only with `.alerts`, when the host retracts
-    /// an alert it forwarded, for example when glucose is back in range.
+    /// **Called** on the main actor when the host retracts an alert it forwarded,
+    /// for example when glucose is back in range.
     @MainActor
-    func watchAlertDidRetract(_ identifier: SmartwatchAlertIdentifier)
+    func watchAlertDidRetract(_ identifier: Alert.Identifier)
 
     /// A note from the host about the watch, such as why an alert was not sent to
     /// it or when the host repeats one.
@@ -697,34 +363,18 @@ public protocol SmartwatchManager: AnyObject {
     /// removed it.
     ///
     /// **Called** when the user deletes the watch, usually from the plugin's own
-    /// settings. Stop everything (Bluetooth, timers, sending) and retract device
-    /// alerts, then await `smartwatchManagerDelegate?.smartwatchManagerWantsDeletion(self)`.
-    /// The default does only the last step.
+    /// settings. Stop everything (Bluetooth, timers, sending) and retract the
+    /// plugin's alerts, then await
+    /// `smartwatchManagerDelegate?.smartwatchManagerWantsDeletion(self)`. The
+    /// default does only the last step.
     func delete() async
 }
 
 public extension SmartwatchManager {
-    var requestedCapabilities: SmartwatchCapabilities { Self.capabilities }
-    var remoteActionLimits: SmartwatchRemoteActionLimits { .standard }
-
-    /// What the host acts on: the requested capabilities the plugin declares.
-    /// Hosts use this for every capability check (snapshot contents, alerts and
-    /// remote actions), so a plugin can't obtain a capability it didn't declare.
-    /// Not a protocol requirement, so a plugin can't override it.
-    var effectiveCapabilities: SmartwatchCapabilities {
-        Self.capabilities.intersection(requestedCapabilities)
-    }
-
-    /// Requested capabilities the plugin doesn't declare; ignored by hosts.
-    var undeclaredRequestedCapabilities: SmartwatchCapabilities {
-        requestedCapabilities.subtracting(Self.capabilities)
-    }
-
-    // Alerts are capability-gated; a plugin without `.alerts` need not implement these.
     @MainActor
-    func watchAlertDidIssue(_ alert: SmartwatchAlert) {}
+    func watchAlertDidIssue(_ alert: Alert, glucoseAlertType: SmartwatchGlucoseAlertType?, issuedAt: Date) {}
     @MainActor
-    func watchAlertDidRetract(_ identifier: SmartwatchAlertIdentifier) {}
+    func watchAlertDidRetract(_ identifier: Alert.Identifier) {}
     @MainActor
     func watchHostDidLog(_ message: String) {}
     @MainActor

@@ -7,147 +7,30 @@
 
 import Foundation
 
-// Requests a watch plugin may send its host (steps 3 and 5): each only with its
-// capability and the user's permission. The rules hosts apply are in
-// `SmartwatchRemoteActionPolicy.swift`.
+// What a watch plugin asks of its host (`SmartwatchManagerDelegate`'s actions),
+// and why a request is refused. Some errors come from the host's own checks, the
+// rest from the plugin's checks (`SmartwatchRemoteActionPolicy.swift`), so a
+// plugin reports both to the watch the same way.
 
-/// What a watch needs to request a bolus, sent with `.remoteBolus`.
-public struct SmartwatchBolusContext: Equatable {
-    /// Identifies the state the recommendation was computed from. A request must
-    /// echo it, and the host rejects requests made against an older state.
-    public var token: UUID
-
-    /// When the host issued this context.
-    public var issuedAt: Date
-
-    /// The current manual bolus recommendation, in units. `nil` when the host
-    /// recommends no bolus; the host then rejects watch boluses.
-    public var recommendedBolus: Double?
-
-    /// The user's maximum bolus, in units.
-    public var maximumBolus: Double?
-
-    /// Bolus volumes the pump can deliver, in units.
-    public var supportedBolusVolumes: [Double]
-
-    public init(token: UUID, issuedAt: Date, recommendedBolus: Double?, maximumBolus: Double?, supportedBolusVolumes: [Double]) {
-        self.token = token
-        self.issuedAt = issuedAt
-        self.recommendedBolus = recommendedBolus
-        self.maximumBolus = maximumBolus
-        self.supportedBolusVolumes = supportedBolusVolumes
-    }
+/// What the watch asks for a preset.
+public enum SmartwatchPresetAction: Equatable, Sendable {
+    /// Start the preset with this `TemporaryPreset.id`, replacing any running one.
+    case activate(presetID: String)
+    /// End the running preset.
+    case cancel
 }
 
-/// A bolus the user confirmed on the watch, after the plugin authenticated it.
-public struct SmartwatchBolusRequest: Equatable {
-    public var units: Double
-    /// `SmartwatchBolusContext.token` from the snapshot the watch showed.
-    public var contextToken: UUID
-    /// When the user confirmed the bolus on the watch. Take it from the watch, not from when the
-    /// command reached the phone, which can be much later; hosts refuse requests
-    /// older than 30 seconds.
-    public var requestedAt: Date
-    /// Asks the host to skip only its recommendation check; every other check
-    /// (permission, ages, maximum bolus, rate limits) still applies.
-    public var isForced: Bool
-
-    public init(units: Double, contextToken: UUID, requestedAt: Date, isForced: Bool = false) {
-        self.units = units
-        self.contextToken = contextToken
-        self.requestedAt = requestedAt
-        self.isForced = isForced
-    }
-}
-
-/// How fast carbs from the watch are absorbed, as the user chose there. The host
-/// maps it to its own fast, medium and slow absorption times.
-public enum SmartwatchCarbAbsorption: String, Equatable, Sendable, CaseIterable {
-    case fast
-    case medium
-    case slow
-}
-
-/// A question from the watch before the user picks a bolus: what the host would
-/// recommend with `grams` of carbs added now (0 for none). Nothing is added or
-/// delivered; the watch shows the answer and starts its bolus picker there.
-public struct SmartwatchBolusRecommendationRequest: Equatable {
-    /// The carbs the user is about to add with the bolus, 0 for none.
-    public var grams: Double
-    /// How fast they are absorbed; `nil` for the host's default.
-    public var absorption: SmartwatchCarbAbsorption?
-
-    public init(grams: Double, absorption: SmartwatchCarbAbsorption? = nil) {
-        self.grams = grams
-        self.absorption = absorption
-    }
-}
-
-/// The host's answer to a `SmartwatchBolusRecommendationRequest`.
-public struct SmartwatchBolusRecommendation: Equatable {
-    /// The recommended bolus with those carbs, in units, rounded to a supported
-    /// volume; 0 when the host recommends none.
-    public var units: Double
-    /// The carbs the recommendation counts.
-    public var grams: Double
-    /// The user's maximum bolus, in units.
-    public var maximumBolus: Double?
-    /// When the host computed it. The bolus itself is checked again, against
-    /// the context after the carbs are added.
-    public var issuedAt: Date
-
-    public init(units: Double, grams: Double, maximumBolus: Double?, issuedAt: Date) {
-        self.units = units
-        self.grams = grams
-        self.maximumBolus = maximumBolus
-        self.issuedAt = issuedAt
-    }
-}
-
-/// A mute the user confirmed on the watch, sent with `.remoteMute`.
-public struct SmartwatchAlertMuteRequest: Equatable {
-    /// How long to mute the host's alerts; 0 ends the mute.
-    public var duration: TimeInterval
-    /// When the user confirmed it on the watch. Take it from the watch, not from when the
-    /// command reached the phone, which can be much later; hosts refuse requests
-    /// older than 30 seconds.
-    public var requestedAt: Date
-
-    public init(duration: TimeInterval, requestedAt: Date) {
-        self.duration = duration
-        self.requestedAt = requestedAt
-    }
-}
-
-/// Why the host refused a mute request from the watch.
+/// Why a mute request from the watch was refused.
 public enum SmartwatchAlertMuteError: Error, Equatable {
-    /// The user hasn't allowed muting from the watch, or the plugin lacks `.remoteMute`.
+    /// Muting from the watch is off in the plugin, or the host doesn't offer it.
     case notAllowed
     /// The request is too old, or dated in the future.
     case expiredRequest
 }
 
-/// Carbs the user confirmed on the watch, sent with `.remoteCarbs`.
-public struct SmartwatchCarbEntryRequest: Equatable {
-    public var grams: Double
-    /// When the user confirmed the entry on the watch. Take it from the watch, not from when the
-    /// command reached the phone, which can be much later; hosts refuse requests
-    /// older than 30 seconds.
-    public var requestedAt: Date
-    /// How fast the carbs are absorbed, as chosen on the watch; `nil` for the
-    /// host's default.
-    public var absorption: SmartwatchCarbAbsorption?
-
-    public init(grams: Double, requestedAt: Date, absorption: SmartwatchCarbAbsorption? = nil) {
-        self.grams = grams
-        self.requestedAt = requestedAt
-        self.absorption = absorption
-    }
-}
-
-/// Why the host did not add a carb entry the watch asked for.
+/// Why a carb entry the watch asked for was not added.
 public enum SmartwatchCarbEntryError: Error, Equatable {
-    /// The user hasn't allowed carb entries from the watch, or the plugin lacks `.remoteCarbs`.
+    /// Carb entries from the watch are off in the plugin, or the host doesn't offer them.
     case notAllowed
     /// The request is too old, or dated in the future.
     case expiredRequest
@@ -160,63 +43,9 @@ public enum SmartwatchCarbEntryError: Error, Equatable {
     case failed(String)
 }
 
-/// A preset the watch can start: an override or a temp target.
-public struct SmartwatchPreset: Equatable, Sendable {
-    /// The host's identifier for the preset; send it back to start it.
-    public var id: String
-    public var name: String
-    /// Whether this preset is running now.
-    public var isActive: Bool
-    /// How long the preset runs when started. `nil` means until it is ended.
-    public var duration: TimeInterval?
-
-    public init(id: String, name: String, isActive: Bool, duration: TimeInterval?) {
-        self.id = id
-        self.name = name
-        self.isActive = isActive
-        self.duration = duration
-    }
-}
-
-/// What the watch asks for a preset.
-public enum SmartwatchPresetAction: Equatable, Sendable {
-    /// Start the preset with this `SmartwatchPreset.id`, replacing any running one.
-    case activate(presetID: String)
-    /// End the running preset.
-    case cancel
-}
-
-/// An override the user started or ended on the watch, sent with `.remoteOverride`.
-public struct SmartwatchOverrideRequest: Equatable {
-    public var action: SmartwatchPresetAction
-    /// When the user confirmed it on the watch. Take it from the watch, not from when the
-    /// command reached the phone, which can be much later; hosts refuse requests
-    /// older than 30 seconds.
-    public var requestedAt: Date
-
-    public init(action: SmartwatchPresetAction, requestedAt: Date) {
-        self.action = action
-        self.requestedAt = requestedAt
-    }
-}
-
-/// A temp target the user started or ended on the watch, sent with `.remoteTempTarget`.
-public struct SmartwatchTempTargetRequest: Equatable {
-    public var action: SmartwatchPresetAction
-    /// When the user confirmed it on the watch. Take it from the watch, not from when the
-    /// command reached the phone, which can be much later; hosts refuse requests
-    /// older than 30 seconds.
-    public var requestedAt: Date
-
-    public init(action: SmartwatchPresetAction, requestedAt: Date) {
-        self.action = action
-        self.requestedAt = requestedAt
-    }
-}
-
-/// Why the host did not start or end an override or temp target.
+/// Why an override or temp target was not started or ended.
 public enum SmartwatchPresetError: Error, Equatable {
-    /// The user hasn't allowed it from the watch, or the plugin lacks the capability.
+    /// Presets from the watch are off in the plugin, or the host doesn't offer them.
     case notAllowed
     /// The request is too old, or dated in the future.
     case expiredRequest
@@ -225,16 +54,16 @@ public enum SmartwatchPresetError: Error, Equatable {
     case failed(String)
 }
 
-/// Why the host did not deliver a watch bolus.
+/// Why a watch bolus was not delivered.
 public enum SmartwatchBolusError: Error, Equatable {
-    /// Watch boluses are turned off, or the plugin lacks `.remoteBolus`.
+    /// Watch boluses are off in the plugin, or the host doesn't offer them.
     case notAllowed
     case invalidAmount
     /// The request is too old, or dated in the future.
     case expiredRequest
     /// The request was made against an older state than the current one.
     case staleContext
-    /// No glucose reading in the last 15 minutes, as when the CGM is unavailable.
+    /// No recent glucose reading, as when the CGM is unavailable.
     case noRecentGlucose
     case exceedsMaximumBolus
     case exceedsRecommendation
@@ -242,10 +71,10 @@ public enum SmartwatchBolusError: Error, Equatable {
     case rateLimited
     /// Watch boluses in the last 24 hours would exceed the daily limit.
     case dailyLimitReached
-    /// One of the host's own checks refused it, beyond `SmartwatchBolusPolicy`
-    /// (for example Trio's max IOB). The reason is also in the host's log.
+    /// One of the host's own checks refused it (for example Trio's max IOB). The
+    /// reason is also in the host's log.
     case refusedByHost(String)
-    /// The same bolus is still being delivered; its result follows. Not a failure.
+    /// A bolus is still being delivered; its result follows. Not a failure.
     case inProgress
     case deliveryFailed(String)
 }
