@@ -22,8 +22,8 @@ public struct SmartwatchHostDataChange: OptionSet, Sendable {
     public static let loop = SmartwatchHostDataChange(rawValue: 1 << 1)
     /// Override or temp target presets, or the active one, changed.
     public static let presets = SmartwatchHostDataChange(rawValue: 1 << 2)
-    /// A setting a watch may show or check changed: display unit, maximum bolus or
-    /// carb entry, schedules, the pump's bolus volumes.
+    /// A setting a watch may show or check changed: display unit, glucose display
+    /// limits, maximum bolus or carb entry, schedules, the pump's bolus volumes.
     public static let settings = SmartwatchHostDataChange(rawValue: 1 << 3)
     /// The host's alert mute started, changed or ended.
     public static let alertMute = SmartwatchHostDataChange(rawValue: 1 << 4)
@@ -72,6 +72,23 @@ public struct SmartwatchLoopState {
         self.predictedGlucose = predictedGlucose
         self.eventualGlucose = eventualGlucose
         self.sensitivityRatio = sensitivityRatio
+    }
+}
+
+/// The low and high glucose limits a host shows glucose against, for a watch's
+/// colours and its low and high graph lines. For display only, never for alarms:
+/// see `SmartwatchManagerDelegate.smartwatchManagerGlucoseDisplayLimits`.
+public struct SmartwatchGlucoseDisplayLimits: Equatable, Sendable {
+    public let low: LoopQuantity
+    public let high: LoopQuantity
+
+    /// `nil` unless `low` is below `high`.
+    public init?(low: LoopQuantity, high: LoopQuantity) {
+        guard low < high else {
+            return nil
+        }
+        self.low = low
+        self.high = high
     }
 }
 
@@ -173,6 +190,21 @@ public protocol SmartwatchManagerDelegate: DeviceManagerDelegate {
     /// The correction range in effect now, including any override or temp target.
     func smartwatchManagerCorrectionRange(_ manager: SmartwatchManager) async -> ClosedRange<LoopQuantity>?
 
+    /// The low and high glucose limits the host shows glucose against, for a
+    /// watch's colours and its low and high graph lines. `nil` (the default) when
+    /// the host has none. Changes come with `.settings`.
+    ///
+    /// **For display only, never for alarms.** A plugin must not compare glucose
+    /// with these limits to buzz, sound, show or clear a glucose alarm. The host
+    /// decides when glucose is low or high, with its own delays, snoozes, mute,
+    /// schedules and forecasts, and tells the plugin through `watchAlertDidIssue`
+    /// and `watchAlertDidRetract`. A watch deciding by itself would alarm when the
+    /// host doesn't, or stay quiet when it does.
+    ///
+    /// Loop returns the low and high of its active glucose alert profile; Trio the
+    /// low and high its statistics and home screen use.
+    func smartwatchManagerGlucoseDisplayLimits(_ manager: SmartwatchManager) async -> SmartwatchGlucoseDisplayLimits?
+
     /// The user's override presets (Loop's presets, Trio's overrides).
     func smartwatchManagerOverridePresets(_ manager: SmartwatchManager) async -> [TemporaryPreset]
 
@@ -268,6 +300,7 @@ public protocol SmartwatchManagerDelegate: DeviceManagerDelegate {
 public extension SmartwatchManagerDelegate {
     func smartwatchManagerTempTargetPresets(_ manager: SmartwatchManager) async -> [TemporaryPreset]? { nil }
     func smartwatchManagerActiveTempTarget(_ manager: SmartwatchManager) async -> TemporaryScheduleOverride? { nil }
+    func smartwatchManagerGlucoseDisplayLimits(_ manager: SmartwatchManager) async -> SmartwatchGlucoseDisplayLimits? { nil }
     func smartwatchManagerDefaultCarbAbsorptionTimes(_ manager: SmartwatchManager) async -> (fast: TimeInterval, medium: TimeInterval, slow: TimeInterval)? { nil }
 }
 
@@ -314,6 +347,13 @@ public extension SmartwatchManagerDelegate {
 ///
 /// **Threads:** the host calls the `@MainActor` methods on the main actor and
 /// expects them to return quickly: read and send to the watch asynchronously.
+///
+/// **Glucose alarms come only from the host.** A plugin passes on the alerts the
+/// host forwards (`watchAlertDidIssue`, with their `SmartwatchGlucoseAlertType`)
+/// and their retraction, and never raises a glucose alarm itself from glucose
+/// values or limits it reads. Notices about the watch itself, such as no readings
+/// for a while, a lost connection or a missing companion app, are the plugin's
+/// own: on the watch, or through `issueAlert` like a pump's.
 public protocol SmartwatchManager: DeviceManager {
     /// The host, set by the host after creating or restoring the manager. Keep it `weak`.
     var smartwatchManagerDelegate: SmartwatchManagerDelegate? { get set }
@@ -332,7 +372,8 @@ public protocol SmartwatchManager: DeviceManager {
     /// **Called** on the main actor each time the host issues or repeats an alert
     /// it forwards to watches (Loop and Trio forward their glucose alerts and
     /// follow their own mute). Use `glucoseAlertType` rather than the identifier
-    /// to tell which glucose alert it is. Defaults to ignoring it.
+    /// to tell which glucose alert it is. This is a watch's only source of glucose
+    /// alarms. Defaults to ignoring it.
     @MainActor
     func watchAlertDidIssue(_ alert: Alert, glucoseAlertType: SmartwatchGlucoseAlertType?, issuedAt: Date)
 

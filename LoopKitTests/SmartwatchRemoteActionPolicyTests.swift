@@ -292,3 +292,26 @@ final class SmartwatchRemoteActionPolicyTests: XCTestCase {
         XCTAssertEqual(carbs.evaluate(self.carbs(30, confirmedAgo: 15), now: now), .failure(.expiredRequest))
     }
 }
+
+final class SmartwatchGlucoseDisplayLimitsTests: XCTestCase {
+    private func mgdL(_ value: Double) -> LoopQuantity {
+        LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: value)
+    }
+
+    func testLowBelowHigh() {
+        let limits = SmartwatchGlucoseDisplayLimits(low: mgdL(70), high: mgdL(180))
+        XCTAssertEqual(limits?.low, mgdL(70))
+        XCTAssertEqual(limits?.high, mgdL(180))
+    }
+
+    func testLowNotBelowHighGivesNoLimits() {
+        XCTAssertNil(SmartwatchGlucoseDisplayLimits(low: mgdL(180), high: mgdL(180)))
+        XCTAssertNil(SmartwatchGlucoseDisplayLimits(low: mgdL(200), high: mgdL(70)))
+    }
+
+    func testUnitsAreCompared() {
+        let mmolL = LoopQuantity(unit: .millimolesPerLiter, doubleValue: 10)
+        XCTAssertNotNil(SmartwatchGlucoseDisplayLimits(low: mgdL(70), high: mmolL))
+        XCTAssertNil(SmartwatchGlucoseDisplayLimits(low: mgdL(200), high: mmolL))
+    }
+}
