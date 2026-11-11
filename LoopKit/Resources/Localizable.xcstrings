@@ -10,6 +10,12 @@
             "value" : "%@ Range"
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ rozsah"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -152,6 +158,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ U bolus failed"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bolus %1$@ U se nepodařilo podat"
           }
         },
         "da" : {
@@ -298,6 +310,12 @@
             "value" : "%1$@ U bolus may not have succeeded"
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Není jisté, zda byl bolus %1$@ U podán"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -441,6 +459,12 @@
             "value" : "%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours."
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ bude podávat bazální inzulín a doporučovat bolus pouze tehdy, pokud se předpokládá, že glykémie zůstane nad touto hranicí po následující tři hodiny."
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -579,6 +603,12 @@
       "comment" : "String format for value with units (1: value, 2: separator, 3: units)",
       "localizations" : {
         "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@%2$@%3$@"
+          }
+        },
+        "cs" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@%2$@%3$@"
@@ -733,6 +763,12 @@
             "value" : "A value you have entered is higher than what is typically recommended for most people."
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zadaná hodnota je vyšší, než se obvykle doporučuje většině lidí."
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -874,6 +910,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "A value you have entered is lower than what is typically recommended for most people."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zadaná hodnota je nižší, než se obvykle doporučuje většině lidí."
           }
         },
         "da" : {
@@ -1162,6 +1204,12 @@
             "value" : "Afrezza هو أنسولين فائق السرعة يُستخدم في أوقات الوجبات، ويُستَنشَق عن طريق الرئتين باستخدام جهاز استنشاق فموي، من إنتاج شركة MannKind"
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afrezza je ultrarychle působící inzulín podávaný při jídle inhalací do plic pomocí inhalátoru. Vyrábí jej společnost MannKind."
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1448,6 +1496,12 @@
             "value" : "Apidra (insulin glulisine)"
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apidra (inzulín glulisin)"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1589,6 +1643,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Apidra (insulin glulisine) is a rapid-acting insulin made by Sanofi-aventis"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apidra (inzulín glulisin) je rychle působící inzulín vyráběný společností Sanofi-Aventis."
           }
         },
         "da" : {
@@ -1735,6 +1795,12 @@
             "value" : "Authorization Denied"
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Přístup nebyl povolen"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1876,6 +1942,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "القاعدية"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bazál"
           }
         },
         "da" : {
@@ -2024,7 +2096,7 @@
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Úrovně bazálu"
+            "value" : "Bazální dávky"
           }
         },
         "da" : {
@@ -2319,6 +2391,12 @@
             "value" : "معاملات الكارب"
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sacharidové poměry"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2469,6 +2547,12 @@
             "value" : "Check your pump before retrying"
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Před opakováním pokusu zkontrolujte pumpu."
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2611,6 +2695,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Authorization Denied"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Přístup nebyl povolen"
           }
         },
         "da" : {
@@ -2769,6 +2859,12 @@
             "value" : "This sample can be deleted from the Health app"
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tento záznam lze odstranit v aplikaci Zdraví."
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2924,6 +3020,12 @@
             "value" : "Communication Failure"
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chyba komunikace"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3073,6 +3175,12 @@
             "value" : "Communications interrupted during insulin delivery command."
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Během příkazu k podání inzulínu došlo k přerušení komunikace."
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3214,6 +3322,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Connection Failure"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chyba připojení"
           }
         },
         "da" : {
@@ -3365,6 +3479,12 @@
             "value" : "نطاق التصحيح"
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cílové rozmezí glykémie"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3514,6 +3634,12 @@
             "value" : "Correction Range is the glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin and helping you calculate your boluses."
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cílové rozmezí glykémie je hodnota nebo rozsah hodnot glykémie, kterých má aplikace %1$@ dosahovat při úpravě bazálního inzulínu a které pomáhají při výpočtu bolusů."
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3655,6 +3781,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Critical Update"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kritická aktualizace"
           }
         },
         "da" : {
@@ -3955,6 +4087,12 @@
             "value" : "Device Refused"
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zařízení odmítlo požadavek"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4104,6 +4242,12 @@
             "value" : "Device Status Critical"
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kritický stav zařízení"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4245,6 +4389,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Device Status Normal"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Normální stav zařízení"
           }
         },
         "da" : {
@@ -4390,6 +4540,12 @@
             "value" : "Device Status Warning"
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Varování zařízení"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4531,6 +4687,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ensure carb data exists for the specified date"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zkontrolujte, zda jsou pro zadané datum k dispozici údaje o sacharidech."
           }
         },
         "da" : {
@@ -4682,6 +4844,12 @@
             "value" : "Falling"
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glykémie klesá"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4831,6 +4999,12 @@
             "value" : "Falling fast"
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glykémie rychle klesá"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4978,6 +5152,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Falling very fast"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glykémie velmi rychle klesá"
           }
         },
         "da" : {
@@ -5278,6 +5458,12 @@
             "value" : "Fiasp هو تركيبة من أنسولين أسبارت مخصصة لوقت الوجبات، مع إضافة النيكوتيناميد (فيتامين B3)، من إنتاج شركة Novo Nordisk"
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fiasp je rychle působící inzulín aspart určený k podávání v souvislosti s jídlem. Obsahuje přidaný nikotinamid (vitamín B3) a vyrábí jej společnost Novo Nordisk."
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5419,6 +5605,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Flat"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glykémie je stabilní"
           }
         },
         "da" : {
@@ -5568,6 +5760,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from different models for the peak activity."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "U rychle působícího inzulínu aplikace %1$@ předpokládá, že inzulín aktivně působí po dobu 6 hodin. Můžete si vybrat z různých modelů průběhu maximálního účinku."
           }
         },
         "da" : {
@@ -5862,6 +6060,12 @@
             "value" : "Glucose Safety Limit"
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bezpečnostní limit glykémie"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6005,6 +6209,12 @@
             "value" : "Hour"
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hodina"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6146,6 +6356,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hours"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hodiny"
           }
         },
         "da" : {
@@ -6434,6 +6650,12 @@
             "value" : "Humalog (insulin lispro)"
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Humalog (inzulín lispro)"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6577,6 +6799,12 @@
             "value" : "Humalog (الأنسولين ليزبرو) هو أنسولين سريع المفعول من إنتاج شركة Eli Lilly"
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Humalog (inzulín lispro) je rychle působící inzulín vyráběný společností Eli Lilly."
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6718,6 +6946,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "نوع الأنسولين"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Model účinku inzulínu"
           }
         },
         "da" : {
@@ -6869,6 +7103,12 @@
             "value" : "حساسية الأنسولين"
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Citlivost na inzulín"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7016,6 +7256,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Invalid Configuration"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neplatné nastavení"
           }
         },
         "da" : {
@@ -7166,6 +7412,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "It is safe to retry"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pokus lze bezpečně opakovat"
           }
         },
         "da" : {
@@ -7454,6 +7706,12 @@
             "value" : "Lyumjev هو تركيبة من أنسولين ليزبرو مخصصة لوقت الوجبات، مع إضافة السيترات والتريبروستينيل، من إنتاج شركة Eli Lilly"
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lyumjev je rychle působící inzulín lispro určený k podávání v souvislosti s jídlem. Obsahuje přidaný citrát a treprostinil a vyrábí jej společnost Eli Lilly."
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7597,6 +7855,12 @@
             "value" : "Make sure your pump is within communication range of your phone."
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ujistěte se, že je pumpa v dosahu komunikace s telefonem."
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7738,6 +8002,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Maximum Basal Rate"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maximální bazální dávka"
           }
         },
         "da" : {
@@ -7889,6 +8159,12 @@
             "value" : "Maximum Basal Rate is the highest temporary basal rate %1$@ is allowed to set."
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maximální bazální dávka je nejvyšší dočasná bazální dávka, kterou smí aplikace %1$@ nastavit."
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8030,6 +8306,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Maximum Bolus"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maximální bolus"
           }
         },
         "da" : {
@@ -8179,6 +8461,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Maximum Bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maximální bolus je nejvyšší množství inzulínu, které lze podat najednou k pokrytí přijatých sacharidů nebo ke snížení vysoké glykémie."
           }
         },
         "da" : {
@@ -9057,6 +9345,12 @@
             "value" : "Needs Attention"
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vyžaduje pozornost"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9206,6 +9500,12 @@
             "value" : "No Update"
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktualizace není potřeba"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9347,6 +9647,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No values found"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nebyly nalezeny žádné hodnoty"
           }
         },
         "da" : {
@@ -9641,6 +9947,12 @@
             "value" : "Novolog (insulin aspart)"
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Novolog (inzulín aspart)"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9782,6 +10094,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "NovoLog (الأنسولين أسبارت) هو أنسولين سريع المفعول من إنتاج شركة Novo Nordisk"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NovoLog (inzulín aspart) je rychle působící inzulín vyráběný společností Novo Nordisk."
           }
         },
         "da" : {
@@ -10082,6 +10400,12 @@
             "value" : "One or more of the values you have entered is outside of what is typically recommended for most people."
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jedna nebo více zadaných hodnot je mimo rozsah běžně doporučovaný pro většinu lidí."
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10226,6 +10550,12 @@
             "value" : "Please re-enable sharing in Health"
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Znovu povolte sdílení dat v aplikaci Zdraví."
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10367,6 +10697,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pre-Meal"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Před jídlem"
           }
         },
         "da" : {
@@ -10518,6 +10854,12 @@
             "value" : "Recommended Update"
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Doporučená aktualizace"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10661,6 +11003,12 @@
             "value" : "Resumed"
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obnoveno"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10802,6 +11150,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rising"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stoupá"
           }
         },
         "da" : {
@@ -10953,6 +11307,12 @@
             "value" : "Rising fast"
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rychle stoupá"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11102,6 +11462,12 @@
             "value" : "Rising very fast"
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Velmi rychle stoupá"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11249,6 +11615,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Some of the values you have entered are outside of what is typically recommended for most people."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Některé zadané hodnoty jsou mimo rozsah běžně doporučovaný pro většinu lidí."
           }
         },
         "da" : {
@@ -11549,6 +11921,12 @@
             "value" : "Temp Basal"
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dočasný bazál"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11690,6 +12068,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Temporarily lower your glucose target before a meal to impact post-meal glucose spikes."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Před jídlem dočasně snižte cílovou glykémii, abyste omezili její prudký vzestup po jídle."
           }
         },
         "da" : {
@@ -11835,6 +12219,12 @@
             "value" : "Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events."
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Před fyzickou aktivitou, během ní nebo po ní dočasně zvyšte cílovou glykémii, abyste snížili riziko hypoglykémie."
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11976,6 +12366,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "The value you have entered is higher than what is typically recommended for most people."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zadaná hodnota je vyšší, než se běžně doporučuje většině lidí."
           }
         },
         "da" : {
@@ -12121,6 +12517,12 @@
             "value" : "The value you have entered is lower than what is typically recommended for most people."
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zadaná hodnota je nižší, než se běžně doporučuje většině lidí."
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12262,6 +12664,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "The values you have entered are outside of what is typically recommended for most people."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zadané hodnoty jsou mimo rozsah běžně doporučovaný pro většinu lidí."
           }
         },
         "da" : {
@@ -12550,6 +12958,12 @@
             "value" : "وحدة لكل ساعة"
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "U/hod"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12693,6 +13107,12 @@
             "value" : "Uncertain Delivery"
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nejisté podání inzulínu"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12834,6 +13254,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Unit"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jednotka"
           }
         },
         "da" : {
@@ -12985,6 +13411,12 @@
             "value" : "Unit/hour"
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jednotka za hodinu"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13132,6 +13564,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Units"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jednotky"
           }
         },
         "da" : {
@@ -13283,6 +13721,12 @@
             "value" : "Units/hour"
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jednotky za hodinu"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13432,6 +13876,12 @@
             "value" : "Update Available"
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je dostupná aktualizace"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13573,6 +14023,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "التمارين"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fyzická aktivita"
           }
         },
         "da" : {
@@ -13724,6 +14180,12 @@
             "value" : "Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs."
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bazální dávka inzulínu představuje množství jednotek inzulínu podávaných za hodinu k pokrytí základní potřeby inzulínu."
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13867,6 +14329,12 @@
             "value" : "Your Carb Ratio is the number of grams of carbohydrates covered by one unit of insulin."
           }
         },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sacharidový poměr udává, kolik gramů sacharidů pokryje jedna jednotka inzulínu."
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14008,6 +14476,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Your Insulin Sensitivities refer to the drop in glucose expected from one unit of insulin."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Citlivost na inzulín udává očekávaný pokles glykémie po podání jedné jednotky inzulínu."
           }
         },
         "da" : {

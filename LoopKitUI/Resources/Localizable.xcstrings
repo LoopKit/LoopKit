@@ -6097,7 +6097,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Back"
+            "value" : "返回"
           }
         }
       }
@@ -11548,7 +11548,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Editare"
+            "value" : "Editați"
           }
         },
         "ru" : {
@@ -20575,7 +20575,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Necesar de insulină total"
+            "value" : "Necesar total de insulină"
           }
         },
         "ru" : {
@@ -32499,7 +32499,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vizualizare suprascriere"
+            "value" : "Vedeți suprascriere"
           }
         },
         "ru" : {
