@@ -145,6 +145,7 @@ public struct MockPumpManagerState: Equatable {
     public var bolusShouldCrash: Bool
     public var tempBasalShouldCrash: Bool
     public var deliveryCommandsShouldTriggerUncertainDelivery: Bool
+    public var basalScheduleSyncShouldError: Bool = false
     public var maximumBolus: Double
     public var maximumBasalRatePerHour: Double
     public var suspendState: SuspendState?
@@ -297,6 +298,7 @@ extension MockPumpManagerState: RawRepresentable {
         self.supportedBasalRates = rawValue["supportedBasalRates"] as? [Double] ?? defaultDeliverableIncrements.supportedBasalRates ?? []
         self.reservoirUnitsRemaining = reservoirUnitsRemaining
         self.tempBasalEnactmentShouldError = rawValue["tempBasalEnactmentShouldError"] as? Bool ?? false
+        self.basalScheduleSyncShouldError = rawValue["basalScheduleSyncShouldError"] as? Bool ?? false
         self.bolusEnactmentShouldError = rawValue["bolusEnactmentShouldError"] as? Bool ?? false
         self.bolusCancelShouldError = rawValue["bolusCancelShouldError"] as? Bool ?? false
         self.deliverySuspensionShouldError = rawValue["deliverySuspensionShouldError"] as? Bool ?? false
@@ -379,6 +381,10 @@ extension MockPumpManagerState: RawRepresentable {
             raw["tempBasalEnactmentShouldError"] = true
         }
 
+        if basalScheduleSyncShouldError {
+            raw["basalScheduleSyncShouldError"] = true
+        }
+
         if bolusEnactmentShouldError {
             raw["bolusEnactmentShouldError"] = true
         }
@@ -440,6 +446,7 @@ extension MockPumpManagerState: CustomDebugStringConvertible {
         * reservoirUnitsRemaining: \(reservoirUnitsRemaining)
         * basalRateSchedule: \(basalRateSchedule as Any)
         * tempBasalEnactmentShouldError: \(tempBasalEnactmentShouldError)
+        * basalScheduleSyncShouldError: \(basalScheduleSyncShouldError)
         * bolusEnactmentShouldError: \(bolusEnactmentShouldError)
         * bolusCancelShouldError: \(bolusCancelShouldError)
         * deliverySuspensionShouldError: \(deliverySuspensionShouldError)

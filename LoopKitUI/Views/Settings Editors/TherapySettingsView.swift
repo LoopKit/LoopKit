@@ -16,6 +16,7 @@ public struct TherapySettingsView: View {
     @Environment(\.dismissAction) var dismissAction
     @Environment(\.appName) private var appName
     @Environment(\.dosingStrategySelectionEnabled) var dosingStrategySelectionEnabled
+    @Environment(\.guidanceColors) private var guidanceColors
 
     public struct ActionButton {
         public init(localizedString: String, action: @escaping () -> Void) {
@@ -42,6 +43,17 @@ public struct TherapySettingsView: View {
         
     public var body: some View {
         content
+            .alert(LocalizedString("Settings Not Saved", comment: "Title of the alert shown when a therapy settings change was refused"),
+                   isPresented: saveErrorIsPresented,
+                   presenting: viewModel.saveError) { _ in
+                Button(LocalizedString("OK", comment: "Button to dismiss a therapy settings save error"), role: .cancel) {}
+            } message: { error in
+                Text(error.localizedDescription)
+            }
+    }
+
+    private var saveErrorIsPresented: Binding<Bool> {
+        Binding(get: { viewModel.saveError != nil }, set: { if !$0 { viewModel.saveError = nil } })
     }
     
     private var content: some View {
@@ -79,6 +91,9 @@ public struct TherapySettingsView: View {
             } else {
                 cards.append(summaryHeaderSection)
             }
+        }
+        if mode == .settings, showsActiveProfile {
+            cards.append(activeProfileSection)
         }
         cards.append(suspendThresholdSection)
         cards.append(correctionRangeSection)
@@ -121,6 +136,33 @@ public struct TherapySettingsView: View {
 
 // MARK: Sections
 extension TherapySettingsView {
+
+    /// Shown once profiles other than Default exist, so it is clear which profile the schedule editors change.
+    private var showsActiveProfile: Bool {
+        (viewModel.therapySettings.therapyProfiles?.count ?? 0) > 1 || viewModel.therapySettings.activeProfileName != nil
+    }
+
+    private var activeProfileSection: Card {
+        let name = TherapyProfiles.activeName(viewModel.therapySettings.activeProfileName)
+        let isDefault = name == TherapyProfile.defaultName
+        return Card {
+            HStack(alignment: .top, spacing: 12) {
+                Image(systemName: isDefault ? "person.crop.circle" : "exclamationmark.circle.fill")
+                    .font(.title2)
+                    .foregroundColor(isDefault ? .accentColor : guidanceColors.warning)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(String(format: LocalizedString("Editing profile: %1$@", comment: "Therapy settings banner title (1: active profile name)"), name))
+                        .bold()
+                        .accessibilityIdentifier("text_ActiveProfile")
+                    Text(String(format: LocalizedString("Changes to the correction range, carb ratios, basal rates and insulin sensitivities are saved to %1$@, the active profile, and %2$@ uses them right away.", comment: "Therapy settings banner text (1: active profile name, 2: app name)"), name, appName))
+                        .font(.footnote)
+                        .foregroundColor(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                Spacer(minLength: 0)
+            }
+        }
+    }
     
     private var prescriptionSection: Card {
         Card {

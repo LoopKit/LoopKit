@@ -98,6 +98,7 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
         case crashOnBolus
         case crashOnTempBasal
         case uncertainDeliveryErrorToggle
+        case basalScheduleSyncErrorToggle
         case lastReconciliationDate
     }
     
@@ -268,6 +269,8 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                 return switchTableViewCell(for: indexPath, titled: "Crash on Temp Basal", boundTo: \.tempBasalShouldCrash)
             case .uncertainDeliveryErrorToggle:
                 return switchTableViewCell(for: indexPath, titled: "Next Delivery Command Uncertain", boundTo: \.deliveryCommandsShouldTriggerUncertainDelivery)
+            case .basalScheduleSyncErrorToggle:
+                return switchTableViewCell(for: indexPath, titled: "Error on Basal Schedule Sync", boundTo: \.basalScheduleSyncShouldError)
             case .lastReconciliationDate:
                 let cell = tableView.dequeueReusableCell(withIdentifier: DateAndDurationTableViewCell.className, for: indexPath) as! DateAndDurationTableViewCell
                 cell.titleLabel.text = "Last Reconciliation Date"

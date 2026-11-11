@@ -1,6 +1,15 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%1$@ %2$@" : {
+      "comment" : "Weekday and time of a scheduled profile switch (1: weekday, 2: time)"
+    },
+    "%1$@ already starts %2$@" : {
+      "comment" : "Scheduled switch error: another start has the same weekday and time (1: profile name, 2: weekday and time)"
+    },
+    "%1$@ starts %2$@" : {
+      "comment" : "A scheduled profile switch (1: profile name, 2: weekday and time)"
+    },
     ", " : {
       "comment" : "Separator for multiple days"
     },
@@ -175,6 +184,21 @@
           }
         }
       }
+    },
+    "%1$@ does not start at midnight" : {
+      "comment" : "Therapy profile error: first entry not at 00:00 (1: setting name)"
+    },
+    "%1$@ has a start time that is not on a half hour" : {
+      "comment" : "Therapy profile error: start time off grid (1: setting name)"
+    },
+    "%1$@ has more than %2$d entries" : {
+      "comment" : "Therapy profile error: too many entries (1: setting name, 2: maximum)"
+    },
+    "%1$@ has no entries" : {
+      "comment" : "Therapy profile error: empty schedule (1: setting name)"
+    },
+    "%1$@ start times are not in ascending order" : {
+      "comment" : "Therapy profile error: start times not ascending (1: setting name)"
     },
     "%1$@ U bolus failed" : {
       "comment" : "Describes a certain bolus failure (1: size of the bolus in units)",
@@ -760,8 +784,20 @@
         }
       }
     },
+    "A correction range has its lower value above its upper value" : {
+      "comment" : "Therapy profile error: target low above high"
+    },
+    "A profile named %1$@ already exists" : {
+      "comment" : "Therapy profile error: duplicate name (1: name)"
+    },
     "A rapid-acting insulin" : {
       "comment" : "Description for rapid acting insulin types"
+    },
+    "A scheduled switch has a time that is not on a whole minute of the day" : {
+      "comment" : "Scheduled switch error: time out of range or not on a minute"
+    },
+    "A scheduled switch has no valid weekday" : {
+      "comment" : "Scheduled switch error: weekday out of range"
     },
     "A value you have entered is higher than what is typically recommended for most people." : {
       "comment" : "Descriptive text for guardrail high value warning for schedule interface",
@@ -1347,6 +1383,9 @@
     },
     "An ultra-rapid-acting mealtime insulin that is inhaled" : {
       "comment" : "Description for afrezza insulin type"
+    },
+    "Another profile change is in progress" : {
+      "comment" : "Therapy profile error: concurrent change"
     },
     "Apidra" : {
       "comment" : "Brand name for apidra insulin type",
@@ -2368,6 +2407,9 @@
           }
         }
       }
+    },
+    "Carb Ratio values are out of bounds" : {
+      "comment" : "Therapy profile error: carb ratio out of bounds"
     },
     "Carb Ratios" : {
       "comment" : "Title text for carb ratios",
@@ -3714,6 +3756,9 @@
           }
         }
       }
+    },
+    "Correction Range values are out of bounds" : {
+      "comment" : "Therapy profile error: correction range out of bounds"
     },
     "Critical Update" : {
       "comment" : "Description of critical software update needed",
@@ -6796,6 +6841,9 @@
     "Impact on Bolusing" : {
 
     },
+    "Insulin delivery is suspended. Resume delivery before changing the basal rates." : {
+      "comment" : "Therapy profile error: the pump is suspended"
+    },
     "Insulin Model" : {
       "comment" : "Title text for fast acting insulin model",
       "extractionState" : "stale",
@@ -7094,6 +7142,9 @@
           }
         }
       }
+    },
+    "Insulin Sensitivity values are out of bounds" : {
+      "comment" : "Therapy profile error: ISF out of bounds"
     },
     "Invalid Configuration" : {
       "comment" : "Generic pump error description",
@@ -7972,6 +8023,9 @@
           }
         }
       }
+    },
+    "Maximum basal rate is not set, so the basal rates cannot be checked" : {
+      "comment" : "Therapy profile error: no max basal"
     },
     "Maximum Basal Rate is the automatically adjusted basal rate that %1$@ is allowed to enact to help reach your Correction Range." : {
       "comment" : "Descriptive text for maximum basal rate (1: app name)"
@@ -9306,6 +9360,12 @@
           }
         }
       }
+    },
+    "No profile named %1$@" : {
+      "comment" : "Therapy profile error: not found (1: name)"
+    },
+    "No pump is configured, so the basal rates cannot be checked" : {
+      "comment" : "Therapy profile error: no pump"
     },
     "No Update" : {
       "comment" : "Description of no software update needed",
@@ -12129,6 +12189,57 @@
         }
       }
     },
+    "The %1$@ profile cannot be deleted" : {
+      "comment" : "Therapy profile error: delete Default (1: Default)"
+    },
+    "The %1$@ profile cannot be renamed" : {
+      "comment" : "Therapy profile error: rename Default (1: Default)"
+    },
+    "The active profile cannot be deleted" : {
+      "comment" : "Therapy profile error: delete active"
+    },
+    "The active profile changed to %1$@ while these settings were open, so the change was not saved. Open the settings again to edit %1$@." : {
+      "comment" : "Therapy profile error: active profile changed during an edit (1: active profile name)"
+    },
+    "The basal rate %1$@ U/hr is above the maximum basal rate" : {
+      "comment" : "Therapy profile error: basal above max (1: rate)"
+    },
+    "The correction range is below the glucose safety limit" : {
+      "comment" : "Therapy profile error: correction range below suspend threshold"
+    },
+    "The name %1$@ is reserved" : {
+      "comment" : "Therapy profile error: reserved name (1: Default)"
+    },
+    "The profile changed on the phone after it was uploaded. Review it again and resend." : {
+      "comment" : "Therapy profile error: fingerprint mismatch"
+    },
+    "The profile has an unsupported glucose unit" : {
+      "comment" : "Therapy profile error: unit"
+    },
+    "The profile name cannot contain or start with '%1$@'" : {
+      "comment" : "Therapy profile error: invalid character (1: character)"
+    },
+    "The profile name is empty" : {
+      "comment" : "Therapy profile error: empty name"
+    },
+    "The profile name is longer than %1$d characters" : {
+      "comment" : "Therapy profile error: name too long (1: maximum length)"
+    },
+    "The profile name starts or ends with a space" : {
+      "comment" : "Therapy profile error: untrimmed name"
+    },
+    "The pump did not accept the basal rates: %1$@" : {
+      "comment" : "Therapy profile error: the pump refused the basal schedule (1: pump error)"
+    },
+    "The pump does not support a basal rate of %1$@ U/hr" : {
+      "comment" : "Therapy profile error: unsupported basal rate (1: rate)"
+    },
+    "The pump supports at most %1$d basal rate entries" : {
+      "comment" : "Therapy profile error: pump basal entry limit (1: maximum)"
+    },
+    "The scheduled switches changed on the phone after they were uploaded. Review them again and resend." : {
+      "comment" : "Scheduled switch error: fingerprint mismatch"
+    },
     "The value you have entered is higher than what is typically recommended for most people." : {
       "comment" : "Descriptive text for guardrail high value warning",
       "localizations" : {
@@ -12559,8 +12670,20 @@
         }
       }
     },
+    "There can be at most %1$d profiles. Delete a profile before creating another." : {
+      "comment" : "Therapy profile error: profile limit reached (1: maximum number of profiles)"
+    },
+    "There can be at most %1$d scheduled switches" : {
+      "comment" : "Scheduled switch error: too many (1: maximum number)"
+    },
+    "These settings changed on the phone while they were open, for example by a remote command, so the change was not saved. Open the settings again to see the current values." : {
+      "comment" : "Therapy profile error: settings changed during an edit"
+    },
     "Training Complete" : {
 
+    },
+    "Two scheduled switches have the same identifier" : {
+      "comment" : "Scheduled switch error: duplicate identifier"
     },
     "U" : {
       "comment" : "The short unit display string for international units of insulin",

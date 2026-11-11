@@ -454,6 +454,21 @@
     " than your typical correction range." : {
 
     },
+    "%1$@ %2$@ · %3$@ starts" : {
+      "comment" : "Scheduled switch row (1: short weekday, 2: time, 3: profile name)"
+    },
+    "%1$@ is used by %2$d scheduled switches, which will be removed." : {
+      "comment" : "Delete profile confirmation: scheduled switches removed (1: profile name, 2: number of scheduled switches)"
+    },
+    "%1$@ is used by 1 scheduled switch, which will be removed." : {
+      "comment" : "Delete profile confirmation: one scheduled switch removed (1: profile name)"
+    },
+    "%1$@ starts again every %2$@ after a manual switch." : {
+      "comment" : "Footer of the scheduled switches with one start that is not paused (1: profile name, 2: weekday and time)"
+    },
+    "%1$@ starts every %2$@ at %3$@ and stays active until the next scheduled start." : {
+      "comment" : "Scheduled switch editor footer (1: profile name, 2: weekday, 3: time)"
+    },
     "-" : {
       "comment" : "Separator between min and max glucose values",
       "localizations" : {
@@ -608,6 +623,60 @@
           }
         }
       }
+    },
+    "A paused start does not run until you resume it. Nothing is switched when you resume; the start runs again at its next time. %1$@ does not remind you of a paused start." : {
+      "comment" : "Scheduled switch editor: paused footer (1: app name)"
+    },
+    "Add Scheduled Switch" : {
+      "comment" : "Title of the scheduled switch editor for a new start"
+    },
+    "All starts are paused." : {
+      "comment" : "Footer of the scheduled switches when every start is paused"
+    },
+    "At those times the profile active before stays active until the next scheduled start." : {
+      "comment" : "Delete profile confirmation: what removing scheduled switches does to the week"
+    },
+    "Day" : {
+      "comment" : "Scheduled switch editor: weekday picker label"
+    },
+    "every week" : {
+      "comment" : "Span line of the only scheduled switch that is not paused"
+    },
+    "It stays active until %1$@." : {
+      "comment" : "Activate profile confirmation: the next scheduled start (1: profile name, weekday and time)"
+    },
+    "Next: %1$@." : {
+      "comment" : "Footer of the scheduled switches naming the next start (1: profile name, weekday and time)"
+    },
+    "No scheduled switches. %1$@ keeps the active profile until you switch." : {
+      "comment" : "Footer of the scheduled switches when there are none (1: app name)"
+    },
+    "Pause" : {
+      "comment" : "Swipe action to pause a scheduled switch"
+    },
+    "Paused" : {
+      "comment" : "Scheduled switch editor: paused toggle label"
+    },
+    "Profile" : {
+      "comment" : "Scheduled switch editor: profile picker label"
+    },
+    "Resume" : {
+      "comment" : "Swipe action to resume a paused scheduled switch"
+    },
+    "Scheduled Switch" : {
+      "comment" : "Title of the scheduled switch editor"
+    },
+    "Scheduled Switches" : {
+      "comment" : "Header of the scheduled profile switches"
+    },
+    "Scheduled switches make a profile active at a time each week, for example Weekend on Saturday 07:00 and Default on Monday 06:00. A profile stays active until the next scheduled start, also after a switch you make yourself. %1$@ switches on its next loop after the time, and tells you when it switched or when it could not." : {
+      "comment" : "Profiles information about scheduled switches (1: app name)"
+    },
+    "Scheduled Switches Not Saved" : {
+      "comment" : "Title of the alert when a change of the scheduled switches fails"
+    },
+    "until %1$@" : {
+      "comment" : "Span line of a scheduled switch: until the next start (1: short weekday and time)"
     },
     "－" : {
       "localizations" : {
@@ -2221,6 +2290,12 @@
         }
       }
     },
+    "%1$@ doses with the profile marked with a checkmark. Tap a profile to review, edit, activate, rename or delete it." : {
+      "comment" : "Profiles list footer (1: app name)"
+    },
+    "%1$@ is the active profile. Editing a setting here changes the settings %2$@ doses with right away, and basal rates are written to the pump." : {
+      "comment" : "Explanation for the active profile (1: profile name, 2: app name)"
+    },
     "%1$@ or your Glucose Safety Limit, whichever is higher" : {
       "comment" : "Lower bound workout information text format (1: app name)",
       "extractionState" : "stale",
@@ -2800,6 +2875,9 @@
     },
     "%1$@ will set your correction range to 110 mg/dL or higher when this preset is enabled." : {
       "comment" : "The format string for the high insulin needs preset warning text on the preset preview screen. (1: app name)"
+    },
+    "%1$@ writes the basal rates of %2$@ to the pump and doses with its settings right away." : {
+      "comment" : "Activate profile confirmation (1: app name, 2: profile name)"
     },
     "%1$@: <b>%2$@</b> %3$@" : {
       "comment" : "Description of a basal temp basal dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit)\nDescription of a bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit)",
@@ -4404,6 +4482,9 @@
     "A percentage " : {
 
     },
+    "A profile holds a correction range, carb ratios, basal rates and insulin sensitivities. %1$@ doses with the active profile, marked with a checkmark.\n\nUse ‘+’ to create a profile from the active profile's settings.\n\nTap a profile to review it. There you can edit its settings and activate, rename or delete it. Editing the active profile changes the settings %1$@ doses with right away.\n\nTo change the order, press and hold a profile and drag it." : {
+      "comment" : "Profiles information (1: app name)"
+    },
     "A value of 0 U/hr means you will be scheduled to receive no basal insulin." : {
       "comment" : "Warning text for basal rate of 0 U/hr",
       "localizations" : {
@@ -4698,6 +4779,15 @@
           }
         }
       }
+    },
+    "Activate" : {
+      "comment" : "Button to activate a therapy profile"
+    },
+    "Activate Profile" : {
+      "comment" : "Title of the activate profile confirmation"
+    },
+    "Active" : {
+      "comment" : "Label of the active profile in the profile list"
     },
     "Active Duration" : {
       "comment" : "The text for the override history duration",
@@ -7416,6 +7506,9 @@
     },
     "Caution" : {
 
+    },
+    "Changes to the correction range, carb ratios, basal rates and insulin sensitivities are saved to %1$@, the active profile, and %2$@ uses them right away." : {
+      "comment" : "Therapy settings banner text (1: active profile name, 2: app name)"
     },
     "Changes will only apply this time you enable the override. The default settings of %@ will not be affected." : {
       "comment" : "Footer text for customizing an override from a preset (1: preset name)",
@@ -10868,6 +10961,12 @@
     "Delete Preset" : {
 
     },
+    "Delete Profile" : {
+      "comment" : "Title of the delete profile confirmation"
+    },
+    "Delete the profile %1$@? This cannot be undone." : {
+      "comment" : "Delete profile confirmation (1: profile name)"
+    },
     "Delivery Limits" : {
       "comment" : "Title text for crossed thresholds guardrail warning",
       "localizations" : {
@@ -12047,6 +12146,9 @@
     "Edit Preset" : {
 
     },
+    "Editing a setting here changes only %1$@. %2$@ keeps dosing with %3$@ until you activate %1$@." : {
+      "comment" : "Explanation for a profile that is not active (1: profile name, 2: app name, 3: active profile name)"
+    },
     "Editing affects only the active override. The default settings of %@ will not be affected." : {
       "comment" : "Footer text for editing an active override (1: preset name)",
       "extractionState" : "manual",
@@ -12196,6 +12298,9 @@
           }
         }
       }
+    },
+    "Editing profile: %1$@" : {
+      "comment" : "Therapy settings banner title (1: active profile name)"
     },
     "Edits persist only until the preset is disabled. The default settings of %@ will not be affected." : {
       "comment" : "Footer text for editing an enabled custom preset (1: preset name)",
@@ -14537,6 +14642,9 @@
           }
         }
       }
+    },
+    "Got it!" : {
+      "comment" : "Dismiss button of the profiles information"
     },
     "High Basal Rate" : {
       "comment" : "Title text for the high basal rate warning",
@@ -20251,6 +20359,9 @@
         }
       }
     },
+    "New Profile" : {
+      "comment" : "Title of the new profile editor"
+    },
     "Next Date" : {
 
     },
@@ -20553,6 +20664,9 @@
     },
     "of scheduled" : {
 
+    },
+    "OK" : {
+      "comment" : "Button to dismiss a profile error"
     },
     "or" : {
 
@@ -22040,6 +22154,18 @@
         }
       }
     },
+    "Profile Name" : {
+      "comment" : "Placeholder of the profile name field"
+    },
+    "Profile Not Changed" : {
+      "comment" : "Title of a profile error"
+    },
+    "Profiles" : {
+      "comment" : "Title on TherapyProfilesView"
+    },
+    "Profiles are not available" : {
+      "comment" : "Therapy profile error: no profile handler"
+    },
     "Progressing." : {
       "comment" : "Accessibility label for ProgressIndicatorView when showIndeterminantProgress",
       "localizations" : {
@@ -22776,6 +22902,12 @@
     },
     "Recommended starting values" : {
 
+    },
+    "Rename" : {
+      "comment" : "Button to rename a therapy profile"
+    },
+    "Rename Profile" : {
+      "comment" : "Title of the rename profile editor"
     },
     "Repeat" : {
 
@@ -25749,6 +25881,9 @@
     "Settings Impact" : {
 
     },
+    "Settings Not Saved" : {
+      "comment" : "Title of the alert shown when a therapy settings change was refused"
+    },
     "Slow" : {
       "comment" : "Section title for slow absorbing food",
       "localizations" : {
@@ -28545,6 +28680,9 @@
         }
       }
     },
+    "The basal rate schedule is empty" : {
+      "comment" : "Therapy profile error: empty basal schedule"
+    },
     "The currently selected fast acting insulin model will be used as a default." : {
       "comment" : "Description for selection when no insulin type is selected.",
       "localizations" : {
@@ -29136,6 +29274,9 @@
           }
         }
       }
+    },
+    "The new profile starts with the settings of %1$@." : {
+      "comment" : "New profile hint (1: active profile name)"
     },
     "The rapid-acting adult model assumes peak activity at 75 minutes." : {
       "comment" : "Information about adult insulin model",
