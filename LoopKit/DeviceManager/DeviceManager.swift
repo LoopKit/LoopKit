@@ -60,11 +60,11 @@ public extension DeviceManager {
 
 // MARK: - Sharing a device with another controller
 
-/// What another controller needs to use a device, plus a header the host can read.
+/// What another controller needs to use a device or service, plus a header the host can read.
 public struct SharedDeviceConfiguration: RawRepresentable {
     public typealias RawValue = [String: Any]
 
-    /// Which plugin builds from it: the exporting manager's `pluginIdentifier`.
+    /// Which plugin builds from it: the exporter's `pluginIdentifier`.
     public let managerIdentifier: String
     /// When it was true.
     public let asOf: Date
@@ -97,9 +97,9 @@ public struct SharedDeviceConfiguration: RawRepresentable {
     }
 }
 
-/// A device manager that can export what another controller needs and be built from such an
-/// export. Managers that cannot simply don't conform; callers find it by conditional cast.
-public protocol DeviceConfigurationSharing: DeviceManager {
+/// A device manager or service that can export what another controller needs and be built from
+/// such an export. Plugins that cannot simply don't conform; callers find it by conditional cast.
+public protocol DeviceConfigurationSharing: Pluggable {
     /// Export for another controller. The kit leaves out what is local to this controller.
     func exportConfiguration() -> SharedDeviceConfiguration
 
@@ -125,7 +125,7 @@ public extension DeviceConfigurationSharing {
 
 /// A device whose hardware allows one controller at a time. Release, take and readiness say
 /// nothing about who the controllers are; that is the host's business.
-public protocol ExclusiveDeviceControl: DeviceConfigurationSharing {
+public protocol ExclusiveDeviceControl: DeviceConfigurationSharing, DeviceManager {
     /// True while control is released. Persisted by the kit, so a relaunch does not take it back.
     var isControlReleased: Bool { get }
 
@@ -142,10 +142,24 @@ public protocol ExclusiveDeviceControl: DeviceConfigurationSharing {
     /// Whether taking control with this export and local state means finding the device first
     /// (the host may need to keep its screen or radio awake). Default: false.
     static func takeControlNeedsSearch(adopting configuration: SharedDeviceConfiguration, localState: [String: Any]?) -> Bool
+
+    /// The kit's name for ending the device from this controller (for example "Deactivate Pod"),
+    /// set only while the device has failed for good: a controller away from the one that set the
+    /// device up can still end it, and its alarm. Default: nil.
+    var failedDeviceDeactivationTitle: String? { get }
+
+    /// Ends a failed device and forgets it, as the kit's own deactivation does: its last delivery is
+    /// booked here. Throws if the device did not confirm; then nothing is forgotten.
+    func deactivateFailedDevice() async throws
+
+    /// Another controller ended the device and booked its last delivery: forget it, booking nothing.
+    /// Only a device this controller released.
+    func forgetDeviceDeactivatedElsewhere() async
 }
 
 public extension ExclusiveDeviceControl {
     var isControlReady: Bool { true }
+    var failedDeviceDeactivationTitle: String? { nil }
     static func takeControlNeedsSearch(adopting configuration: SharedDeviceConfiguration, localState: [String: Any]?) -> Bool { false }
 }
 
