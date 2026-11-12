@@ -233,6 +233,7 @@ extension CachedInsulinDeliveryObject {
             value: programmedValue,
             unit: unit,
             doseId: doseId,
+            metadata: metadata.flatMap { try? DoseMetadata(encoded: $0) },
             deliveredUnits: !isMutable ? deliveredUnits : nil,
             description: nil,
             syncIdentifier: syncIdentifier,
@@ -292,6 +293,7 @@ extension CachedInsulinDeliveryObject {
         self.isMutable = entry.isMutable
         self.wasProgrammedByPumpUI = entry.wasProgrammedByPumpUI
         self.doseId = entry.doseId
+        self.metadata = try? entry.metadata?.encoded()
         updateModificationCounter()  // Maintains modificationCounter order
     }
 
@@ -318,6 +320,7 @@ extension CachedInsulinDeliveryObject {
         self.isMutable = entry.isMutable
         self.wasProgrammedByPumpUI = entry.wasProgrammedByPumpUI
         self.doseId = entry.doseId
+        self.metadata = try? entry.metadata?.encoded()
         updateModificationCounter()  // Maintains modificationCounter order
     }
 }

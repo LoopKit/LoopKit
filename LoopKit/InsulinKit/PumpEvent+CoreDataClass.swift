@@ -200,6 +200,7 @@ extension PumpEvent {
                 value: value,
                 unit: unit,
                 doseId: doseId,
+                metadata: metadata.flatMap { try? DoseMetadata(encoded: $0) },
                 deliveredUnits: deliveredUnits,
                 syncIdentifier: syncIdentifier,
                 insulinType: insulinType,
@@ -219,6 +220,7 @@ extension PumpEvent {
             value = entry.value
             unit = entry.unit
             doseId = entry.doseId
+            metadata = try? entry.metadata?.encoded()
             deliveredUnits = entry.deliveredUnits
             insulinType = entry.insulinType
             automatic = entry.automatic
