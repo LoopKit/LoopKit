@@ -9,13 +9,14 @@ import Foundation
 import UserNotifications
 
 public protocol DeviceManagerDelegate: AlertIssuer, PersistedAlertStore {
-    // This will be called from an unspecified queue
+    /// Called from any thread, and not awaited, so a manager can log from anywhere. The delegate keeps
+    /// entries in the order it receives them.
     func deviceManager(_ manager: DeviceManager, logEventForDeviceIdentifier deviceIdentifier: String?, type: DeviceLogEntryType, message: String, completion: ((Error?) -> Void)?)
 
     /// An `ExclusiveDeviceControl` device's link is up and the device has answered. Optional.
-    func deviceManagerControlDidBecomeReady(_ manager: DeviceManager)
+    func deviceManagerControlDidBecomeReady(_ manager: DeviceManager) async
 
-    /// Records an event with the app's analytics services. This will be called from an unspecified queue
+    /// Records an event with the app's analytics services. Called from any thread, and not awaited.
     func deviceManager(_ manager: DeviceManager, recordAnalyticsEvent name: String, properties: [AnyHashable: Any]?)
 }
 
@@ -149,5 +150,5 @@ public extension ExclusiveDeviceControl {
 }
 
 public extension DeviceManagerDelegate {
-    func deviceManagerControlDidBecomeReady(_ manager: DeviceManager) {}
+    func deviceManagerControlDidBecomeReady(_ manager: DeviceManager) async {}
 }

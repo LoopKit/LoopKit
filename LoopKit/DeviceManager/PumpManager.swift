@@ -42,26 +42,28 @@ public protocol PumpManagerStatusObserver: AnyObject {
     func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus, oldStatus: PumpManagerStatus)
 }
 
+/// Calls to the delegate may come from any thread or actor; the delegate decides where its own work runs. A
+/// manager awaits each call before making the next, so the delegate sees them in the order they happened.
 public protocol PumpManagerDelegate: DeviceManagerDelegate, PumpManagerStatusObserver {
-    func pumpManagerBLEHeartbeatDidFire(_ pumpManager: PumpManager)
+    func pumpManagerBLEHeartbeatDidFire(_ pumpManager: PumpManager) async
 
     /// Queries the delegate as to whether Loop requires the pump to provide its own periodic scheduling
     /// via BLE.
     /// This is the companion to `PumpManager.setMustProvideBLEHeartbeat(_:)`
-    func pumpManagerMustProvideBLEHeartbeat(_ pumpManager: PumpManager) -> Bool
+    func pumpManagerMustProvideBLEHeartbeat(_ pumpManager: PumpManager) async -> Bool
 
     /// Informs the delegate that the manager is deactivating and should be deleted
     func pumpManagerWantsDeletion(_ pumpManager: PumpManager) async
 
     /// Informs the delegate that the hardware this PumpManager has been reporting for has been replaced.
-    func pumpManagerPumpWasReplaced(_ pumpManager: PumpManager)
+    func pumpManagerPumpWasReplaced(_ pumpManager: PumpManager) async
 
     /// Triggered when pump model changes. With a more formalized setup flow (which requires a successful model fetch),
     /// this delegate method could go away.
-    func pumpManager(_ pumpManager: PumpManager, didUpdatePumpRecordsBasalProfileStartEvents pumpRecordsBasalProfileStartEvents: Bool)
+    func pumpManager(_ pumpManager: PumpManager, didUpdatePumpRecordsBasalProfileStartEvents pumpRecordsBasalProfileStartEvents: Bool) async
 
     /// Reports an error that should be surfaced to the user
-    func pumpManager(_ pumpManager: PumpManager, didError error: PumpManagerError)
+    func pumpManager(_ pumpManager: PumpManager, didError error: PumpManagerError) async
 
     /// This should be called any time the PumpManager synchronizes with the pump, even if there are no new doses in the log, as changes to lastReconciliation
     /// indicate we can trust insulin delivery status up until that point, even if there are no new doses.
@@ -69,26 +71,30 @@ public protocol PumpManagerDelegate: DeviceManagerDelegate, PumpManagerStatusObs
     /// For pumps with a user interface and dosing history capabilities, lastReconciliation should be reflective of the last time we reconciled fully with pump history, and know
     /// that we have accounted for any external doses. It is possible for the pump to report reservoir data beyond the date of lastReconciliation, and Loop can use it for
     /// calculating IOB.
-    func pumpManager(_ pumpManager: PumpManager, hasNewPumpEvents events: [NewPumpEvent], lastReconciliation: Date?, replacePendingEvents: Bool, completion: @escaping (_ error: Error?) -> Void)
+    ///
+    /// Returns once the events are stored; throws if they could not be.
+    func pumpManager(_ pumpManager: PumpManager, hasNewPumpEvents events: [NewPumpEvent], lastReconciliation: Date?, replacePendingEvents: Bool) async throws
 
-    func pumpManager(_ pumpManager: PumpManager, didReadReservoirValue units: Double, at date: Date, completion: @escaping (_ result: Result<(newValue: ReservoirValue, lastValue: ReservoirValue?, areStoredValuesContinuous: Bool), Error>) -> Void)
+    func pumpManager(_ pumpManager: PumpManager, didReadReservoirValue units: Double, at date: Date) async throws -> (newValue: ReservoirValue, lastValue: ReservoirValue?, areStoredValuesContinuous: Bool)
 
-    func pumpManager(_ pumpManager: PumpManager, didAdjustPumpClockBy adjustment: TimeInterval)
+    func pumpManager(_ pumpManager: PumpManager, didAdjustPumpClockBy adjustment: TimeInterval) async
 
-    func pumpManagerDidUpdateState(_ pumpManager: PumpManager)
-    
-    func pumpManager(_ pumpManager: PumpManager, didRequestBasalRateScheduleChange basalRateSchedule: BasalRateSchedule, completion: @escaping (Error?) -> Void)
+    /// Informs the delegate that `rawState` has changed and should be persisted.
+    func pumpManagerDidUpdateState(_ pumpManager: PumpManager) async
 
-    @MainActor
-    func startDateToFilterNewPumpEvents(for manager: PumpManager) -> Date
+    func pumpManager(_ pumpManager: PumpManager, didRequestBasalRateScheduleChange basalRateSchedule: BasalRateSchedule) async throws
+
+    func startDateToFilterNewPumpEvents(for manager: PumpManager) async -> Date
 
     /// Indicates the system time offset from a trusted time source. If the return value is added to the system time, the result is the trusted time source value. If the trusted time source is earlier than the system time, the return value is negative.
+    /// Read from any thread.
     var detectedSystemTimeOffset: TimeInterval { get }
 
-    /// Indicates if automatic dosing has been enabled
+    /// Indicates if automatic dosing has been enabled. For the manager's UI.
     @MainActor
     var automaticDosingEnabled: Bool { get }
 
+    /// For the manager's UI.
     @MainActor
     var automatedTreatmentState: AutomatedTreatmentState? { get }
 }
@@ -106,10 +112,6 @@ public protocol PumpManager: DeviceManager {
 
     /// All user-selectable maximum bolus volumes, in Units. Must be non-empty. Used during onboarding by therapy settings.
     static var onboardingSupportedMaximumBolusVolumes: [Double] { get }
-
-    /// The queue on which PumpManagerDelegate methods are called
-    /// Setting to nil resets to a default provided by the manager
-    var delegateQueue: DispatchQueue! { get set }
 
     /// Rounds a basal rate in U/hr to a rate supported by this pump.
     ///
@@ -140,8 +142,8 @@ public protocol PumpManager: DeviceManager {
     /// The basal schedule duration increment, beginning at midnight, supported by the pump
     var minimumBasalScheduleEntryDuration: TimeInterval { get }
 
-    /// The primary client receiving notifications about the pump lifecycle
-    /// All delegate methods are called on `delegateQueue`
+    /// The primary client receiving notifications about the pump lifecycle. See `PumpManagerDelegate` for how the
+    /// manager calls it.
     var pumpManagerDelegate: PumpManagerDelegate? { get set }
     
     /// Whether the PumpManager provides DoseEntry values for scheduled basal delivery. If false, Loop will use the basal schedule to infer normal basal delivery during times not overridden by:
