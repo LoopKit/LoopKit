@@ -74,6 +74,52 @@ public struct TherapyProfile: Codable, Equatable {
         return profile
     }
 
+    /// This profile with each correction range bound and insulin sensitivity taken from `stored` where `stored` has the
+    /// same start time and the same value to the three decimals `hasSameValues(as:)` compares in mg/dL, so a value that
+    /// is sent back unchanged stays exactly as stored. The glucose schedules are in `stored`'s unit.
+    public func keepingStoredGlucoseValues(of stored: TherapyProfile) -> TherapyProfile {
+        let mgdL = LoopUnit.milligramsPerDeciliter
+        let rangeUnit = stored.glucoseTargetRangeSchedule.unit
+        let sensitivityUnit = stored.insulinSensitivitySchedule.unit
+        guard let range = glucoseTargetRangeSchedule.schedule(for: rangeUnit),
+              let rangeMgdL = glucoseTargetRangeSchedule.schedule(for: mgdL)?.items,
+              let storedRangeMgdL = stored.glucoseTargetRangeSchedule.schedule(for: mgdL)?.items,
+              let sensitivity = insulinSensitivitySchedule.schedule(for: sensitivityUnit),
+              let sensitivityMgdL = insulinSensitivitySchedule.schedule(for: mgdL)?.items,
+              let storedSensitivityMgdL = stored.insulinSensitivitySchedule.schedule(for: mgdL)?.items
+        else {
+            return self
+        }
+        func same(_ a: Double, _ b: Double) -> Bool {
+            String(format: "%.3f", a) == String(format: "%.3f", b)
+        }
+        let rangeItems = range.items.enumerated().map { index, item -> RepeatingScheduleValue<DoubleRange> in
+            guard let storedIndex = storedRangeMgdL.firstIndex(where: { $0.startTime == item.startTime }) else {
+                return item
+            }
+            let storedItem = stored.glucoseTargetRangeSchedule.items[storedIndex].value
+            let minValue = same(storedRangeMgdL[storedIndex].value.minValue, rangeMgdL[index].value.minValue) ? storedItem.minValue : item.value.minValue
+            let maxValue = same(storedRangeMgdL[storedIndex].value.maxValue, rangeMgdL[index].value.maxValue) ? storedItem.maxValue : item.value.maxValue
+            return RepeatingScheduleValue(startTime: item.startTime, value: DoubleRange(minValue: minValue, maxValue: maxValue))
+        }
+        let sensitivityItems = sensitivity.items.enumerated().map { index, item -> RepeatingScheduleValue<Double> in
+            guard let storedIndex = storedSensitivityMgdL.firstIndex(where: { $0.startTime == item.startTime }),
+                  same(storedSensitivityMgdL[storedIndex].value, sensitivityMgdL[index].value)
+            else {
+                return item
+            }
+            return stored.insulinSensitivitySchedule.items[storedIndex]
+        }
+        var profile = self
+        if let keptRange = GlucoseRangeSchedule(unit: rangeUnit, dailyItems: rangeItems, timeZone: range.timeZone) {
+            profile.glucoseTargetRangeSchedule = keptRange
+        }
+        if let keptSensitivity = InsulinSensitivitySchedule(unit: sensitivityUnit, dailyItems: sensitivityItems, timeZone: sensitivity.timeZone) {
+            profile.insulinSensitivitySchedule = keptSensitivity
+        }
+        return profile
+    }
+
     /// This profile with its glucose schedules in `unit`.
     public func withGlucoseUnit(_ unit: LoopUnit) -> TherapyProfile {
         var profile = self

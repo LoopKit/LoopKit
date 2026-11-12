@@ -63,6 +63,31 @@ final class TherapyProfileTests: XCTestCase {
 
     // MARK: StoredSettings
 
+    func testGlucoseValuesSentBackUnchangedKeepTheirStoredValue() {
+        let stored = profile("Weekend", target: [(0, 100.8872928000303, 105.00000000000001), (.hours(8), 100, 110)], sensitivity: [(0, 45.0000001)])
+        let sent = profile("Weekend", target: [(0, 100.887, 108), (.hours(8), 100, 110)], carbRatio: [(0, 12)], sensitivity: [(0, 45)])
+
+        let kept = sent.keepingStoredGlucoseValues(of: stored)
+
+        XCTAssertEqual(kept.glucoseTargetRangeSchedule.items.map(\.value), [DoubleRange(minValue: 100.8872928000303, maxValue: 108), DoubleRange(minValue: 100, maxValue: 110)])
+        XCTAssertEqual(kept.insulinSensitivitySchedule.items.map(\.value), [45.0000001])
+        XCTAssertEqual(kept.carbRatioSchedule.items.map(\.value), [12])
+
+        let unchanged = profile("Weekend", target: [(0, 100.887, 105), (.hours(8), 100, 110)], sensitivity: [(0, 45)])
+        XCTAssertEqual(unchanged.keepingStoredGlucoseValues(of: stored).glucoseTargetRangeSchedule.items, stored.glucoseTargetRangeSchedule.items)
+    }
+
+    func testGlucoseValuesSentBackInMillimolesKeepTheStoredMilligramValue() {
+        let stored = profile("Weekend", target: [(0, 100, 110)], sensitivity: [(0, 45)])
+        let millimoles = stored.withGlucoseUnit(.millimolesPerLiter)
+
+        let kept = millimoles.keepingStoredGlucoseValues(of: stored)
+
+        XCTAssertEqual(kept.glucoseTargetRangeSchedule.unit, .milligramsPerDeciliter)
+        XCTAssertEqual(kept.glucoseTargetRangeSchedule.items, stored.glucoseTargetRangeSchedule.items)
+        XCTAssertEqual(kept.insulinSensitivitySchedule.items, stored.insulinSensitivitySchedule.items)
+    }
+
     func testStoredSettingsWithoutProfileKeysDecodes() throws {
         let original = StoredSettings(date: Date(timeIntervalSince1970: 1_700_000_000),
                                       glucoseTargetRangeSchedule: profile("x").glucoseTargetRangeSchedule,
