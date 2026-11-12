@@ -429,8 +429,8 @@ extension StoredSettings {
     }
 }
 
-/// An element that decodes as nil when it can not be read, so one unreadable profile does not lose the therapy
-/// settings stored with it.
+/// An element that decodes as nil when it can not be read, so one unreadable element does not lose the settings
+/// stored with it.
 struct Lossy<Value: Decodable>: Decodable {
     let value: Value?
 

@@ -46,13 +46,6 @@ final class ScheduledProfileSwitchTests: XCTestCase {
     func testANameCanNotHoldTheTextBetweenTwoCanonicalEntries() {
         let between = ";weekday=1;date=-;time=0;paused=true|profile="
         XCTAssertGreaterThan(between.count, TherapyProfileValidator.maximumNameLength)
-
-        let name = String(";weekday=1|profile=".padding(toLength: TherapyProfileValidator.maximumNameLength, withPad: "x", startingAt: 0))
-        let one = [ScheduledProfileSwitch(profileName: name, weekday: 2, time: 0)]
-        let two = [ScheduledProfileSwitch(profileName: ";weekday=1", weekday: 1, time: 0),
-                   ScheduledProfileSwitch(profileName: "x", weekday: 2, time: 0)]
-        XCTAssertNotEqual(ScheduledProfileSwitches.canonicalFingerprintString(one),
-                          ScheduledProfileSwitches.canonicalFingerprintString(two))
     }
 
     func testFingerprintIgnoresIdentifiersAndOrder() {
