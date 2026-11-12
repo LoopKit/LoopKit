@@ -45,12 +45,21 @@ public struct SmartwatchLoopState {
 
     public var carbsOnBoard: CarbValue?
 
-    /// The forecast from the last loop run; empty before it has run.
-    public var predictedGlucose: [PredictedGlucoseValue]
+    /// The forecasts from the last loop run, one curve per forecast the host's
+    /// algorithm makes: Loop has one, Trio up to four (oref's IOB, ZT, COB and UAM,
+    /// as many as it computed). Each curve is a normal forecast, one value per
+    /// time, ascending. A watch draws a cone as the per-time minimum and maximum
+    /// across the curves (cut where the shortest ends; one curve gives its line),
+    /// or the curves as lines. Empty before the loop has run.
+    ///
+    /// Curves, not one flat array: a flat array is one forecast, with one value per
+    /// time and the eventual glucose last. Several curves mixed into it would lose
+    /// which value belongs to which curve and would zigzag when drawn as a line.
+    public var predictedGlucose: [[PredictedGlucoseValue]]
 
-    /// Where the algorithm expects glucose to end up. Loop reports the end of
-    /// `predictedGlucose`; a host whose algorithm computes its own (Trio's
-    /// eventual BG) reports that.
+    /// Where the algorithm expects glucose to end up. Loop reports the end of its
+    /// forecast; a host whose algorithm computes its own (Trio's eventual BG)
+    /// reports that.
     public var eventualGlucose: LoopQuantity?
 
     /// The algorithm's sensitivity ratio (1 = no adjustment), for hosts that have one.
@@ -61,7 +70,7 @@ public struct SmartwatchLoopState {
         isClosedLoop: Bool,
         insulinOnBoard: InsulinValue? = nil,
         carbsOnBoard: CarbValue? = nil,
-        predictedGlucose: [PredictedGlucoseValue] = [],
+        predictedGlucose: [[PredictedGlucoseValue]] = [],
         eventualGlucose: LoopQuantity? = nil,
         sensitivityRatio: Double? = nil
     ) {
