@@ -15,12 +15,22 @@ public protocol TherapySettingsViewModelDelegate: AnyObject {
     func syncDeliveryLimits(deliveryLimits: DeliveryLimits) async throws -> DeliveryLimits
     func saveCompletion(therapySettings: TherapySettings)
     func pumpSupportedIncrements() -> PumpSupportedIncrements?
+    /// Throws when settings edited from `therapySettings` can no longer be saved, for example because the active
+    /// profile or its schedules changed while the editor was open. Nothing is synced or saved then.
+    func validateTherapySettingsEdit(from therapySettings: TherapySettings) throws
+}
+
+public extension TherapySettingsViewModelDelegate {
+    func validateTherapySettingsEdit(from therapySettings: TherapySettings) throws {}
 }
 
 @Observable
 public class TherapySettingsViewModel {
     
     public var therapySettings: TherapySettings
+
+    /// Why the last change was not saved, until the settings screen shows it.
+    public var saveError: Error?
     
     @ObservationIgnored private let initialTherapySettings: TherapySettings
     @ObservationIgnored public var prescription: Prescription?
@@ -91,11 +101,29 @@ extension TherapySettingsViewModel {
     }
 
     public func syncBasalRateSchedule(items: [RepeatingScheduleValue<Double>], completion: @escaping (Result<BasalRateSchedule, Error>) -> Void) {
+        do {
+            try delegate?.validateTherapySettingsEdit(from: therapySettings)
+        } catch {
+            completion(.failure(error))
+            return
+        }
         delegate?.syncBasalRateSchedule(items: items, completion: completion)
     }
     
     public func syncDeliveryLimits(deliveryLimits: DeliveryLimits) async throws -> DeliveryLimits {
+        try delegate?.validateTherapySettingsEdit(from: therapySettings)
         return try await delegate?.syncDeliveryLimits(deliveryLimits: deliveryLimits) ?? deliveryLimits
+    }
+
+    /// False, with `saveError` set, when the delegate refuses changes made from the settings shown.
+    private func canSave() -> Bool {
+        do {
+            try delegate?.validateTherapySettingsEdit(from: therapySettings)
+            return true
+        } catch {
+            saveError = error
+            return false
+        }
     }
 }
 
@@ -103,17 +131,20 @@ extension TherapySettingsViewModel {
 extension TherapySettingsViewModel {
     
     public func saveCorrectionRange(range: GlucoseRangeSchedule) {
+        guard canSave() else { return }
         therapySettings.glucoseTargetRangeSchedule = range
         delegate?.saveCompletion(therapySettings: therapySettings)
     }
         
     public func saveCorrectionRangeOverride(preset: CorrectionRangeOverrides.Preset,
                                             correctionRangeOverrides: CorrectionRangeOverrides) {
+        guard canSave() else { return }
         therapySettings.correctionRangeOverrides = correctionRangeOverrides
         delegate?.saveCompletion(therapySettings: therapySettings)
     }
 
     public func saveSuspendThreshold(quantity: LoopQuantity, withDisplayGlucoseUnit displayGlucoseUnit: LoopUnit) {
+        guard canSave() else { return }
         therapySettings.suspendThreshold = GlucoseThreshold(unit: displayGlucoseUnit, value: quantity.doubleValue(for: displayGlucoseUnit))
 
         // TODO: Eventually target editors should support conflicting initial values
@@ -164,27 +195,32 @@ extension TherapySettingsViewModel {
     }
     
     public func saveBasalRates(basalRates: BasalRateSchedule) {
+        guard canSave() else { return }
         therapySettings.basalRateSchedule = basalRates
         delegate?.saveCompletion(therapySettings: therapySettings)
     }
     
     public func saveDeliveryLimits(limits: DeliveryLimits) {
+        guard canSave() else { return }
         therapySettings.maximumBasalRatePerHour = limits.maximumBasalRate?.doubleValue(for: .internationalUnitsPerHour)
         therapySettings.maximumBolus = limits.maximumBolus?.doubleValue(for: .internationalUnit)
         delegate?.saveCompletion(therapySettings: therapySettings)
     }
     
     public func saveInsulinModel(insulinModelPreset: ExponentialInsulinModelPreset) {
+        guard canSave() else { return }
         therapySettings.defaultRapidActingModel = insulinModelPreset
         delegate?.saveCompletion(therapySettings: therapySettings)
     }
     
     public func saveCarbRatioSchedule(carbRatioSchedule: CarbRatioSchedule) {
+        guard canSave() else { return }
         therapySettings.carbRatioSchedule = carbRatioSchedule
         delegate?.saveCompletion(therapySettings: therapySettings)
     }
     
     public func saveInsulinSensitivitySchedule(insulinSensitivitySchedule: InsulinSensitivitySchedule) {
+        guard canSave() else { return }
         therapySettings.insulinSensitivitySchedule = insulinSensitivitySchedule
         delegate?.saveCompletion(therapySettings: therapySettings)
     }

@@ -736,6 +736,12 @@ public final class MockPumpManager: TestingPumpManager {
     public func setMaximumTempBasalRate(_ rate: Double) { }
 
     public func syncBasalRateSchedule(items scheduleItems: [RepeatingScheduleValue<Double>], completion: @escaping (Result<BasalRateSchedule, Error>) -> Void) {
+        if state.basalScheduleSyncShouldError {
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
+                completion(.failure(PumpManagerError.communication(MockPumpManagerError.communicationFailure)))
+            }
+            return
+        }
         state.basalRateSchedule = BasalRateSchedule(dailyItems: scheduleItems, timeZone: self.status.timeZone)
 
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
