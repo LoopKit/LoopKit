@@ -16,7 +16,7 @@ class DoseEntryCodableTests: XCTestCase {
                                              startDate: dateFormatter.date(from: "2020-05-14T22:07:19Z")!,
                                              value: 2.5,
                                              unit: .units,
-                                             decisionId: nil),
+                                             doseId: nil),
         encodesJSON: """
 {
   "endDate" : "2020-05-14T22:07:19Z",
@@ -35,7 +35,7 @@ class DoseEntryCodableTests: XCTestCase {
                                              endDate: dateFormatter.date(from: "2020-05-14T22:37:19Z")!,
                                              value: 1.25,
                                              unit: .unitsPerHour,
-                                             decisionId: nil,
+                                             doseId: nil,
                                              deliveredUnits: 0.5,
                                              description: "Temporary Basal",
                                              syncIdentifier: "238E41EA-9576-4981-A1A4-51E10228584F",
@@ -96,7 +96,7 @@ class DoseEntryRawRepresentableTests: XCTestCase {
                                  startDate: Date(),
                                  value: 2.5,
                                  unit: .units,
-                                 decisionId: nil)
+                                 doseId: nil)
         let actual = DoseEntry(rawValue: original.rawValue)
         XCTAssertEqual(actual, original)
     }
@@ -107,7 +107,7 @@ class DoseEntryRawRepresentableTests: XCTestCase {
                                  endDate: Date().addingTimeInterval(.minutes(30)),
                                  value: 1.25,
                                  unit: .unitsPerHour,
-                                 decisionId: nil,
+                                 doseId: nil,
                                  deliveredUnits: 0.5,
                                  description: "Temporary Basal",
                                  syncIdentifier: UUID().uuidString,
@@ -119,5 +119,17 @@ class DoseEntryRawRepresentableTests: XCTestCase {
                                  wasProgrammedByPumpUI: true)
         let actual = DoseEntry(rawValue: original.rawValue)
         XCTAssertEqual(actual, original)
+    }
+
+    func testLegacyDecisionIdBecomesDoseId() throws {
+        let id = UUID()
+        var rawValue = DoseEntry(type: .bolus, startDate: Date(), value: 1, unit: .units).rawValue
+        rawValue["decisionId"] = id.uuidString
+        XCTAssertEqual(DoseEntry(rawValue: rawValue)?.doseId, id)
+
+        let json = #"{"type":"bolus","startDate":"2026-11-09T12:00:00Z","endDate":"2026-11-09T12:00:00Z","value":1,"unit":"U","decisionId":"\#(id.uuidString)"}"#
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        XCTAssertEqual(try decoder.decode(DoseEntry.self, from: Data(json.utf8)).doseId, id)
     }
 }
