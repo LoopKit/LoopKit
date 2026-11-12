@@ -320,9 +320,15 @@ extension TherapyProfileView {
                 isEnabled: therapySetting != .basalRate || viewModel.pumpSupportedIncrements() != nil,
                 title: therapySetting.title,
                 descriptiveText: therapySetting.descriptiveText(appName: appName, dosingStrategySelectionEnabled: dosingStrategySelectionEnabled),
-                destination: { dismiss in
-                    editor(for: therapySetting, dismiss: dismiss)
-                        .environment(\.dismissAction, dismiss)
+                destination: { goBack in
+                    PoppingEditor { pop in
+                        let close = {
+                            pop()
+                            goBack()
+                        }
+                        return editor(for: therapySetting, dismiss: close)
+                            .environment(\.dismissAction, close)
+                    }
                 },
                 content: content
             )
@@ -357,5 +363,16 @@ fileprivate struct SettingsDivider: View {
     var body: some View {
         Divider()
             .padding(.trailing, -8)
+    }
+}
+
+/// Hands `content` a closure that pops it from the navigation stack. The profile screens live in a `NavigationStack`,
+/// where the editor's `NavigationLink(isActive:)` does not pop when it is set back to false.
+private struct PoppingEditor<Content: View>: View {
+    @Environment(\.dismiss) private var dismiss
+    let content: (@escaping () -> Void) -> Content
+
+    var body: some View {
+        content { dismiss() }
     }
 }
