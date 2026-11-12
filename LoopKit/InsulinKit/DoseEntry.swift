@@ -17,6 +17,8 @@ public struct DoseEntry: TimelineValue, Hashable {
     public var unit: DoseUnit
     /// The identifier Loop passed to `PumpManager.enactBolus` or `enactTempBasal` for this dose. Loop keys its `DoseMetadata` by it.
     public var doseId: UUID?
+    /// What Loop knows about the dose, set when the pump reports it
+    public var metadata: DoseMetadata?
     public var deliveredUnits: Double?
     public var description: String?
     public var insulinType: InsulinType?
@@ -38,13 +40,14 @@ public struct DoseEntry: TimelineValue, Hashable {
     }
 
     // If the insulin model field is nil, it's assumed that the model is the type of insulin the pump dispenses
-    public init(type: DoseType, startDate: Date, endDate: Date? = nil, value: Double, unit: DoseUnit, doseId: UUID? = nil, deliveredUnits: Double? = nil, description: String? = nil, syncIdentifier: String? = nil, scheduledBasalRate: LoopQuantity? = nil, insulinType: InsulinType? = nil, automatic: Bool? = nil, manuallyEntered: Bool = false, isMutable: Bool = false, wasProgrammedByPumpUI: Bool = false) {
+    public init(type: DoseType, startDate: Date, endDate: Date? = nil, value: Double, unit: DoseUnit, doseId: UUID? = nil, metadata: DoseMetadata? = nil, deliveredUnits: Double? = nil, description: String? = nil, syncIdentifier: String? = nil, scheduledBasalRate: LoopQuantity? = nil, insulinType: InsulinType? = nil, automatic: Bool? = nil, manuallyEntered: Bool = false, isMutable: Bool = false, wasProgrammedByPumpUI: Bool = false) {
         self.type = type
         self.startDate = startDate
         self.endDate = endDate ?? startDate
         self.value = value
         self.unit = unit
         self.doseId = doseId
+        self.metadata = metadata
         self.deliveredUnits = deliveredUnits
         self.description = description
         self.syncIdentifier = syncIdentifier
@@ -149,6 +152,12 @@ extension DoseEntry {
     /// MinimedPumpmanager will be updated to report deliveredUnits, so this will end up not being used.
     private static let minimumMinimedIncrementPerUnit: Double = 20
 
+    /// The dosing decision the dose was enacted from. A dose stored before doseId replaced decisionId
+    /// has no metadata, and its doseId is the decision id.
+    public var decisionId: UUID? {
+        metadata.map { $0.decisionId } ?? doseId
+    }
+
     /// Returns the delivered units, or rounds to nearest deliverable (mdt) increment
     public var unitsInDeliverableIncrements: Double {
         guard case .unitsPerHour = unit else {
@@ -173,6 +182,7 @@ extension DoseEntry {
             "description: \(optionalString(description))",
             "scheduledBasalRate: \(optionalString(scheduledBasalRate))",
             "syncIdentifier: \(optionalString(syncIdentifier))",
+            "metadata: \(optionalString(metadata))",
         ].joined(separator: "\n")
     }
 }
@@ -186,6 +196,7 @@ extension DoseEntry: Codable {
         self.value = try container.decode(Double.self, forKey: .value)
         self.unit = try container.decode(DoseUnit.self, forKey: .unit)
         self.doseId = try container.decodeIfPresent(UUID.self, forKey: .doseId) ?? container.decodeIfPresent(UUID.self, forKey: .decisionId)
+        self.metadata = try container.decodeIfPresent(DoseMetadata.self, forKey: .metadata)
         self.deliveredUnits = try container.decodeIfPresent(Double.self, forKey: .deliveredUnits)
         self.description = try container.decodeIfPresent(String.self, forKey: .description)
         self.syncIdentifier = try container.decodeIfPresent(String.self, forKey: .syncIdentifier)
@@ -208,6 +219,7 @@ extension DoseEntry: Codable {
         try container.encode(value, forKey: .value)
         try container.encode(unit, forKey: .unit)
         try container.encodeIfPresent(doseId, forKey: .doseId)
+        try container.encodeIfPresent(metadata, forKey: .metadata)
         try container.encodeIfPresent(deliveredUnits, forKey: .deliveredUnits)
         try container.encodeIfPresent(description, forKey: .description)
         try container.encodeIfPresent(syncIdentifier, forKey: .syncIdentifier)
@@ -236,6 +248,7 @@ extension DoseEntry: Codable {
         case unit
         case doseId
         case decisionId // Before doseId replaced it
+        case metadata
         case deliveredUnits
         case description
         case syncIdentifier
@@ -273,6 +286,7 @@ extension DoseEntry: RawRepresentable {
         self.manuallyEntered = manuallyEntered
 
         self.doseId = UUID(uuidString: rawValue["doseId"] as? String ?? rawValue["decisionId"] as? String ?? "")
+        self.metadata = (rawValue["metadata"] as? Data).flatMap { try? DoseMetadata(encoded: $0) }
         self.deliveredUnits = rawValue["deliveredUnits"] as? Double
         self.description = rawValue["description"] as? String
         self.insulinType = (rawValue["insulinType"] as? InsulinType.RawValue).flatMap { InsulinType(rawValue: $0) }
@@ -296,6 +310,7 @@ extension DoseEntry: RawRepresentable {
         ]
 
         rawValue["doseId"] = doseId?.uuidString
+        rawValue["metadata"] = try? metadata?.encoded()
         rawValue["deliveredUnits"] = deliveredUnits
         rawValue["description"] = description
         rawValue["insulinType"] = insulinType?.rawValue

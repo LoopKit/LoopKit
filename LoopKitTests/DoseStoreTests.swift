@@ -512,9 +512,51 @@ class DoseStoreTests: PersistenceControllerTestCase {
         XCTAssertTrue(doseEntries[0].wasProgrammedByPumpUI)
         
         XCTAssertEqual(f("2018-12-12 18:05:00 +0000"), doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate)
-        
+
     }
-    
+
+    func testAddPumpEventsKeepsDoseMetadata() async throws {
+        let formatter = DateFormatter.descriptionFormatter
+        let f = { (input) in
+            return formatter.date(from: input)!
+        }
+
+        let doseStoreInitialization = expectation(description: "Expect DoseStore to finish initialization")
+        let doseStore = await DoseStore(
+            cacheStore: cacheStore,
+            longestEffectDuration: .hours(4),
+            syncVersion: 1,
+            provenanceIdentifier: Bundle.main.bundleIdentifier!,
+            onReady: { _ in doseStoreInitialization.fulfill() },
+            test_currentDate: f("2018-12-12 18:07:14 +0000")
+        )
+        let doseStoreDelegate = DoseStoreDelegateMock()
+        doseStoreDelegate.basal = BasalRateSchedule.generateTimeline(
+            schedules: [(date: f("2018-12-12 00:00:00 +0000"), schedule: BasalRateSchedule(dailyItems: [RepeatingScheduleValue(startTime: 0, value: 1.0)])!)],
+            startDate: f("2018-12-11 00:00:00 +0000"),
+            endDate: f("2018-12-13 00:00:00 +0000")
+        )
+        doseStore.delegate = doseStoreDelegate
+        await fulfillment(of: [doseStoreInitialization], timeout: 30)
+        doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate = f("2018-12-12 18:00:00 +0000")
+        doseStore.insulinDeliveryStore.test_currentDate = f("2018-12-12 18:07:14 +0000")
+
+        let metadata = DoseMetadata(origin: .remote, decisionId: UUID(), activationType: .manualNoRecommendation)
+        let bolus = DoseEntry(type: .bolus, startDate: f("2018-12-12 18:05:14 +0000"), value: 1.5, unit: .units, doseId: UUID(), metadata: metadata, deliveredUnits: 1.5)
+        let event = NewPumpEvent(date: bolus.startDate, dose: bolus, raw: Data(hexadecimalString: "01323200ce052a0c12")!, title: "Bolus", type: .bolus)
+
+        try await doseStore.addPumpEvents([event], lastReconciliation: f("2018-12-12 18:07:14 +0000"))
+
+        let (_, pumpEvents) = try await doseStore.executePumpEventQuery(fromQueryAnchor: nil, limit: 10)
+        XCTAssertEqual(pumpEvents.count, 1)
+        XCTAssertEqual(pumpEvents[0].dose?.metadata, metadata)
+
+        let doseEntries = try await doseStore.insulinDeliveryStore.getDoseEntries()
+        let storedBolus = doseEntries.first { $0.doseId == bolus.doseId }
+        XCTAssertEqual(storedBolus?.type, .bolus)
+        XCTAssertEqual(storedBolus?.metadata, metadata)
+    }
+
     func testBasalInsertionBetweenTempBasals() async throws {
         let start = testingDate("2018-12-12 17:00:00 +0000")
         let now = start.addingTimeInterval(.minutes(20))

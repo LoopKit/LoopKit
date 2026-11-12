@@ -10,8 +10,8 @@ import Foundation
 import CoreData
 
 /// What Loop knows about a dose it sent to the pump. Pump managers never see it: they carry only
-/// the `doseId` and return it on the `DoseEntry` they report.
-public struct DoseMetadata: Codable, Equatable {
+/// the `doseId` and return it on the `DoseEntry` they report, and Loop then sets `DoseEntry.metadata`.
+public struct DoseMetadata: Codable, Hashable {
     public enum Origin: String, Codable {
         /// Loop's automatic dosing
         case automatic
@@ -40,6 +40,22 @@ public struct DoseMetadata: Codable, Equatable {
     }
 }
 
+extension DoseMetadata {
+    private static let encoder: PropertyListEncoder = {
+        let encoder = PropertyListEncoder()
+        encoder.outputFormat = .binary
+        return encoder
+    }()
+
+    func encoded() throws -> Data {
+        try Self.encoder.encode(self)
+    }
+
+    init(encoded data: Data) throws {
+        self = try PropertyListDecoder().decode(DoseMetadata.self, from: data)
+    }
+}
+
 class DoseMetadataObject: NSManagedObject {
     @nonobjc class func fetchRequest() -> NSFetchRequest<DoseMetadataObject> {
         return NSFetchRequest<DoseMetadataObject>(entityName: "DoseMetadataObject")
@@ -50,18 +66,11 @@ class DoseMetadataObject: NSManagedObject {
     @NSManaged var data: Data
 }
 
+/// Holds the metadata of doses Loop has sent until the pump reports them, across relaunches.
 public class DoseMetadataStore {
     private let store: PersistenceController
     private let expireAfter: TimeInterval
     private let log = OSLog(category: "DoseMetadataStore")
-
-    private static let encoder: PropertyListEncoder = {
-        let encoder = PropertyListEncoder()
-        encoder.outputFormat = .binary
-        return encoder
-    }()
-
-    private static let decoder = PropertyListDecoder()
 
     public init(store: PersistenceController, expireAfter: TimeInterval) {
         self.store = store
@@ -71,7 +80,7 @@ public class DoseMetadataStore {
     /// Stores the metadata for a dose. Call before sending the dose to the pump, so a dose reported after a relaunch still finds it.
     public func storeMetadata(_ metadata: DoseMetadata, for doseId: UUID, date: Date = Date()) async throws {
         try await store.waitUntilReady()
-        let data = try Self.encoder.encode(metadata)
+        let data = try metadata.encoded()
 
         try await store.managedObjectContext.perform {
             let object = DoseMetadataObject(context: self.store.managedObjectContext)
@@ -103,7 +112,7 @@ public class DoseMetadataStore {
             var result: [UUID: DoseMetadata] = [:]
             for object in try self.store.managedObjectContext.fetch(request) {
                 do {
-                    result[object.doseId] = try Self.decoder.decode(DoseMetadata.self, from: object.data)
+                    result[object.doseId] = try DoseMetadata(encoded: object.data)
                 } catch {
                     self.log.error("Unable to decode metadata for dose %{public}@: %{public}@", object.doseId.uuidString, String(describing: error))
                 }
@@ -112,19 +121,25 @@ public class DoseMetadataStore {
         }
     }
 
-    /// The dosing decision each dose was enacted from. A dose stored before doseId replaced decisionId
-    /// has no metadata, and its doseId is the decision id.
-    public func decisionIds(for doseIds: [UUID]) async throws -> [UUID: UUID] {
-        let metadata = try await metadata(for: doseIds)
-        var result: [UUID: UUID] = [:]
-        for doseId in doseIds {
-            if let doseMetadata = metadata[doseId] {
-                result[doseId] = doseMetadata.decisionId
-            } else {
-                result[doseId] = doseId
-            }
+    /// The events with each dose's metadata set, looked up by its doseId. A pump can report a dose
+    /// several times before it is final, so the metadata is kept until it expires.
+    public func addingMetadata(to events: [NewPumpEvent]) async -> [NewPumpEvent] {
+        let doseIds = events.compactMap { $0.dose?.doseId }
+        let metadata: [UUID: DoseMetadata]
+        do {
+            metadata = try await self.metadata(for: doseIds)
+        } catch {
+            log.error("Unable to read dose metadata: %{public}@", String(describing: error))
+            return events
         }
-        return result
+
+        return events.map { event in
+            guard var dose = event.dose, let doseId = dose.doseId, let doseMetadata = metadata[doseId] else {
+                return event
+            }
+            dose.metadata = doseMetadata
+            return NewPumpEvent(date: event.date, dose: dose, raw: event.raw, title: event.title, type: event.type, alarmType: event.alarmType)
+        }
     }
 
     public func purgeMetadata(before date: Date) async throws {

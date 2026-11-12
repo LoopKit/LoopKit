@@ -28,18 +28,29 @@ class DoseMetadataStoreTests: PersistenceControllerTestCase {
         XCTAssertEqual(single, bolus)
     }
 
-    func testDecisionIdsFallBackToDoseIdWithoutMetadata() async throws {
+    func testAddsMetadataToReportedDoses() async throws {
         let store = DoseMetadataStore(store: cacheStore, expireAfter: .hours(24))
-        let newDoseId = UUID()
-        let decisionId = UUID()
-        let noDecisionDoseId = UUID()
-        let legacyDoseId = UUID()
+        let doseId = UUID()
+        let metadata = DoseMetadata(origin: .automatic, device: .phone, decisionId: UUID(), activationType: .automatic)
+        try await store.storeMetadata(metadata, for: doseId)
 
-        try await store.storeMetadata(DoseMetadata(origin: .automatic, decisionId: decisionId), for: newDoseId)
-        try await store.storeMetadata(DoseMetadata(origin: .remote), for: noDecisionDoseId)
+        let now = Date()
+        let bolus = NewPumpEvent(date: now, dose: DoseEntry(type: .bolus, startDate: now, value: 1, unit: .units, doseId: doseId, isMutable: true), raw: Data([1]), title: "Bolus")
+        let unknown = NewPumpEvent(date: now, dose: DoseEntry(type: .bolus, startDate: now, value: 1, unit: .units, doseId: UUID()), raw: Data([2]), title: "Bolus")
+        let suspend = NewPumpEvent(date: now, dose: DoseEntry(suspendDate: now), raw: Data([3]), title: "Suspend")
 
-        let decisionIds = try await store.decisionIds(for: [newDoseId, noDecisionDoseId, legacyDoseId])
-        XCTAssertEqual(decisionIds, [newDoseId: decisionId, legacyDoseId: legacyDoseId])
+        let events = await store.addingMetadata(to: [bolus, unknown, suspend])
+
+        XCTAssertEqual(events[0].dose?.metadata, metadata)
+        XCTAssertEqual(events[0].dose?.syncIdentifier, bolus.dose?.syncIdentifier)
+        XCTAssertEqual(events[0].type, .bolus)
+        XCTAssertEqual(events[1], unknown)
+        XCTAssertEqual(events[2], suspend)
+
+        // A dose reported again, now final, still gets its metadata.
+        let finalBolus = NewPumpEvent(date: now, dose: DoseEntry(type: .bolus, startDate: now, value: 1, unit: .units, doseId: doseId, deliveredUnits: 1), raw: Data([1]), title: "Bolus")
+        let finalEvents = await store.addingMetadata(to: [finalBolus])
+        XCTAssertEqual(finalEvents[0].dose?.metadata, metadata)
     }
 
     func testPurgesExpiredMetadata() async throws {
