@@ -175,7 +175,7 @@ struct MockPumpManagerSettingsView: View {
                 .sheet(isPresented: $showManualTempBasalOptions) {
                     ManualTempBasalEntryView(
                         enactBasal: { rate, duration, completion in
-                            viewModel.runTemporaryBasalProgram(decisionId: nil, unitsPerHour: rate, for: duration) { error in
+                            viewModel.runTemporaryBasalProgram(doseId: nil, unitsPerHour: rate, for: duration) { error in
                                 completion(error)
                                 if error == nil {
                                     showManualTempBasalOptions = false

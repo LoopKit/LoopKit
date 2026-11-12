@@ -150,6 +150,41 @@ class CoreDataMigrationTests: XCTestCase {
         XCTAssertNil(migratedObjects.first?.value(forKey: "receivedDate"))
     }
 
+    func testV8toV9MigrationKeepsDecisionIdAsDoseId() throws {
+        let modelV8Container = try startPersistentContainer(.v8)
+        let oldContext = modelV8Container.viewContext
+        let pumpEventId = UUID()
+        let insulinDeliveryId = UUID()
+
+        let pumpEvent = NSEntityDescription.insertNewObject(forEntityName: "PumpEvent", into: oldContext)
+        pumpEvent.setValue(Date(), forKey: "createdAt")
+        pumpEvent.setValue(Date(), forKey: "date")
+        pumpEvent.setValue(pumpEventId, forKey: "decisionId")
+
+        let insulinDelivery = NSEntityDescription.insertNewObject(forEntityName: "CachedInsulinDeliveryObject", into: oldContext)
+        insulinDelivery.setValue(Date(), forKey: "createdAt")
+        insulinDelivery.setValue(Date(), forKey: "startDate")
+        insulinDelivery.setValue(Date(), forKey: "endDate")
+        insulinDelivery.setValue("com.LoopKit.Loop", forKey: "provenanceIdentifier")
+        insulinDelivery.setValue(true, forKey: "hasLoopKitOrigin")
+        insulinDelivery.setValue("sync", forKey: "syncIdentifier")
+        insulinDelivery.setValue(1.0, forKey: "deliveredUnits")
+        insulinDelivery.setValue(1, forKey: "reason")
+        insulinDelivery.setValue(insulinDeliveryId, forKey: "decisionId")
+        try oldContext.save()
+
+        let modelV9Container = try migrate(container: modelV8Container, to: .v9)
+        let context = modelV9Container.viewContext
+
+        let pumpEvents = try context.fetch(NSFetchRequest<NSManagedObject>(entityName: "PumpEvent"))
+        XCTAssertEqual(pumpEvents.map { $0.value(forKey: "doseId") as? UUID }, [pumpEventId])
+
+        let insulinDeliveries = try context.fetch(NSFetchRequest<NSManagedObject>(entityName: "CachedInsulinDeliveryObject"))
+        XCTAssertEqual(insulinDeliveries.map { $0.value(forKey: "doseId") as? UUID }, [insulinDeliveryId])
+
+        XCTAssertNotNil(NSEntityDescription.entity(forEntityName: "DoseMetadataObject", in: context))
+    }
+
     func testV5StoreOpensWithCurrentModel() async throws {
         let directoryURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: directoryURL, withIntermediateDirectories: true)
@@ -190,7 +225,8 @@ extension CoreDataMigrationTests {
         case v6
         case v7
         case v8
-        
+        case v9
+
         var name: String {
             switch self {
             case .v4: "Modelv4"
@@ -198,6 +234,7 @@ extension CoreDataMigrationTests {
             case .v6: "Modelv6"
             case .v7: "Modelv7"
             case .v8: "Modelv8"
+            case .v9: "Modelv9"
             }
         }
     }
