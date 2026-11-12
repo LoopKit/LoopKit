@@ -40,7 +40,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
     var duration: TimeInterval
     let insulinType: InsulinType?
     let automatic: Bool?
-    var decisionId: UUID?
+    var doseId: UUID?
 
     var finishTime: Date {
         get {
@@ -83,7 +83,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         return units
     }
 
-    init(bolusAmount: Double, startTime: Date, duration: TimeInterval, insulinType: InsulinType? = nil, automatic: Bool = false, decisionId: UUID?) {
+    init(bolusAmount: Double, startTime: Date, duration: TimeInterval, insulinType: InsulinType? = nil, automatic: Bool = false, doseId: UUID?) {
         self.doseType = .bolus
         self.units = bolusAmount
         self.startTime = startTime
@@ -91,10 +91,10 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.scheduledUnits = nil
         self.insulinType = insulinType
         self.automatic = automatic
-        self.decisionId = decisionId
+        self.doseId = doseId
     }
 
-    init(tempBasalRate: Double, startTime: Date, duration: TimeInterval, insulinType: InsulinType? = nil, automatic: Bool = true, decisionId: UUID?) {
+    init(tempBasalRate: Double, startTime: Date, duration: TimeInterval, insulinType: InsulinType? = nil, automatic: Bool = true, doseId: UUID?) {
         self.doseType = .tempBasal
         self.units = tempBasalRate * duration.hours
         self.startTime = startTime
@@ -102,7 +102,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.scheduledUnits = nil
         self.insulinType = insulinType
         self.automatic = automatic
-        self.decisionId = decisionId
+        self.doseId = doseId
     }
 
     init(suspendStartTime: Date, automatic: Bool? = nil) {
@@ -112,7 +112,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.duration = 0
         self.insulinType = nil
         self.automatic = automatic
-        self.decisionId = nil
+        self.doseId = nil
     }
 
     init(resumeStartTime: Date, insulinType: InsulinType? = nil, automatic: Bool? = nil) {
@@ -122,7 +122,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.duration = 0
         self.insulinType = insulinType
         self.automatic = automatic
-        self.decisionId = nil
+        self.doseId = nil
     }
 
     public mutating func cancel(at date: Date) {
@@ -204,8 +204,8 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.startTime = startTime
         self.duration = duration
         
-        if let decisionId = rawValue["decisionId"] as? UUID {
-            self.decisionId = decisionId
+        if let doseId = (rawValue["doseId"] ?? rawValue["decisionId"]) as? UUID {
+            self.doseId = doseId
         }
 
         if let scheduledUnits = rawValue["scheduledUnits"] as? Double {
@@ -233,8 +233,8 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
             "duration": duration,
         ]
         
-        if let decisionId {
-            rawValue["decisionId"] = decisionId
+        if let doseId {
+            rawValue["doseId"] = doseId
         }
 
         if let scheduledUnits = scheduledUnits {
@@ -274,7 +274,7 @@ extension NewPumpEvent {
             case .basal:
                 return nil
             case .bolus:
-                var newDose = UnfinalizedDose(bolusAmount: dose.programmedUnits, startTime: dose.startDate, duration: duration, insulinType: dose.insulinType ?? defaultInsulinType, automatic: dose.automatic ?? false, decisionId: dose.decisionId)
+                var newDose = UnfinalizedDose(bolusAmount: dose.programmedUnits, startTime: dose.startDate, duration: duration, insulinType: dose.insulinType ?? defaultInsulinType, automatic: dose.automatic ?? false, doseId: dose.doseId)
                 if let delivered = dose.deliveredUnits {
                     newDose.scheduledUnits = dose.programmedUnits
                     newDose.units = delivered
@@ -285,7 +285,7 @@ extension NewPumpEvent {
             case .suspend:
                 return UnfinalizedDose(suspendStartTime: dose.startDate, automatic: dose.automatic)
             case .tempBasal:
-                return UnfinalizedDose(tempBasalRate: dose.unitsPerHour, startTime: dose.startDate, duration: duration, insulinType: dose.insulinType ?? defaultInsulinType, decisionId: dose.decisionId)
+                return UnfinalizedDose(tempBasalRate: dose.unitsPerHour, startTime: dose.startDate, duration: duration, insulinType: dose.insulinType ?? defaultInsulinType, doseId: dose.doseId)
             }
         }
         return nil
@@ -296,9 +296,9 @@ extension DoseEntry {
     init (_ dose: UnfinalizedDose) {
         switch dose.doseType {
         case .bolus:
-            self = DoseEntry(type: .bolus, startDate: dose.startTime, endDate: dose.finishTime, value: dose.scheduledUnits ?? dose.units, unit: .units, decisionId: dose.decisionId, deliveredUnits: dose.finalizedUnits, insulinType: dose.insulinType, automatic: dose.automatic, isMutable: dose.isMutable)
+            self = DoseEntry(type: .bolus, startDate: dose.startTime, endDate: dose.finishTime, value: dose.scheduledUnits ?? dose.units, unit: .units, doseId: dose.doseId, deliveredUnits: dose.finalizedUnits, insulinType: dose.insulinType, automatic: dose.automatic, isMutable: dose.isMutable)
         case .tempBasal:
-            self = DoseEntry(type: .tempBasal, startDate: dose.startTime, endDate: dose.finishTime, value: dose.scheduledTempRate ?? dose.rate, unit: .unitsPerHour, decisionId: dose.decisionId, deliveredUnits: dose.finalizedUnits, insulinType: dose.insulinType, automatic: dose.automatic, isMutable: dose.isMutable)
+            self = DoseEntry(type: .tempBasal, startDate: dose.startTime, endDate: dose.finishTime, value: dose.scheduledTempRate ?? dose.rate, unit: .unitsPerHour, doseId: dose.doseId, deliveredUnits: dose.finalizedUnits, insulinType: dose.insulinType, automatic: dose.automatic, isMutable: dose.isMutable)
         case .suspend:
             self = DoseEntry(suspendDate: dose.startTime, automatic: dose.automatic)
         case .resume:

@@ -130,6 +130,7 @@
 		5B16B7C672EBB933AAC82F77 /* SmartwatchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F53F70BD36C31A8ABBF7893D /* SmartwatchManager.swift */; };
 		5A7C0FFE0000000000000B02 /* SmartwatchRemoteActionPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7C0FFE0000000000000B01 /* SmartwatchRemoteActionPolicy.swift */; };
 		87DDB056C1A2676A74A7174C /* SmartwatchRemoteActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5E88CCC0907F94409DA4E2 /* SmartwatchRemoteActions.swift */; };
+		5907D79087422A43F6904C39 /* DeviceManagerPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDC5C0D8D0ADADC90FB7896 /* DeviceManagerPlugin.swift */; };
 		4353D16F203D104F007B4ECD /* CarbStoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4353D16E203D104F007B4ECD /* CarbStoreError.swift */; };
 		4353D170203D3E5C007B4ECD /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4301582C1C7ECD7A00B64B63 /* HealthKit.framework */; };
 		4353D173203D3E7E007B4ECD /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4353D172203D3E7E007B4ECD /* CoreData.framework */; };
@@ -453,6 +454,8 @@
 		A912BE2D245B9F9800CBE199 /* SettingsObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A912BE28245B9CD500CBE199 /* SettingsObject+CoreDataClass.swift */; };
 		A919889C2354E5EB00B75EEE /* SettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A919889B2354E5EB00B75EEE /* SettingsStore.swift */; };
 		A919889F2355016B00B75EEE /* DosingDecisionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A919889E2355016B00B75EEE /* DosingDecisionStore.swift */; };
+		B7C1D2E3F4A5B6C7D8E9F002 /* DoseMetadataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7C1D2E3F4A5B6C7D8E9F001 /* DoseMetadataStore.swift */; };
+		B7C1D2E3F4A5B6C7D8E9F003 /* DoseMetadataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7C1D2E3F4A5B6C7D8E9F001 /* DoseMetadataStore.swift */; };
 		5D0A1B2C3D4E5F6071829304 /* DosingDecisionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A919889E2355016B00B75EEE /* DosingDecisionStore.swift */; };
 		A932803B2798D63B0091D0A1 /* SyncAlertObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = A932803A2798D63B0091D0A1 /* SyncAlertObject.swift */; };
 		A932803C2798D63B0091D0A1 /* SyncAlertObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = A932803A2798D63B0091D0A1 /* SyncAlertObject.swift */; };
@@ -494,6 +497,7 @@
 		A971C89F23C68B030099BEFC /* GlucoseStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A971C89E23C68B030099BEFC /* GlucoseStoreTests.swift */; };
 		A971C8A223C6B17D0099BEFC /* SettingsStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A971C8A123C6B17D0099BEFC /* SettingsStoreTests.swift */; };
 		A971C8A423C6B1890099BEFC /* DosingDecisionStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A971C8A323C6B1890099BEFC /* DosingDecisionStoreTests.swift */; };
+		B7C1D2E3F4A5B6C7D8E9F011 /* DoseMetadataStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7C1D2E3F4A5B6C7D8E9F010 /* DoseMetadataStoreTests.swift */; };
 		A985464B251442010099C1A6 /* OutputStreamTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A985464A251442010099C1A6 /* OutputStreamTests.swift */; };
 		A985464F251449FE0099C1A6 /* NotificationSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A985464E251449FE0099C1A6 /* NotificationSettings.swift */; };
 		A985465125144ABA0099C1A6 /* NotificationSettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A985465025144ABA0099C1A6 /* NotificationSettingsTests.swift */; };
@@ -611,6 +615,7 @@
 		E56B6E01B9A25F04279DF442 /* SmartwatchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F53F70BD36C31A8ABBF7893D /* SmartwatchManager.swift */; };
 		5A7C0FFE0000000000000B03 /* SmartwatchRemoteActionPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7C0FFE0000000000000B01 /* SmartwatchRemoteActionPolicy.swift */; };
 		79BFB4BE74EFBCDAEC647046 /* SmartwatchRemoteActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5E88CCC0907F94409DA4E2 /* SmartwatchRemoteActions.swift */; };
+		E4AC322A00C927544001EC76 /* DeviceManagerPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDC5C0D8D0ADADC90FB7896 /* DeviceManagerPlugin.swift */; };
 		A9E675E322713F4700E25293 /* CarbStoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4353D16E203D104F007B4ECD /* CarbStoreError.swift */; };
 		A9E675E922713F4700E25293 /* LoopKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D8FDCE1C728FDF0073BE78 /* LoopKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A9E675F3227140D800E25293 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9E675F2227140D800E25293 /* CoreData.framework */; };
@@ -744,6 +749,7 @@
 		C16BC0D92A60351B00BDC713 /* recommend_temp_basal_start_low_end_in_range.json in Resources */ = {isa = PBXBuildFile; fileRef = C16BC0C82A60351A00BDC713 /* recommend_temp_basal_start_low_end_in_range.json */; };
 		C16BC0DA2A60351B00BDC713 /* far_future_high_bg_forecast.json in Resources */ = {isa = PBXBuildFile; fileRef = C16BC0C92A60351A00BDC713 /* far_future_high_bg_forecast.json */; };
 		C16DA83F22E8D88F008624C2 /* LoopPluginBundleKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16DA83E22E8D88F008624C2 /* LoopPluginBundleKey.swift */; };
+		4344022FFB85A42FFA5F38CE /* LoopPluginBundleKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16DA83E22E8D88F008624C2 /* LoopPluginBundleKey.swift */; };
 		C16DA84522E9330A008624C2 /* LoopUIPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16DA84422E9330A008624C2 /* LoopUIPlugin.swift */; };
 		C17F39C123CD24A000FA1113 /* DeviceLog.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C17F39BF23CD24A000FA1113 /* DeviceLog.xcdatamodeld */; };
 		C17F39C723CD256000FA1113 /* PersistentDeviceLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C17F39C623CD256000FA1113 /* PersistentDeviceLog.swift */; };
@@ -1186,6 +1192,7 @@
 		5A7C0FFE0000000000000B01 /* SmartwatchRemoteActionPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartwatchRemoteActionPolicy.swift; sourceTree = "<group>"; };
 		2D5E88CCC0907F94409DA4E2 /* SmartwatchRemoteActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartwatchRemoteActions.swift; sourceTree = "<group>"; };
 		5A7C0FFE0000000000000B04 /* SmartwatchRemoteActionPolicyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartwatchRemoteActionPolicyTests.swift; sourceTree = "<group>"; };
+		3EDC5C0D8D0ADADC90FB7896 /* DeviceManagerPlugin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceManagerPlugin.swift; sourceTree = "<group>"; };
 		4353D16E203D104F007B4ECD /* CarbStoreError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarbStoreError.swift; sourceTree = "<group>"; };
 		4353D172203D3E7E007B4ECD /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		4359E74D1EEA1FBC0022EF0C /* FoodEmojiDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoodEmojiDataSource.swift; sourceTree = "<group>"; };
@@ -1298,6 +1305,7 @@
 		840A2D7D2E39635B00D4E245 /* Modelv6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Modelv6.xcdatamodel; sourceTree = "<group>"; };
 		E77A7883792945C59E39CEC0 /* Modelv7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Modelv7.xcdatamodel; sourceTree = "<group>"; };
 		E204F97E07D6426EAB37F0F3 /* Modelv8.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Modelv8.xcdatamodel; sourceTree = "<group>"; };
+		A7D05E9B1C2F4E8D9A3B6C01 /* Modelv9.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Modelv9.xcdatamodel; sourceTree = "<group>"; };
 		840A2D812E39649500D4E245 /* ModelMappingv4v5Tov6Policy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelMappingv4v5Tov6Policy.swift; sourceTree = "<group>"; };
 		840A2DD22E399BD400D4E245 /* Modelv5ToModelv6.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Modelv5ToModelv6.xcmappingmodel; sourceTree = "<group>"; };
 		840A2DD52E39A30700D4E245 /* Modelv4ToModelv6.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Modelv4ToModelv6.xcmappingmodel; sourceTree = "<group>"; };
@@ -1491,6 +1499,7 @@
 		A912BE2A245B9E8600CBE199 /* SettingsObject+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingsObject+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		A919889B2354E5EB00B75EEE /* SettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStore.swift; sourceTree = "<group>"; };
 		A919889E2355016B00B75EEE /* DosingDecisionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DosingDecisionStore.swift; sourceTree = "<group>"; };
+		B7C1D2E3F4A5B6C7D8E9F001 /* DoseMetadataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoseMetadataStore.swift; sourceTree = "<group>"; };
 		A932803A2798D63B0091D0A1 /* SyncAlertObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncAlertObject.swift; sourceTree = "<group>"; };
 		A933DB8724BF956F009B417A /* CriticalEventLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CriticalEventLog.swift; sourceTree = "<group>"; };
 		A93761C025ED670200F6BE43 /* BluetoothProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothProvider.swift; sourceTree = "<group>"; };
@@ -1521,6 +1530,7 @@
 		A971C89E23C68B030099BEFC /* GlucoseStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseStoreTests.swift; sourceTree = "<group>"; };
 		A971C8A123C6B17D0099BEFC /* SettingsStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStoreTests.swift; sourceTree = "<group>"; };
 		A971C8A323C6B1890099BEFC /* DosingDecisionStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DosingDecisionStoreTests.swift; sourceTree = "<group>"; };
+		B7C1D2E3F4A5B6C7D8E9F010 /* DoseMetadataStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoseMetadataStoreTests.swift; sourceTree = "<group>"; };
 		A985464A251442010099C1A6 /* OutputStreamTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputStreamTests.swift; sourceTree = "<group>"; };
 		A985464E251449FE0099C1A6 /* NotificationSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettings.swift; sourceTree = "<group>"; };
 		A985465025144ABA0099C1A6 /* NotificationSettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingsTests.swift; sourceTree = "<group>"; };
@@ -2409,6 +2419,7 @@
 				C17F39BD23CD239000FA1113 /* DeviceManager */,
 				A95A1D7E2460BBC70079378D /* DosingDecisionObject+CoreDataClass.swift */,
 				A95A1D812460BBDC0079378D /* DosingDecisionObject+CoreDataProperties.swift */,
+				B7C1D2E3F4A5B6C7D8E9F001 /* DoseMetadataStore.swift */,
 				A919889E2355016B00B75EEE /* DosingDecisionStore.swift */,
 				891A3FD8224BEB4500378B27 /* EGPSchedule.swift */,
 				437AFF22203BE382008C4892 /* Extensions */,
@@ -2492,6 +2503,7 @@
 				B4CEE2A4256E91290093111B /* DoseProgressTests.swift */,
 				635BA87E8AE6B0570F38FBCA /* PresetsTrainingTests.swift */,
 				43A067121F245A2F00E9E90F /* DoseStoreTests.swift */,
+				B7C1D2E3F4A5B6C7D8E9F010 /* DoseMetadataStoreTests.swift */,
 				A971C8A323C6B1890099BEFC /* DosingDecisionStoreTests.swift */,
 				437AFF1B203A45CF008C4892 /* Extensions */,
 				43D988911C87FEFF00DA4467 /* Fixtures */,
@@ -3008,6 +3020,7 @@
 				F53F70BD36C31A8ABBF7893D /* SmartwatchManager.swift */,
 				5A7C0FFE0000000000000B01 /* SmartwatchRemoteActionPolicy.swift */,
 				2D5E88CCC0907F94409DA4E2 /* SmartwatchRemoteActions.swift */,
+				3EDC5C0D8D0ADADC90FB7896 /* DeviceManagerPlugin.swift */,
 				A9A53E2B2714E5BC0050C0B1 /* CodableDevice.swift */,
 				B4102D3124ABB068005D460B /* DeviceLifecycleProgress.swift */,
 				4379CFE221102A4100AADC79 /* DeviceManager.swift */,
@@ -4022,6 +4035,7 @@
 				89AE222C228BC66E00BDFD85 /* Locked.swift in Sources */,
 				432CF87120D76D5A0066B889 /* GlucoseDisplayable.swift in Sources */,
 				A919889F2355016B00B75EEE /* DosingDecisionStore.swift in Sources */,
+				B7C1D2E3F4A5B6C7D8E9F002 /* DoseMetadataStore.swift in Sources */,
 				4322B77F202FA2AF0002837D /* PersistenceController.swift in Sources */,
 				4322B78D202FA2B30002837D /* InsulinDeliveryStore.swift in Sources */,
 				A9498D8023386C3300DAA9B9 /* RemoteDataService.swift in Sources */,
@@ -4156,6 +4170,7 @@
 				5B16B7C672EBB933AAC82F77 /* SmartwatchManager.swift in Sources */,
 				5A7C0FFE0000000000000B02 /* SmartwatchRemoteActionPolicy.swift in Sources */,
 				87DDB056C1A2676A74A7174C /* SmartwatchRemoteActions.swift in Sources */,
+				5907D79087422A43F6904C39 /* DeviceManagerPlugin.swift in Sources */,
 				4353D16F203D104F007B4ECD /* CarbStoreError.swift in Sources */,
 				89F6E30F244A1A5D00CB9E15 /* Guardrail.swift in Sources */,
 				A985464F251449FE0099C1A6 /* NotificationSettings.swift in Sources */,
@@ -4191,6 +4206,7 @@
 				B4B7C1612603F241007379F6 /* InsulinSensitivityScheduleTests.swift in Sources */,
 				A971C89F23C68B030099BEFC /* GlucoseStoreTests.swift in Sources */,
 				A971C8A423C6B1890099BEFC /* DosingDecisionStoreTests.swift in Sources */,
+				B7C1D2E3F4A5B6C7D8E9F011 /* DoseMetadataStoreTests.swift in Sources */,
 				437AFF21203AA740008C4892 /* NSManagedObjectContext.swift in Sources */,
 				F78DB24B7725AFF7BCC8968E /* WeakSynchronizedDelegateTests.swift in Sources */,
 				A95A1D852460CAD50079378D /* CarbValueTests.swift in Sources */,
@@ -4357,6 +4373,7 @@
 				5D0A1B2C3D4E5F6071829311 /* DosingDecisionObject+CoreDataProperties.swift in Sources */,
 				5D0A1B2C3D4E5F6071829310 /* DosingDecisionObject+CoreDataClass.swift in Sources */,
 				5D0A1B2C3D4E5F6071829304 /* DosingDecisionStore.swift in Sources */,
+				B7C1D2E3F4A5B6C7D8E9F003 /* DoseMetadataStore.swift in Sources */,
 				9D3D2DA3B9824EF48981F0E4 /* StoredInsulinModel.swift in Sources */,
 				485ACF65C30744BFBC979CEF /* NotificationSettings.swift in Sources */,
 				2383C3D7967B4602B8EB4A5B /* SettingsObject+CoreDataProperties.swift in Sources */,
@@ -4503,6 +4520,8 @@
 				E56B6E01B9A25F04279DF442 /* SmartwatchManager.swift in Sources */,
 				5A7C0FFE0000000000000B03 /* SmartwatchRemoteActionPolicy.swift in Sources */,
 				79BFB4BE74EFBCDAEC647046 /* SmartwatchRemoteActions.swift in Sources */,
+				E4AC322A00C927544001EC76 /* DeviceManagerPlugin.swift in Sources */,
+				4344022FFB85A42FFA5F38CE /* LoopPluginBundleKey.swift in Sources */,
 				A9E675E322713F4700E25293 /* CarbStoreError.swift in Sources */,
 				AC5CD58D81CB29E1D0B38C57 /* LoopUnit.swift in Sources */,
 				CC96AD4965829FFF63DCFDB3 /* LoopQuantity.swift in Sources */,
@@ -5768,13 +5787,14 @@
 		B41E10512C3D314600E186F7 /* Model.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				A7D05E9B1C2F4E8D9A3B6C01 /* Modelv9.xcdatamodel */,
 				E204F97E07D6426EAB37F0F3 /* Modelv8.xcdatamodel */,
 				E77A7883792945C59E39CEC0 /* Modelv7.xcdatamodel */,
 				840A2D7D2E39635B00D4E245 /* Modelv6.xcdatamodel */,
 				B41E10522C3D314600E186F7 /* Modelv5.xcdatamodel */,
 				B41E10532C3D314600E186F7 /* Modelv4.xcdatamodel */,
 			);
-			currentVersion = E204F97E07D6426EAB37F0F3 /* Modelv8.xcdatamodel */;
+			currentVersion = A7D05E9B1C2F4E8D9A3B6C01 /* Modelv9.xcdatamodel */;
 			path = Model.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

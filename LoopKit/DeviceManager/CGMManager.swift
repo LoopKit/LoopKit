@@ -84,26 +84,28 @@ public protocol CGMManagerStatusObserver: AnyObject {
     func cgmManager(_ manager: CGMManager, didUpdate status: CGMManagerStatus)
 }
 
+/// Calls to the delegate may come from any thread or actor; the delegate decides where its own work runs. A
+/// manager awaits each call before making the next, so the delegate sees them in the order they happened.
 public protocol CGMManagerDelegate: DeviceManagerDelegate, CGMManagerStatusObserver {
     /// Asks the delegate for a date with which to filter incoming glucose data
     ///
     /// - Parameter manager: The manager instance
     /// - Returns: The date data occuring on or after which should be kept
-    func startDateToFilterNewData(for manager: CGMManager) -> Date?
+    func startDateToFilterNewData(for manager: CGMManager) async -> Date?
 
     /// Informs the delegate that the device has updated with a new result
     ///
     /// - Parameters:
     ///   - manager: The manager instance
     ///   - result: The result of the update
-    func cgmManager(_ manager: CGMManager, hasNew readingResult: CGMReadingResult) -> Void
+    func cgmManager(_ manager: CGMManager, hasNew readingResult: CGMReadingResult) async
 
     /// Informs the delegate that the device has reported a new event
     ///
     /// - Parameters:
     ///   - manager: The manager instance
     ///   - event: The new event
-    func cgmManager(_ manager: CGMManager, hasNew events: [PersistedCgmEvent]) -> Void
+    func cgmManager(_ manager: CGMManager, hasNew events: [PersistedCgmEvent]) async
 
     /// Informs the delegate that the manager is deactivating and should be deleted
     ///
@@ -113,15 +115,15 @@ public protocol CGMManagerDelegate: DeviceManagerDelegate, CGMManagerStatusObser
     /// Informs the delegate that the manager has updated its state and should be persisted.
     ///
     /// - Parameter manager: The manager instance
-    func cgmManagerDidUpdateState(_ manager: CGMManager)
-    
-    /// Asks the delegate for credential store prefix to avoid namespace conflicts
+    func cgmManagerDidUpdateState(_ manager: CGMManager) async
+
+    /// Asks the delegate for credential store prefix to avoid namespace conflicts. Called from any thread.
     ///
     /// - Parameter manager: The manager instance
     /// - Returns: The unique prefix for the credential store
     func credentialStoragePrefix(for manager: CGMManager) -> String
 
-    /// Asks the delegate whether the app can read the CGM directly on Apple Watch
+    /// Asks the delegate whether the app can read the CGM directly on Apple Watch. Called from any thread.
     ///
     /// - Parameter manager: The manager instance
     /// - Returns: true if the app's watch app can read the sensor itself
@@ -163,10 +165,6 @@ public protocol CGMManager: DeviceManager {
     /// The current status of the cgm manager
     var cgmManagerStatus: CGMManagerStatus { get }
 
-    /// The queue on which CGMManagerDelegate methods are called
-    /// Setting to nil resets to a default provided by the manager
-    var delegateQueue: DispatchQueue! { get set }
-
 
     /// Implementations of this function must call the `completion` block, with the appropriate `CGMReadingResult`
     /// according to the current available data.
@@ -195,6 +193,13 @@ public protocol CGMManager: DeviceManager {
     ///
     /// - Parameter observer: The observing object
     func removeStatusObserver(_ observer: CGMManagerStatusObserver)
+
+    /// Whether the manager is scanning for a sensor it has not yet connected to.
+    var isSearchingForSensor: Bool { get }
+
+    /// A short text form of what needs the user's attention (a code to enter, the app to keep open), for
+    /// a small display; nil for nothing. Changes are reported to status observers.
+    var shortStatusNote: String? { get }
 
     /// Tears the manager down and asks its delegate to remove it. Returns once the delegate has removed it.
     ///
@@ -242,6 +247,10 @@ public extension CGMManager {
     func removeStatusObserver(_ observer: CGMManagerStatusObserver) {
         // optional since a CGM manager may not support status observers
     }
+
+    var isSearchingForSensor: Bool { false }
+
+    var shortStatusNote: String? { nil }
 
     /// Override this default behaviour if the CGM Manager needs to complete tasks before being deleted
     func delete() async {

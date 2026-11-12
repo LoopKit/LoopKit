@@ -416,15 +416,6 @@ public final class MockCGMManager: TestingCGMManager {
         }
     }
 
-    public var delegateQueue: DispatchQueue! {
-        get {
-            return delegate.queue
-        }
-        set {
-            delegate.queue = newValue
-        }
-    }
-
     private let delegate = WeakSynchronizedDelegate<CGMManagerDelegate>()
 
     private let lockedDataSource = Locked(MockCGMDataSource(model: .noData))
@@ -464,8 +455,8 @@ public final class MockCGMManager: TestingCGMManager {
     
     private func notifyStatusObservers(cgmManagerStatus: CGMManagerStatus) {
         delegate.notify { delegate in
-            delegate?.cgmManagerDidUpdateState(self)
-            delegate?.cgmManager(self, didUpdate: self.cgmManagerStatus)
+            await delegate?.cgmManagerDidUpdateState(self)
+            delegate?.cgmManager(self, didUpdate: cgmManagerStatus)
         }
         statusObservers.forEach { observer in
             observer.cgmManager(self, didUpdate: cgmManagerStatus)
@@ -588,11 +579,11 @@ public final class MockCGMManager: TestingCGMManager {
                 )
             }
             self.delegate.notify { delegate in
-                delegate?.cgmManager(self, hasNew: .newData(samplesWithCondition))
+                await delegate?.cgmManager(self, hasNew: .newData(samplesWithCondition))
             }
         } else {
             self.delegate.notify { delegate in
-                delegate?.cgmManager(self, hasNew: result)
+                await delegate?.cgmManager(self, hasNew: result)
             }
         }
     }
@@ -729,15 +720,13 @@ extension MockCGMManager {
         }
         delegate.notifyDelayed(by: delay ?? 0) { delegate in
             self.logDeviceComms(.delegate, message: "\(#function): \(identifier) \(trigger)")
-            Task {
-                await delegate?.issueAlert(Alert(identifier: Alert.Identifier(managerIdentifier: self.pluginIdentifier, alertIdentifier: identifier),
-                                           foregroundContent: alert.foregroundContent,
-                                           backgroundContent: alert.backgroundContent,
-                                           trigger: trigger,
-                                           interruptionLevel: alert.interruptionLevel,
-                                           sound: alert.sound,
-                                           metadata: metadata))
-            }
+            await delegate?.issueAlert(Alert(identifier: Alert.Identifier(managerIdentifier: self.pluginIdentifier, alertIdentifier: identifier),
+                                       foregroundContent: alert.foregroundContent,
+                                       backgroundContent: alert.backgroundContent,
+                                       trigger: trigger,
+                                       interruptionLevel: alert.interruptionLevel,
+                                       sound: alert.sound,
+                                       metadata: metadata))
         }
 
         // updating the status highlight
@@ -769,9 +758,7 @@ extension MockCGMManager {
     public func retractAlert(identifier: Alert.AlertIdentifier) {
         
         delegate.notify { delegate in
-            Task {
-                await delegate?.retractAlert(identifier: Alert.Identifier(managerIdentifier: self.pluginIdentifier, alertIdentifier: identifier))
-            }
+            await delegate?.retractAlert(identifier: Alert.Identifier(managerIdentifier: self.pluginIdentifier, alertIdentifier: identifier))
         }
 
         // updating the status highlight
@@ -828,9 +815,7 @@ extension MockCGMManager {
                           interruptionLevel: interruptionLevel)
 
         delegate.notify { delegate in
-            Task {
-                await delegate?.issueAlert(alert)
-            }
+            await delegate?.issueAlert(alert)
         }
     }
 }

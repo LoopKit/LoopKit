@@ -317,14 +317,13 @@ public final class MockPumpManager: TestingPumpManager {
                 }
             }
 
+            let readDate = Date()
             delegate.notify { (delegate) in
                 if newValue.reservoirUnitsRemaining != oldValue.reservoirUnitsRemaining {
-                    delegate?.pumpManager(self, didReadReservoirValue: self.state.reservoirUnitsRemaining, at: Date()) { result in
-                        // nothing to do here
-                    }
+                    _ = try? await delegate?.pumpManager(self, didReadReservoirValue: newValue.reservoirUnitsRemaining, at: readDate)
                 }
-                delegate?.pumpManagerDidUpdateState(self)
-                
+                await delegate?.pumpManagerDidUpdateState(self)
+
                 delegate?.pumpManager(self, didUpdate: newStatus, oldStatus: oldStatus)
             }
         }
@@ -336,15 +335,6 @@ public final class MockPumpManager: TestingPumpManager {
         }
         set {
             delegate.delegate = newValue
-        }
-    }
-
-    public var delegateQueue: DispatchQueue! {
-        get {
-            return delegate.queue
-        }
-        set {
-            delegate.queue = newValue
         }
     }
 
@@ -444,20 +434,21 @@ public final class MockPumpManager: TestingPumpManager {
         state.finalizeFinishedDoses()
         let pendingPumpEvents = state.pumpEventsToStore
         delegate.notify { (delegate) in
-            delegate?.pumpManager(self, hasNewPumpEvents: pendingPumpEvents, lastReconciliation: self.lastSync, replacePendingEvents: true) { error in
-                if error == nil {
-                    self.state.additionalPumpEvents = []
-                }
+            do {
+                try await delegate?.pumpManager(self, hasNewPumpEvents: pendingPumpEvents, lastReconciliation: self.lastSync, replacePendingEvents: true)
+                self.state.additionalPumpEvents = []
+                completion(nil)
+            } catch {
                 completion(error)
             }
         }
     }
 
-    public func enactTempBasal(decisionId: UUID?, unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (PumpManagerError?) -> Void) {
-        runTemporaryBasalProgram(decisionId: decisionId, unitsPerHour: unitsPerHour, for: duration, automatic: true, completion: completion)
+    public func enactTempBasal(doseId: UUID, unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (PumpManagerError?) -> Void) {
+        runTemporaryBasalProgram(doseId: doseId, unitsPerHour: unitsPerHour, for: duration, automatic: true, completion: completion)
     }
 
-    public func runTemporaryBasalProgram(decisionId: UUID?, unitsPerHour: Double, for duration: TimeInterval, automatic: Bool, completion: @escaping (PumpManagerError?) -> Void) {
+    public func runTemporaryBasalProgram(doseId: UUID?, unitsPerHour: Double, for duration: TimeInterval, automatic: Bool, completion: @escaping (PumpManagerError?) -> Void) {
         logDeviceComms(.send, message: "Temp Basal \(unitsPerHour) U/hr Duration:\(duration.hours) automatic:\(automatic)")
 
         if state.tempBasalShouldCrash {
@@ -503,7 +494,7 @@ public final class MockPumpManager: TestingPumpManager {
                     completion(nil)
                 }
             } else {
-                let temp = UnfinalizedDose(tempBasalRate: unitsPerHour, startTime: now, duration: duration, insulinType: state.insulinType, automatic: automatic, decisionId: decisionId)
+                let temp = UnfinalizedDose(tempBasalRate: unitsPerHour, startTime: now, duration: duration, insulinType: state.insulinType, automatic: automatic, doseId: doseId)
                 state.unfinalizedTempBasal = temp
                 storePumpEvents { (error) in
                     completion(nil)
@@ -517,7 +508,7 @@ public final class MockPumpManager: TestingPumpManager {
         self.delegate.delegate?.deviceManager(self, logEventForDeviceIdentifier: "mockpump", type: type, message: message, completion: nil)
     }
 
-    public func enactBolus(decisionId: UUID?, units: Double, activationType: BolusActivationType, completion: @escaping (PumpManagerError?) -> Void) {
+    public func enactBolus(doseId: UUID, units: Double, activationType: BolusActivationType, completion: @escaping (PumpManagerError?) -> Void) {
 
         logDeviceCommunication("enactBolus(\(units), \(activationType))")
 
@@ -561,7 +552,7 @@ public final class MockPumpManager: TestingPumpManager {
             }
             
             
-            let bolus = UnfinalizedDose(bolusAmount: units, startTime: Date(), duration: .minutes(units / type(of: self).deliveryUnitsPerMinute), insulinType: state.insulinType, automatic: activationType.isAutomatic, decisionId: decisionId)
+            let bolus = UnfinalizedDose(bolusAmount: units, startTime: Date(), duration: .minutes(units / type(of: self).deliveryUnitsPerMinute), insulinType: state.insulinType, automatic: activationType.isAutomatic, doseId: doseId)
             state.unfinalizedBolus = bolus
             
             logDeviceComms(.receive, message: "Bolus accepted")
@@ -729,7 +720,7 @@ public final class MockPumpManager: TestingPumpManager {
     public func injectPumpEvents(_ pumpEvents: [NewPumpEvent]) {
         // directly report these pump events
         delegate.notify { delegate in
-            delegate?.pumpManager(self, hasNewPumpEvents: pumpEvents, lastReconciliation: Date(), replacePendingEvents: true) { _ in }
+            try? await delegate?.pumpManager(self, hasNewPumpEvents: pumpEvents, lastReconciliation: Date(), replacePendingEvents: true)
         }
     }
     
@@ -762,20 +753,14 @@ extension MockPumpManager: AlertIssuer {
     public func issueAlert(_ alert: Alert) {
         logDeviceComms(.delegate, message: "issuing \(alert.identifier) \(alert.backgroundContent.title) with trigger \(alert.trigger)")
         delegate.notify { delegate in
-            guard let delegate else { return }
-            Task {
-                await delegate.issueAlert(alert)
-            }
+            await delegate?.issueAlert(alert)
         }
     }
-    
+
     public func retractAlert(identifier: Alert.Identifier) {
         logDeviceComms(.delegate, message: "retracting \(identifier)")
         delegate.notify { delegate in
-            guard let delegate else { return }
-            Task {
-                await delegate.retractAlert(identifier: identifier)
-            }
+            await delegate?.retractAlert(identifier: identifier)
         }
     }
     

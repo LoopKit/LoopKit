@@ -232,7 +232,8 @@ extension CachedInsulinDeliveryObject {
             endDate: endDate,
             value: programmedValue,
             unit: unit,
-            decisionId: decisionId,
+            doseId: doseId,
+            metadata: metadata.flatMap { try? DoseMetadata(encoded: $0) },
             deliveredUnits: !isMutable ? deliveredUnits : nil,
             description: nil,
             syncIdentifier: syncIdentifier,
@@ -253,7 +254,7 @@ extension CachedInsulinDeliveryObject {
         self.hasLoopKitOrigin = sample.hasLoopKitOrigin
         self.startDate = sample.startDate
         self.endDate = sample.endDate
-        self.decisionId = sample.decisionId
+        self.doseId = sample.doseId
         self.syncIdentifier = sample.syncIdentifier ?? sample.uuid.uuidString // External doses might not have a syncIdentifier, so use the UUID
         self.deliveredUnits = sample.quantity.doubleValue(for: .internationalUnit())
         self.scheduledBasalRate = sample.scheduledBasalRate
@@ -291,7 +292,8 @@ extension CachedInsulinDeliveryObject {
         self.isSuspend = (entry.type == .suspend)
         self.isMutable = entry.isMutable
         self.wasProgrammedByPumpUI = entry.wasProgrammedByPumpUI
-        self.decisionId = entry.decisionId
+        self.doseId = entry.doseId
+        self.metadata = try? entry.metadata?.encoded()
         updateModificationCounter()  // Maintains modificationCounter order
     }
 
@@ -317,7 +319,8 @@ extension CachedInsulinDeliveryObject {
         self.isSuspend = (entry.type == .suspend)
         self.isMutable = entry.isMutable
         self.wasProgrammedByPumpUI = entry.wasProgrammedByPumpUI
-        self.decisionId = entry.decisionId
+        self.doseId = entry.doseId
+        self.metadata = try? entry.metadata?.encoded()
         updateModificationCounter()  // Maintains modificationCounter order
     }
 }
