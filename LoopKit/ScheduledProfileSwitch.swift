@@ -179,6 +179,8 @@ public enum ScheduledProfileSwitches {
         TherapyProfile.fingerprint(canonical: canonicalFingerprintString(entries))
     }
 
+    /// Different lists give different strings: the text between two entries is longer than
+    /// `TherapyProfileValidator.maximumNameLength`, so no profile name can contain it.
     static func canonicalFingerprintString(_ entries: [ScheduledProfileSwitch]) -> String {
         entries
             .map { "profile=\($0.profileName);weekday=\($0.weekday);date=-;time=\(Int($0.time));paused=\($0.paused)" }

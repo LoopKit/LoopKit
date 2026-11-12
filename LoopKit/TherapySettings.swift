@@ -109,9 +109,9 @@ extension TherapySettings: Codable {
         let carbRatioSchedule = try container.decodeIfPresent(CarbRatioSchedule.self, forKey: .carbRatioSchedule)
         let basalRateSchedule = try container.decodeIfPresent(BasalRateSchedule.self, forKey: .basalRateSchedule)
         let defaultRapidActingModel = try container.decodeIfPresent(ExponentialInsulinModelPreset.self, forKey: .defaultRapidActingModel)
-        let therapyProfiles = try container.decodeIfPresent([TherapyProfile].self, forKey: .therapyProfiles)
+        let therapyProfiles = try container.decodeIfPresent([Lossy<TherapyProfile>].self, forKey: .therapyProfiles)?.compactMap(\.value)
         let activeProfileName = try container.decodeIfPresent(String.self, forKey: .activeProfileName)
-        let scheduledSwitches = try container.decodeIfPresent([ScheduledProfileSwitch].self, forKey: .scheduledSwitches)
+        let scheduledSwitches = try container.decodeIfPresent([Lossy<ScheduledProfileSwitch>].self, forKey: .scheduledSwitches)?.compactMap(\.value)
 
         self.init(glucoseTargetRangeSchedule: glucoseTargetRangeSchedule,
                   correctionRangeOverrides: correctionRangeOverrides,

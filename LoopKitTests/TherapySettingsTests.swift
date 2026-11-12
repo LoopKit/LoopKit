@@ -242,6 +242,37 @@ class TherapySettingsCodableTests: XCTestCase {
         XCTAssertEqual(encodedString, String(data: data, encoding: .utf8)!)
     }
 
+    func testTherapySettingDecodingSkipsAnUnreadableProfileOrScheduledSwitch() throws {
+        var settings = TherapySettings.test
+        let profile = try XCTUnwrap(TherapyProfile(name: "Weekend",
+                                                   glucoseTargetRangeSchedule: settings.glucoseTargetRangeSchedule,
+                                                   carbRatioSchedule: settings.carbRatioSchedule,
+                                                   basalRateSchedule: settings.basalRateSchedule,
+                                                   insulinSensitivitySchedule: settings.insulinSensitivitySchedule))
+        var unreadable = profile
+        unreadable.name = "School"
+        settings.therapyProfiles = [profile, unreadable]
+        settings.activeProfileName = "Weekend"
+        settings.scheduledSwitches = [ScheduledProfileSwitch(profileName: "Weekend", weekday: 7, time: 8 * 3600),
+                                      ScheduledProfileSwitch(profileName: "School", weekday: 2, time: 7 * 3600)]
+
+        var json = try XCTUnwrap(JSONSerialization.jsonObject(with: encoder.encode(settings)) as? [String: Any])
+        var profiles = try XCTUnwrap(json["therapyProfiles"] as? [[String: Any]])
+        profiles[1].removeValue(forKey: "basalRateSchedule")
+        json["therapyProfiles"] = profiles
+        var switches = try XCTUnwrap(json["scheduledSwitches"] as? [[String: Any]])
+        switches[1].removeValue(forKey: "profile")
+        json["scheduledSwitches"] = switches
+
+        let decoded = try decoder.decode(TherapySettings.self, from: JSONSerialization.data(withJSONObject: json))
+
+        XCTAssertEqual(decoded.therapyProfiles?.map(\.name), ["Weekend"])
+        XCTAssertEqual(decoded.scheduledSwitches?.map(\.profileName), ["Weekend"])
+        XCTAssertEqual(decoded.activeProfileName, "Weekend")
+        XCTAssertEqual(decoded.basalRateSchedule, settings.basalRateSchedule)
+        XCTAssertEqual(decoded.maximumBolus, settings.maximumBolus)
+    }
+
     func testTherapySettingDecoding() throws {
         let data = encodedString.data(using: .utf8)!
         let decoded = try decoder.decode(TherapySettings.self, from: data)
