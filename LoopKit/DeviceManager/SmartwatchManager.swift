@@ -48,18 +48,23 @@ public struct SmartwatchLoopState {
     /// The forecasts from the last loop run, one curve per forecast the host's
     /// algorithm makes: Loop has one, Trio up to four (oref's IOB, ZT, COB and UAM,
     /// as many as it computed). Each curve is a normal forecast, one value per
-    /// time, ascending. A watch draws a cone as the per-time minimum and maximum
-    /// across the curves (cut where the shortest ends; one curve gives its line),
-    /// or the curves as lines. Empty before the loop has run.
+    /// time, ascending, reaching at most `forecastHorizon` past its first value.
+    /// A watch draws a cone as the per-time minimum and maximum across the curves
+    /// (cut where the shortest ends; one curve gives its line), or the curves as
+    /// lines. Empty before the loop has run.
     ///
     /// Curves, not one flat array: a flat array is one forecast, with one value per
     /// time and the eventual glucose last. Several curves mixed into it would lose
     /// which value belongs to which curve and would zigzag when drawn as a line.
     public var predictedGlucose: [[PredictedGlucoseValue]]
 
+    /// How far `predictedGlucose` reaches past each curve's first value. Hosts cut
+    /// their curves there, so every plugin gets the same span from either host.
+    public static let forecastHorizon: TimeInterval = 4 * 60 * 60
+
     /// Where the algorithm expects glucose to end up. Loop reports the end of its
-    /// forecast; a host whose algorithm computes its own (Trio's eventual BG)
-    /// reports that.
+    /// whole forecast, not cut at `forecastHorizon`; a host whose algorithm
+    /// computes its own (Trio's eventual BG) reports that.
     public var eventualGlucose: LoopQuantity?
 
     /// The algorithm's sensitivity ratio (1 = no adjustment), for hosts that have one.
