@@ -361,4 +361,12 @@ public protocol PumpDeliveryOdometer {
     /// When the bolus the pump reported giving at its last read will end, whoever started it; nil
     /// when it reported none. A controller's own bolus state knows only the boluses it started.
     var bolusUnderWayEndsAt: Date? { get }
+
+    /// The pump has stopped for good, so `deliveredUnits` can no longer change and is as current as
+    /// any later read. A failed pump may refuse further reads.
+    var deliveredUnitsAreFinal: Bool { get }
+}
+
+extension PumpDeliveryOdometer {
+    public var deliveredUnitsAreFinal: Bool { false }
 }
