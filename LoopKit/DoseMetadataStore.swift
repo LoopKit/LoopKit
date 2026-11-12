@@ -19,6 +19,8 @@ public struct DoseMetadata: Codable, Hashable {
         case user
         /// A remote command from a service
         case remote
+        /// Written by a newer build
+        case unknown
     }
 
     public enum Device: String, Codable {
@@ -26,17 +28,63 @@ public struct DoseMetadata: Codable, Hashable {
         case watch
     }
 
+    /// The remote command a dose was delivered for
+    public struct RemoteRequest: Codable, Hashable {
+        public struct Approver: Codable, Hashable {
+            /// nil for the person using this phone
+            public var name: String?
+
+            public init(name: String? = nil) {
+                self.name = name
+            }
+        }
+
+        public var serviceIdentifier: String
+        /// The service's id for the command
+        public var requestId: String?
+        /// Who sent the command, for display
+        public var requester: String?
+        /// When the command was sent, by the service's clock
+        public var requestedAt: Date?
+        /// Who approved the command on the phone; nil when it needed no approval
+        public var approvedBy: Approver?
+
+        public init(serviceIdentifier: String, requestId: String? = nil, requester: String? = nil, requestedAt: Date? = nil, approvedBy: Approver? = nil) {
+            self.serviceIdentifier = serviceIdentifier
+            self.requestId = requestId
+            self.requester = requester
+            self.requestedAt = requestedAt
+            self.approvedBy = approvedBy
+        }
+    }
+
     public var origin: Origin
     public var device: Device?
     /// The dosing decision the dose was enacted from
     public var decisionId: UUID?
     public var activationType: BolusActivationType?
+    public var remoteRequest: RemoteRequest?
 
-    public init(origin: Origin, device: Device? = nil, decisionId: UUID? = nil, activationType: BolusActivationType? = nil) {
+    public init(origin: Origin, device: Device? = nil, decisionId: UUID? = nil, activationType: BolusActivationType? = nil, remoteRequest: RemoteRequest? = nil) {
         self.origin = origin
         self.device = device
         self.decisionId = decisionId
         self.activationType = activationType
+        self.remoteRequest = remoteRequest
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case origin, device, decisionId, activationType, remoteRequest
+    }
+
+    // Values a newer build added decode as unknown or nil rather than failing the whole record.
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        origin = (try? container.decode(String.self, forKey: .origin)).flatMap(Origin.init(rawValue:)) ?? .unknown
+        device = (try? container.decodeIfPresent(String.self, forKey: .device)).flatMap(Device.init(rawValue:))
+        decisionId = try? container.decodeIfPresent(UUID.self, forKey: .decisionId)
+        activationType = (try? container.decodeIfPresent(String.self, forKey: .activationType)).flatMap(BolusActivationType.init(rawValue:))
+        remoteRequest = try? container.decodeIfPresent(RemoteRequest.self, forKey: .remoteRequest)
     }
 }
 

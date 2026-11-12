@@ -162,4 +162,22 @@ class DoseEntryRawRepresentableTests: XCTestCase {
         XCTAssertNil(remote.decisionId)
         XCTAssertEqual(legacy.decisionId, doseId)
     }
+
+    func testRemoteRequestRoundTrips() throws {
+        let request = DoseMetadata.RemoteRequest(serviceIdentifier: "LoopSight", requestId: "cmd-1", requester: "Mom", requestedAt: Date(timeIntervalSince1970: 1_800_000_000), approvedBy: .init())
+        let metadata = DoseMetadata(origin: .remote, activationType: .manualNoRecommendation, remoteRequest: request)
+
+        XCTAssertEqual(try DoseMetadata(encoded: metadata.encoded()), metadata)
+    }
+
+    func testMetadataDecodesUnknownValues() throws {
+        let json = #"{"origin":"siri","device":"ring","activationType":"voice","decisionId":"\#(UUID().uuidString)","remoteRequest":{"serviceIdentifier":"X","approvedBy":{"name":"Dad"},"future":1}}"#
+        let metadata = try JSONDecoder().decode(DoseMetadata.self, from: Data(json.utf8))
+
+        XCTAssertEqual(metadata.origin, .unknown)
+        XCTAssertNil(metadata.device)
+        XCTAssertNil(metadata.activationType)
+        XCTAssertNotNil(metadata.decisionId)
+        XCTAssertEqual(metadata.remoteRequest, DoseMetadata.RemoteRequest(serviceIdentifier: "X", approvedBy: .init(name: "Dad")))
+    }
 }
