@@ -22,7 +22,6 @@ public struct CarbQuantityRow: View {
     private let formatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
-        formatter.maximumIntegerDigits = 3
         formatter.maximumFractionDigits = 1
         return formatter
     }()
@@ -77,8 +76,16 @@ public struct CarbQuantityRow: View {
     
     // Update quantity based on text field input
     private func updateQuantity(with input: String) {
-        if let number = formatter.number(from: input) {
-            quantity = number.doubleValue
+        let decimalSeparator = formatter.decimalSeparator ?? "."
+        let allowedCharacters = "0123456789" + decimalSeparator
+        let filtered = input.filter { allowedCharacters.contains($0) }
+        if filtered != input {
+            self.carbInput = filtered
+        }
+
+        let minAllowedCarbEntry = 1.0
+        if let doubleValue = Double(filtered), doubleValue >= minAllowedCarbEntry {
+            quantity = doubleValue
         } else {
             quantity = nil
         }
@@ -86,10 +93,9 @@ public struct CarbQuantityRow: View {
     
     // Update text field input based on quantity
     private func updateCarbInput(with newQuantity: Double?) {
+        // Do not enable Continue button if newQuantity is invalid (< minAllowedCarbEntry)
         if let value = newQuantity {
             carbInput = formatter.string(from: NSNumber(value: value)) ?? ""
-        } else {
-            carbInput = ""
         }
     }
     
