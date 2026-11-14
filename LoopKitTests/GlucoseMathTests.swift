@@ -239,6 +239,32 @@ class GlucoseMathTests: XCTestCase {
 
         XCTAssertEqual(0, effects.count)
     }
+    
+    func testCounteractionEffectsForUnalignedSamples() {
+        let mgdL = HKUnit.milligramsPerDeciliter
+        let input = loadInputFixture("counteraction_effect_falling_glucose_input")
+        let insulinEffect = loadOutputFixture("counteraction_effect_falling_glucose_insulin")
+        
+        let shiftedInput = input.map{ GlucoseFixtureValue(startDate: $0.startDate.addingTimeInterval(TimeInterval(1E-6)), quantity: $0.quantity, isDisplayOnly: $0.isDisplayOnly, wasUserEntered: $0.wasUserEntered, provenanceIdentifier: $0.provenanceIdentifier, condition: $0.condition, trendRate: $0.trendRate) }
+        var adjustedInsulinEffect = [insulinEffect[0]]
+        let firstValue = insulinEffect[0].quantity.doubleValue(for: mgdL)
+        for i in 1..<insulinEffect.count {
+            adjustedInsulinEffect.append(GlucoseEffect(startDate: insulinEffect[i].startDate, quantity: HKQuantity(unit: mgdL, doubleValue: firstValue - Double(i * i))))
+        }
+        let effects = input.counteractionEffects(to: adjustedInsulinEffect)
+
+        adjustedInsulinEffect.append(GlucoseEffect(startDate: insulinEffect.last!.startDate.addingTimeInterval(.minutes(5)), quantity: HKQuantity(unit: mgdL, doubleValue: firstValue - Double(insulinEffect.count * insulinEffect.count))))
+        
+        let shiftedEffects = shiftedInput.counteractionEffects(to: adjustedInsulinEffect)
+        let unit = HKUnit.milligramsPerDeciliter.unitDivided(by: .minute())
+
+        XCTAssertEqual(effects.count, shiftedEffects.count)
+
+        for (effect, shifted) in zip(effects, shiftedEffects) {
+            XCTAssertEqual(shifted.startDate.timeIntervalSince(effect.startDate), 1E-6, accuracy: 1E-7)
+            XCTAssertEqual(effect.quantity.doubleValue(for: unit), shifted.quantity.doubleValue(for: unit), accuracy: Double(1E-6))
+        }
+    }
 
     func testCounteractionEffectsForFallingGlucose() {
         let input = loadInputFixture("counteraction_effect_falling_glucose_input")
