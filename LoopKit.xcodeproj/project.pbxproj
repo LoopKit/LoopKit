@@ -349,6 +349,7 @@
 		89653C822473592600E1BAA5 /* CarbRatioScheduleEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89653C812473592600E1BAA5 /* CarbRatioScheduleEditor.swift */; };
 		89653C8424738D2B00E1BAA5 /* BasalRateScheduleEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89653C8324738D2B00E1BAA5 /* BasalRateScheduleEditor.swift */; };
 		8974AFC022120D7A0043F01B /* TemporaryScheduleOverrideTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8974AFBF22120D7A0043F01B /* TemporaryScheduleOverrideTests.swift */; };
+		EE0E5C012F0A000000000009 /* ExerciseStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0E5C012F0A000000000008 /* ExerciseStoreTests.swift */; };
 		898B4E75246CCAB50053C484 /* Binding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898B4E74246CCAB50053C484 /* Binding.swift */; };
 		898B4E77246DAE280053C484 /* GlucoseRangePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898B4E76246DAE280053C484 /* GlucoseRangePicker.swift */; };
 		898B4E7B246DC6A70053C484 /* CorrectionRangeScheduleEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898B4E7A246DC6A70053C484 /* CorrectionRangeScheduleEditor.swift */; };
@@ -378,6 +379,12 @@
 		89AE2226228BC54C00BDFD85 /* TemporaryPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AE221F228BC54C00BDFD85 /* TemporaryPreset.swift */; };
 		89AE2227228BC54C00BDFD85 /* TemporaryScheduleOverride.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AE2223228BC54C00BDFD85 /* TemporaryScheduleOverride.swift */; };
 		89AE2228228BC54C00BDFD85 /* TemporaryPresetSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AE2224228BC54C00BDFD85 /* TemporaryPresetSettings.swift */; };
+		EE0E5C012F0A000000000004 /* StoredWorkout.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0E5C012F0A000000000001 /* StoredWorkout.swift */; };
+		EE0E5C012F0A000000000005 /* ExerciseStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0E5C012F0A000000000002 /* ExerciseStore.swift */; };
+		EE0E5C012F0A000000000006 /* StoredWorkout.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0E5C012F0A000000000001 /* StoredWorkout.swift */; };
+		EE0E5C012F0A000000000007 /* ExerciseStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0E5C012F0A000000000002 /* ExerciseStore.swift */; };
+		EE0E5C012F0A00000000000B /* StoredHealthSample.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0E5C012F0A00000000000A /* StoredHealthSample.swift */; };
+		EE0E5C012F0A00000000000C /* StoredHealthSample.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0E5C012F0A00000000000A /* StoredHealthSample.swift */; };
 		89AE2229228BC54C00BDFD85 /* TemporaryScheduleOverrideHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AE2225228BC54C00BDFD85 /* TemporaryScheduleOverrideHistory.swift */; };
 		89AE222B228BC56A00BDFD85 /* WeakSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AE222A228BC56A00BDFD85 /* WeakSet.swift */; };
 		89AE222C228BC66E00BDFD85 /* Locked.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AC792E224C781200B8E9BA /* Locked.swift */; };
@@ -1402,6 +1409,7 @@
 		89653C812473592600E1BAA5 /* CarbRatioScheduleEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarbRatioScheduleEditor.swift; sourceTree = "<group>"; };
 		89653C8324738D2B00E1BAA5 /* BasalRateScheduleEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasalRateScheduleEditor.swift; sourceTree = "<group>"; };
 		8974AFBF22120D7A0043F01B /* TemporaryScheduleOverrideTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemporaryScheduleOverrideTests.swift; sourceTree = "<group>"; };
+		EE0E5C012F0A000000000008 /* ExerciseStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseStoreTests.swift; sourceTree = "<group>"; };
 		898B4E74246CCAB50053C484 /* Binding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Binding.swift; sourceTree = "<group>"; };
 		898B4E76246DAE280053C484 /* GlucoseRangePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseRangePicker.swift; sourceTree = "<group>"; };
 		898B4E7A246DC6A70053C484 /* CorrectionRangeScheduleEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionRangeScheduleEditor.swift; sourceTree = "<group>"; };
@@ -1438,6 +1446,9 @@
 		89AE221F228BC54C00BDFD85 /* TemporaryPreset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemporaryPreset.swift; sourceTree = "<group>"; };
 		89AE2223228BC54C00BDFD85 /* TemporaryScheduleOverride.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemporaryScheduleOverride.swift; sourceTree = "<group>"; };
 		89AE2224228BC54C00BDFD85 /* TemporaryPresetSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemporaryPresetSettings.swift; sourceTree = "<group>"; };
+		EE0E5C012F0A000000000001 /* StoredWorkout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoredWorkout.swift; sourceTree = "<group>"; };
+		EE0E5C012F0A000000000002 /* ExerciseStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseStore.swift; sourceTree = "<group>"; };
+		EE0E5C012F0A00000000000A /* StoredHealthSample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoredHealthSample.swift; sourceTree = "<group>"; };
 		89AE2225228BC54C00BDFD85 /* TemporaryScheduleOverrideHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemporaryScheduleOverrideHistory.swift; sourceTree = "<group>"; };
 		89AE222A228BC56A00BDFD85 /* WeakSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeakSet.swift; sourceTree = "<group>"; };
 		89AF78BF2447E285002B4FCC /* CardStackBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardStackBuilder.swift; sourceTree = "<group>"; };
@@ -2436,6 +2447,7 @@
 				842E40242F22D82F000CCCE0 /* Presets */,
 				434C5F9B2098352500B2FD1A /* QuantityFormatter.swift */,
 				C1CEBFDD29BB6C84007FD8A3 /* Resources */,
+				EE0E5C012F0A000000000003 /* ExerciseKit */,
 				43D8FDF31C7290350073BE78 /* SampleValue.swift */,
 				1D63DEA126E94F6B00F46FA5 /* Service */,
 				43F5035421059A8A009FA89A /* ServiceAuthentication.swift */,
@@ -2525,6 +2537,7 @@
 				C14604812E0087AE00153DFD /* TemporaryPresetScheduleTests.swift */,
 				891A3FD02249948A00378B27 /* TemporaryScheduleOverrideHistoryTests.swift */,
 				8974AFBF22120D7A0043F01B /* TemporaryScheduleOverrideTests.swift */,
+				EE0E5C012F0A000000000008 /* ExerciseStoreTests.swift */,
 				E93C86AF24CF7C470073089B /* TherapySettingsTests.swift */,
 				1D70C40C26F01D9F00C62570 /* VersionCheckServiceTests.swift */,
 			);
@@ -3027,6 +3040,16 @@
 				C17F39CF23CE34B100FA1113 /* StoredDeviceLogEntry.swift */,
 			);
 			path = DeviceLog;
+			sourceTree = "<group>";
+		};
+		EE0E5C012F0A000000000003 /* ExerciseKit */ = {
+			isa = PBXGroup;
+			children = (
+				EE0E5C012F0A000000000001 /* StoredWorkout.swift */,
+				EE0E5C012F0A000000000002 /* ExerciseStore.swift */,
+				EE0E5C012F0A00000000000A /* StoredHealthSample.swift */,
+			);
+			path = ExerciseKit;
 			sourceTree = "<group>";
 		};
 		C1CEBFDD29BB6C84007FD8A3 /* Resources */ = {
@@ -4064,6 +4087,9 @@
 				4322B782202FA2AF0002837D /* PumpEventType.swift in Sources */,
 				84DF48F32F6C6B9000BEDB40 /* TimeInterval+Timecode.swift in Sources */,
 				89AE2228228BC54C00BDFD85 /* TemporaryPresetSettings.swift in Sources */,
+				EE0E5C012F0A000000000004 /* StoredWorkout.swift in Sources */,
+				EE0E5C012F0A000000000005 /* ExerciseStore.swift in Sources */,
+				EE0E5C012F0A00000000000B /* StoredHealthSample.swift in Sources */,
 				43D8FDFA1C7290350073BE78 /* GlucoseRangeSchedule.swift in Sources */,
 				4322B77E202FA2AF0002837D /* PersistedPumpEvent.swift in Sources */,
 				437AFEEE2036A156008C4892 /* CachedCarbObject+CoreDataProperties.swift in Sources */,
@@ -4231,6 +4257,7 @@
 				B4B7C1772603F5F6007379F6 /* HKUnitTests.swift in Sources */,
 				A9DF02C924F724D900B7C988 /* CriticalEventLogTests.swift in Sources */,
 				8974AFC022120D7A0043F01B /* TemporaryScheduleOverrideTests.swift in Sources */,
+				EE0E5C012F0A000000000009 /* ExerciseStoreTests.swift in Sources */,
 				A91263872790B45300C6C950 /* NewPumpEventTests.swift in Sources */,
 				437AFF1D203A45DB008C4892 /* CacheStore.swift in Sources */,
 				A9B0D97E273313EB00D96D93 /* CGMManagerStatusTests.swift in Sources */,
@@ -4364,6 +4391,9 @@
 				89AE2239228BCAAB00BDFD85 /* TemporaryScheduleOverrideHistory.swift in Sources */,
 				89AE223A228BCAAB00BDFD85 /* TemporaryPreset.swift in Sources */,
 				89AE223B228BCAAB00BDFD85 /* TemporaryPresetSettings.swift in Sources */,
+				EE0E5C012F0A000000000006 /* StoredWorkout.swift in Sources */,
+				EE0E5C012F0A000000000007 /* ExerciseStore.swift in Sources */,
+				EE0E5C012F0A00000000000C /* StoredHealthSample.swift in Sources */,
 				A987CD4724A5893500439ADC /* JSONStreamEncoder.swift in Sources */,
 				C1CEBFD929BA9D81007FD8A3 /* TimeZone.swift in Sources */,
 				89AE223C228BCAAB00BDFD85 /* WeakSet.swift in Sources */,
