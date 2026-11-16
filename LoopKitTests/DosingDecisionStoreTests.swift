@@ -148,7 +148,14 @@ class DosingDecisionStorePersistenceTests: PersistenceControllerTestCase, Dosing
     },
     "controllerStatus" : {
       "batteryLevel" : 0.5,
-      "batteryState" : "charging"
+      "batteryState" : "charging",
+      "build" : {
+        "buildDate" : "2026-11-16T15:40:00Z",
+        "buildNumber" : "58",
+        "version" : "3.15.0",
+        "workspaceBranch" : "dev",
+        "workspaceRevision" : "c50b6bb"
+      }
     },
     "controllerTimeZone" : {
       "identifier" : "America/Los_Angeles"
@@ -755,7 +762,14 @@ class StoredDosingDecisionCodableTests: XCTestCase {
   },
   "controllerStatus" : {
     "batteryLevel" : 0.5,
-    "batteryState" : "charging"
+    "batteryState" : "charging",
+    "build" : {
+      "buildDate" : "2026-11-16T15:40:00Z",
+      "buildNumber" : "58",
+      "version" : "3.15.0",
+      "workspaceBranch" : "dev",
+      "workspaceRevision" : "c50b6bb"
+    }
   },
   "controllerTimeZone" : {
     "identifier" : "America/Los_Angeles"
@@ -1054,7 +1068,12 @@ fileprivate extension StoredDosingDecision {
                                                          enactTrigger: .local,
                                                          syncIdentifier: UUID(uuidString: "394818CF-99CD-4B12-99CD-0E678414986B")!)
         let controllerStatus = StoredDosingDecision.ControllerStatus(batteryState: .charging,
-                                                                     batteryLevel: 0.5)
+                                                                     batteryLevel: 0.5,
+                                                                     build: StoredDosingDecision.ControllerStatus.Build(version: "3.15.0",
+                                                                                                                       buildNumber: "58",
+                                                                                                                       workspaceBranch: "dev",
+                                                                                                                       workspaceRevision: "c50b6bb",
+                                                                                                                       buildDate: "2026-11-16T15:40:00Z"))
         let pumpManagerStatus = PumpManagerStatus(timeZone: scheduleTimeZone,
                                                   device: HKDevice(name: "Pump Name",
                                                                    manufacturer: "Pump Manufacturer",
