@@ -328,12 +328,30 @@ public struct StoredDosingDecision {
             case full
         }
 
+        public struct Build: Codable, Equatable {
+            public let version: String?
+            public let buildNumber: String?
+            public let workspaceBranch: String?
+            public let workspaceRevision: String?
+            public let buildDate: String?
+
+            public init(version: String? = nil, buildNumber: String? = nil, workspaceBranch: String? = nil, workspaceRevision: String? = nil, buildDate: String? = nil) {
+                self.version = version
+                self.buildNumber = buildNumber
+                self.workspaceBranch = workspaceBranch
+                self.workspaceRevision = workspaceRevision
+                self.buildDate = buildDate
+            }
+        }
+
         public let batteryState: BatteryState?
         public let batteryLevel: Float?
+        public let build: Build?
 
-        public init(batteryState: BatteryState? = nil, batteryLevel: Float? = nil) {
+        public init(batteryState: BatteryState? = nil, batteryLevel: Float? = nil, build: Build? = nil) {
             self.batteryState = batteryState
             self.batteryLevel = batteryLevel
+            self.build = build
         }
     }
 
