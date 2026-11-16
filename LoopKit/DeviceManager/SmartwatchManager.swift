@@ -90,7 +90,7 @@ public struct SmartwatchLoopState {
 }
 
 /// Which glucose alert a host alert is. The host passes it with each alert it
-/// forwards (`watchAlertDidIssue`); `nil` means the alert isn't a glucose alert.
+/// forwards (`hostDidIssueAlert`); `nil` means the alert isn't a glucose alert.
 ///
 /// Why a dedicated type rather than reading the alert itself:
 /// - A watch needs to know *which* glucose alert is active, for example to colour
@@ -196,8 +196,8 @@ public protocol SmartwatchManagerDelegate: DeviceManagerDelegate {
     /// **For display only, never for alarms.** A plugin must not compare glucose
     /// with these limits to buzz, sound, show or clear a glucose alarm. The host
     /// decides when glucose is low or high, with its own delays, snoozes, mute,
-    /// schedules and forecasts, and tells the plugin through `watchAlertDidIssue`
-    /// and `watchAlertDidRetract`. A watch deciding by itself would alarm when the
+    /// schedules and forecasts, and tells the plugin through `hostDidIssueAlert`
+    /// and `hostDidRetractAlert`. A watch deciding by itself would alarm when the
     /// host doesn't, or stay quiet when it does.
     ///
     /// Loop returns the low and high of its active glucose alert profile; Trio the
@@ -350,7 +350,7 @@ public extension SmartwatchManagerDelegate {
 /// expects them to return quickly: read and send to the watch asynchronously.
 ///
 /// **Glucose alarms come only from the host.** A plugin passes on the alerts the
-/// host forwards (`watchAlertDidIssue`, with their `SmartwatchGlucoseAlertType`)
+/// host forwards (`hostDidIssueAlert`, with their `SmartwatchGlucoseAlertType`)
 /// and their retraction, and never raises a glucose alarm itself from glucose
 /// values or limits it reads. Notices about the watch itself, such as no readings
 /// for a while, a lost connection or a missing companion app, are the plugin's
@@ -376,14 +376,14 @@ public protocol SmartwatchManager: DeviceManager {
     /// to tell which glucose alert it is. This is a watch's only source of glucose
     /// alarms. Defaults to ignoring it.
     @MainActor
-    func watchAlertDidIssue(_ alert: Alert, glucoseAlertType: SmartwatchGlucoseAlertType?, issuedAt: Date)
+    func hostDidIssueAlert(_ alert: Alert, glucoseAlertType: SmartwatchGlucoseAlertType?, issuedAt: Date)
 
     /// A host alert was retracted and should clear on the watch.
     ///
     /// **Called** on the main actor when the host retracts an alert it forwarded,
     /// for example when glucose is back in range.
     @MainActor
-    func watchAlertDidRetract(_ identifier: Alert.Identifier)
+    func hostDidRetractAlert(_ identifier: Alert.Identifier)
 
     /// A note from the host about the watch, such as why an alert was not sent to
     /// it or when the host repeats one.
@@ -391,7 +391,7 @@ public protocol SmartwatchManager: DeviceManager {
     /// **Called** on the main actor. The host has already written it to its own
     /// device log; the plugin may show it in its own log next to the watch traffic.
     @MainActor
-    func watchHostDidLog(_ message: String)
+    func hostDidLog(_ message: String)
 
     /// A URL the host doesn't handle itself, such as a companion app's callback
     /// after the user picked a watch there (Garmin Connect's `device-select-resp`).
@@ -399,7 +399,7 @@ public protocol SmartwatchManager: DeviceManager {
     /// **Called** on the main actor for every such URL; return `true` only if the
     /// plugin handled it. The host registers the URL scheme. Defaults to `false`.
     @MainActor
-    func watchHostDidReceiveURL(_ url: URL) -> Bool
+    func hostDidReceiveURL(_ url: URL) -> Bool
 
     /// Stops the manager and asks the host to remove it. Returns once the host has
     /// removed it.
@@ -414,13 +414,13 @@ public protocol SmartwatchManager: DeviceManager {
 
 public extension SmartwatchManager {
     @MainActor
-    func watchAlertDidIssue(_ alert: Alert, glucoseAlertType: SmartwatchGlucoseAlertType?, issuedAt: Date) {}
+    func hostDidIssueAlert(_ alert: Alert, glucoseAlertType: SmartwatchGlucoseAlertType?, issuedAt: Date) {}
     @MainActor
-    func watchAlertDidRetract(_ identifier: Alert.Identifier) {}
+    func hostDidRetractAlert(_ identifier: Alert.Identifier) {}
     @MainActor
-    func watchHostDidLog(_ message: String) {}
+    func hostDidLog(_ message: String) {}
     @MainActor
-    func watchHostDidReceiveURL(_ url: URL) -> Bool { false }
+    func hostDidReceiveURL(_ url: URL) -> Bool { false }
 
     /// Override this default behaviour if the watch manager needs to complete tasks before being deleted
     func delete() async {

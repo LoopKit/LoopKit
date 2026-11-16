@@ -1,5 +1,5 @@
 //
-//  SmartwatchRemoteActions.swift
+//  SmartwatchActionError.swift
 //  LoopKit
 //
 //  Copyright © 2026 LoopKit Authors. All rights reserved.
