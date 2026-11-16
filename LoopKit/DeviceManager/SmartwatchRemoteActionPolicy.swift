@@ -9,38 +9,16 @@ import Foundation
 
 // Checks a watch plugin can apply before it asks the host to bolus or add carbs:
 // how fresh a request is, whether it was made against what the watch was shown,
-// the recommendation cap, and how often. The host doesn't call these; it applies
+// the recommendation cap, and how often. How fresh is a range of allowed request
+// ages in seconds (`ClosedRange<TimeInterval>`, as `-5...30`), which a plugin
+// also checks mute and preset requests against. The host doesn't call these; it applies
 // its own limits to every action (see `SmartwatchManagerDelegate`). There are no
 // default limits: each plugin states its own, so the numbers are visible where
 // they apply. Shared here so plugins with remote actions don't each copy them.
 
-/// How fresh a request from the watch must be: confirmed at most `maximumAge`
-/// ago, and dated at most `maximumClockSkew` in the future. A plugin uses one
-/// window for every remote action: it passes it to the bolus and carb policies
-/// and checks mute and preset requests with it directly.
-public struct SmartwatchRequestWindow: Equatable, Sendable {
-    public var maximumAge: TimeInterval
-    public var maximumClockSkew: TimeInterval
-
-    public init(maximumAge: TimeInterval, maximumClockSkew: TimeInterval) {
-        self.maximumAge = maximumAge
-        self.maximumClockSkew = maximumClockSkew
-    }
-
-    /// Whether a request confirmed at `requestedAt` may still run at `now`.
-    public func contains(_ requestedAt: Date, now: Date) -> Bool {
-        let age = now.timeIntervalSince(requestedAt)
-        return age <= maximumAge && age >= -maximumClockSkew
-    }
-}
-
 /// What the watch was shown to pick a bolus: the recommendation, the maximum
-/// bolus and the pump's volumes at one moment, under one token.
+/// bolus and the pump's volumes at one moment.
 public struct SmartwatchBolusContext: Equatable, Sendable {
-    /// Identifies the state the recommendation was computed from. A request must
-    /// echo it, and requests made against an older state are refused.
-    public var token: UUID
-
     /// When this context was issued.
     public var issuedAt: Date
 
@@ -54,8 +32,7 @@ public struct SmartwatchBolusContext: Equatable, Sendable {
     /// Bolus volumes the pump can deliver, in units.
     public var supportedBolusVolumes: [Double]
 
-    public init(token: UUID, issuedAt: Date, recommendedBolus: Double?, maximumBolus: Double?, supportedBolusVolumes: [Double]) {
-        self.token = token
+    public init(issuedAt: Date, recommendedBolus: Double?, maximumBolus: Double?, supportedBolusVolumes: [Double]) {
         self.issuedAt = issuedAt
         self.recommendedBolus = recommendedBolus
         self.maximumBolus = maximumBolus
@@ -69,52 +46,22 @@ public struct SmartwatchBolusContext: Equatable, Sendable {
     }
 }
 
-/// A bolus the user confirmed on the watch, after the plugin authenticated it.
-public struct SmartwatchBolusRequest: Equatable, Sendable {
-    public var units: Double
-    /// `SmartwatchBolusContext.token` from the context the watch showed.
-    public var contextToken: UUID
-    /// When the user confirmed the bolus on the watch. Take it from the watch, not
-    /// from when the command reached the phone, which can be much later.
-    public var requestedAt: Date
-    /// Skips only the recommendation check; every other check (ages, maximum
-    /// bolus, rate limits) still applies.
-    public var isForced: Bool
-
-    public init(units: Double, contextToken: UUID, requestedAt: Date, isForced: Bool) {
-        self.units = units
-        self.contextToken = contextToken
-        self.requestedAt = requestedAt
-        self.isForced = isForced
-    }
-}
-
-/// Carbs the user confirmed on the watch.
-public struct SmartwatchCarbEntryRequest: Equatable, Sendable {
-    public var grams: Double
-    /// When the user confirmed the entry on the watch, taken from the watch; the
-    /// entry is dated then.
-    public var requestedAt: Date
-
-    public init(grams: Double, requestedAt: Date) {
-        self.grams = grams
-        self.requestedAt = requestedAt
-    }
-}
-
 /// Decides whether a bolus requested on the watch may be passed to the host.
 ///
 /// A plugin calls `evaluate` after it authenticated the request and before it
 /// calls the host's `deliverBolus`. It rejects requests that are not allowed, are
-/// old or made against an older state, exceed the maximum bolus or the
-/// recommendation the watch was shown, or come too often. A forced request skips
+/// old, come without a current context, exceed the maximum bolus or the current
+/// recommendation, or come too often. A forced request skips
 /// only the recommendation check. The host still applies its own limits.
 public struct SmartwatchBolusPolicy {
     /// How strict the policy is. No defaults: a plugin states each one.
     public struct Limits: Equatable, Sendable {
-        /// How fresh a request must be.
-        public var requestWindow: SmartwatchRequestWindow
-        /// A context older than this is rejected even if its token matches.
+        /// How old a request may be, in seconds: confirmed on the watch at most
+        /// `upperBound` ago, and dated at most `-lowerBound` in the future (as
+        /// `-5...30`). Takes the date from the watch, not from when the command
+        /// reached the phone, which can be much later.
+        public var requestWindow: ClosedRange<TimeInterval>
+        /// A context older than this is rejected.
         public var maximumContextAge: TimeInterval
         /// Every watch bolus, forced ones too, is refused when the newest glucose
         /// reading is older than this: on the watch the user may not see that
@@ -124,21 +71,16 @@ public struct SmartwatchBolusPolicy {
         public var minimumInterval: TimeInterval
         /// Watch boluses in a rolling 24 hours may total at most this many maximum boluses.
         public var dailyLimitInMaximumBoluses: Double
-        /// A request must quote the current context's token. Off only for a watch
-        /// app that can't send it back: its requests are then checked against the
-        /// current context, which must still be fresh.
-        public var requiresContextToken: Bool
         /// A request may not exceed the recommendation unless it is forced. Off for
         /// a watch app that lets the user pick any amount up to the maximum bolus.
         public var capsAtRecommendation: Bool
 
         public init(
-            requestWindow: SmartwatchRequestWindow,
+            requestWindow: ClosedRange<TimeInterval>,
             maximumContextAge: TimeInterval,
             maximumGlucoseAge: TimeInterval,
             minimumInterval: TimeInterval,
             dailyLimitInMaximumBoluses: Double,
-            requiresContextToken: Bool,
             capsAtRecommendation: Bool
         ) {
             self.requestWindow = requestWindow
@@ -146,7 +88,6 @@ public struct SmartwatchBolusPolicy {
             self.maximumGlucoseAge = maximumGlucoseAge
             self.minimumInterval = minimumInterval
             self.dailyLimitInMaximumBoluses = dailyLimitInMaximumBoluses
-            self.requiresContextToken = requiresContextToken
             self.capsAtRecommendation = capsAtRecommendation
         }
     }
@@ -197,37 +138,41 @@ public struct SmartwatchBolusPolicy {
     }
 
     /// The units to deliver, rounded to a supported volume, or why not.
-    public func evaluate(_ request: SmartwatchBolusRequest, now: Date) -> Result<Double, SmartwatchBolusError> {
+    ///
+    /// - Parameters:
+    ///   - requestedAt: When the user confirmed the bolus on the watch.
+    ///   - isForced: Skips only the recommendation check; every other check
+    ///     (ages, maximum bolus, rate limits) still applies.
+    public func evaluate(units requestedUnits: Double, requestedAt: Date, isForced: Bool, now: Date) -> Result<Double, SmartwatchActionError> {
         guard isAllowed else {
             return .failure(.notAllowed)
         }
-        guard request.units.isFinite, request.units > 0 else {
+        guard requestedUnits.isFinite, requestedUnits > 0 else {
             return .failure(.invalidAmount)
         }
-        guard limits.requestWindow.contains(request.requestedAt, now: now) else {
+        guard limits.requestWindow.contains(now.timeIntervalSince(requestedAt)) else {
             return .failure(.expiredRequest)
         }
         guard let latestGlucoseDate, now.timeIntervalSince(latestGlucoseDate) <= limits.maximumGlucoseAge else {
             return .failure(.noRecentGlucose)
         }
         guard let context = currentContext,
-              !limits.requiresContextToken || context.token == request.contextToken,
               now.timeIntervalSince(context.issuedAt) <= limits.maximumContextAge
         else {
             return .failure(.staleContext)
         }
 
-        let units = roundToSupportedVolume(request.units)
+        let units = roundToSupportedVolume(requestedUnits)
         guard units > 0 else {
             return .failure(.invalidAmount)
         }
         guard let maximumBolus = context.maximumBolus, units <= maximumBolus + Self.tolerance else {
-            return .failure(.exceedsMaximumBolus)
+            return .failure(.exceedsMaximum)
         }
         // The watch may bolus up to the recommendation it was shown, rounded
         // the same way; never more, and nothing when the host recommends no bolus.
         // A forced request skips this check only.
-        if !request.isForced, limits.capsAtRecommendation {
+        if !isForced, limits.capsAtRecommendation {
             guard let recommended = context.recommendedBolus,
                   units <= roundToSupportedVolume(recommended) + Self.tolerance
             else {
@@ -249,76 +194,58 @@ public struct SmartwatchBolusPolicy {
 
 /// Hands out the bolus context a plugin shows on the watch, and keeps the state
 /// the bolus checks need: a context is reused while its inputs are unchanged,
-/// spent when a bolus starts, and a resend of the bolus being delivered is
+/// spent when a bolus starts, and a request while a bolus is being delivered is
 /// recognised. Issue a context again after every glucose or loop change, from
-/// the host's recommendation, maximum bolus and bolus volumes, so a bolus made
-/// against an older state is refused. Keep one per manager and use it only from
+/// the host's recommendation, maximum bolus and bolus volumes, so a bolus is
+/// checked against the current state. Keep one per manager and use it only from
 /// one actor.
 public struct SmartwatchBolusContextIssuer {
-    /// What a context is computed from; a new token is issued when it changes.
-    public struct Inputs: Equatable, Sendable {
-        public var recommendedBolus: Double?
-        public var maximumBolus: Double?
-        public var supportedBolusVolumes: [Double]
-        /// The newest glucose reading, so a new reading always gives a new token.
-        public var latestGlucoseDate: Date?
-
-        public init(recommendedBolus: Double?, maximumBolus: Double?, supportedBolusVolumes: [Double], latestGlucoseDate: Date?) {
-            self.recommendedBolus = recommendedBolus
-            self.maximumBolus = maximumBolus
-            self.supportedBolusVolumes = supportedBolusVolumes
-            self.latestGlucoseDate = latestGlucoseDate
-        }
-    }
-
     /// The context last handed out, until a bolus spends it.
     public private(set) var current: SmartwatchBolusContext?
-    private var currentInputs: Inputs?
-    private var deliveringToken: UUID?
+    /// The newest glucose reading when `current` was issued, so a new reading
+    /// always gives a new context.
+    private var currentLatestGlucoseDate: Date?
+    /// Whether a bolus is being delivered: from `beginDelivery()` until
+    /// `endDelivery()`. Answer a request meanwhile with `.inProgress`: its result
+    /// follows, and a failure could lead the user to bolus again.
+    public private(set) var isDelivering = false
 
     public init() {}
 
-    /// The context to send: the current one while `inputs` are unchanged,
-    /// otherwise a new one with a new token. A recommendation of 0 U or less
+    /// The context to send: the current one while its inputs are unchanged,
+    /// otherwise a new one issued `now`. A recommendation of 0 U or less
     /// counts as none.
-    public mutating func context(for inputs: Inputs, now: Date) -> SmartwatchBolusContext {
-        var inputs = inputs
-        if let recommended = inputs.recommendedBolus, !(recommended > 0) {
-            inputs.recommendedBolus = nil
-        }
-        if let current, inputs == currentInputs {
+    public mutating func context(recommendedBolus: Double?, maximumBolus: Double?, supportedBolusVolumes: [Double], latestGlucoseDate: Date?, now: Date) -> SmartwatchBolusContext {
+        let recommendedBolus = recommendedBolus.flatMap { $0 > 0 ? $0 : nil }
+        if let current,
+           current.recommendedBolus == recommendedBolus,
+           current.maximumBolus == maximumBolus,
+           current.supportedBolusVolumes == supportedBolusVolumes,
+           currentLatestGlucoseDate == latestGlucoseDate {
             return current
         }
         let context = SmartwatchBolusContext(
-            token: UUID(),
             issuedAt: now,
-            recommendedBolus: inputs.recommendedBolus,
-            maximumBolus: inputs.maximumBolus,
-            supportedBolusVolumes: inputs.supportedBolusVolumes
+            recommendedBolus: recommendedBolus,
+            maximumBolus: maximumBolus,
+            supportedBolusVolumes: supportedBolusVolumes
         )
         current = context
-        currentInputs = inputs
+        currentLatestGlucoseDate = latestGlucoseDate
         return context
     }
 
-    /// Whether this request is a resend of the bolus being delivered. Answer it
-    /// with `.inProgress`: its result follows, and a failure could lead the user
-    /// to bolus again.
-    public func isDelivering(_ request: SmartwatchBolusRequest) -> Bool {
-        request.contextToken == deliveringToken
-    }
-
     /// Spends the context, so the same request cannot deliver twice, and marks
-    /// its bolus as being delivered. Call after the policy allowed the request.
-    public mutating func beginDelivery(of request: SmartwatchBolusRequest) {
+    /// a bolus as being delivered. Call after the policy allowed the request.
+    public mutating func beginDelivery() {
         current = nil
-        currentInputs = nil
-        deliveringToken = request.contextToken
+        currentLatestGlucoseDate = nil
+        isDelivering = true
     }
 
     /// Call when the pump has answered, whether or not the bolus was delivered.
     public mutating func endDelivery() {
-        deliveringToken = nil
+        isDelivering = false
     }
 }
 
@@ -327,12 +254,12 @@ public struct SmartwatchBolusContextIssuer {
 /// host still applies its own maximum carb entry.
 public struct SmartwatchCarbEntryPolicy {
     public struct Limits: Equatable, Sendable {
-        /// How fresh a request must be.
-        public var requestWindow: SmartwatchRequestWindow
+        /// How old a request may be, in seconds, as for a bolus.
+        public var requestWindow: ClosedRange<TimeInterval>
         /// Minimum time between carb entries from the watch.
         public var minimumInterval: TimeInterval
 
-        public init(requestWindow: SmartwatchRequestWindow, minimumInterval: TimeInterval) {
+        public init(requestWindow: ClosedRange<TimeInterval>, minimumInterval: TimeInterval) {
             self.requestWindow = requestWindow
             self.minimumInterval = minimumInterval
         }
@@ -356,22 +283,25 @@ public struct SmartwatchCarbEntryPolicy {
     /// The grams to add, or why not. A plugin takes its rate-limit slot (records the
     /// entry) before it asks the host to add the carbs, so a resend that arrives
     /// meanwhile is rate limited instead of added twice.
-    public func evaluate(_ request: SmartwatchCarbEntryRequest, now: Date) -> Result<Double, SmartwatchCarbEntryError> {
+    ///
+    /// - Parameter requestedAt: When the user confirmed the entry on the watch,
+    ///   taken from the watch; the entry is dated then.
+    public func evaluate(grams: Double, requestedAt: Date, now: Date) -> Result<Double, SmartwatchActionError> {
         guard isAllowed else {
             return .failure(.notAllowed)
         }
-        guard request.grams.isFinite, request.grams > 0 else {
+        guard grams.isFinite, grams > 0 else {
             return .failure(.invalidAmount)
         }
-        guard limits.requestWindow.contains(request.requestedAt, now: now) else {
+        guard limits.requestWindow.contains(now.timeIntervalSince(requestedAt)) else {
             return .failure(.expiredRequest)
         }
-        guard request.grams <= maximumGrams else {
+        guard grams <= maximumGrams else {
             return .failure(.exceedsMaximum)
         }
         if let lastEntry, now.timeIntervalSince(lastEntry) < limits.minimumInterval {
             return .failure(.rateLimited)
         }
-        return .success(request.grams)
+        return .success(grams)
     }
 }

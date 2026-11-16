@@ -89,23 +89,6 @@ public struct SmartwatchLoopState {
     }
 }
 
-/// The low and high glucose limits a host shows glucose against, for a watch's
-/// colours and its low and high graph lines. For display only, never for alarms:
-/// see `SmartwatchManagerDelegate.smartwatchManagerGlucoseDisplayLimits`.
-public struct SmartwatchGlucoseDisplayLimits: Equatable, Sendable {
-    public let low: LoopQuantity
-    public let high: LoopQuantity
-
-    /// `nil` unless `low` is below `high`.
-    public init?(low: LoopQuantity, high: LoopQuantity) {
-        guard low < high else {
-            return nil
-        }
-        self.low = low
-        self.high = high
-    }
-}
-
 /// Which glucose alert a host alert is. The host passes it with each alert it
 /// forwards (`watchAlertDidIssue`); `nil` means the alert isn't a glucose alert.
 ///
@@ -219,8 +202,9 @@ public protocol SmartwatchManagerDelegate: DeviceManagerDelegate {
     /// host doesn't, or stay quiet when it does.
     ///
     /// Loop returns the low and high of its active glucose alert profile; Trio the
-    /// low and high its statistics and home screen use.
-    func smartwatchManagerGlucoseDisplayLimits(_ manager: SmartwatchManager) async -> SmartwatchGlucoseDisplayLimits?
+    /// low and high its statistics and home screen use. A host returns `nil`
+    /// unless low is below high.
+    func smartwatchManagerGlucoseDisplayLimits(_ manager: SmartwatchManager) async -> ClosedRange<LoopQuantity>?
 
     /// The user's override presets (Loop's presets, Trio's overrides).
     func smartwatchManagerOverridePresets(_ manager: SmartwatchManager) async -> [TemporaryPreset]
@@ -259,7 +243,7 @@ public protocol SmartwatchManagerDelegate: DeviceManagerDelegate {
     /// Nothing is added or delivered.
     ///
     /// - Returns: Units, rounded to a supported volume; 0 when the host recommends none.
-    /// - Throws: `SmartwatchBolusError`: `.invalidAmount` for carbs that aren't a
+    /// - Throws: `SmartwatchActionError`: `.invalidAmount` for carbs that aren't a
     ///   valid entry, `.refusedByHost` when no recommendation can be computed.
     func smartwatchManager(_ manager: SmartwatchManager, recommendBolusForCarbs grams: Double, absorptionTime: TimeInterval?) async throws -> Double
 
@@ -275,9 +259,9 @@ public protocol SmartwatchManagerDelegate: DeviceManagerDelegate {
     /// - Returns: The units, once the pump accepted the bolus. It may still be
     ///   cancelled on the phone or the pump while it runs, and then delivers
     ///   less; the host doesn't report that to the plugin.
-    /// - Throws: `SmartwatchBolusError`. `.deliveryFailed` when the pump was asked
+    /// - Throws: `SmartwatchActionError`. `.deliveryFailed` when the pump was asked
     ///   and didn't accept it, including uncertain delivery. Every other error
-    ///   means nothing was sent to the pump: `.exceedsMaximumBolus` or
+    ///   means nothing was sent to the pump: `.exceedsMaximum` or
     ///   `.refusedByHost` for the host's limits, `.inProgress` while another
     ///   bolus is being delivered.
     func smartwatchManager(_ manager: SmartwatchManager, deliverBolus units: Double) async throws -> Double
@@ -290,26 +274,27 @@ public protocol SmartwatchManagerDelegate: DeviceManagerDelegate {
     ///
     /// - Parameter absorptionTime: `nil` for the host's default.
     /// - Returns: The grams added.
-    /// - Throws: `SmartwatchCarbEntryError`.
+    /// - Throws: `SmartwatchActionError`.
     func smartwatchManager(_ manager: SmartwatchManager, addCarbEntry grams: Double, absorptionTime: TimeInterval?, date: Date) async throws -> Double
 
-    /// Starts an override preset (by `TemporaryPreset.id`) or ends the running one.
-    /// Ending when none is running succeeds.
+    /// Starts the override preset with this `TemporaryPreset.id`, replacing any
+    /// running one, or ends the running one when `presetID` is `nil`. Ending when
+    /// none is running succeeds.
     ///
-    /// - Throws: `SmartwatchPresetError`.
-    func smartwatchManager(_ manager: SmartwatchManager, enactOverride action: SmartwatchPresetAction) async throws
+    /// - Throws: `SmartwatchActionError`.
+    func smartwatchManager(_ manager: SmartwatchManager, enactOverride presetID: String?) async throws
 
-    /// Starts a temp target preset or ends the running one, for hosts that have
-    /// temp targets. Others throw `.notAllowed` (the default).
+    /// Starts a temp target preset (`nil`: ends the running one), for hosts that
+    /// have temp targets. Others throw `.notAllowed` (the default).
     ///
-    /// - Throws: `SmartwatchPresetError`.
-    func smartwatchManager(_ manager: SmartwatchManager, enactTempTarget action: SmartwatchPresetAction) async throws
+    /// - Throws: `SmartwatchActionError`.
+    func smartwatchManager(_ manager: SmartwatchManager, enactTempTarget presetID: String?) async throws
 
     /// Mutes the host's alerts for `duration`, or ends the mute when it's 0. The
     /// host may round the duration up to one it offers or cap it at its maximum.
     ///
     /// - Returns: When the mute ends (now, when it was ended).
-    /// - Throws: `SmartwatchAlertMuteError`.
+    /// - Throws: `SmartwatchActionError`.
     func smartwatchManager(_ manager: SmartwatchManager, muteAlertsFor duration: TimeInterval) async throws -> Date
 }
 
@@ -317,34 +302,34 @@ public protocol SmartwatchManagerDelegate: DeviceManagerDelegate {
 public extension SmartwatchManagerDelegate {
     func smartwatchManagerTempTargetPresets(_ manager: SmartwatchManager) async -> [TemporaryPreset]? { nil }
     func smartwatchManagerActiveTempTarget(_ manager: SmartwatchManager) async -> TemporaryScheduleOverride? { nil }
-    func smartwatchManagerGlucoseDisplayLimits(_ manager: SmartwatchManager) async -> SmartwatchGlucoseDisplayLimits? { nil }
+    func smartwatchManagerGlucoseDisplayLimits(_ manager: SmartwatchManager) async -> ClosedRange<LoopQuantity>? { nil }
     func smartwatchManagerDefaultCarbAbsorptionTimes(_ manager: SmartwatchManager) async -> (fast: TimeInterval, medium: TimeInterval, slow: TimeInterval)? { nil }
 }
 
 /// Every action is refused unless the host implements it.
 public extension SmartwatchManagerDelegate {
     func smartwatchManager(_ manager: SmartwatchManager, recommendBolusForCarbs grams: Double, absorptionTime: TimeInterval?) async throws -> Double {
-        throw SmartwatchBolusError.notAllowed
+        throw SmartwatchActionError.notAllowed
     }
 
     func smartwatchManager(_ manager: SmartwatchManager, deliverBolus units: Double) async throws -> Double {
-        throw SmartwatchBolusError.notAllowed
+        throw SmartwatchActionError.notAllowed
     }
 
     func smartwatchManager(_ manager: SmartwatchManager, addCarbEntry grams: Double, absorptionTime: TimeInterval?, date: Date) async throws -> Double {
-        throw SmartwatchCarbEntryError.notAllowed
+        throw SmartwatchActionError.notAllowed
     }
 
-    func smartwatchManager(_ manager: SmartwatchManager, enactOverride action: SmartwatchPresetAction) async throws {
-        throw SmartwatchPresetError.notAllowed
+    func smartwatchManager(_ manager: SmartwatchManager, enactOverride presetID: String?) async throws {
+        throw SmartwatchActionError.notAllowed
     }
 
-    func smartwatchManager(_ manager: SmartwatchManager, enactTempTarget action: SmartwatchPresetAction) async throws {
-        throw SmartwatchPresetError.notAllowed
+    func smartwatchManager(_ manager: SmartwatchManager, enactTempTarget presetID: String?) async throws {
+        throw SmartwatchActionError.notAllowed
     }
 
     func smartwatchManager(_ manager: SmartwatchManager, muteAlertsFor duration: TimeInterval) async throws -> Date {
-        throw SmartwatchAlertMuteError.notAllowed
+        throw SmartwatchActionError.notAllowed
     }
 }
 
