@@ -9,8 +9,7 @@ import Foundation
 
 /// Why a request from the watch (`SmartwatchManagerDelegate`'s actions) was
 /// refused. Some cases come from the host's own checks, the rest from the
-/// plugin's checks (`SmartwatchRemoteActionPolicy.swift`), so a plugin reports
-/// both to the watch the same way.
+/// plugin's own checks, so a plugin reports both to the watch the same way.
 public enum SmartwatchActionError: Error, Equatable {
     /// The action is off in the plugin, or the host doesn't offer it.
     case notAllowed

@@ -138,8 +138,7 @@ public enum SmartwatchGlucoseAlertType: String, Equatable, Sendable {
 /// **Actions** (bolus, carbs, presets, mute) get the same checks the host applies
 /// to any request of that kind, such as its maximum bolus, and nothing
 /// watch-specific. Whether a watch may ask at all, and how fresh or frequent its
-/// requests must be, is the plugin's own setting and policy
-/// (`SmartwatchRemoteActionPolicy.swift` has shared checks). A host that doesn't
+/// requests must be, is the plugin's own setting and policy. A host that doesn't
 /// offer an action throws `.notAllowed` (the default).
 ///
 /// **Threads:** like every `DeviceManagerDelegate` (through `PersistedAlertStore`),
