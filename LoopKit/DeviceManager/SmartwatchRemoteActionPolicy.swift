@@ -8,51 +8,26 @@
 import Foundation
 
 // Checks a watch plugin can apply before it asks the host to bolus or add carbs:
-// how fresh a request is, whether it was made against what the watch was shown,
-// the recommendation cap, and how often. How fresh is a range of allowed request
+// how fresh a request and the newest glucose reading are, the maximum bolus and
+// the host's current recommendation, and how often. How fresh is a range of allowed request
 // ages in seconds (`ClosedRange<TimeInterval>`, as `-5...30`), which a plugin
 // also checks mute and preset requests against. The host doesn't call these; it applies
 // its own limits to every action (see `SmartwatchManagerDelegate`). There are no
 // default limits: each plugin states its own, so the numbers are visible where
 // they apply. Shared here so plugins with remote actions don't each copy them.
 
-/// What the watch was shown to pick a bolus: the recommendation, the maximum
-/// bolus and the pump's volumes at one moment.
-public struct SmartwatchBolusContext: Equatable, Sendable {
-    /// When this context was issued.
-    public var issuedAt: Date
-
-    /// The host's manual bolus recommendation, in units. `nil` when it
-    /// recommends none; watch boluses are then refused unless forced.
-    public var recommendedBolus: Double?
-
-    /// The user's maximum bolus, in units.
-    public var maximumBolus: Double?
-
-    /// Bolus volumes the pump can deliver, in units.
-    public var supportedBolusVolumes: [Double]
-
-    public init(issuedAt: Date, recommendedBolus: Double?, maximumBolus: Double?, supportedBolusVolumes: [Double]) {
-        self.issuedAt = issuedAt
-        self.recommendedBolus = recommendedBolus
-        self.maximumBolus = maximumBolus
-        self.supportedBolusVolumes = supportedBolusVolumes
-    }
-
-    /// The pump's smallest bolus step in units, for a watch that picks an amount.
-    public var bolusIncrement: Double? {
-        let steps = zip(supportedBolusVolumes.dropFirst(), supportedBolusVolumes).map { $0 - $1 }.filter { $0 > 0 }
-        return steps.min() ?? supportedBolusVolumes.first
-    }
-}
-
 /// Decides whether a bolus requested on the watch may be passed to the host.
 ///
 /// A plugin calls `evaluate` after it authenticated the request and before it
-/// calls the host's `deliverBolus`. It rejects requests that are not allowed, are
-/// old, come without a current context, exceed the maximum bolus or the current
-/// recommendation, or come too often. A forced request skips
-/// only the recommendation check. The host still applies its own limits.
+/// calls the host's `deliverBolus`, with the host's recommendation, maximum bolus
+/// and bolus volumes read for this request. It rejects requests that are not
+/// allowed, are old, come without recent glucose, exceed the maximum bolus or the
+/// recommendation, or come too often. A forced request skips only the
+/// recommendation check. The host still applies its own limits.
+///
+/// While a bolus it allowed is being delivered, a plugin answers further
+/// requests with `.inProgress`: their result follows, and a failure could lead
+/// the user to bolus again.
 public struct SmartwatchBolusPolicy {
     /// How strict the policy is. No defaults: a plugin states each one.
     public struct Limits: Equatable, Sendable {
@@ -61,8 +36,6 @@ public struct SmartwatchBolusPolicy {
         /// `-5...30`). Takes the date from the watch, not from when the command
         /// reached the phone, which can be much later.
         public var requestWindow: ClosedRange<TimeInterval>
-        /// A context older than this is rejected.
-        public var maximumContextAge: TimeInterval
         /// Every watch bolus, forced ones too, is refused when the newest glucose
         /// reading is older than this: on the watch the user may not see that
         /// glucose is missing.
@@ -77,14 +50,12 @@ public struct SmartwatchBolusPolicy {
 
         public init(
             requestWindow: ClosedRange<TimeInterval>,
-            maximumContextAge: TimeInterval,
             maximumGlucoseAge: TimeInterval,
             minimumInterval: TimeInterval,
             dailyLimitInMaximumBoluses: Double,
             capsAtRecommendation: Bool
         ) {
             self.requestWindow = requestWindow
-            self.maximumContextAge = maximumContextAge
             self.maximumGlucoseAge = maximumGlucoseAge
             self.minimumInterval = minimumInterval
             self.dailyLimitInMaximumBoluses = dailyLimitInMaximumBoluses
@@ -112,8 +83,12 @@ public struct SmartwatchBolusPolicy {
     public var limits: Limits
     /// Watch boluses are off unless the user turned them on in the plugin.
     public var isAllowed: Bool
-    /// The context the watch was last shown.
-    public var currentContext: SmartwatchBolusContext?
+    /// The host's manual bolus recommendation now, in units, read for this
+    /// request. `nil`, or 0 U or less, when it recommends none: watch boluses are
+    /// then refused unless forced.
+    public var recommendedBolus: Double?
+    /// The user's maximum bolus, in units; without one every watch bolus is refused.
+    public var maximumBolus: Double?
     /// When the newest glucose reading was taken, CGM or entered by the user.
     public var latestGlucoseDate: Date?
     /// Watch boluses delivered recently, for the rate limits.
@@ -124,14 +99,16 @@ public struct SmartwatchBolusPolicy {
     public init(
         limits: Limits,
         isAllowed: Bool,
-        currentContext: SmartwatchBolusContext?,
+        recommendedBolus: Double?,
+        maximumBolus: Double?,
         latestGlucoseDate: Date?,
         recentDeliveries: [Delivery],
         roundToSupportedVolume: @escaping (Double) -> Double
     ) {
         self.limits = limits
         self.isAllowed = isAllowed
-        self.currentContext = currentContext
+        self.recommendedBolus = recommendedBolus
+        self.maximumBolus = maximumBolus
         self.latestGlucoseDate = latestGlucoseDate
         self.recentDeliveries = recentDeliveries
         self.roundToSupportedVolume = roundToSupportedVolume
@@ -156,24 +133,18 @@ public struct SmartwatchBolusPolicy {
         guard let latestGlucoseDate, now.timeIntervalSince(latestGlucoseDate) <= limits.maximumGlucoseAge else {
             return .failure(.noRecentGlucose)
         }
-        guard let context = currentContext,
-              now.timeIntervalSince(context.issuedAt) <= limits.maximumContextAge
-        else {
-            return .failure(.staleContext)
-        }
-
         let units = roundToSupportedVolume(requestedUnits)
         guard units > 0 else {
             return .failure(.invalidAmount)
         }
-        guard let maximumBolus = context.maximumBolus, units <= maximumBolus + Self.tolerance else {
+        guard let maximumBolus, units <= maximumBolus + Self.tolerance else {
             return .failure(.exceedsMaximum)
         }
-        // The watch may bolus up to the recommendation it was shown, rounded
-        // the same way; never more, and nothing when the host recommends no bolus.
+        // The watch may bolus up to the host's recommendation, rounded the same
+        // way; never more, and nothing when the host recommends no bolus.
         // A forced request skips this check only.
         if !isForced, limits.capsAtRecommendation {
-            guard let recommended = context.recommendedBolus,
+            guard let recommended = recommendedBolus, recommended > 0,
                   units <= roundToSupportedVolume(recommended) + Self.tolerance
             else {
                 return .failure(.exceedsRecommendation)
@@ -189,63 +160,6 @@ public struct SmartwatchBolusPolicy {
             return .failure(.dailyLimitReached)
         }
         return .success(units)
-    }
-}
-
-/// Hands out the bolus context a plugin shows on the watch, and keeps the state
-/// the bolus checks need: a context is reused while its inputs are unchanged,
-/// spent when a bolus starts, and a request while a bolus is being delivered is
-/// recognised. Issue a context again after every glucose or loop change, from
-/// the host's recommendation, maximum bolus and bolus volumes, so a bolus is
-/// checked against the current state. Keep one per manager and use it only from
-/// one actor.
-public struct SmartwatchBolusContextIssuer {
-    /// The context last handed out, until a bolus spends it.
-    public private(set) var current: SmartwatchBolusContext?
-    /// The newest glucose reading when `current` was issued, so a new reading
-    /// always gives a new context.
-    private var currentLatestGlucoseDate: Date?
-    /// Whether a bolus is being delivered: from `beginDelivery()` until
-    /// `endDelivery()`. Answer a request meanwhile with `.inProgress`: its result
-    /// follows, and a failure could lead the user to bolus again.
-    public private(set) var isDelivering = false
-
-    public init() {}
-
-    /// The context to send: the current one while its inputs are unchanged,
-    /// otherwise a new one issued `now`. A recommendation of 0 U or less
-    /// counts as none.
-    public mutating func context(recommendedBolus: Double?, maximumBolus: Double?, supportedBolusVolumes: [Double], latestGlucoseDate: Date?, now: Date) -> SmartwatchBolusContext {
-        let recommendedBolus = recommendedBolus.flatMap { $0 > 0 ? $0 : nil }
-        if let current,
-           current.recommendedBolus == recommendedBolus,
-           current.maximumBolus == maximumBolus,
-           current.supportedBolusVolumes == supportedBolusVolumes,
-           currentLatestGlucoseDate == latestGlucoseDate {
-            return current
-        }
-        let context = SmartwatchBolusContext(
-            issuedAt: now,
-            recommendedBolus: recommendedBolus,
-            maximumBolus: maximumBolus,
-            supportedBolusVolumes: supportedBolusVolumes
-        )
-        current = context
-        currentLatestGlucoseDate = latestGlucoseDate
-        return context
-    }
-
-    /// Spends the context, so the same request cannot deliver twice, and marks
-    /// a bolus as being delivered. Call after the policy allowed the request.
-    public mutating func beginDelivery() {
-        current = nil
-        currentLatestGlucoseDate = nil
-        isDelivering = true
-    }
-
-    /// Call when the pump has answered, whether or not the bolus was delivered.
-    public mutating func endDelivery() {
-        isDelivering = false
     }
 }
 

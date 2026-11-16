@@ -22,8 +22,6 @@ public enum SmartwatchActionError: Error, Equatable {
     case exceedsMaximum
     /// A bolus above the recommendation the watch was shown.
     case exceedsRecommendation
-    /// A bolus requested against an older state than the current one.
-    case staleContext
     /// No recent glucose reading, as when the CGM is unavailable.
     case noRecentGlucose
     /// Too soon after the previous request of this kind.

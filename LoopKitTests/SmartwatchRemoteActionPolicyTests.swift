@@ -16,17 +16,12 @@ final class SmartwatchRemoteActionPolicyTests: XCTestCase {
     private static let window: ClosedRange<TimeInterval> = -5...30
     private static let bolusLimits = SmartwatchBolusPolicy.Limits(
         requestWindow: window,
-        maximumContextAge: 15 * 60,
         maximumGlucoseAge: 15 * 60,
         minimumInterval: 5 * 60,
         dailyLimitInMaximumBoluses: 3,
         capsAtRecommendation: true
     )
     private static let carbLimits = SmartwatchCarbEntryPolicy.Limits(requestWindow: window, minimumInterval: 5 * 60)
-
-    private func context(recommended: Double? = 2.0, maximum: Double? = 5.0, issuedAgo: TimeInterval = 60) -> SmartwatchBolusContext {
-        SmartwatchBolusContext(issuedAt: now.addingTimeInterval(-issuedAgo), recommendedBolus: recommended, maximumBolus: maximum, supportedBolusVolumes: [])
-    }
 
     /// 0.05 U steps, built like the pumps build theirs. Dividing by 0.05 instead
     /// would turn 1.15 into 1.10 (1.15 / 0.05 is 22.999… in floating point).
@@ -36,14 +31,16 @@ final class SmartwatchRemoteActionPolicyTests: XCTestCase {
     private func policy(
         limits: SmartwatchBolusPolicy.Limits = bolusLimits,
         allowed: Bool = true,
-        context: SmartwatchBolusContext? = nil,
+        recommended: Double? = 2.0,
+        maximum: Double? = 5.0,
         glucoseAgo: TimeInterval? = 5 * 60,
         deliveries: [SmartwatchBolusPolicy.Delivery] = []
     ) -> SmartwatchBolusPolicy {
         SmartwatchBolusPolicy(
             limits: limits,
             isAllowed: allowed,
-            currentContext: context ?? self.context(),
+            recommendedBolus: recommended,
+            maximumBolus: maximum,
             latestGlucoseDate: glucoseAgo.map { now.addingTimeInterval(-$0) },
             recentDeliveries: deliveries,
             roundToSupportedVolume: { units in Self.supportedVolumes.last { $0 <= units } ?? 0 }
@@ -91,27 +88,11 @@ final class SmartwatchRemoteActionPolicyTests: XCTestCase {
         XCTAssertNotNil(try? policy().evaluate(request(1, confirmedAgo: 30), now: now).get())
     }
 
-    func testRejectsAStaleOrMissingContext() {
-        XCTAssertEqual(policy(context: context(issuedAgo: 16 * 60)).evaluate(request(1), now: now), .failure(.staleContext))
-        let noContext = SmartwatchBolusPolicy(limits: Self.bolusLimits, isAllowed: true, currentContext: nil, latestGlucoseDate: now, recentDeliveries: [], roundToSupportedVolume: { $0 })
-        XCTAssertEqual(noContext.evaluate(request(1), now: now), .failure(.staleContext))
-    }
-
     func testRefusesWithoutRecentGlucoseEvenForced() {
         XCTAssertEqual(policy(glucoseAgo: nil).evaluate(request(1), now: now), .failure(.noRecentGlucose))
         XCTAssertEqual(policy(glucoseAgo: 16 * 60).evaluate(request(1), now: now), .failure(.noRecentGlucose))
         XCTAssertEqual(policy(glucoseAgo: 16 * 60).evaluate(request(1, forced: true), now: now), .failure(.noRecentGlucose))
         XCTAssertNotNil(try? policy(glucoseAgo: 15 * 60).evaluate(request(1), now: now).get())
-    }
-
-    func testBolusIncrementIsTheSmallestStep() {
-        func increment(_ volumes: [Double]) -> Double? {
-            SmartwatchBolusContext(issuedAt: now, recommendedBolus: nil, maximumBolus: nil, supportedBolusVolumes: volumes).bolusIncrement
-        }
-        XCTAssertEqual(increment([0.05, 0.1, 0.15]) ?? 0, 0.05, accuracy: 0.0001)
-        XCTAssertEqual(increment([0.1, 0.2, 0.25, 0.3]) ?? 0, 0.05, accuracy: 0.0001)
-        XCTAssertEqual(increment([0.1]), 0.1)
-        XCTAssertNil(increment([]))
     }
 
     func testAWiderRequestWindowAcceptsOlderRequests() {
@@ -124,32 +105,38 @@ final class SmartwatchRemoteActionPolicyTests: XCTestCase {
     func testWithoutTheRecommendationCapTheMaximumBolusStillApplies() {
         var limits = Self.bolusLimits
         limits.capsAtRecommendation = false
-        let policy = policy(limits: limits, context: context(recommended: 1, maximum: 5))
+        let policy = policy(limits: limits, recommended: 1, maximum: 5)
         XCTAssertEqual(try? policy.evaluate(request(4), now: now).get(), 4)
         XCTAssertEqual(policy.evaluate(request(5.5), now: now), .failure(.exceedsMaximum))
     }
 
     func testRejectsMoreThanTheMaximumBolus() {
-        let policy = policy(context: context(recommended: 8, maximum: 5))
+        let policy = policy(recommended: 8, maximum: 5)
         XCTAssertEqual(policy.evaluate(request(5.5), now: now), .failure(.exceedsMaximum))
-        let noMaximum = self.policy(context: context(maximum: nil))
+        let noMaximum = self.policy(maximum: nil)
         XCTAssertEqual(noMaximum.evaluate(request(1), now: now), .failure(.exceedsMaximum))
     }
 
     func testRejectsMoreThanTheRecommendation() {
         XCTAssertEqual(policy().evaluate(request(2.1), now: now), .failure(.exceedsRecommendation))
-        let noRecommendation = policy(context: context(recommended: nil))
+        let noRecommendation = policy(recommended: nil)
         XCTAssertEqual(noRecommendation.evaluate(request(0.5), now: now), .failure(.exceedsRecommendation))
+    }
+
+    func testNoPositiveRecommendationCountsAsNone() {
+        XCTAssertEqual(policy(recommended: 0).evaluate(request(0.1), now: now), .failure(.exceedsRecommendation))
+        XCTAssertEqual(policy(recommended: -0.5).evaluate(request(0.1), now: now), .failure(.exceedsRecommendation))
+        XCTAssertEqual(try? policy(recommended: -0.5).evaluate(request(0.1, forced: true), now: now).get(), 0.1)
     }
 
     // A forced request skips only the recommendation: the maximum bolus, the
     // permission and the rate limits still apply.
     func testForcedRequestSkipsOnlyTheRecommendation() {
-        let noRecommendation = policy(context: context(recommended: nil))
+        let noRecommendation = policy(recommended: nil)
         XCTAssertEqual(try? noRecommendation.evaluate(request(0.1, forced: true), now: now).get(), 0.1)
         XCTAssertEqual(noRecommendation.evaluate(request(100, forced: true), now: now), .failure(.exceedsMaximum))
         XCTAssertEqual(policy(allowed: false).evaluate(request(0.1, forced: true), now: now), .failure(.notAllowed))
-        let recent = policy(context: context(recommended: nil), deliveries: [.init(date: now.addingTimeInterval(-60), units: 0.1)])
+        let recent = policy(recommended: nil, deliveries: [.init(date: now.addingTimeInterval(-60), units: 0.1)])
         XCTAssertEqual(recent.evaluate(request(0.1, forced: true), now: now), .failure(.rateLimited))
     }
 
@@ -180,45 +167,14 @@ final class SmartwatchRemoteActionPolicyTests: XCTestCase {
         let strict = SmartwatchBolusPolicy(
             limits: limits,
             isAllowed: true,
-            currentContext: context(),
+            recommendedBolus: 2,
+            maximumBolus: 5,
             latestGlucoseDate: now,
             recentDeliveries: [.init(date: now.addingTimeInterval(-30 * 60), units: 0.5)],
             roundToSupportedVolume: { $0 }
         )
         XCTAssertEqual(strict.evaluate(request(1, confirmedAgo: 15), now: now), .failure(.expiredRequest))
         XCTAssertEqual(strict.evaluate(request(1), now: now), .failure(.rateLimited))
-    }
-
-    // MARK: - Bolus context issuer
-
-    private func issue(_ issuer: inout SmartwatchBolusContextIssuer, recommended: Double? = 2, glucoseDate: Date? = nil, at date: Date? = nil) -> SmartwatchBolusContext {
-        issuer.context(recommendedBolus: recommended, maximumBolus: 5, supportedBolusVolumes: [0.05], latestGlucoseDate: glucoseDate ?? now, now: date ?? now)
-    }
-
-    func testIssuerKeepsTheContextWhileTheInputsAreUnchanged() {
-        var issuer = SmartwatchBolusContextIssuer()
-        let first = issue(&issuer)
-        XCTAssertEqual(issue(&issuer, at: now.addingTimeInterval(60)), first, "issued when the inputs were first seen")
-        XCTAssertEqual(issue(&issuer, recommended: 1, at: now.addingTimeInterval(60)).issuedAt, now.addingTimeInterval(60))
-        XCTAssertEqual(issue(&issuer, recommended: 1, glucoseDate: now.addingTimeInterval(300), at: now.addingTimeInterval(120)).issuedAt, now.addingTimeInterval(120), "a new reading gives a new context")
-    }
-
-    func testIssuerTreatsNoPositiveRecommendationAsNone() {
-        var issuer = SmartwatchBolusContextIssuer()
-        XCTAssertNil(issue(&issuer, recommended: 0).recommendedBolus)
-        XCTAssertNil(issue(&issuer, recommended: -0.5).recommendedBolus)
-    }
-
-    func testABolusSpendsTheContextAndAResendIsInProgress() {
-        var issuer = SmartwatchBolusContextIssuer()
-        _ = issue(&issuer)
-        XCTAssertFalse(issuer.isDelivering)
-        issuer.beginDelivery()
-        XCTAssertNil(issuer.current, "Spent: the same request can't pass the policy again")
-        XCTAssertTrue(issuer.isDelivering)
-        issuer.endDelivery()
-        XCTAssertFalse(issuer.isDelivering)
-        XCTAssertEqual(issue(&issuer, at: now.addingTimeInterval(60)).issuedAt, now.addingTimeInterval(60), "A new context after a bolus")
     }
 
     func testDeliveriesRoundTripAsJSON() throws {
@@ -268,7 +224,8 @@ final class SmartwatchRemoteActionPolicyTests: XCTestCase {
         let bolus = SmartwatchBolusPolicy(
             limits: bolusLimits,
             isAllowed: true,
-            currentContext: context(),
+            recommendedBolus: 2,
+            maximumBolus: 5,
             latestGlucoseDate: now,
             recentDeliveries: [],
             roundToSupportedVolume: { $0 }
