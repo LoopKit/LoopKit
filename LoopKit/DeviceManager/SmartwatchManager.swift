@@ -198,7 +198,10 @@ public protocol SmartwatchManagerDelegate: DeviceManagerDelegate {
     /// The temp basal running now; `nil` while none is.
     func smartwatchManagerTempBasal(_ manager: SmartwatchManager) async -> DoseEntry?
 
-    /// The insulin sensitivity now, including any active override.
+    /// The insulin sensitivity the host's dosing uses now (with any override, and
+    /// any automatic adjustment such as autosens), in glucose per insulin unit:
+    /// `.milligramsPerDeciliterPerInternationalUnit` or
+    /// `.millimolesPerLiterPerInternationalUnit`; `nil` when unknown.
     func smartwatchManagerInsulinSensitivity(_ manager: SmartwatchManager) async -> LoopQuantity?
 
     /// The correction range in effect now, including any override or temp target.
