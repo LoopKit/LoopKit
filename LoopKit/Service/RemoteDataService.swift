@@ -120,6 +120,19 @@ public protocol RemoteDataService: Service {
      */
     func uploadCgmEventData(_ stored: [PersistedCgmEvent]) async throws
 
+    var exerciseDataLimit: Int? { get }
+
+    /// Called only when the user has turned on exercise data sharing. Deleted workouts are identified by their HealthKit UUID.
+    func uploadExerciseData(added: [StoredWorkout], deleted: [UUID]) async throws
+
+    var healthSampleDataLimit: Int? { get }
+
+    /// Called only when the user has turned on exercise data sharing, once per kind with changes.
+    func uploadHealthSamples(kind: StoredHealthSample.Kind, added: [StoredHealthSample], deleted: [UUID]) async throws
+
+    /// What this service does with exercise data, shown with the exercise data setting. Nil if it doesn't use it.
+    var exerciseDataDescription: String? { get }
+
     /**
      Handle a push notification
      - Parameter notification: The push notification dictionary
@@ -135,4 +148,13 @@ public extension RemoteDataService {
     var glucoseDataLimit: Int? { return nil }
     var pumpEventDataLimit: Int? { return nil }
     var settingsDataLimit: Int? { return nil }
+    var exerciseDataLimit: Int? { return nil }
+
+    func uploadExerciseData(added: [StoredWorkout], deleted: [UUID]) async throws {}
+
+    var healthSampleDataLimit: Int? { return nil }
+
+    func uploadHealthSamples(kind: StoredHealthSample.Kind, added: [StoredHealthSample], deleted: [UUID]) async throws {}
+
+    var exerciseDataDescription: String? { return nil }
 }
