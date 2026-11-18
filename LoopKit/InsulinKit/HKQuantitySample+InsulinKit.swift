@@ -8,7 +8,10 @@
 import HealthKit
 
 
-/// Defines the id of the dosing decision associated with the dose
+/// Defines the id Loop gave the dose when it sent it to the pump
+let MetadataKeyDoseId = "com.loopkit.InsulinKit.MetadataKeyDoseId"
+
+/// The key doseId was written under before it replaced decisionId
 let MetadataKeyDecisionId = "com.loopkit.InsulinKit.MetadataKeyDecisionId"
 
 /// Defines the scheduled basal insulin rate during the time of the basal delivery sample
@@ -92,8 +95,8 @@ extension HKQuantitySample {
             metadata[MetadataKeyAutomaticallyIssued] = automatic
         }
         
-        if let decisionId = dose.decisionId {
-            metadata[MetadataKeyDecisionId] = decisionId.uuidString
+        if let doseId = dose.doseId {
+            metadata[MetadataKeyDoseId] = doseId.uuidString
         }
 
         self.init(
@@ -157,8 +160,8 @@ extension HKQuantitySample {
         return InsulinType(healthKitRepresentation: rawType)
     }
     
-    var decisionId: UUID? {
-        UUID(uuidString: [MetadataKeyDecisionId] as? String ?? "")
+    var doseId: UUID? {
+        UUID(uuidString: metadata?[MetadataKeyDoseId] as? String ?? metadata?[MetadataKeyDecisionId] as? String ?? "")
     }
 
     /// Returns a DoseEntry representation of the sample.
@@ -222,7 +225,7 @@ extension HKQuantitySample {
             endDate: endDate,
             value: programmedValue,
             unit: unit,
-            decisionId: decisionId,
+            doseId: doseId,
             deliveredUnits: deliveredUnits,
             description: nil,
             syncIdentifier: syncIdentifier,

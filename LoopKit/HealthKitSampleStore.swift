@@ -181,7 +181,29 @@ public class HealthKitSampleStore {
         set {
             mutateQueryState { state in
                 state.anchorState = .initializationComplete(newValue)
-                state.authorizationDetermined = !authorizationRequired
+            }
+            checkAuthorizationIfNeeded()
+        }
+    }
+
+    /// Runs the authorization checks, which can block for a long time, one at a time and off the caller's thread.
+    private let authorizationQueue = DispatchQueue(label: "com.loopkit.HealthKitSampleStore.authorizationQueue", qos: .utility)
+
+    /// Records that authorization is determined once HealthKit reports it, without making the caller wait.
+    ///
+    /// `authorizationStatus(for:)` is a synchronous call into healthd, and healthd holds its reply until the Health
+    /// database is available, which can take indefinitely long. The store initializers that app launch waits on
+    /// set the initial anchor, so they must not make that call themselves.
+    private func checkAuthorizationIfNeeded() {
+        guard !queryState.authorizationDetermined else {
+            return
+        }
+        authorizationQueue.async { [weak self] in
+            guard let self, !self.authorizationRequired else {
+                return
+            }
+            self.mutateQueryState { state in
+                state.authorizationDetermined = true
             }
         }
     }

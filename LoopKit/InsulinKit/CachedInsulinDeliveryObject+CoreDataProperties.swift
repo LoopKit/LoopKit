@@ -36,5 +36,6 @@ extension CachedInsulinDeliveryObject {
     @NSManaged public var isMutable: Bool
     @NSManaged public var modificationCounter: Int64
     @NSManaged public var wasProgrammedByPumpUI: Bool
-    @NSManaged public var decisionId: UUID?
+    @NSManaged public var doseId: UUID?
+    @NSManaged public var metadata: Data?
 }

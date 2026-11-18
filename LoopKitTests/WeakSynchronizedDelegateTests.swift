@@ -18,84 +18,91 @@ private class TestDelegateImpl: TestDelegate {
     func identify() -> Int { return id }
 }
 
+private actor Recorder {
+    private(set) var entries: [Int] = []
+    func append(_ entry: Int) { entries.append(entry) }
+}
+
 class WeakSynchronizedDelegateTests: XCTestCase {
 
-    private var delegateQueue: DispatchQueue!
-    private var other: DispatchQueue!
-    private var third: DispatchQueue!
+    func testNotifyRunsBlocksInOrderWhenAnEarlierBlockSuspends() async {
+        let subject = WeakSynchronizedDelegate<TestDelegate>()
+        let recorder = Recorder()
 
-    override func setUp() {
-        super.setUp()
-        delegateQueue = DispatchQueue(label: "WeakSynchronizedDelegateTests.delegate")
-        other = DispatchQueue(label: "WeakSynchronizedDelegateTests.other")
-        third = DispatchQueue(label: "WeakSynchronizedDelegateTests.third")
+        subject.notify { _ in
+            try? await Task.sleep(nanoseconds: 50_000_000)
+            await recorder.append(1)
+        }
+        subject.notify { _ in
+            await recorder.append(2)
+        }
+        await subject.notify { _ in
+            await recorder.append(3)
+        }.value
+
+        let entries = await recorder.entries
+        XCTAssertEqual([1, 2, 3], entries)
     }
 
-    func testCallRunsBlockOnDelegateQueueWithDelegate() {
-        let subject = WeakSynchronizedDelegate<TestDelegate>(queue: delegateQueue)
+    func testNotifyPassesTheDelegate() async {
+        let subject = WeakSynchronizedDelegate<TestDelegate>()
         let delegate = TestDelegateImpl(id: 42)
         subject.delegate = delegate
+        let recorder = Recorder()
 
-        let result = subject.call { $0?.identify() }
+        await subject.notify { delegate in
+            await recorder.append(delegate?.identify() ?? 0)
+        }.value
 
-        XCTAssertEqual(42, result)
+        let entries = await recorder.entries
+        XCTAssertEqual([42], entries)
+        withExtendedLifetime(delegate) {}
     }
 
-    func testCallWithNoDelegate() {
-        let subject = WeakSynchronizedDelegate<TestDelegate>(queue: delegateQueue)
+    func testCallDoesNotWaitForPendingNotifications() async {
+        let subject = WeakSynchronizedDelegate<TestDelegate>()
+        let delegate = TestDelegateImpl(id: 7)
+        subject.delegate = delegate
+        let recorder = Recorder()
 
-        XCTAssertNil(subject.call { $0?.identify() })
+        let pending = subject.notify { _ in
+            try? await Task.sleep(nanoseconds: 200_000_000)
+            await recorder.append(1)
+        }
+
+        let answer = await subject.call { $0?.identify() }
+        let entriesWhenCallReturned = await recorder.entries
+
+        XCTAssertEqual(7, answer)
+        XCTAssertEqual([], entriesWhenCallReturned)
+        await pending.value
+        withExtendedLifetime(delegate) {}
     }
 
-    /// `call` must not hold the lock while the block runs.
-    ///
-    /// The block waits for another thread to take the lock, so if `call` is still holding it the
-    /// wait times out — it cannot pass by simply outlasting a short block.
-    func testCallDoesNotHoldLockDuringBlock() {
-        let subject = WeakSynchronizedDelegate<TestDelegate>(queue: delegateQueue)
-        subject.delegate = TestDelegateImpl(id: 1)
+    func testCallFromInsideNotifyDoesNotDeadlock() async {
+        let subject = WeakSynchronizedDelegate<TestDelegate>()
+        let delegate = TestDelegateImpl(id: 3)
+        subject.delegate = delegate
+        let recorder = Recorder()
 
-        let lockTaken = DispatchSemaphore(value: 0)
-        let finished = expectation(description: "call completes")
+        await subject.notify { _ in
+            let answer = await subject.call { $0?.identify() }
+            await recorder.append(answer ?? 0)
+        }.value
 
-        other.async {
-            subject.call { _ in
-                self.third.async {
-                    // Any other member takes the same lock.
-                    _ = subject.queue
-                    lockTaken.signal()
-                }
-                XCTAssertEqual(.success, lockTaken.wait(timeout: .now() + 1),
-                               "the lock was still held while the block ran")
-            }
-            finished.fulfill()
-        }
-
-        wait(for: [finished], timeout: 5)
+        let entries = await recorder.entries
+        XCTAssertEqual([3], entries)
+        withExtendedLifetime(delegate) {}
     }
 
-    /// The deadlock as it actually presented: work already running on the delegate queue reaches
-    /// back into the delegate (taking the lock) while another thread is in `call`.
-    func testCallDoesNotDeadlockAgainstBusyDelegateQueue() {
-        let subject = WeakSynchronizedDelegate<TestDelegate>(queue: delegateQueue)
-        subject.delegate = TestDelegateImpl(id: 1)
+    func testDelegateIsHeldWeakly() {
+        let subject = WeakSynchronizedDelegate<TestDelegate>()
+        var delegate: TestDelegateImpl? = TestDelegateImpl(id: 1)
+        subject.delegate = delegate
+        XCTAssertNotNil(subject.delegate)
 
-        let started = DispatchSemaphore(value: 0)
-        let finished = expectation(description: "call completes")
+        delegate = nil
 
-        // Occupy the delegate queue with a block that needs the lock, as `notify` would.
-        delegateQueue.async {
-            started.signal()
-            Thread.sleep(forTimeInterval: 0.1)
-            _ = subject.delegate
-        }
-
-        started.wait()
-        other.async {
-            _ = subject.call { $0?.identify() }
-            finished.fulfill()
-        }
-
-        wait(for: [finished], timeout: 2)
+        XCTAssertNil(subject.delegate)
     }
 }

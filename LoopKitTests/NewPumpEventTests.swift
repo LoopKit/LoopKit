@@ -17,7 +17,7 @@ class NewPumpEventRawRepresentableTests: XCTestCase {
                                                     endDate: Date().addingTimeInterval(.minutes(30)),
                                                     value: 1.5,
                                                     unit: .unitsPerHour,
-                                                    decisionId: nil,
+                                                    doseId: nil,
                                                     deliveredUnits: 0.5,
                                                     description: "Test Dose Entry",
                                                     syncIdentifier: UUID().uuidString,

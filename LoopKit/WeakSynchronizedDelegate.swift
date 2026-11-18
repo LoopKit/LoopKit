@@ -7,15 +7,15 @@
 
 import Foundation
 
-public class WeakSynchronizedDelegate<Delegate> {
+/// Holds a device manager's delegate weakly, and delivers the manager's calls to it one at a time, in the
+/// order they were made.
+public final class WeakSynchronizedDelegate<Delegate>: @unchecked Sendable {
 
     private let lock = UnfairLock()
     private weak var _delegate: AnyObject?
-    private var _queue: DispatchQueue
+    private var last: Task<Void, Never>?
 
-    public init(queue: DispatchQueue = .main) {
-        _queue = queue
-    }
+    public init() {}
 
     public var delegate: Delegate? {
         get {
@@ -30,58 +30,32 @@ public class WeakSynchronizedDelegate<Delegate> {
         }
     }
 
-    public var queue: DispatchQueue! {
-        get {
-            return lock.withLock {
-                return _queue
+    /// Runs `block` once every block passed to `notify` before it has finished. Await the returned task to
+    /// wait for the block itself.
+    @discardableResult
+    public func notify(_ block: @escaping (_ delegate: Delegate?) async -> Void) -> Task<Void, Never> {
+        return lock.withLock {
+            let previous = last
+            let delegate = _delegate as? Delegate
+            let task = Task {
+                await previous?.value
+                await block(delegate)
             }
-        }
-        set {
-            lock.withLock {
-                _queue = newValue ?? .main
-            }
-        }
-    }
-    
-    public func notify(_ block: @escaping (_ delegate: Delegate?) -> Void) {
-        var delegate: Delegate?
-        var queue: DispatchQueue!
-
-        lock.withLock {
-            delegate = _delegate as? Delegate
-            queue = _queue
-        }
-
-        queue.async {
-            block(delegate)
-        }
-    }
-    
-    public func notifyDelayed(by interval: TimeInterval, _ block: @escaping (_ delegate: Delegate?) -> Void) {
-        var delegate: Delegate?
-        var queue: DispatchQueue!
-
-        lock.withLock {
-            delegate = _delegate as? Delegate
-            queue = _queue
-        }
-
-        queue.asyncAfter(deadline: .now() + interval) {
-            block(delegate)
+            last = task
+            return task
         }
     }
 
-    public func call<ReturnType>(_ block: (_ delegate: Delegate?) -> ReturnType) -> ReturnType {
-        var delegate: Delegate?
-        var queue: DispatchQueue!
-
-        lock.withLock {
-            delegate = _delegate as? Delegate
-            queue = _queue
+    public func notifyDelayed(by interval: TimeInterval, _ block: @escaping (_ delegate: Delegate?) async -> Void) {
+        Task {
+            try? await Task.sleep(nanoseconds: UInt64(max(0, interval) * 1_000_000_000))
+            notify(block)
         }
+    }
 
-        return queue.sync {
-            block(delegate)
-        }
+    /// Runs `block` now, without waiting for earlier notifications, and returns its result. For questions
+    /// the manager asks its delegate.
+    public func call<ReturnType>(_ block: (_ delegate: Delegate?) async -> ReturnType) async -> ReturnType {
+        return await block(delegate)
     }
 }
