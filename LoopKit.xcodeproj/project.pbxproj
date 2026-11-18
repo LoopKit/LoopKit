@@ -89,6 +89,8 @@
 		A2801C31E4C6618EB772C9B3 /* CarbEntryUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D57DB62BC9A753D5BEAB967 /* CarbEntryUpdate.swift */; };
 		4322B77A202FA2790002837D /* NSUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4346D1FB1C79481E00ABAFE3 /* NSUserDefaults.swift */; };
 		4322B77B202FA2790002837D /* StoredCarbEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FE4E1C7291BD0073BE78 /* StoredCarbEntry.swift */; };
+		C0A1B2C3D4E5F60718293A03 /* ComponentReplacement.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A1B2C3D4E5F60718293A02 /* ComponentReplacement.swift */; };
+		C0A1B2C3D4E5F60718293A04 /* ComponentReplacement.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A1B2C3D4E5F60718293A02 /* ComponentReplacement.swift */; };
 		4322B77D202FA2AF0002837D /* NewPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4302F4EA1D50670500F0FCAF /* NewPumpEvent.swift */; };
 		4322B77E202FA2AF0002837D /* PersistedPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4302F4EC1D5068CE00F0FCAF /* PersistedPumpEvent.swift */; };
 		4322B77F202FA2AF0002837D /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FEE21C7294D50073BE78 /* PersistenceController.swift */; };
@@ -1149,6 +1151,7 @@
 		4301582A1C7ECCEF00B64B63 /* LoopKitExample.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = LoopKitExample.entitlements; sourceTree = "<group>"; };
 		4301582C1C7ECD7A00B64B63 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		4302F4E81D5066F400F0FCAF /* ReservoirValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReservoirValue.swift; sourceTree = "<group>"; };
+		C0A1B2C3D4E5F60718293A02 /* ComponentReplacement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentReplacement.swift; sourceTree = "<group>"; };
 		4302F4EA1D50670500F0FCAF /* NewPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewPumpEvent.swift; sourceTree = "<group>"; };
 		4302F4EC1D5068CE00F0FCAF /* PersistedPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistedPumpEvent.swift; sourceTree = "<group>"; };
 		43177D071D37306D0006E908 /* GlucoseRangeOverrideTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GlucoseRangeOverrideTableViewCell.xib; sourceTree = "<group>"; };
@@ -1299,6 +1302,7 @@
 		840A2D7D2E39635B00D4E245 /* Modelv6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Modelv6.xcdatamodel; sourceTree = "<group>"; };
 		E77A7883792945C59E39CEC0 /* Modelv7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Modelv7.xcdatamodel; sourceTree = "<group>"; };
 		E204F97E07D6426EAB37F0F3 /* Modelv8.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Modelv8.xcdatamodel; sourceTree = "<group>"; };
+		C0A1B2C3D4E5F60718293A01 /* Modelv10.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Modelv10.xcdatamodel; sourceTree = "<group>"; };
 		A7D05E9B1C2F4E8D9A3B6C01 /* Modelv9.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Modelv9.xcdatamodel; sourceTree = "<group>"; };
 		840A2D812E39649500D4E245 /* ModelMappingv4v5Tov6Policy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelMappingv4v5Tov6Policy.swift; sourceTree = "<group>"; };
 		840A2DD22E399BD400D4E245 /* Modelv5ToModelv6.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Modelv5ToModelv6.xcmappingmodel; sourceTree = "<group>"; };
@@ -2601,6 +2605,7 @@
 				438207701F2AE9A300886C13 /* InsulinDeliveryStore.swift */,
 				43D8FEDF1C7294D50073BE78 /* InsulinMath.swift */,
 				E9F54F5D25802D5E0034795E /* InsulinType.swift */,
+				C0A1B2C3D4E5F60718293A02 /* ComponentReplacement.swift */,
 				4302F4EA1D50670500F0FCAF /* NewPumpEvent.swift */,
 				4302F4EC1D5068CE00F0FCAF /* PersistedPumpEvent.swift */,
 				A93CA898278D08CC003B5A01 /* PumpAlarmType.swift */,
@@ -4026,6 +4031,7 @@
 				C187338D29B9486200519CDF /* TimeInterval.swift in Sources */,
 				437AFEED2036A156008C4892 /* CachedCarbObject+CoreDataClass.swift in Sources */,
 				43D8FDF71C7290350073BE78 /* DailyValueSchedule.swift in Sources */,
+				C0A1B2C3D4E5F60718293A03 /* ComponentReplacement.swift in Sources */,
 				4322B77D202FA2AF0002837D /* NewPumpEvent.swift in Sources */,
 				C1B8E6E52A1BB14E00AF38D0 /* HealthKitSampleStore.swift in Sources */,
 				434113AA20F171CB00D05747 /* CachedInsulinDeliveryObject+CoreDataClass.swift in Sources */,
@@ -4410,6 +4416,7 @@
 				A9E6758D22713F4700E25293 /* CachedCarbObject+CoreDataClass.swift in Sources */,
 				1DD9CE9A26B8CF4A008B4A46 /* HKDevice+Encodable.swift in Sources */,
 				A9E6758E22713F4700E25293 /* DailyValueSchedule.swift in Sources */,
+				C0A1B2C3D4E5F60718293A04 /* ComponentReplacement.swift in Sources */,
 				A9E6758F22713F4700E25293 /* NewPumpEvent.swift in Sources */,
 				A9E6759022713F4700E25293 /* CachedInsulinDeliveryObject+CoreDataClass.swift in Sources */,
 				C1CEBFD429BA9D57007FD8A3 /* HKUnit.swift in Sources */,
@@ -5791,6 +5798,7 @@
 		B41E10512C3D314600E186F7 /* Model.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				C0A1B2C3D4E5F60718293A01 /* Modelv10.xcdatamodel */,
 				A7D05E9B1C2F4E8D9A3B6C01 /* Modelv9.xcdatamodel */,
 				E204F97E07D6426EAB37F0F3 /* Modelv8.xcdatamodel */,
 				E77A7883792945C59E39CEC0 /* Modelv7.xcdatamodel */,
@@ -5798,7 +5806,7 @@
 				B41E10522C3D314600E186F7 /* Modelv5.xcdatamodel */,
 				B41E10532C3D314600E186F7 /* Modelv4.xcdatamodel */,
 			);
-			currentVersion = A7D05E9B1C2F4E8D9A3B6C01 /* Modelv9.xcdatamodel */;
+			currentVersion = C0A1B2C3D4E5F60718293A01 /* Modelv10.xcdatamodel */;
 			path = Model.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

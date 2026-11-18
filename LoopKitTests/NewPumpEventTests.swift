@@ -34,4 +34,32 @@ class NewPumpEventRawRepresentableTests: XCTestCase {
         let actual = NewPumpEvent(rawValue: original.rawValue)
         XCTAssertEqual(actual, original)
     }
+
+    func testComponentReplacementRawRepresentable() {
+        let replacement = ComponentReplacement(previousStopDate: Date(timeIntervalSinceReferenceDate: 1000),
+                                               reason: .fault,
+                                               faultCode: "0x14",
+                                               previousRemainingUnits: 12.5,
+                                               primes: [.init(target: .cannula, volume: 0.5)],
+                                               expirationDate: Date(timeIntervalSinceReferenceDate: 300_000),
+                                               componentIdentifier: "L1-S2")
+        let original = NewPumpEvent(date: Date(timeIntervalSinceReferenceDate: 2000),
+                                    dose: nil,
+                                    raw: Data("Pod Change".utf8),
+                                    title: "Pod Change",
+                                    type: .replaceComponent(componentType: .pump),
+                                    componentReplacement: replacement)
+        let actual = NewPumpEvent(rawValue: original.rawValue)
+        XCTAssertEqual(actual, original)
+        XCTAssertEqual(actual?.componentReplacement, replacement)
+    }
+
+    func testComponentReplacementDecodesAnUnknownReason() throws {
+        let data = Data(#"{"primes":[],"reason":"somethingNew"}"#.utf8)
+        XCTAssertEqual(try ComponentReplacement(encoded: data).reason, .unknown)
+    }
+
+    func testTubingReplacementTypeRoundTrips() {
+        XCTAssertEqual(PumpEventType(rawValue: PumpEventType.replaceComponent(componentType: .tubing).rawValue), .replaceComponent(componentType: .tubing))
+    }
 }

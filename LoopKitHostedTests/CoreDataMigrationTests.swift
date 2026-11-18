@@ -185,6 +185,21 @@ class CoreDataMigrationTests: XCTestCase {
         XCTAssertNotNil(NSEntityDescription.entity(forEntityName: "DoseMetadataObject", in: context))
     }
 
+    func testV9toV10MigrationKeepsPumpEvents() throws {
+        let modelV9Container = try startPersistentContainer(.v9)
+        let oldContext = modelV9Container.viewContext
+        let pumpEvent = NSEntityDescription.insertNewObject(forEntityName: "PumpEvent", into: oldContext)
+        pumpEvent.setValue(Date(), forKey: "createdAt")
+        pumpEvent.setValue(Date(), forKey: "date")
+        pumpEvent.setValue("Replacepump", forKey: "type")
+        try oldContext.save()
+
+        let modelV10Container = try migrate(container: modelV9Container, to: .v10)
+        let pumpEvents = try modelV10Container.viewContext.fetch(NSFetchRequest<NSManagedObject>(entityName: "PumpEvent"))
+        XCTAssertEqual(pumpEvents.map { $0.value(forKey: "type") as? String }, ["Replacepump"])
+        XCTAssertNil(pumpEvents.first?.value(forKey: "componentReplacement"))
+    }
+
     func testV5StoreOpensWithCurrentModel() async throws {
         let directoryURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: directoryURL, withIntermediateDirectories: true)
@@ -226,6 +241,7 @@ extension CoreDataMigrationTests {
         case v7
         case v8
         case v9
+        case v10
 
         var name: String {
             switch self {
@@ -235,6 +251,7 @@ extension CoreDataMigrationTests {
             case .v7: "Modelv7"
             case .v8: "Modelv8"
             case .v9: "Modelv9"
+            case .v10: "Modelv10"
             }
         }
     }
