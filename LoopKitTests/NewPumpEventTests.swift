@@ -58,8 +58,4 @@ class NewPumpEventRawRepresentableTests: XCTestCase {
         let data = Data(#"{"primes":[],"reason":"somethingNew"}"#.utf8)
         XCTAssertEqual(try ComponentReplacement(encoded: data).reason, .unknown)
     }
-
-    func testTubingReplacementTypeRoundTrips() {
-        XCTAssertEqual(PumpEventType(rawValue: PumpEventType.replaceComponent(componentType: .tubing).rawValue), .replaceComponent(componentType: .tubing))
-    }
 }

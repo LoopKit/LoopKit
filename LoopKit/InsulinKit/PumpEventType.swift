@@ -91,7 +91,7 @@ public enum PumpEventType: CaseIterable, Hashable {
     }
     
     public static var allCases: [PumpEventType] {
-        return [.alarm, .alarmClear, .basal, .bolus, .prime, .resume, .rewind, .suspend, .tempBasal, .replaceComponent(componentType: .reservoir), .replaceComponent(componentType: .pump), .replaceComponent(componentType: .infusionSet), .replaceComponent(componentType: .tubing)]
+        return [.alarm, .alarmClear, .basal, .bolus, .prime, .resume, .rewind, .suspend, .tempBasal, .replaceComponent(componentType: .reservoir), .replaceComponent(componentType: .pump), .replaceComponent(componentType: .infusionSet)]
     }
 }
 
@@ -100,7 +100,6 @@ public enum ReplaceableComponent: String {
     case reservoir
     case pump // Base, pod or patch full replacement
     case infusionSet
-    case tubing
 }
 
 extension PumpEventType {
@@ -136,10 +135,8 @@ extension PumpEventType {
             return 11
         case .replaceComponent(componentType: .infusionSet):
             return 12
-        case .replaceComponent(componentType: .tubing):
-            return 13
         case .timeZoneSync:
-            return 14
+            return 13
         }
     }
 }
