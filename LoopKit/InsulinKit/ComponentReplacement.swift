@@ -9,19 +9,70 @@ import Foundation
 
 /// Details of a `.replaceComponent` pump event. The event's date is when the new component started.
 public struct ComponentReplacement: Codable, Hashable {
-    public enum Reason: String, Codable {
+    public enum Reason: Codable, Hashable {
         /// Replaced at or after the end of its nominal lifetime
         case expired
-        /// The pump faulted; see `faultCode`
-        case fault
-        case occlusion
+        /// The pump faulted, with the pump's own code for the fault
+        case fault(code: String?)
+        case occlusion(code: String?)
         /// Replaced early, with no fault or occlusion
         case userInitiated
         /// Not known, or written by a newer build
         case unknown
 
+        private enum CodingKeys: String, CodingKey {
+            case type
+            case code
+        }
+
         public init(from decoder: Decoder) throws {
-            self = Reason(rawValue: try decoder.singleValueContainer().decode(String.self)) ?? .unknown
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            let code = try container.decodeIfPresent(String.self, forKey: .code)
+            switch try container.decode(String.self, forKey: .type) {
+            case "expired": self = .expired
+            case "fault": self = .fault(code: code)
+            case "occlusion": self = .occlusion(code: code)
+            case "userInitiated": self = .userInitiated
+            default: self = .unknown
+            }
+        }
+
+        public func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            try container.encode(type, forKey: .type)
+            try container.encodeIfPresent(code, forKey: .code)
+        }
+
+        public var type: String {
+            switch self {
+            case .expired: return "expired"
+            case .fault: return "fault"
+            case .occlusion: return "occlusion"
+            case .userInitiated: return "userInitiated"
+            case .unknown: return "unknown"
+            }
+        }
+
+        public var code: String? {
+            switch self {
+            case .fault(let code), .occlusion(let code): return code
+            default: return nil
+            }
+        }
+    }
+
+    /// The component that was replaced
+    public struct PreviousComponent: Codable, Hashable {
+        /// When it stopped delivering, such as when a pod was deactivated
+        public var stopDate: Date?
+        /// Insulin left in it, when the pump reported it
+        public var remainingUnits: Double?
+        public var reason: Reason
+
+        public init(stopDate: Date? = nil, remainingUnits: Double? = nil, reason: Reason) {
+            self.stopDate = stopDate
+            self.remainingUnits = remainingUnits
+            self.reason = reason
         }
     }
 
@@ -41,24 +92,16 @@ public struct ComponentReplacement: Codable, Hashable {
         }
     }
 
-    /// When the replaced component stopped delivering, such as when a pod was deactivated
-    public var previousStopDate: Date?
-    public var reason: Reason?
-    /// The pump's own code for the fault, when `reason` is `.fault`
-    public var faultCode: String?
-    /// Insulin left in the replaced component, when the pump reported it
-    public var previousRemainingUnits: Double?
+    /// Nil when the pump knows nothing about the replaced component
+    public var previous: PreviousComponent?
     public var primes: [Prime]
     /// The end of the new component's nominal lifetime
     public var expirationDate: Date?
     /// Identifies the new component, such as a pod's lot and sequence numbers. This identifies a device, so services should not upload it as is.
     public var componentIdentifier: String?
 
-    public init(previousStopDate: Date? = nil, reason: Reason? = nil, faultCode: String? = nil, previousRemainingUnits: Double? = nil, primes: [Prime] = [], expirationDate: Date? = nil, componentIdentifier: String? = nil) {
-        self.previousStopDate = previousStopDate
-        self.reason = reason
-        self.faultCode = faultCode
-        self.previousRemainingUnits = previousRemainingUnits
+    public init(previous: PreviousComponent? = nil, primes: [Prime] = [], expirationDate: Date? = nil, componentIdentifier: String? = nil) {
+        self.previous = previous
         self.primes = primes
         self.expirationDate = expirationDate
         self.componentIdentifier = componentIdentifier

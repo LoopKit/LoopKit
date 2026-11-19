@@ -581,7 +581,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
         doseStore.delegate = doseStoreDelegate
         await fulfillment(of: [doseStoreInitialization], timeout: 30)
 
-        let replacement = ComponentReplacement(previousStopDate: f("2018-12-12 18:00:00 +0000"), reason: .expired, primes: [.init(target: .cannula, volume: 0.5)], expirationDate: f("2018-12-15 18:05:00 +0000"))
+        let replacement = ComponentReplacement(previous: .init(stopDate: f("2018-12-12 18:00:00 +0000"), reason: .expired), primes: [.init(target: .cannula, volume: 0.5)], expirationDate: f("2018-12-15 18:05:00 +0000"))
         let event = NewPumpEvent(date: f("2018-12-12 18:05:00 +0000"), dose: nil, raw: Data("Pod Change".utf8), title: "Pod Change", type: .replaceComponent(componentType: .pump), componentReplacement: replacement)
 
         try await doseStore.addPumpEvents([event], lastReconciliation: f("2018-12-12 18:07:14 +0000"))
