@@ -26,6 +26,7 @@ extension PumpEvent {
     @NSManaged var primitiveValue: NSNumber?
     @NSManaged var doseId: UUID?
     @NSManaged var metadata: Data?
+    @NSManaged var componentReplacement: Data?
     @NSManaged var primitiveDeliveredUnits: NSNumber?
     @NSManaged var mutable: Bool
     @NSManaged var raw: Data?
@@ -57,6 +58,7 @@ extension PumpEvent: Encodable {
         try container.encodeIfPresent(insulinType, forKey: .insulinType)
         try container.encodeIfPresent(automatic, forKey: .automatic)
         try container.encodeIfPresent(alarmType?.rawValue, forKey: .alarmType)
+        try container.encodeIfPresent(componentReplacement.flatMap { try? ComponentReplacement(encoded: $0) }, forKey: .componentReplacement)
         try container.encode(modificationCounter, forKey: .modificationCounter)
         try container.encode(wasProgrammedByPumpUI, forKey: .wasProgrammedByPumpUI)
     }
@@ -79,6 +81,7 @@ extension PumpEvent: Encodable {
         case insulinType
         case automatic
         case alarmType
+        case componentReplacement
         case modificationCounter
         case wasProgrammedByPumpUI
     }

@@ -679,6 +679,7 @@ extension DoseStore {
                 object.mutable = isMutable
                 object.dose = event.dose
                 object.alarmType = event.alarmType
+                object.componentReplacement = try? event.componentReplacement?.encoded()
                 object.wasProgrammedByPumpUI = wasProgrammedByPumpUI
             }
 
