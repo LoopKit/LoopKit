@@ -347,16 +347,16 @@ extension TherapySettingsView {
     
     private var supportSection: some View {
         Section {
-            NavigationLink(destination: DemoPlaceHolderView(appName: appName)) {
+            Link(destination: URL(string: "https://loopkit.github.io/loopdocs/loop-3/therapy-settings/")!) {
                 HStack {
                     Text("Get help with Therapy Settings", comment: "Support button for Therapy Settings")
                         .foregroundColor(.primary)
                     Spacer()
                     Disclosure()
                 }
+                .contentShape(Rectangle())
             }
         }
-        .contentShape(Rectangle())
     }
 }
 
