@@ -31,13 +31,16 @@ public struct TherapySettingsView: View {
     @State var viewModel: TherapySettingsViewModel
         
     private let actionButton: ActionButton?
+    private let additionalSettingsCards: [Card]
 
     public init(mode: SettingsPresentationMode,
                 viewModel: TherapySettingsViewModel,
-                actionButton: ActionButton? = nil) {
+                actionButton: ActionButton? = nil,
+                additionalSettingsCards: [Card] = []) {
         self.mode = mode
         self.viewModel = viewModel
         self.actionButton = actionButton
+        self.additionalSettingsCards = additionalSettingsCards
     }
         
     public var body: some View {
@@ -87,6 +90,9 @@ public struct TherapySettingsView: View {
         cards.append(basalRatesSection)
         cards.append(deliveryLimitsSection)
         cards.append(insulinSensitivitiesSection)
+        if mode == .settings {
+            cards.append(contentsOf: additionalSettingsCards)
+        }
 
         return CardStack(cards: cards)
     }
@@ -476,7 +482,7 @@ struct CorrectionRangeOverridesRangeItem: View {
     }
 }
 
-struct SectionWithTapToEdit<Content, NavigationDestination>: View where Content: View, NavigationDestination: View  {
+public struct SectionWithTapToEdit<Content, NavigationDestination>: View where Content: View, NavigationDestination: View  {
     let isEnabled: Bool
     let title: String
     let descriptiveText: String
@@ -485,7 +491,7 @@ struct SectionWithTapToEdit<Content, NavigationDestination>: View where Content:
 
     @State var isActive: Bool = false
 
-    init(isEnabled: Bool,
+    public init(isEnabled: Bool,
          title: String,
          descriptiveText: String,
          destination: @escaping (@escaping () -> Void) -> NavigationDestination,
