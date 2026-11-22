@@ -151,7 +151,7 @@ public struct DeliveryLimitsEditor: View {
                 guardrailWarningIfNecessary
             },
             action: {
-                if self.crossedThresholds.isEmpty && therapyProfilesFailing(value).isEmpty {
+                if self.crossedThresholds.isEmpty && failingProfiles.isEmpty {
                     self.startSaving()
                 } else {
                     self.presentedAlert = .saveConfirmation(confirmationAlertContent)
@@ -414,8 +414,12 @@ public struct DeliveryLimitsEditor: View {
         }
     }
     
+    private var failingProfiles: [String] {
+        mode == .settings ? therapyProfilesFailing(value) : []
+    }
+
     private var confirmationAlertContent: AlertContent {
-        let failingProfiles = therapyProfilesFailing(value)
+        let failingProfiles = failingProfiles
         let message = [
             crossedThresholds.isEmpty ? nil : TherapySetting.deliveryLimits.guardrailSaveWarningCaption,
             failingProfiles.isEmpty ? nil : TherapySettingsViewModel.therapyProfilesFailingMessage(failingProfiles),

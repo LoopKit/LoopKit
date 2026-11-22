@@ -469,4 +469,21 @@ final class TherapyProfileTests: XCTestCase {
         XCTAssertEqual(resolved[1].basalRateSchedule.items.map(\.value), [0.7])
         XCTAssertEqual(resolved[0].basalRateSchedule.items.map(\.value), [0.85, 1.0])
     }
+
+    func testResolvedMakesDefaultFromTheLiveSchedulesWhenItIsNotStored() {
+        let weekday = profile("Weekday", basal: [(0, 0.7)])
+        let resolved = TherapyProfiles.resolved([weekday, profile("Weekend", basal: [(0, 0.5)])], activeProfileName: "Weekday", live: weekday)
+        XCTAssertEqual(resolved.map(\.name), ["Default", "Weekday", "Weekend"])
+        XCTAssertTrue(resolved[0].hasSameValues(as: weekday))
+        XCTAssertEqual(TherapyProfiles.resolved([weekday], activeProfileName: "Weekday", live: weekday).map(\.name), ["Default", "Weekday"])
+        XCTAssertEqual(TherapyProfiles.resolved([weekday], activeProfileName: "Weekday", live: nil).map(\.name), ["Weekday"])
+    }
+
+    func testMaximumBasalRateWithinAnUlpStillAllowsThatRate() {
+        XCTAssertEqual(Guardrail.selectableBasalRates(supportedBasalRates: supportedBasalRates, maximumBasalRate: 3.0.nextDown).last, 3.0)
+        XCTAssertEqual(Guardrail.selectableBasalRates(supportedBasalRates: supportedBasalRates, maximumBasalRate: 2.99).last, 2.95)
+        let validator = TherapyProfileValidator(supportedBasalRates: supportedBasalRates, maximumBasalRatePerHour: 3.0.nextDown, maximumBasalScheduleEntryCount: nil, suspendThreshold: nil)
+        XCTAssertNoThrow(try validator.validate(profile("x", basal: [(0, 3.0)])))
+    }
 }
+

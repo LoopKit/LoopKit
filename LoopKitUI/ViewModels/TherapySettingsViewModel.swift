@@ -230,25 +230,14 @@ extension TherapySettingsViewModel {
 
 // MARK: Profiles
 extension TherapySettingsViewModel {
-    /// The validator for activating a profile with `settings` and the pump's increments, or nil without a pump.
-    func therapyProfileValidator(for settings: TherapySettings) -> TherapyProfileValidator? {
-        guard let increments = pumpSupportedIncrements() else {
-            return nil
-        }
-        return TherapyProfileValidator(supportedBasalRates: increments.basalRates,
-                                       maximumBasalRatePerHour: settings.maximumBasalRatePerHour,
-                                       maximumBasalScheduleEntryCount: increments.maximumBasalScheduleEntryCount,
-                                       suspendThreshold: settings.suspendThreshold)
-    }
-
     /// The profiles that can be activated now but not once `change` is made to these settings, for example a lower
     /// maximum basal rate or a higher glucose safety limit.
-    public func therapyProfilesFailing(after change: (inout TherapySettings) -> Void) -> [String] {
+    func therapyProfilesFailing(after change: (inout TherapySettings) -> Void) -> [String] {
         var changed = therapySettings
         change(&changed)
         guard let profiles = therapySettings.therapyProfiles,
-              let current = therapyProfileValidator(for: therapySettings),
-              let proposed = therapyProfileValidator(for: changed)
+              let current = TherapyProfileValidator(therapySettings: therapySettings, pumpSupportedIncrements: pumpSupportedIncrements()),
+              let proposed = TherapyProfileValidator(therapySettings: changed, pumpSupportedIncrements: pumpSupportedIncrements())
         else {
             return []
         }
@@ -257,7 +246,10 @@ extension TherapySettingsViewModel {
 
     /// Names the profiles a change leaves impossible to activate, for a save confirmation.
     static func therapyProfilesFailingMessage(_ names: [String]) -> String {
-        String(format: LocalizedString("With this change, %1$@ can no longer be activated until its settings are edited to fit.", comment: "Save confirmation naming the profiles a change leaves impossible to activate (1: list of profile names)"),
-               ListFormatter.localizedString(byJoining: names))
+        if names.count == 1 {
+            return String(format: LocalizedString("With this change, %1$@ can no longer be activated until its settings are edited to fit.", comment: "Save confirmation naming the one profile a change leaves impossible to activate (1: profile name)"), names[0])
+        }
+        return String(format: LocalizedString("With this change, these profiles can no longer be activated until their settings are edited to fit: %1$@.", comment: "Save confirmation naming the profiles a change leaves impossible to activate (1: list of profile names)"),
+                      ListFormatter.localizedString(byJoining: names))
     }
 }

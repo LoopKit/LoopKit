@@ -43,14 +43,7 @@ public final class TherapyProfilesViewModel: ObservableObject {
 
     /// The activation checks with the current settings and pump, or nil without a pump.
     private var activationValidator: TherapyProfileValidator? {
-        guard let increments = pumpSupportedIncrements() else {
-            return nil
-        }
-        let settings = therapySettings
-        return TherapyProfileValidator(supportedBasalRates: increments.basalRates,
-                                       maximumBasalRatePerHour: settings.maximumBasalRatePerHour,
-                                       maximumBasalScheduleEntryCount: increments.maximumBasalScheduleEntryCount,
-                                       suspendThreshold: settings.suspendThreshold)
+        TherapyProfileValidator(therapySettings: therapySettings, pumpSupportedIncrements: pumpSupportedIncrements())
     }
 
     static func activationProblems(of profiles: [TherapyProfile], validator: TherapyProfileValidator?) -> [String: String] {
@@ -63,9 +56,7 @@ public final class TherapyProfilesViewModel: ObservableObject {
             guard !failures.isEmpty else {
                 continue
             }
-            problems[profile.name] = TherapyProfileSchedule.allCases.compactMap { schedule in
-                failures[schedule].map { "\(schedule.therapySetting.title): \($0.localizedDescription)" }
-            }.joined(separator: "\n")
+            problems[profile.name] = TherapyProfileValidator.description(of: failures)
         }
         return problems
     }
