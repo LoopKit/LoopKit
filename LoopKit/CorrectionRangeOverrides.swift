@@ -117,7 +117,7 @@ extension ClosedRange<LoopQuantity> {
 
 extension LoopUnit {
     /// The step between the values of a glucose picker.
-    public var glucosePickerStride: Double {
+    var glucosePickerStride: Double {
         self == .millimolesPerLiter ? 0.1 : 5
     }
 }

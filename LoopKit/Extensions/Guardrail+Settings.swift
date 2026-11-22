@@ -8,6 +8,9 @@
 
 import HealthKit
 
+/// The basal rates a basal rate schedule may hold at most, in U/hr.
+private let scheduledBasalRateAbsoluteRange = 0.0...30.0
+
 public extension Guardrail where Value == LoopQuantity {
     static let suspendThreshold = Guardrail(absoluteBounds: 67...110, recommendedBounds: 74...80, unit: .milligramsPerDeciliter, startingSuggestion: 80)
 
@@ -81,7 +84,6 @@ public extension Guardrail where Value == LoopQuantity {
     )
 
     static func basalRate(supportedBasalRates: [Double]) -> Guardrail {
-        let scheduledBasalRateAbsoluteRange = 0.0...30.0
         let allowedBasalRates = supportedBasalRates.filter { scheduledBasalRateAbsoluteRange.contains($0) }
         return Guardrail(
             absoluteBounds: allowedBasalRates.first!...allowedBasalRates.last!,
@@ -144,15 +146,17 @@ public extension Guardrail where Value == LoopQuantity {
     }
 
     /// The basal rates a basal rate schedule can hold: the pump's supported rates above 0 U/hr, up to
-    /// `maximumBasalRate` and within the scheduled basal guardrail.
+    /// `maximumBasalRate` and within the scheduled basal guardrail. A rate within 1e-6 U/hr of the maximum counts as at
+    /// the maximum.
     static func selectableBasalRates(supportedBasalRates: [Double], maximumBasalRate: Double?) -> [Double] {
         let supportedBasalRates = supportedBasalRates.filter { $0 != 0 }
-        guard supportedBasalRates.contains(where: { (0.0...30.0).contains($0) }) else {
+        guard supportedBasalRates.contains(where: { scheduledBasalRateAbsoluteRange.contains($0) }) else {
             return []
         }
         let guardrail = Guardrail.basalRate(supportedBasalRates: supportedBasalRates)
+        let maximum = (maximumBasalRate ?? .infinity) + 1e-6
         return supportedBasalRates.filter {
-            $0 <= (maximumBasalRate ?? .infinity) && guardrail.absoluteBounds.contains(LoopQuantity(unit: .internationalUnitsPerHour, doubleValue: $0))
+            $0 <= maximum && guardrail.absoluteBounds.contains(LoopQuantity(unit: .internationalUnitsPerHour, doubleValue: $0))
         }
     }
 
