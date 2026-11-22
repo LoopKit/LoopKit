@@ -15,7 +15,7 @@ public protocol TherapySettingsViewModelDelegate: AnyObject {
     func syncDeliveryLimits(deliveryLimits: DeliveryLimits) async throws -> DeliveryLimits
     func saveCompletion(therapySettings: TherapySettings)
     func pumpSupportedIncrements() -> PumpSupportedIncrements?
-    /// Throws when settings edited from `therapySettings` can no longer be saved, for example because the active
+    /// Throws when settings edited from `therapySettings` would overwrite a newer change, for example because the active
     /// profile or its schedules changed while the editor was open. Nothing is synced or saved then.
     func validateTherapySettingsEdit(from therapySettings: TherapySettings) throws
 }
