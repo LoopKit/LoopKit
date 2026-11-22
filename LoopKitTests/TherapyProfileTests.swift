@@ -549,5 +549,12 @@ final class TherapyProfileTests: XCTestCase {
         }
         XCTAssertEqual(TherapyProfileValidator.correctionRangeLowerValues(suspendThreshold: threshold, unit: .milligramsPerDeciliter), [])
     }
+
+    func testEditLimitsWithASafetyLimitAboveTheCorrectionRangeGuardrail() throws {
+        let validator = TherapyProfileValidator(supportedBasalRates: supportedBasalRates, maximumBasalRatePerHour: 3, maximumBasalScheduleEntryCount: nil, suspendThreshold: GlucoseThreshold(unit: .millimolesPerLiter, value: 75))
+        let limits = try XCTUnwrap(validator.editLimits(unit: .milligramsPerDeciliter))
+        XCTAssertEqual(limits.target.bounds, 180...180)
+        XCTAssertEqual(limits.target.recommended, 180...180)
+    }
 }
 

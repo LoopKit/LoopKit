@@ -227,7 +227,7 @@ public struct TherapyProfileValidator {
         let absolute = Guardrail.correctionRange.absoluteBounds.doubleBounds(for: mgdl)
         let recommended = Guardrail.correctionRange.recommendedBounds.doubleBounds(for: mgdl)
         let lower = max(absolute.lowerBound, suspendThreshold?.quantity.doubleValue(for: mgdl) ?? absolute.lowerBound)
-        return max(lower, recommended.lowerBound)...recommended.upperBound
+        return min(max(lower, recommended.lowerBound), recommended.upperBound)...recommended.upperBound
     }
 
     // MARK: Edit limits
@@ -244,9 +244,11 @@ public struct TherapyProfileValidator {
             let upper = LoopQuantity(unit: mgdl, doubleValue: range.upperBound).doubleValue(for: unit)
             return Self.onStep(lower, glucoseStep, .up)...Self.onStep(upper, glucoseStep, .down)
         }
-        let targetLowerValues = (Guardrail.minCorrectionRangeValue(suspendThreshold: suspendThreshold)...Guardrail.correctionRange.absoluteBounds.upperBound).glucosePickerValues(unit: unit)
         let targetValues = Guardrail.correctionRange.absoluteBounds.glucosePickerValues(unit: unit)
-        let targetAbsolute = (targetLowerValues.min() ?? 0)...(targetValues.max() ?? 0)
+        let targetUpper = targetValues.max() ?? 0
+        // With the glucose safety limit above the guardrail no correction range passes; the bounds collapse to the top.
+        let targetLower = Self.correctionRangeLowerValues(suspendThreshold: suspendThreshold, unit: unit).min() ?? targetUpper
+        let targetAbsolute = min(targetLower, targetUpper)...targetUpper
         let targetRecommended = glucose(recommendedTargetBoundsInMilligramsPerDeciliter)
         let sensitivityUnit: LoopUnit = unit == .millimolesPerLiter ? .millimolesPerLiterPerInternationalUnit : .milligramsPerDeciliterPerInternationalUnit
         let sensitivityValues = Guardrail.insulinSensitivity.allValues(forUnit: sensitivityUnit)
