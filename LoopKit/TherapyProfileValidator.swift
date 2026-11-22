@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// Checks therapy profiles before they are stored or activated, for local and remote changes alike.
+/// Checks therapy profiles before they are stored or activated.
 /// A profile that breaks any rule is rejected as a whole; values are never adjusted to fit.
 public struct TherapyProfileValidator {
     public static let maximumNameLength = 32

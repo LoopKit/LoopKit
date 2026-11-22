@@ -159,11 +159,10 @@ public enum TherapyProfileSchedule: CaseIterable, Hashable {
 // MARK: - Fingerprint
 
 extension TherapyProfile {
-    /// The value a follower computes from the uploaded profile and sends with a remote command, so the phone only acts
-    /// on the values the follower reviewed. Canonical form, with glucose values in `unit` and every value to three
-    /// decimals: `basal=<seconds>:<value>,...;carbratio=...;sens=...;target_low=...;target_high=...`, hashed with
-    /// SHA-256, first 16 hex characters. Nil when a glucose schedule has no values in `unit`. It detects a profile that
-    /// changed since the follower saw it; the command's OTP, not the fingerprint, authorizes the command.
+    /// Identifies the profile's schedule values, so a change made from an outdated copy is refused. Canonical form, with
+    /// glucose values in `unit` and every value to three decimals:
+    /// `basal=<seconds>:<value>,...;carbratio=...;sens=...;target_low=...;target_high=...`, hashed with SHA-256, first
+    /// 16 hex characters. Nil when a glucose schedule has no values in `unit`.
     public func fingerprint(unit: LoopUnit) -> String? {
         canonicalFingerprintString(unit: unit).map(Self.fingerprint(canonical:))
     }
@@ -308,8 +307,8 @@ public enum TherapyProfiles {
         activeProfileName ?? TherapyProfile.defaultName
     }
 
-    /// The stored profiles with Default first and the active profile holding the live schedules. Before any other
-    /// profile is stored, this is Default made from the live schedules.
+    /// The stored profiles with Default first and the active profile holding the live schedules. When Default is not
+    /// stored, it is made from the live schedules.
     public static func resolved(_ stored: [TherapyProfile], activeProfileName: String?, live: TherapyProfile?) -> [TherapyProfile] {
         var profiles = stored
         let active = activeName(activeProfileName)
@@ -320,6 +319,11 @@ public enum TherapyProfiles {
                 profiles[index] = activeProfile
             } else if active == TherapyProfile.defaultName {
                 profiles.insert(activeProfile, at: 0)
+            }
+            if !profiles.contains(where: \.isDefault) {
+                var defaultProfile = live
+                defaultProfile.name = TherapyProfile.defaultName
+                profiles.insert(defaultProfile, at: 0)
             }
         }
         if let index = profiles.firstIndex(where: \.isDefault), index != 0 {

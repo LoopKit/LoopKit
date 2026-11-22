@@ -172,8 +172,7 @@ public enum ScheduledProfileSwitches {
         }
     }
 
-    /// The value a follower computes from the uploaded list and sends when it replaces the list, so the phone only
-    /// replaces the list the follower reviewed. Each entry is `profile=<name>;weekday=<1–7>;date=-;time=<seconds>;paused=<bool>`;
+    /// Identifies the list, so a change made from an outdated copy is refused. Each entry is `profile=<name>;weekday=<1–7>;date=-;time=<seconds>;paused=<bool>`;
     /// the sorted entries are joined with `|`, hashed with SHA-256, first 16 hex characters. Identifiers are not part of it.
     public static func fingerprint(_ entries: [ScheduledProfileSwitch]) -> String {
         TherapyProfile.fingerprint(canonical: canonicalFingerprintString(entries))
