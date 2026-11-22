@@ -97,7 +97,7 @@ public struct ComponentReplacement: Codable, Hashable {
     public var primes: [Prime]
     /// The end of the new component's nominal lifetime
     public var expirationDate: Date?
-    /// Identifies the new component, such as a pod's lot and sequence numbers. This identifies a device, so remote services should not upload it as is. Local exports, like the Critical Event Log, include it.
+    /// Identifies the new component, such as a pod's lot and sequence numbers
     public var componentIdentifier: String?
 
     public init(previous: PreviousComponent? = nil, primes: [Prime] = [], expirationDate: Date? = nil, componentIdentifier: String? = nil) {
