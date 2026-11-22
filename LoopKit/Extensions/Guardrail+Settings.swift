@@ -143,6 +143,19 @@ public extension Guardrail where Value == LoopQuantity {
             .filter { basalGuardrail.absoluteBounds.contains(LoopQuantity(unit: .internationalUnitsPerHour, doubleValue: $0)) }
     }
 
+    /// The basal rates a basal rate schedule can hold: the pump's supported rates above 0 U/hr, up to
+    /// `maximumBasalRate` and within the scheduled basal guardrail.
+    static func selectableBasalRates(supportedBasalRates: [Double], maximumBasalRate: Double?) -> [Double] {
+        let supportedBasalRates = supportedBasalRates.filter { $0 != 0 }
+        guard supportedBasalRates.contains(where: { (0.0...30.0).contains($0) }) else {
+            return []
+        }
+        let guardrail = Guardrail.basalRate(supportedBasalRates: supportedBasalRates)
+        return supportedBasalRates.filter {
+            $0 <= (maximumBasalRate ?? .infinity) && guardrail.absoluteBounds.contains(LoopQuantity(unit: .internationalUnitsPerHour, doubleValue: $0))
+        }
+    }
+
     static func maximumBolus(supportedBolusVolumes: [Double]) -> Guardrail {
         let maxBolusThresholdUnits: Double = 30
         let maxBolusWarningThresholdUnits: Double = 20

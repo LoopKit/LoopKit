@@ -125,23 +125,12 @@ public struct GlucoseRangePicker: View {
         }
     }
 
-    private var stride: Double {
-        switch unit {
-        case .milligramsPerDeciliter:
-            return 5
-        case .millimolesPerLiter:
-            return 0.1
-        default:
-            fatalError("Unsupported glucose unit \(unit)")
-        }
-    }
-
     private var lowerBoundPicker: some View {
         GlucoseValuePicker(
             value: $lowerBound,
             unit: unit,
             guardrail: guardrail,
-            selectableValues: lowerBoundRange.selectableValues(unit: unit, stride: stride),
+            selectableValues: lowerBoundRange.glucosePickerValues(unit: unit),
             isUnitLabelVisible: false
         )
         .accessibility(identifier: "min_glucose_picker")
@@ -152,7 +141,7 @@ public struct GlucoseRangePicker: View {
             value: $upperBound,
             unit: unit,
             guardrail: guardrail,
-            selectableValues: upperBoundRange.selectableValues(unit: unit, stride: stride)
+            selectableValues: upperBoundRange.glucosePickerValues(unit: unit)
         )
         .accessibility(identifier: "max_glucose_picker")
     }
