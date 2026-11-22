@@ -12210,7 +12210,7 @@
     "The name %1$@ is reserved" : {
       "comment" : "Therapy profile error: reserved name (1: Default)"
     },
-    "The profile changed on the phone after it was uploaded. Review it again and resend." : {
+    "The profile changed after these values were read. Review the profile and make the change again." : {
       "comment" : "Therapy profile error: fingerprint mismatch"
     },
     "The profile has an unsupported glucose unit" : {
@@ -12237,7 +12237,7 @@
     "The pump supports at most %1$d basal rate entries" : {
       "comment" : "Therapy profile error: pump basal entry limit (1: maximum)"
     },
-    "The scheduled switches changed on the phone after they were uploaded. Review them again and resend." : {
+    "The scheduled switches changed after they were read. Review them and make the change again." : {
       "comment" : "Scheduled switch error: fingerprint mismatch"
     },
     "The value you have entered is higher than what is typically recommended for most people." : {
@@ -12676,7 +12676,7 @@
     "There can be at most %1$d scheduled switches" : {
       "comment" : "Scheduled switch error: too many (1: maximum number)"
     },
-    "These settings changed on the phone while they were open, for example by a remote command, so the change was not saved. Open the settings again to see the current values." : {
+    "These settings changed while they were open, for example by a scheduled switch, so the change was not saved. Open the settings again to see the current values." : {
       "comment" : "Therapy profile error: settings changed during an edit"
     },
     "This remote command is not supported by this app" : {

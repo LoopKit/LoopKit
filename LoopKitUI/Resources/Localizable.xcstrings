@@ -691,7 +691,7 @@
       "comment" : "Span line of a scheduled switch: until the next start (1: short weekday and time)"
     },
     "With this change, %1$@ can no longer be activated until its settings are edited to fit." : {
-      "comment" : "Save confirmation naming the profiles a change leaves impossible to activate (1: list of profile names)"
+      "comment" : "Save confirmation naming the one profile a change leaves impossible to activate (1: profile name)"
     },
     "With this change, these profiles can no longer be activated until their settings are edited to fit: %1$@." : {
       "comment" : "Save confirmation naming the profiles a change leaves impossible to activate (1: list of profile names)"

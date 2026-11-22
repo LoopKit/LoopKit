@@ -113,7 +113,7 @@ public enum ScheduledProfileSwitchError: LocalizedError, Equatable {
         case .slotTaken(let existing):
             return String(format: LocalizedString("%1$@ already starts %2$@", comment: "Scheduled switch error: another start has the same weekday and time (1: profile name, 2: weekday and time)"), existing.profileName, existing.localizedWeekdayAndTime)
         case .conflict:
-            return LocalizedString("The scheduled switches changed on the phone after they were uploaded. Review them again and resend.", comment: "Scheduled switch error: fingerprint mismatch")
+            return LocalizedString("The scheduled switches changed after they were read. Review them and make the change again.", comment: "Scheduled switch error: fingerprint mismatch")
         }
     }
 }

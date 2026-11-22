@@ -50,7 +50,7 @@ final class TherapyProfileUITests: XCTestCase {
 
     func testFailingMessageNamesOneOrSeveralProfiles() {
         XCTAssertEqual(TherapySettingsViewModel.therapyProfilesFailingMessage(["High"]), "With this change, High can no longer be activated until its settings are edited to fit.")
-        XCTAssertEqual(TherapySettingsViewModel.therapyProfilesFailingMessage(["High", "Low"]), "With this change, these profiles can no longer be activated until their settings are edited to fit: High and Low.")
+        XCTAssertEqual(TherapySettingsViewModel.therapyProfilesFailingMessage(["High", "Low"]), "With this change, these profiles can no longer be activated until their settings are edited to fit: \(ListFormatter.localizedString(byJoining: ["High", "Low"])).")
     }
 
     @MainActor
