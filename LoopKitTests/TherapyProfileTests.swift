@@ -529,5 +529,12 @@ final class TherapyProfileTests: XCTestCase {
         let validator = TherapyProfileValidator(supportedBasalRates: supportedBasalRates, maximumBasalRatePerHour: 3.0.nextDown, maximumBasalScheduleEntryCount: nil, suspendThreshold: nil)
         XCTAssertNoThrow(try validator.validate(profile("x", basal: [(0, 3.0)])))
     }
+
+    func testEditLimitsPublishAMaximumBasalRateThatAllowsTheTopRate() throws {
+        let validator = TherapyProfileValidator(supportedBasalRates: supportedBasalRates, maximumBasalRatePerHour: 3.0.nextDown, maximumBasalScheduleEntryCount: nil, suspendThreshold: nil)
+        let limits = try XCTUnwrap(validator.editLimits(unit: .milligramsPerDeciliter))
+        XCTAssertEqual(limits.basalRates.last, 3.0)
+        XCTAssertGreaterThanOrEqual(limits.maximumBasalRatePerHour, try XCTUnwrap(limits.basalRates.last))
+    }
 }
 

@@ -247,7 +247,7 @@ public struct TherapyProfileValidator {
 
         return TherapyProfileEditLimits(
             unit: unit,
-            maximumBasalRatePerHour: maximumBasalRatePerHour,
+            maximumBasalRatePerHour: max(maximumBasalRatePerHour, basalRates.last ?? maximumBasalRatePerHour),
             basalRates: basalRates,
             maximumBasalScheduleEntryCount: maximumBasalScheduleEntryCount,
             carbRatio: .init(bounds: carbRatioAbsolute, step: 0.1, recommended: carbRatioRecommended),
@@ -272,6 +272,7 @@ public struct TherapyProfileEditLimits: Equatable {
     }
 
     public let unit: LoopUnit
+    /// The maximum basal rate, raised to the highest of `basalRates` when that is within the tolerance above it.
     public let maximumBasalRatePerHour: Double
     /// The supported basal rates up to the maximum basal rate.
     public let basalRates: [Double]
