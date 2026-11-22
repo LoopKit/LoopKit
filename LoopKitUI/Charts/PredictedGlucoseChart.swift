@@ -167,6 +167,26 @@ extension PredictedGlucoseChart {
             fills: fills
         )
 
+        // Warning Area (80)
+        let warningAreaStartingPoint = ChartPoint(x: ChartAxisValueDouble(0), y: ChartAxisValueDouble(85)) //82
+        let warningArea = ChartPointsViewsLayer(xAxis: xAxisLayer.axis, yAxis: yAxisLayer.axis, chartPoints: [warningAreaStartingPoint], viewGenerator: {(chartPointModel, layer, chart) -> UIView? in
+            let height: CGFloat = ChartAxisValueDouble(85).scalar - ChartAxisValueDouble(72).scalar
+            let viewFrame = CGRect(x: chart.contentView.bounds.minX, y: chartPointModel.screenLoc.y, width: chart.contentView.bounds.size.width, height: height)
+            let v = UIView(frame: viewFrame)
+            v.layer.backgroundColor = CGColor(red: 1.0, green: 0.64, blue: 0.0, alpha: 0.3)
+            return v
+        })
+        
+        // Danger area (70)
+        let dangerAreaStartingPoint = ChartPoint(x: ChartAxisValueDouble(0), y: ChartAxisValueDouble(69)) //69
+        let dangerArea = ChartPointsViewsLayer(xAxis: xAxisLayer.axis, yAxis: yAxisLayer.axis, chartPoints: [dangerAreaStartingPoint], viewGenerator: {(chartPointModel, layer, chart) -> UIView? in
+            let height: CGFloat = ChartAxisValueDouble(69).scalar - ChartAxisValueDouble(50).scalar
+            let viewFrame = CGRect(x: chart.contentView.bounds.minX, y: chartPointModel.screenLoc.y, width: chart.contentView.bounds.size.width, height: height)
+            let v = UIView(frame: viewFrame)
+            v.layer.backgroundColor = CGColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 0.2)
+            return v
+        })
+        
         // Grid lines
         let gridLayer = ChartGuideLinesForValuesLayer(xAxis: xAxisLayer.axis, yAxis: yAxisLayer.axis, settings: guideLinesLayerSettings, axisValuesX: Array(xAxisValues.dropFirst().dropLast()), axisValuesY: yAxisValues)
 
@@ -214,6 +234,8 @@ extension PredictedGlucoseChart {
             glucoseChartCache?.highlightLayer,
             prediction,
             alternatePrediction,
+            warningArea,
+            dangerArea,
             circles
         ]
 
@@ -241,7 +263,7 @@ extension PredictedGlucoseChart {
         }
         
         let yAxisValues = ChartAxisValuesStaticGenerator.generateYAxisValuesUsingLinearSegmentStep(chartPoints: points,
-            minSegmentCount: 2,
+            minSegmentCount: maxYAxisSegmentCount,
             maxSegmentCount: maxYAxisSegmentCount,
             multiple: glucoseUnit == .milligramsPerDeciliter ? (yAxisStepSizeMGDLOverride ?? 25) : 1,
             axisValueGenerator: axisValueGenerator,
