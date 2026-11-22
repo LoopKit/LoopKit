@@ -329,7 +329,8 @@ public struct StoredSettings: Equatable {
     public var pumpSupportedBasalRates: [Double]?
     /// The most basal rate entries the pump can store, or nil when no pump is configured.
     public var pumpMaximumBasalScheduleEntryCount: Int?
-    /// Every profile with Default first, or empty when Default, holding the live schedules, is the only one.
+    /// Every profile with Default first, or empty when Default, holding the live schedules, is the only one. The
+    /// active profile's entry may lag the live schedules; `resolvedTherapyProfiles` has the current values.
     public var therapyProfiles: [TherapyProfile]
     /// The profile the live schedules belong to; nil means Default.
     public var activeProfileName: String?
@@ -412,9 +413,10 @@ extension StoredSettings {
                        insulinSensitivitySchedule: insulinSensitivitySchedule)
     }
 
-    /// Every profile with Default first. Before any other profile exists this is Default alone.
+    /// Every profile with Default first, the active one holding the live schedules. Before any other profile exists
+    /// this is Default alone.
     public var resolvedTherapyProfiles: [TherapyProfile] {
-        TherapyProfiles.resolved(therapyProfiles, live: TherapyProfiles.activeName(activeProfileName) == TherapyProfile.defaultName ? liveTherapyProfile : nil)
+        TherapyProfiles.resolved(therapyProfiles, activeProfileName: activeProfileName, live: liveTherapyProfile)
     }
 
     /// The rules profiles were checked against with these settings, or nil when no pump was configured.

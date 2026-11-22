@@ -17,6 +17,8 @@ public final class TherapyProfilesViewModel: ObservableObject {
     @Published private(set) var profiles: [TherapyProfile] = []
     @Published private(set) var activeProfileName: String = TherapyProfile.defaultName
     @Published private(set) var scheduledSwitches: [ScheduledProfileSwitch] = []
+    /// Why each profile that fails the activation checks with the current settings and pump can not be activated.
+    @Published private(set) var activationProblems: [String: String] = [:]
 
     private weak var profileDelegate: TherapyProfileDelegate?
     /// Saves edits of the active profile, the same way as the Therapy Settings screen.
@@ -36,6 +38,36 @@ public final class TherapyProfilesViewModel: ObservableObject {
         profiles = profileDelegate?.therapyProfiles ?? []
         activeProfileName = profileDelegate?.activeTherapyProfileName ?? TherapyProfile.defaultName
         scheduledSwitches = profileDelegate?.scheduledProfileSwitches ?? []
+        activationProblems = Self.activationProblems(of: profiles, validator: activationValidator)
+    }
+
+    /// The activation checks with the current settings and pump, or nil without a pump.
+    private var activationValidator: TherapyProfileValidator? {
+        guard let increments = pumpSupportedIncrements() else {
+            return nil
+        }
+        let settings = therapySettings
+        return TherapyProfileValidator(supportedBasalRates: increments.basalRates,
+                                       maximumBasalRatePerHour: settings.maximumBasalRatePerHour,
+                                       maximumBasalScheduleEntryCount: increments.maximumBasalScheduleEntryCount,
+                                       suspendThreshold: settings.suspendThreshold)
+    }
+
+    static func activationProblems(of profiles: [TherapyProfile], validator: TherapyProfileValidator?) -> [String: String] {
+        guard let validator else {
+            return [:]
+        }
+        var problems: [String: String] = [:]
+        for profile in profiles {
+            let failures = validator.failures(of: profile)
+            guard !failures.isEmpty else {
+                continue
+            }
+            problems[profile.name] = TherapyProfileSchedule.allCases.compactMap { schedule in
+                failures[schedule].map { "\(schedule.therapySetting.title): \($0.localizedDescription)" }
+            }.joined(separator: "\n")
+        }
+        return problems
     }
 
     var therapySettings: TherapySettings {
@@ -237,6 +269,21 @@ public final class TherapyProfilesViewModel: ObservableObject {
             throw TherapyProfilesUnavailableError()
         }
         return profileDelegate
+    }
+}
+
+extension TherapyProfileSchedule {
+    var therapySetting: TherapySetting {
+        switch self {
+        case .correctionRange:
+            return .glucoseTargetRange
+        case .carbRatio:
+            return .carbRatio
+        case .basalRate:
+            return .basalRate
+        case .insulinSensitivity:
+            return .insulinSensitivity
+        }
     }
 }
 

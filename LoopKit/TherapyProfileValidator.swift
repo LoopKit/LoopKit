@@ -16,14 +16,14 @@ public struct TherapyProfileValidator {
     public static let maximumProfileCount = 20
     public static let scheduleSegmentInterval: TimeInterval = .minutes(30)
 
-    /// Allowed basal rates: the pump's supported rates within the scheduled basal guardrail.
+    /// The basal rates the pump supports, ascending.
     public let supportedBasalRates: [Double]
     public let maximumBasalRatePerHour: Double?
     public let maximumBasalScheduleEntryCount: Int?
     public let suspendThreshold: GlucoseThreshold?
 
     public init(supportedBasalRates: [Double], maximumBasalRatePerHour: Double?, maximumBasalScheduleEntryCount: Int?, suspendThreshold: GlucoseThreshold?) {
-        self.supportedBasalRates = supportedBasalRates.filter { (0.0...30.0).contains($0) }.sorted()
+        self.supportedBasalRates = supportedBasalRates.sorted()
         self.maximumBasalRatePerHour = maximumBasalRatePerHour
         self.maximumBasalScheduleEntryCount = maximumBasalScheduleEntryCount
         self.suspendThreshold = suspendThreshold
@@ -84,9 +84,9 @@ public struct TherapyProfileValidator {
         }
     }
 
-    /// Checks the rules that do not depend on a pump: schedule shape, the guardrails, and a correction range at or
-    /// above `suspendThreshold`.
-    public static func validateValues(of profile: TherapyProfile, suspendThreshold: GlucoseThreshold?) throws {
+    /// Checks the rules that do not depend on a pump for the schedules in `schedules`: schedule shape, the values the
+    /// editors offer, and a correction range at or above `suspendThreshold`.
+    public static func validateValues(of profile: TherapyProfile, suspendThreshold: GlucoseThreshold?, schedules: Set<TherapyProfileSchedule> = Set(TherapyProfileSchedule.allCases)) throws {
         let mgdl = LoopUnit.milligramsPerDeciliter
         guard let correctionRange = profile.glucoseTargetRangeSchedule.schedule(for: mgdl),
               let sensitivity = profile.insulinSensitivitySchedule.schedule(for: mgdl)
@@ -94,40 +94,64 @@ public struct TherapyProfileValidator {
             throw TherapyProfileError.invalidSchedule(LocalizedString("The profile has an unsupported glucose unit", comment: "Therapy profile error: unit"))
         }
 
-        try validateScheduleShape(startTimes: correctionRange.items.map(\.startTime), settingName: LocalizedString("Correction Range", comment: "Therapy profile schedule name: correction range"))
-        try validateScheduleShape(startTimes: profile.carbRatioSchedule.items.map(\.startTime), settingName: LocalizedString("Carb Ratios", comment: "Therapy profile schedule name: carb ratios"))
-        try validateScheduleShape(startTimes: profile.basalRateSchedule.items.map(\.startTime), settingName: LocalizedString("Basal Rates", comment: "Therapy profile schedule name: basal rates"))
-        try validateScheduleShape(startTimes: sensitivity.items.map(\.startTime), settingName: LocalizedString("Insulin Sensitivities", comment: "Therapy profile schedule name: insulin sensitivities"))
+        if schedules.contains(.correctionRange) {
+            try validateScheduleShape(startTimes: correctionRange.items.map(\.startTime), settingName: LocalizedString("Correction Range", comment: "Therapy profile schedule name: correction range"))
+        }
+        if schedules.contains(.carbRatio) {
+            try validateScheduleShape(startTimes: profile.carbRatioSchedule.items.map(\.startTime), settingName: LocalizedString("Carb Ratios", comment: "Therapy profile schedule name: carb ratios"))
+        }
+        if schedules.contains(.basalRate) {
+            try validateScheduleShape(startTimes: profile.basalRateSchedule.items.map(\.startTime), settingName: LocalizedString("Basal Rates", comment: "Therapy profile schedule name: basal rates"))
+        }
+        if schedules.contains(.insulinSensitivity) {
+            try validateScheduleShape(startTimes: sensitivity.items.map(\.startTime), settingName: LocalizedString("Insulin Sensitivities", comment: "Therapy profile schedule name: insulin sensitivities"))
+        }
 
-        let targetUnit = profile.glucoseTargetRangeSchedule.unit
-        let targetBounds = pickerBounds(of: Guardrail.correctionRange, in: targetUnit)
-        for (item, ownItem) in zip(correctionRange.items, profile.glucoseTargetRangeSchedule.items) {
-            guard item.value.minValue <= item.value.maxValue else {
-                throw TherapyProfileError.invalidSchedule(LocalizedString("A correction range has its lower value above its upper value", comment: "Therapy profile error: target low above high"))
-            }
-            guard contains(targetBounds, ownItem.value.minValue), Self.contains(targetBounds, ownItem.value.maxValue) else {
-                throw TherapyProfileError.valueOutOfRange(LocalizedString("Correction Range values are out of bounds", comment: "Therapy profile error: correction range out of bounds"))
-            }
-            if let suspendThreshold, item.value.minValue < suspendThreshold.quantity.doubleValue(for: mgdl) - tolerance {
-                throw TherapyProfileError.correctionRangeBelowSuspendThreshold
+        if schedules.contains(.correctionRange) {
+            let targetUnit = profile.glucoseTargetRangeSchedule.unit
+            let guardrailValues = Guardrail.correctionRange.absoluteBounds.glucosePickerValues(unit: targetUnit)
+            let lowerValues = (Guardrail.minCorrectionRangeValue(suspendThreshold: suspendThreshold)...Guardrail.correctionRange.absoluteBounds.upperBound).glucosePickerValues(unit: targetUnit)
+            for item in profile.glucoseTargetRangeSchedule.items {
+                guard item.value.minValue <= item.value.maxValue else {
+                    throw TherapyProfileError.invalidSchedule(LocalizedString("A correction range has its lower value above its upper value", comment: "Therapy profile error: target low above high"))
+                }
+                guard contains(guardrailValues, item.value.minValue), contains(guardrailValues, item.value.maxValue) else {
+                    throw TherapyProfileError.valueOutOfRange(LocalizedString("Correction Range values are out of bounds", comment: "Therapy profile error: correction range out of bounds"))
+                }
+                guard contains(lowerValues, item.value.minValue) else {
+                    throw TherapyProfileError.correctionRangeBelowSuspendThreshold
+                }
             }
         }
 
-        let carbRatioBounds = Guardrail.carbRatio.absoluteBounds.doubleBounds(for: .gramsPerUnit)
-        for item in profile.carbRatioSchedule.items where !contains(carbRatioBounds, item.value) {
-            throw TherapyProfileError.valueOutOfRange(LocalizedString("Carb Ratio values are out of bounds", comment: "Therapy profile error: carb ratio out of bounds"))
+        if schedules.contains(.carbRatio) {
+            let carbRatioBounds = Guardrail.carbRatio.absoluteBounds.doubleBounds(for: .gramsPerUnit)
+            for item in profile.carbRatioSchedule.items where !contains(carbRatioBounds, item.value) {
+                throw TherapyProfileError.valueOutOfRange(LocalizedString("Carb Ratio values are out of bounds", comment: "Therapy profile error: carb ratio out of bounds"))
+            }
         }
 
-        let sensitivityUnit: LoopUnit = profile.insulinSensitivitySchedule.unit == .millimolesPerLiter ? .millimolesPerLiterPerInternationalUnit : .milligramsPerDeciliterPerInternationalUnit
-        let sensitivityBounds = pickerBounds(of: Guardrail.insulinSensitivity, in: sensitivityUnit)
-        for item in profile.insulinSensitivitySchedule.items where !contains(sensitivityBounds, item.value) {
-            throw TherapyProfileError.valueOutOfRange(LocalizedString("Insulin Sensitivity values are out of bounds", comment: "Therapy profile error: ISF out of bounds"))
+        if schedules.contains(.insulinSensitivity) {
+            let sensitivityUnit: LoopUnit = profile.insulinSensitivitySchedule.unit == .millimolesPerLiter ? .millimolesPerLiterPerInternationalUnit : .milligramsPerDeciliterPerInternationalUnit
+            let sensitivityValues = Guardrail.insulinSensitivity.allValues(forUnit: sensitivityUnit)
+            for item in profile.insulinSensitivitySchedule.items where !contains(sensitivityValues, item.value) {
+                throw TherapyProfileError.valueOutOfRange(LocalizedString("Insulin Sensitivity values are out of bounds", comment: "Therapy profile error: ISF out of bounds"))
+            }
         }
     }
 
     /// Checks every rule and returns the profile with basal rates written exactly as the pump's supported rates.
     public func validate(_ profile: TherapyProfile) throws -> TherapyProfile {
-        try Self.validateValues(of: profile, suspendThreshold: suspendThreshold)
+        try validate(profile, schedules: Set(TherapyProfileSchedule.allCases))
+    }
+
+    /// Checks the rules for the schedules in `schedules` only, so a stored profile can be repaired one schedule at a
+    /// time. Returns the profile with basal rates written exactly as the pump's supported rates when they are checked.
+    public func validate(_ profile: TherapyProfile, schedules: Set<TherapyProfileSchedule>) throws -> TherapyProfile {
+        try Self.validateValues(of: profile, suspendThreshold: suspendThreshold, schedules: schedules)
+        guard schedules.contains(.basalRate) else {
+            return profile
+        }
 
         guard !supportedBasalRates.isEmpty else {
             throw TherapyProfileError.noPump
@@ -138,15 +162,17 @@ public struct TherapyProfileValidator {
         if let maximumBasalScheduleEntryCount, profile.basalRateSchedule.items.count > maximumBasalScheduleEntryCount {
             throw TherapyProfileError.invalidSchedule(String(format: LocalizedString("The pump supports at most %1$d basal rate entries", comment: "Therapy profile error: pump basal entry limit (1: maximum)"), maximumBasalScheduleEntryCount))
         }
+        let supported = Guardrail.selectableBasalRates(supportedBasalRates: supportedBasalRates, maximumBasalRate: nil)
+        let selectable = Guardrail.selectableBasalRates(supportedBasalRates: supportedBasalRates, maximumBasalRate: maximumBasalRatePerHour)
         var basalItems: [RepeatingScheduleValue<Double>] = []
         for item in profile.basalRateSchedule.items {
-            guard let supported = supportedBasalRates.first(where: { abs($0 - item.value) < Self.tolerance }) else {
+            guard let rate = selectable.first(where: { abs($0 - item.value) < Self.tolerance }) else {
+                if supported.contains(where: { abs($0 - item.value) < Self.tolerance }) {
+                    throw TherapyProfileError.basalRateAboveMaximum(item.value)
+                }
                 throw TherapyProfileError.unsupportedBasalRate(item.value)
             }
-            guard supported <= maximumBasalRatePerHour + Self.tolerance else {
-                throw TherapyProfileError.basalRateAboveMaximum(item.value)
-            }
-            basalItems.append(RepeatingScheduleValue(startTime: item.startTime, value: supported))
+            basalItems.append(RepeatingScheduleValue(startTime: item.startTime, value: rate))
         }
 
         var validated = profile
@@ -156,20 +182,33 @@ public struct TherapyProfileValidator {
         return validated
     }
 
+    /// The first broken rule of each schedule of `profile`, empty when it can be activated.
+    public func failures(of profile: TherapyProfile) -> [TherapyProfileSchedule: TherapyProfileError] {
+        var failures: [TherapyProfileSchedule: TherapyProfileError] = [:]
+        for schedule in TherapyProfileSchedule.allCases {
+            do {
+                _ = try validate(profile, schedules: [schedule])
+            } catch let error as TherapyProfileError {
+                failures[schedule] = error
+            } catch {
+                failures[schedule] = .invalidSchedule(error.localizedDescription)
+            }
+        }
+        return failures
+    }
+
     private static let tolerance = 1e-6
 
     private static func contains(_ range: ClosedRange<Double>, _ value: Double) -> Bool {
         value >= range.lowerBound - tolerance && value <= range.upperBound + tolerance
     }
 
-    /// The lowest and highest values the guardrail's picker offers in `unit`, which rounds the bounds to the unit's
-    /// digits: in mmol/L the correction range runs from 4.8 to 10.0.
-    private static func pickerBounds(of guardrail: Guardrail<LoopQuantity>, in unit: LoopUnit) -> ClosedRange<Double> {
-        let values = guardrail.allValues(forUnit: unit)
-        guard let lowest = values.first, let highest = values.last else {
-            return guardrail.absoluteBounds.doubleBounds(for: unit)
+    /// True when `value` lies between the lowest and the highest of `values`.
+    private static func contains(_ values: [Double], _ value: Double) -> Bool {
+        guard let lowest = values.min(), let highest = values.max() else {
+            return false
         }
-        return lowest...highest
+        return contains(lowest...highest, value)
     }
 
     private var recommendedTargetBoundsInMilligramsPerDeciliter: ClosedRange<Double> {
@@ -194,16 +233,17 @@ public struct TherapyProfileValidator {
             let upper = LoopQuantity(unit: mgdl, doubleValue: range.upperBound).doubleValue(for: unit)
             return Self.onStep(lower, glucoseStep, .up)...Self.onStep(upper, glucoseStep, .down)
         }
-        let targetPicker = Self.pickerBounds(of: Guardrail.correctionRange, in: unit)
-        let suspendLowerBound = suspendThreshold.map { Self.onStep($0.quantity.doubleValue(for: unit), glucoseStep, .up) } ?? targetPicker.lowerBound
-        let targetAbsolute = max(targetPicker.lowerBound, suspendLowerBound)...targetPicker.upperBound
+        let targetLowerValues = (Guardrail.minCorrectionRangeValue(suspendThreshold: suspendThreshold)...Guardrail.correctionRange.absoluteBounds.upperBound).glucosePickerValues(unit: unit)
+        let targetValues = Guardrail.correctionRange.absoluteBounds.glucosePickerValues(unit: unit)
+        let targetAbsolute = (targetLowerValues.min() ?? 0)...(targetValues.max() ?? 0)
         let targetRecommended = glucose(recommendedTargetBoundsInMilligramsPerDeciliter)
         let sensitivityUnit: LoopUnit = unit == .millimolesPerLiter ? .millimolesPerLiterPerInternationalUnit : .milligramsPerDeciliterPerInternationalUnit
-        let sensitivityAbsolute = Self.pickerBounds(of: Guardrail.insulinSensitivity, in: sensitivityUnit)
+        let sensitivityValues = Guardrail.insulinSensitivity.allValues(forUnit: sensitivityUnit)
+        let sensitivityAbsolute = (sensitivityValues.first ?? 0)...(sensitivityValues.last ?? 0)
         let sensitivityRecommended = glucose(Guardrail.insulinSensitivity.recommendedBounds.doubleBounds(for: .milligramsPerDeciliterPerInternationalUnit))
         let carbRatioAbsolute = Guardrail.carbRatio.absoluteBounds.doubleBounds(for: .gramsPerUnit)
         let carbRatioRecommended = Guardrail.carbRatio.recommendedBounds.doubleBounds(for: .gramsPerUnit)
-        let basalRates = supportedBasalRates.filter { $0 <= maximumBasalRatePerHour + Self.tolerance }
+        let basalRates = Guardrail.selectableBasalRates(supportedBasalRates: supportedBasalRates, maximumBasalRate: maximumBasalRatePerHour)
 
         return TherapyProfileEditLimits(
             unit: unit,

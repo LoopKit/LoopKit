@@ -57,11 +57,26 @@ public struct TherapyProfile: Codable, Equatable {
 
     /// True when both profiles hold the same schedule values, ignoring name, glucose unit and time zone.
     public func hasSameValues(as other: TherapyProfile) -> Bool {
+        schedulesDiffering(from: other).isEmpty
+    }
+
+    /// The schedules whose values differ from `other`'s, ignoring name, glucose unit and time zone.
+    public func schedulesDiffering(from other: TherapyProfile) -> Set<TherapyProfileSchedule> {
         let unit = LoopUnit.milligramsPerDeciliter
-        return glucoseTargetRangeSchedule.schedule(for: unit)?.items.roundedRanges == other.glucoseTargetRangeSchedule.schedule(for: unit)?.items.roundedRanges &&
-            carbRatioSchedule.items == other.carbRatioSchedule.items &&
-            basalRateSchedule.items == other.basalRateSchedule.items &&
-            insulinSensitivitySchedule.schedule(for: unit)?.items.roundedValues == other.insulinSensitivitySchedule.schedule(for: unit)?.items.roundedValues
+        var differing: Set<TherapyProfileSchedule> = []
+        if glucoseTargetRangeSchedule.schedule(for: unit)?.items.roundedRanges != other.glucoseTargetRangeSchedule.schedule(for: unit)?.items.roundedRanges {
+            differing.insert(.correctionRange)
+        }
+        if carbRatioSchedule.items != other.carbRatioSchedule.items {
+            differing.insert(.carbRatio)
+        }
+        if basalRateSchedule.items != other.basalRateSchedule.items {
+            differing.insert(.basalRate)
+        }
+        if insulinSensitivitySchedule.schedule(for: unit)?.items.roundedValues != other.insulinSensitivitySchedule.schedule(for: unit)?.items.roundedValues {
+            differing.insert(.insulinSensitivity)
+        }
+        return differing
     }
 
     /// This profile with every schedule in `timeZone`.
@@ -133,13 +148,22 @@ public struct TherapyProfile: Codable, Equatable {
     }
 }
 
+/// The four schedules a therapy profile holds.
+public enum TherapyProfileSchedule: CaseIterable, Hashable {
+    case correctionRange
+    case carbRatio
+    case basalRate
+    case insulinSensitivity
+}
+
 // MARK: - Fingerprint
 
 extension TherapyProfile {
     /// The value a follower computes from the uploaded profile and sends with a remote command, so the phone only acts
     /// on the values the follower reviewed. Canonical form, with glucose values in `unit` and every value to three
     /// decimals: `basal=<seconds>:<value>,...;carbratio=...;sens=...;target_low=...;target_high=...`, hashed with
-    /// SHA-256, first 16 hex characters. Nil when a glucose schedule has no values in `unit`.
+    /// SHA-256, first 16 hex characters. Nil when a glucose schedule has no values in `unit`. It detects a profile that
+    /// changed since the follower saw it; the command's OTP, not the fingerprint, authorizes the command.
     public func fingerprint(unit: LoopUnit) -> String? {
         canonicalFingerprintString(unit: unit).map(Self.fingerprint(canonical:))
     }
@@ -284,13 +308,19 @@ public enum TherapyProfiles {
         activeProfileName ?? TherapyProfile.defaultName
     }
 
-    /// The stored profiles with Default first, made from the live schedules when it is not stored.
-    public static func resolved(_ stored: [TherapyProfile], live: TherapyProfile?) -> [TherapyProfile] {
+    /// The stored profiles with Default first and the active profile holding the live schedules. Before any other
+    /// profile is stored, this is Default made from the live schedules.
+    public static func resolved(_ stored: [TherapyProfile], activeProfileName: String?, live: TherapyProfile?) -> [TherapyProfile] {
         var profiles = stored
-        if !profiles.contains(where: \.isDefault), let live {
-            var defaultProfile = live
-            defaultProfile.name = TherapyProfile.defaultName
-            profiles.insert(defaultProfile, at: 0)
+        let active = activeName(activeProfileName)
+        if let live {
+            var activeProfile = live
+            activeProfile.name = active
+            if let index = profiles.firstIndex(where: { $0.name == active }) {
+                profiles[index] = activeProfile
+            } else if active == TherapyProfile.defaultName {
+                profiles.insert(activeProfile, at: 0)
+            }
         }
         if let index = profiles.firstIndex(where: \.isDefault), index != 0 {
             profiles.insert(profiles.remove(at: index), at: 0)
@@ -300,17 +330,10 @@ public enum TherapyProfiles {
 
     /// The stored profiles after the live schedules are written to the active profile.
     public static func synchronizingActive(_ stored: [TherapyProfile], activeProfileName: String?, live: TherapyProfile?) -> [TherapyProfile] {
-        guard !stored.isEmpty, let live else {
+        guard !stored.isEmpty, live != nil else {
             return stored
         }
-        var profiles = resolved(stored, live: activeName(activeProfileName) == TherapyProfile.defaultName ? live : nil)
-        let active = activeName(activeProfileName)
-        if let index = profiles.firstIndex(where: { $0.name == active }) {
-            var updated = live
-            updated.name = active
-            profiles[index] = updated
-        }
-        return profiles
+        return resolved(stored, activeProfileName: activeProfileName, live: live)
     }
 
     /// Creates (`originalName` nil) or updates `profile`; a different `profile.name` renames it.
@@ -320,7 +343,7 @@ public enum TherapyProfiles {
                               in stored: [TherapyProfile],
                               activeProfileName: String?,
                               live: TherapyProfile?) throws -> (profiles: [TherapyProfile], activeProfileName: String?) {
-        var profiles = resolved(stored, live: activeName(activeProfileName) == TherapyProfile.defaultName ? live : nil)
+        var profiles = resolved(stored, activeProfileName: activeProfileName, live: live)
         var activeProfileName = activeProfileName
         let existingNames = profiles.map(\.name)
 
@@ -356,7 +379,7 @@ public enum TherapyProfiles {
         guard name != activeName(activeProfileName) else {
             throw TherapyProfileError.cannotDeleteActive
         }
-        var profiles = resolved(stored, live: activeName(activeProfileName) == TherapyProfile.defaultName ? live : nil)
+        var profiles = resolved(stored, activeProfileName: activeProfileName, live: live)
         guard let index = profiles.firstIndex(where: { $0.name == name }) else {
             throw TherapyProfileError.notFound(name)
         }
@@ -366,10 +389,10 @@ public enum TherapyProfiles {
 
     /// The stored list in the order of `names`, Default first. Names not in the list keep their relative order at the end.
     public static func reordering(_ stored: [TherapyProfile], names: [String], live: TherapyProfile?, activeProfileName: String?) -> [TherapyProfile] {
-        let profiles = resolved(stored, live: activeName(activeProfileName) == TherapyProfile.defaultName ? live : nil)
+        let profiles = resolved(stored, activeProfileName: activeProfileName, live: live)
         let ordered = names.compactMap { name in profiles.first(where: { $0.name == name }) }
         let rest = profiles.filter { profile in !names.contains(profile.name) }
-        return resolved(ordered + rest, live: nil)
+        return resolved(ordered + rest, activeProfileName: nil, live: nil)
     }
 }
 

@@ -457,6 +457,12 @@
     "%1$@ %2$@ · %3$@ starts" : {
       "comment" : "Scheduled switch row (1: short weekday, 2: time, 3: profile name)"
     },
+    "%1$@ cannot be activated" : {
+      "comment" : "Scheduled switch line when its profile fails the activation checks (1: profile name)"
+    },
+    "%1$@ does not pass the checks for activation, so you will not be able to switch back to it until its settings are edited to fit." : {
+      "comment" : "Activate profile confirmation when the active profile fails the activation checks (1: active profile name)"
+    },
     "%1$@ is used by %2$d scheduled switches, which will be removed." : {
       "comment" : "Delete profile confirmation: scheduled switches removed (1: profile name, 2: number of scheduled switches)"
     },
@@ -636,8 +642,14 @@
     "At those times the profile active before stays active until the next scheduled start." : {
       "comment" : "Delete profile confirmation: what removing scheduled switches does to the week"
     },
+    "Cannot be activated" : {
+      "comment" : "Profile list line of a profile that fails the activation checks"
+    },
     "Day" : {
       "comment" : "Scheduled switch editor: weekday picker label"
+    },
+    "Edit the settings named above to fit the current limits and pump." : {
+      "comment" : "How to fix a profile that fails the activation checks"
     },
     "every week" : {
       "comment" : "Span line of the only scheduled switch that is not paused"
@@ -677,6 +689,9 @@
     },
     "until %1$@" : {
       "comment" : "Span line of a scheduled switch: until the next start (1: short weekday and time)"
+    },
+    "With this change, %1$@ can no longer be activated until its settings are edited to fit." : {
+      "comment" : "Save confirmation naming the profiles a change leaves impossible to activate (1: list of profile names)"
     },
     "－" : {
       "localizations" : {

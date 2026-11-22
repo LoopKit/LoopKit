@@ -65,6 +65,10 @@ struct TherapyProfileView: View {
                         .fixedSize(horizontal: false, vertical: true)
                         .accessibilityIdentifier("text_ProfileExplanation")
 
+                    if let problem = viewModel.activationProblems[profileName] {
+                        activationProblemView(problem)
+                    }
+
                     if profile != nil {
                         profileCardStack
                     }
@@ -117,7 +121,7 @@ struct TherapyProfileView: View {
             case .activate:
                 return Alert(
                     title: Text(LocalizedString("Activate Profile", comment: "Title of the activate profile confirmation")),
-                    message: Text(String(format: LocalizedString("%1$@ writes the basal rates of %2$@ to the pump and doses with its settings right away.", comment: "Activate profile confirmation (1: app name, 2: profile name)"), appName, profileName) + activationScheduleText),
+                    message: Text(String(format: LocalizedString("%1$@ writes the basal rates of %2$@ to the pump and doses with its settings right away.", comment: "Activate profile confirmation (1: app name, 2: profile name)"), appName, profileName) + activationScheduleText + switchBackText),
                     primaryButton: .default(Text(LocalizedString("Activate", comment: "Button to activate a therapy profile")), action: activate),
                     secondaryButton: .cancel()
                 )
@@ -185,6 +189,34 @@ struct TherapyProfileView: View {
             return ""
         }
         return " " + String(format: LocalizedString("It stays active until %1$@.", comment: "Activate profile confirmation: the next scheduled start (1: profile name, weekday and time)"), next.entry.localizedDescription)
+    }
+
+    /// A warning when the active profile itself fails the activation checks, so switching away can not be undone.
+    private var switchBackText: String {
+        let active = viewModel.activeProfileName
+        guard active != profileName, viewModel.activationProblems[active] != nil else {
+            return ""
+        }
+        return "\n\n" + String(format: LocalizedString("%1$@ does not pass the checks for activation, so you will not be able to switch back to it until its settings are edited to fit.", comment: "Activate profile confirmation when the active profile fails the activation checks (1: active profile name)"), active)
+    }
+
+    private func activationProblemView(_ problem: String) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Label(LocalizedString("Cannot be activated", comment: "Title of the reasons a profile fails the activation checks"), systemImage: "exclamationmark.triangle.fill")
+                .font(.headline)
+                .foregroundColor(.orange)
+            Text(problem)
+                .font(.subheadline)
+                .fixedSize(horizontal: false, vertical: true)
+            Text(LocalizedString("Edit the settings named above to fit the current limits and pump.", comment: "How to fix a profile that fails the activation checks"))
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding([.leading, .trailing])
+        .padding(.top, 8)
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("text_ProfileActivationProblem")
     }
 
     /// The scheduled switches the deletion removes, and what that does to the week.

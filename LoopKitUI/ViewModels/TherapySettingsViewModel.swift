@@ -115,7 +115,9 @@ extension TherapySettingsViewModel {
         return try await delegate?.syncDeliveryLimits(deliveryLimits: deliveryLimits) ?? deliveryLimits
     }
 
-    /// False, with `saveError` set, when the delegate refuses changes made from the settings shown.
+    /// False, with `saveError` set, when the delegate refuses changes made from the settings shown. Every save passes
+    /// through it, including settings outside the profiles, because `saveCompletion` hands the delegate the whole
+    /// settings copy this screen opened with, the four schedules included.
     private func canSave() -> Bool {
         do {
             try delegate?.validateTherapySettingsEdit(from: therapySettings)
@@ -223,5 +225,39 @@ extension TherapySettingsViewModel {
         guard canSave() else { return }
         therapySettings.insulinSensitivitySchedule = insulinSensitivitySchedule
         delegate?.saveCompletion(therapySettings: therapySettings)
+    }
+}
+
+// MARK: Profiles
+extension TherapySettingsViewModel {
+    /// The validator for activating a profile with `settings` and the pump's increments, or nil without a pump.
+    func therapyProfileValidator(for settings: TherapySettings) -> TherapyProfileValidator? {
+        guard let increments = pumpSupportedIncrements() else {
+            return nil
+        }
+        return TherapyProfileValidator(supportedBasalRates: increments.basalRates,
+                                       maximumBasalRatePerHour: settings.maximumBasalRatePerHour,
+                                       maximumBasalScheduleEntryCount: increments.maximumBasalScheduleEntryCount,
+                                       suspendThreshold: settings.suspendThreshold)
+    }
+
+    /// The profiles that can be activated now but not once `change` is made to these settings, for example a lower
+    /// maximum basal rate or a higher glucose safety limit.
+    public func therapyProfilesFailing(after change: (inout TherapySettings) -> Void) -> [String] {
+        var changed = therapySettings
+        change(&changed)
+        guard let profiles = therapySettings.therapyProfiles,
+              let current = therapyProfileValidator(for: therapySettings),
+              let proposed = therapyProfileValidator(for: changed)
+        else {
+            return []
+        }
+        return profiles.filter { (try? current.validate($0)) != nil && (try? proposed.validate($0)) == nil }.map(\.name)
+    }
+
+    /// Names the profiles a change leaves impossible to activate, for a save confirmation.
+    static func therapyProfilesFailingMessage(_ names: [String]) -> String {
+        String(format: LocalizedString("With this change, %1$@ can no longer be activated until its settings are edited to fit.", comment: "Save confirmation naming the profiles a change leaves impossible to activate (1: list of profile names)"),
+               ListFormatter.localizedString(byJoining: names))
     }
 }

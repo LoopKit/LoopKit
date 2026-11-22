@@ -417,7 +417,7 @@ final class TherapyProfileTests: XCTestCase {
     func testEditLimitsInMilligramsPerDeciliter() throws {
         let limits = try XCTUnwrap(validator.editLimits(unit: .milligramsPerDeciliter))
         XCTAssertEqual(limits.maximumBasalRatePerHour, 3.0)
-        XCTAssertEqual(limits.basalRates.first, 0)
+        XCTAssertEqual(limits.basalRates.first, 0.05)
         XCTAssertEqual(limits.basalRates.last, 3.0)
         XCTAssertEqual(limits.target.bounds, 87...180)
         XCTAssertEqual(limits.carbRatio.bounds, 2...150)
@@ -435,5 +435,82 @@ final class TherapyProfileTests: XCTestCase {
         XCTAssertEqual(limits.target.bounds.upperBound, 10.0, accuracy: 0.0001)
         XCTAssertEqual(limits.sensitivity.bounds.upperBound, 27.8, accuracy: 0.0001)
         XCTAssertNoThrow(try validator.validate(profile("x", target: [(0, limits.target.bounds.lowerBound, limits.target.bounds.upperBound)], sensitivity: [(0, limits.sensitivity.bounds.lowerBound)], unit: .millimolesPerLiter)))
+    }
+
+    // MARK: Editors and validator agree
+
+    private let offGridThreshold = GlucoseThreshold(unit: .milligramsPerDeciliter, value: 89)
+
+    func testEveryBasalRateTheEditorOffersValidatesAndNoOtherDoes() throws {
+        let editorRates = Guardrail.selectableBasalRates(supportedBasalRates: supportedBasalRates, maximumBasalRate: 3.0)
+        XCTAssertEqual(editorRates.first, 0.05)
+        XCTAssertEqual(editorRates.last, 3.0)
+        for rate in editorRates {
+            XCTAssertNoThrow(try validator.validate(profile("x", basal: [(0, rate)])), "\(rate)")
+        }
+        assertRejects(profile("x", basal: [(0, 0)])) { $0 == .unsupportedBasalRate(0) }
+        assertRejects(profile("x", basal: [(0, 3.05)])) { $0 == .basalRateAboveMaximum(3.05) }
+        XCTAssertEqual(try XCTUnwrap(validator.editLimits(unit: .milligramsPerDeciliter)).basalRates, editorRates)
+    }
+
+    func testCorrectionRangeBoundsAreThoseOfThePickers() throws {
+        for unit in [LoopUnit.milligramsPerDeciliter, .millimolesPerLiter] {
+            for threshold in [GlucoseThreshold(unit: .milligramsPerDeciliter, value: 75), offGridThreshold, GlucoseThreshold(unit: .milligramsPerDeciliter, value: 100)] {
+                let validator = TherapyProfileValidator(supportedBasalRates: supportedBasalRates, maximumBasalRatePerHour: 3, maximumBasalScheduleEntryCount: nil, suspendThreshold: threshold)
+                let lowerValues = (Guardrail.minCorrectionRangeValue(suspendThreshold: threshold)...Guardrail.correctionRange.absoluteBounds.upperBound).glucosePickerValues(unit: unit)
+                let upperValues = Guardrail.correctionRange.absoluteBounds.glucosePickerValues(unit: unit)
+                let step = unit.glucosePickerStride
+                func accepts(_ low: Double, _ high: Double) -> Bool {
+                    (try? validator.validate(profile("x", target: [(0, low, high)], sensitivity: [(0, unit == .millimolesPerLiter ? 2.8 : 50)], unit: unit))) != nil
+                }
+                let label = "\(unit) \(threshold.value)"
+                for low in lowerValues {
+                    XCTAssertTrue(accepts(low, upperValues.last!), "\(label) low \(low)")
+                }
+                XCTAssertTrue(accepts(lowerValues.first!, lowerValues.first!), label)
+                XCTAssertFalse(accepts(lowerValues.first! - step, upperValues.last!), label)
+                XCTAssertFalse(accepts(lowerValues.first!, upperValues.last! + step), label)
+                let limits = try XCTUnwrap(validator.editLimits(unit: unit))
+                XCTAssertEqual(limits.target.bounds.lowerBound, lowerValues.first!, accuracy: 0.0001, label)
+                XCTAssertEqual(limits.target.bounds.upperBound, upperValues.last!, accuracy: 0.0001, label)
+            }
+        }
+    }
+
+    func testOffGridSafetyLimitAcceptsTheLowestValueThePickerShows() throws {
+        let validator = TherapyProfileValidator(supportedBasalRates: supportedBasalRates, maximumBasalRatePerHour: 3, maximumBasalScheduleEntryCount: nil, suspendThreshold: offGridThreshold)
+        let lowest = try XCTUnwrap((Guardrail.minCorrectionRangeValue(suspendThreshold: offGridThreshold)...Guardrail.correctionRange.absoluteBounds.upperBound).glucosePickerValues(unit: .millimolesPerLiter).first)
+        XCTAssertEqual(lowest, 4.9, accuracy: 0.0001)
+        XCTAssertNoThrow(try validator.validate(profile("x", target: [(0, 4.9, 6.0)], sensitivity: [(0, 2.8)], unit: .millimolesPerLiter)))
+        XCTAssertThrowsError(try validator.validate(profile("x", target: [(0, 4.8, 6.0)], sensitivity: [(0, 2.8)], unit: .millimolesPerLiter))) {
+            XCTAssertEqual($0 as? TherapyProfileError, .correctionRangeBelowSuspendThreshold)
+        }
+    }
+
+    // MARK: Repair one schedule at a time
+
+    func testValidatingSomeSchedulesIgnoresTheOthers() throws {
+        let broken = profile("x", target: [(0, 80, 100)], basal: [(0, 3.5)])
+        XCTAssertThrowsError(try validator.validate(broken))
+        XCTAssertNoThrow(try validator.validate(broken, schedules: [.carbRatio, .insulinSensitivity]))
+        XCTAssertThrowsError(try validator.validate(broken, schedules: [.basalRate])) { XCTAssertEqual($0 as? TherapyProfileError, .basalRateAboveMaximum(3.5)) }
+        XCTAssertEqual(Set(validator.failures(of: broken).keys), [.correctionRange, .basalRate])
+        XCTAssertTrue(validator.failures(of: profile("x")).isEmpty)
+    }
+
+    func testSchedulesDifferingNamesTheChangedSchedules() {
+        let base = profile("x")
+        XCTAssertEqual(base.schedulesDiffering(from: base), [])
+        XCTAssertEqual(profile("y", basal: [(0, 0.9)]).schedulesDiffering(from: base), [.basalRate])
+        XCTAssertEqual(profile("y", target: [(0, 5.6, 6.1)], unit: .millimolesPerLiter).schedulesDiffering(from: base), [.correctionRange, .insulinSensitivity])
+    }
+
+    func testResolvedUsesTheLiveSchedulesForWhicheverProfileIsActive() {
+        let stored = [profile("Default"), profile("Weekend", basal: [(0, 0.5)])]
+        let live = profile("Weekend", basal: [(0, 0.7)])
+        let resolved = TherapyProfiles.resolved(stored, activeProfileName: "Weekend", live: live)
+        XCTAssertEqual(resolved.map(\.name), ["Default", "Weekend"])
+        XCTAssertEqual(resolved[1].basalRateSchedule.items.map(\.value), [0.7])
+        XCTAssertEqual(resolved[0].basalRateSchedule.items.map(\.value), [0.85, 1.0])
     }
 }

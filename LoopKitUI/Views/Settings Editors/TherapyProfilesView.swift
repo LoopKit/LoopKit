@@ -39,7 +39,14 @@ public struct TherapyProfilesView: View {
                                     Image(systemName: "checkmark")
                                         .foregroundColor(.accentColor)
                                         .opacity(viewModel.isActive(profile) ? 1 : 0)
-                                    Text(profile.name)
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        Text(profile.name)
+                                        if viewModel.activationProblems[profile.name] != nil {
+                                            Label(LocalizedString("Cannot be activated", comment: "Profile list line of a profile that fails the activation checks"), systemImage: "exclamationmark.triangle.fill")
+                                                .font(.footnote)
+                                                .foregroundColor(.orange)
+                                        }
+                                    }
                                     Spacer()
                                     if viewModel.isActive(profile) {
                                         Text(LocalizedString("Active", comment: "Label of the active profile in the profile list"))
@@ -139,6 +146,11 @@ public struct TherapyProfilesView: View {
             }
             .font(.footnote)
             .foregroundColor(.secondary)
+            if viewModel.activationProblems[entry.profileName] != nil {
+                Label(String(format: LocalizedString("%1$@ cannot be activated", comment: "Scheduled switch line when its profile fails the activation checks (1: profile name)"), entry.profileName), systemImage: "exclamationmark.triangle.fill")
+                    .font(.footnote)
+                    .foregroundColor(.orange)
+            }
         }
         .opacity(entry.paused ? 0.5 : 1)
     }
