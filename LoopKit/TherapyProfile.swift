@@ -264,7 +264,7 @@ public enum TherapyProfileError: LocalizedError, Equatable {
         case .cannotRenameDefault:
             return String(format: LocalizedString("The %1$@ profile cannot be renamed", comment: "Therapy profile error: rename Default (1: Default)"), TherapyProfile.defaultName)
         case .conflict:
-            return LocalizedString("The profile changed after these values were read. Review the profile and make the change again.", comment: "Therapy profile error: fingerprint mismatch")
+            return LocalizedString("The profile changed on the phone after it was uploaded. Review it again and resend.", comment: "Therapy profile error: fingerprint mismatch")
         case .noPump:
             return LocalizedString("No pump is configured, so the basal rates cannot be checked", comment: "Therapy profile error: no pump")
         case .maximumBasalRateNotSet:
@@ -278,7 +278,7 @@ public enum TherapyProfileError: LocalizedError, Equatable {
         case .activeProfileChangedWhileEditing(let name):
             return String(format: LocalizedString("The active profile changed to %1$@ while these settings were open, so the change was not saved. Open the settings again to edit %1$@.", comment: "Therapy profile error: active profile changed during an edit (1: active profile name)"), name)
         case .settingsChangedWhileEditing:
-            return LocalizedString("These settings changed while they were open, for example by a scheduled switch, so the change was not saved. Open the settings again to see the current values.", comment: "Therapy profile error: settings changed during an edit")
+            return LocalizedString("These settings changed on the phone while they were open, for example by a remote command, so the change was not saved. Open the settings again to see the current values.", comment: "Therapy profile error: settings changed during an edit")
         case .invalidSchedule(let reason):
             return reason
         case .valueOutOfRange(let reason):
