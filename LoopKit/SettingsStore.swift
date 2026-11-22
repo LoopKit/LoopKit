@@ -325,6 +325,10 @@ public struct StoredSettings: Equatable {
     // This is the user's display preference glucose unit. TODO: Rename?
     public var bloodGlucoseUnit: LoopUnit?
     public var automaticDosingStrategy: AutomaticDosingStrategy
+    /// The basal rates the pump supports, or nil when no pump is configured.
+    public var pumpSupportedBasalRates: [Double]?
+    /// The most basal rate entries the pump can store, or nil when no pump is configured.
+    public var pumpMaximumBasalScheduleEntryCount: Int?
     /// Every profile with Default first, or empty when Default, holding the live schedules, is the only one. The
     /// active profile's entry may lag the live schedules; `resolvedTherapyProfiles` has the current values.
     public var therapyProfiles: [TherapyProfile]
@@ -359,6 +363,8 @@ public struct StoredSettings: Equatable {
                 pumpDevice: HKDevice? = nil,
                 bloodGlucoseUnit: LoopUnit? = nil,
                 automaticDosingStrategy: AutomaticDosingStrategy = .tempBasalOnly,
+                pumpSupportedBasalRates: [Double]? = nil,
+                pumpMaximumBasalScheduleEntryCount: Int? = nil,
                 therapyProfiles: [TherapyProfile] = [],
                 activeProfileName: String? = nil,
                 scheduledSwitches: [ScheduledProfileSwitch] = [],
@@ -386,6 +392,8 @@ public struct StoredSettings: Equatable {
         self.pumpDevice = pumpDevice
         self.bloodGlucoseUnit = bloodGlucoseUnit
         self.automaticDosingStrategy = automaticDosingStrategy
+        self.pumpSupportedBasalRates = pumpSupportedBasalRates
+        self.pumpMaximumBasalScheduleEntryCount = pumpMaximumBasalScheduleEntryCount
         self.therapyProfiles = therapyProfiles
         self.activeProfileName = activeProfileName
         self.scheduledSwitches = scheduledSwitches
@@ -409,6 +417,17 @@ extension StoredSettings {
     /// this is Default alone.
     public var resolvedTherapyProfiles: [TherapyProfile] {
         TherapyProfiles.resolved(therapyProfiles, activeProfileName: activeProfileName, live: liveTherapyProfile)
+    }
+
+    /// The rules profiles were checked against with these settings, or nil when no pump was configured.
+    public var therapyProfileValidator: TherapyProfileValidator? {
+        guard let pumpSupportedBasalRates else {
+            return nil
+        }
+        return TherapyProfileValidator(supportedBasalRates: pumpSupportedBasalRates,
+                                       maximumBasalRatePerHour: maximumBasalRatePerHour,
+                                       maximumBasalScheduleEntryCount: pumpMaximumBasalScheduleEntryCount,
+                                       suspendThreshold: suspendThreshold)
     }
 }
 
@@ -450,6 +469,8 @@ extension StoredSettings: Codable {
                   pumpDevice: try container.decodeIfPresent(CodableDevice.self, forKey: .pumpDevice)?.device,
                   bloodGlucoseUnit: bloodGlucoseUnit,
                   automaticDosingStrategy: try container.decodeIfPresent(AutomaticDosingStrategy.self, forKey: .automaticDosingStrategy) ?? .tempBasalOnly,
+                  pumpSupportedBasalRates: try container.decodeIfPresent([Double].self, forKey: .pumpSupportedBasalRates),
+                  pumpMaximumBasalScheduleEntryCount: try container.decodeIfPresent(Int.self, forKey: .pumpMaximumBasalScheduleEntryCount),
                   therapyProfiles: (try? container.decodeIfPresent([Lossy<TherapyProfile>].self, forKey: .therapyProfiles))??.compactMap(\.value) ?? [],
                   activeProfileName: try container.decodeIfPresent(String.self, forKey: .activeProfileName),
                   scheduledSwitches: (try? container.decodeIfPresent([Lossy<ScheduledProfileSwitch>].self, forKey: .scheduledSwitches))??.compactMap(\.value) ?? [],
@@ -482,6 +503,8 @@ extension StoredSettings: Codable {
         try container.encodeIfPresent(pumpDevice.map { CodableDevice($0) }, forKey: .pumpDevice)
         try container.encode(bloodGlucoseUnit.unitString, forKey: .bloodGlucoseUnit)
         try container.encode(automaticDosingStrategy, forKey: .automaticDosingStrategy)
+        try container.encodeIfPresent(pumpSupportedBasalRates, forKey: .pumpSupportedBasalRates)
+        try container.encodeIfPresent(pumpMaximumBasalScheduleEntryCount, forKey: .pumpMaximumBasalScheduleEntryCount)
         if !therapyProfiles.isEmpty {
             try container.encode(therapyProfiles, forKey: .therapyProfiles)
         }
@@ -534,6 +557,8 @@ extension StoredSettings: Codable {
         case pumpDevice
         case bloodGlucoseUnit
         case automaticDosingStrategy
+        case pumpSupportedBasalRates
+        case pumpMaximumBasalScheduleEntryCount
         case therapyProfiles
         case activeProfileName
         case scheduledSwitches

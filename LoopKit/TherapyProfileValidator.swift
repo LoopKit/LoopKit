@@ -210,6 +210,77 @@ public struct TherapyProfileValidator {
         }
         return contains(lowest...highest, value)
     }
+
+    private var recommendedTargetBoundsInMilligramsPerDeciliter: ClosedRange<Double> {
+        let mgdl = LoopUnit.milligramsPerDeciliter
+        let absolute = Guardrail.correctionRange.absoluteBounds.doubleBounds(for: mgdl)
+        let recommended = Guardrail.correctionRange.recommendedBounds.doubleBounds(for: mgdl)
+        let lower = max(absolute.lowerBound, suspendThreshold?.quantity.doubleValue(for: mgdl) ?? absolute.lowerBound)
+        return max(lower, recommended.lowerBound)...recommended.upperBound
+    }
+
+    // MARK: Edit limits
+
+    /// Limits for editing profiles elsewhere, such as in a caregiver app, in `unit`.
+    public func editLimits(unit: LoopUnit) -> TherapyProfileEditLimits? {
+        guard let maximumBasalRatePerHour, !supportedBasalRates.isEmpty else {
+            return nil
+        }
+        let mgdl = LoopUnit.milligramsPerDeciliter
+        let glucoseStep = unit == .millimolesPerLiter ? 0.1 : 1
+        func glucose(_ range: ClosedRange<Double>) -> ClosedRange<Double> {
+            let lower = LoopQuantity(unit: mgdl, doubleValue: range.lowerBound).doubleValue(for: unit)
+            let upper = LoopQuantity(unit: mgdl, doubleValue: range.upperBound).doubleValue(for: unit)
+            return Self.onStep(lower, glucoseStep, .up)...Self.onStep(upper, glucoseStep, .down)
+        }
+        let targetLowerValues = (Guardrail.minCorrectionRangeValue(suspendThreshold: suspendThreshold)...Guardrail.correctionRange.absoluteBounds.upperBound).glucosePickerValues(unit: unit)
+        let targetValues = Guardrail.correctionRange.absoluteBounds.glucosePickerValues(unit: unit)
+        let targetAbsolute = (targetLowerValues.min() ?? 0)...(targetValues.max() ?? 0)
+        let targetRecommended = glucose(recommendedTargetBoundsInMilligramsPerDeciliter)
+        let sensitivityUnit: LoopUnit = unit == .millimolesPerLiter ? .millimolesPerLiterPerInternationalUnit : .milligramsPerDeciliterPerInternationalUnit
+        let sensitivityValues = Guardrail.insulinSensitivity.allValues(forUnit: sensitivityUnit)
+        let sensitivityAbsolute = (sensitivityValues.first ?? 0)...(sensitivityValues.last ?? 0)
+        let sensitivityRecommended = glucose(Guardrail.insulinSensitivity.recommendedBounds.doubleBounds(for: .milligramsPerDeciliterPerInternationalUnit))
+        let carbRatioAbsolute = Guardrail.carbRatio.absoluteBounds.doubleBounds(for: .gramsPerUnit)
+        let carbRatioRecommended = Guardrail.carbRatio.recommendedBounds.doubleBounds(for: .gramsPerUnit)
+        let basalRates = Guardrail.selectableBasalRates(supportedBasalRates: supportedBasalRates, maximumBasalRate: maximumBasalRatePerHour)
+
+        return TherapyProfileEditLimits(
+            unit: unit,
+            maximumBasalRatePerHour: maximumBasalRatePerHour,
+            basalRates: basalRates,
+            maximumBasalScheduleEntryCount: maximumBasalScheduleEntryCount,
+            carbRatio: .init(bounds: carbRatioAbsolute, step: 0.1, recommended: carbRatioRecommended),
+            sensitivity: .init(bounds: sensitivityAbsolute, step: glucoseStep, recommended: sensitivityRecommended),
+            target: .init(bounds: targetAbsolute, step: glucoseStep, recommended: targetRecommended),
+            maximumScheduleEntryCount: Self.maximumScheduleEntryCount,
+            segmentInterval: Self.scheduleSegmentInterval)
+    }
+
+    private static func onStep(_ value: Double, _ step: Double, _ rule: FloatingPointRoundingRule) -> Double {
+        let steps = (value / step + (rule == .up ? -1e-9 : 1e-9)).rounded(rule)
+        return (steps * step * 1000).rounded() / 1000
+    }
+}
+
+/// Bounds for editing profile values, as published to remote services.
+public struct TherapyProfileEditLimits: Equatable {
+    public struct ValueLimits: Equatable {
+        public let bounds: ClosedRange<Double>
+        public let step: Double
+        public let recommended: ClosedRange<Double>?
+    }
+
+    public let unit: LoopUnit
+    public let maximumBasalRatePerHour: Double
+    /// The supported basal rates up to the maximum basal rate.
+    public let basalRates: [Double]
+    public let maximumBasalScheduleEntryCount: Int?
+    public let carbRatio: ValueLimits
+    public let sensitivity: ValueLimits
+    public let target: ValueLimits
+    public let maximumScheduleEntryCount: Int
+    public let segmentInterval: TimeInterval
 }
 
 private extension ClosedRange where Bound == LoopQuantity {
