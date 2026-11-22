@@ -159,8 +159,9 @@ public enum TherapyProfileSchedule: CaseIterable, Hashable {
 // MARK: - Fingerprint
 
 extension TherapyProfile {
-    /// Identifies the profile's schedule values, so a change made from an outdated copy is refused. Canonical form, with
-    /// glucose values in `unit` and every value to three decimals:
+    /// Identifies the profile's schedule values, so a change made from an outdated copy is refused. A follower computes it
+    /// from the uploaded profile and sends it with a remote command; the command's OTP, not the fingerprint, authorizes
+    /// the command. Canonical form, with glucose values in `unit` and every value to three decimals:
     /// `basal=<seconds>:<value>,...;carbratio=...;sens=...;target_low=...;target_high=...`, hashed with SHA-256, first
     /// 16 hex characters. Nil when a glucose schedule has no values in `unit`.
     public func fingerprint(unit: LoopUnit) -> String? {
