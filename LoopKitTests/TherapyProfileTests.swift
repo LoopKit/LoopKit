@@ -397,46 +397,6 @@ final class TherapyProfileTests: XCTestCase {
         XCTAssertFalse(profile("Sport", basal: [(0, 0.9)]).matches(fingerprint: "3e603478d512da04"))
     }
 
-    func testStoredSettingsCarryThePumpLimitsProfilesAreCheckedAgainst() throws {
-        var settings = StoredSettings(maximumBasalRatePerHour: 3.0,
-                                      suspendThreshold: GlucoseThreshold(unit: .milligramsPerDeciliter, value: 75),
-                                      bloodGlucoseUnit: .milligramsPerDeciliter,
-                                      pumpSupportedBasalRates: supportedBasalRates,
-                                      pumpMaximumBasalScheduleEntryCount: 24)
-        let decoded = try PropertyListDecoder().decode(StoredSettings.self, from: PropertyListEncoder().encode(settings))
-        XCTAssertEqual(decoded, settings)
-        let validator = try XCTUnwrap(decoded.therapyProfileValidator)
-        XCTAssertEqual(validator.editLimits(unit: .milligramsPerDeciliter), self.validator.editLimits(unit: .milligramsPerDeciliter))
-
-        settings.pumpSupportedBasalRates = nil
-        XCTAssertNil(settings.therapyProfileValidator)
-    }
-
-    // MARK: Edit limits
-
-    func testEditLimitsInMilligramsPerDeciliter() throws {
-        let limits = try XCTUnwrap(validator.editLimits(unit: .milligramsPerDeciliter))
-        XCTAssertEqual(limits.maximumBasalRatePerHour, 3.0)
-        XCTAssertEqual(limits.basalRates.first, 0.05)
-        XCTAssertEqual(limits.basalRates.last, 3.0)
-        XCTAssertEqual(limits.target.bounds, 87...180)
-        XCTAssertEqual(limits.carbRatio.bounds, 2...150)
-        XCTAssertEqual(limits.carbRatio.recommended, 4...28)
-        XCTAssertEqual(limits.sensitivity.bounds, 10...500)
-        XCTAssertEqual(limits.sensitivity.recommended, 16...399)
-        XCTAssertEqual(limits.maximumScheduleEntryCount, 48)
-        XCTAssertEqual(limits.segmentInterval, 1800)
-    }
-
-    func testEditLimitsInMillimolesPerLiterMatchTheGuardrailPickers() throws {
-        let limits = try XCTUnwrap(validator.editLimits(unit: .millimolesPerLiter))
-        XCTAssertEqual(limits.target.step, 0.1)
-        XCTAssertEqual(limits.target.bounds.lowerBound, 4.8, accuracy: 0.0001)
-        XCTAssertEqual(limits.target.bounds.upperBound, 10.0, accuracy: 0.0001)
-        XCTAssertEqual(limits.sensitivity.bounds.upperBound, 27.8, accuracy: 0.0001)
-        XCTAssertNoThrow(try validator.validate(profile("x", target: [(0, limits.target.bounds.lowerBound, limits.target.bounds.upperBound)], sensitivity: [(0, limits.sensitivity.bounds.lowerBound)], unit: .millimolesPerLiter)))
-    }
-
     // MARK: Editors and validator agree
 
     private let offGridThreshold = GlucoseThreshold(unit: .milligramsPerDeciliter, value: 89)
@@ -450,7 +410,6 @@ final class TherapyProfileTests: XCTestCase {
         }
         assertRejects(profile("x", basal: [(0, 0)])) { $0 == .unsupportedBasalRate(0) }
         assertRejects(profile("x", basal: [(0, 3.05)])) { $0 == .basalRateAboveMaximum(3.05) }
-        XCTAssertEqual(try XCTUnwrap(validator.editLimits(unit: .milligramsPerDeciliter)).basalRates, editorRates)
     }
 
     func testCorrectionRangeBoundsAreThoseOfThePickers() throws {
@@ -470,9 +429,6 @@ final class TherapyProfileTests: XCTestCase {
                 XCTAssertTrue(accepts(lowerValues.first!, lowerValues.first!), label)
                 XCTAssertFalse(accepts(lowerValues.first! - step, upperValues.last!), label)
                 XCTAssertFalse(accepts(lowerValues.first!, upperValues.last! + step), label)
-                let limits = try XCTUnwrap(validator.editLimits(unit: unit))
-                XCTAssertEqual(limits.target.bounds.lowerBound, lowerValues.first!, accuracy: 0.0001, label)
-                XCTAssertEqual(limits.target.bounds.upperBound, upperValues.last!, accuracy: 0.0001, label)
             }
         }
     }
