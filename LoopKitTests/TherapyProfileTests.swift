@@ -485,5 +485,18 @@ final class TherapyProfileTests: XCTestCase {
         let validator = TherapyProfileValidator(supportedBasalRates: supportedBasalRates, maximumBasalRatePerHour: 3.0.nextDown, maximumBasalScheduleEntryCount: nil, suspendThreshold: nil)
         XCTAssertNoThrow(try validator.validate(profile("x", basal: [(0, 3.0)])))
     }
+
+    func testSafetyLimitAboveTheCorrectionRangeGuardrailRejectsEveryCorrectionRange() {
+        // A glucose safety limit of 75 read as mmol/L is far above the correction range guardrail.
+        let threshold = GlucoseThreshold(unit: .millimolesPerLiter, value: 75)
+        let validator = TherapyProfileValidator(supportedBasalRates: supportedBasalRates, maximumBasalRatePerHour: 3, maximumBasalScheduleEntryCount: nil, suspendThreshold: threshold)
+        XCTAssertThrowsError(try validator.validate(profile("x", target: [(0, 100, 180)]))) {
+            XCTAssertEqual($0 as? TherapyProfileError, .correctionRangeBelowSuspendThreshold)
+        }
+        XCTAssertThrowsError(try TherapyProfileValidator.validateValues(of: profile("x"), suspendThreshold: threshold)) {
+            XCTAssertEqual($0 as? TherapyProfileError, .correctionRangeBelowSuspendThreshold)
+        }
+        XCTAssertEqual(TherapyProfileValidator.correctionRangeLowerValues(suspendThreshold: threshold, unit: .milligramsPerDeciliter), [])
+    }
 }
 

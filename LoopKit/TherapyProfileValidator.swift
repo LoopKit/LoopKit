@@ -110,7 +110,7 @@ public struct TherapyProfileValidator {
         if schedules.contains(.correctionRange) {
             let targetUnit = profile.glucoseTargetRangeSchedule.unit
             let guardrailValues = Guardrail.correctionRange.absoluteBounds.glucosePickerValues(unit: targetUnit)
-            let lowerValues = (Guardrail.minCorrectionRangeValue(suspendThreshold: suspendThreshold)...Guardrail.correctionRange.absoluteBounds.upperBound).glucosePickerValues(unit: targetUnit)
+            let lowerValues = correctionRangeLowerValues(suspendThreshold: suspendThreshold, unit: targetUnit)
             for item in profile.glucoseTargetRangeSchedule.items {
                 guard item.value.minValue <= item.value.maxValue else {
                     throw TherapyProfileError.invalidSchedule(LocalizedString("A correction range has its lower value above its upper value", comment: "Therapy profile error: target low above high"))
@@ -198,6 +198,17 @@ public struct TherapyProfileValidator {
     }
 
     private static let tolerance = 1e-6
+
+    /// The lower correction range values the picker offers in `unit` above `suspendThreshold`, empty when the threshold
+    /// is above the correction range guardrail, so every correction range is below it.
+    static func correctionRangeLowerValues(suspendThreshold: GlucoseThreshold?, unit: LoopUnit) -> [Double] {
+        let floor = Guardrail.minCorrectionRangeValue(suspendThreshold: suspendThreshold)
+        let upper = Guardrail.correctionRange.absoluteBounds.upperBound
+        guard floor <= upper else {
+            return []
+        }
+        return (floor...upper).glucosePickerValues(unit: unit)
+    }
 
     private static func contains(_ range: ClosedRange<Double>, _ value: Double) -> Bool {
         value >= range.lowerBound - tolerance && value <= range.upperBound + tolerance
