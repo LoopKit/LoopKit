@@ -27,7 +27,7 @@ public struct ComponentReplacement: Codable, Hashable {
 
         public init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
-            let code = try container.decodeIfPresent(String.self, forKey: .code)
+            let code = try? container.decodeIfPresent(String.self, forKey: .code)
             switch try container.decode(String.self, forKey: .type) {
             case "expired": self = .expired
             case "fault": self = .fault(code: code)
@@ -97,7 +97,7 @@ public struct ComponentReplacement: Codable, Hashable {
     public var primes: [Prime]
     /// The end of the new component's nominal lifetime
     public var expirationDate: Date?
-    /// Identifies the new component, such as a pod's lot and sequence numbers. This identifies a device, so services should not upload it as is.
+    /// Identifies the new component, such as a pod's lot and sequence numbers. This identifies a device, so remote services should not upload it as is. Local exports, like the Critical Event Log, include it.
     public var componentIdentifier: String?
 
     public init(previous: PreviousComponent? = nil, primes: [Prime] = [], expirationDate: Date? = nil, componentIdentifier: String? = nil) {
@@ -105,6 +105,30 @@ public struct ComponentReplacement: Codable, Hashable {
         self.primes = primes
         self.expirationDate = expirationDate
         self.componentIdentifier = componentIdentifier
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case previous
+        case primes
+        case expirationDate
+        case componentIdentifier
+    }
+
+    private struct DecodedPrime: Decodable {
+        let prime: Prime?
+
+        init(from decoder: Decoder) throws {
+            prime = try? Prime(from: decoder)
+        }
+    }
+
+    /// Primes with a target from a newer build are dropped, keeping the rest of the record.
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        previous = try container.decodeIfPresent(PreviousComponent.self, forKey: .previous)
+        primes = (try container.decodeIfPresent([DecodedPrime].self, forKey: .primes) ?? []).compactMap(\.prime)
+        expirationDate = try container.decodeIfPresent(Date.self, forKey: .expirationDate)
+        componentIdentifier = try container.decodeIfPresent(String.self, forKey: .componentIdentifier)
     }
 
     init(encoded: Data) throws {

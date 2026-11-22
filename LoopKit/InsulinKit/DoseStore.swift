@@ -679,7 +679,11 @@ extension DoseStore {
                 object.mutable = isMutable
                 object.dose = event.dose
                 object.alarmType = event.alarmType
-                object.componentReplacement = try? event.componentReplacement?.encoded()
+                do {
+                    object.componentReplacement = try event.componentReplacement?.encoded()
+                } catch {
+                    self.log.error("Unable to encode component replacement: %{public}@", String(describing: error))
+                }
                 object.wasProgrammedByPumpUI = wasProgrammedByPumpUI
             }
 

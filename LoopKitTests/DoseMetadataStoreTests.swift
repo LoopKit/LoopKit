@@ -51,6 +51,13 @@ class DoseMetadataStoreTests: PersistenceControllerTestCase {
         let finalBolus = NewPumpEvent(date: now, dose: DoseEntry(type: .bolus, startDate: now, value: 1, unit: .units, doseId: doseId, deliveredUnits: 1), raw: Data([1]), title: "Bolus")
         let finalEvents = await store.addingMetadata(to: [finalBolus])
         XCTAssertEqual(finalEvents[0].dose?.metadata, metadata)
+
+        let replacement = ComponentReplacement(previous: .init(reason: .expired), primes: [.init(target: .cannula, volume: 0.5)])
+        let change = NewPumpEvent(date: now, dose: DoseEntry(type: .bolus, startDate: now, value: 1, unit: .units, doseId: doseId, deliveredUnits: 1),
+                                  raw: Data([4]), title: "Change", type: .replaceComponent(componentType: .infusionSet), componentReplacement: replacement)
+        let changeEvents = await store.addingMetadata(to: [change])
+        XCTAssertEqual(changeEvents[0].dose?.metadata, metadata)
+        XCTAssertEqual(changeEvents[0].componentReplacement, replacement)
     }
 
     func testPurgesExpiredMetadata() async throws {

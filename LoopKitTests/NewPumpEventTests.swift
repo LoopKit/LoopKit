@@ -58,6 +58,16 @@ class NewPumpEventRawRepresentableTests: XCTestCase {
         XCTAssertEqual(try ComponentReplacement(encoded: data).previous?.reason, .unknown)
     }
 
+    func testComponentReplacementToleratesFieldsFromANewerBuild() throws {
+        let data = Data(#"{"previous":{"reason":{"type":"somethingNew","code":20}},"primes":[{"target":"reservoir","volume":1},{"target":"cannula","volume":0.5}],"componentIdentifier":"A-1"}"#.utf8)
+        let replacement = try ComponentReplacement(encoded: data)
+        XCTAssertEqual(replacement.previous?.reason, .unknown)
+        XCTAssertEqual(replacement.primes, [.init(target: .cannula, volume: 0.5)])
+        XCTAssertEqual(replacement.componentIdentifier, "A-1")
+
+        XCTAssertEqual(try ComponentReplacement(encoded: Data(#"{"componentIdentifier":"A-1"}"#.utf8)).primes, [])
+    }
+
     func testReasonEncodesItsCode() throws {
         let encoded = try ComponentReplacement(previous: .init(reason: .fault(code: "0x5C"))).encoded()
         XCTAssertEqual(String(decoding: encoded, as: UTF8.self), #"{"previous":{"reason":{"code":"0x5C","type":"fault"}},"primes":[]}"#)
