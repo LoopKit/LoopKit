@@ -13,6 +13,8 @@ public protocol RemoteActionDelegate: AnyObject {
     func cancelRemoteOverride() async throws
     func deliverRemoteCarbs(amountInGrams: Double, absorptionTime: TimeInterval?, foodType: String?, startDate: Date?) async throws
     func deliverRemoteBolus(amountInUnits: Double, decisionId: UUID?) async throws
+    /// Delivers a bolus for a remote command; the request is kept in the dose's metadata.
+    func deliverRemoteBolus(amountInUnits: Double, decisionId: UUID?, request: DoseMetadata.RemoteRequest?) async throws
 
     /// Activates the profile named `name` when it matches `expectedFingerprint`.
     func switchRemoteTherapyProfile(name: String, expectedFingerprint: String) async throws
@@ -22,4 +24,11 @@ public protocol RemoteActionDelegate: AnyObject {
     func deleteRemoteTherapyProfile(name: String, expectedFingerprint: String) async throws
     /// Replaces the scheduled profile switches when the current list matches `expectedFingerprint`.
     func saveRemoteScheduledProfileSwitches(_ entries: [ScheduledProfileSwitch], expectedFingerprint: String) async throws
+}
+
+extension RemoteActionDelegate {
+    public func deliverRemoteBolus(amountInUnits: Double, decisionId: UUID?, request: DoseMetadata.RemoteRequest?) async throws {
+        try await deliverRemoteBolus(amountInUnits: amountInUnits, decisionId: decisionId)
+    }
+
 }
