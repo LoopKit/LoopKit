@@ -31,4 +31,25 @@ extension RemoteActionDelegate {
         try await deliverRemoteBolus(amountInUnits: amountInUnits, decisionId: decisionId)
     }
 
+    public func switchRemoteTherapyProfile(name: String, expectedFingerprint: String) async throws {
+        throw RemoteActionUnsupportedError()
+    }
+
+    public func saveRemoteTherapyProfile(_ profile: TherapyProfile, originalName: String?, expectedFingerprint: String?) async throws {
+        throw RemoteActionUnsupportedError()
+    }
+
+    public func deleteRemoteTherapyProfile(name: String, expectedFingerprint: String) async throws {
+        throw RemoteActionUnsupportedError()
+    }
+
+    public func saveRemoteScheduledProfileSwitches(_ entries: [ScheduledProfileSwitch], expectedFingerprint: String) async throws {
+        throw RemoteActionUnsupportedError()
+    }
+}
+
+struct RemoteActionUnsupportedError: LocalizedError {
+    var errorDescription: String? {
+        LocalizedString("This remote command is not supported by this app", comment: "Error when a remote command has no implementation in the host app")
+    }
 }

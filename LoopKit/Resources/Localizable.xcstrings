@@ -12679,6 +12679,9 @@
     "These settings changed on the phone while they were open, for example by a remote command, so the change was not saved. Open the settings again to see the current values." : {
       "comment" : "Therapy profile error: settings changed during an edit"
     },
+    "This remote command is not supported by this app" : {
+      "comment" : "Error when a remote command has no implementation in the host app"
+    },
     "Training Complete" : {
 
     },
