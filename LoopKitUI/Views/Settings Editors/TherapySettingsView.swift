@@ -80,13 +80,13 @@ public struct TherapySettingsView: View {
                 cards.append(summaryHeaderSection)
             }
         }
-        cards.append(suspendThresholdSection)
-        cards.append(correctionRangeSection)
-        cards.append(preMealCorrectionRangeSection)
-        cards.append(carbRatioSection)
         cards.append(basalRatesSection)
-        cards.append(deliveryLimitsSection)
+        cards.append(carbRatioSection)
         cards.append(insulinSensitivitiesSection)
+        cards.append(correctionRangeSection)
+        cards.append(suspendThresholdSection)
+        cards.append(preMealCorrectionRangeSection)
+        cards.append(deliveryLimitsSection)
 
         return CardStack(cards: cards)
     }
