@@ -24,6 +24,10 @@ extension CGMManagerUIPlugin {
     public var cgmManagerType: CGMManager.Type? { cgmManagerType as CGMManagerUI.Type? }
 }
 
+public protocol SmartwatchManagerUIPlugin {
+    var smartwatchManagerType: SmartwatchManagerUI.Type? { get }
+}
+
 public protocol ServiceUIPlugin {
     var serviceType: ServiceUI.Type? { get }
 }
