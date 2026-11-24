@@ -24,5 +24,6 @@ public enum LoopNotificationCategory: String {
     case remoteCarbsFailure
     case missedMeal
     case presetReminder
+    case scheduledProfileSwitch
     case requiredUpdate
 }

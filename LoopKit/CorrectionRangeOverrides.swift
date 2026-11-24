@@ -86,6 +86,11 @@ extension ClosedRange<LoopQuantity> {
         String(format: NSLocalizedString("%.0f - %.0f %3$@", comment: ""), lowerBound.doubleValue(for: unit), upperBound.doubleValue(for: unit), unit.unitString)
     }
 
+    /// The values a glucose picker offers for this range in `unit`, rounded as the picker shows them.
+    public func glucosePickerValues(unit: LoopUnit) -> [Double] {
+        selectableValues(unit: unit, stride: unit.glucosePickerStride).map { unit.roundForPicker(value: $0) }
+    }
+
     public func selectableValues(unit: LoopUnit, stride: Double = 1.0) -> [Double] {
         let lower = lowerBound.doubleValue(for: unit)
         let upper = upperBound.doubleValue(for: unit)
@@ -110,3 +115,9 @@ extension ClosedRange<LoopQuantity> {
     }
 }
 
+extension LoopUnit {
+    /// The step between the values of a glucose picker.
+    var glucosePickerStride: Double {
+        self == .millimolesPerLiter ? 0.1 : 5
+    }
+}

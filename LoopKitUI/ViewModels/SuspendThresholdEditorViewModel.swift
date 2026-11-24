@@ -20,6 +20,9 @@ struct SuspendThresholdEditorViewModel {
 
     var saveSuspendThreshold: (_ suspendThreshold: LoopQuantity, _ displayGlucoseUnit: LoopUnit) -> Void
 
+    /// The profiles that could no longer be activated with this glucose safety limit.
+    var therapyProfilesFailing: (_ suspendThreshold: LoopQuantity, _ displayGlucoseUnit: LoopUnit) -> [String]
+
     public init(therapySettingsViewModel: TherapySettingsViewModel,
                 mode: SettingsPresentationMode,
                 didSave: (() -> Void)? = nil)
@@ -40,6 +43,12 @@ struct SuspendThresholdEditorViewModel {
             }
             therapySettingsViewModel.saveSuspendThreshold(quantity: suspendThreshold, withDisplayGlucoseUnit: displayGlucoseUnit)
             didSave?()
+        }
+
+        self.therapyProfilesFailing = { [weak therapySettingsViewModel] suspendThreshold, displayGlucoseUnit in
+            therapySettingsViewModel?.therapyProfilesFailing { settings in
+                settings.suspendThreshold = GlucoseThreshold(unit: displayGlucoseUnit, value: suspendThreshold.doubleValue(for: displayGlucoseUnit))
+            } ?? []
         }
     }
 }

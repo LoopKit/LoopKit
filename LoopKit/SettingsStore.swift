@@ -325,6 +325,17 @@ public struct StoredSettings: Equatable {
     // This is the user's display preference glucose unit. TODO: Rename?
     public var bloodGlucoseUnit: LoopUnit?
     public var automaticDosingStrategy: AutomaticDosingStrategy
+    /// Every profile with Default first, or empty when Default, holding the live schedules, is the only one. The
+    /// active profile's entry may lag the live schedules; `resolvedTherapyProfiles` has the current values.
+    public var therapyProfiles: [TherapyProfile]
+    /// The profile the live schedules belong to; nil means Default.
+    public var activeProfileName: String?
+    /// The weekly profile starts.
+    public var scheduledSwitches: [ScheduledProfileSwitch]
+    /// Scheduled starts up to this instant are settled: run, superseded or skipped.
+    public var scheduledSwitchesSettledAt: Date?
+    /// What made the active profile change last.
+    public var activeProfileSwitchTrigger: TherapyProfileSwitchTrigger?
     public var syncIdentifier: UUID
 
     public init(date: Date = Date(),
@@ -348,6 +359,11 @@ public struct StoredSettings: Equatable {
                 pumpDevice: HKDevice? = nil,
                 bloodGlucoseUnit: LoopUnit? = nil,
                 automaticDosingStrategy: AutomaticDosingStrategy = .tempBasalOnly,
+                therapyProfiles: [TherapyProfile] = [],
+                activeProfileName: String? = nil,
+                scheduledSwitches: [ScheduledProfileSwitch] = [],
+                scheduledSwitchesSettledAt: Date? = nil,
+                activeProfileSwitchTrigger: TherapyProfileSwitchTrigger? = nil,
                 syncIdentifier: UUID = UUID()) {
         self.date = date
         self.controllerTimeZone = controllerTimeZone
@@ -370,7 +386,39 @@ public struct StoredSettings: Equatable {
         self.pumpDevice = pumpDevice
         self.bloodGlucoseUnit = bloodGlucoseUnit
         self.automaticDosingStrategy = automaticDosingStrategy
+        self.therapyProfiles = therapyProfiles
+        self.activeProfileName = activeProfileName
+        self.scheduledSwitches = scheduledSwitches
+        self.scheduledSwitchesSettledAt = scheduledSwitchesSettledAt
+        self.activeProfileSwitchTrigger = activeProfileSwitchTrigger
         self.syncIdentifier = syncIdentifier
+    }
+}
+
+extension StoredSettings {
+    /// The live schedules as a profile named after the active profile, or nil when any schedule is missing.
+    public var liveTherapyProfile: TherapyProfile? {
+        TherapyProfile(name: TherapyProfiles.activeName(activeProfileName),
+                       glucoseTargetRangeSchedule: glucoseTargetRangeSchedule,
+                       carbRatioSchedule: carbRatioSchedule,
+                       basalRateSchedule: basalRateSchedule,
+                       insulinSensitivitySchedule: insulinSensitivitySchedule)
+    }
+
+    /// Every profile with Default first, the active one holding the live schedules. Before any other profile exists
+    /// this is Default alone.
+    public var resolvedTherapyProfiles: [TherapyProfile] {
+        TherapyProfiles.resolved(therapyProfiles, activeProfileName: activeProfileName, live: liveTherapyProfile)
+    }
+}
+
+/// An element that decodes as nil when it can not be read, so one unreadable element does not lose the settings
+/// stored with it.
+struct Lossy<Value: Decodable>: Decodable {
+    let value: Value?
+
+    init(from decoder: Decoder) throws {
+        value = try? Value(from: decoder)
     }
 }
 
@@ -402,6 +450,11 @@ extension StoredSettings: Codable {
                   pumpDevice: try container.decodeIfPresent(CodableDevice.self, forKey: .pumpDevice)?.device,
                   bloodGlucoseUnit: bloodGlucoseUnit,
                   automaticDosingStrategy: try container.decodeIfPresent(AutomaticDosingStrategy.self, forKey: .automaticDosingStrategy) ?? .tempBasalOnly,
+                  therapyProfiles: (try? container.decodeIfPresent([Lossy<TherapyProfile>].self, forKey: .therapyProfiles))??.compactMap(\.value) ?? [],
+                  activeProfileName: try container.decodeIfPresent(String.self, forKey: .activeProfileName),
+                  scheduledSwitches: (try? container.decodeIfPresent([Lossy<ScheduledProfileSwitch>].self, forKey: .scheduledSwitches))??.compactMap(\.value) ?? [],
+                  scheduledSwitchesSettledAt: try container.decodeIfPresent(Date.self, forKey: .scheduledSwitchesSettledAt),
+                  activeProfileSwitchTrigger: try container.decodeIfPresent(TherapyProfileSwitchTrigger.self, forKey: .activeProfileSwitchTrigger),
                   syncIdentifier: try container.decode(UUID.self, forKey: .syncIdentifier))
     }
 
@@ -429,6 +482,15 @@ extension StoredSettings: Codable {
         try container.encodeIfPresent(pumpDevice.map { CodableDevice($0) }, forKey: .pumpDevice)
         try container.encode(bloodGlucoseUnit.unitString, forKey: .bloodGlucoseUnit)
         try container.encode(automaticDosingStrategy, forKey: .automaticDosingStrategy)
+        if !therapyProfiles.isEmpty {
+            try container.encode(therapyProfiles, forKey: .therapyProfiles)
+        }
+        try container.encodeIfPresent(activeProfileName, forKey: .activeProfileName)
+        if !scheduledSwitches.isEmpty {
+            try container.encode(scheduledSwitches, forKey: .scheduledSwitches)
+        }
+        try container.encodeIfPresent(scheduledSwitchesSettledAt, forKey: .scheduledSwitchesSettledAt)
+        try container.encodeIfPresent(activeProfileSwitchTrigger, forKey: .activeProfileSwitchTrigger)
         try container.encode(syncIdentifier, forKey: .syncIdentifier)
     }
 
@@ -472,6 +534,11 @@ extension StoredSettings: Codable {
         case pumpDevice
         case bloodGlucoseUnit
         case automaticDosingStrategy
+        case therapyProfiles
+        case activeProfileName
+        case scheduledSwitches
+        case scheduledSwitchesSettledAt
+        case activeProfileSwitchTrigger
         case syncIdentifier
     }
 }

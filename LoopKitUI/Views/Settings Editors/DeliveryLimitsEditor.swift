@@ -24,6 +24,8 @@ public struct DeliveryLimitsEditor: View {
     let syncDeliveryLimits: ((_ deliveryLimits: DeliveryLimits) async throws -> DeliveryLimits)?
     let save: (_ deliveryLimits: DeliveryLimits) -> Void
     let mode: SettingsPresentationMode
+    /// The profiles that could no longer be activated with these limits.
+    let therapyProfilesFailing: (_ deliveryLimits: DeliveryLimits) -> [String]
 
     @State var value: DeliveryLimits
     @State private var userDidTap: Bool = false
@@ -46,7 +48,8 @@ public struct DeliveryLimitsEditor: View {
         lowestCarbRatio: Double?,
         syncDeliveryLimits: @escaping (_ deliveryLimits: DeliveryLimits) async throws -> DeliveryLimits,
         onSave save: @escaping (_ deliveryLimits: DeliveryLimits) -> Void,
-        mode: SettingsPresentationMode = .settings
+        mode: SettingsPresentationMode = .settings,
+        therapyProfilesFailing: @escaping (_ deliveryLimits: DeliveryLimits) -> [String] = { _ in [] }
     ) {
         self._value = State(initialValue: value)
         self.initialValue = value
@@ -59,6 +62,7 @@ public struct DeliveryLimitsEditor: View {
         self.save = save
         self.mode = mode
         self.lowestCarbRatio = lowestCarbRatio
+        self.therapyProfilesFailing = therapyProfilesFailing
     }
     
     public init(
@@ -87,7 +91,12 @@ public struct DeliveryLimitsEditor: View {
                 therapySettingsViewModel?.saveDeliveryLimits(limits: newLimits)
                 didSave?()
             },
-            mode: mode
+            mode: mode,
+            therapyProfilesFailing: { [weak therapySettingsViewModel] limits in
+                therapySettingsViewModel?.therapyProfilesFailing { settings in
+                    settings.maximumBasalRatePerHour = limits.maximumBasalRate?.doubleValue(for: .internationalUnitsPerHour)
+                } ?? []
+            }
         )
     }
 
@@ -142,7 +151,7 @@ public struct DeliveryLimitsEditor: View {
                 guardrailWarningIfNecessary
             },
             action: {
-                if self.crossedThresholds.isEmpty {
+                if self.crossedThresholds.isEmpty && failingProfiles.isEmpty {
                     self.startSaving()
                 } else {
                     self.presentedAlert = .saveConfirmation(confirmationAlertContent)
@@ -405,10 +414,19 @@ public struct DeliveryLimitsEditor: View {
         }
     }
     
+    private var failingProfiles: [String] {
+        mode == .settings ? therapyProfilesFailing(value) : []
+    }
+
     private var confirmationAlertContent: AlertContent {
-        AlertContent(
+        let failingProfiles = failingProfiles
+        let message = [
+            crossedThresholds.isEmpty ? nil : TherapySetting.deliveryLimits.guardrailSaveWarningCaption,
+            failingProfiles.isEmpty ? nil : TherapySettingsViewModel.therapyProfilesFailingMessage(failingProfiles),
+        ].compactMap { $0 }.joined(separator: "\n\n")
+        return AlertContent(
             title: Text(LocalizedString("Save Delivery Limits?", comment: "Alert title for confirming delivery limits outside the recommended range")),
-            message: Text(TherapySetting.deliveryLimits.guardrailSaveWarningCaption),
+            message: Text(message),
             cancel: Text(LocalizedString("Go Back", comment: "Text for go back action on confirmation alert")),
             ok: Text(LocalizedString("Continue", comment: "Text for continue action on confirmation alert")
             )
