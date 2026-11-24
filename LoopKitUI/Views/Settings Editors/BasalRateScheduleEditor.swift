@@ -41,24 +41,12 @@ public struct BasalRateScheduleEditor: View {
             )!
         }
 
-        // filter out 0 U/hr
-        let supportedBasalRates = supportedBasalRates.filter { $0 != 0 }
-        if let maxBasal = maximumBasalRate {
-            let partitioningIndex = supportedBasalRates.partitioningIndex(where: { $0 > maxBasal })
-            self.supportedBasalRates = Array(supportedBasalRates[..<partitioningIndex])
-        } else {
-            self.supportedBasalRates = supportedBasalRates
-        }
-
-        self.guardrail = Guardrail.basalRate(supportedBasalRates: supportedBasalRates)
+        self.supportedBasalRates = Guardrail.selectableBasalRates(supportedBasalRates: supportedBasalRates, maximumBasalRate: maximumBasalRate)
+        self.guardrail = Guardrail.basalRate(supportedBasalRates: supportedBasalRates.filter { $0 != 0 })
         self.maximumScheduleEntryCount = maximumScheduleEntryCount
         self.syncBasalRateSchedule = syncBasalRateSchedule
         self.save = save
         self.mode = mode
-        
-        self.supportedBasalRates.removeAll(where: {
-            !self.guardrail.absoluteBounds.contains(LoopQuantity(unit: .internationalUnitsPerHour, doubleValue: $0))
-        })
     }
     
     public init(

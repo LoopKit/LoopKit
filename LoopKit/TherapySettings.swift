@@ -30,6 +30,15 @@ public struct TherapySettings: Equatable {
     
     public var defaultRapidActingModel: ExponentialInsulinModelPreset?
 
+    /// Every profile with Default first, or nil when these settings carry no profiles.
+    public var therapyProfiles: [TherapyProfile]?
+
+    /// The profile the schedules belong to; nil means Default.
+    public var activeProfileName: String?
+
+    /// The weekly profile starts, or nil when these settings carry none.
+    public var scheduledSwitches: [ScheduledProfileSwitch]?
+
     public var isComplete: Bool {
         return
             glucoseTargetRangeSchedule != nil &&
@@ -66,7 +75,10 @@ public struct TherapySettings: Equatable {
         insulinSensitivitySchedule: InsulinSensitivitySchedule? = nil,
         carbRatioSchedule: CarbRatioSchedule? = nil,
         basalRateSchedule: BasalRateSchedule? = nil,
-        defaultRapidActingModel: ExponentialInsulinModelPreset? = nil
+        defaultRapidActingModel: ExponentialInsulinModelPreset? = nil,
+        therapyProfiles: [TherapyProfile]? = nil,
+        activeProfileName: String? = nil,
+        scheduledSwitches: [ScheduledProfileSwitch]? = nil
     ){
         self.glucoseTargetRangeSchedule = glucoseTargetRangeSchedule
         self.correctionRangeOverrides = correctionRangeOverrides
@@ -78,6 +90,9 @@ public struct TherapySettings: Equatable {
         self.carbRatioSchedule = carbRatioSchedule
         self.basalRateSchedule = basalRateSchedule
         self.defaultRapidActingModel = defaultRapidActingModel
+        self.therapyProfiles = therapyProfiles
+        self.activeProfileName = activeProfileName
+        self.scheduledSwitches = scheduledSwitches
     }
 }
 
@@ -94,6 +109,9 @@ extension TherapySettings: Codable {
         let carbRatioSchedule = try container.decodeIfPresent(CarbRatioSchedule.self, forKey: .carbRatioSchedule)
         let basalRateSchedule = try container.decodeIfPresent(BasalRateSchedule.self, forKey: .basalRateSchedule)
         let defaultRapidActingModel = try container.decodeIfPresent(ExponentialInsulinModelPreset.self, forKey: .defaultRapidActingModel)
+        let therapyProfiles = try container.decodeIfPresent([Lossy<TherapyProfile>].self, forKey: .therapyProfiles)?.compactMap(\.value)
+        let activeProfileName = try container.decodeIfPresent(String.self, forKey: .activeProfileName)
+        let scheduledSwitches = try container.decodeIfPresent([Lossy<ScheduledProfileSwitch>].self, forKey: .scheduledSwitches)?.compactMap(\.value)
 
         self.init(glucoseTargetRangeSchedule: glucoseTargetRangeSchedule,
                   correctionRangeOverrides: correctionRangeOverrides,
@@ -103,7 +121,10 @@ extension TherapySettings: Codable {
                   insulinSensitivitySchedule: insulinSensitivitySchedule,
                   carbRatioSchedule: carbRatioSchedule,
                   basalRateSchedule: basalRateSchedule,
-                  defaultRapidActingModel: defaultRapidActingModel)
+                  defaultRapidActingModel: defaultRapidActingModel,
+                  therapyProfiles: therapyProfiles,
+                  activeProfileName: activeProfileName,
+                  scheduledSwitches: scheduledSwitches)
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -117,6 +138,9 @@ extension TherapySettings: Codable {
         try container.encodeIfPresent(carbRatioSchedule, forKey: .carbRatioSchedule)
         try container.encodeIfPresent(basalRateSchedule, forKey: .basalRateSchedule)
         try container.encodeIfPresent(defaultRapidActingModel, forKey: .defaultRapidActingModel)
+        try container.encodeIfPresent(therapyProfiles, forKey: .therapyProfiles)
+        try container.encodeIfPresent(activeProfileName, forKey: .activeProfileName)
+        try container.encodeIfPresent(scheduledSwitches, forKey: .scheduledSwitches)
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -129,6 +153,9 @@ extension TherapySettings: Codable {
         case carbRatioSchedule
         case basalRateSchedule
         case defaultRapidActingModel
+        case therapyProfiles
+        case activeProfileName
+        case scheduledSwitches
     }
 }
 

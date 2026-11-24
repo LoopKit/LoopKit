@@ -143,7 +143,7 @@ public struct SuspendThresholdEditor: View {
                 }
             },
             action: {
-                if self.warningThreshold == nil {
+                if self.warningThreshold == nil && failingProfiles.isEmpty {
                     self.startSaving()
                 } else {
                     self.showingConfirmationAlert = true
@@ -197,10 +197,19 @@ public struct SuspendThresholdEditor: View {
         }
     }
 
+    private var failingProfiles: [String] {
+        mode == .settings ? viewModel.therapyProfilesFailing(value, displayGlucosePreference.unit) : []
+    }
+
     private func confirmationAlert() -> SwiftUI.Alert {
-        SwiftUI.Alert(
+        let failingProfiles = failingProfiles
+        let message = [
+            warningThreshold == nil ? nil : TherapySetting.suspendThreshold.guardrailSaveWarningCaption,
+            failingProfiles.isEmpty ? nil : TherapySettingsViewModel.therapyProfilesFailingMessage(failingProfiles),
+        ].compactMap { $0 }.joined(separator: "\n\n")
+        return SwiftUI.Alert(
             title: Text(LocalizedString("Save Glucose Safety Limit?", comment: "Alert title for confirming a glucose safety limit outside the recommended range")),
-            message: Text(TherapySetting.suspendThreshold.guardrailSaveWarningCaption),
+            message: Text(message),
             primaryButton: .cancel(Text(LocalizedString("Go Back", comment: "Text for go back action on confirmation alert"))),
             secondaryButton: .default(
                 Text(LocalizedString("Continue", comment: "Text for continue action on confirmation alert")),
