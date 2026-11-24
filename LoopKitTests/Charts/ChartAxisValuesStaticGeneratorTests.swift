@@ -7,6 +7,8 @@
 //
 
 import XCTest
+import UIKit
+import LoopKit
 import SwiftCharts
 @testable import LoopKitUI
 
@@ -156,5 +158,61 @@ extension ChartAxisValuesStaticGeneratorTests {
                                                                                         multiple: multiple,
                                                                                         axisValueGenerator: axisValueGenerator,
                                                                                         addPaddingSegmentIfEdge: addPaddingSegmentIfEdge)
+    }
+}
+
+final class ChartsManagerLabelWidthTests: XCTestCase {
+    private let colors = ChartColorPalette(axisLine: .clear, axisLabel: .gray, grid: .gray, presetTint: .gray, glucoseTint: .gray, insulinTint: .gray, carbTint: .gray)
+
+    func testCarbEffectChartReservesSpaceForSignedFractionalLabels() {
+        let font = UIFont.systemFont(ofSize: 14)
+        let manager = ChartsManager(colors: colors, settings: ChartSettings(), charts: [CarbEffectChart()], traitCollection: UITraitCollection())
+        let labelWidth = manager.fixedHorizontalMargin - ChartSettings().labelsToAxisSpacingY
+        for locale in ["en_US", "de_DE"] {
+            let formatter = NumberFormatter()
+            formatter.locale = Locale(identifier: locale)
+            formatter.maximumFractionDigits = 2
+            for value in [-0.08, -12.34] {
+                let text = formatter.string(from: NSNumber(value: value))!
+                XCTAssertLessThanOrEqual((text as NSString).size(withAttributes: [.font: font]).width, labelWidth, "\(locale): \(text)")
+            }
+        }
+        XCTAssertEqual(labelWidth, 50)
+    }
+
+    func testSharedManagerUsesOneMarginAndAlignedChartFrames() {
+        let glucose = GlucoseCarbChart()
+        glucose.glucoseDisplayRange = LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 60)...LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: 200)
+        var settings = ChartSettings()
+        settings.axisTitleLabelsToLabelsSpacing = 0
+        let manager = ChartsManager(colors: colors, settings: settings, charts: [glucose, IOBChart(), LegacyDoseChart(), CarbEffectChart()], traitCollection: UITraitCollection())
+        manager.prerender()
+        let frame = CGRect(x: 0, y: 0, width: 402, height: 150)
+        let charts = (0..<4).compactMap { manager.chart(atIndex: $0, frame: frame) }
+        XCTAssertEqual(charts.count, 4)
+        XCTAssertEqual(manager.fixedHorizontalMargin, 55)
+        for chart in charts {
+            XCTAssertEqual(chart.innerFrame.minX, 56)
+            XCTAssertEqual(chart.innerFrame.width, charts[0].innerFrame.width)
+        }
+    }
+
+    func testCarbEffectMarginIsUsedForAvailableTimeRange() {
+        var settings = ChartSettings()
+        settings.trailing = 8
+        let carbManager = ChartsManager(colors: colors, settings: settings, charts: [CarbEffectChart()], traitCollection: UITraitCollection())
+        let otherManager = ChartsManager(colors: colors, settings: settings, charts: [IOBChart()], traitCollection: UITraitCollection())
+        func hours(_ width: CGFloat, _ manager: ChartsManager) -> Int {
+            Int(floor((width - manager.fixedHorizontalMargin) / 75))
+        }
+        XCTAssertEqual(carbManager.fixedHorizontalMargin, 63)
+        XCTAssertEqual(hours(402, carbManager), 4)
+        XCTAssertEqual(hours(874, carbManager), 10)
+        XCTAssertEqual(hours(874, otherManager), 11)
+    }
+
+    func testManagerWithoutCarbEffectChartKeepsExistingMargin() {
+        let manager = ChartsManager(colors: colors, settings: ChartSettings(), charts: [IOBChart()], traitCollection: UITraitCollection())
+        XCTAssertEqual(manager.fixedHorizontalMargin, 35)
     }
 }

@@ -35,6 +35,8 @@ open class ChartsManager {
         self.colors = colors
         self.chartSettings = settings
         self.charts = charts
+        // Keep every chart in a manager aligned while allowing signed carb-effect labels to fit.
+        self.labelsWidthY = charts.contains { $0 is CarbEffectChart } ? 50 : 30
         self.traitCollection = traitCollection
         self.chartsCache = Array(repeating: nil, count: charts.count)
 
@@ -49,7 +51,7 @@ open class ChartsManager {
 
     private let chartSettings: ChartSettings
 
-    private let labelsWidthY: CGFloat = 30
+    private let labelsWidthY: CGFloat
 
     public let charts: [ChartProviding]
 
