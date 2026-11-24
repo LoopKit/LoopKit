@@ -56,6 +56,62 @@ class PumpEventEncodableTests: PersistenceControllerTestCase {
         }
     }
 
+    func testEncodableComponentReplacement() throws {
+        try cacheStore.managedObjectContext.performAndWait {
+            let pumpEvent = PumpEvent(context: cacheStore.managedObjectContext)
+            pumpEvent.createdAt = dateFormatter.date(from: "2020-05-12T22:33:48Z")!
+            pumpEvent.date = dateFormatter.date(from: "2020-05-12T22:38:14Z")!
+            pumpEvent.duration = 0
+            pumpEvent.uploaded = false
+            pumpEvent.mutable = false
+            pumpEvent.modificationCounter = 345
+            pumpEvent.wasProgrammedByPumpUI = false
+            pumpEvent.componentReplacement = try ComponentReplacement(
+                previous: .init(stopDate: dateFormatter.date(from: "2020-05-12T20:00:00Z")!, remainingUnits: 23.5, reason: .occlusion(code: "0x14")),
+                primes: [.init(target: .tubing, volume: 2.6), .init(target: .cannula, volume: 0.5)],
+                expirationDate: dateFormatter.date(from: "2020-05-15T22:38:14Z")!,
+                componentIdentifier: "139173265-2"
+            ).encoded()
+
+            let data = try encoder.encode(pumpEvent)
+            XCTAssertEqual(String(data: data, encoding: .utf8), """
+{
+  "componentReplacement" : {
+    "componentIdentifier" : "139173265-2",
+    "expirationDate" : "2020-05-15T22:38:14Z",
+    "previous" : {
+      "reason" : {
+        "code" : "0x14",
+        "type" : "occlusion"
+      },
+      "remainingUnits" : 23.5,
+      "stopDate" : "2020-05-12T20:00:00Z"
+    },
+    "primes" : [
+      {
+        "target" : "tubing",
+        "volume" : 2.6
+      },
+      {
+        "target" : "cannula",
+        "volume" : 0.5
+      }
+    ]
+  },
+  "createdAt" : "2020-05-12T22:33:48Z",
+  "date" : "2020-05-12T22:38:14Z",
+  "duration" : 0,
+  "insulinType" : 0,
+  "modificationCounter" : 345,
+  "mutable" : false,
+  "uploaded" : false,
+  "wasProgrammedByPumpUI" : false
+}
+"""
+            )
+        }
+    }
+
     func testEncodableOptional() throws {
         cacheStore.managedObjectContext.performAndWait {
             let pumpEvent = PumpEvent(context: cacheStore.managedObjectContext)

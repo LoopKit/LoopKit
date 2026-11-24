@@ -557,6 +557,39 @@ class DoseStoreTests: PersistenceControllerTestCase {
         XCTAssertEqual(storedBolus?.metadata, metadata)
     }
 
+    func testAddPumpEventsKeepsComponentReplacement() async throws {
+        let formatter = DateFormatter.descriptionFormatter
+        let f = { (input) in
+            return formatter.date(from: input)!
+        }
+
+        let doseStoreInitialization = expectation(description: "Expect DoseStore to finish initialization")
+        let doseStore = await DoseStore(
+            cacheStore: cacheStore,
+            longestEffectDuration: .hours(4),
+            syncVersion: 1,
+            provenanceIdentifier: Bundle.main.bundleIdentifier!,
+            onReady: { _ in doseStoreInitialization.fulfill() },
+            test_currentDate: f("2018-12-12 18:07:14 +0000")
+        )
+        let doseStoreDelegate = DoseStoreDelegateMock()
+        doseStoreDelegate.basal = BasalRateSchedule.generateTimeline(
+            schedules: [(date: f("2018-12-12 00:00:00 +0000"), schedule: BasalRateSchedule(dailyItems: [RepeatingScheduleValue(startTime: 0, value: 1.0)])!)],
+            startDate: f("2018-12-11 00:00:00 +0000"),
+            endDate: f("2018-12-13 00:00:00 +0000")
+        )
+        doseStore.delegate = doseStoreDelegate
+        await fulfillment(of: [doseStoreInitialization], timeout: 30)
+
+        let replacement = ComponentReplacement(previous: .init(stopDate: f("2018-12-12 18:00:00 +0000"), reason: .expired), primes: [.init(target: .cannula, volume: 0.5)], expirationDate: f("2018-12-15 18:05:00 +0000"))
+        let event = NewPumpEvent(date: f("2018-12-12 18:05:00 +0000"), dose: nil, raw: Data("Pod Change".utf8), title: "Pod Change", type: .replaceComponent(componentType: .pump), componentReplacement: replacement)
+
+        try await doseStore.addPumpEvents([event], lastReconciliation: f("2018-12-12 18:07:14 +0000"))
+
+        let (_, pumpEvents) = try await doseStore.executePumpEventQuery(fromQueryAnchor: nil, limit: 10)
+        XCTAssertEqual(pumpEvents.map(\.componentReplacement), [replacement])
+    }
+
     func testBasalInsertionBetweenTempBasals() async throws {
         let start = testingDate("2018-12-12 17:00:00 +0000")
         let now = start.addingTimeInterval(.minutes(20))

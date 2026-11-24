@@ -186,7 +186,7 @@ public class DoseMetadataStore {
                 return event
             }
             dose.metadata = doseMetadata
-            return NewPumpEvent(date: event.date, dose: dose, raw: event.raw, title: event.title, type: event.type, alarmType: event.alarmType)
+            return NewPumpEvent(date: event.date, dose: dose, raw: event.raw, title: event.title, type: event.type, alarmType: event.alarmType, componentReplacement: event.componentReplacement)
         }
     }
 
