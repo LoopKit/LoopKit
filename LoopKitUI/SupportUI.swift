@@ -133,6 +133,10 @@ public protocol SupportUI: Pluggable {
     @MainActor
     func reportProblemView() -> AnyView?
 
+    /// A menu item for the Therapy Settings support section, or nil if unavailable.
+    /// The view can open documentation or navigate to an in-app help screen.
+    func therapySettingsHelpView() -> AnyView?
+
     /// Initializes the support with the previously-serialized state.
     ///
     /// - Parameters:
@@ -161,6 +165,10 @@ extension SupportUI {
 
     @MainActor
     public func reportProblemView() -> AnyView? {
+        nil
+    }
+
+    public func therapySettingsHelpView() -> AnyView? {
         nil
     }
 }

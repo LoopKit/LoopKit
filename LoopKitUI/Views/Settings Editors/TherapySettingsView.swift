@@ -31,13 +31,16 @@ public struct TherapySettingsView: View {
     @State var viewModel: TherapySettingsViewModel
         
     private let actionButton: ActionButton?
+    private let helpView: AnyView?
 
     public init(mode: SettingsPresentationMode,
                 viewModel: TherapySettingsViewModel,
-                actionButton: ActionButton? = nil) {
+                actionButton: ActionButton? = nil,
+                helpView: AnyView? = nil) {
         self.mode = mode
         self.viewModel = viewModel
         self.actionButton = actionButton
+        self.helpView = helpView
     }
         
     public var body: some View {
@@ -56,8 +59,8 @@ public struct TherapySettingsView: View {
         var cardListSections: [CardListSection] = []
 
         cardListSections.append(therapySettingsCardListSection)
-        if mode == .settings {
-            cardListSections.append(supportCardListSection)
+        if mode == .settings, let helpView = helpView {
+            cardListSections.append(supportCardListSection(helpView: helpView))
         }
 
         return cardListSections
@@ -91,9 +94,9 @@ public struct TherapySettingsView: View {
         return CardStack(cards: cards)
     }
     
-    private var supportCardListSection: CardListSection {
+    private func supportCardListSection(helpView: AnyView) -> CardListSection {
         CardListSection(title: Text(LocalizedString("Support", comment: "Title for support section"))) {
-            supportSection
+            helpView
         }
     }
 
@@ -341,20 +344,6 @@ extension TherapySettingsView {
                                       guardrail: .insulinSensitivity)
                     .accessibilityIdentifier("insulinSensitivityValue")
                 }
-            }
-        }
-    }
-    
-    private var supportSection: some View {
-        Section {
-            Link(destination: URL(string: "https://loopkit.github.io/loopdocs/loop-3/therapy-settings/")!) {
-                HStack {
-                    Text("Get help with Therapy Settings", comment: "Support button for Therapy Settings")
-                        .foregroundColor(.primary)
-                    Spacer()
-                    Disclosure()
-                }
-                .contentShape(Rectangle())
             }
         }
     }
