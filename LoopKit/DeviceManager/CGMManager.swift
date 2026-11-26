@@ -201,11 +201,38 @@ public protocol CGMManager: DeviceManager {
     /// a small display; nil for nothing. Changes are reported to status observers.
     var shortStatusNote: String? { get }
 
+    /// For a manager built from another controller's export (a watch reading the sensor for itself): what
+    /// it still needs before it can read the sensor on its own; nil when nothing, or for any other manager.
+    /// Changes are reported to status observers.
+    var directReadNeed: CGMDirectReadNeed? { get }
+
+    /// For a manager built from another controller's export: whether that controller's reading, by its
+    /// sync identifier, came from the sensor this manager reads. When the controller moves to a new
+    /// sensor, its latest reading is still the old sensor's. Nil when the manager cannot tell.
+    func readIsFromThisSensor(syncIdentifier: String) -> Bool?
+
     /// Tears the manager down and asks its delegate to remove it. Returns once the delegate has removed it.
     ///
     /// Implementations that tear down first should finish that teardown, including awaiting any alert
     /// retractions, before awaiting `cgmManagerDelegate?.cgmManagerWantsDeletion(self)`.
     func delete() async
+}
+
+/// What a manager reading the sensor for another controller (a watch) still needs from the user.
+/// Whichever way the phone reads the sensor (alongside the CGM maker's app, or directly), a watch
+/// reading it for itself connects directly, with its own key and Bluetooth bond.
+public enum CGMDirectReadNeed: Equatable {
+    /// No pairing code for the sensor.
+    case pairingCode
+    /// The sensor did not accept the pairing code.
+    case pairingCodeRejected
+    /// A code, and no connection to the sensor yet.
+    case firstConnection
+    /// A code, and a link to the sensor is up: the sensor is checking the code.
+    case checkingCode
+    /// The sensor accepted the code and its link is up: the system's Bluetooth pairing request for the
+    /// sensor is showing on this device, or will once the app is on screen, and has to be accepted.
+    case pairingAcceptance
 }
 
 public extension CGMManager {
@@ -251,6 +278,10 @@ public extension CGMManager {
     var isSearchingForSensor: Bool { false }
 
     var shortStatusNote: String? { nil }
+
+    var directReadNeed: CGMDirectReadNeed? { nil }
+
+    func readIsFromThisSensor(syncIdentifier: String) -> Bool? { nil }
 
     /// Override this default behaviour if the CGM Manager needs to complete tasks before being deleted
     func delete() async {
