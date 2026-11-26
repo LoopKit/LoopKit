@@ -28,8 +28,7 @@ Everything flows through a single `PumpManagerDelegate` call
 func pumpManager(_ pumpManager: PumpManager,
                  hasNewPumpEvents events: [NewPumpEvent],
                  lastReconciliation: Date?,
-                 replacePendingEvents: Bool,
-                 completion: @escaping (_ error: Error?) -> Void)
+                 replacePendingEvents: Bool) async throws
 ```
 
 In the Loop app this is implemented in `DeviceDataManager` and forwards directly to:

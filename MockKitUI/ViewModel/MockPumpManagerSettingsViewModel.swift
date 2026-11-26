@@ -186,12 +186,12 @@ class MockPumpManagerSettingsViewModel: ObservableObject {
         return formatter
     }()
 
-    func runTemporaryBasalProgram(decisionId: UUID?, unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (PumpManagerError?) -> Void) {
-        pumpManager.runTemporaryBasalProgram(decisionId: decisionId, unitsPerHour: unitsPerHour, for: duration, automatic: false, completion: completion)
+    func runTemporaryBasalProgram(doseId: UUID?, unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (PumpManagerError?) -> Void) {
+        pumpManager.runTemporaryBasalProgram(doseId: doseId, unitsPerHour: unitsPerHour, for: duration, automatic: false, completion: completion)
     }
 
     func cancelManualTempBasal(completion: @escaping (PumpManagerError?) -> Void) {
-        pumpManager.runTemporaryBasalProgram(decisionId: nil, unitsPerHour: 0, for: 0, automatic: false, completion: completion)
+        pumpManager.runTemporaryBasalProgram(doseId: nil, unitsPerHour: 0, for: 0, automatic: false, completion: completion)
     }
     
     static let reservoirVolumeFormatter: QuantityFormatter = {

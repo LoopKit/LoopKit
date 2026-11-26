@@ -24,7 +24,9 @@ extension PumpEvent {
     @NSManaged var primitiveUnit: String?
     @NSManaged var primitiveUploaded: NSNumber?
     @NSManaged var primitiveValue: NSNumber?
-    @NSManaged var decisionId: UUID?
+    @NSManaged var doseId: UUID?
+    @NSManaged var metadata: Data?
+    @NSManaged var componentReplacement: Data?
     @NSManaged var primitiveDeliveredUnits: NSNumber?
     @NSManaged var mutable: Bool
     @NSManaged var raw: Data?
@@ -47,7 +49,8 @@ extension PumpEvent: Encodable {
         try container.encodeIfPresent(unit?.rawValue, forKey: .unit)
         try container.encode(uploaded, forKey: .uploaded)
         try container.encodeIfPresent(value, forKey: .value)
-        try container.encodeIfPresent(decisionId, forKey: .decisionId)
+        try container.encodeIfPresent(doseId, forKey: .doseId)
+        try container.encodeIfPresent(metadata.flatMap { try? DoseMetadata(encoded: $0) }, forKey: .metadata)
         try container.encodeIfPresent(deliveredUnits, forKey: .deliveredUnits)
         try container.encode(mutable, forKey: .mutable)
         try container.encodeIfPresent(raw?.base64EncodedString(), forKey: .raw)
@@ -55,6 +58,7 @@ extension PumpEvent: Encodable {
         try container.encodeIfPresent(insulinType, forKey: .insulinType)
         try container.encodeIfPresent(automatic, forKey: .automatic)
         try container.encodeIfPresent(alarmType?.rawValue, forKey: .alarmType)
+        try container.encodeIfPresent(componentReplacement.flatMap { try? ComponentReplacement(encoded: $0) }, forKey: .componentReplacement)
         try container.encode(modificationCounter, forKey: .modificationCounter)
         try container.encode(wasProgrammedByPumpUI, forKey: .wasProgrammedByPumpUI)
     }
@@ -68,7 +72,8 @@ extension PumpEvent: Encodable {
         case unit
         case uploaded
         case value
-        case decisionId
+        case doseId
+        case metadata
         case deliveredUnits
         case mutable
         case raw
@@ -76,6 +81,7 @@ extension PumpEvent: Encodable {
         case insulinType
         case automatic
         case alarmType
+        case componentReplacement
         case modificationCounter
         case wasProgrammedByPumpUI
     }

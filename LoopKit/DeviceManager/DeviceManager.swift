@@ -9,13 +9,14 @@ import Foundation
 import UserNotifications
 
 public protocol DeviceManagerDelegate: AlertIssuer, PersistedAlertStore {
-    // This will be called from an unspecified queue
+    /// Called from any thread, and not awaited, so a manager can log from anywhere. The delegate keeps
+    /// entries in the order it receives them.
     func deviceManager(_ manager: DeviceManager, logEventForDeviceIdentifier deviceIdentifier: String?, type: DeviceLogEntryType, message: String, completion: ((Error?) -> Void)?)
 
     /// An `ExclusiveDeviceControl` device's link is up and the device has answered. Optional.
-    func deviceManagerControlDidBecomeReady(_ manager: DeviceManager)
+    func deviceManagerControlDidBecomeReady(_ manager: DeviceManager) async
 
-    /// Records an event with the app's analytics services. This will be called from an unspecified queue
+    /// Records an event with the app's analytics services. Called from any thread, and not awaited.
     func deviceManager(_ manager: DeviceManager, recordAnalyticsEvent name: String, properties: [AnyHashable: Any]?)
 }
 
@@ -122,6 +123,16 @@ public extension DeviceConfigurationSharing {
     var isConfigurationSharingEnabled: Bool { true }
 }
 
+/// A device several controllers use at once (for example a CGM a phone and a watch both read). The
+/// controller that set it up can change its configuration at any time, and the others follow.
+public protocol ShareableDeviceControl: DeviceConfigurationSharing, DeviceManager {
+    /// The export this manager was built from changed (for example a new sensor or pairing code). Take
+    /// it on in place, keeping this manager and what it holds open (such as its Bluetooth central).
+    /// The host calls it only on a manager built with `init(adopting:localState:)`, with an export
+    /// whose `managerIdentifier` is this manager's `pluginIdentifier`.
+    func adoptConfiguration(_ configuration: SharedDeviceConfiguration)
+}
+
 /// A device whose hardware allows one controller at a time. Release, take and readiness say
 /// nothing about who the controllers are; that is the host's business.
 public protocol ExclusiveDeviceControl: DeviceConfigurationSharing {
@@ -149,5 +160,5 @@ public extension ExclusiveDeviceControl {
 }
 
 public extension DeviceManagerDelegate {
-    func deviceManagerControlDidBecomeReady(_ manager: DeviceManager) {}
+    func deviceManagerControlDidBecomeReady(_ manager: DeviceManager) async {}
 }

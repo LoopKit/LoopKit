@@ -17,7 +17,7 @@ class NewPumpEventRawRepresentableTests: XCTestCase {
                                                     endDate: Date().addingTimeInterval(.minutes(30)),
                                                     value: 1.5,
                                                     unit: .unitsPerHour,
-                                                    decisionId: nil,
+                                                    doseId: nil,
                                                     deliveredUnits: 0.5,
                                                     description: "Test Dose Entry",
                                                     syncIdentifier: UUID().uuidString,
@@ -33,5 +33,43 @@ class NewPumpEventRawRepresentableTests: XCTestCase {
                                     alarmType: .occlusion)
         let actual = NewPumpEvent(rawValue: original.rawValue)
         XCTAssertEqual(actual, original)
+    }
+
+    func testComponentReplacementRawRepresentable() {
+        let replacement = ComponentReplacement(previous: .init(stopDate: Date(timeIntervalSinceReferenceDate: 1000),
+                                                               remainingUnits: 12.5,
+                                                               reason: .occlusion(code: "0x14")),
+                                               primes: [.init(target: .cannula, volume: 0.5)],
+                                               expirationDate: Date(timeIntervalSinceReferenceDate: 300_000),
+                                               componentIdentifier: "L1-S2")
+        let original = NewPumpEvent(date: Date(timeIntervalSinceReferenceDate: 2000),
+                                    dose: nil,
+                                    raw: Data("Pod Change".utf8),
+                                    title: "Pod Change",
+                                    type: .replaceComponent(componentType: .pump),
+                                    componentReplacement: replacement)
+        let actual = NewPumpEvent(rawValue: original.rawValue)
+        XCTAssertEqual(actual, original)
+        XCTAssertEqual(actual?.componentReplacement, replacement)
+    }
+
+    func testComponentReplacementDecodesAnUnknownReason() throws {
+        let data = Data(#"{"primes":[],"previous":{"reason":{"type":"somethingNew","code":"1"}}}"#.utf8)
+        XCTAssertEqual(try ComponentReplacement(encoded: data).previous?.reason, .unknown)
+    }
+
+    func testComponentReplacementToleratesFieldsFromANewerBuild() throws {
+        let data = Data(#"{"previous":{"reason":{"type":"somethingNew","code":20}},"primes":[{"target":"reservoir","volume":1},{"target":"cannula","volume":0.5}],"componentIdentifier":"A-1"}"#.utf8)
+        let replacement = try ComponentReplacement(encoded: data)
+        XCTAssertEqual(replacement.previous?.reason, .unknown)
+        XCTAssertEqual(replacement.primes, [.init(target: .cannula, volume: 0.5)])
+        XCTAssertEqual(replacement.componentIdentifier, "A-1")
+
+        XCTAssertEqual(try ComponentReplacement(encoded: Data(#"{"componentIdentifier":"A-1"}"#.utf8)).primes, [])
+    }
+
+    func testReasonEncodesItsCode() throws {
+        let encoded = try ComponentReplacement(previous: .init(reason: .fault(code: "0x5C"))).encoded()
+        XCTAssertEqual(String(decoding: encoded, as: UTF8.self), #"{"previous":{"reason":{"code":"0x5C","type":"fault"}},"primes":[]}"#)
     }
 }
