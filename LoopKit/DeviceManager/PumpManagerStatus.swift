@@ -52,6 +52,12 @@ public struct PumpLifecycleProgress: DeviceLifecycleProgress, Equatable {
     }
 }
 
+/// The current reservoir measurement, including pumps that report only a lower bound.
+public enum ReservoirLevel: Equatable, Codable {
+    case measured(units: Double)
+    case aboveThreshold(units: Double)
+}
+
 public struct PumpManagerStatus: Equatable {
 
     public enum BasalDeliveryState: Equatable {
@@ -90,6 +96,9 @@ public struct PumpManagerStatus: Equatable {
 
     public var deliveryIsUncertain: Bool
 
+    /// The current pump's reservoir level; nil when no current measurement is available.
+    public var reservoirLevel: ReservoirLevel?
+
     public init(
         timeZone: TimeZone,
         device: HKDevice,
@@ -97,7 +106,8 @@ public struct PumpManagerStatus: Equatable {
         basalDeliveryState: BasalDeliveryState?,
         bolusState: BolusState,
         insulinType: InsulinType?,
-        deliveryIsUncertain: Bool = false
+        deliveryIsUncertain: Bool = false,
+        reservoirLevel: ReservoirLevel? = nil
     ) {
         self.timeZone = timeZone
         self.device = device
@@ -106,6 +116,7 @@ public struct PumpManagerStatus: Equatable {
         self.bolusState = bolusState
         self.insulinType = insulinType
         self.deliveryIsUncertain = deliveryIsUncertain
+        self.reservoirLevel = reservoirLevel
     }
 }
 
@@ -119,6 +130,7 @@ extension PumpManagerStatus: Codable {
         self.bolusState = try container.decode(BolusState.self, forKey: .bolusState)
         self.insulinType = try container.decodeIfPresent(InsulinType.self, forKey: .insulinType)
         self.deliveryIsUncertain = try container.decode(Bool.self, forKey: .deliveryIsUncertain)
+        self.reservoirLevel = try container.decodeIfPresent(ReservoirLevel.self, forKey: .reservoirLevel)
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -130,6 +142,7 @@ extension PumpManagerStatus: Codable {
         try container.encode(bolusState, forKey: .bolusState)
         try container.encodeIfPresent(insulinType, forKey: .insulinType)
         try container.encode(deliveryIsUncertain, forKey: .deliveryIsUncertain)
+        try container.encodeIfPresent(reservoirLevel, forKey: .reservoirLevel)
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -140,6 +153,7 @@ extension PumpManagerStatus: Codable {
         case bolusState
         case insulinType
         case deliveryIsUncertain
+        case reservoirLevel
     }
 }
 

@@ -10,6 +10,24 @@ import XCTest
 
 class QuantityFormatterTests: XCTestCase {
 
+    func testReservoirFormattingPreservesMeasurementLimitsAndUsesUniversalPrecision() {
+        let locales = [("en_US", "."), ("de_DE", ",")]
+        for (identifier, decimalSeparator) in locales {
+            let locale = Locale(identifier: identifier)
+            let cases: [(ReservoirLevel, String)] = [
+                (.measured(units: 0), "0"),
+                (.measured(units: 50), "50"),
+                (.aboveThreshold(units: 50), "50+"),
+                (.measured(units: 12.3454), "12\(decimalSeparator)345"),
+                (.measured(units: 12.3456), "12\(decimalSeparator)346")
+            ]
+            for (level, number) in cases {
+                XCTAssertEqual(level.formatted(locale: locale), "\(number)\u{00a0}U", "\(identifier): \(level)")
+                XCTAssertEqual(level.formatted(locale: locale, includeUnit: false), number, "\(identifier): \(level)")
+            }
+        }
+    }
+
     var formatter: QuantityFormatter!
 
     func setFormatter(for unit: LoopUnit) {
