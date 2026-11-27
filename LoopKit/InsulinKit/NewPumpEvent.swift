@@ -22,8 +22,10 @@ public struct NewPumpEvent: Equatable {
     public let title: String
     /// The type of alarm, only valid if type == .alarm
     public let alarmType: PumpAlarmType?
+    /// Details of a component change, only valid if type == .replaceComponent
+    public let componentReplacement: ComponentReplacement?
 
-    public init(date: Date, dose: DoseEntry?, raw: Data, title: String, type: PumpEventType? = nil, alarmType: PumpAlarmType? = nil) {
+    public init(date: Date, dose: DoseEntry?, raw: Data, title: String, type: PumpEventType? = nil, alarmType: PumpAlarmType? = nil, componentReplacement: ComponentReplacement? = nil) {
         self.date = date
         self.raw = raw
         self.title = title
@@ -37,6 +39,7 @@ public struct NewPumpEvent: Equatable {
         self.type = type ?? dose?.type.pumpEventType
 
         self.alarmType = alarmType
+        self.componentReplacement = componentReplacement
     }
 }
 
@@ -58,6 +61,7 @@ extension NewPumpEvent: RawRepresentable {
         self.dose = (rawValue["dose"] as? DoseEntry.RawValue).flatMap { DoseEntry(rawValue: $0) }
         self.type = (rawValue["type"] as? PumpEventType.RawValue).flatMap { PumpEventType(rawValue: $0) }
         self.alarmType = (rawValue["alarmType"] as? PumpAlarmType.RawValue).flatMap { PumpAlarmType(rawValue: $0) }
+        self.componentReplacement = (rawValue["componentReplacement"] as? Data).flatMap { try? ComponentReplacement(encoded: $0) }
     }
 
     public var rawValue: [String: Any] {
@@ -70,6 +74,7 @@ extension NewPumpEvent: RawRepresentable {
         rawValue["dose"] = dose?.rawValue
         rawValue["type"] = type?.rawValue
         rawValue["alarmType"] = alarmType?.rawValue
+        rawValue["componentReplacement"] = try? componentReplacement?.encoded()
 
         return rawValue
     }
