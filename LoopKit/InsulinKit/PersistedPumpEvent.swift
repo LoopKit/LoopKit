@@ -30,6 +30,8 @@ public struct PersistedPumpEvent: Hashable {
     public let automatic: Bool?
     /// The type of alarm, only valid if type == .alarm
     public let alarmType: PumpAlarmType?
+    /// Details of a component change, only valid if type == .replaceComponent
+    public let componentReplacement: ComponentReplacement?
 
     public init(date: Date,
                 persistedDate: Date,
@@ -40,7 +42,8 @@ public struct PersistedPumpEvent: Hashable {
                 title: String?,
                 type: PumpEventType?,
                 automatic: Bool? = nil,
-                alarmType: PumpAlarmType? = nil) {
+                alarmType: PumpAlarmType? = nil,
+                componentReplacement: ComponentReplacement? = nil) {
         self.date = date
         self.persistedDate = persistedDate
         self.dose = dose
@@ -51,6 +54,7 @@ public struct PersistedPumpEvent: Hashable {
         self.type = type
         self.automatic = automatic
         self.alarmType = alarmType
+        self.componentReplacement = componentReplacement
     }
 }
 
@@ -67,7 +71,8 @@ extension PumpEvent {
             title: title,
             type: type,
             automatic: automatic,
-            alarmType: alarmType
+            alarmType: alarmType,
+            componentReplacement: componentReplacement.flatMap { try? ComponentReplacement(encoded: $0) }
         )
     }
 }
