@@ -31,13 +31,16 @@ public struct TherapySettingsView: View {
     @State var viewModel: TherapySettingsViewModel
         
     private let actionButton: ActionButton?
+    private let supportMenuItems: [AnyView]
 
     public init(mode: SettingsPresentationMode,
                 viewModel: TherapySettingsViewModel,
-                actionButton: ActionButton? = nil) {
+                actionButton: ActionButton? = nil,
+                supportMenuItems: [AnyView] = []) {
         self.mode = mode
         self.viewModel = viewModel
         self.actionButton = actionButton
+        self.supportMenuItems = supportMenuItems
     }
         
     public var body: some View {
@@ -56,7 +59,7 @@ public struct TherapySettingsView: View {
         var cardListSections: [CardListSection] = []
 
         cardListSections.append(therapySettingsCardListSection)
-        if mode == .settings {
+        if mode == .settings, !supportMenuItems.isEmpty {
             cardListSections.append(supportCardListSection)
         }
 
@@ -93,7 +96,9 @@ public struct TherapySettingsView: View {
     
     private var supportCardListSection: CardListSection {
         CardListSection(title: Text(LocalizedString("Support", comment: "Title for support section"))) {
-            supportSection
+            Card(of: supportMenuItems.indices, id: \.self) { index in
+                supportMenuItems[index]
+            }
         }
     }
 
@@ -343,20 +348,6 @@ extension TherapySettingsView {
                 }
             }
         }
-    }
-    
-    private var supportSection: some View {
-        Section {
-            NavigationLink(destination: DemoPlaceHolderView(appName: appName)) {
-                HStack {
-                    Text("Get help with Therapy Settings", comment: "Support button for Therapy Settings")
-                        .foregroundColor(.primary)
-                    Spacer()
-                    Disclosure()
-                }
-            }
-        }
-        .contentShape(Rectangle())
     }
 }
 
