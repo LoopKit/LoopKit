@@ -31,6 +31,7 @@ public struct LoopScenario: Hashable {
 public enum SettingsMenuSection: Equatable {
     case configuration
     case support
+    case therapySettingsSupport
     case custom(localizedTitle: String)
 
     public var customLocalizedTitle: String? {
@@ -81,9 +82,9 @@ public protocol SupportUI: Pluggable {
 
     typealias RawStateValue = [String: Any]
 
-    /// Provides configuration menu items.
+    /// Provides settings menu items.
     ///
-    /// - Returns: An array of views that will be added to the configuration section of settings.
+    /// - Returns: Menu items routed to their corresponding settings sections.
     func configurationMenuItems() -> [CustomMenuItem]
 
     ///
@@ -133,10 +134,6 @@ public protocol SupportUI: Pluggable {
     @MainActor
     func reportProblemView() -> AnyView?
 
-    /// A menu item for the Therapy Settings support section, or nil if unavailable.
-    /// The view can open documentation or navigate to an in-app help screen.
-    func therapySettingsHelpView() -> AnyView?
-
     /// Initializes the support with the previously-serialized state.
     ///
     /// - Parameters:
@@ -165,10 +162,6 @@ extension SupportUI {
 
     @MainActor
     public func reportProblemView() -> AnyView? {
-        nil
-    }
-
-    public func therapySettingsHelpView() -> AnyView? {
         nil
     }
 }

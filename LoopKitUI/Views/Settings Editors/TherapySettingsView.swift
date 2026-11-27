@@ -31,16 +31,16 @@ public struct TherapySettingsView: View {
     @State var viewModel: TherapySettingsViewModel
         
     private let actionButton: ActionButton?
-    private let helpView: AnyView?
+    private let supportMenuItems: [AnyView]
 
     public init(mode: SettingsPresentationMode,
                 viewModel: TherapySettingsViewModel,
                 actionButton: ActionButton? = nil,
-                helpView: AnyView? = nil) {
+                supportMenuItems: [AnyView] = []) {
         self.mode = mode
         self.viewModel = viewModel
         self.actionButton = actionButton
-        self.helpView = helpView
+        self.supportMenuItems = supportMenuItems
     }
         
     public var body: some View {
@@ -59,8 +59,8 @@ public struct TherapySettingsView: View {
         var cardListSections: [CardListSection] = []
 
         cardListSections.append(therapySettingsCardListSection)
-        if mode == .settings, let helpView = helpView {
-            cardListSections.append(supportCardListSection(helpView: helpView))
+        if mode == .settings, !supportMenuItems.isEmpty {
+            cardListSections.append(supportCardListSection)
         }
 
         return cardListSections
@@ -94,9 +94,11 @@ public struct TherapySettingsView: View {
         return CardStack(cards: cards)
     }
     
-    private func supportCardListSection(helpView: AnyView) -> CardListSection {
+    private var supportCardListSection: CardListSection {
         CardListSection(title: Text(LocalizedString("Support", comment: "Title for support section"))) {
-            helpView
+            Card(of: supportMenuItems.indices, id: \.self) { index in
+                supportMenuItems[index]
+            }
         }
     }
 
