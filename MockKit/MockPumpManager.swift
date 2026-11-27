@@ -248,7 +248,10 @@ public final class MockPumpManager: TestingPumpManager {
             basalDeliveryState: basalDeliveryState(for: state),
             bolusState: bolusState(for: state),
             insulinType: state.insulinType,
-            deliveryIsUncertain: state.deliveryIsUncertain
+            deliveryIsUncertain: state.deliveryIsUncertain,
+            reservoirLevel: state.reservoirUnitsRemaining >= 50
+                ? .aboveThreshold(units: 50)
+                : .measured(units: state.reservoirUnitsRemaining)
         )
     }
 

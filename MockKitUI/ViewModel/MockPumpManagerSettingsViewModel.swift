@@ -194,27 +194,8 @@ class MockPumpManagerSettingsViewModel: ObservableObject {
         pumpManager.runTemporaryBasalProgram(doseId: nil, unitsPerHour: 0, for: 0, automatic: false, completion: completion)
     }
     
-    static let reservoirVolumeFormatter: QuantityFormatter = {
-        let formatter = QuantityFormatter(for: .internationalUnit)
-        formatter.numberFormatter.maximumFractionDigits = 2
-        formatter.avoidLineBreaking = true
-        return formatter
-    }()
-    
     var reservoirLevelString: String {
-        let reservoirUnitsRemaining = pumpManager.state.reservoirUnitsRemaining
-        let formatter = Self.reservoirVolumeFormatter
-        formatter.numberFormatter.maximumFractionDigits = 2
-        formatter.numberFormatter.minimumFractionDigits = 0
-        let quantity = LoopQuantity(unit: .internationalUnit, doubleValue: reservoirUnitsRemaining)
-        
-        switch pumpManager.state.reservoirUnitsRemaining {
-        case let x where x >= 50:
-            // when above the rounding limit, do not display fractions
-            return "50+"
-        default:
-            return formatter.string(from: quantity, includeUnit: false) ?? ""
-        }
+        pumpManager.status.reservoirLevel?.formatted(includeUnit: false) ?? ""
     }
     
     var reservoirAccuracyString: String {

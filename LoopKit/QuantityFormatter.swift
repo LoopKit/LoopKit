@@ -161,6 +161,25 @@ open class QuantityFormatter {
     }
 }
 
+public extension ReservoirLevel {
+    /// Uses the same insulin quantity precision and localization on every display.
+    func formatted(locale: Locale = .current, includeUnit: Bool = true) -> String {
+        let formatter = QuantityFormatter(for: .internationalUnit)
+        formatter.locale = locale
+
+        let units: Double
+        switch self {
+        case .measured(let value):
+            units = value
+        case .aboveThreshold(let threshold):
+            units = threshold
+            formatter.numberFormatter.positiveSuffix += "+"
+        }
+
+        return formatter.string(from: LoopQuantity(unit: .internationalUnit, doubleValue: units), includeUnit: includeUnit) ?? ""
+    }
+}
+
 public extension LoopQuantity {
     /// if fractionDigits is nil, defaults to the unit maxFractionDigits
     func doubleValue(for unit: LoopUnit, withRounding: Bool, usingFractionDigits fractionDigits: Int? = nil) -> Double {
