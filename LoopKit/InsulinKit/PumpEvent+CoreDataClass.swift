@@ -249,5 +249,6 @@ extension PumpEvent {
         dose = event.dose
         automatic = event.automatic
         alarmType = event.alarmType
+        componentReplacement = try? event.componentReplacement?.encoded()
     }
 }
