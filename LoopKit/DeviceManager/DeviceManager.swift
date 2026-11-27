@@ -149,6 +149,11 @@ public protocol ExclusiveDeviceControl: DeviceConfigurationSharing {
     /// The link is up and the device has answered. Default: true.
     var isControlReady: Bool { get }
 
+    /// When this controller found, on reaching the device, that another controller has used it since
+    /// its own last contact. The kit then stops: it sends the device nothing until `takeControl()`.
+    /// Nil when it has not, and after a take. Default: nil.
+    var otherControllerDetectedAt: Date? { get }
+
     /// Whether taking control with this export and local state means finding the device first
     /// (the host may need to keep its screen or radio awake). Default: false.
     static func takeControlNeedsSearch(adopting configuration: SharedDeviceConfiguration, localState: [String: Any]?) -> Bool
@@ -156,6 +161,7 @@ public protocol ExclusiveDeviceControl: DeviceConfigurationSharing {
 
 public extension ExclusiveDeviceControl {
     var isControlReady: Bool { true }
+    var otherControllerDetectedAt: Date? { nil }
     static func takeControlNeedsSearch(adopting configuration: SharedDeviceConfiguration, localState: [String: Any]?) -> Bool { false }
 }
 
